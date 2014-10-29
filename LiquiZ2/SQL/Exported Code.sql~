@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesConElements` (
   `Sequence` INT NOT NULL,
   `Element` INT NULL,
   `Ques` INT NULL,
-  `Type` CHAR(4) NOT NULL)
+  `QType` CHAR(4) NOT NULL)
 ENGINE = InnoDB;
 
 
