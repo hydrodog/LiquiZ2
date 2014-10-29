@@ -9,7 +9,7 @@
 		<description>This is the description of my J2EE component</description>
 		<display-name>This is the display name of my J2EE component</display-name>
 		<servlet-name>Util</servlet-name>
-		<servlet-class>org.adastraeducation.liquiz.util.Util</servlet-class>
+		<servlet-class>org.adastraeducation.liquiz.servlet.Util</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Util</servlet-name>
@@ -20,7 +20,7 @@
 		<description>This is the description of my J2EE component</description>
 		<display-name>This is the display name of my J2EE component</display-name>
 		<servlet-name>LoginJudge</servlet-name>
-		<servlet-class>org.adastraeducation.liquiz.servelet.LoginJudge</servlet-class>
+		<servlet-class>org.adastraeducation.liquiz.servlet.LoginJudge</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginJudge</servlet-name>
@@ -31,7 +31,7 @@
 		<description>This is the description of my J2EE component</description>
 		<display-name>This is the display name of my J2EE component</display-name>
 		<servlet-name>Register</servlet-name>
-		<servlet-class>org.adastraeducation.liquiz.servelet.Register</servlet-class>
+		<servlet-class>org.adastraeducation.liquiz.servlet.Register</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Register</servlet-name>
