@@ -1,11 +1,33 @@
 package org.adastraeducation.liquiz.servlet;
 
+import java.io.IOException;
+
 import org.adastraeducation.liquiz.*;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 
-public class Util {
+public class Util extends HttpServlet{
+	
+	private Quiz quiz = new Quiz();
+	
+	public void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+//      problem for quiz lifetime, when to create a new Quiz?
+		
+//		if(request.getSession().isNew())
+//			quiz = new Quiz();
+		
+		addQuestion(quiz, request);
+		request.setAttribute("QuizContext",showQuiz(quiz));
+		request.setAttribute("NumberOfQuestions", quiz.getQuestionCount());
+		request.setAttribute("NumberOfQuestionContainers", quiz.getQuestionContainerCount());
+		RequestDispatcher dispatcher = request.getRequestDispatcher("addQuestion.jsp");
+		dispatcher.forward(request, response);
+	}
 	
 	
 	public void addQuestion(Quiz quiz, HttpServletRequest request){

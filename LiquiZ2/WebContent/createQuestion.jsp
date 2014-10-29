@@ -5,7 +5,7 @@
         <title>CreateQuestions</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
         </script>
-        <script src="assets/func.js"></script>
+        <script src="assets/js/func.js"></script>
     </head>
     <body>
     	 Choose your color for blank
@@ -22,6 +22,8 @@
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
                     <option value="FillIn" selected>FillIn</option>
                     <option value="MultiChoice">MultiChoice</option>
+                    <option value="MultiAnswer">MultiAnswer</option>
+                    
                 </select>
             </div>
             <div id="common_attribute" align="left">
