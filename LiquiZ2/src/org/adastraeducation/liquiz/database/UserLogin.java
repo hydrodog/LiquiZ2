@@ -5,25 +5,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class UserLogin {
-	public static void checkLogin(String un, String pw) {
+	public static boolean checkLogin(HttpServletRequest request) {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
 			PreparedStatement p = conn.prepareStatement("SELECT UserID, Password FROM Users WHERE UserID=? AND Password=?");
-			p.setString(1, un); 
-			p.setString(2, pw);
+			p.setString(1, request.getParameter("id")); 
+			p.setString(2, request.getParameter("passwd"));
 			ResultSet rs = p.executeQuery();
 			if(rs.next()) {
-				System.out.print("Login successful");
+				rs.close();
+				return true;
 			} else {
-				System.out.print("Username or password incorrect");
+				rs.close();
+				return false;
 			}
-			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
+		return false;
 	}
 }
