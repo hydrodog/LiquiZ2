@@ -28,9 +28,6 @@ public class Register extends HttpServlet{
 		String passwd2 = request.getParameter("passwd2");
 		String emailAddress = request.getParameter("email-address");
 		
-		boolean passwdCorrect = passwd1.equals(passwd2);
-		boolean emailCorrect = testEmail(emailAddress);
-		
 		if(passwd1.equals(passwd2)&&testEmail(emailAddress)){
 			sb.append("Please check the confirm email to finish the registeration!");
 			sendEmail(request);
@@ -55,7 +52,7 @@ public class Register extends HttpServlet{
 		//email to
 		String to = request.getParameter("email-address");
 		String userName = request.getParameter("userName");
-		String password = request.getParameter("password");
+		String password = request.getParameter("passwd");
 		
 		
 		// Get system properties
