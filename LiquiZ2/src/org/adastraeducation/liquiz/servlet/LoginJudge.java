@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+ * Author: Yingzhu
+ * Logic for login page. Judge whether username and password are right
+ */
 public class LoginJudge extends HttpServlet {
 	
 	public void service(HttpServletRequest request, HttpServletResponse response)

@@ -17,6 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+ * Authour:Yingzhu
+ * Logic for register.
+ * It will send an email to users' email-address. To click the url in the email will finish
+ * the whole registration
+ */
+
 public class Register extends HttpServlet{
 	
 	public void service(HttpServletRequest request, HttpServletResponse response)
@@ -41,6 +48,8 @@ public class Register extends HttpServlet{
 		RequestDispatcher dispatcher = request.getRequestDispatcher("RegisterCheck.jsp");
 		dispatcher.forward(request, response);
 	}
+	
+	//Here is the function to send email
 	
 	public void sendEmail(HttpServletRequest request){
 		//your host
