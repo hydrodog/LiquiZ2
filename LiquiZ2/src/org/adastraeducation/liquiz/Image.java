@@ -5,6 +5,12 @@ public class Image implements Displayable {
 	private String height;
 	private String name;
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public Image(){
 		name = null;		
 	}

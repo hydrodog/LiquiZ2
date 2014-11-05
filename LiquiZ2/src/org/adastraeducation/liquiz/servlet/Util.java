@@ -45,6 +45,7 @@ public class Util extends HttpServlet{
 	   		//TODO: do nothing and level will default to 1 if error?
 	   	}
 		Question q = null;
+		Displayable d = null;
 		String questType = request.getParameter("question_type");
 		if (questType.equals("FillIn")) {
 			q= createFillIn(request);
@@ -61,12 +62,24 @@ public class Util extends HttpServlet{
 			
 		}
 		
+		String displaySource = request.getParameter("display_source");
+		if (displaySource.equals("Image")) {
+			d= createImage(request);
+	     
+		} else if (displaySource.equals("Video")) {
+			d= createVideo(request);
+			
+		}else if (displaySource.equals("Audio")) {
+			d= createAudio(request);
+		}	
+		
 		QuestionContainer qc = new QuestionContainer();
 		String title = request.getParameter("title");
 		qc.add(new Text(title));
 	    String questionText = request.getParameter("question_text");
 	    qc.add(new Text(questionText));
 		qc.add(q);
+		qc.add(d);
 	    quiz.addQuestionContainer(qc);
 	}
 	
@@ -111,10 +124,40 @@ public class Util extends HttpServlet{
 		return q;
 	}
 	public Question createMultiAnswer(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		int numChoices = Integer.parseInt(request.getParameter("multianswer_number"));
+		Answer[] answers = new Answer[numChoices];
+		for (int i = 0; i < numChoices; i++) {
+		  String choice = request.getParameter("multichoices" + (i+1));
+		  answers[i] = new Answer(choice, false);
+		}
+		MultiAnswer q = new MultiAnswer();
+		q.setAnswers(answers); 
+		return q;
+	}
+	
+	public Displayable createImage(HttpServletRequest request){
+		String source = request.getParameter("image_src");
+		Image q = new Image();
+		q.setName(source);
+		return q;
+	}
+
+	public Displayable createVideo(HttpServletRequest request){
+		String source = request.getParameter("video_src");
+		Video q = new Video();
+		q.setVideo(source);
+		return q;
+	}
+
+	public Displayable createAudio(HttpServletRequest request){
+		String source = request.getParameter("audio_src");
+		Audio q = new Audio();
+		q.setSource(source);
+		return q;
 	}
 
 
 }
-
+/*    				<input type="button" value="Show Button" onclick="showImage();"/>
+ 				    <img id="loadingImage" src="typeImageName();" style="visibility:hidden"/>
+ */

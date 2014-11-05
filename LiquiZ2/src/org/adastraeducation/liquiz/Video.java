@@ -6,6 +6,9 @@ public class Video implements Displayable {
 	private int height;
 	private String type;
 	
+	public Video(){
+		video = null;		
+	}
 	public Video(String video){
 		this.video = video;		
 	}
@@ -14,6 +17,12 @@ public class Video implements Displayable {
 		this.height= height;
 		this.width= width;
 		this.type = type;
+	}
+	public String getVideo() {
+		return video;
+	}
+	public void setVideo(String video) {
+		this.video = video;
 	}
 	//<source src="movie.mp4" type="video/mp4">
 	//<source src="movie.ogg" type="video/ogg">

@@ -12,6 +12,14 @@ public class Essay extends Question {
 		this.defaultText = defaultText;
 	}
 
+	public String getDefaultText() {
+		return defaultText;
+	}
+
+	public void setDefaultText(String defaultText) {
+		this.defaultText = defaultText;
+	}
+
 	public String getTagName() {
 		return "Essay";
 	}
