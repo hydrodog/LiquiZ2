@@ -71,11 +71,11 @@ function changeSource(obj) {
     
 }
 
-function showImage(){
+function showImage(obj){
 	var empty="";
     document.getElementById("image_src").innerHTML=empty;
 
-	empty = "<img src= \"assets\img\image_src \" alt= \"image_src\" width=\"600\" height=\"450\">";
+	empty = "<img src= \"assets\\img\\" +obj.value + "\" alt= \"image_src\" width=\"600\" height=\"450\">";
     document.getElementById("image_src").innerHTML=empty;
 
 }

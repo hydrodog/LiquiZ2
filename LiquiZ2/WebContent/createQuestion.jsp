@@ -50,7 +50,7 @@
                 <textarea name="question_text" rows="6" cols="40"></textarea>
             </div>
             </br>
-            <img src= "assets\img\hedgehog.jpg" alt= "image_src" width="600" height="450">
+           <!--  <img src= "assets\img\hedgehog.jpg" alt= "image_src" width="600" height="450"> -->
             <div id="image_attribute" align="left" style= "display:none">
                 <div>
                 Image Name
