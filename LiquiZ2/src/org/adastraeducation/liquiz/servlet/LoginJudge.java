@@ -20,8 +20,8 @@ public class LoginJudge extends HttpServlet {
 			throws ServletException, IOException{
 		String user = request.getParameter("userName");
 		String password = request.getParameter("passwd");
-		//if(user.equals("quiz")&&password.equals("123")){
-		if(UserLogin.checkLogin(user,password)) {
+		if(user.equals("quiz")&&password.equals("123")){
+		//if(UserLogin.checkLogin(user,password)) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
 			dispatcher.forward(request, response);
 		}
