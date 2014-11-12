@@ -7,7 +7,7 @@ INSERT INTO Courses (Name, Privacy)
 VALUES ("Intro Java", "a");
 
 INSERT INTO Policies (Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns)
-VALUES ("Homework", 0, 1, 0, "10", 0, 0);
+VALUES ("Homework", 0, 1, 0, 10, 0, 0);
 
 INSERT INTO Quizzes (Name, Policy, Privacy)
 VALUES ("ThisIsAQuiz", 1, "a");
@@ -36,10 +36,10 @@ INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
 VALUES (1, 2, 2, 1);
 
 -- Add DispEls and Questions to qc
-INSERT INTO QuesConElements (QuesCon, Sequence, Element)
-VALUES (1, 1, 1);
-INSERT INTO QuesConElements (QuesCon, Sequence, Ques)
-VALUES (1, 2, 1);
+INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
+VALUES (1, 1, 1, "Elem");
+INSERT INTO QuesConElements (QuesCon, Sequence, Ques, Type)
+VALUES (1, 2, 1, "Ques");
 
 -- Elements to go into second qc
 INSERT INTO DispElSeq
@@ -69,12 +69,12 @@ VALUES (2, 4, 2, 1);
 INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
 VALUES (2, 5, 3, 0);
 
-INSERT INTO QuesConElements (QuesCon, Sequence, Element)
-VALUES (2, 1, 4);
-INSERT INTO QuesConElements (QuesCon, Sequence, Element)
-VALUES (2, 2, 5);
-INSERT INTO QuesConElements (QuesCon, Sequence, Ques)
-VALUES (2, 3, 2);
+INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
+VALUES (2, 1, 4, "Elem");
+INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
+VALUES (2, 2, 5, "Elem");
+INSERT INTO QuesConElements (QuesCon, Sequence, Ques, Type)
+VALUES (2, 3, 2, "Ques");
 
 -- Connect QuesCons to Quiz
 INSERT INTO QuizzesQuesCons
