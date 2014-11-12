@@ -19,14 +19,14 @@ DROP TABLE IF EXISTS `LiquiZ`.`Policies` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`Policies` (
   `PolID` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(255) NOT NULL,
-  `Attempts` INT NOT NULL,
-  `Timed` BIT(1) NOT NULL,
+  `Attempts` INT NOT NULL DEFAULT 1,
+  `Timed` BIT(1) NOT NULL DEFAULT 0,
   `TimeLimit` INT NULL,
-  `ShowAns` BIT(1) NOT NULL,
-  `Scored` BIT(1) NOT NULL,
+  `ShowAns` BIT(1) NOT NULL DEFAULT 0,
+  `Scored` BIT(1) NOT NULL DEFAULT 1,
   `Grade` INT NOT NULL,
-  `ShuffleQues` BIT(1) NOT NULL,
-  `ShuffleAns` BIT(1) NOT NULL,
+  `ShuffleQues` BIT(1) NOT NULL DEFAULT 0,
+  `ShuffleAns` BIT(1) NOT NULL DEFAULT 0,
   `AccessCode` VARCHAR(255) NULL,
   PRIMARY KEY (`PolID`),
   UNIQUE INDEX `PolID_UNIQUE` (`PolID` ASC))
@@ -147,7 +147,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`Answers` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`Answers` (
   `AnsID` INT NOT NULL AUTO_INCREMENT,
   `Response` INT NULL,
-  `Element` INT NULL COMMENT 'What represents the answer',
+  `Element` INT NULL COMMENT 'The DispEl that represents the answer',
   `LowBound` INT NULL COMMENT 'to accept a range of numbers (lower bound)',
   `HighBound` INT NULL COMMENT 'to accept a range of numbers (upper bound)',
   PRIMARY KEY (`AnsID`))
