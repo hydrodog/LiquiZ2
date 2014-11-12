@@ -7,7 +7,7 @@ INSERT INTO Courses (Name, Privacy)
 VALUES ("Intro Java", "a");
 
 INSERT INTO Policies (Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns)
-VALUES ("Homework", "N", "Y", "N", "10", "N", "N");
+VALUES ("Homework", 0, 1, 0, "10", 0, 0);
 
 INSERT INTO Quizzes (Name, Policy, Privacy)
 VALUES ("ThisIsAQuiz", 1, "a");
@@ -31,9 +31,9 @@ VALUES (3);
 
 -- Connect questions to answers
 INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
-VALUES (1, 1, 1, "Y");
+VALUES (1, 1, 1, 1);
 INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
-VALUES (1, 2, 2, "Y");
+VALUES (1, 2, 2, 1);
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements (QuesCon, Sequence, Element)
@@ -63,11 +63,11 @@ INSERT INTO Answers(Element)
 VALUES (8);
 
 INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
-VALUES (2, 3, 1, "N");
+VALUES (2, 3, 1, 0);
 INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
-VALUES (2, 4, 2, "Y");
+VALUES (2, 4, 2, 1);
 INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
-VALUES (2, 5, 3, "N");
+VALUES (2, 5, 3, 0);
 
 INSERT INTO QuesConElements (QuesCon, Sequence, Element)
 VALUES (2, 1, 4);

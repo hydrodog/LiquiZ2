@@ -20,13 +20,13 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Policies` (
   `PolID` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(255) NOT NULL,
   `Attempts` INT NOT NULL,
-  `Timed` VARCHAR(1) NOT NULL,
+  `Timed` BIT(1) NOT NULL,
   `TimeLimit` INT NULL,
-  `ShowAns` VARCHAR(1) NOT NULL,
-  `Scored` VARCHAR(1) NOT NULL,
+  `ShowAns` BIT(1) NOT NULL,
+  `Scored` BIT(1) NOT NULL,
   `Grade` INT NOT NULL,
-  `ShuffleQues` VARCHAR(1) NOT NULL,
-  `ShuffleAns` VARCHAR(1) NOT NULL,
+  `ShuffleQues` BIT(1) NOT NULL,
+  `ShuffleAns` BIT(1) NOT NULL,
   `AccessCode` VARCHAR(255) NULL,
   PRIMARY KEY (`PolID`),
   UNIQUE INDEX `PolID_UNIQUE` (`PolID` ASC))
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesAnsSeq` (
   `Ans` INT NULL,
   `StdChoice` INT NULL,
   `Sequence` INT NULL,
-  `Correct` CHAR(1) NULL)
+  `Correct` BIT(1) NULL)
 ENGINE = InnoDB;
 
 
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentResponses` (
   `Student` INT NOT NULL,
   `Ques` INT NOT NULL,
   `Response` INT NOT NULL,
-  `Correct` CHAR(1) NULL)
+  `Correct` BIT(1) NULL)
 ENGINE = InnoDB;
 
 
@@ -258,66 +258,12 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentGrades` (
   `Grade` DOUBLE NOT NULL)
 ENGINE = InnoDB;
 
-
-USE `LiquiZ` ;
-
--- -----------------------------------------------------
--- Placeholder table for view `LiquiZ`.`ViewAnsToQues`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`ViewAnsToQues` (`Ques` INT, `GROUP_CONCAT(Ans)` INT, `GROUP_CONCAT(StdChoice)` INT, `Sequence` INT);
-
--- -----------------------------------------------------
--- Placeholder table for view `LiquiZ`.`ViewQuiz`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`ViewQuiz` (`QuesCon` INT, `QuesID` INT, `Element` INT);
-
--- -----------------------------------------------------
--- Placeholder table for view `LiquiZ`.`ViewQuizWAns`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`ViewQuizWAns` (`QuesCon` INT, `Element` INT, `QuesID` INT, `Points` INT, `AnsID` INT);
-
--- -----------------------------------------------------
--- View `LiquiZ`.`ViewAnsToQues`
--- -----------------------------------------------------
+DROP TABLE IF EXISTS `LiquiZ`.`ViewAnsToQues` ;
+DROP TABLE IF EXISTS `LiquiZ`.`ViewQuiz` ;
+DROP TABLE IF EXISTS `LiquiZ`.`ViewQuizWAns` ;
 DROP VIEW IF EXISTS `LiquiZ`.`ViewAnsToQues` ;
-DROP TABLE IF EXISTS `LiquiZ`.`ViewAnsToQues`;
-USE `LiquiZ`;
-CREATE  OR REPLACE VIEW `ViewAnsToQues` AS 
-SELECT Ques, GROUP_CONCAT(Ans), GROUP_CONCAT(StdChoice), Sequence
-FROM QuesAnsSeq
-WHERE Correct="Y"
-;
-
--- -----------------------------------------------------
--- View `LiquiZ`.`ViewQuiz`
--- -----------------------------------------------------
 DROP VIEW IF EXISTS `LiquiZ`.`ViewQuiz` ;
-DROP TABLE IF EXISTS `LiquiZ`.`ViewQuiz`;
-USE `LiquiZ`;
-CREATE  OR REPLACE VIEW `ViewQuiz` AS
-SELECT QuizzesQuesCons.Quiz, QuizzesQuesCons.QuesCon, Questions.QuesID, Questions.QType, DispElSeq.Element, DispElSeq.Type
-FROM QuizzesQuesCons
-LEFT JOIN QuesConElements ON QuizzesQuesCons.QuesCon = QuesConElements.QuesCon
-LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
-LEFT JOIN DispElSeq ON QuesConElements.Element = DispElSeq.DispEl
-ORDER BY QuizzesQuesCons.Sequence, QuesConElements.Sequence, DispElSeq.Sequence ASC;
-
--- -----------------------------------------------------
--- View `LiquiZ`.`ViewQuizWAns`
--- -----------------------------------------------------
 DROP VIEW IF EXISTS `LiquiZ`.`ViewQuizWAns` ;
-DROP TABLE IF EXISTS `LiquiZ`.`ViewQuizWAns`;
-USE `LiquiZ`;
-CREATE  OR REPLACE VIEW `ViewQuizWAns` AS
-SELECT QuizzesQuesCons.Quiz, QuizzesQuesCons.QuesCon, DispElSeq.Element, DispElSeq.Type, Questions.QuesID, Questions.Points, Answers.AnsID
-FROM QuizzesQuesCons
-LEFT JOIN QuesConElements ON QuizzesQuesCons.QuesCon = QuesConElements.QuesCon
-LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
-LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques
-LEFT JOIN Answers ON QuesAnsSeq.Ans = Answers.AnsID AND QuesAnsSeq.Correct="Y"
-LEFT JOIN StdChoices ON QuesAnsSeq.StdChoice = StdChoices.StdChID AND QuesAnsSeq.Correct="Y"
-LEFT JOIN DispElSeq ON QuesConElements.Element = DispElSeq.DispEl AND Answers.Element = DispElSeq.DispEl AND Answers.Response = DispElSeq.DispEl
-ORDER BY QuizzesQuesCons.Sequence, QuesConElements.Sequence, DispElSeq.Sequence ASC;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
