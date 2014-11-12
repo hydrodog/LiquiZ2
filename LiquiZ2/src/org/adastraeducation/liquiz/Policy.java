@@ -6,7 +6,8 @@ public class Policy {
 	private boolean showAns;
 	private boolean scored;
 	private int grade;
-	private boolean shuffle;
+	private boolean shuffleQues;
+	private boolean shuffleAns;
 	private String accessCode;
 	
 	public int getAttemptNum() {
@@ -57,12 +58,20 @@ public class Policy {
 		this.grade = value;
 	}
 	
-	public boolean getShuffle() {
-		return this.shuffle;
+	public boolean getShuffleQues() {
+		return this.shuffleQues;
 	}
 	
-	public void setShuffle(boolean value) {
-		this.shuffle = value;
+	public void setShuffleQues(boolean value) {
+		this.shuffleQues = value;
+	}
+	
+	public boolean getShuffleAns() {
+		return this.shuffleAns;
+	}
+	
+	public void setShuffleAns(boolean value) {
+		this.shuffleAns = value;
 	}
 	
 	public String getAccessCode() {
@@ -80,7 +89,8 @@ public class Policy {
 		showAns = false;
 		scored = true;
 		grade = 0;
-		shuffle = true;
+		shuffleQues = true;
+		shuffleAns = true;
 		accessCode = "";
 	}
 
