@@ -46,6 +46,12 @@ public class Video implements Displayable {
 		this.width= width;
 		this.type = type;
 	}
+	public String getVideo() {
+		return video;
+	}
+	public void setVideo(String video) {
+		this.video = video;
+	}
 	//<source src="movie.mp4" type="video/mp4">
 	//<source src="movie.ogg" type="video/ogg">
 	public void writeHTML(StringBuilder b){

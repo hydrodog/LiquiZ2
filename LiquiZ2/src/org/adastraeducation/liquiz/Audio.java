@@ -4,12 +4,21 @@ public class Audio implements Displayable {
 	private String source;
 	private String type;
 
+	public Audio(){
+		source = null ;		
+	}
 	public Audio(String source){
 		this.source = source;		
 	}
 
 	public Audio(String source, String type){
 		this.source = source;		
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
 	}
 	//<source src="horse.ogg" type="audio/ogg">
 	//<source src="horse.mp3" type="audio/mpeg">

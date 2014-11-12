@@ -17,6 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+ * Authour:Yingzhu
+ * Logic for register.
+ * It will send an email to users' email-address. To click the url in the email will finish
+ * the whole registration
+ */
+
 public class Register extends HttpServlet{
 	
 	public void service(HttpServletRequest request, HttpServletResponse response)
@@ -27,9 +34,6 @@ public class Register extends HttpServlet{
 		String passwd1 = request.getParameter("passwd");
 		String passwd2 = request.getParameter("passwd2");
 		String emailAddress = request.getParameter("email-address");
-		
-		boolean passwdCorrect = passwd1.equals(passwd2);
-		boolean emailCorrect = testEmail(emailAddress);
 		
 		if(passwd1.equals(passwd2)&&testEmail(emailAddress)){
 			sb.append("Please check the confirm email to finish the registeration!");
@@ -45,6 +49,8 @@ public class Register extends HttpServlet{
 		dispatcher.forward(request, response);
 	}
 	
+	//Here is the function to send email
+	
 	public void sendEmail(HttpServletRequest request){
 		//your host
 		String host = "smtp.gmail.com";
@@ -55,7 +61,7 @@ public class Register extends HttpServlet{
 		//email to
 		String to = request.getParameter("email-address");
 		String userName = request.getParameter("userName");
-		String password = request.getParameter("password");
+		String password = request.getParameter("passwd");
 		
 		
 		// Get system properties

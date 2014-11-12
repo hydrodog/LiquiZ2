@@ -34,6 +34,14 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	public String getTagName() {
 		return "MultiAnswer";
 	}
+	
+	public Answer[] getAnswers() {
+		return answers;
+	}
+	public void setAnswers(Answer[] answers) {
+		this.answers = answers;
+	}
+
 
 	//TODO: the html is wrong here, you need values between <option> and </option>
 	public void writeHTML(StringBuilder b ){	
