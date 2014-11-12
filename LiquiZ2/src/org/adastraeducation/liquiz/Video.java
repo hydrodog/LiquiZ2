@@ -6,6 +6,37 @@ public class Video implements Displayable {
 	private int height;
 	private String type;
 	
+	public String getVideo(){
+		return video;
+	}
+	
+	public void setVideo(String v){
+		video = v;
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public void setHeight(int h){
+		height = h;
+	}
+	
+	public int getHeight(){
+		return height;
+	}
+	
+	public void setWidth(int w){
+		width = w;
+	}
+	
+	public String getType(){
+		return type;
+	}
+	
+	public void setType (String t){
+		type = t;
+	}
 	public Video(String video){
 		this.video = video;		
 	}

@@ -8,6 +8,22 @@ public class MatrixQuestion extends Question {
 	private int rows;
 	private int cols;
 	
+	public int getRows(){
+		return rows;
+	}
+	
+	public void setRows(int r){
+		rows = r;
+	}
+	
+	public int getCols(){
+		return cols;
+	}
+	
+	public void setCols(int c){
+		cols = c;
+	}
+	
 	public MatrixQuestion(int id, int level, int points, int rows, int cols) {
 		super(id, level, points);
 		this.rows = rows;

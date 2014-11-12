@@ -9,6 +9,17 @@ public class StdChoice {
 	private Answer[] answers;
 	private HashMap<String, Answer[]> opinion = new HashMap<String, Answer[]>();
 	
+	public String getName(){
+		return this.name;
+	}
+	
+	public void setName(String s){
+		name = s;
+	}
+	
+	public Answer[] getAnswers(){
+		return answers;
+	}
 
 	public StdChoice(String name ) {
 		this.name = name;

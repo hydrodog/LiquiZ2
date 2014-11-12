@@ -3,6 +3,15 @@ package org.adastraeducation.liquiz;
 
 public class MultiAnswer extends MultiChoiceDropdown {
 	private Answer [] answers;
+	
+	/**********************Added getter and setter for serialization********************************/
+	public Answer[] getAnswer(){
+		return answers;
+	}
+	
+	public void setAnswer(Answer[] a){
+		answers = a;
+	}
 
 	public MultiAnswer() {
 	}

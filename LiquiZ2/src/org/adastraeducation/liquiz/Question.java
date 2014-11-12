@@ -15,6 +15,7 @@ public abstract class Question implements Displayable {
 		questionDictionary.put(this.id, this);
 	}
 	public Question() {}
+	
 	public Question (int id, int points, int level) {
 		this.points= points;
 		this.level= level;

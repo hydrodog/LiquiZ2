@@ -5,6 +5,14 @@ public class Code extends Question {
 	public Code() {
 		defaultText = "";
 	}
+	/*********************Added getter and setter for serialization********************************/
+	public String getdefaultTex(){
+		return defaultText;
+	}
+	
+	public void setdefaultText(){
+		this.defaultText="";
+	}
 
 	public Code(int id, int level, int points,
 				String defaultText) {

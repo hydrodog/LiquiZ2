@@ -6,6 +6,31 @@ public class Matrix implements Displayable {
 	private int row;
 	private int col;
 	
+	/******************************************************/
+	public double[][] getData(){
+		return data;
+	}
+	
+	public void setData(){ 
+		
+	}
+	
+	public int getRow(){
+		return row;
+	}
+	
+	public void setRow(int r){
+		this.row = r;
+	}
+	
+	public int getCol(){
+		return col;
+	}
+	
+	public void setCol(int c){
+		this.col = c;
+	}
+	
 	/**
 	 * Construct a matrix with all zeros
 	 */
