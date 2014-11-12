@@ -6,6 +6,6 @@
 
 <jsp:useBean id="quiz" class="org.adastraeducation.liquiz.Quiz" scope="session"/>
 
-<%= request.getAttribute("QuizContext") %>
+<%= request.getParameter("QuizContext") %>
 Quiz now has: <%= request.getAttribute("NumberOfQuestions") %> 
 questions in  <%= request.getAttribute("NumberOfQuestionContainers") %> question containers.
