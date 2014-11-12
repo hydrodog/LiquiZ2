@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserLogin {
-	public static void checkLogin(String un, String pw) {
+	public static boolean checkLogin(String un, String pw) {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
@@ -16,14 +16,18 @@ public class UserLogin {
 			ResultSet rs = p.executeQuery();
 			if(rs.next()) {
 				System.out.print("Login successful");
+				rs.close();
+				return true;
 			} else {
 				System.out.print("Username or password incorrect");
+				rs.close();
+				return false;
 			}
-			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
+		return false;
 	}
 }
