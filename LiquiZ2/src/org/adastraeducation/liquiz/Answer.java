@@ -56,12 +56,14 @@ public class Answer implements Displayable {
 	public void setHeight(String height) {
 		this.height = height;
 	}
+	
 	public void setAnswer(String answer){
 		ans = answer;
 	}
 	public String getAnswer(){
 		return ans;
 	}
+	
 	public void setCorrect(boolean correct){
 		this.correct = correct;
 	}

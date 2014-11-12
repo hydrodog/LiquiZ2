@@ -11,6 +11,15 @@ public class Essay extends Question {
 		super(id, level, points);
 		this.defaultText = defaultText;
 	}
+	
+	/*******************Added getter and setter for serialization*************************/
+	public String getdefaultText(){
+		return defaultText;
+	}
+	
+	public void setdefaultText(){
+		this.defaultText = "";
+	}
 
 	public String getDefaultText() {
 		return defaultText;

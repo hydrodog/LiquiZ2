@@ -13,6 +13,9 @@ public class User {
 	
 	private String id; // unique User for this system
 	private String passwd;
+	private String fName;
+	private String lName;
+	private String email;
 	private int role; // lookup into Role table?
 	private int permissions;
 	public String getId() {
@@ -31,6 +34,24 @@ public class User {
 	 * Each bit of permissions represents the ability to do something
 	 * @return permissions bits
 	 */
+	public String getFirstName() {
+		return fName;
+	}
+	public void setFirstName(String firstName) {
+		fName = firstName;
+	}
+	public String getLastName() {
+		return lName;
+	}
+	public void setLastName(String lastName) {
+		lName = lastName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public int getPermissions() {
 		return permissions;
 	}

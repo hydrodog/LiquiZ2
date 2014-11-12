@@ -14,6 +14,24 @@ public class Image implements Displayable {
 	public Image(){
 		name = null;		
 	}
+	
+	/*********************Added getters and setters for serialization*************************************/
+	public String getWidth(){
+		return width;
+	}
+	
+	public void setWidth(String w){
+		this.width = w;
+	}
+	
+	public String getHeight(){
+		return height;
+	}
+	
+	public void setHeight(String h){
+		this.height = h;
+	}
+	
 	//TODO: Add Image constructor here!!
 	public Image(String image){
 		this.name= image;

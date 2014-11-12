@@ -77,14 +77,15 @@ public class Quiz implements Displayable {
 	}
 	
 	public void setPolicy(int num,boolean timed, int duration, 
-			boolean showAns,boolean scored,int grade, boolean shuffle, String accessCode){
+			boolean showAns,boolean scored,int grade, boolean shuffleQues, boolean shuffleAns, String accessCode){
 		policy.setAttemptNum(num);
 		policy.setTimed(timed);
 		policy.setDuration(duration);
 		policy.setShowAns(showAns);
 		policy.setScored(scored);
 		policy.setGrade(grade);
-		policy.setShuffle(shuffle);
+		policy.setShuffleQues(shuffleQues);
+		policy.setShuffleAns(shuffleAns);
 		policy.setAccessCode(accessCode);
 	}
 	

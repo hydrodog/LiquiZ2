@@ -17,7 +17,7 @@ public class LoadEntities {
 		Displayable d;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT Element, QType FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
+			PreparedStatement p = conn.prepareStatement("SELECT Element, Type FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
 			p.setInt(1, DispElID);
 			ResultSet rs = p.executeQuery();
 
@@ -61,7 +61,8 @@ public class LoadEntities {
 			ResultSet rs = p.executeQuery();
 
 			if (rs.getInt("Element") != 0) {
-				a = new Answer(); //TODO: Answer constructor only takes Strings
+				Displayable d = loadDispEl(rs.getInt("Element"));
+				a = new Answer(); //TODO: Change Answer class to have Displayable? or just put the DispEl string into the constructor?
 			} else {
 				// Range
 				a = null; // CHANGE THIS!!!
@@ -104,7 +105,12 @@ public class LoadEntities {
 				if (rs2.getInt("Ans") != 0) {
 					ans.add(loadAns(rs2.getInt("Ans")));
 					ans.get(ans.size()-1).setCorrect(rs2.getBoolean("Correct"));
-				} // TODO: else StdChoice
+				} else {
+					PreparedStatement p3 = conn.prepareStatement("SELECT * FROM StdChoices WHERE StdChID=? ORDER BY Sequence ASC");
+					p3.setInt(1, rs2.getInt("StdChoice"));
+					ResultSet rs3 = p3.executeQuery();
+					//TODO: StdChoice??
+				}
 				//TODO: How does Java connect Q's and A's?
 
 			}
@@ -138,7 +144,8 @@ public class LoadEntities {
 			pol.setShowAns(rs.getBoolean("ShowAns"));
 			pol.setScored(rs.getBoolean("Scored"));
 			pol.setGrade(rs.getInt("Grade"));
-			pol.setShuffle(rs.getBoolean("")); //TODO: Policy class does not distinguish ShuffleQues and ShuffleAns
+			pol.setShuffleQues(rs.getBoolean("ShuffleQues"));
+			pol.setShuffleAns(rs.getBoolean("ShuffleAns"));
 			if (rs.getString("AccessCode") != null) {
 				pol.setAccessCode(rs.getString("AccessCode"));
 			}

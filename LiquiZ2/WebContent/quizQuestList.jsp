@@ -83,7 +83,7 @@
 $(".EditQz").click(function(){
 	var name = $(this).siblings(":last");
 	//var name2 = $(this).closest('tr').find("td: last");
-	alert(name.text());
+	alert('name');
 });
 
 $("#AllQz").click(function(){
@@ -167,6 +167,6 @@ $("#NewQs").click(function(){
 /***********TODO***********
 implement edit buttons
 show quiz name when clicked on
-increment quiz/ques index when adding a new one
+increment quiz/ques index when adding a new one....
 
 ***************************/
