@@ -32,14 +32,6 @@ public class Image implements Displayable {
 		this.height = h;
 	}
 	
-	public String getName(){
-		return name;
-	}
-	
-	public void setName(String n){
-		this.name = n;
-	}
-	
 	//TODO: Add Image constructor here!!
 	public Image(String image){
 		this.name= image;
