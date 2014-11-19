@@ -24,8 +24,6 @@ public class Create {
 		}
 	}
 	
-	//TODO: UserPermissions
-	
 	public static void createCourse(String name, String privacy) {
 		Connection conn = null;
 		try {

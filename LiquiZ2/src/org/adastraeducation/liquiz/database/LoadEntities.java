@@ -261,4 +261,13 @@ public class LoadEntities {
 
 		return null;
 	}
+	
+	/*
+	 * TODO:
+	 * loadCourse
+	 * loadStudentGrade
+	 * loadStudentGradeOnQuiz
+	 * loadStudentResponse
+	 * loadUser
+	 */
 }
