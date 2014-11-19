@@ -6,36 +6,37 @@ package org.adastraeducation.liquiz;
  */
 
 public class Answer implements Displayable {
-	private String ans;
+	//private String ans;
+	private Displayable ans;
 	private boolean correct;
 	private int index;// for standard choice
 	private String width; // for graphical answer
 	private String height;// for graphical answer	
 	
-	public Answer(String ans, boolean correct) {
+	public Answer(Displayable ans, boolean correct) {
 		this.ans = ans;
 		this.correct = correct;
 	}
-	public Answer(String ans) {
+	public Answer(Displayable ans) {
 		this(ans, false);
 	}
 	public Answer() { this(null, false); }
 	
-    public Answer(int index, String ans) {
+    public Answer(int index, Displayable ans) {
 		this.ans = ans;
 		this.index = index;
 		this.correct = false;
 	}
-    public Answer(int index, String ans, boolean correct) {
+    public Answer(int index, Displayable ans, boolean correct) {
 		this.ans = ans;
 		this.index = index;
 		this.correct = correct;
 	}
     
-	public String getAns() {
+	public Displayable getAns() {
 		return ans;
 	}
-	public void setAns(String ans) {
+	public void setAns(Displayable ans) {
 		this.ans = ans;
 	}
 	public int getIndex() {
@@ -56,14 +57,7 @@ public class Answer implements Displayable {
 	public void setHeight(String height) {
 		this.height = height;
 	}
-	
-	public void setAnswer(String answer){
-		ans = answer;
-	}
-	public String getAnswer(){
-		return ans;
-	}
-	
+
 	public void setCorrect(boolean correct){
 		this.correct = correct;
 	}
