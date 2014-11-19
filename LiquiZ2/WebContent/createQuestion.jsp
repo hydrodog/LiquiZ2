@@ -17,6 +17,8 @@
         </select>
         <form method="GET" action="addQuestion.jsp">
             <div id="div_title" align="left">
+                </br>
+            
                 Title  <input type="text" name="title">
                 QuestionType
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
@@ -24,15 +26,6 @@
                     <option value="Essay" >Essay</option>                 
                     <option value="MultiChoice">MultiChoice</option>
                     <option value="MultiAnswer">MultiAnswer</option>
-                    
-                </select>
-                <div id="display_src" align="left"> </br>
-                DisplaySource 
-                <select name="display_source" size="1" onchange="changeSource(this)">
-                	<option value="None" selected>None</option>
-                    <option value="Image">Image</option>
-                    <option value="Video">Video</option>
-                    <option value="Audio">Audio</option>
                     
                 </select>
                                 
@@ -45,43 +38,116 @@
                 Answer<input type="text" name="answer">   
             </div>
             </br>
+            
+            <div>
+            	Image Upload
+				<input type="file" id="image-input">
+				<input type="button" value="Load Selected Image" id="load-image" />
+				</br>
+				
+			</div>
+
+			<div>
+			    </br>
+       			<img id="image-container"/>
+    		</div>
+    		
+    		</br>
+    		
+    		<script>
+    		(function(){
+
+    		    var fileInput = document.getElementById('image-input');
+    		    var image = document.getElementById('image-container');
+
+    		    document.getElementById('load-image').addEventListener('click', function(){
+
+    		    	var fileUrl = window.URL.createObjectURL(fileInput.files[0]);
+
+    		        image.src = fileUrl;
+
+    		    });
+
+    		})();   
+
+			</script>
+			
+			
+           
+			<div>
+                Audio Upload
+				<input type="file" id="audio-input">
+				<input type="button" value="Load Selected Audio" id="load-audio" />
+			
+			</div>
+
+			<div>
+				</br>
+       			<audio id="audio-container" controls></audio>
+       			</br>
+       			</br>
+    		</div>
+    		
+    		<script>
+    		(function(){
+
+    		    var fileInput = document.getElementById('audio-input');
+    		    var audio = document.getElementById('audio-container');
+
+    		    document.getElementById('load-audio').addEventListener('click', function(){
+
+    		    	var fileUrl = window.URL.createObjectURL(fileInput.files[0]);
+
+    		        audio.src = fileUrl;
+
+    		    });
+
+    		})();   
+
+			</script>
+			
+			 <div>
+                Video Upload
+				<input type="file" id="video-input">
+				<input type="button" value="Load Selected Video" id="load-video" />
+			</div>
+
+			<div>
+				</br>
+       			<video id="video-container" controls></video>
+       			</br>
+       			</br>
+    		</div>
+    		<script>
+    		(function(){
+
+    		    var fileInput = document.getElementById('video-input');
+    		    var video = document.getElementById('video-container');
+
+    		    document.getElementById('load-video').addEventListener('click', function(){
+
+    		    	var fileUrl = window.URL.createObjectURL(fileInput.files[0]);
+
+    		        video.src = fileUrl;
+
+    		    });
+
+    		})();   
+
+			</script>
+			
+                
             <div id="question_text" align="left">
                 Question Text</br>
                 <textarea name="question_text" rows="6" cols="40"></textarea>
             </div>
             </br>
-           <!--  <img src= "assets\img\hedgehog.jpg" alt= "image_src" width="600" height="450"> -->
-            <div id="image_attribute" align="left" style= "display:none">
-                <div>
-                Image Name
-                    <input type="text" name="image" onchange="showImage(this)" >
-                </div>
-                <div id="image_src"></div>
                 
-            </div>
-            
-            <div id="video_attribute" align="left" style= "display:none">
-                <div>
-                Video Name
-                    <input type="text" name="video" onchange="showVideo(this)" >
-                </div>
-                <div id="video_src"></div>
-                
-            </div>
-            
-            <div id="audio_attribute" align="left" style= "display:none">
-                <div>
-                Audio Name
-                    <input type="text" name="image" onchange="showAudio(this)" >
-                </div>
-                <div id="audio_src"></div>
-                
-            </div>
-            
-            <div id="fillin_attribute" align="left" >
+                <div id="fillin_attribute" align="left" >
                 <div style="float:left">
                     <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">WarningPattern</br>
                 </div>
+                </br>
                 <div id="warningPattern_attribute" style="float:left;display:none; margin-left:60px;">
                     <select name="warning_type" size="1">
                         <option value="NumberWarningPattern" selected>FillIn</option>
@@ -111,24 +177,37 @@
               <div id="essay_attribute" align="left" style= "display:none">
                 <div>
                     Type your Essay</br>
-               		<textarea name="question_text" rows="10" cols="100"></textarea>
+               		<textarea name="question_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
+					<br>
+					<font color="black">Word count:</font><font color="red"> 
+  					<span id="count_number_words">0</span>
+					</font>
+					<br>
+					<font color="black">Words remaining: </font><font color="red"> 
+   					<span id="show_remaining_words">120</span>
+					</font>
+
+    
                 </div>
-                <div id="choices"></div>
             </div>
             
             <div id="multichoice_attribute" align="left" style= "display:none">
                 <div>
-                    Number of choices
+                    Number of multi-choices
                     <input type="text" name="multichoice_number" onchange="createChoices(this)" >
                 </div>
+                </br>
+                
                 <div id="choices"></div>
             </div>
             
             <div id="multianswer_attribute" align="left" style= "display:none">
                 <div>
-                    Number of multi-choices
+                    Number of multi-answer-choices
                     <input type="text" name="multianswer_number" onchange="createMultiChoices(this)" >
                 </div>
+                </br>
+                
                 <div id="multichoices"></div>
             </div>
             

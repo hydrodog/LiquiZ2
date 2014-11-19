@@ -13,13 +13,15 @@ public class Util extends HttpServlet{
 	
 	private Quiz quiz = new Quiz();
 	
-	public void service(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 //      problem for quiz lifetime, when to create a new Quiz?
 		
 //		if(request.getSession().isNew())
 //			quiz = new Quiz();
+		
+		System.out.println("test-Util");
 		
 		addQuestion(quiz, request);
 		request.setAttribute("QuizContext",showQuiz(quiz));
@@ -113,10 +115,10 @@ public class Util extends HttpServlet{
 		return q;
 	}
 	public Question createMultiChoiceRadio(HttpServletRequest request){
-		int numChoices = Integer.parseInt(request.getParameter("multichoice_number"));
+		int numChoices = Integer.parseInt(request.getParameter("multichoiceradio_number"));
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
-		  String choice = request.getParameter("choices" + (i+1));
+		  String choice = request.getParameter("choicesradio" + (i+1));
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiChoiceRadio q = new MultiChoiceRadio();
