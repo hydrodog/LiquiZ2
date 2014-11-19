@@ -39,7 +39,8 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
-  `DispElID` INT NOT NULL AUTO_INCREMENT COMMENT 'Not sure I\'ll need this but needed for diagram i think',
+  `DispElID` INT NOT NULL AUTO_INCREMENT COMMENT 'Not sure I\'ll need this but needed for diagram I think',
+  `Type` CHAR(4) NOT NULL,
   PRIMARY KEY (`DispElID`))
 ENGINE = InnoDB;
 
@@ -108,8 +109,8 @@ DROP TABLE IF EXISTS `LiquiZ`.`QuesCon` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesCon` (
   `QuesConID` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`QuesConID`),
-  UNIQUE INDEX `QCID_UNIQUE` (`QuesConID` ASC))
+  PRIMARY KEY (`QuesConID`)
+  )
 ENGINE = InnoDB;
 
 
@@ -162,8 +163,19 @@ DROP TABLE IF EXISTS `LiquiZ`.`DispElSeq` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DispElSeq` (
   `DispEl` INT NOT NULL,
   `Element` VARCHAR(255) NOT NULL,
-  `Sequence` INT NOT NULL,
-  `Type` CHAR(4) NOT NULL)
+  `Sequence` INT NOT NULL)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `LiquiZ`.`StdSet`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LiquiZ`.`StdSet` ;
+
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`StdSet` (
+  `StdSetID`  INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`StdSetId`))
 ENGINE = InnoDB;
 
 
@@ -173,10 +185,9 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `LiquiZ`.`StdChoices` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`StdChoices` (
-  `StdChID` INT NOT NULL,
+  `StdSetID` INT NOT NULL,
   `Element` INT NOT NULL,
-  `Sequence` INT NOT NULL,
-  PRIMARY KEY (`StdChID`))
+  `Sequence` INT NOT NULL)
 ENGINE = InnoDB;
 
 
@@ -188,9 +199,10 @@ DROP TABLE IF EXISTS `LiquiZ`.`QuesAnsSeq` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesAnsSeq` (
   `Ques` INT NOT NULL,
   `Ans` INT NULL,
-  `StdChoice` INT NULL,
+  `StdSet` INT NULL,
+  `StdChoice` INT NULL, -- Sequence, so we can set correct
   `Sequence` INT NULL,
-  `Correct` BIT(1) NULL)
+  `Correct` BIT(1) NULL) -- 0/1
 ENGINE = InnoDB;
 
 
