@@ -51,10 +51,10 @@ public class Answer implements Displayable {
 		this.correct = correct;
 	}
     
-    public String getAns() {
+    public String getAnswer() {
     	return ans;
     }
-    public void setAns(String ans) {
+    public void setAnswer(String ans) {
     	this.ans = ans;
     }
 	public Displayable getGAns() {
