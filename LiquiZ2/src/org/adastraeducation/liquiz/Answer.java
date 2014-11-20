@@ -6,38 +6,62 @@ package org.adastraeducation.liquiz;
  */
 
 public class Answer implements Displayable {
-	//private String ans;
-	private Displayable ans;
+	private String ans;
+	private Displayable gAns;
 	private boolean correct;
 	private int index;// for standard choice
 	private String width; // for graphical answer
 	private String height;// for graphical answer	
 	
-	public Answer(Displayable ans, boolean correct) {
+	
+	public Answer(String ans, boolean correct) {
 		this.ans = ans;
+		this.correct = correct;
+	}
+	public Answer(String ans) {
+		this(ans, false);
+	}
+	public Answer(Displayable ans, boolean correct) {
+		gAns = ans;
 		this.correct = correct;
 	}
 	public Answer(Displayable ans) {
 		this(ans, false);
 	}
-	public Answer() { this(null, false); }
+	//public Answer() { this(null, false); }
 	
-    public Answer(int index, Displayable ans) {
+	public Answer(int index, String ans) {
 		this.ans = ans;
 		this.index = index;
 		this.correct = false;
 	}
-    public Answer(int index, Displayable ans, boolean correct) {
+	public Answer(int index, String ans, boolean correct) {
 		this.ans = ans;
 		this.index = index;
 		this.correct = correct;
 	}
-    
-	public Displayable getAns() {
-		return ans;
+    public Answer(int index, Displayable ans) {
+		gAns = ans;
+		this.index = index;
+		this.correct = false;
 	}
-	public void setAns(Displayable ans) {
-		this.ans = ans;
+    public Answer(int index, Displayable ans, boolean correct) {
+    	gAns = ans;
+		this.index = index;
+		this.correct = correct;
+	}
+    
+    public String getAns() {
+    	return ans;
+    }
+    public void setAns(String ans) {
+    	this.ans = ans;
+    }
+	public Displayable getGAns() {
+		return gAns;
+	}
+	public void setGAns(Displayable ans) {
+		gAns = ans;
 	}
 	public int getIndex() {
 		return index;
