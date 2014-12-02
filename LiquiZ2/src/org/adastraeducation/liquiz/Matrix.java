@@ -11,8 +11,8 @@ public class Matrix implements Displayable {
 		return data;
 	}
 	
-	public void setData(){ 
-		
+	public void setData(double[][] arr){ 
+		data = arr;
 	}
 	
 	public int getRow(){
@@ -29,6 +29,10 @@ public class Matrix implements Displayable {
 	
 	public void setCol(int c){
 		this.col = c;
+	}
+	
+	public Matrix(){
+		
 	}
 	
 	/**

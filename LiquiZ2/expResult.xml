@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_51" class="java.beans.XMLDecoder">
+ <object class="org.adastraeducation.liquiz.test.Ziuq">
+  <void property="c">
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.test.Contain">
+      <void property="displays">
+       <object class="java.util.ArrayList">
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.Contain">
+          <void property="id">
+           <int>9</int>
+          </void>
+          <void property="name">
+           <string>Nested container 9</string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>11</int>
+          </void>
+          <void property="name">
+           <string>Nested displayable </string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.Contain">
+          <void property="id">
+           <int>10</int>
+          </void>
+          <void property="name">
+           <string>Nested container 10</string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>13</int>
+          </void>
+          <void property="name">
+           <string>Nested displayable </string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>1</int>
+          </void>
+          <void property="name">
+           <string>I am quiz 1</string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>2</int>
+          </void>
+          <void property="name">
+           <string>I am quiz 2</string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>3</int>
+          </void>
+          <void property="name">
+           <string>I am quiz 3</string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>4</int>
+          </void>
+          <void property="name">
+           <string>I am quiz 4</string>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="org.adastraeducation.liquiz.test.display">
+          <void property="id">
+           <int>5</int>
+          </void>
+          <void property="name">
+           <string>I am quiz 5</string>
+          </void>
+         </object>
+        </void>
+       </object>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.test.Contain">
+      <void property="id">
+       <int>1</int>
+      </void>
+      <void property="name">
+       <string>Conatainer 1</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.test.Contain">
+      <void property="id">
+       <int>2</int>
+      </void>
+      <void property="name">
+       <string>Conatainer 2</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.test.Contain">
+      <void property="id">
+       <int>3</int>
+      </void>
+      <void property="name">
+       <string>Conatainer 3</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.test.Contain">
+      <void property="id">
+       <int>4</int>
+      </void>
+      <void property="name">
+       <string>Conatainer 4</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.test.Contain">
+      <void property="id">
+       <int>5</int>
+      </void>
+      <void property="name">
+       <string>Conatainer 5</string>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+  <void property="id">
+   <int>2014</int>
+  </void>
+  <void property="name">
+   <string>LiquiZ</string>
+  </void>
+ </object>
+</java>

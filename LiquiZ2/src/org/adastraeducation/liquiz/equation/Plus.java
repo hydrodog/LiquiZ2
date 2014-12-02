@@ -5,6 +5,24 @@ public class Plus implements Expression {;
 	private Expression op1;
 	private Expression op2;
 	
+	public Expression getOp1(){
+		return op1;
+	}
+	
+	public void setOp1(Expression e){
+		op1 = e;
+	}
+	
+	public Expression getOp2(){
+		return op2;
+	}
+	
+	public void setOp2(Expression e){
+		op2 = e;
+	}
+	
+	public Plus(){}
+	
 	public Plus(Expression op1, Expression op2){
 		this.op1=op1;
 		this.op2=op2;

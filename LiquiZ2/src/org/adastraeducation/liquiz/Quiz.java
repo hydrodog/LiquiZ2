@@ -32,8 +32,11 @@ public class Quiz implements Displayable {
 	public static String escapeXML(String s) {
 		return s;
 	}
+	private int id; // unique id for db and XML
+	private String name; // display name, possibly per Course?
 	private ArrayList<QuestionContainer> qContainers;
 	private Policy policy ; 
+	
 	public int getId() {
 		return id;
 	}
@@ -50,8 +53,14 @@ public class Quiz implements Displayable {
 		this.name = name;
 	}
 
-	private int id; // unique id for db and XML
-	private String name; // display name, possibly per Course?
+	public ArrayList<QuestionContainer> getQContainers() {
+		return qContainers;
+	}
+	
+	public void setQContainers(ArrayList<QuestionContainer> c){
+		qContainers = c;
+	}
+	
 	public int getQuestionContainerCount() {
 		return qContainers.size();
 	}
@@ -62,21 +71,12 @@ public class Quiz implements Displayable {
 		}
 		return count;
 	}
-	public Quiz() {
-		qContainers = new ArrayList<QuestionContainer>();
-		policy = new Policy();
-	}
-	
-	public Quiz(Policy plc) {
-		this.qContainers = new ArrayList<QuestionContainer>();
-		policy = plc;
-	}
 	
 	public Policy getPolicy(){
 		return policy;
 	}
 	
-	public void setPolicy(int num,boolean timed, int duration, 
+/*	public void setPolicy(int num,boolean timed, int duration, 
 			boolean showAns,boolean scored,int grade, boolean shuffleQues, boolean shuffleAns, String accessCode){
 		policy.setAttemptNum(num);
 		policy.setTimed(timed);
@@ -87,13 +87,27 @@ public class Quiz implements Displayable {
 		policy.setShuffleQues(shuffleQues);
 		policy.setShuffleAns(shuffleAns);
 		policy.setAccessCode(accessCode);
+	}*/
+	
+	public void setPolicy(Policy p){
+		this.policy = p;
 	}
 	
-	public ArrayList<QuestionContainer> getQuestionContainers() {
-		return qContainers;
+	public Quiz() {
+/*		this.id = 0;
+		this.name = "defaultName";
+		this.qContainers = new ArrayList<QuestionContainer>();
+		this.policy = new Policy();*/
+	}
+	
+	public Quiz(Policy plc) {
+		this.qContainers = new ArrayList<QuestionContainer>();
+		policy = plc;
 	}
 	
 	public void addQuestionContainer(QuestionContainer qc) {
+		if(this.qContainers == null)
+			this.qContainers = new ArrayList<QuestionContainer>();
 		qContainers.add(qc);
 	}
 	

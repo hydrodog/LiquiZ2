@@ -16,6 +16,34 @@ public class Equation implements Displayable {
 	private double correctAnswer;
 	private HashMap<String,Var> variables;
 	
+	public Expression getFunc(){
+		return this.func; 
+	}
+	
+	public void setFunc(Expression e){
+		this.func = e;
+	}
+	
+	public double getCorrectAnswer(){
+		return this.correctAnswer;
+	}
+	
+	public void setCorrectAnswer(double ans){
+		this.correctAnswer = ans;
+	}
+	
+	public HashMap<String,Var> getVariables(){
+		return variables;
+	}
+	
+	public void setVariables(HashMap<String,Var> h){
+		variables = h;
+	}
+	
+	public Equation(){
+		
+	}
+	
 	public Equation(String equation, HashMap<String,Var> variables){
 		this.variables=variables;
 		ArrayList<String> equationSplit = this.parseQuestion(equation);
@@ -28,7 +56,7 @@ public class Equation implements Displayable {
 		this.variables = variables;
 		correctAnswer=func.eval();
 	}
-	
+
 	public Equation(Expression func){
 		this.func = func;
 		this.variables = new HashMap<String,Var>();
@@ -39,9 +67,9 @@ public class Equation implements Displayable {
 		correctAnswer=func.eval();
 	}
 	
-	public void setVariables(HashMap<String,Var> variables){
+/*	public void setVariables(HashMap<String,Var> variables){
 		this.variables = variables;
-	}
+	}*/
 	
 
 	public String getTagName() { return "Equation"; }
@@ -151,13 +179,13 @@ public class Equation implements Displayable {
 //		DatabaseMgr.update(sql);
 //	}
 	
-	public Expression getExpression(){
+/*	public Expression getExpression(){
 		return func;
 	}
 	
 	public double getCorrectAnswer(){
 		return correctAnswer;
-	}
+	}*/
 
 
 
