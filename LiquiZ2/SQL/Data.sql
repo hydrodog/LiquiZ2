@@ -1,35 +1,39 @@
 USE `LiquiZ` ;
 DELETE FROM Answers;
 DELETE FROM Courses;
-DELETE FROM CoursesQuizzes; --
+DELETE FROM CoursesQuizzes; 
 DELETE FROM DispElSeq;
 DELETE FROM DisplayElements;
 DELETE FROM Policies;
 DELETE FROM QuesAnsSeq;
-DELETE FROM QuesCon; --
+DELETE FROM QuesCon; 
 DELETE FROM QuesConElements;
 DELETE FROM Questions;
 DELETE FROM Quizzes;
 DELETE FROM QuizzesQuesCons;
+DELETE FROM Responses;
 DELETE FROM StdChoices;
 DELETE FROM StdSet;
-DELETE FROM StudentGrades; --
-DELETE FROM StudentGradesOnQuizzes; --
-DELETE FROM StudentResponses; --
+DELETE FROM StudentGrades; 
+DELETE FROM StudentGradesOnQuizzes; 
+DELETE FROM StudentResponses; 
 DELETE FROM UserPermissions;
 DELETE FROM Users;
 
 INSERT INTO Users
 VALUES (1, "Yijin", "Kang", "yijkan", "password", "yijinkang@gmail.com");
 
-INSERT INTO Courses (Name, Privacy)
-VALUES ("Intro Java", "a");
+INSERT INTO Courses
+VALUES (1, "Intro Java", "a");
 
 INSERT INTO Policies (PolID, Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns)
 VALUES (1, "Homework", 0, 1, 0, 10, 0, 0);
 
 INSERT INTO Quizzes (QuizID, Name, Policy, Privacy)
 VALUES (1, "ThisIsAQuiz", 1, "a");
+
+INSERT INTO CoursesQuizzes
+VALUES (1, 1, 1);
 
 -- Elements to go into first qc
 INSERT INTO DisplayElements
@@ -61,12 +65,16 @@ INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
 VALUES (1, 2, 2, 1);
 
 -- Add DispEls and Questions to qc
+INSERT INTO QuesCon
+VALUES (1);
 INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
 VALUES (1, 1, 1, "Elem");
 INSERT INTO QuesConElements (QuesCon, Sequence, Ques, Type)
 VALUES (1, 2, 1, "Ques");
 
 -- Elements to go into second qc
+INSERT INTO QuesCon
+VALUES (2);
 INSERT INTO DisplayElements
 VALUES (4, "img");
 INSERT INTO DispElSeq
@@ -237,3 +245,31 @@ INSERT INTO DispElSeq
 VALUES(23, "Purple", 1);
 INSERT INTO StdChoices
 VALUES(3, 23, 5);
+
+-- Student A has taken the quiz
+INSERT INTO Users
+VALUES (2, "A", "A", "aa", "password", "abcd@gmail.com");
+
+INSERT INTO Responses
+VALUES (1, 24);
+INSERT INTO DisplayElements
+VALUES (24, "text");
+INSERT INTO DispElSeq
+VALUES (24, "Blue", 1);
+INSERT INTO StudentResponses
+VALUES (2, 1, 1, 1);
+
+INSERT INTO Responses
+VALUES (2, 25);
+INSERT INTO DisplayElements
+VALUES (25, "text");
+INSERT INTO DispElSeq
+VALUES (25, "Cat", 1);
+INSERT INTO StudentResponses
+VALUES (2, 2, 2, 1);
+
+INSERT INTO StudentGradesOnQuizzes
+VALUES (1, 1, 100);
+
+INSERT INTO StudentGrades
+VALUES (1, 100);

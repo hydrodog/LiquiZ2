@@ -236,6 +236,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `LizuiZ`.`Responses`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LiquiZ`.`Responses` ;
+
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`Responses` (
+  `ResponseID` INT NOT NULL AUTO_INCREMENT,
+  `Element` INT NOT NULL,
+  PRIMARY KEY (`ResponseID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `LiquiZ`.`StudentResponses`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `LiquiZ`.`StudentResponses` ;
