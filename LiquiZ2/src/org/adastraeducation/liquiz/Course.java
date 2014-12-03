@@ -7,7 +7,8 @@ package org.adastraeducation.liquiz;
 import java.util.ArrayList;
 
 public class Course implements Displayable {
-	private String id, name;
+	private int id;
+	private String name;
 	// private String classname, qListClassName; // for user to override HTML class for style
 	// TODO: is this needed? would users want to customize their list of quizzes?
 	private ArrayList<Quiz> quizzes;
@@ -21,17 +22,17 @@ public class Course implements Displayable {
 		quizzes = new ArrayList<Quiz>();
 	}
 
-	public Course(String id, String name) {
+	public Course(int id, String name) {
 		this.id = id;
 		this.name = name;
 		quizzes = new ArrayList<Quiz>();
 	}
 
-	public String getID() {
+	public int getID() {
 		return id;
 	}
 	
-	public void setID(String id) {
+	public void setID(int id) {
 		this.id = id;
 	}
 

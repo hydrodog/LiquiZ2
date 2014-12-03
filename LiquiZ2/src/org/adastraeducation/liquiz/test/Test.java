@@ -250,7 +250,7 @@ public class Test {
 		testOutput("output/test3", test3());
 		
 		/*testing Course*/
-		Course testCourse = new Course("ID", "Test Course");
+		Course testCourse = new Course(1, "Test Course");
 		testCourse.addQuiz(test1());
 		testCourse.addQuiz(test2());
 		testCourse.addQuiz(test3());
