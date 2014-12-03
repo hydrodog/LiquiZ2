@@ -61,8 +61,7 @@ public class LoadEntities {
 			ResultSet rs = p.executeQuery();
 
 			if (rs.getInt("Element") != 0) {
-				Displayable d = loadDispEl(rs.getInt("Element"));
-				a = new Answer(); //TODO: Change Answer class to have Displayable? or just put the DispEl string into the constructor?
+				a = new Answer(loadDispEl(rs.getInt("Element"))); 
 			} else {
 				// Range
 				a = null; // CHANGE THIS!!!
@@ -77,11 +76,42 @@ public class LoadEntities {
 		}
 		return null;
 	}
+	
+	// Loads all the answers in the StdSet requested
+	public static StdChoiceTwo loadStdChoices(int SetID) {
+		Connection conn = null;
+		ArrayList<Answer> ans = new ArrayList<Answer>();
+		
+		try {
+			conn = DatabaseMgr.getConnection();
+			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM StdSet WHERE StdSetID=?");
+			p1.setInt(1, SetID);
+			ResultSet rs1 = p1.executeQuery();
+			String name = null;
+			if (rs1.next()) {
+				name = rs1.getString("Name");
+			}
+			PreparedStatement p2 = conn.prepareStatement("SELECT * FROM StdChoices WHERE StdSetID=?");
+			p2.setInt(1, SetID);
+			ResultSet rs2 = p2.executeQuery();
+			
+			while (rs2.next()) {
+				ans.add(new Answer(loadDispEl(rs2.getInt("Element"))));
+			}
+			return new StdChoiceTwo(name, ans);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.returnConnection(conn);
+		}
+		return null;
+	}
 
 	public static Question loadQues(int QuesID) {
 		Connection conn = null;
 		Question q;
 		ArrayList<Answer> ans = new ArrayList<Answer>();
+		StdChoiceTwo sc = null;
 
 		try {
 			conn = DatabaseMgr.getConnection();
@@ -89,31 +119,39 @@ public class LoadEntities {
 			p1.setInt(1, QuesID);
 			ResultSet rs1 = p1.executeQuery();
 
-			String type = rs1.getString("QType");
 			// Figure out what type of Question to load
+			String type = rs1.getString("QType");
 			if (type.equals("Fill")) {
 				q = new FillIn(rs1.getInt("QuesID"), rs1.getInt("Points"), rs1.getInt("Level"));
-			} //TODO: else if...
+			} //TODO: else if(type.equals("")) ...
 			else {
 				q = null;
 			}
 
+			// Load corresponding answers or stdchoices
 			PreparedStatement p2 = conn.prepareStatement("SELECT * FROM QuesAnsSeq WHERE Ques=? ORDER BY Sequence ASC");
 			p2.setInt(1, QuesID);
 			ResultSet rs2 = p2.executeQuery();
+			
 			while (rs2.next()) {
 				if (rs2.getInt("Ans") != 0) {
 					ans.add(loadAns(rs2.getInt("Ans")));
 					ans.get(ans.size()-1).setCorrect(rs2.getBoolean("Correct"));
-				} else {
-					PreparedStatement p3 = conn.prepareStatement("SELECT * FROM StdChoices WHERE StdChID=? ORDER BY Sequence ASC");
-					p3.setInt(1, rs2.getInt("StdChoice"));
-					ResultSet rs3 = p3.executeQuery();
-					//TODO: StdChoice??
+				} else {					
+					if (sc.equals(null)) {
+						sc = loadStdChoices(rs2.getInt("StdSet"));
+					}
+					if (rs2.getBoolean("Correct")) {
+						sc.setAnswer(rs2.getInt("Sequence"));
+					}
 				}
-				//TODO: How does Java connect Q's and A's?
-
 			}
+			if (ans.isEmpty() && !sc.equals(null)) {
+				ans = sc.getAnswers();
+			}
+			
+			// TODO: How does Java connect Q's and A's?
+			// make ArrayList<Answers> in Question class and single-answer questions will have only 1
 
 			rs1.close();
 			rs2.close();
@@ -223,4 +261,13 @@ public class LoadEntities {
 
 		return null;
 	}
+	
+	/*
+	 * TODO:
+	 * loadCourse
+	 * loadStudentGrade
+	 * loadStudentGradeOnQuiz
+	 * loadStudentResponse
+	 * loadUser
+	 */
 }

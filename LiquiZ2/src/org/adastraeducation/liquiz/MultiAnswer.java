@@ -43,7 +43,6 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	}
 
 
-	//TODO: the html is wrong here, you need values between <option> and </option>
 	public void writeHTML(StringBuilder b ){	
 		if (stdchoice != null) {
 

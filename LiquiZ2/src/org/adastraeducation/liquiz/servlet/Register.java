@@ -98,7 +98,7 @@ public class Register extends HttpServlet{
 
 			// Send message
 			Transport transport=session.getTransport("smtp");
-			transport.connect("smtp.gmail.com","banboonwang","65254408wang"); 
+			transport.connect("smtp.gmail.com","banboonwang","********"); 
 			transport.sendMessage(message,message.getAllRecipients());
 			transport.close();
 			System.out.println("Sent message successfully....");

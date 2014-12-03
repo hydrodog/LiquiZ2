@@ -159,6 +159,3 @@ public class Util extends HttpServlet{
 
 
 }
-/*    				<input type="button" value="Show Button" onclick="showImage();"/>
- 				    <img id="loadingImage" src="typeImageName();" style="visibility:hidden"/>
- */
