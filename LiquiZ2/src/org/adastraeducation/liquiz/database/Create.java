@@ -10,7 +10,7 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Users(FirstName, LastName, Username, Password, Email) VALUES('?','?','?','?','?')");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Users(FirstName, LastName, Username, Password, Email) VALUES(?,?,?,?,?)");
 			p.setString(1, fName);
 			p.setString(2, lName);
 			p.setString(3, id);
@@ -28,7 +28,7 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Courses(Name, Privacy) VALUES ('?','?')");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Courses(Name, Privacy) VALUES (?,?)");
 			p.setString(1, name);
 			p.setString(2, privacy);
 			p.execute();
@@ -43,7 +43,7 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Policies(Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns) VALUES('?',?,?,?,?,?,?)");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Policies(Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns) VALUES(?,?,?,?,?,?,?)");
 			p.setString(1, name);
 			p.setInt(2, timed);
 			p.setInt(3, showAns);
@@ -63,7 +63,7 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Quizzes(Name, Policy, Privacy) VALUES('?',?,'?'");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Quizzes(Name, Policy, Privacy) VALUES(?,?,?");
 			p.setString(1, name);
 			p.setInt(2, pol);
 			p.setString(3, priv);
@@ -80,7 +80,7 @@ public class Create {
 		int key = -1;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p1 = conn.prepareStatement("INSERT INTO DisplayElements(Type) VALUES('?')");
+			PreparedStatement p1 = conn.prepareStatement("INSERT INTO DisplayElements(Type) VALUES(?)");
 			p1.setString(1, type);
 			p1.execute();
 			
@@ -106,7 +106,7 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p2 = conn.prepareStatement("INSERT INTO DispElSeq VALUES(?,'?',?)");
+			PreparedStatement p2 = conn.prepareStatement("INSERT INTO DispElSeq VALUES(?,?,?)");
 			p2.setInt(1, id);
 			p2.setString(2, element);
 			p2.setInt(3, seq);
@@ -123,7 +123,7 @@ public class Create {
 		int key = -1;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Questions(Points,Level,QType) VALUES (?,?,'?')");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Questions(Points,Level,QType) VALUES (?,?,?)");
 			p.setInt(1, points);
 			p.setInt(2, level);
 			p.setString(3, type);

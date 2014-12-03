@@ -334,11 +334,32 @@ public class LoadEntities {
 		return null;
 	}
 	
+	public static User loadUser(int id) {
+		Connection conn = DatabaseMgr.getConnection();
+		try {
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM Users WHERE UserID=?");
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			
+			String un = rs.getString("Username");
+			String pw = rs.getString("Password");
+			String fn = rs.getString("FirstName");
+			String ln = rs.getString("LastName");
+			String email = rs.getString("Email");
+			
+			return new User(un, pw, fn, ln, email);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.returnConnection(conn);
+		}
+		return null;
+	}
+	
 	/*
 	 * TODO:
 	 * loadStudentGrade
 	 * loadStudentGradeOnQuiz
 	 * loadStudentResponse
-	 * loadUser
 	 */
 }
