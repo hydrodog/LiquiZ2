@@ -1,4 +1,5 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
@@ -23,7 +24,8 @@
                 QuestionType
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
                     <option value="FillIn" selected>FillIn</option>
-                    <option value="Essay" >Essay</option>                 
+                    <option value="Essay" >Essay</option>        
+                    <option value="Code" >Code</option>                 
                     <option value="MultiChoiceDropdown">MultiChoice-Dropdown</option>
                     <option value="MultiChoiceRadio">MultiChoice-Radio</option>
                     <option value="MultiAnswer">MultiAnswer</option>
