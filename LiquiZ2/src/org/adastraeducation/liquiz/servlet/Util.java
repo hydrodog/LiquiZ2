@@ -13,15 +13,13 @@ public class Util extends HttpServlet{
 	
 	private Quiz quiz = new Quiz();
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 //      problem for quiz lifetime, when to create a new Quiz?
 		
 //		if(request.getSession().isNew())
 //			quiz = new Quiz();
-		
-		System.out.println("test-Util");
 		
 		addQuestion(quiz, request);
 		request.setAttribute("QuizContext",showQuiz(quiz));
@@ -47,12 +45,14 @@ public class Util extends HttpServlet{
 	   		//TODO: do nothing and level will default to 1 if error?
 	   	}
 		Question q = null;
-		Displayable d = null;
 		String questType = request.getParameter("question_type");
 		if (questType.equals("FillIn")) {
 			q= createFillIn(request);
 	     
-		} else if (questType.equals("MultiChoice")) {
+		}else if (questType.equals("Essay")) {
+			q= createEssay(request);
+			
+		} else if (questType.equals("MultiChoiceDropdown")) {
 			q= createMultiChoiceDropdown(request);
 			
 		}else if (questType.equals("MultiChoiceRadio")) {
@@ -64,16 +64,6 @@ public class Util extends HttpServlet{
 			
 		}
 		
-		String displaySource = request.getParameter("display_source");
-		if (displaySource.equals("Image")) {
-			d= createImage(request);
-	     
-		} else if (displaySource.equals("Video")) {
-			d= createVideo(request);
-			
-		}else if (displaySource.equals("Audio")) {
-			d= createAudio(request);
-		}	
 		
 		QuestionContainer qc = new QuestionContainer();
 		String title = request.getParameter("title");
@@ -81,7 +71,6 @@ public class Util extends HttpServlet{
 	    String questionText = request.getParameter("question_text");
 	    qc.add(new Text(questionText));
 		qc.add(q);
-		qc.add(d);
 	    quiz.addQuestionContainer(qc);
 	}
 	
@@ -103,11 +92,21 @@ public class Util extends HttpServlet{
 	  	Answer answer = new Answer(answerText, true);
 	  	return q;
 	}
+	
+	public Question createEssay(HttpServletRequest request){
+		String quesText;
+		Answer answers = null;
+		Essay q = new Essay();
+	    quesText = request.getParameter("essay_ques_text");
+	  	Answer answer = new Answer(quesText, true);
+	  	return q;
+	}
+	
 	public Question createMultiChoiceDropdown(HttpServletRequest request){
-		int numChoices = Integer.parseInt(request.getParameter("multichoice_number"));
+		int numChoices = Integer.parseInt(request.getParameter("multichoice_dropdown_number"));
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
-		  String choice = request.getParameter("choices" + (i+1));
+		  String choice = request.getParameter("dropdown_choices" + (i+1));
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiChoiceDropdown q = new MultiChoiceDropdown();
@@ -115,10 +114,10 @@ public class Util extends HttpServlet{
 		return q;
 	}
 	public Question createMultiChoiceRadio(HttpServletRequest request){
-		int numChoices = Integer.parseInt(request.getParameter("multichoiceradio_number"));
+		int numChoices = Integer.parseInt(request.getParameter("multichoice_radio_number"));
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
-		  String choice = request.getParameter("choicesradio" + (i+1));
+		  String choice = request.getParameter("radio_choices" + (i+1));
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiChoiceRadio q = new MultiChoiceRadio();
@@ -129,35 +128,13 @@ public class Util extends HttpServlet{
 		int numChoices = Integer.parseInt(request.getParameter("multianswer_number"));
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
-		  String choice = request.getParameter("multichoices" + (i+1));
+		  String choice = request.getParameter("multi_choices" + (i+1));
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiAnswer q = new MultiAnswer();
 		q.setAnswers(answers); 
 		return q;
 	}
-	
-	public Displayable createImage(HttpServletRequest request){
-		String source = request.getParameter("image_src");
-		Image q = new Image();
-		q.setName(source);
-		return q;
-	}
-
-	public Displayable createVideo(HttpServletRequest request){
-		String source = request.getParameter("video_src");
-		Video q = new Video();
-		q.setVideo(source);
-		return q;
-	}
-
-	public Displayable createAudio(HttpServletRequest request){
-		String source = request.getParameter("audio_src");
-		Audio q = new Audio();
-		q.setSource(source);
-		return q;
-	}
-
 
 }
 /*    				<input type="button" value="Show Button" onclick="showImage();"/>
