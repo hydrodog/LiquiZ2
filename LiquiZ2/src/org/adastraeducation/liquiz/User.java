@@ -18,6 +18,24 @@ public class User {
 	private String email;
 	private int role; // lookup into Role table?
 	private int permissions;
+	
+	public User(String id, String passwd, String fName, String lName, String email) {
+		this.id = id;
+		this.passwd = passwd;
+		this.fName = fName;
+		this.lName = lName;
+		this.email = email;
+	}
+	
+	public User(String id, String passwd, String fName, String lName, String email, int permissions) {
+		this.id = id;
+		this.passwd = passwd;
+		this.fName = fName;
+		this.lName = lName;
+		this.email = email;
+		this.permissions = permissions;
+	}
+	
 	public String getId() {
 		return id;
 	}

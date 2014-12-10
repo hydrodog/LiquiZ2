@@ -1,4 +1,5 @@
 package org.adastraeducation.liquiz.test;
+
 import org.adastraeducation.liquiz.equation.*;
 import org.adastraeducation.liquiz.util.NumberWarningPattern;
 import org.adastraeducation.liquiz.util.SpecializedPattern;
@@ -10,7 +11,7 @@ import java.beans.XMLEncoder;
 import java.beans.XMLDecoder;
 
 import org.adastraeducation.liquiz.*;
-public class Test {
+public class SerializeTest {
 	private static String header, trailer;
 	private static char[] buf;
 	private static String load(String filename) throws IOException {
@@ -72,10 +73,10 @@ public class Test {
 		//for Equation and Fillin, with WarningPattern
 		Var x1 = new Var("x1", 0, 99, 1);
 		Var y1 = new Var("y1", 0, 99, 1);
-		HashMap<String,Var> map1 = new HashMap<String,Var>();
+		//HashMap<String,Var> map1 = new HashMap<String,Var>();
 		map.put("x1",x1);
 		map.put("y1", y1);
-		Equation eq1 = new Equation(	"x1+y1",map);
+		Equation eq1 = new Equation("x1+y1",map);
 		
 		qc = new QuestionContainer(
 			new Displayable[] {
@@ -230,6 +231,12 @@ public class Test {
 		enc.writeObject(quiz);
 		enc.close();
 	}
+	
+	public static void writeXML (String filename, Course course) throws IOException{
+		XMLEncoder enc = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
+		enc.writeObject(course);
+		enc.close();
+	}
 
 	public static Quiz readXML(String filename) throws IOException {
 		XMLDecoder dec = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
@@ -242,20 +249,30 @@ public class Test {
 		writeJS(baseName + ".js", d);
 		if (d instanceof Quiz)
 			writeXML(baseName + ".xml", (Quiz)d); 
+		else if (d instanceof Course){
+			writeXML(baseName + ".xml", (Course)d);
+			}
 	}
 	
+	//private static void fix
+	
 	public static void main(String[] args) throws IOException {
-		testOutput("output/test1", test1());
-//		testOutput("output/test2", test2());
-		testOutput("output/test3", test3());
+		testOutput("test1", test1());
+		testOutput("test2", test2());
+//		testOutput("output/test3", test3());
 		
 		/*testing Course*/
-		Course testCourse = new Course(1, "Test Course");
+/*    	Course testCourse = new Course("ID", "Test Course");
 		testCourse.addQuiz(test1());
 		testCourse.addQuiz(test2());
 		testCourse.addQuiz(test3());
 		testCourse.addQuiz(test4());
-		testOutput("output/testCourse", testCourse);
+		testOutput("testCourse", testCourse);*/
+		Quiz toBeRead = readXML("test1.xml");
+		testOutput("returnedData",toBeRead);
+		Quiz q2 = readXML("test2.xml");
+		testOutput("returnedData2", q2);
 	}
 
 }
+

@@ -3,10 +3,25 @@ package org.adastraeducation.liquiz;
 public class Text implements Displayable {
 	private String text;
 	
+	public Text(){
+		
+	}
+	
 	public Text(String text) {
 		this.text = text;
 	}
-	public String getTagName() { return "Text"; }
+	public String getTagName() 
+	{
+		return "Text"; 
+	}
+	
+	public String getText(){
+		return text;
+	}
+	
+	public void setText(String t){
+		text = t;
+	}
 	
 	@Override
 	public void writeHTML(StringBuilder b) {

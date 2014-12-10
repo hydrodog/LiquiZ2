@@ -1,8 +1,10 @@
 package org.adastraeducation.liquiz;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Question implements Displayable {
 	private int id,points,level;
+	private ArrayList<Answer> answers;
 
 	private static int count; // for general unique id
 	static {
@@ -28,6 +30,19 @@ public abstract class Question implements Displayable {
 		this.level = level;
 		setHashId(id);
 	}
+	
+	public Question (int id, int points, int level, ArrayList<Answer> answers) {
+		this.id = id;
+		this.points = points;
+		this.level = level;
+		this.answers = answers;
+	}
+	
+	public Question (int points, int level, ArrayList<Answer> answers) {
+		this.points = points;
+		this.level = level;
+		this.answers = answers;
+	}
 		
 	public int getPoints() {
 		return points;
@@ -46,6 +61,12 @@ public abstract class Question implements Displayable {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public ArrayList<Answer> getAns() {
+		return answers;
+	}
+	public void setAns(ArrayList<Answer> answers) {
+		this.answers = answers;
 	}
 	
 	public abstract String getTagName();

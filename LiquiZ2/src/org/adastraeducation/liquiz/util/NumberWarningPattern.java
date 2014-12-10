@@ -15,6 +15,8 @@ public class NumberWarningPattern implements WarningPattern {
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
+	
+	public NumberWarningPattern(){}
 
 	@Override
 	public String getTag() {

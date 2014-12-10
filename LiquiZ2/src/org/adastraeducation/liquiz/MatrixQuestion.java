@@ -24,6 +24,8 @@ public class MatrixQuestion extends Question {
 		cols = c;
 	}
 	
+	public MatrixQuestion(){}
+	
 	public MatrixQuestion(int id, int level, int points, int rows, int cols) {
 		super(id, level, points);
 		this.rows = rows;

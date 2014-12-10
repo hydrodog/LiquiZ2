@@ -7,11 +7,11 @@ public class Video implements Displayable {
 	private String type;
 	
 	public String getVideo(){
-		return video;
+		return this.video;
 	}
 	
 	public void setVideo(String v){
-		video = v;
+		this.video = v;
 	}
 	
 	public int getWidth(){

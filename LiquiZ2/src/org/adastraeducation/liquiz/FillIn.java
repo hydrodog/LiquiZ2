@@ -180,13 +180,13 @@ public class FillIn extends Question {
 	
 	public boolean isCorrect(String s) {
 		if(pattern==null&&appro==null){      //it is a fillin question
-			if(s.equals(this.answer.getAns()))
+			if(s.equals(this.answer.getAnswer()))
 				return true;
 			else
 				return false;
 		}
 		else if(pattern==null&&appro!=null){   // it is a regex question
-			String ans = this.answer.getAns();
+			String ans = this.answer.getAnswer();
 			double target = Double.parseDouble(ans);
 			if(appro.equal(target))
 				return true;
@@ -194,14 +194,14 @@ public class FillIn extends Question {
 				return false;
 		}
 		else if(pattern!=null&&appro==null){   // it is a Number Question
-			String ans = this.answer.getAns();
+			String ans = this.answer.getAnswer();
 			if(pattern.isMatch(ans))
 				return true;
 			else
 				return false;
 		}
 		else{                               // it is a RegexNumber Question
-			String ans = this.answer.getAns();
+			String ans = this.answer.getAnswer();
 			if(pattern.isMatch(ans)){
 				String temp = pattern.getValue(ans);
 				double target = Double.parseDouble(temp);
