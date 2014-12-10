@@ -22,26 +22,37 @@ function changeQuestion(obj) {
 	if (obj.value=="FillIn") {
         document.getElementById("fillin_attribute").style.display="";
         document.getElementById("essay_attribute").style.display="none";
-        document.getElementById("multichoice_attribute").style.display="none";
+        document.getElementById("multidropdown_attribute").style.display="none";
+        document.getElementById("multiradio_attribute").style.display="none";		
         document.getElementById("multianswer_attribute").style.display="none";
         
     }else if (obj.value=="Essay"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="";
-        document.getElementById("multichoice_attribute").style.display="none";
+        document.getElementById("multidropdown_attribute").style.display="none";
+		document.getElementById("multiradio_attribute").style.display="none";		
         document.getElementById("multianswer_attribute").style.display="none";
 
     }
-	else if (obj.value=="MultiChoice"){
+	else if (obj.value=="MultiChoice-Dropdown"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
-        document.getElementById("multichoice_attribute").style.display="";
+        document.getElementById("multidropdown_attribute").style.display="";
+		document.getElementById("multiradio_attribute").style.display="none";		
+        document.getElementById("multianswer_attribute").style.display="none";
+
+    }else if (obj.value=="MultiChoice-Radio"){
+        document.getElementById("fillin_attribute").style.display="none";
+        document.getElementById("essay_attribute").style.display="none";
+        document.getElementById("multidropdown_attribute").style.display="none";
+		document.getElementById("multiradio_attribute").style.display="";		
         document.getElementById("multianswer_attribute").style.display="none";
 
     }else {
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
-        document.getElementById("multichoice_attribute").style.display="none";
+        document.getElementById("multidropdown_attribute").style.display="none";
+		document.getElementById("multiradio_attribute").style.display="none";		
         document.getElementById("multianswer_attribute").style.display="";
     }
     
@@ -90,20 +101,29 @@ function showNumberQuestionAttribute(obj) {
     }
 }
 
-function createChoices(obj) {
+function createDropDownChoices(obj) {
     var empty="";
-    document.getElementById("choices").innerHTML=empty;
+    document.getElementById("dropdown").innerHTML=empty;
     for (var i=0;i<obj.value;i++) {
-        empty+="Option "+(i+1)+"&nbsp&nbsp<input type=\"text\" name=\"choices"+(i+1)+"\"></br>";
+        empty+="</br>Option "+(i+5)+"&nbsp&nbsp<input type=\"text\" name=\"dropdown_choices"+(i+5)+"\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"dropdown_choices\" value =\"choice"+(i+5)+"\" ></br>";
     }
-    document.getElementById("choices").innerHTML=empty;
+    document.getElementById("dropdown").innerHTML=empty;
+}
+
+function createRadioChoices(obj) {
+    var empty="";
+    document.getElementById("radio").innerHTML=empty;
+    for (var i=0;i<=obj.value;i++) {
+        empty+="</br>Option "+(i+5)+"&nbsp&nbsp<input type=\"text\" name=\"radio_choices"+(i+5)+"\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"radio_choices\" value =\"choice"+(i+5)+"\" ></br>";
+    }
+    document.getElementById("radio").innerHTML=empty;
 }
 
 function createMultiChoices(obj) {
     var empty="";
     document.getElementById("multichoices").innerHTML=empty;
     for (var i=0;i<obj.value;i++) {
-        empty+="Option "+(i+1)+"&nbsp&nbsp<input type=\"text\" name=\"multichoices"+(i+1)+"\"></br>";
+        empty+="</br>Option "+(i+5)+"&nbsp&nbsp<input type=\"text\" name=\"multi_choices"+(i+5)+"\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"checkbox\" name=\"multi_choices\" value =\"choice"+(i+5)+"\" ></br>";
     }
     document.getElementById("multichoices").innerHTML=empty;
 }

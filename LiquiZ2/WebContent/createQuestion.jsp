@@ -15,7 +15,7 @@
             <option value="blue">blue</option>
             <option value="green">green</option>
         </select>
-        <form method="GET" action="addQuestion.jsp">
+        <form method="GET" action="addQuestion">
             <div id="div_title" align="left">
                 </br>
             
@@ -24,7 +24,8 @@
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
                     <option value="FillIn" selected>FillIn</option>
                     <option value="Essay" >Essay</option>                 
-                    <option value="MultiChoice">MultiChoice</option>
+                    <option value="MultiChoiceDropdown">MultiChoice-Dropdown</option>
+                    <option value="MultiChoiceRadio">MultiChoice-Radio</option>
                     <option value="MultiAnswer">MultiAnswer</option>
                     
                 </select>
@@ -38,10 +39,10 @@
                 Answer<input type="text" name="answer">   
             </div>
             </br>
-            
+                        
             <div>
             	Image Upload
-				<input type="file" id="image-input">
+				<input type="file" name = "image_src" id="image-input">
 				<input type="button" value="Load Selected Image" id="load-image" />
 				</br>
 				
@@ -76,7 +77,7 @@
            
 			<div>
                 Audio Upload
-				<input type="file" id="audio-input">
+				<input type="file" name= "audio_src" id="audio-input">
 				<input type="button" value="Load Selected Audio" id="load-audio" />
 			
 			</div>
@@ -108,7 +109,7 @@
 			
 			 <div>
                 Video Upload
-				<input type="file" id="video-input">
+				<input type="file" name= "video_src" id="video-input">
 				<input type="button" value="Load Selected Video" id="load-video" />
 			</div>
 
@@ -136,14 +137,13 @@
 
 			</script>
 			
-                
             <div id="question_text" align="left">
                 Question Text</br>
                 <textarea name="question_text" rows="6" cols="40"></textarea>
             </div>
             </br>
                 
-                <div id="fillin_attribute" align="left" >
+            <div id="fillin_attribute" align="left" >
                 <div style="float:left">
                     <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">WarningPattern</br>
                 </div>
@@ -177,7 +177,7 @@
               <div id="essay_attribute" align="left" style= "display:none">
                 <div>
                     Type your Essay</br>
-               		<textarea name="question_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
+               		<textarea name="essay_ques_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
 					<br>
 					<font color="black">Word count:</font><font color="red"> 
   					<span id="count_number_words">0</span>
@@ -191,20 +191,63 @@
                 </div>
             </div>
             
-            <div id="multichoice_attribute" align="left" style= "display:none">
+            <div id="multidropdown_attribute" align="left" style= "display:none">
                 <div>
-                    Number of multi-choices
-                    <input type="text" name="multichoice_number" onchange="createChoices(this)" >
-                </div>
-                </br>
                 
-                <div id="choices"></div>
+                    Multiple choice - Dropdown :
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
+                    Add more options <input type="text" name="multichoice_dropdown_number" onchange="createDropDownChoices(this)" style="width: 30px;"  >
+                    </br>
+                   
+                   </br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_1" ></br>
+                   </br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_2" ></br>
+                   </br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_3" ></br>
+                   </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_4" >
+                
+                   
+                </div>
+                
+                <div id="dropdown"></div>
+                
+                
             </div>
+            
+            
+            <div id="multiradio_attribute" align="left" style= "display:none">
+                <div>
+                    Multiple choice - Radio :
+                    &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
+                    Add more options <input type="text" name="multichoice_radio_number" onchange="createRadioChoices(this)" style="width: 30px;"  >
+                    </br>
+                    <form>
+                   </br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_1" ></br>
+                   </br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_2" ></br>
+                   </br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_3" ></br>
+                   </br> Option 4: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_4" >
+                	</form>
+                   
+                </div>
+                
+                <div id="radio"></div>
+          	</div>
+            	
             
             <div id="multianswer_attribute" align="left" style= "display:none">
                 <div>
-                    Number of multi-answer-choices
-                    <input type="text" name="multianswer_number" onchange="createMultiChoices(this)" >
+                   Multiple Answer Choices:
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
+                    Add more options <input type="text" name="multianswer_number" onchange="createMultiChoices(this)" style="width: 30px;"   >
+                    </br>
+                    <form>
+                   </br> Option 1: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_1" ></br>
+                   </br> Option 2: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_2" ></br>
+                   </br> Option 3: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_3" ></br>
+                   </br> Option 4: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_4" >
+                	</form>
+                   
                 </div>
                 </br>
                 
