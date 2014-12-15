@@ -1,22 +1,15 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+        <meta http-equiv="Content-Type" conte"WebContent/createQuestion.jsp"nt="text/html"; charset="UTF-8">
         <title>CreateQuestions</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
         </script>
         <script src="assets/js/func.js"></script>
     </head>
     <body>
-    	 Choose your color for blank
-         <select name="question_type" size="1" onchange="setColor(this)">
-            <option value="default" selected>default</option>
-            <option value="red">red</option>
-            <option value="blue">blue</option>
-            <option value="green">green</option>
-        </select>
-        <form method="GET" action="addQuestion">
+    	 
+        <form method="GET" action="addQuestion.jsp">
             <div id="div_title" align="left">
                 </br>
             
@@ -24,24 +17,29 @@
                 QuestionType
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
                     <option value="FillIn" selected>FillIn</option>
-                    <option value="Essay" >Essay</option>        
-                    <option value="Code" >Code</option>                 
+                    <option value="Essay" >Essay</option>                 
                     <option value="MultiChoiceDropdown">MultiChoice-Dropdown</option>
                     <option value="MultiChoiceRadio">MultiChoice-Radio</option>
                     <option value="MultiAnswer">MultiAnswer</option>
                     
                 </select>
                                 
-                </div>
             </div>
+            
             </br>
             <div id="common_attribute" align="left">
                 Level<input type="text" name="level" value="1">
-                Points<input type="text" name="points" = value="1">
-                Answer<input type="text" name="answer">   
+                Points<input type="text" name="points" value="1">
             </div>
             </br>
-                        
+            <div id="question_text" align="left">
+                Question Text</br>
+                <textarea name="question_text" rows="6" cols="40"></textarea>
+            </div>
+            </br>
+            
+            
+            
             <div>
             	Image Upload
 				<input type="file" name = "image_src" id="image-input">
@@ -139,13 +137,15 @@
 
 			</script>
 			
-            <div id="question_text" align="left">
-                Question Text</br>
-                <textarea name="question_text" rows="6" cols="40"></textarea>
-            </div>
+			
+               
             </br>
                 
             <div id="fillin_attribute" align="left" >
+                Answer<input type="text" name="answer">   
+            	</br>
+                </br>
+            
                 <div style="float:left">
                     <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">WarningPattern</br>
                 </div>
@@ -156,15 +156,18 @@
                     </select>
                     Number Limits<input type="text" name="warningNumberLimit">
                 </div>
+                </br>
                 
                 <div style="clear:both"></div>             
                 <div style="float:left">
                     <input type="checkbox" name="regex" onclick="showRegexQuestionAttribute(this)">RegexQuestion</br>
                 </div>
+                
                 <div id="regexQuestion_attribute" style="float:left;display: none; margin-left:60px;">
                     Input your Regex<input type="text" name="regexString">
                 </div>
                 <div style="clear:both"></div>
+                </br>
                 
                 <div style="float:left">
                     <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">NumberQuestion</br>
@@ -179,7 +182,7 @@
               <div id="essay_attribute" align="left" style= "display:none">
                 <div>
                     Type your Essay</br>
-               		<textarea name="essay_ques_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
+               		<textarea name="question_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
 					<br>
 					<font color="black">Word count:</font><font color="red"> 
   					<span id="count_number_words">0</span>
@@ -201,12 +204,12 @@
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
                     Add more options <input type="text" name="multichoice_dropdown_number" onchange="createDropDownChoices(this)" style="width: 30px;"  >
                     </br>
-                   
+                   <form>
                    </br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_1" ></br>
                    </br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_2" ></br>
                    </br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_3" ></br>
-                   </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_4" >
-                
+                   </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_4" ></br>
+                	</form>
                    
                 </div>
                 

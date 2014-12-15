@@ -23,36 +23,37 @@ function changeQuestion(obj) {
         document.getElementById("fillin_attribute").style.display="";
         document.getElementById("essay_attribute").style.display="none";
         document.getElementById("multidropdown_attribute").style.display="none";
-        document.getElementById("multiradio_attribute").style.display="none";		
+        document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
         
     }else if (obj.value=="Essay"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="";
         document.getElementById("multidropdown_attribute").style.display="none";
-		document.getElementById("multiradio_attribute").style.display="none";		
+        document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
 
     }
-	else if (obj.value=="MultiChoice-Dropdown"){
+	else if (obj.value=="MultiChoiceDropdown"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
         document.getElementById("multidropdown_attribute").style.display="";
-		document.getElementById("multiradio_attribute").style.display="none";		
+        document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
 
-    }else if (obj.value=="MultiChoice-Radio"){
+    }
+	else if (obj.value=="MultiChoiceRadio"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
         document.getElementById("multidropdown_attribute").style.display="none";
-		document.getElementById("multiradio_attribute").style.display="";		
+        document.getElementById("multiradio_attribute").style.display="";
         document.getElementById("multianswer_attribute").style.display="none";
 
     }else {
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
         document.getElementById("multidropdown_attribute").style.display="none";
-		document.getElementById("multiradio_attribute").style.display="none";		
+        document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="";
     }
     
@@ -104,8 +105,8 @@ function showNumberQuestionAttribute(obj) {
 function createDropDownChoices(obj) {
     var empty="";
     document.getElementById("dropdown").innerHTML=empty;
-    for (var i=0;i<obj.value;i++) {
-        empty+="</br>Option "+(i+5)+"&nbsp&nbsp<input type=\"text\" name=\"dropdown_choices"+(i+5)+"\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"dropdown_choices\" value =\"choice"+(i+5)+"\" ></br>";
+    for (var i=1;i<=obj.value;i++) {
+        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"dropdown_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"dropdown_choices\"></br>";
     }
     document.getElementById("dropdown").innerHTML=empty;
 }
@@ -113,8 +114,8 @@ function createDropDownChoices(obj) {
 function createRadioChoices(obj) {
     var empty="";
     document.getElementById("radio").innerHTML=empty;
-    for (var i=0;i<=obj.value;i++) {
-        empty+="</br>Option "+(i+5)+"&nbsp&nbsp<input type=\"text\" name=\"radio_choices"+(i+5)+"\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"radio_choices\" value =\"choice"+(i+5)+"\" ></br>";
+    for (var i=1;i<=obj.value;i++) {
+        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"radio_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"radio_choices\"></br>";
     }
     document.getElementById("radio").innerHTML=empty;
 }
@@ -122,8 +123,8 @@ function createRadioChoices(obj) {
 function createMultiChoices(obj) {
     var empty="";
     document.getElementById("multichoices").innerHTML=empty;
-    for (var i=0;i<obj.value;i++) {
-        empty+="</br>Option "+(i+5)+"&nbsp&nbsp<input type=\"text\" name=\"multi_choices"+(i+5)+"\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"checkbox\" name=\"multi_choices\" value =\"choice"+(i+5)+"\" ></br>";
+    for (var i=1;i<=obj.value;i++) {
+        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"multi_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"checkbox\" name=\"multi_choices\"></br>";
     }
     document.getElementById("multichoices").innerHTML=empty;
 }
