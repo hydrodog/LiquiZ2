@@ -13,6 +13,9 @@ public class Code extends Question {
 	public void setdefaultText(){
 		this.defaultText="";
 	}
+	public void setDefaultText(String defaultText) {
+		this.defaultText=defaultText;		
+	}
 
 	public Code(int id, int level, int points,
 				String defaultText) {
@@ -50,4 +53,5 @@ public class Code extends Question {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 }

@@ -3,6 +3,7 @@ package org.adastraeducation.liquiz.servlet;
 import java.io.IOException;
 
 import org.adastraeducation.liquiz.*;
+import org.adastraeducation.liquiz.util.QuestionPattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -52,7 +53,10 @@ public class Util extends HttpServlet{
 			q= createFillIn(request);
 	     
 		}else if (questType.equals("Essay")) {
-			q= createMultiChoiceDropdown(request);
+			q= createEssay(request);
+			
+		}else if (questType.equals("Code")) {
+			q= createCode(request);
 			
 		}else if (questType.equals("MultiChoice")) {
 			q= createMultiChoiceDropdown(request);
@@ -63,6 +67,9 @@ public class Util extends HttpServlet{
 		}
 		else if (questType.equals("MultiAnswer")) {
 			q= createMultiAnswer(request);
+			
+		}else if(questType.equals("RegexQuestion")){
+			q= createRegexQuestion(request);
 			
 		}
 		
@@ -100,6 +107,21 @@ public class Util extends HttpServlet{
 	  	Answer answer = new Answer(answerText, true);
 	  	return q;
 	}
+	
+	public Question createEssay(HttpServletRequest request){
+		String text = request.getParameter("essay_text");
+		Essay q = new Essay();
+		q.setDefaultText(text);
+	  	return q;
+	}
+	
+	public Question createCode(HttpServletRequest request){
+		String text = request.getParameter("code_text");
+		Code q = new Code();
+		q.setDefaultText(text);
+	  	return q;
+	}
+	
 	public Question createMultiChoiceDropdown(HttpServletRequest request){
 		int numChoices = Integer.parseInt(request.getParameter("multichoice_dropdown_number"));
 		//int numChoices = 4 + (Integer.parseInt(request.getParameter("multichoice_dropdown_number")));
@@ -136,6 +158,19 @@ public class Util extends HttpServlet{
 		q.setAnswers(answers); 
 		return q;
 	}
+	public Question createRegexQuestion(HttpServletRequest request){
+		String answerText ;
+		QuestionPattern regexPattern;
+		Answer answers = null;
+		RegexQuestion q = new RegexQuestion();
+		q.setAnswers(answers);
+	    answerText = request.getParameter("answer");
+	  //  regexPattern = request.getParameter("regexString");
+	  //  q.setPattern(regexPattern);   TODO: Check!
+	  	Answer answer = new Answer(answerText, true);
+	  	return q;
+	}
+	
 
 
 }

@@ -25,6 +25,8 @@ function changeQuestion(obj) {
         document.getElementById("multidropdown_attribute").style.display="none";
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="none";
+
         
     }else if (obj.value=="Essay"){
         document.getElementById("fillin_attribute").style.display="none";
@@ -32,6 +34,17 @@ function changeQuestion(obj) {
         document.getElementById("multidropdown_attribute").style.display="none";
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="none";
+
+
+    }else if (obj.value=="Code"){
+        document.getElementById("fillin_attribute").style.display="none";
+        document.getElementById("code_attribute").style.display="";
+        document.getElementById("multidropdown_attribute").style.display="none";
+        document.getElementById("multiradio_attribute").style.display="none";
+        document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="none";
+
 
     }
 	else if (obj.value=="MultiChoiceDropdown"){
@@ -40,6 +53,8 @@ function changeQuestion(obj) {
         document.getElementById("multidropdown_attribute").style.display="";
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="none";
+
 
     }
 	else if (obj.value=="MultiChoiceRadio"){
@@ -48,14 +63,27 @@ function changeQuestion(obj) {
         document.getElementById("multidropdown_attribute").style.display="none";
         document.getElementById("multiradio_attribute").style.display="";
         document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="none";
 
-    }else {
+
+    }else if(obj.value=="MultiAnswer"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
         document.getElementById("multidropdown_attribute").style.display="none";
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="";
+        document.getElementById("regexQuestion_attribute").style.display="none";
+
+    }else{
+        document.getElementById("fillin_attribute").style.display="none";
+        document.getElementById("essay_attribute").style.display="none";
+        document.getElementById("multidropdown_attribute").style.display="none";
+        document.getElementById("multiradio_attribute").style.display="none";
+        document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="";
+
     }
+    
     
 }
 
@@ -88,9 +116,9 @@ function showWarningPatternAttribute(obj) {
 
 function showRegexQuestionAttribute(obj) {
     if (obj.checked) {
-        document.getElementById("regexQuestion_attribute").style.display="";
+        document.getElementById("regexInput_attribute").style.display="";
     }else{
-        document.getElementById("regexQuestion_attribute").style.display="none";
+        document.getElementById("regexInput_attribute").style.display="none";
     }
 }
 

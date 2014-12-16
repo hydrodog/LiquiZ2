@@ -8,7 +8,7 @@
         <script src="assets/js/func.js"></script>
     </head>
     <body>
-    	 
+    	 <h2> Questions </h2>
         <form method="GET" action="addQuestion.jsp">
             <div id="div_title" align="left">
                 </br>
@@ -17,10 +17,12 @@
                 QuestionType
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
                     <option value="FillIn" selected>FillIn</option>
-                    <option value="Essay" >Essay</option>                 
+                    <option value="Essay" >Essay</option> 
+                    <option value="Code" >Code</option>                
                     <option value="MultiChoiceDropdown">MultiChoice-Dropdown</option>
                     <option value="MultiChoiceRadio">MultiChoice-Radio</option>
                     <option value="MultiAnswer">MultiAnswer</option>
+                    <option value="RegexQuestion">Regex-Question</option>
                     
                 </select>
                                 
@@ -31,6 +33,7 @@
                 Level<input type="text" name="level" value="1">
                 Points<input type="text" name="points" value="1">
             </div>
+           
             </br>
             <div id="question_text" align="left">
                 Question Text</br>
@@ -142,37 +145,29 @@
             </br>
                 
             <div id="fillin_attribute" align="left" >
-                Answer<input type="text" name="answer">   
+            Answer<input type="text" name="answer">   
             	</br>
                 </br>
-            
+                <div>
                 <div style="float:left">
                     <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">WarningPattern</br>
                 </div>
                 </br>
-                <div id="warningPattern_attribute" style="float:left;display:none; margin-left:60px;">
+                <div id="warningPattern_attribute" style="float:left;display:none; ">
                     <select name="warning_type" size="1">
                         <option value="NumberWarningPattern" selected>FillIn</option>
                     </select>
                     Number Limits<input type="text" name="warningNumberLimit">
                 </div>
+                </div>
                 </br>
-                
-                <div style="clear:both"></div>             
-                <div style="float:left">
-                    <input type="checkbox" name="regex" onclick="showRegexQuestionAttribute(this)">RegexQuestion</br>
-                </div>
-                
-                <div id="regexQuestion_attribute" style="float:left;display: none; margin-left:60px;">
-                    Input your Regex<input type="text" name="regexString">
-                </div>
-                <div style="clear:both"></div>
                 </br>
                 
                 <div style="float:left">
                     <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">NumberQuestion</br>
                 </div>
-                <div id="numberQuestion_attribute" style="float:left;display:none; margin-left:60px;">
+                </br>
+                <div id="numberQuestion_attribute" style="float:left;display:none;">
                     Input your exact number<input type="text" name="NumberQuestion_ExactNumber">
                     Input your approximate<input type="text" name="NumberQuestion_Approximate">
                 </div>
@@ -182,7 +177,7 @@
               <div id="essay_attribute" align="left" style= "display:none">
                 <div>
                     Type your Essay</br>
-               		<textarea name="question_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
+               		<textarea name="essay_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
 					<br>
 					<font color="black">Word count:</font><font color="red"> 
   					<span id="count_number_words">0</span>
@@ -195,6 +190,33 @@
     
                 </div>
             </div>
+            
+            <div id="code_attribute" align="left" style= "display:none">
+            
+            Programming Language
+                <select name="code_type" size="1">
+                    <option value="C++">C++</option>
+                    <option value="Java" >Java</option> 
+                    
+                </select>
+                
+                </br></br>
+                <div>
+                    Type your Code</br>
+               		<textarea name="code_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
+					<br>
+					<font color="black">Word count:</font><font color="red"> 
+  					<span id="count_number_words">0</span>
+					</font>
+					<br>
+					<font color="black">Words remaining: </font><font color="red"> 
+   					<span id="show_remaining_words">120</span>
+					</font>
+
+    
+                </div>
+            </div>
+            
             
             <div id="multidropdown_attribute" align="left" style= "display:none">
                 <div>
@@ -259,6 +281,23 @@
                 <div id="multichoices"></div>
             </div>
             
+            <div id="regexQuestion_attribute" align="left" style= "display:none">
+            Answer<input type="text" name="answer">   
+            	</br>
+                </br>
+                
+                <div style="clear:both"></div>             
+                <div style="float:left">
+                    <input type="checkbox" name="regex" onclick="showRegexQuestionAttribute(this)">RegexQuestion</br>
+                <div id="regexInput_attribute" style="float:left;display: none; margin-left:60px;">
+                    Input your Regex<input type="text" name="regexString">
+                </div>
+                <div style="clear:both"></div>
+                </br>
+                </div>
+            </div>
+            
+            </br>
             
             <div align="left">
             </br></br>

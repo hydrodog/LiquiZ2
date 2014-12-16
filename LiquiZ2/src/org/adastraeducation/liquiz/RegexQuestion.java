@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 public class RegexQuestion extends FillIn {	
 	
+	public RegexQuestion() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	private QuestionPattern pattern; //The regex pattern that will be used
 	
 	//constructors
@@ -22,10 +26,7 @@ public class RegexQuestion extends FillIn {
 		super(id,points,level, answer);
 		this.pattern = pattern;
 	}
-	
-	
 
-	
 	public String getTagName() { return "RegexQuestion"; }
 	
 	public void setPattern(QuestionPattern pattern){
