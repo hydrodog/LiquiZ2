@@ -6,6 +6,7 @@ package org.adastraeducation.liquiz;
  */
 
 public class Answer implements Displayable {
+	private int id;
 	private String ans;
 	private Displayable gAns;
 	private boolean correct;
@@ -31,27 +32,32 @@ public class Answer implements Displayable {
 		gAns = ans;
 		this.correct = correct;
 	}
+	public Answer(int id, Displayable ans, boolean correct) {
+		this.id = id;
+		gAns = ans;
+		this.correct = correct;
+	}
 	public Answer(Displayable ans) {
 		this(ans, false);
 	}
 	//public Answer() { this(null, false); }
 	
-	public Answer(int index, String ans) {
+	public Answer(String ans, int index) {
 		this.ans = ans;
 		this.index = index;
 		this.correct = false;
 	}
-	public Answer(int index, String ans, boolean correct) {
-		this.ans = ans;
-		this.index = index;
-		this.correct = correct;
-	}
-    public Answer(int index, Displayable ans) {
+	public Answer(Displayable ans, int index) {
 		gAns = ans;
 		this.index = index;
 		this.correct = false;
 	}
-    public Answer(int index, Displayable ans, boolean correct) {
+	public Answer(String ans, int index, boolean correct) {
+		this.ans = ans;
+		this.index = index;
+		this.correct = correct;
+	}
+    public Answer(Displayable ans, int index, boolean correct) {
     	gAns = ans;
 		this.index = index;
 		this.correct = correct;

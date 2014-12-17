@@ -1,5 +1,6 @@
 package org.adastraeducation.liquiz;
 public class Policy {
+	private int id;
 	private int attemptNum;
 	private boolean timed;
 	private int duration;
@@ -10,6 +11,13 @@ public class Policy {
 	private boolean shuffleAns;
 	private String accessCode;
 	
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int id) {
+		this.id=id;
+	}
 	public int getAttemptNum() {
 		return this.attemptNum;
 	}

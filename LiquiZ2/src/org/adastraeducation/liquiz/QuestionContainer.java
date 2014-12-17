@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class QuestionContainer implements Displayable {
+	private int id;
 	private ArrayList<Displayable> displayables;
 
 	public QuestionContainer() {
@@ -11,7 +12,10 @@ public class QuestionContainer implements Displayable {
 	public QuestionContainer(Displayable[] list) {
 		displayables = new ArrayList<Displayable>(Arrays.asList(list));
 	}
-
+	public QuestionContainer(int id, Displayable[] list) {
+		this.id = id;
+		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+	}
 	public ArrayList<Displayable> getDisplayables() {
 		return this.displayables;
 	}

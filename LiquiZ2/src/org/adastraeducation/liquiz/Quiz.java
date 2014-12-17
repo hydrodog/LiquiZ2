@@ -100,6 +100,12 @@ public class Quiz implements Displayable {
 		this.policy = new Policy();*/
 	}
 	
+	public Quiz(int id, Policy plc) {
+		this.id=id;
+		this.qContainers = new ArrayList<QuestionContainer>();
+		policy = plc;
+	}
+	
 	public Quiz(Policy plc) {
 		this.qContainers = new ArrayList<QuestionContainer>();
 		policy = plc;

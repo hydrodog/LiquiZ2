@@ -17,7 +17,7 @@ public class Response implements Displayable {
 	public Response(Displayable d) {
 		displayable = d;
 	}
-
+	
 	public ArrayList<Displayable> getDisplayables() {
 		return this.displayables;
 	}

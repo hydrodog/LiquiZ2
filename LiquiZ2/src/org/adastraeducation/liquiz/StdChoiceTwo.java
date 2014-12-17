@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 
 public class StdChoiceTwo {
+	private int id;
 	private String name;
 	private ArrayList<Answer> answers = new ArrayList<Answer>();
 	
@@ -35,6 +36,12 @@ public class StdChoiceTwo {
 	}
 	
 	public StdChoiceTwo(String name, ArrayList<Answer> answers) {
+		this.name = name;
+		this.answers = answers;
+	}
+	
+	public StdChoiceTwo(int id, String name, ArrayList<Answer> answers) {
+		this.id = id;
 		this.name = name;
 		this.answers = answers;
 	}

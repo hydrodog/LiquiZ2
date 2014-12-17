@@ -11,7 +11,7 @@ import org.adastraeducation.liquiz.*;
  * @author yijinkang
  *
  */
-public class LoadEntities {
+public class Load {
 	/**
 	 * 
 	 * @param DispElID
@@ -48,6 +48,7 @@ public class LoadEntities {
 	}
 
 	public static Displayable loadDispEl(int DispElID) {
+		//TODO should these load with ID?
 		Connection conn = null;
 		Displayable d = null;
 		try {
@@ -76,7 +77,7 @@ public class LoadEntities {
 			} else {
 				d = null;
 			}
-
+			Database.setDisp(DispElID, d);
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -86,7 +87,7 @@ public class LoadEntities {
 		return d;
 	}
 
-	public static Answer loadAns(int AnsID) {
+	public static Answer loadAns(int AnsID, boolean correct) {
 		Connection conn = null;
 		Response res = null;
 		Answer a = null;
@@ -98,24 +99,22 @@ public class LoadEntities {
 			ResultSet rs = p.executeQuery();
 
 			if (rs.getInt("Element") != 0) {
-				res = new Response(loadDispEl(rs.getInt("Response")));
-				a = new Answer(loadDispEl(rs.getInt("Element")), false, res); 
+				a = new Answer(AnsID, loadDispEl(rs.getInt("Element")), correct);
+				if (rs.getInt("Response") != 0) {
+					res = new Response(loadDispEl(rs.getInt("Response")));
+					a.setResponse(res);
+				}
 			} else {
 				// TODO Range
 			}
 			
 			rs.close();
+			Database.setAns(AnsID, a);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-		return a;
-	}
-	
-	public static Answer loadAns(int AnsID, boolean correct) {
-		Answer a = loadAns(AnsID);
-		a.setCorrect(correct);
 		return a;
 	}
 	
@@ -143,12 +142,13 @@ public class LoadEntities {
 			ResultSet rs2 = p2.executeQuery();
 			// add the choices to the ans ArrayList<Answer>
 			while (rs2.next()) {
-				ans.add(new Answer(loadDispEl(rs2.getInt("Element"))));
+				ans.add(new Answer(loadDispEl(rs2.getInt("Element")),rs2.getInt("Sequence")));
 			}
 			
 			rs1.close();
 			rs2.close();
-			sc = new StdChoiceTwo(name, ans);
+			sc = new StdChoiceTwo(SetID, name, ans);
+			Database.setStdChoice(SetID, sc);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -224,6 +224,7 @@ public class LoadEntities {
 			
 			ques.close();
 			QA.close();
+			Database.setQues(QuesID, q);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -244,6 +245,7 @@ public class LoadEntities {
 
 			// set fields of the policy
 			pol = new Policy();
+			pol.setID(PolID);
 			pol.setAttemptNum(rs.getInt("Attempts"));
 			pol.setTimed(rs.getBoolean("Timed"));
 			if (rs.getBoolean("Timed")) {
@@ -258,6 +260,7 @@ public class LoadEntities {
 				pol.setAccessCode(rs.getString("AccessCode"));
 			}
 
+			Database.setPolicy(PolID, pol);
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -267,38 +270,40 @@ public class LoadEntities {
 		return pol;
 	}
 
-	public static QuestionContainer loadQuesCon(int QCID) {
+	public static void loadQuesCon() {
 		Connection conn = null;
-		ArrayList<Displayable> dispEls = new ArrayList<Displayable>();
-		QuestionContainer qc = null;
 
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT * FROM QuesConElements WHERE QuesCon=? ORDER BY Sequence ASC");
-			p.setInt(1, QCID);
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM QuesConElements ORDER BY Sequence ASC");
 			ResultSet rs = p.executeQuery();
 
-			// load all of the elements in the QuestionContainer and put it in dispEls
+			ArrayList<Displayable> dispEls = new ArrayList<Displayable>();
+			QuestionContainer qc = null;
+			
 			while (rs.next()) {
+				// load all of the elements in the QuestionContainer and put it in dispEls ArrayList
 				String element = rs.getString("Type");
 				if (element.equals("disp")) {
 					dispEls.add(loadDispEl(rs.getInt("Element")));
 				} else {
 					dispEls.add(loadQues(rs.getInt("Ques")));
 				}
+				// turn dispEls into a QuestionContainer & put it in the database
+				int QCID = rs.getInt("QCID");
+				qc = new QuestionContainer(QCID, (Displayable[])dispEls.toArray());
+				Database.setQuesCon(QCID, qc);
 			}
-			// turn dispEls into a QuestionContainer
-
 			rs.close();
-			qc = new QuestionContainer((Displayable[])dispEls.toArray());
+			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-		return qc;
 	}
 	
+	//TODO is this actually needed? - quizzes will all be loaded
 	public static String loadQuizName(int QuizID) {
 		Connection conn = null;
 		String name = null;
@@ -317,77 +322,90 @@ public class LoadEntities {
 		return name;
 	}
 	
-	public static Quiz loadQuiz(int QuizID) {
+	public static void loadQuiz() {
 		Connection conn = null;
-		Quiz quiz = null;
 		
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM Quizzes WHERE QuizID=?");
-			p1.setInt(1, QuizID);
+			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM Quizzes");
 			ResultSet rs1 = p1.executeQuery();
-			//set Policy
-			Policy policy = loadPolicy(rs1.getInt("Policy"));
-			quiz = new Quiz(policy);
 			
-			//find & load QuestionContainers
-			PreparedStatement p2 = conn.prepareStatement("SELECT * FROM QuizzesQuesCons WHERE Quiz=? ORDER BY Sequence ASC");
-			p2.setInt(1, QuizID);
-			ResultSet rs2 = p2.executeQuery();
-			while(rs2.next()) {
-				quiz.addQuestionContainer(loadQuesCon(rs2.getInt("QuesCon")));
+			Quiz quiz = null;
+			// load all quizzes
+			while (rs1.next()) {
+				Policy policy = loadPolicy(rs1.getInt("Policy")); //set Policy
+				quiz = new Quiz(rs1.getInt("QuizID"), policy);
+				
+				//find & load QuestionContainers
+				PreparedStatement p2 = conn.prepareStatement("SELECT * FROM QuizzesQuesCons WHERE Quiz=? ORDER BY Sequence ASC");
+				p2.setInt(1, rs1.getInt("QuizID"));
+				ResultSet rs2 = p2.executeQuery();
+				while(rs2.next()) {
+					quiz.addQuestionContainer(Database.getQuesCon(rs2.getInt("QuesCon")));
+				}
+				rs2.close();
 			}
 
 			rs1.close();
-			rs2.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-
-		return quiz;
 	}
 	
-	public static Course loadCourse(int id) {
+	public static void loadCourse() {
 		Connection conn = null;
-		Course course = null;
 		
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT * FROM Courses WHERE CourseID=?");
-			p.setInt(1, id);
-			ResultSet rs = p.executeQuery();
+			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM Courses"); 
+			ResultSet rs1 = p1.executeQuery();
 			
-			if (rs.next()) {
-				String name = rs.getString("Name");
+			Course course = null;
+			while (rs1.next()) {
+				int id = rs1.getInt("CourseID");
+				String name = rs1.getString("Name");
 				course = new Course(id, name);
+				
+				// Add all quizzes
+				PreparedStatement p2 = conn.prepareStatement("SELECT * FROM CoursesQuizzes WHERE Course=?");
+				p2.setInt(1, id);
+				ResultSet rs2 = p2.executeQuery();
+				
+				while (rs2.next()) {
+					course.addQuiz(Database.getQuiz(rs2.getInt("Quiz")));
+				}
+				rs2.close();
+				
+				Database.setCourse(id, course);
 			}
-			rs.close();
+			rs1.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-		return course;
 	}
 	
-	public static User loadUser(int id) {
+	public static void loadUser() {
 		Connection conn = null;
-		User user = null;
+		
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT * FROM Users WHERE UserID=?");
-			p.setInt(1, id);
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM Users");
 			ResultSet rs = p.executeQuery();
 			
-			if (rs.next()) {
+			User user = null;
+			while (rs.next()) {
+				int id = rs.getInt("UserID");
 				String un = rs.getString("Username");
 				String pw = rs.getString("Password");
 				String fn = rs.getString("FirstName");
 				String ln = rs.getString("LastName");
 				String email = rs.getString("Email");
-				user = new User(un, pw, fn, ln, email);
+				user = new User(id, un, pw, fn, ln, email);
+				Database.setUser(id, user);
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -395,9 +413,9 @@ public class LoadEntities {
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-		return user;
 	}
 	
+	//TODO while loop
 	public static double loadStudentGrade(int id) {
 		Connection conn = DatabaseMgr.getConnection();
 		double grade = 0;
@@ -418,6 +436,7 @@ public class LoadEntities {
 		return grade;
 	}
 	
+	//TODO while loop
 	public static int loadStudentQuizScore(int sid, int qid) {
 		Connection conn = null;
 		int score = 0;
@@ -440,6 +459,7 @@ public class LoadEntities {
 		return score;
 	}
 	
+	//TODO while loop
 	public static Displayable loadStudentResponse(int sid, int qid) {
 		Connection conn = null;
 		Displayable d = null;
@@ -461,4 +481,11 @@ public class LoadEntities {
 		}
 		return d;
 	}
+	
+	/*
+	 * TODO: two types of methods
+	 * questions, answers, StdChoices, DispEls load one at a time and return
+	 * Users, Courses, quizzes, policies, question containers,  load everything (they'll call the above methods so the needed ones will be loaded as well)
+	 * Student Grade/QuizScore/Response load everything too but where to put it? 2D array?
+	 */
 }

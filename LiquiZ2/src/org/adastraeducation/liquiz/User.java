@@ -11,7 +11,8 @@ public class User {
 	
 	//TODO: Do we need CREATEUSER privilege?
 	
-	private String id; // unique User for this system
+	private int id;
+	private String username; // unique User for this system
 	private String passwd;
 	private String fName;
 	private String lName;
@@ -19,16 +20,20 @@ public class User {
 	private int role; // lookup into Role table?
 	private int permissions;
 	
-	public User(String id, String passwd, String fName, String lName, String email) {
-		this.id = id;
+	public User() {
+		
+	}
+	
+	public User(String username, String passwd, String fName, String lName, String email) {
+		this.username = username;
 		this.passwd = passwd;
 		this.fName = fName;
 		this.lName = lName;
 		this.email = email;
 	}
 	
-	public User(String id, String passwd, String fName, String lName, String email, int permissions) {
-		this.id = id;
+	public User(String username, String passwd, String fName, String lName, String email, int permissions) {
+		this.username = username;
 		this.passwd = passwd;
 		this.fName = fName;
 		this.lName = lName;
@@ -36,11 +41,29 @@ public class User {
 		this.permissions = permissions;
 	}
 	
-	public String getId() {
+	public User(int id, String username, String passwd, String fName, String lName, String email) {
+		this(username, passwd, fName, lName, email);
+		this.id = id;
+	}
+	
+	public User(int id, String username, String passwd, String fName, String lName, String email, int permissions) {
+		this(username, passwd, fName, lName, email, permissions);
+		this.id = id;
+	}
+	
+	public int getID() {
 		return id;
 	}
-	public void setId(String id) {
+	
+	public void setID(int id) {
 		this.id = id;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public String getPasswd() {
 		return passwd;
@@ -95,9 +118,9 @@ public class User {
 		return (permissions & requestedPerm) != 0;		
 	}
 	public boolean isLoggedIn() {
-		if (id == null || passwd == null)
+		if (username == null || passwd == null)
 			return false;
-		return id.equals("test") && passwd.equals("test");
+		return username.equals("test") && passwd.equals("test");
 	}
 	public static void main(String[]a) {
 		System.out.println("test");
