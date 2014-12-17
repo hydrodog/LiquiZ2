@@ -31,6 +31,22 @@ public class MultiChoiceDropdown extends Question {
 		super(level, points);
 		stdchoice = new StdChoice(stdChoiceName, rightAns);
 	}
+	
+
+	public static MultiChoiceDropdown createRandomNum(int level, int points, Answer ans, int index, int choices) {
+		// something to randomize the other Answer choices and put in ans among the array
+		Answer answers[] = new Answer[choices];
+		answers[index] = ans;
+		for(int i = 0; i < answers.length; i++){
+			if (answers[i].equals(null)) {
+//				answers[i] = TODO: generate something random
+			} else {
+				continue;
+			}
+		}
+		
+		return new MultiChoiceDropdown(level, points, answers);
+	}
 
 	public String getTagName() {
 		return "MultiChoice";
