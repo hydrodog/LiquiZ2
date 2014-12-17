@@ -11,11 +11,10 @@ DELETE FROM QuesConElements;
 DELETE FROM Questions;
 DELETE FROM Quizzes;
 DELETE FROM QuizzesQuesCons;
-DELETE FROM Responses;
 DELETE FROM StdChoices;
 DELETE FROM StdSet;
 DELETE FROM StudentGrades; 
-DELETE FROM StudentGradesOnQuizzes; 
+DELETE FROM StudentQuizScores; 
 DELETE FROM StudentResponses; 
 DELETE FROM UserPermissions;
 DELETE FROM Users;
@@ -250,25 +249,21 @@ VALUES(3, 23, 5);
 INSERT INTO Users
 VALUES (2, "A", "A", "aa", "password", "abcd@gmail.com");
 
-INSERT INTO Responses
-VALUES (1, 24);
 INSERT INTO DisplayElements
 VALUES (24, "text");
 INSERT INTO DispElSeq
 VALUES (24, "Blue", 1);
 INSERT INTO StudentResponses
-VALUES (2, 1, 1, 1);
+VALUES (2, 1, 24, 1);
 
-INSERT INTO Responses
-VALUES (2, 25);
 INSERT INTO DisplayElements
 VALUES (25, "text");
 INSERT INTO DispElSeq
 VALUES (25, "Cat", 1);
 INSERT INTO StudentResponses
-VALUES (2, 2, 2, 1);
+VALUES (2, 2, 25, 1);
 
-INSERT INTO StudentGradesOnQuizzes
+INSERT INTO StudentQuizScores
 VALUES (1, 1, 100);
 
 INSERT INTO StudentGrades
