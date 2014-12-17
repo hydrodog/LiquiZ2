@@ -220,17 +220,6 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`UserPermissions` (
 
 
 -- -----------------------------------------------------
--- Table `LizuiZ`.`Responses`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `LiquiZ`.`Responses` ;
-
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`Responses` (
-  `ResponseID` INT NOT NULL AUTO_INCREMENT,
-  `Element` INT NOT NULL,
-  PRIMARY KEY (`ResponseID`));
-
-
--- -----------------------------------------------------
 -- Table `LiquiZ`.`StudentResponses`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `LiquiZ`.`StudentResponses` ;
@@ -243,11 +232,11 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentResponses` (
 
 
 -- -----------------------------------------------------
--- Table `LiquiZ`.`StudentGradesOnQuizzes`
+-- Table `LiquiZ`.`StudentQuizScores`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `LiquiZ`.`StudentGradesOnQuizzes` ;
+DROP TABLE IF EXISTS `LiquiZ`.`StudentQuizScores` ;
 
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentGradesOnQuizzes` (
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentQuizScores` (
   `Student` INT NOT NULL,
   `Quiz` INT NOT NULL,
   `Score` INT NOT NULL);
