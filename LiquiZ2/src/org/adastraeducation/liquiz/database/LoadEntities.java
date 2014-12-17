@@ -5,15 +5,18 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.*;
 
+/**
+ * Loading objects based on database information
+ * Need to work on where the objects go after being created...
+ * @author yijinkang
+ *
+ */
 public class LoadEntities {
-	public static void main(String[] args) {
-		//StringBuilder s = new StringBuilder();
-		//loadQuiz(1).writeXML(s);
-		//System.out.print(s.toString());
-		
-		System.out.print(loadText(1));
-	}
-	
+	/**
+	 * 
+	 * @param DispElID
+	 * @return one String of all the parts combined
+	 */
 	public static String loadText(int DispElID) {
 		Connection conn = null;
 		StringBuilder sb = new StringBuilder();
@@ -23,14 +26,17 @@ public class LoadEntities {
 			p.setInt(1, DispElID);
 			ResultSet rs = p.executeQuery();
 			
+			rs.next();
 			if (rs.getString("Type").equals("text")) {
 				// Longer Strings are split up
 				while (rs.next()) {
 					sb.append(rs.getString("Element"));
 				}
 			} else {
+				//DisplayElement requested is not text
 				//TODO: Exception
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -48,9 +54,14 @@ public class LoadEntities {
 			PreparedStatement p = conn.prepareStatement("SELECT Element, Type FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
 			p.setInt(1, DispElID);
 			ResultSet rs = p.executeQuery();
-
+			
+			String type = null;
 			// Figure out what type of Displayable to load
-			String type = rs.getString("Type");
+			if (rs.next()) {
+				type = rs.getString("Type");
+			} else {
+				System.out.print("No Displayables found");
+			}
 			
 			if (type.equals("text")) {
 				String s = loadText(rs.getInt("DispEl"));
@@ -126,6 +137,9 @@ public class LoadEntities {
 			while (rs2.next()) {
 				ans.add(new Answer(loadDispEl(rs2.getInt("Element"))));
 			}
+			
+			rs1.close();
+			rs2.close();
 			return new StdChoiceTwo(name, ans);
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -323,9 +337,12 @@ public class LoadEntities {
 			PreparedStatement p = conn.prepareStatement("SELECT * FROM Courses WHERE CourseID=?");
 			p.setInt(1, id);
 			ResultSet rs = p.executeQuery();
-			String name = rs.getString("Name");
 			
-			return new Course(id, name);
+			if (rs.next()) {
+				String name = rs.getString("Name");
+				return new Course(id, name);
+			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -341,13 +358,15 @@ public class LoadEntities {
 			p.setInt(1, id);
 			ResultSet rs = p.executeQuery();
 			
-			String un = rs.getString("Username");
-			String pw = rs.getString("Password");
-			String fn = rs.getString("FirstName");
-			String ln = rs.getString("LastName");
-			String email = rs.getString("Email");
-			
-			return new User(un, pw, fn, ln, email);
+			if (rs.next()) {
+				String un = rs.getString("Username");
+				String pw = rs.getString("Password");
+				String fn = rs.getString("FirstName");
+				String ln = rs.getString("LastName");
+				String email = rs.getString("Email");
+				return new User(un, pw, fn, ln, email);
+			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -358,8 +377,11 @@ public class LoadEntities {
 	
 	/*
 	 * TODO:
+	 * loadQuizName
 	 * loadStudentGrade
 	 * loadStudentGradeOnQuiz
 	 * loadStudentResponse
+	 * 
+	 * Remember to close RS's and return connections
 	 */
 }

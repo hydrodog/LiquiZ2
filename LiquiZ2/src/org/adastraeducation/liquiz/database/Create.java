@@ -4,8 +4,21 @@ import java.sql.*;
 
 import org.adastraeducation.liquiz.*;
 
+/**
+ * Adds a row to tables with newly created entities
+ * @author yijinkang
+ *
+ */
 public class Create {
 	
+	/**
+	 * Updates Users table when a new user registers
+	 * @param fName first name
+	 * @param lName last name
+	 * @param id username
+	 * @param pw password
+	 * @param email email address
+	 */
 	public static void createUser(String fName, String lName, String id, String pw, String email) {
 		Connection conn = null;
 		try {
@@ -24,6 +37,11 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Updates Courses table when a new course is created
+	 * @param name
+	 * @param privacy
+	 */
 	public static void createCourse(String name, String privacy) {
 		Connection conn = null;
 		try {
@@ -39,6 +57,16 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Updates Policies table when a policy type is created
+	 * @param name
+	 * @param timed
+	 * @param showAns
+	 * @param scored
+	 * @param grade
+	 * @param shuffleQues
+	 * @param shuffleAns
+	 */
 	public static void createPolicy(String name, int timed, int showAns, int scored, int grade, int shuffleQues, int shuffleAns) {
 		Connection conn = null;
 		try {
@@ -59,6 +87,12 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Updates Quizzes table when a new quiz is created
+	 * @param name
+	 * @param pol
+	 * @param priv
+	 */
 	public static void createQuiz(String name, int pol, String priv) {
 		Connection conn = null;
 		try {
@@ -75,6 +109,13 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Updates DisplayElements table when a new one is created. 
+	 * Does NOT contain content of Display Element.
+	 * Use fillDispEl.
+	 * @param type
+	 * @return auto-generated key of new Display Element
+	 */
 	public static int createDispEl(String type) {
 		Connection conn = null;
 		int key = -1;
@@ -102,6 +143,13 @@ public class Create {
 		return key;
 	}
 	
+	/**
+	 * Fills in content of Display Element created by createDispEl
+	 * Long strings are added in multiple rows.
+	 * @param id
+	 * @param element
+	 * @param seq
+	 */
 	public static void fillDispEl (int id, String element, int seq) {
 		Connection conn = null;
 		try {
@@ -118,6 +166,13 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Updates Questions table when a new one is created
+	 * @param points
+	 * @param level
+	 * @param type
+	 * @return auto-generated key of new Question
+	 */
 	public static int createQues(int points, int level, String type) {
 		Connection conn = null;
 		int key = -1;
@@ -145,6 +200,12 @@ public class Create {
 		return key;
 	}
 	
+	/**
+	 * Updates Answers table when a new non-numerical one is created
+	 * @param res response when student chooses this answer
+	 * @param el Display Element that represents the answer
+	 * @return auto-generated key of new Answer
+	 */
 	public static int createAns(int res, int el) {
 		Connection conn = null;
 		int key = -1;
@@ -171,6 +232,13 @@ public class Create {
 		return key;
 	}
 	
+	/**
+	 * Updates Answers table when a numerical one is needed
+	 * @param res response when student chooses this answer
+	 * @param low lower bound of range to be accepted
+	 * @param high upper bound of range to be accepted 
+	 * @return auto-generated key of new Answer
+	 */
 	public static int createNumAns(int res, int low, int high) {
 		Connection conn = null;
 		int key = -1;
@@ -198,6 +266,13 @@ public class Create {
 		return key;
 	}
 	
+	/**
+	 * Update StdSet table when a new Standard Choice Set is created.
+	 * Does not fill in individual choices of the set.
+	 * Use fillStdChoices
+	 * @param name of set
+	 * @return auto-generated key of new StdSet
+	 */
 	public static int createStdSet(String name) {
 		Connection conn = null;
 		int key = -1;
@@ -221,6 +296,12 @@ public class Create {
 		return key;
 	}
 	
+	/**
+	 * Updates StdChoice table with choices for the specified StdSet
+	 * @param setId ID of Standard Choice Set
+	 * @param element ID of corresponding Display Element
+	 * @param seq The sequence within the set
+	 */
 	public static void fillStdChoices(int setId, int element, int seq) {
 		Connection conn = null;
 		try {
@@ -237,6 +318,13 @@ public class Create {
 		}
 	}
 	
+	/** 
+	 * Updates QuesAnsSeq table in order to link Questions and Answers
+	 * @param qid
+	 * @param aid
+	 * @param seq
+	 * @param correct
+	 */
 	public static void linkQuesAns(int qid, int aid, int seq, boolean correct) {
 		Connection conn = null;
 		try {
@@ -254,6 +342,13 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Updates QuesAnsSeq table in order to link Questions and StdSets
+	 * @param qid
+	 * @param sid
+	 * @param seq
+	 * @param correct
+	 */
 	public static void linkQuesStd(int qid, int sid, int seq, boolean correct) {
 		Connection conn = null;
 		try {
