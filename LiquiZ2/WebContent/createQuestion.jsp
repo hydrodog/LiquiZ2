@@ -1,7 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
     <head>
-        <meta http-equiv="Content-Type" conte"WebContent/createQuestion.jsp"nt="text/html"; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
         <title>CreateQuestions</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
         </script>
