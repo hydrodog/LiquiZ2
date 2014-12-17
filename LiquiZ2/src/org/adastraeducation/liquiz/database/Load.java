@@ -303,25 +303,6 @@ public class Load {
 		}
 	}
 	
-	//TODO is this actually needed? - quizzes will all be loaded
-	public static String loadQuizName(int QuizID) {
-		Connection conn = null;
-		String name = null;
-		
-		try {
-			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT * FROM Quizzes WHERE QuizID=?");
-			p.setInt(1, QuizID);
-			ResultSet rs = p.executeQuery();
-			name = rs.getString("Name");
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DatabaseMgr.returnConnection(conn);
-		}
-		return name;
-	}
-	
 	public static void loadQuiz() {
 		Connection conn = null;
 		
@@ -343,6 +324,7 @@ public class Load {
 				while(rs2.next()) {
 					quiz.addQuestionContainer(Database.getQuesCon(rs2.getInt("QuesCon")));
 				}
+				Database.setQuiz(rs1.getInt("QuizID"), quiz);
 				rs2.close();
 			}
 
