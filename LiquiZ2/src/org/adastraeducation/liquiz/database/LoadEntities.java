@@ -86,7 +86,7 @@ public class LoadEntities {
 		return d;
 	}
 
-	public static Answer loadAns(int AnsID, boolean correct) {
+	public static Answer loadAns(int AnsID) {
 		Connection conn = null;
 		Response res = null;
 		Answer a = null;
@@ -99,7 +99,7 @@ public class LoadEntities {
 
 			if (rs.getInt("Element") != 0) {
 				res = new Response(loadDispEl(rs.getInt("Response")));
-				a = new Answer(loadDispEl(rs.getInt("Element")), correct, res); 
+				a = new Answer(loadDispEl(rs.getInt("Element")), false, res); 
 			} else {
 				// TODO Range
 			}
@@ -110,6 +110,12 @@ public class LoadEntities {
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
+		return a;
+	}
+	
+	public static Answer loadAns(int AnsID, boolean correct) {
+		Answer a = loadAns(AnsID);
+		a.setCorrect(correct);
 		return a;
 	}
 	

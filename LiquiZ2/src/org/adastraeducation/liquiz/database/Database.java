@@ -1,3 +1,5 @@
+package org.adastraeducation.liquiz.database;
+
 import java.sql.*;
 import java.util.ArrayList;
 import org.adastraeducation.liquiz.*;
@@ -11,6 +13,7 @@ import org.adastraeducation.liquiz.*;
 public class Database {
 	private static ArrayList<Quiz> quizzes = new ArrayList<Quiz>(); 
 	private static ArrayList<QuestionContainer> quesCons = new ArrayList<QuestionContainer>();
+	private static ArrayList<Course> courses = new ArrayList<Course>();
 	
 	/**
 	 * Load all quizzes and put them in quizzes ArrayList
@@ -40,6 +43,7 @@ public class Database {
 		}
 	}
 	
+	//TODO: Is there a need to load individual QCs, questions, displayables...?
 	public static void loadQCs() {
 		Connection conn = null;
 		try {
@@ -56,4 +60,27 @@ public class Database {
 			DatabaseMgr.returnConnection(conn);
 		}
 	}
+	
+	public static void loadCourses() {
+		Connection conn = null;
+		try {
+			conn = DatabaseMgr.getConnection();
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM Courses");
+			ResultSet rs = p.executeQuery();
+			while (rs.next()) {
+				int courseID = rs.getInt("CourseID");
+				courses.add(courseID, LoadEntities.loadCourse(courseID));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.returnConnection(conn);
+		}
+	}
+	
+	/*
+	 * TODO: 
+	 * find methods
+	 * load 
+	 */
 }
