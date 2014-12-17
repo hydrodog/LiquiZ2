@@ -1,10 +1,13 @@
 package org.adastraeducation.liquiz;
 
+import java.util.ArrayList;
+
 
 public class MultiAnswer extends MultiChoiceDropdown {
-	private Answer [] answers;
+	private Answer [] answers; // would like to switch to ArrayList<Answer>
 	
 	/**********************Added getter and setter for serialization********************************/
+	// There are duplicate getters and setters now... -Yijin
 	public Answer[] getAnswer(){
 		return answers;
 	}
@@ -29,6 +32,13 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		// TODO Auto-generated constructor stub
 		super(level, points);
 		stdchoice = new StdChoice(stdChoiceName, rightAns);
+	}
+	// constructor with ArrayList
+	public MultiAnswer(int id, int level, int points, ArrayList<Answer> answers) {
+		super(id, level, points, answers);
+	}
+	public MultiAnswer(int level, int points, ArrayList<Answer> answers) {
+		super(level, points, answers);
 	}
 
 	public String getTagName() {

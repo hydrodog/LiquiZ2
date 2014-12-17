@@ -1,11 +1,13 @@
 package org.adastraeducation.liquiz;
 
+import java.util.ArrayList;
+
 
 
 public class MultiChoiceDropdown extends Question {
 	protected Answer[] answers;
 	protected StdChoice stdchoice;
-	
+	protected StdChoiceTwo sc;
 
 	public MultiChoiceDropdown() {
 	}
@@ -21,6 +23,14 @@ public class MultiChoiceDropdown extends Question {
 		super(level, points);
 		this.answers = answers.clone();
 	}
+	
+	//constructors with ArrayList<Answer> instead of Answer[]
+	public MultiChoiceDropdown(int id, int level, int points, ArrayList<Answer> answers) {
+		super(id, level, points, answers);
+	}
+	public MultiChoiceDropdown(int level, int points, ArrayList<Answer> answers) {
+		super(level, points, answers);
+	}
 
 	public MultiChoiceDropdown(int level, int points, String stdChoiceName) {
 		super(level, points);
@@ -31,7 +41,15 @@ public class MultiChoiceDropdown extends Question {
 		super(level, points);
 		stdchoice = new StdChoice(stdChoiceName, rightAns);
 	}
-	
+	//constructors with StdChoiceTwo
+	public MultiChoiceDropdown(int level, int points, StdChoiceTwo sc) {
+		super(level, points);
+		this.sc = sc;
+	}
+	public MultiChoiceDropdown(int id, int level, int points, StdChoiceTwo sc) {
+		super(id, level, points);
+		this.sc = sc;
+	}
 
 	public static MultiChoiceDropdown createRandomNum(int level, int points, Answer ans, int index, int choices) {
 		// something to randomize the other Answer choices and put in ans among the array
@@ -55,8 +73,8 @@ public class MultiChoiceDropdown extends Question {
 	public Answer[] getAnswers() {
 		return answers;
 	}
-	public void setAnswers(Answer[] answers) {
-		this.answers = answers;
+	public void setAnswers(Answer[] ans) {
+		this.answers = ans;
 	}
 
 	public void writeHTML(StringBuilder b) {

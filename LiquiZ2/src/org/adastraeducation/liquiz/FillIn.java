@@ -1,9 +1,4 @@
-
-
-
-
-
- package org.adastraeducation.liquiz;
+package org.adastraeducation.liquiz;
 
 /*
  * author: Yingzhu
@@ -20,16 +15,18 @@
  * For instance, "12 fadasd" is right. However, "13 KJKAJD 24" is wrong. Only 13 may be detected and 24 may be ignored. 
  */
 
+import java.util.ArrayList;
+
 import org.adastraeducation.liquiz.util.NumberWarningPattern;
 import org.adastraeducation.liquiz.util.QuestionPattern;
 import org.adastraeducation.liquiz.util.Number;
 import org.adastraeducation.liquiz.util.WarningPattern;
 
 public class FillIn extends Question {
-	private Answer answer;
+	private Answer answer; //TODO: remove
 	
-	// add attibutes to merge Regex Questions.
-	// If hasPattern is true and pattern!=null, it means it is a fillin quesiton also a Regex Question
+	// add attributes to merge Regex Questions.
+	// If hasPattern is true and pattern!=null, it means it is a fillin question also a Regex Question
 	private QuestionPattern pattern;
 	private boolean hasPattern;
 	// add attributes to merge Number question
@@ -59,7 +56,7 @@ public class FillIn extends Question {
 
 	public FillIn(int id, int points, int level, String answer) {
 		super(id, points, level);
-		this.answer = new Answer(answer, true);
+		this.answer = new Answer(answer, true); //TODO: change into ArrayList? or remove constructor
 		warningPattern = null;
 		pattern = null;
 		appro = null;
@@ -67,15 +64,20 @@ public class FillIn extends Question {
 	
 	public FillIn(int id, int points, int level, Answer answer) {
 		super(id, points, level);
-		this.answer=answer;
+		this.answer=answer; //TODO: change into ArrayList? or remove constructor
 		warningPattern = null;
 		pattern = null;
 		appro = null;
 	}
+	
+	public FillIn(int id, int points, int level, ArrayList<Answer> answers) {
+		super(id, points, level, answers);
+	}
+	
 	// the new constructor including all of the elements
 	public FillIn(int id, int points, int level, Answer answer, WarningPattern wp, QuestionPattern qp, Number number){
 		super(id,points, level);
-		this.answer = answer;
+		this.answer = answer; //TODO: change into ArrayList? or remove constructor
 		this.warningPattern=wp;
 		this.pattern = qp;
 		this.appro = number;
@@ -84,7 +86,7 @@ public class FillIn extends Question {
 	// the new constructor including all of the elements
 	public FillIn(int points, int level, Answer answer, WarningPattern wp, QuestionPattern qp, Number number){
 		super(points, level);
-		this.answer = answer;
+		this.answer = answer; //TODO: change into ArrayList? or remove constructor
 		this.warningPattern=wp;
 		this.pattern = qp;
 		this.appro = number;

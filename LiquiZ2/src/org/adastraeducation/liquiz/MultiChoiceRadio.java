@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz;
 
+import java.util.ArrayList;
+
 public class MultiChoiceRadio extends MultiChoiceDropdown {
 	public MultiChoiceRadio() {
 	}
@@ -12,10 +14,24 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 			Answer[] answers) {
 	super(level, points, answers);
 	}
-
+	// constructors with ArrayList
+	public MultiChoiceRadio(int id, int level, int points, ArrayList<Answer> answers) {
+		super(id, level, points, answers);
+	}
+	public MultiChoiceRadio(int level, int points, ArrayList<Answer> answers) {
+		super (level, points, answers);
+	}
+	
 	public MultiChoiceRadio(int level, int points, String stdChoiceName) {
 		super(level, points, stdChoiceName);
 
+	}
+	//constructors with StdChoiceTwo
+	public MultiChoiceRadio(int level, int points, StdChoiceTwo sc) {
+		super(level, points, sc);
+	}
+	public MultiChoiceRadio(int id, int level, int points, StdChoiceTwo sc) {
+		super(id, level, points, sc);
 	}
 
 	public String getTagName() {
