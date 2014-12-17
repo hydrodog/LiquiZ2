@@ -114,14 +114,6 @@ function showWarningPatternAttribute(obj) {
     }
 }
 
-function showRegexQuestionAttribute(obj) {
-    if (obj.checked) {
-        document.getElementById("regexInput_attribute").style.display="";
-    }else{
-        document.getElementById("regexInput_attribute").style.display="none";
-    }
-}
-
 function showNumberQuestionAttribute(obj) {
     if (obj.checked) {
         document.getElementById("numberQuestion_attribute").style.display="";
@@ -134,7 +126,7 @@ function createDropDownChoices(obj) {
     var empty="";
     document.getElementById("dropdown").innerHTML=empty;
     for (var i=1;i<=obj.value;i++) {
-        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"dropdown_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"dropdown_choices\"></br>";
+        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"dropdown_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"checkbox\" name=\"dropdown_choices\"></br>";
     }
     document.getElementById("dropdown").innerHTML=empty;
 }
@@ -143,7 +135,7 @@ function createRadioChoices(obj) {
     var empty="";
     document.getElementById("radio").innerHTML=empty;
     for (var i=1;i<=obj.value;i++) {
-        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"radio_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"radio\" name=\"radio_choices\"></br>";
+        empty+="</br> Option "+(i+4)+":&nbsp<input type=\"text\" name=\"radio_choices\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type=\"checkbox\" name=\"radio_choices\"></br>";
     }
     document.getElementById("radio").innerHTML=empty;
 }

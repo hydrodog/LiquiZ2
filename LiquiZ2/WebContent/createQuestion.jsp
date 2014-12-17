@@ -16,7 +16,7 @@
                 Title  <input type="text" name="title">
                 QuestionType
                 <select name="question_type" size="1" onchange="changeQuestion(this)">
-                    <option value="FillIn" selected>FillIn</option>
+                    <option value="FillIn" selected>Fill-In</option>
                     <option value="Essay" >Essay</option> 
                     <option value="Code" >Code</option>                
                     <option value="MultiChoiceDropdown">MultiChoice-Dropdown</option>
@@ -42,7 +42,7 @@
             </br>
             
             
-            
+           
             <div>
             	Image Upload
 				<input type="file" name = "image_src" id="image-input">
@@ -140,7 +140,7 @@
 
 			</script>
 			
-			
+		
                
             </br>
                 
@@ -150,12 +150,12 @@
                 </br>
                 <div>
                 <div style="float:left">
-                    <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">WarningPattern</br>
+                    <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">Warning Pattern</br>
                 </div>
                 </br>
                 <div id="warningPattern_attribute" style="float:left;display:none; ">
                     <select name="warning_type" size="1">
-                        <option value="NumberWarningPattern" selected>FillIn</option>
+                        <option value="NumberWarningPattern" selected>Fill-In</option>
                     </select>
                     Number Limits<input type="text" name="warningNumberLimit">
                 </div>
@@ -164,7 +164,7 @@
                 </br>
                 
                 <div style="float:left">
-                    <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">NumberQuestion</br>
+                    <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">Number Question</br>
                 </div>
                 </br>
                 <div id="numberQuestion_attribute" style="float:left;display:none;">
@@ -227,10 +227,10 @@
                     Add more options <input type="text" name="multichoice_dropdown_number" onchange="createDropDownChoices(this)" style="width: 30px;"  >
                     </br>
                    <form>
-                   </br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_1" ></br>
-                   </br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_2" ></br>
-                   </br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_3" ></br>
-                   </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="dropdown_choices" value ="choice_4" ></br>
+                   </br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_1" ></br>
+                   </br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_2" ></br>
+                   </br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_3" ></br>
+                   </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_4" ></br>
                 	</form>
                    
                 </div>
@@ -249,10 +249,10 @@
                     Add more options <input type="text" name="multichoice_radio_number" onchange="createRadioChoices(this)" style="width: 30px;"  >
                     </br>
                     <form>
-                   </br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_1" ></br>
-                   </br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_2" ></br>
-                   </br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_3" ></br>
-                   </br> Option 4: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="radio" name="radio_choices" value ="choice_4" >
+                   </br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_1" ></br>
+                   </br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_2" ></br>
+                   </br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_3" ></br>
+                   </br> Option 4: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_4" >
                 	</form>
                    
                 </div>
@@ -288,8 +288,6 @@
                 
                 <div style="clear:both"></div>             
                 <div style="float:left">
-                    <input type="checkbox" name="regex" onclick="showRegexQuestionAttribute(this)">RegexQuestion</br>
-                <div id="regexInput_attribute" style="float:left;display: none; margin-left:60px;">
                     Input your Regex<input type="text" name="regexString">
                 </div>
                 <div style="clear:both"></div>
