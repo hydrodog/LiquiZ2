@@ -91,7 +91,16 @@ public class FillIn extends Question {
 		this.pattern = qp;
 		this.appro = number;
 	}
-
+	
+	public boolean isCorrect(Displayable d) {
+		ArrayList<Answer> answers = this.getAns();
+		for (int i = 0; i < answers.size(); i++) {
+			if (answers.get(i).getCorrect() && d.equals(answers.get(i).getGAns())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	//get Tag
 	public String getTagName() { return "FillIn"; }

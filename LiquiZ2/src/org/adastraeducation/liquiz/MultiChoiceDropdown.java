@@ -65,6 +65,16 @@ public class MultiChoiceDropdown extends Question {
 		
 		return new MultiChoiceDropdown(level, points, answers);
 	}
+	
+	public boolean isCorrect(Displayable d) {
+		ArrayList<Answer> answers = this.getAns();
+		for (int i = 0; i < answers.size(); i++) {
+			if (answers.get(i).getCorrect() && d.equals(answers.get(i).getGAns())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public String getTagName() {
 		return "MultiChoice";

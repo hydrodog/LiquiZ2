@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class MultiAnswer extends MultiChoiceDropdown {
-	private Answer [] answers; // would like to switch to ArrayList<Answer>
+	private Answer [] answers; // would like to switch to ArrayList<Answer> in Question class
 	
 	/**********************Added getter and setter for serialization********************************/
 	// There are duplicate getters and setters now... -Yijin
@@ -41,6 +41,8 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		super(level, points, answers);
 	}
 
+	//TODO: Override IsCorrect()
+	
 	public String getTagName() {
 		return "MultiAnswer";
 	}
