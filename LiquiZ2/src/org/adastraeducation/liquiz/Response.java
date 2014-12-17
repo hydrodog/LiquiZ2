@@ -3,13 +3,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Response implements Displayable {
+	private Displayable displayable;
 	private ArrayList<Displayable> displayables;
 
 	public Response() {
 		displayables = new ArrayList<Displayable>();
 	}
+	// not sure why it's a list so I'm making a new one...
 	public Response(Displayable[] list) {
 		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+	}
+	
+	public Response(Displayable d) {
+		displayable = d;
 	}
 
 	public ArrayList<Displayable> getDisplayables() {

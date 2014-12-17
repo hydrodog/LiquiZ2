@@ -12,6 +12,7 @@ public class Answer implements Displayable {
 	private int index;// for standard choice
 	private String width; // for graphical answer
 	private String height;// for graphical answer	
+	private Response res; // Response
 	
 	
 	public Answer(String ans, boolean correct) {
@@ -20,6 +21,11 @@ public class Answer implements Displayable {
 	}
 	public Answer(String ans) {
 		this(ans, false);
+	}
+	public Answer(Displayable ans, boolean correct, Response r) {
+		gAns = ans;
+		this.correct = correct;
+		res = r;
 	}
 	public Answer(Displayable ans, boolean correct) {
 		gAns = ans;
@@ -87,6 +93,14 @@ public class Answer implements Displayable {
 	}
 	public  boolean getCorrect(){
 		return correct;
+	}
+	
+	public void setResponse(Response r) {
+		res = r;
+	}
+	
+	public Response getResponse() {
+		return res;
 	}
 	
 	//TODO: Dov says add graphical answer back in here once it works
