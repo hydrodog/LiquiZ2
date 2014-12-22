@@ -51,28 +51,4 @@ public class runCode extends HttpServlet {
 		return sb.toString();
 	}
 
-	//		public static void main(String[] args){
-	//			
-	//	        Process ps;
-	//			try {
-	//				ps = Runtime.getRuntime().exec("javac /Users/wyz/Documents/eclipse_workspace/CPE642/src/codeTest/Solution.java");
-	//				ps = Runtime.getRuntime().exec("java .\\src\\codeTest.Solution");
-	//				
-	//				InputStreamReader isr = new InputStreamReader(ps.getInputStream());
-	//				BufferedReader br = new BufferedReader(isr);
-	//				
-	//				String line;
-	//				
-	//				while((line=br.readLine())!=null){
-	//					System.out.println(line);
-	//				}
-	//			
-	//			} catch (IOException e) {
-	//				// TODO Auto-generated catch block
-	//				e.printStackTrace();
-	//			}
-	//		}
-
-
-
 }

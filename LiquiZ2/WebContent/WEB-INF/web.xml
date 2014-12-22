@@ -37,6 +37,17 @@
 		<servlet-name>Register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+		<description>runCode on the website</description>
+		<display-name>runCode on the website</display-name>
+		<servlet-name>runCode</servlet-name>
+		<servlet-class>org.adastraeducation.liquiz.servlet.runCode</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>runCode</servlet-name>
+		<url-pattern>/runCode</url-pattern>
+	</servlet-mapping>
 
 
 	<welcome-file-list>
