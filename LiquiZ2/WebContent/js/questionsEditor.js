@@ -15,29 +15,34 @@ quiz({qList:[
     ansrL:choices['qTypes'],
     pHold:'Choose a type...',
     hideL:choices['qTypes2']
+    ,qID:"questionType"
   }),
-  question({type:'essay',qHTML:'Question Text:',rows:3,cols:30,pHold:'Your text here...'}),
+  question({type:'essay',qHTML:'Question Text:',rows:3,cols:30,pHold:'Your text here...',qID:"questionHTML"}),
   questionSet({class:'dropdowns multidropdowns',qList:[
-    question({type:'essay',qHTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your text here...'}),
+    question({type:'essay',qHTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your text here...',qID:"placeholderText"}),
+    question({type:'html',HTML:'Choices:'}),
     question({type:'multiquestion',qHTML:'',qArry:[
-      question({type:'essay',qHTML:new fromText('Answer Choice [list:nums]:',1),rows:3,cols:30,pHold:'Your text here...'}),
-      question({type:'dropdown',qHTML:'',ansrL:choices['correct']})
+      question({type:'essay',rows:3,cols:30,pHold:'Your text here...',qID:"choices:1"}),
+      question({type:'dropdown',qHTML:'',ansrL:choices['correct'],qID:"correct:1"})
     ]}),
     question({type:'multiquestion',qHTML:'',qArry:[
-      question({type:'essay',qHTML:new fromText('Answer Choice [list:nums]:',2),rows:3,cols:30,pHold:'Your text here...'}),
-      question({type:'dropdown',qHTML:'',ansrL:choices['incorrect']})
+      question({type:'essay',rows:3,cols:30,pHold:'Your text here...',qID:"choices:2"}),
+      question({type:'dropdown',qHTML:'',ansrL:choices['incorrect'],qID:"correct:2"})
     ]}),
     question({type:'multiquestion',qHTML:'',qArry:[
-      question({type:'essay',qHTML:new fromText('Answer Choice [list:nums]:',3),rows:3,cols:30,pHold:'Your text here...'}),
-      question({type:'dropdown',qHTML:'',ansrL:choices['incorrect']})
-    ]})
+      question({type:'essay',rows:3,cols:30,pHold:'Your text here...',qID:"choices:3"}),
+      question({type:'dropdown',qHTML:'',ansrL:choices['incorrect'],qID:"correct:3"})
+    ]}),
+  question({type:'html',HTML:'<br>'}),
+    question({type:'addchoicesbutton'}),
+    question({type:'removechoicesbutton'})
   ]}),
   
   questionSet({class:'codes',qList:[
-    question({type:'essay',qHTML:'Base Code:',rows:3,cols:30,pHold:'Your base code here...'})
+    question({type:'essay',qHTML:'Base Code:',rows:3,cols:30,pHold:'Your base code here...',qID:"baseCode"})
   ]}),
   questionSet({class:'numfillins essays',qList:[
-    question({type:'essay',qHTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...'})
+    question({type:'essay',qHTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',qID:"placeholderText"})
   ]})
   
-],opts:{timed:false}});
+  ],opts:{submit:"Save Question", timed:false}});
