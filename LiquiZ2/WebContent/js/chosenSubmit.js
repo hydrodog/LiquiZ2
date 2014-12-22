@@ -19,10 +19,18 @@ function SUBMIT_ONE_QUIZ(quiz){
 
   var i = 0;
   var allSend = "";
+  var sendData = {};
+
   $("*").each(function(){
     i++;
+
     if(!$(this).attr("id"))
       $(this).attr("id","$"+i);
+    else{
+                console.log($(this).attr("id") );
+          console.log(this);
+
+    }
   });
  
 
@@ -30,15 +38,19 @@ function SUBMIT_ONE_QUIZ(quiz){
 
     if($(this).parent().is(':visible')){
       var val = $(this).val();
-
       //BTW we will escape the val of each answer so that students can't mess server parsing up
-      if(!(val==null||val.length < 1))
-        allSend+=(allSend.length>0?",\n":"")+("{"+$(this).attr("id")+":"+val+"}");
+      if(!(val==null||val.length < 1)){
+        allSend+=(allSend.length>0?",\n":"")+("{"+$(this).parent().attr("id")+":"+val+"}");
+        sendData[$(this).parent().attr("id")]=val;
+      }
       
     }
 
   });
-  alert(allSend);
+  //alert(allSend);
+  if(sendData){
+    sendQuestion(sendData);
+  }
 }
 
 /*Will send all quizes if need be
