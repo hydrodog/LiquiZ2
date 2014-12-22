@@ -29,8 +29,8 @@
       <script>
       var newtab = window.open("","editor");
             $(newtab.document.body).empty();
-      newtab.document.write('<!doctype html><html lang="en"><head>    <meta charset="utf-8">    <title>SITQuiz.</title>    <link rel="stylesheet" href="web/css/chosen.css">    <link rel="stylesheet" href="web/css/main.css">     <script src="web/js/jq.js" type="text/javascript">'+'</sc'+'ript><script src="web/js/chosen_jquery.js" type="text/javascript">'+'</sc'+'ript><script>');
-      $(newtab.document.body).append('<div id="top_bar"> <img src="web/img/title_logo.png"/>  </div> <div id="top_bar_fill"></div>');
+      newtab.document.write('<!doctype html><html lang="en"><head>    <meta charset="utf-8">    <title>SITQuiz.</title>    <link rel="stylesheet" href="../WebContent/css/chosen.css">    <link rel="stylesheet" href="../WebContent/css/main.css">     <script src="../WebContent/js/jq.js" type="text/javascript">'+'</sc'+'ript><script src="../WebContent/js/chosen_jquery.js" type="text/javascript">'+'</sc'+'ript><script>');
+      $(newtab.document.body).append('<div id="top_bar"> <img src="../WebContent/assets/img/title_logo.png"/>  </div> <div id="top_bar_fill"></div>');
       $(newtab.document.body).append("<div id = 'fakeTest' class='quiz'> <button>New Question</button><button>Paste Question</button></div>");
             var $fakeTest = $(newtab.document.body).find('#fakeTest');
 
