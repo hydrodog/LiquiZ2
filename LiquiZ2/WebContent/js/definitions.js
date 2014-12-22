@@ -1,4 +1,4 @@
-//choices is the global object variable where reusable lists are stored
+//choices is the global object variable where reusable lists of answers are stored
 var choices = {};
 //tabIndex is so that we can bounce from question to question using the tab button. tabIndex is basically a counter so that we can set the next index.
 var tabIndex = 1;
@@ -55,6 +55,15 @@ addchoicesbutton = function(){
     $(button).attr("tabindex",""+tabIndex);
   tabIndex++;
   return button;
+}
+
+//TODO: Refactor addchoicebutton, removechoicesbutton, etc...
+makeButton = function(text, onClick) {
+  var b = document.createElement("BUTTON");
+  $(b).text(text);
+  $(b).on("click", onClick);
+  $(b).attr("tabindex",tabIndexFunc());
+  return b;
 }
 
 /*
@@ -196,7 +205,7 @@ returns the containing div to be added to a quiz or multiquestion
 
 */
 
-function Q(questionHTML,question){
+function Q(questionHTML){
   
   var container = document.createElement("DIV");
   $(container).append(questionText(questionHTML));
@@ -227,13 +236,7 @@ function textArea(rows,cols,placeholder,hasclass){
   var textarea = document.createElement("TEXTAREA");
   //set sizing
   $(textarea).attr("rows",""+rows);
-  
-  
-  
-  
-  
   $(textarea).attr("cols",""+cols);
-  
   //optional placeholder or pre assigned value
   //if placeholder has placevalue, make the text editable
   if(placeholder.placevalue){
@@ -245,7 +248,6 @@ function textArea(rows,cols,placeholder,hasclass){
   if(hasclass){
     //for CSS
     $(textarea).addClass(hasclass);
-    
   }
   $(textarea).attr("tabindex",""+tabIndex);
   tabIndex++;
@@ -273,6 +275,8 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   //placeholder
   $(question).attr("data-placeholder",placeholder?placeholder:"Pick an Answer...");
   //stuff to make chosen recoginze this
+  $(question).addClass("question");
+
   $(question).addClass("chosen-select");
   $(question).addClass("drop");
   //$(question).attr("tabindex","2");
@@ -316,9 +320,7 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
       $(this).data("index",""+this.selectedIndex);
     });
   }
-  
-  $(question).addClass("question");
-  
+    
   $(question).attr("tabindex",""+tabIndex);
   tabIndex++;
   return question;
@@ -361,7 +363,7 @@ number=function(object){
       cols = object.cols,
       placeholder = object.pHold;
   var container = Q(questionHTML,
-                    textArea(1,cols,placeholder?placeholder:"...","number"));
+                    textArea(1,cols,placeholder||"...","number"));
   
   return container;
   
@@ -490,7 +492,7 @@ essay=function(object){
       placeholder = object.pHold;
   
   var container = Q(questionHTML,
-                    textArea(rows,cols,placeholder?placeholder:"Your Essay Here...","essay"));
+                    textArea(rows,cols,placeholder||"Your Essay Here...","essay"));
   
   return container;   
   
@@ -862,7 +864,7 @@ function quiz(object){
     $(quizContainer).append(timeDiv);
   }
   $(quizContainer).addClass('quiz');
-  for(var i = 0; i < questions.length; i++){
+  for (var i = 0; i < questions.length; i++){
     $(questions[i]).addClass('Q');
     $(quizContainer).append(questions[i]);
   }
