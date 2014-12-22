@@ -6,40 +6,39 @@
     <meta charset="utf-8">
     <title>SITQuiz.</title>
     
-    <link rel="stylesheet" href="../WebContent/css/chosen.css">
-    <link rel="stylesheet" href="../WebContent/css/main.css">
+    <link rel="stylesheet" href="web/css/chosen.css">
+    <link rel="stylesheet" href="web/css/main.css">
     
   </head>
   <body>
     <div id="top_bar">
-      <img src="../WebContent/assets/img/title_logo.png"/>
+      <img src="web/img/title_logo.png"/>
     </div>
         <div id="top_bar_fill">
     </div>
     
     
-    
+    <div id = 'fakeTest' class='quiz'> <button>New Question</button><button>Paste Question</button></div>
     
 
 
     
     
-    <script src="../WebContent/js/jq.js" type="text/javascript"></script>
-    <script src="../WebContent/js/chosen_jquery.js" type="text/javascript"></script>
+    <script src="web/js/jq.js" type="text/javascript"></script>
+    <script src="web/js/chosen_jquery.js" type="text/javascript"></script>
       <script>
       var newtab = window.open("","editor");
-            $(newtab.document.body).empty();
-      newtab.document.write('<!doctype html><html lang="en"><head>    <meta charset="utf-8">    <title>SITQuiz.</title>    <link rel="stylesheet" href="../WebContent/css/chosen.css">    <link rel="stylesheet" href="../WebContent/css/main.css">     <script src="../WebContent/js/jq.js" type="text/javascript">'+'</sc'+'ript><script src="../WebContent/js/chosen_jquery.js" type="text/javascript">'+'</sc'+'ript><script>');
-      $(newtab.document.body).append('<div id="top_bar"> <img src="../WebContent/assets/img/title_logo.png"/>  </div> <div id="top_bar_fill"></div>');
-      $(newtab.document.body).append("<div id = 'fakeTest' class='quiz'> <button>New Question</button><button>Paste Question</button></div>");
-            var $fakeTest = $(newtab.document.body).find('#fakeTest');
+            $(newtab.document.body).html("");
+      newtab.document.write('<!doctype html><html lang="en"><head>    <meta charset="utf-8">    <title>SITQuiz.</title>    <link rel="stylesheet" href="web/css/chosen.css">    <link rel="stylesheet" href="web/css/main.css">     <script src="web/js/jq.js" type="text/javascript">'+'</sc'+'ript><script src="web/js/chosen_jquery.js" type="text/javascript">'+'</sc'+'ript>');
+      $(newtab.document.body).append('<body><div id="top_bar"> <img src="web/img/title_logo.png"/>  </div> <div id="top_bar_fill"></div>' + "<div id = 'fakeTest' class='quiz'> <button>New Question</button><button>Paste Question</button></div></body>");
+            var $fakeTest = $('#fakeTest');
 
     
     </script>
     
-    <script type="text/javascript" src="../WebContent/js/definitions.js"></script>
-    <script type="text/javascript" src="../WebContent/js/questionsEditor.js"></script>
-    <script type="text/javascript" src="../WebContent/js/chosenSubmit.js"></script>
+    <script type="text/javascript" src="web/js/definitions.js"></script>
+    <script type="text/javascript" src="web/js/questionsEditor.js"></script>
+    <script type="text/javascript" src="web/js/chosenSubmit.js"></script>
     
     
   
