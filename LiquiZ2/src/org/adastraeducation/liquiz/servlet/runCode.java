@@ -7,8 +7,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class runCode {
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+public class runCode extends HttpServlet {
+	
+	public void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException{
+		String s = request.getParameter("code_text");
+		FileOutput.output(System.getProperty("user.dir"), s);
+	}
 
 
 	private static void printLines(String name, InputStream ins) throws Exception {
@@ -30,10 +40,8 @@ public class runCode {
 
 	public static void main(String[] args) {
 		try {
-			//			      runProcess("javac Solution.java");
-			//			      runProcess("java Solution");
-			runProcess("g++ test.cpp");
-			runProcess("./a.out");
+			runProcess("javac code.java");
+			runProcess("java code");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

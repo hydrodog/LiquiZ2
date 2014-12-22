@@ -9,7 +9,7 @@ import java.io.IOException;
 public class  FileOutput {
 	
 	public static void output(String path, String s) throws IOException{
-		File f = new File(path,"code.txt");
+		File f = new File(path,"code.java");
 		if(f.exists()){
 			try{
 				FileWriter fw = new FileWriter(f,true);
