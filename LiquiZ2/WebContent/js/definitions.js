@@ -1,8 +1,10 @@
-//var Type = {};
+//choices is the global object variable where reusable lists are stored
 var choices = {};
+//tabIndex is so that we can bounce from question to question using the tab button. tabIndex is basically a counter so that we can set the next index.
 var tabIndex = 1;
 
 //This is needed to store the show/hide lists until the end so we can hide everything!
+//This is for sections that need to be hidden unless certain choices are made.
 var showHideList=[];
 
 //this is just here for reference!! No effect yet!
@@ -23,10 +25,115 @@ var opts = {
   displayAllQuestions: true
 };
 
+
+/*
+the actual setting of the tab index needs updating, and this
+is the beginning of that method. The problem is if you need
+to set a tab index and higher indexes are already set, you
+must run through $('*').each(function(){}); and reset tab
+indexes to their value + 1 only if they are higher than the
+value you wish to set.
+*/
+function setTabIndex(index){
+  if(index<tabIndex){
+      return tabIndex++;
+  }else{
+      tabIndex++;
+      return index;
+  }
+    
+}
+
+/*
+This function returns a button that is used to add
+more choices to the drop down questions
+*/
+addchoicesbutton = function(){
+  var button = document.createElement("BUTTON");
+  $(button).text("Add Choice");
+  $(button).on("click",buttonAddChoice);
+    $(button).attr("tabindex",""+tabIndex);
+  tabIndex++;
+  return button;
+}
+
+/*
+This function removes choices and is called on click of
+the removechoicebutton() object
+*/
+function buttonRemoveChoice (e){
+  var childs = $(e.target).parent().find('.multiquestion');
+  //console.log(childs);
+  if(childs.length>0)
+  $(childs[childs.length-1]).remove();
+}
+
+/*
+This function returns a button that is used to remove
+choices from the drop down questions
+*/
+removechoicesbutton = function(){
+  var button = document.createElement("BUTTON");
+  $(button).text("Remove Choice");
+  $(button).on("click",buttonRemoveChoice);
+      $(button).attr("tabindex",""+tabIndex);
+  tabIndex++;
+  return button;
+}
+
+/*
+this was for the infinite questions which should 
+be done later and returns a question element along
+with any children elements needed
+*/
+var construct = function (obj,i){
+  var temp = {};
+  
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      if(obj[key].change_me){
+        temp[key] = construct(obj[key],i);
+      }else{
+        temp[key] = clone(obj[key],i);
+      }
+    }
+  }
+  return question(temp);
+};
+
+/*
+This purely clones an object, but does work with
+the construct function
+*/
+var clone = function (obj,i){
+  var temp = {};
+  
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      if(obj[key].change_me){
+        temp[key] = construct(obj[key],i);
+      }else{
+        temp[key] = clone(obj[key],i);
+      }
+    }
+  }
+  return temp;
+};
+
+/*
+FROMTEXT marks an string for mutation into an
+infinite object (those should be done later)
+*/
+function mutable(text,index){
+  this.change_me=true;
+  this.mutable=text;
+  this.index=index;
+}
+
 /*
 This is the infinite question generator
 */
-function questionSet(object){
+function questionInf(object){
   var qClass = object.class;
   var questions = object.qList;
   var container = document.createElement("DIV");
@@ -47,15 +154,15 @@ function questionSet(object){
   
   return container;
 }
+
 /*
 This is like 'Q', but a multiquestion variant,
 with the intent to take a class to
 be added
 */
-
 function questionSet(object){
-  var qClass = object.class
-      ,questions = object.qList;
+  var qClass = object.class,
+      questions = object.qList;
   var container = document.createElement("DIV");
   
   for (var i = 0; i < questions.length; i++){
@@ -155,7 +262,7 @@ isMultiple - differentiates between dropdown and dropdownmultiple
 returns the created select (drop down) html element
 
 */
-function dropDown(placeholder,answerList,showHide,isMultiple){
+function  dropDown(placeholder,answerList,showHide,isMultiple){
   if(typeof answerList == 'string'){
     answerList = choices[answerList];
   }
@@ -168,7 +275,7 @@ function dropDown(placeholder,answerList,showHide,isMultiple){
   //stuff to make chosen recoginze this
   $(question).addClass("chosen-select");
   $(question).addClass("drop");
-  $(question).attr("tabindex","2");
+  //$(question).attr("tabindex","2");
   if(isMultiple){
     //for CSS  
     $(question).addClass("multidrop");
@@ -179,7 +286,7 @@ function dropDown(placeholder,answerList,showHide,isMultiple){
     $(question).addClass("singledrop");
     
   }
-
+  
   
   //adds the possible answers as 'options' in a 'select' element
   for(var i = 0; i < answerList.length; i++){
@@ -210,8 +317,8 @@ function dropDown(placeholder,answerList,showHide,isMultiple){
     });
   }
   
-        $(question).addClass("question");
-
+  $(question).addClass("question");
+  
   $(question).attr("tabindex",""+tabIndex);
   tabIndex++;
   return question;
@@ -225,8 +332,11 @@ code - code textarea
 essay - essay textarea
 dropdown - select list single response
 dropdownmultiple - select list multiple response
+*/
 
 
+/*
+returns a series question set
 */
 series=function(args){
   var questionHTML = object.qHTML,
@@ -243,18 +353,28 @@ series=function(args){
   
 };
 
+/*
+returns a number fillin question
+*/
 number=function(object){
   var questionHTML = object.qHTML,
       cols = object.cols,
       placeholder = object.pHold;
   var container = Q(questionHTML,
                     textArea(1,cols,placeholder?placeholder:"...","number"));
-
+  
   return container;
   
 };
-multiquestion=function(object){
+
+/*
+returns a new multiquestion object
+*/
+multiquestion=function(tempObject){
+  var object = {qHTML:"",qMakeArry:[],qArry:[]};
+  merge(object,tempObject);
   var questionHTML = object.qHTML,
+      questionMakeArray = object.qMakeArry,
       questionArray = object.qArry;
   //generate entire Object div
   var container = document.createElement("DIV");
@@ -263,6 +383,11 @@ multiquestion=function(object){
   //gen textarea
   $(container).addClass('inlineParent');
   $(container).addClass('multiquestion');
+  
+  //if we have any questions in object format, we make them into divs.
+    for(var i = 0; i < questionMakeArray.length; i++){
+        questionArray.push(question(questionMakeArray[i]));
+    }
   
   
   //adds question to multiquestion (to be added to the quiz)
@@ -294,6 +419,9 @@ multiquestion=function(object){
   
 };
 
+/*
+returns a new html span to be inserted wherever a question could
+*/
 html=function(object){
   var objectHTML = object.HTML;
   //generate entire Object span
@@ -308,6 +436,10 @@ html=function(object){
   
 };
 
+/*
+returns a 
+code question
+*/
 code=function(object){
   var questionHTML = object.qHTML,
       rows = object.rows || object.rowsE,//rowsEditor
@@ -347,6 +479,10 @@ code=function(object){
   
   
 };
+
+/*
+returns an essay question
+*/
 essay=function(object){
   var questionHTML = object.qHTML,
       rows = object.rows,
@@ -360,6 +496,9 @@ essay=function(object){
   
 };
 
+/*
+returns a dropdown question
+*/
 dropdown=function(object){
   var questionHTML = object.qHTML,
       answerList = object.ansrL,
@@ -373,6 +512,9 @@ dropdown=function(object){
   return container;
 };
 
+/*
+returns a dropdown with multiple selection 
+*/
 dropdownmultiple=function(object){
   var questionHTML = object.qHTML,
       answerList = object.ansrL,
@@ -388,20 +530,8 @@ dropdownmultiple=function(object){
 };
 
 
-/*
-These are the functions to show & hide
-question sets.
-*/
 
-/*
-These are the functions to add/remove questions
-from the parent element of the button sender.
-Must still write
-*/
 
-/*
-Generate text with the format of text and then [x]
-*/
 /*
 Eventually I plan to use json and each array in json becomes an object so
 [object,[object2, ...],[object3,[object4,...]...]...]
@@ -422,6 +552,9 @@ would make something like
 choices.nums=['0','1','2','3','4','5','6','7','8','9'];
 choices.nums.repeats=true;
 
+/*
+Generate text with the format of text and then [x]
+*/
 function objectFromText(object,index){
   if(object[0]=='list'){
     return textIndex(object[1],index);
@@ -494,13 +627,7 @@ function textIndex (strd,index) {
     }
   }
 }
-/*
-FROMTEXT
-*/
-function fromText(text,index){
-  this.fromText=text;
-  this.index=index;
-}
+
 /*attempting to make fromText into a constructor method.
 
 var consTop={},
@@ -523,28 +650,125 @@ else fills span with html from 'text'
 */
 function questionText(text){
   if(text){
-  var questionTextContainer;
-  if(typeof text == 'string'){
-    questionTextContainer = document.createElement("PRE");
-    $(questionTextContainer).html(text);
-  }else if(text.url){
-    questionTextContainer = document.createElement("PRE");
-    $(questionTextContainer).html("<img src='"+text.url+"' />");
-  }else if(text.fromText){
-    questionTextContainer = questionsFromText(text.fromText,text.index,"PRE");
+    var questionTextContainer;
+    if(typeof text == 'string'){
+      questionTextContainer = document.createElement("PRE");
+      $(questionTextContainer).html(text);
+    }else if(text.url){
+      questionTextContainer = document.createElement("PRE");
+      $(questionTextContainer).html("<img src='"+text.url+"' />");
+    }else if(text.fromText){
+      questionTextContainer = questionsFromText(text.fromText,text.index,"PRE");
+    }
+    $(questionTextContainer).addClass("qHTML");
+    $(questionTextContainer).addClass("nonquestion");
+    
+    return questionTextContainer;
+  }else{
+    return "";
   }
-  $(questionTextContainer).addClass("qHTML");
-  $(questionTextContainer).addClass("nonquestion");
-  
-  return questionTextContainer;
-}else{
-  return "";
-}
 }
 
 /*question
 fills in Type[]() function properly
 
+*/
+typeFromChoice={'Drop Down':'dropdown', 'Multidrop-down':'dropdownmultiple', 'Number Fillin':'number', 'Essay':'essay', 'Code':'code'};
+function paramSet (set,onThis,rename){
+  if(set)
+    onThis[rename] = set;
+  //console.log(onThis[rename]);
+}
+
+/*
+this returns a button that
+should add set the position of adding 
+a new question
+*/
+function newQuestionButton(){
+  var button = document.createElement("BUTTON");
+  $(button).text("New Question");
+  return button;
+}
+
+/*
+this returns a button that
+should paste in a copy of any question
+in memory
+*/
+function newPasteQuestion(){
+  var button = document.createElement("BUTTON");
+  $(button).text("Paste Question");
+  return button;
+}
+
+/*
+This sends a generated question to the new tab/ window
+*/
+function sendQuestion(obj){
+  var questionParams = {};
+  var i = 1;
+  while(obj["choices:"+i]){
+    if(i == 1){
+      questionParams.ansrL = [""];
+      questionParams.correctL = ["Incorrect"];
+    }
+    questionParams.ansrL.push(obj["choices:"+i]);
+    questionParams.correctL.push(obj["correct:"+i]);
+    
+    i++;
+  }
+  console.log(obj["placeholderText"]);
+  paramSet (obj["questionHTML"],questionParams,"qHTML");
+  paramSet (obj["placeholderText"],questionParams,"pHold");
+  paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
+  paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
+  
+  for(var key in questionParams){
+   // console.log(key+":"+questionParams[key]);
+  }
+  for(var key in obj){
+    //console.log(key+":"+obj[key]);
+  }
+  var q = question(questionParams);
+  var qParent = document.createElement("DIV");
+  var qDisabler = document.createElement("DIV");
+  $(qParent).append(q);
+  $(qDisabler).addClass("qDisabler");
+  $(qParent).addClass("qDisablerParent");
+  $(qDisabler).html("&nbsp;");
+  $(qParent).append(qDisabler);
+  console.log(q);
+ 
+  $($fakeTest).append( qParent);
+  $($fakeTest).append( [newQuestionButton()," ",newPasteQuestion()]);
+        $(q).addClass('Q');
+ 
+  $(q).find('.chosen-select').chosen({});
+
+}
+/*
+This adds a new choice and is called by
+the addchoicebutton() object on click
+*/
+function buttonAddChoice (e){
+ // console.log();
+  var len = ($(e.target).parent().find(".question").length)/2-1;
+  var ques = question({type:'multiquestion',qHTML:'',qMakeArry:[
+      {type:'essay',rows:3,cols:30,pHold:'Your text here...',qID:"choices:"+len},
+      {type:'dropdown',qHTML:'',ansrL:choices['incorrect'],qID:"correct:"+len}
+    ]});
+ // $(ques).addClass('Q');
+  console.log($(ques).find('.drop'));
+  $(e.target).parent().append(ques  );
+    $(ques).find('.chosen-select').chosen({});
+    $(e.target).parent().find(".nonquestion").last().before(ques);
+
+}
+
+/*
+this returns a new question and is the object returning
+method that one adds to a quiz
 */
 function question(obj){
   
@@ -558,15 +782,15 @@ function question(obj){
     type = arguments[0]?arguments[0]:object.type;
   }
   
-  
-  return this[type.toLowerCase()](object);
+  var quest = this[type.toLowerCase()](object);
+  if(object.qID){
+    $(quest).attr("id",object.qID);
+      //  console.log($(quest).attr("id"));
+  }
+  return quest;
   
 }
-/*
-This is a constructor to create a question from text format:
-This is my [q:dropdown] quiz
-And here is my [q:dropdownmultiple:]
-*/
+
 
 /*
 makes text solid
@@ -613,62 +837,63 @@ var merge = function (obj,objM){
   for(var key in objM) {
     obj[key]= objM[key];
   }
+};
+/*
+sets up a new quiz choices list
+TODO: add submit button to the end of each quiz
+*/
+function quiz(object){
+  var questions = object.qList;
+  var options={
+    timed:false,
+    submit:"SUBMIT"
+  };
+  merge(options,object.opts);
+  var timeDiv;
+  var quizContainer = document.createElement("DIV");
+  if(options.timed){
+    timeDiv = document.createElement("DIV");
+  }
+  
+  var SUBMIT = document.createElement("BUTTON");
+  $(SUBMIT).text(options.submit);
+  if(options.timed){
+    $(timeDiv).text("Time Elapsed - 00:00:00");
+    $(quizContainer).append(timeDiv);
+  }
+  $(quizContainer).addClass('quiz');
+  for(var i = 0; i < questions.length; i++){
+    $(questions[i]).addClass('Q');
+    $(quizContainer).append(questions[i]);
+  }
+  
+  
+  $(quizContainer).append(SUBMIT);
+  $(SUBMIT).attr("tabindex",""+tabIndex);
+  tabIndex++;
+  $(SUBMIT).on("click",function(){
+    SUBMIT_ONE_QUIZ(quizContainer);
+  });
+  
+  document.body.appendChild(quizContainer);
+  
+  /*
+  TODO, quiz starts hidden with a click to take quiz button.
+  Then run the start function to make the quiz appear,
+  and start the timer
+  */
+  if(options.timed){
+    
+    var start = function(){
+      var startTime = (new Date()).getTime();
+      setInterval(function(){
+        var endTime = (new Date()).getTime();
+        $(timeDiv).text("Time Elapsed - "+msToTime(endTime-startTime));
+      },500);
+    };
+    start();
+    
+  }
+  
+  //will be removed on TODO completion
 }
-    /*
-    sets up a new quiz choices list
-    TODO: add submit button to the end of each quiz
-    */
-    function quiz(object){
-      var questions = object.qList;
-      var options={
-        timed:false,
-        submit:"SUBMIT"
-      };
-      merge(options,object.opts);
-      var timeDiv;
-      var quizContainer = document.createElement("DIV");
-      if(options.timed){
-        timeDiv = document.createElement("DIV");
-      }
-      
-      var SUBMIT = document.createElement("BUTTON");
-      $(SUBMIT).text(options.submit);
-      if(options.timed){
-        $(timeDiv).text("Time Elapsed - 00:00:00");
-        $(quizContainer).append(timeDiv);
-      }
-      $(quizContainer).addClass('quiz');
-      for(var i = 0; i < questions.length; i++){
-        $(questions[i]).addClass('Q');
-        $(quizContainer).append(questions[i]);
-      }
-      
-      
-      $(quizContainer).append(SUBMIT);
-      
-      $(SUBMIT).on("click",function(){
-        SUBMIT_ONE_QUIZ(quizContainer);
-      });
-      
-      document.body.appendChild(quizContainer);
-      
-      /*
-      TODO, quiz starts hidden with a click to take quiz button.
-      Then run the start function to make the quiz appear,
-      and start the timer
-      */
-      if(options.timed){
-        
-        var start = function(){
-          var startTime = (new Date()).getTime();
-          setInterval(function(){
-            var endTime = (new Date()).getTime();
-            $(timeDiv).text("Time Elapsed - "+msToTime(endTime-startTime));
-          },500);
-        };
-        start();
-        
-      }
-      
-      //will be removed on TODO completion
-    }
