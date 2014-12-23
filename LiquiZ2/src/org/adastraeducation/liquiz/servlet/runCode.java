@@ -22,12 +22,20 @@ public class runCode extends HttpServlet {
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException{
 		String s = request.getParameter("code_text");
-		FileOutput.output(System.getProperty("user.dir"), s);
+		String language = request.getParameter("code_type");
+		FileOutput.output(System.getProperty("user.dir"), s,language);
 		request.setAttribute("path", System.getProperty("user.dir"));
 		try {
-			runProcess("javac code.java");
-			String result = runProcess("java code");
-			request.setAttribute("result", result);
+			if(language.equals("Java")){
+				runProcess("javac code.java");
+				String result = runProcess("java code");
+				request.setAttribute("result", result);
+			}
+			else{
+				runProcess("g++ code.cpp");
+				String result = runProcess("./a.out");
+				request.setAttribute("result", result);
+			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("codeResult.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
