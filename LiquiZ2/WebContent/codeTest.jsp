@@ -8,7 +8,7 @@
 </head>
 <body>
 	<form method="Get" action="runCode">
-		<div id="code_attribute" align="left" style="display: none">
+		<div id="code_attribute" align="left">
 
 			Programming Language <select name="code_type" size="1">
 				<option value="C++">C++</option>
@@ -19,6 +19,11 @@
 				Type your Code</br>
 				<textarea name="code_text" rows="10" cols="100"></textarea>
 			</div>
+		</div>
+		<div align="left">
+			<input type="submit" value="Submit" size="12">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="reset" value="Cancel"
+				size="12">
 		</div>
 	</form>
 </body>

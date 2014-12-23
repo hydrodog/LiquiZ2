@@ -12,7 +12,7 @@ public class  FileOutput {
 		File f = new File(path,"code.java");
 		if(f.exists()){
 			try{
-				FileWriter fw = new FileWriter(f,true);
+				FileWriter fw = new FileWriter(f,false);
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(s);
 				bw.close();
@@ -28,7 +28,7 @@ public class  FileOutput {
 		else{
 			f.createNewFile();
 			try{
-				FileWriter fw = new FileWriter(f,true);
+				FileWriter fw = new FileWriter(f,false);
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(s);
 				bw.close();

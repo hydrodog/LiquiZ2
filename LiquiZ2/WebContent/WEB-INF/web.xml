@@ -37,8 +37,8 @@
 		<servlet-name>Register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
-	
-		<servlet>
+
+	<servlet>
 		<description>runCode on the website</description>
 		<display-name>runCode on the website</display-name>
 		<servlet-name>runCode</servlet-name>
