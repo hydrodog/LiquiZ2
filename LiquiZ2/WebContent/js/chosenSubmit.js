@@ -17,22 +17,10 @@ for(var k = 0; k < showHideList.length; k++){
 
 function SUBMIT_ONE_QUIZ(quiz){
 
-  var i = 0;
+  var i = 1;
   var allSend = "";
   var sendData = {};
 
-  $(quiz).find("*").each(function(){
-    i++;
-
-    if(!$(this).attr("id"))
-      $(this).attr("id","$"+i);
-    else{
-                console.log($(this).attr("id") );
-          console.log(this);
-
-    }
-  });
- 
 
   $(quiz).find(".question").each(function(){
 
@@ -41,6 +29,8 @@ function SUBMIT_ONE_QUIZ(quiz){
       //BTW we will escape the val of each answer so that students can't mess server parsing up
       if(!(val==null||val.length < 1)){
         allSend+=(allSend.length>0?",\n":"")+("{"+$(this).parent().attr("id")+":"+val+"}");
+        if(!$(this).parent().attr("id"))
+           $(this).parent().attr("id","-"+i++);
         sendData[$(this).parent().attr("id")]=val;
       }
       
