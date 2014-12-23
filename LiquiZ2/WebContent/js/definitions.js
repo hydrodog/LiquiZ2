@@ -251,6 +251,29 @@ function textArea(rows,cols,placeholder,hasclass){
   return textarea;
 }
 /*
+This is called on the value change of a radio or drop down
+when that object must show or hide stuff
+*/
+function showHideClassChangeCall(event){
+      if(event.data.showHide[parseInt($(this).data("index"))].length > 0)
+        $("."+event.data.showHide[parseInt($(this).data("index"))]).hide();
+      $("."+event.data.showHide[this.selectedIndex]).show();
+      $(this).data("index",""+this.selectedIndex);
+}
+
+/*
+this is called to set up show/ hide list capabilities
+*/
+function showHideClass(question,showHide){
+  $(question).data("index","0");
+  if(showHide){
+    showHideList.push(showHide);
+    $(question).change({showHide:showHide},showHideClassChangeCall);
+  }
+}
+
+
+/*
 dropDown
 placeholder - does not accept placeholder.placevalue
 answerlist - list of possible options
@@ -304,17 +327,8 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
     $(question).append(option);   
     
   }
-  $(question).data("index","0");
-  if(showHide){
-    showHideList.push(showHide);
-    $(question).change(function(){
-      if(showHide[parseInt($(this).data("index"))].length > 0)
-        $("."+showHide[parseInt($(this).data("index"))]).hide();
-      $("."+showHide[this.selectedIndex]).show();
-      $(this).data("index",""+this.selectedIndex);
-    });
-  }
   
+  showHideClass(question,showHide);
   
   setTabIndex(question);
 
