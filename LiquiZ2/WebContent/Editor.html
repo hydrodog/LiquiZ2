@@ -21,7 +21,7 @@
     </div>
     
       <script>
-        var newtab = window.open("","editor");
+          var newtab = window.open("","editor");
         $(newtab.document.body).empty();
         //$(newtab.document.body).append("<div id='fakeTest'></div>");
       $(newtab.document).find('head').empty();
@@ -38,7 +38,9 @@
         '<img src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/assets/img/title_logo.png"/>'+
         '</div> <div id="top_bar_fill"></div>' + 
         "<div id = 'fakeTest' class='quiz'>"+
-        "<button>New Question</button><button>Paste Question</button></div>"
+        '<button id="submit" tabindex="14">Submit Quiz</button>'+
+        "</div>"
+
       );
             var $fakeTest = $(newtab.document.body).find('#fakeTest');
                         var $submit = $(newtab.document.body).find('#submit');
