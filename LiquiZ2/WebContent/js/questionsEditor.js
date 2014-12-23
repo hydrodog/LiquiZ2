@@ -61,7 +61,8 @@ quiz({qList:[
 //TODO: change name essay to "textarea"
 //TODO: add "textfield"
     essay({css: 'inline', qHTML:'Pattern:',rows:1,cols:30,pHold:'', qID:"pattern"}),
-    essay({css: 'inline', qHTML:'Name:',rows:1,cols:30,pHold:'', qID:"patternname"})
+    essay({css: 'inline', qHTML:'Name:',rows:1,cols:30,pHold:'', qID:"patternname"}),
+      editBar("editbar")
 //TODO: add function button to create a button
 //    button(qHTML:'Save:',rows:3,cols:30,pHold:'',qID:"patternname"}),
   ]}),

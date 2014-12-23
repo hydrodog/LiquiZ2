@@ -115,6 +115,28 @@ html{
   
 }
 
+.but {
+    width:24px;
+    height:24px;
+    border-width: 0;
+    border-radius:0px;
+}
+
+.editbut {
+    background: url(../assets/img/edit.png);
+    background-size:24px 24px;
+}
+
+.delbut {
+    background: url(../assets/img/delete.png);
+    background-size:24px 24px;
+}
+
+.copybut {
+    background: url(../assets/img/copy.png);
+    background-size:24px 24px;
+}
+
 ::-webkit-input-placeholder {
   color: #04333F;
 }

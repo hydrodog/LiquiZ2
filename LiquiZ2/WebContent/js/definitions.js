@@ -378,6 +378,22 @@ number=function(object){
   
 };
 
+
+/*
+ Equation question where randomized values are sent to change
+ question every time
+*/
+equation=function (quest){
+  var container = Q(quest.qHTML,
+                    textArea(1,quest.cols,quest.pHold||"...","equation"));
+  return container;
+  
+};
+
+
+
+
+
 /*
 returns a new multiquestion object
 */
@@ -739,8 +755,8 @@ function sendQuestion(obj){
 
 }
 /*
-This adds a new choice and is called by
-the addchoicebutton() object on click
+  Add a new choice and is called by
+  the addchoicebutton() object on click
 */
 function buttonAddChoice (e){
  // console.log();
@@ -755,6 +771,30 @@ function buttonAddChoice (e){
     $(ques).find('.chosen-select').chosen({});
     $(e.target).parent().find(".nonquestion").last().before(ques);
 
+}
+
+/*
+  Add a named button with a given css style
+*/
+function button (text, css) {
+   var b = document.createElement("BUTTON");
+    $(b).attr("value", text);
+    $(b).addClass(css);
+   return b;
+}
+
+/*
+  Create standard buttons: Edit, Delete, Copy
+  These are the same in many contexts to effect "least surprise"
+*/
+function editBar (css){
+   var d = document.createElement("DIV");
+    $(d).addClass(css);
+    $(d).append(button("", "editbut but"));
+    $(d).append(button("", "delbut but"));
+    $(d).append(button("", "copybut but"));
+console.log(d);
+   return d;
 }
 
 /*
