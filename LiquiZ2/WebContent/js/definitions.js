@@ -677,27 +677,6 @@ function paramSet (set,onThis,rename){
   //console.log(onThis[rename]);
 }
 
-/*
-this returns a button that
-should add set the position of adding 
-a new question
-*/
-function newQuestionButton(){
-  var button = document.createElement("BUTTON");
-  $(button).text("New Question");
-  return button;
-}
-
-/*
-this returns a button that
-should paste in a copy of any question
-in memory
-*/
-function newPasteQuestion(){
-  var button = document.createElement("BUTTON");
-  $(button).text("Paste Question");
-  return button;
-}
 
 /*
 This sends a generated question to the new tab/ window
@@ -729,19 +708,20 @@ function sendQuestion(obj){
   }
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
-  var qDisabler = document.createElement("DIV");
+//  var qDisabler = document.createElement("DIV");
   $(qParent).append(q);
-  $(qDisabler).addClass("qDisabler");
-  $(qParent).addClass("qDisablerParent");
-  $(qDisabler).html("&nbsp;");
-  $(qParent).append(qDisabler);
+  //$(qDisabler).addClass("qDisabler");
+  //$(qParent).addClass("qDisablerParent");
+  //$(qDisabler).html("&nbsp;");
+  //$(qParent).append(qDisabler);
   console.log(q);
   console.log($fakeTest);
   $($fakeTest).append( qParent);
-  $($fakeTest).append( [newQuestionButton()," ",newPasteQuestion()]);
-        $(q).addClass('Q');
- 
+  $(q).addClass('Q');
+  
   $(q).find('.chosen-select').chosen({});
+  //$().parent().before($submit);
+  $($submit).before(qParent);
 
 }
 /*
