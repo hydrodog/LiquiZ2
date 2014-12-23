@@ -34,14 +34,11 @@ must run through $('*').each(function(){}); and reset tab
 indexes to their value + 1 only if they are higher than the
 value you wish to set.
 */
-function setTabIndex(index){
-  if(index<tabIndex){
-      return tabIndex++;
-  }else{
-      tabIndex++;
-      return index;
-  }
-    
+function setTabIndex(ques,index){
+  if(!index)
+      index = tabIndex;
+  $(ques).attr("tabindex",""+tabIndex);
+  tabIndex++;
 }
 
 /*
@@ -49,11 +46,17 @@ This function returns a button that is used to add
 more choices to the drop down questions
 */
 addchoicesbutton = function(){
+  return buttonWithLabelAndOnClick("Add Choice",buttonAddChoice);
+}
+
+/*
+generic make a button with a onclick
+*/
+buttonWithLabelAndOnClick = function(label,onclick){
   var button = document.createElement("BUTTON");
-  $(button).text("Add Choice");
-  $(button).on("click",buttonAddChoice);
-    $(button).attr("tabindex",""+tabIndex);
-  tabIndex++;
+  $(button).text(label);
+  $(button).on("click",onclick);
+  setTabIndex(button);
   return button;
 }
 
@@ -73,12 +76,7 @@ This function returns a button that is used to remove
 choices from the drop down questions
 */
 removechoicesbutton = function(){
-  var button = document.createElement("BUTTON");
-  $(button).text("Remove Choice");
-  $(button).on("click",buttonRemoveChoice);
-      $(button).attr("tabindex",""+tabIndex);
-  tabIndex++;
-  return button;
+  return buttonWithLabelAndOnClick("Remove Choice",buttonRemoveChoice);
 }
 
 /*
@@ -239,7 +237,7 @@ function textArea(rows,cols,placeholder,hasclass){
   if(placeholder.placevalue){
     $(textarea).val(placeholder.placevalue);
   }else{
-    $(textarea).attr("placeholder",placeholder?placeholder:"Your Answer Here...");
+    $(textarea).attr("placeholder",placeholder||"Your Answer Here...");
   }
   
   if(hasclass){
@@ -247,8 +245,7 @@ function textArea(rows,cols,placeholder,hasclass){
     $(textarea).addClass(hasclass);
     
   }
-  $(textarea).attr("tabindex",""+tabIndex);
-  tabIndex++;
+  setTabIndex(textarea);
   
   
   return textarea;
@@ -270,12 +267,13 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
     showHide = choices[showHide];
   }
   var question = document.createElement("SELECT");
+  $(question).addClass("question");
+
   //placeholder
-  $(question).attr("data-placeholder",placeholder?placeholder:"Pick an Answer...");
+  $(question).attr("data-placeholder",placeholder||"Pick an Answer...");
   //stuff to make chosen recoginze this
   $(question).addClass("chosen-select");
   $(question).addClass("drop");
-  //$(question).attr("tabindex","2");
   if(isMultiple){
     //for CSS  
     $(question).addClass("multidrop");
@@ -317,10 +315,9 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
     });
   }
   
-  $(question).addClass("question");
   
-  $(question).attr("tabindex",""+tabIndex);
-  tabIndex++;
+  setTabIndex(question);
+
   return question;
 }
 
@@ -361,7 +358,7 @@ number=function(object){
       cols = object.cols,
       placeholder = object.pHold;
   var container = Q(questionHTML,
-                    textArea(1,cols,placeholder?placeholder:"...","number"));
+                    textArea(1,cols,placeholder||"...","number"));
   
   return container;
   
@@ -451,8 +448,8 @@ code=function(object){
   
   //generate entire Object div
   var container = Q(questionHTML,
-                    textArea(rows?rows:20,cols?cols:60,placeholder?placeholder:"Your Code Here...","code"),
-                    textArea(rows2?rows2:20,cols2?cols2:30,placeholder2?placeholder2:"Server Response","code nonquestion"));
+                    textArea(rows||20,cols||60,placeholder||"Your Code Here...","code"),
+                    textArea(rows2||20,cols2||30,placeholder2||"Server Response","code nonquestion"));
   
   /*
   This only applies to code containers
@@ -490,7 +487,7 @@ essay=function(object){
       placeholder = object.pHold;
   
   var container = Q(questionHTML,
-                    textArea(rows,cols,placeholder?placeholder:"Your Essay Here...","essay"));
+                    textArea(rows,cols,placeholder||"Your Essay Here...","essay"));
   
   return container;   
   
@@ -569,7 +566,7 @@ function objectFromText(object,index){
 }
 
 function questionsFromText(text,index,QType){
-  var container = document.createElement(QType?QType:"DIV");
+  var container = document.createElement(QType||"DIV");
   //gen question text
   if(!index){
     index=0;
@@ -739,7 +736,7 @@ function sendQuestion(obj){
   $(qDisabler).html("&nbsp;");
   $(qParent).append(qDisabler);
   console.log(q);
- 
+  console.log($fakeTest);
   $($fakeTest).append( qParent);
   $($fakeTest).append( [newQuestionButton()," ",newPasteQuestion()]);
         $(q).addClass('Q');
@@ -779,7 +776,7 @@ function question(obj){
     type = object.type;
   }else if(arguments.length == 2){
     object = arguments[1];
-    type = arguments[0]?arguments[0]:object.type;
+    type = arguments[0]||object.type;
   }
   
   var quest = this[type.toLowerCase()](object);
@@ -869,8 +866,8 @@ function quiz(object){
   
   
   $(quizContainer).append(SUBMIT);
-  $(SUBMIT).attr("tabindex",""+tabIndex);
-  tabIndex++;
+  setTabIndex(SUBMIT);
+
   $(SUBMIT).on("click",function(){
     SUBMIT_ONE_QUIZ(quizContainer);
   });
