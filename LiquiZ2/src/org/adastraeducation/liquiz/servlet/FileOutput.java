@@ -12,8 +12,14 @@ import java.io.IOException;
 
 public class  FileOutput {
 	
-	public static void output(String path, String s) throws IOException{
-		File f = new File(path,"code.java");
+	public static void output(String path, String s, String language) throws IOException{
+		File f;
+		if(language.equals("Java")){
+			f = new File(path,"code.java");
+		}
+		else{
+			f = new File(path,"code.cpp");
+		}
 		if(f.exists()){
 			try{
 				FileWriter fw = new FileWriter(f,false);

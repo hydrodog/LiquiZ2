@@ -237,7 +237,7 @@ function textArea(rows,cols,placeholder,hasclass){
   if(placeholder.placevalue){
     $(textarea).val(placeholder.placevalue);
   }else{
-    $(textarea).attr("placeholder",placeholder||"Your Answer Here...");
+    $(textarea).attr("placeholder",placeholder||"");
   }
   
   if(hasclass){
@@ -349,17 +349,17 @@ dropdownmultiple - select list multiple response
 /*
 returns a series question set
 */
-series=function(args){
-  var questionHTML = object.qHTML,
-      eachQuestionText = object.qText;
+series=function(question){
+
   var questionList = [];
   for(var i = 0; i < 10; i++){
-    questionList.push(questionsFromText(eachQuestionText,i));
+    questionList.push(questionsFromText(question.qText,i));
   }
   
-  var container = Q(questionHTML,
+  var container = Q(question.qHTML,
                     questionSet('series',questionList));
-  
+          questionSuper(container,question);
+
   return container;
   
 };
@@ -367,13 +367,11 @@ series=function(args){
 /*
 returns a number fillin question
 */
-number=function(object){
-  var questionHTML = object.qHTML,
-      cols = object.cols,
-      placeholder = object.pHold;
-  var container = Q(questionHTML,
-                    textArea(1,cols,placeholder||"...","number"));
-  
+number=function(question){
+
+  var container = Q(question.qHTML,
+                    textArea(1,question.cols,question.pHold||"","number"));
+        questionSuper(container,question);
   return container;
   
 };
@@ -397,29 +395,27 @@ equation=function (quest){
 /*
 returns a new multiquestion object
 */
-multiquestion=function(tempObject){
-  var object = {qHTML:"",qMakeArry:[],qArry:[]};
-  merge(object,tempObject);
-  var questionHTML = object.qHTML,
-      questionMakeArray = object.qMakeArry,
-      questionArray = object.qArry;
+multiquestion=function(question){
+  var defaults = {qHTML:"",qMakeArry:[],qArry:[]};
+  question = merge(defaults,question);
+
   //generate entire Object div
   var container = document.createElement("DIV");
   //gen question text
-  $(container).append(questionText(questionHTML));
+  $(container).append(questionText(question.qHTML));
   //gen textarea
   $(container).addClass('inlineParent');
   $(container).addClass('multiquestion');
   
   //if we have any questions in object format, we make them into divs.
-    for(var i = 0; i < questionMakeArray.length; i++){
-        questionArray.push(question(questionMakeArray[i]));
+    for(var i = 0; i < question.qMakeArry.length; i++){
+        question.qArry.push(question(question.qMakeArry[i]));
     }
   
   
   //adds question to multiquestion (to be added to the quiz)
-  for(var i = 0; i < questionArray.length; i++){
-    $(container).append(questionArray[i]);
+  for(var i = 0; i < question.qArry.length; i++){
+    $(container).append(question.qArry[i]);
     
     /*
     To find the 'question' of each 'container' div,
@@ -429,18 +425,19 @@ multiquestion=function(tempObject){
     
     */
     
-    if($(questionArray[i]).is('div')){
-      $(questionArray[i]).children().each(function(){
+    if($(question.qArry[i]).is('div')){
+      $(question.qArry[i]).children().each(function(){
         if($(this).index()==1){
           $(this).addClass("question");
         }
       });
     }
-    $(questionArray[i]).addClass('insidemulti');
+    $(question.qArry[i]).addClass('insidemulti');
     
   }
   
-  
+      questionSuper(container,question);
+
   //make sure we can read the answer later (for recursion if desired)
   return container;
   
@@ -449,14 +446,14 @@ multiquestion=function(tempObject){
 /*
 returns a new html span to be inserted wherever a question could
 */
-html=function(object){
-  var objectHTML = object.HTML;
+html=function(question){
   //generate entire Object span
   var container = document.createElement("SPAN");
   //gen question text
-  $(container).html(objectHTML);
+  $(container).html( question.HTML);
   $(container).addClass("nonquestion");
-  
+    questionSuper(container,question);
+
   
   //for multiquestions
   return container;
@@ -467,19 +464,13 @@ html=function(object){
 returns a 
 code question
 */
-code=function(object){
-  var questionHTML = object.qHTML,
-      rows = object.rows || object.rowsE,//rowsEditor
-      cols = object.cols || object.colsE,//colsEditor
-      placeholder = object.pHold || object.pHoldE,//pHoldEditor
-      rows2 = object.rows2 || object.rowsC,//rowsConsole
-      cols2 = object.cols2 || object.rowsC,//colsConsole
-      placeholder2 = object.pHold2 || object.pHoldC;//pHoldConsole
+code=function(question){
+
   
   //generate entire Object div
-  var container = Q(questionHTML,
-                    textArea(rows||20,cols||60,placeholder||"Your Code Here...","code"),
-                    textArea(rows2||20,cols2||30,placeholder2||"Server Response","code nonquestion"));
+  var container = Q(question.qHTML,
+                    textArea(question.rows || question.rowsE||20,question.cols || question.colsE||60,question.pHold || question.pHoldE||"","code"),
+                    textArea(question.rows2 || question.rowsC||20,question.cols2 || question.rowsC||30,question.pHold2 || question.pHoldC||"Server Response","code nonquestion"));
   
   /*
   This only applies to code containers
@@ -500,7 +491,8 @@ code=function(object){
   $(compile).text("compile");
   $(compile).addClass("button compile");
   $(container).append(compile);
-  
+      questionSuper(container,question);
+
   return container;   
   
   
@@ -510,32 +502,20 @@ code=function(object){
 /*
 returns an essay question
 */
-essay=function(object){
-  var questionHTML = object.qHTML,
-      rows = object.rows,
-      cols = object.cols,
-      placeholder = object.pHold;
-  
-  var container = Q(questionHTML,
-                    textArea(rows,cols,placeholder||"Your Essay Here...","essay"));
-  
+essay=function(question){
+  var container = Q(question.qHTML,
+                    textArea(question.rows,question.cols,question.pHold||"","essay"));
+    questionSuper(container,question);
   return container;   
-  
 };
 
 /*
 returns a dropdown question
 */
-dropdown=function(object){
-  var questionHTML = object.qHTML,
-      answerList = object.ansrL,
-      placeholder = object.pHold,
-      showHide = object.hideL;
-  //generate entire Object div
-  var container = Q(questionHTML,
-                    dropDown(placeholder,answerList,showHide,false));
-  
-  
+dropdown=function(question){
+  var container = Q(question.qHTML,
+                    dropDown(question.pHold,question.ansrL,question.hideL,false));
+  questionSuper(container,question);
   return container;
 };
 
@@ -762,7 +742,7 @@ function buttonAddChoice (e){
  // console.log();
   var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',qHTML:'',qMakeArry:[
-      {type:'essay',rows:3,cols:30,pHold:'Your text here...',qID:"choices:"+len},
+      {type:'essay',rows:3,cols:30,pHold:'',qID:"choices:"+len},
       {type:'dropdown',qHTML:'',ansrL:choices['incorrect'],qID:"correct:"+len}
     ]});
  // $(ques).addClass('Q');
@@ -771,6 +751,12 @@ function buttonAddChoice (e){
     $(ques).find('.chosen-select').chosen({});
     $(e.target).parent().find(".nonquestion").last().before(ques);
 
+}
+
+function questionSuper(element,params){
+  if(params.qID){
+    $(element).attr("id",params.qID);
+  }
 }
 
 /*
@@ -814,10 +800,7 @@ function question(obj){
   }
   
   var quest = this[type.toLowerCase()](object);
-  if(object.qID){
-    $(quest).attr("id",object.qID);
-      //  console.log($(quest).attr("id"));
-  }
+  
   return quest;
   
 }
@@ -868,6 +851,7 @@ var merge = function (obj,objM){
   for(var key in objM) {
     obj[key]= objM[key];
   }
+  return obj;
 };
 /*
 sets up a new quiz choices list
