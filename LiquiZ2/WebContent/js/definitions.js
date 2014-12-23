@@ -894,3 +894,4 @@ function quiz(object){
   
   //will be removed on TODO completion
 }
+
