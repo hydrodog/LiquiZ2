@@ -21,7 +21,7 @@ function SUBMIT_ONE_QUIZ(quiz){
   var allSend = "";
   var sendData = {};
 
-  $("*").each(function(){
+  $(quiz).find("*").each(function(){
     i++;
 
     if(!$(this).attr("id"))
@@ -47,8 +47,9 @@ function SUBMIT_ONE_QUIZ(quiz){
     }
 
   });
-  //alert(allSend);
-  if(sendData){
+  if(quiz.id == "fakeTest"){
+    alert(allSend);
+  }else if(sendData){
     sendQuestion(sendData);
   }
 }
