@@ -54,12 +54,14 @@ quiz({qList:[
     question({type:'essay',qHTML:'Placeholder Text:',rows:1,cols:30,pHold:'Your placeholder text here...',qID:"placeholderText"})
 
   ]}),
+//TODO: table
+// table([ [ x, y, z], [a, b]] ); // will generate a table of fields for the above min/max/
   questionSet({class:'regex',qList:[
     dropdown({qHTML:'',ansrL:regex['physics'],qID:"regexquestion"}),
 //TODO: change name essay to "textarea"
 //TODO: add "textfield"
-    essay({qHTML:'Pattern:',rows:1,cols:30,pHold:'', qID:"pattern"}),
-    essay({qHTML:'Name:',rows:1,cols:30,pHold:'', qID:"patternname"})
+    essay({css: 'inline', qHTML:'Pattern:',rows:1,cols:30,pHold:'', qID:"pattern"}),
+    essay({css: 'inline', qHTML:'Name:',rows:1,cols:30,pHold:'', qID:"patternname"})
 //TODO: add function button to create a button
 //    button(qHTML:'Save:',rows:3,cols:30,pHold:'',qID:"patternname"}),
   ]}),
