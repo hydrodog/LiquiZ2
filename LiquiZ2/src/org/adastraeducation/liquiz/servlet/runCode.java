@@ -23,6 +23,7 @@ public class runCode extends HttpServlet {
 			throws ServletException, IOException{
 		String s = request.getParameter("code_text");
 		FileOutput.output(System.getProperty("user.dir"), s);
+		request.setAttribute("path", System.getProperty("user.dir"));
 		try {
 			runProcess("javac code.java");
 			String result = runProcess("java code");
