@@ -237,7 +237,7 @@ function textArea(rows,cols,placeholder,hasclass){
   if(placeholder.placevalue){
     $(textarea).val(placeholder.placevalue);
   }else{
-    $(textarea).attr("placeholder",placeholder||"Your Answer Here...");
+    $(textarea).attr("placeholder",placeholder||"");
   }
   
   if(hasclass){
@@ -726,7 +726,7 @@ function buttonAddChoice (e){
  // console.log();
   var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',qHTML:'',qMakeArry:[
-      {type:'essay',rows:3,cols:30,pHold:'Your text here...',qID:"choices:"+len},
+      {type:'essay',rows:3,cols:30,pHold:'',qID:"choices:"+len},
       {type:'dropdown',qHTML:'',ansrL:choices['incorrect'],qID:"correct:"+len}
     ]});
  // $(ques).addClass('Q');
