@@ -21,16 +21,22 @@ function SUBMIT_ONE_QUIZ(quiz){
   var allSend = "";
   var sendData = {};
 
+  $(quiz).find("*").each(function(){
+    if(parseInt($(this).parent().attr("id"))<-i)
+      i=-parseInt($(this).parent().attr("id"));
+  });
+ 
 
   $(quiz).find(".question").each(function(){
 
-    if($(this).parent().is(':visible')){
+     if($(this).parent().is(':visible')){
       var val = $(this).val();
       //BTW we will escape the val of each answer so that students can't mess server parsing up
       if(!(val==null||val.length < 1)){
-        allSend+=(allSend.length>0?",\n":"")+("{"+$(this).parent().attr("id")+":"+val+"}");
         if(!$(this).parent().attr("id"))
            $(this).parent().attr("id","-"+i++);
+        allSend+=(allSend.length>0?",\n":"")+("{"+$(this).parent().attr("id")+":"+val+"}");
+        
         sendData[$(this).parent().attr("id")]=val;
       }
       
