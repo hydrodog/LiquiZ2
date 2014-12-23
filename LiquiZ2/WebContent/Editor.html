@@ -11,7 +11,6 @@
     <script src="./js/jq.js" type="text/javascript"></script>
     <script src="./js/chosen_jquery.js" type="text/javascript"></script>
     <script type="text/javascript" src="./js/definitions.js"></script>
-    <script type="text/javascript" src="./js/questionsEditor.js"></script>
     
   </head>
   <body>
@@ -42,7 +41,15 @@
         "<button>New Question</button><button>Paste Question</button></div>"
       );
             var $fakeTest = $(newtab.document.body).find('#fakeTest');
+                        var $submit = $(newtab.document.body).find('#submit');
+
     </script>
+        <script type="text/javascript" src="./js/questionsEditor.js"></script>
     <script type="text/javascript" src="./js/chosenSubmit.js"></script>  
+     <script>
+    $(newtab.document.body).find('#submit').on("click",function(){
+       SUBMIT_ONE_QUIZ($(newtab.document.body).find('#fakeTest')[0]);
+    });
+    </script>
   </body>
 </html>
