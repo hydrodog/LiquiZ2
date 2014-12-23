@@ -1,11 +1,13 @@
 package org.adastraeducation.liquiz.servlet;
 
-import java.io.BufferedInputStream;
+/*
+ * Author: Yingzhu
+ */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Scanner;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class runCode extends HttpServlet {
 	
+	private static final long serialVersionUID = 1L;
+
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException{
 		String s = request.getParameter("code_text");
