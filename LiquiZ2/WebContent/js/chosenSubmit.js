@@ -31,6 +31,17 @@ function SUBMIT_ONE_QUIZ(quiz){
 
      if($(this).parent().is(':visible')){
       var val = $(this).val();
+       if($(this).is('form')){
+         if($(this).is('.checkbox')){
+           var checked = $(this).find("input[type='checkbox']:checked");
+           val = [];
+           for(var i = 0; i < checked.length; i++){
+             val.push($(checked[i]).val());
+           }
+         }else{
+           val = $(this).find("input[type='radio']:checked").val();
+         }
+       }
       //BTW we will escape the val of each answer so that students can't mess server parsing up
       if(!(val==null||val.length < 1)){
         if(!$(this).parent().attr("id"))
@@ -43,6 +54,8 @@ function SUBMIT_ONE_QUIZ(quiz){
     }
 
   });
+      console.log(allSend);
+
   if(quiz.id == "fakeTest"){
     alert(allSend);
   }else if(sendData){
