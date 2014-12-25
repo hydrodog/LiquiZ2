@@ -66,7 +66,6 @@ the removechoicebutton() object
 */
 function buttonRemoveChoice (e){
   var childs = $(e.target).parent().find('.multiquestion');
-  //console.log(childs);
   if(childs.length>0)
   $(childs[childs.length-1]).remove();
 }
@@ -103,20 +102,19 @@ var construct = function (obj,i){
 This purely clones an object, but does work with
 the construct function
 */
-var clone = function (obj,i){
-  var temp = {};
-  
-  for(var key in obj) {
-    if(obj.hasOwnProperty(key)) {
-      if(obj[key].change_me){
-        temp[key] = construct(obj[key],i);
-      }else{
-        temp[key] = clone(obj[key],i);
-      }
+function clone(obj) {
+    if(obj == null || typeof(obj) != 'object')
+        return obj;
+
+    var temp = [];// changed
+
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key)) {
+            temp[key] = clone(obj[key]);
+        }
     }
-  }
-  return temp;
-};
+    return temp;
+}
 
 /*
 FROMTEXT marks an string for mutation into an
@@ -194,10 +192,11 @@ returns the containing div to be added to a quiz or multiquestion
 
 */
 
-function Q(questionHTML,question){
+function Q(params,question){
   
   var container = document.createElement("DIV");
-  $(container).append(questionText(questionHTML));
+  $(container).append(questionText(params.HTML));
+  questionSuper(container,params);
   
   for (var i = 1; i < arguments.length; i++){
     $(container).append(arguments[i]);
@@ -286,9 +285,13 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   if(typeof answerList == 'string'){
     answerList = choices[answerList];
   }
+  answerList=clone(answerList);
   if(typeof showHide == 'string'){
     showHide = choices[showHide];
   }
+  //if(answerList[0]!=""){
+    answerList.unshift("");
+  //}
   var question = document.createElement("SELECT");
   $(question).addClass("question");
 
@@ -313,16 +316,8 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   for(var i = 0; i < answerList.length; i++){
     
     var option = document.createElement("OPTION");
-    if(answerList[i].url){
-      answerList[i]=answerList[i].url;
-      if(answerList[i].length>0){
-        $(option).html((i)+"<br/><img src='"+answerList[i]+"' />");
-      }
-    }else{
-      if(answerList[i].length>0){
-        $(option).text(answerList[i]);
-      }
-    }
+    if(i>0)
+      $(option).html(textObject(answerList[i]) +"&nbsp;");
     $(option).attr("value",answerList[i]);
     $(question).append(option);   
     
@@ -356,12 +351,8 @@ series=function(question){
     questionList.push(questionsFromText(question.qText,i));
   }
   
-  var container = Q(question.qHTML,
-                    questionSet('series',questionList));
-          questionSuper(container,question);
-
-  return container;
-  
+return Q(question,
+         questionSet('series',questionList));  
 };
 
 /*
@@ -369,53 +360,35 @@ returns a number fillin question
 */
 number=function(question){
 
-  var container = Q(question.qHTML,
-                    textArea(1,question.cols,question.pHold||"","number"));
-        questionSuper(container,question);
-  return container;
+  return Q(question,
+           textArea(1,question.cols,question.pHold||"","number"));;
   
 };
-
-
-/*
- Equation question where randomized values are sent to change
- question every time
-*/
-equation=function (quest){
-  var container = Q(quest.qHTML,
-                    textArea(1,quest.cols,quest.pHold||"...","equation"));
-  return container;
-  
-};
-
-
-
-
 
 /*
 returns a new multiquestion object
 */
-multiquestion=function(question){
-  var defaults = {qHTML:"",qMakeArry:[],qArry:[]};
-  question = merge(defaults,question);
-
+multiquestion=function(quest){
+  var defaults = {HTML:"",MakeArry:[],Arry:[]};
+  quest = merge(defaults,quest);
+//console.log(question.MakeArry);
   //generate entire Object div
   var container = document.createElement("DIV");
   //gen question text
-  $(container).append(questionText(question.qHTML));
+  $(container).append(questionText(quest.HTML));
   //gen textarea
   $(container).addClass('inlineParent');
   $(container).addClass('multiquestion');
   
   //if we have any questions in object format, we make them into divs.
-    for(var i = 0; i < question.qMakeArry.length; i++){
-        question.qArry.push(question(question.qMakeArry[i]));
+    for(var i = 0; i < quest.MakeArry.length; i++){
+        quest.Arry.push(question(quest.MakeArry[i]));
     }
   
   
   //adds question to multiquestion (to be added to the quiz)
-  for(var i = 0; i < question.qArry.length; i++){
-    $(container).append(question.qArry[i]);
+  for(var i = 0; i < quest.Arry.length; i++){
+    $(container).append(quest.Arry[i]);
     
     /*
     To find the 'question' of each 'container' div,
@@ -425,18 +398,18 @@ multiquestion=function(question){
     
     */
     
-    if($(question.qArry[i]).is('div')){
-      $(question.qArry[i]).children().each(function(){
+    if($(quest.Arry[i]).is('div')){
+      $(quest.Arry[i]).children().each(function(){
         if($(this).index()==1){
           $(this).addClass("question");
         }
       });
     }
-    $(question.qArry[i]).addClass('insidemulti');
+    $(quest.Arry[i]).addClass('insidemulti');
     
   }
   
-      questionSuper(container,question);
+      questionSuper(container,quest);
 
   //make sure we can read the answer later (for recursion if desired)
   return container;
@@ -468,7 +441,7 @@ code=function(question){
 
   
   //generate entire Object div
-  var container = Q(question.qHTML,
+  var container = Q(question,
                     textArea(question.rows || question.rowsE||20,question.cols || question.colsE||60,question.pHold || question.pHoldE||"","code"),
                     textArea(question.rows2 || question.rowsC||20,question.cols2 || question.rowsC||30,question.pHold2 || question.pHoldC||"Server Response","code nonquestion"));
   
@@ -503,39 +476,92 @@ code=function(question){
 returns an essay question
 */
 essay=function(question){
-  var container = Q(question.qHTML,
-                    textArea(question.rows,question.cols,question.pHold||"","essay"));
-    questionSuper(container,question);
-  return container;   
+  return Q(question,
+           textArea(question.rows,question.cols,question.pHold||"","essay"));;   
 };
 
 /*
 returns a dropdown question
 */
 dropdown=function(question){
-  var container = Q(question.qHTML,
-                    dropDown(question.pHold,question.ansrL,question.hideL,false));
-  questionSuper(container,question);
-  return container;
+  return Q(question,
+           dropDown(question.pHold,question.ansrL,question.hideL,false));
 };
 
 /*
 returns a dropdown with multiple selection 
 */
-dropdownmultiple=function(object){
-  var questionHTML = object.qHTML,
-      answerList = object.ansrL,
-      placeholder = object.pHold,
-      showHide = object.hideL;
-  //generate entire Object div
-  var container = Q(questionHTML,
-                    dropDown(placeholder,answerList,showHide,true));
-  
-  
-  return container;
+dropdownmultiple=function(question){
+
+  return Q(question,
+           dropDown(question.pHold,question.ansrL,question.hideL,true));;
   
 };
 
+/*
+returns a radio button question
+*/
+radiocheckbox=function(quest) {
+    var placeholder = quest.pHold;
+    var answerList = quest.ansrL;
+    var showHide = quest.hideL;
+    var isMultiple = quest.isCheck;
+    if(typeof answerList == 'string'){
+	answerList = choices[answerList];
+    }
+    if(typeof showHide == 'string'){
+	showHide = choices[showHide];
+    }
+    var question = document.createElement("FORM");
+    if(isMultiple){
+	//for CSS  
+	$(question).addClass("checkbox");
+    }else{
+	//for CSS
+	$(question).addClass("radio");
+    }
+  
+    
+    //adds the possible answers as 'input' inside the 'form' element
+    for(var i = 0; i < answerList.length; i++){
+    
+    var input = document.createElement("INPUT");
+
+	$(input).attr("name","sel");
+	$(input).attr("id","sel"+i);
+      $(input).attr("type",isMultiple?"checkbox":"radio");
+	$(input).attr("value",answerList[i]);
+	$(question).append(input);   
+      
+    var label = document.createElement("LABEL");
+    $(label).append(textObject(answerList[i]));
+    $(label).append("<br>");
+    $(label).attr("for","sel"+i);
+    $(question).append(label);
+    
+  }
+  showHideClass(showHide);
+    setTabIndex(question);
+    return Q(quest,
+                    question);
+  //return container;
+};
+
+/*
+returns a radio elem
+*/
+radio = function(quest) {
+    quest.isCheck = false;
+    return radiocheckbox(quest);
+}
+
+/*
+returns a checkbox elem
+*/
+checkbox = function(quest) {
+    quest.isCheck = true;
+    return radiocheckbox(quest);
+}
 
 
 
@@ -647,7 +673,21 @@ function constructorObj(object){
 
 }
 */
-
+/*
+makes sure that images are displayed properly
+*/
+function textObject(text){
+if(text.url){
+	    text=text.url;
+	    if(text.length>0){
+		    return "<img src='"+text+"' />";
+	    }
+	}else{
+	    if(text.length>0){
+            return text;
+        }
+	}
+}
 
 /*
 returns quesiton span if img, returns
@@ -658,16 +698,11 @@ else fills span with html from 'text'
 function questionText(text){
   if(text){
     var questionTextContainer;
-    if(typeof text == 'string'){
+
       questionTextContainer = document.createElement("PRE");
-      $(questionTextContainer).html(text);
-    }else if(text.url){
-      questionTextContainer = document.createElement("PRE");
-      $(questionTextContainer).html("<img src='"+text.url+"' />");
-    }else if(text.fromText){
-      questionTextContainer = questionsFromText(text.fromText,text.index,"PRE");
-    }
-    $(questionTextContainer).addClass("qHTML");
+      $(questionTextContainer).html(textObject(text));
+
+    $(questionTextContainer).addClass("HTML");
     $(questionTextContainer).addClass("nonquestion");
     
     return questionTextContainer;
@@ -705,7 +740,7 @@ function sendQuestion(obj){
     i++;
   }
   console.log(obj["placeholderText"]);
-  paramSet (obj["questionHTML"],questionParams,"qHTML");
+  paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
@@ -735,15 +770,15 @@ function sendQuestion(obj){
 
 }
 /*
-  Add a new choice and is called by
-  the addchoicebutton() object on click
+This adds a new choice and is called by
+the addchoicebutton() object on click
 */
 function buttonAddChoice (e){
  // console.log();
   var len = ($(e.target).parent().find(".question").length)/2-1;
-  var ques = question({type:'multiquestion',qHTML:'',qMakeArry:[
-      {type:'essay',rows:3,cols:30,pHold:'',qID:"choices:"+len},
-      {type:'dropdown',qHTML:'',ansrL:choices['incorrect'],qID:"correct:"+len}
+  var ques = question({type:'multiquestion',HTML:'',MakeArry:[
+      {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices:"+len},
+      {type:'dropdown',HTML:'',ansrL:choices['incorrect'],ID:"correct:"+len}
     ]});
  // $(ques).addClass('Q');
   console.log($(ques).find('.drop'));
@@ -754,33 +789,9 @@ function buttonAddChoice (e){
 }
 
 function questionSuper(element,params){
-  if(params.qID){
-    $(element).attr("id",params.qID);
+  if(params.ID){
+    $(element).attr("id",params.ID);
   }
-}
-
-/*
-  Add a named button with a given css style
-*/
-function button (text, css) {
-   var b = document.createElement("BUTTON");
-    $(b).attr("value", text);
-    $(b).addClass(css);
-   return b;
-}
-
-/*
-  Create standard buttons: Edit, Delete, Copy
-  These are the same in many contexts to effect "least surprise"
-*/
-function editBar (css){
-   var d = document.createElement("DIV");
-    $(d).addClass(css);
-    $(d).append(button("", "editbut but"));
-    $(d).append(button("", "delbut but"));
-    $(d).append(button("", "copybut but"));
-console.log(d);
-   return d;
 }
 
 /*
@@ -798,7 +809,6 @@ function question(obj){
     object = arguments[1];
     type = arguments[0]||object.type;
   }
-  
   var quest = this[type.toLowerCase()](object);
   
   return quest;
@@ -912,4 +922,3 @@ function quiz(object){
   
   //will be removed on TODO completion
 }
-
