@@ -23,21 +23,21 @@ public class StdChoice {
 
 	public StdChoice(String name ) {
 		this.name = name;
-		hashMapStdChoice();
+//		hashMapStdChoice();
 		this.answers =  opinion.get(name);
 	}
 
 
 	public StdChoice(String name, int rightAns) {
 		this.name = name;
-		hashMapStdChoice();
+//		hashMapStdChoice();
 		this.answers =  opinion.get(name);
 		setAnswer(rightAns);
 	}
 
 	 public StdChoice(String name, int[] rightAns) {
     	this.name = name;
-		hashMapStdChoice();
+//		hashMapStdChoice();
 		this.answers =  opinion.get(name);
 		setmultiAnswer(rightAns);	}
 
