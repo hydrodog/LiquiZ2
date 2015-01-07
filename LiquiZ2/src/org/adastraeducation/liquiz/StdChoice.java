@@ -65,26 +65,26 @@ public class StdChoice {
 	}
 
 
-	private void hashMapStdChoice() {
-		opinion = new HashMap<String, Answer[]>();
-
-		opinion.put("Poll", new Answer[] {new Answer("Strongly Agree"),
-			    new Answer("Agree"), new Answer("No Opinion"),
-			    new Answer("Disagree"),new Answer("Strongly Disagree")
-			  });
-		opinion.put("Complexity",  new Answer[] {
-			    new Answer(1,"O(1)"),new Answer(2,"O(n)"),new Answer(3,"O(n^2)"),
-			    new Answer(4,"O(n^3)"),new Answer(5,"O(n logn)")
-			  });
-		opinion.put("Colors",  new Answer[] {
-			    new Answer(1,"Blue"),new Answer(2,"Red"),new Answer(3,"Green"),
-			    new Answer(4,"Orange"),new Answer(5,"Purple")
-			  });
-		opinion.put("Insects",  new Answer[] {
-			    new Answer(1,"Dog"),new Answer(2,"Cat"),new Answer(3,"Grasshopper"),
-			    new Answer(4,"Butterfly"),new Answer(5,"Ladybug")
-			  });
-	}
+//	private void hashMapStdChoice() {
+//		opinion = new HashMap<String, Answer[]>();
+//
+//		opinion.put("Poll", new Answer[] {new Answer("Strongly Agree"),
+//			    new Answer("Agree"), new Answer("No Opinion"),
+//			    new Answer("Disagree"),new Answer("Strongly Disagree")
+//			  });
+//		opinion.put("Complexity",  new Answer[] {
+//			    new Answer(1,"O(1)"),new Answer(2,"O(n)"),new Answer(3,"O(n^2)"),
+//			    new Answer(4,"O(n^3)"),new Answer(5,"O(n logn)")
+//			  });
+//		opinion.put("Colors",  new Answer[] {
+//			    new Answer(1,"Blue"),new Answer(2,"Red"),new Answer(3,"Green"),
+//			    new Answer(4,"Orange"),new Answer(5,"Purple")
+//			  });
+//		opinion.put("Insects",  new Answer[] {
+//			    new Answer(1,"Dog"),new Answer(2,"Cat"),new Answer(3,"Grasshopper"),
+//			    new Answer(4,"Butterfly"),new Answer(5,"Ladybug")
+//			  });
+//	}
 	
 	public void writeHTMLDropdown(StringBuilder b){
 		b.append("<select>");
