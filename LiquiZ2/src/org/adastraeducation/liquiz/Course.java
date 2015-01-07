@@ -54,7 +54,7 @@ public class Course implements Displayable {
 
 	
 	/*
-	 * <div class='coursename'>NAME</div>
+	 * <div class='courseName'>NAME</div>
 	 * <div class='quizList'>
 	 *    <div class='quizName'>QUIZNAME</div>
 	 *    <div class='quizName'>QUIZNAME</div>
@@ -62,7 +62,7 @@ public class Course implements Displayable {
 	 */
 	
 	public void writeHTML(StringBuilder b) {
-		b.append("<div class='coursename'>" + name + "</div>\n");
+		b.append("<div class='courseName'>" + name + "</div>\n");
 		b.append("<div class='quizList'>\n");
 		for (Quiz q : quizzes) {
 			b.append("<div class='quizName'>" + q.getName() + "</div>\n"); 
