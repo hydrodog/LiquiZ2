@@ -131,7 +131,7 @@ public class Util extends HttpServlet{
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiChoiceDropdown q = new MultiChoiceDropdown();
-		q.setAnswers(answers); 
+		q.setAns(answers); 
 		return q;
 	}
 	public Question createMultiChoiceRadio(HttpServletRequest request){
@@ -143,7 +143,7 @@ public class Util extends HttpServlet{
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiChoiceRadio q = new MultiChoiceRadio();
-		q.setAnswers(answers); 
+		q.setAns(answers); 
 		return q;
 	}
 	public Question createMultiAnswer(HttpServletRequest request) {

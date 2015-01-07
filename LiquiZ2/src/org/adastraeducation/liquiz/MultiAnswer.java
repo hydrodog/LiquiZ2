@@ -7,13 +7,20 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	private Answer [] answers; // would like to switch to ArrayList<Answer> in Question class
 	
 	/**********************Added getter and setter for serialization********************************/
-	// There are duplicate getters and setters now... -Yijin
+	// There are duplicate getters and setters now plus the one in the Question parent class -Yijin
 	public Answer[] getAnswer(){
 		return answers;
 	}
 	
 	public void setAnswer(Answer[] a){
 		answers = a;
+	}
+	
+	public Answer[] getAnswers() {
+		return answers;
+	}
+	public void setAnswers(Answer[] answers) {
+		this.answers = answers;
 	}
 
 	public MultiAnswer() {
@@ -28,18 +35,20 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		super(level, points, answers);
 	}
 	
-	public MultiAnswer(int level, int points, String stdChoiceName, int [] rightAns) {
-		// TODO Auto-generated constructor stub
-		super(level, points);
-		stdchoice = new StdChoice(stdChoiceName, rightAns);
-	}
-	// constructor with ArrayList
+	// same as above two constructors but with ArrayList
 	public MultiAnswer(int id, int level, int points, ArrayList<Answer> answers) {
 		super(id, level, points, answers);
 	}
 	public MultiAnswer(int level, int points, ArrayList<Answer> answers) {
 		super(level, points, answers);
 	}
+	
+	public MultiAnswer(int level, int points, String stdChoiceName, int [] rightAns) {
+		// TODO Auto-generated constructor stub
+		super(level, points);
+		stdchoice = new StdChoice(stdChoiceName, rightAns);
+	}
+	
 
 	//TODO: Override IsCorrect()
 	
@@ -47,14 +56,6 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		return "MultiAnswer";
 	}
 	
-	public Answer[] getAnswers() {
-		return answers;
-	}
-	public void setAnswers(Answer[] answers) {
-		this.answers = answers;
-	}
-
-
 	public void writeHTML(StringBuilder b ){	
 		if (stdchoice != null) {
 

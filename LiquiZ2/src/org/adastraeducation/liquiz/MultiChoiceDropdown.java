@@ -53,11 +53,11 @@ public class MultiChoiceDropdown extends Question {
 
 	public static MultiChoiceDropdown createRandomNum(int level, int points, Answer ans, int index, int choices) {
 		// something to randomize the other Answer choices and put in ans among the array
-		Answer answers[] = new Answer[choices];
-		answers[index] = ans;
-		for(int i = 0; i < answers.length; i++){
-			if (answers[i].equals(null)) {
-//				answers[i] = TODO: generate something random
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		answers.set(index, ans);
+		for(int i = 0; i < choices; i++){
+			if (answers.get(i).equals(null)) {
+//				answers.set(i, TODO: generate something random);
 			} else {
 				continue;
 			}
@@ -80,12 +80,13 @@ public class MultiChoiceDropdown extends Question {
 		return "MultiChoice";
 	}
 
-	public Answer[] getAnswers() {
-		return answers;
-	}
-	public void setAnswers(Answer[] ans) {
-		this.answers = ans;
-	}
+//	Question parent class has getAns() and setAns()
+//	public Answer[] getAnswers() {
+//		return answers;
+//	}
+//	public void setAnswers(Answer[] ans) {
+//		this.answers = ans;
+//	}
 
 	public void writeHTML(StringBuilder b) {
 		// Standard Choice options
@@ -97,9 +98,9 @@ public class MultiChoiceDropdown extends Question {
 
 			// Regular options
 			b.append("<select>");
-			for (int i = 0; i < answers.length; i++) {
-				b.append("<option value='" + answers[i].getAnswer() + "'> "
-						+ answers[i].getAnswer() + " </option> ");
+			for (int i = 0; i < this.getAns().size(); i++) {
+				b.append("<option value='" + this.getAns().get(i).getAnswer() + "'> "
+						+ this.getAns().get(i).getAnswer() + " </option> ");
 			}
 			b.append("</select>");
 			b.append("</br>");
@@ -110,14 +111,14 @@ public class MultiChoiceDropdown extends Question {
 
 	public void writeJS(StringBuilder b) {
 		b.append("multichoice([");
-		for (int i = 0; i < answers.length; i++) {
-			answers[i].writeJS(b);
+		for (int i = 0; i < this.getAns().size(); i++) {
+			this.getAns().get(i).writeJS(b);
 		}
 	}
 
 	public void writeXML(StringBuilder b) {
-		for (int i = 0; i < answers.length; i++)
-			answers[i].writeXML(b);
+		for (int i = 0; i < this.getAns().size(); i++)
+			this.getAns().get(i).writeXML(b);
 	}
 	@Override
 	public boolean isCorrect(String s) {

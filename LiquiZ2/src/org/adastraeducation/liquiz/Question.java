@@ -1,5 +1,6 @@
 package org.adastraeducation.liquiz;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public abstract class Question implements Displayable {
@@ -67,6 +68,14 @@ public abstract class Question implements Displayable {
 	}
 	public void setAns(ArrayList<Answer> answers) {
 		this.answers = answers;
+	}
+	
+	// might change everything to ArrayLists later
+	public Answer[] getAnsAsArray() {
+		return (Answer[]) answers.toArray();
+	}
+	public void setAns(Answer[] answers) {
+		this.answers = new ArrayList<Answer>(Arrays.asList(answers));
 	}
 	
 	public abstract String getTagName();
