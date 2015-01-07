@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.adastraeducation.liquiz.database.UserLogin;
+import org.adastraeducation.liquiz.database.Check;
 
 /*
  * Author: Yingzhu
