@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class MultiAnswer extends MultiChoiceDropdown {
 	private Answer [] answers; // would like to switch to ArrayList<Answer> in Question class
 	
-	/**********************Added getter and setter for serialization********************************/
 	// There are duplicate getters and setters now plus the one in the Question parent class -Yijin
+	
+	/**********************Added getter and setter for serialization********************************/
 	public Answer[] getAnswer(){
 		return answers;
 	}
@@ -16,12 +17,12 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		answers = a;
 	}
 	
-	public Answer[] getAnswers() {
-		return answers;
-	}
-	public void setAnswers(Answer[] answers) {
-		this.answers = answers;
-	}
+//	public Answer[] getAnswers() {
+//		return answers;
+//	}
+//	public void setAnswers(Answer[] answers) {
+//		this.answers = answers;
+//	}
 
 	public MultiAnswer() {
 	}

@@ -155,7 +155,7 @@ public class Util extends HttpServlet{
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiAnswer q = new MultiAnswer();
-		q.setAnswers(answers); 
+		q.setAnswer(answers); 
 		return q;
 	}
 	public Question createRegexQuestion(HttpServletRequest request){
