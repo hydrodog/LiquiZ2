@@ -22,8 +22,10 @@ public class Database {
 	private static ArrayList<Displayable> displayables = new ArrayList<Displayable>();
 	
 	/**
-	 * "Adders" and Getters - consider that id starts at 1 and index starts at 0, not that it's terrible
+	 * "Adders" and Getters
+	 * Note that id starts at 1 and index starts at 0, so the first space in each ArrayList is empty
 	 */
+	
 	public static void setUser(int id, User u) {
 		users.set(id, u);
 	}
