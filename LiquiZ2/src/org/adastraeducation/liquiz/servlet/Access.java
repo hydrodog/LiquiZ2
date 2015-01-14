@@ -38,6 +38,7 @@ public class Access {
 			String str = new String(bytes);
 			System.out.println(str);
 		}
+		
 	}
 
 }
