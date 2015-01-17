@@ -904,8 +904,20 @@ function quiz(object){
 
   //on editor, send to server button
   if(options.isEditor){
-    var serverSend = buttonWithLabelAndOnClick("Send to Server",function(){
+    var serverSend = buttonWithLabelAndOnClick("Save Quiz",function(){
      alert("send to server:\n"+questionJSONs.join(",")); 
+      
+      //when sending data to the server, we must change " to ' to avoid &quot waste.
+      //must also join array by ","
+      $.ajax({
+        type: "POST",
+           url: "http://bluecode.altervista.org/bean/response.php",
+        data: "quiz="+questionJSONs.join(",").replace(/\"/g,"'"),
+        dataType: "text",
+          success: function(data){alert(data);},
+        failure: function(errMsg) {
+            alert(errMsg);
+        }});
     });
     setTabIndex(serverSend);
     $(quizContainer).append("&nbsp;");
