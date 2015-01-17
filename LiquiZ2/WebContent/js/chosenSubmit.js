@@ -56,9 +56,10 @@ function SUBMIT_ONE_QUIZ(quiz){
   });
       console.log(allSend);
 
-  if(quiz.id == "fakeTest"){
+  if($(quiz).attr("isEditor") != "true"){
     alert(allSend);
   }else if(sendData){
+    
     sendQuestion(sendData);
   }
 }
