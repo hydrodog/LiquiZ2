@@ -7,6 +7,10 @@ var tabIndex = 1;
 //This is for sections that need to be hidden unless certain choices are made.
 var showHideList=[];
 
+//JSON Object Storage for the Quiz Creator
+var questionJSONs = [];
+
+
 //this is just here for reference!! No effect yet!
 var opts = {
   timed : false,
@@ -727,6 +731,7 @@ function paramSet (set,onThis,rename){
 This sends a generated question to the new tab/ window
 */
 function sendQuestion(obj){
+  questionJSONs.push(JSON.stringify(obj));
   var questionParams = {};
   var i = 1;
   while(obj["choices:"+i]){
@@ -871,7 +876,8 @@ function quiz(object){
   var questions = object.qList;
   var options={
     timed:false,
-    submit:"SUBMIT"
+    submit:"SUBMIT",
+    isEditor:false
   };
   merge(options,object.opts);
   var timeDiv;
@@ -895,6 +901,17 @@ function quiz(object){
   
   $(quizContainer).append(SUBMIT);
   setTabIndex(SUBMIT);
+
+  //on editor, send to server button
+  if(options.isEditor){
+    var serverSend = buttonWithLabelAndOnClick("Send to Server",function(){
+     alert("send to server:\n"+questionJSONs.join(",")); 
+    });
+    setTabIndex(serverSend);
+    $(quizContainer).append("&nbsp;");
+    $(quizContainer).append(serverSend);
+    $(quizContainer).attr("isEditor","true");
+  }
 
   $(SUBMIT).on("click",function(){
     SUBMIT_ONE_QUIZ(quizContainer);
@@ -921,4 +938,6 @@ function quiz(object){
   }
   
   //will be removed on TODO completion
+  
+  
 }
