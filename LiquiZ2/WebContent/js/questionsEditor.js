@@ -46,4 +46,4 @@ quiz({qList:[
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
   ]})
   
-  ],opts:{submit:"Save Question", timed:false}});
+  ],opts:{submit:"Save Question", isEditor:true, timed:false}});
