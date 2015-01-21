@@ -9,8 +9,8 @@ standard('incorrect',['Incorrect','Correct']);
 
 quiz({qList:[
   
+  //choose question type
   dropdown({
-    
     HTML:'Type of Question:',
     ansrL:choices['qTypes'],
     pHold:'Choose a type...',
@@ -19,6 +19,8 @@ quiz({qList:[
   }),
 
   essay({HTML:'Question Text:',rows:3,cols:30,pHold:'Your text here...',ID:"questionHTML"}),
+  
+  //question type choice determines which questionSet is shown
   questionSet({class:'dropdowns multidropdowns',qList:[
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your text here...',ID:"placeholderText"}),
     html({HTML:'Choices:'}),
@@ -34,7 +36,7 @@ quiz({qList:[
       essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices:3"}),
       dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct:3"})
     ]}),
-  html({HTML:'<br>'}),
+    html({HTML:'<br>'}),
     question({type:'addchoicesbutton'}),
     question({type:'removechoicesbutton'})
   ]}),
