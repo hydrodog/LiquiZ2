@@ -11,6 +11,8 @@ import org.adastraeducation.liquiz.*;
  */
 public class Create {
 	
+	//TODO: add to Database ArrayLists as well!
+	
 	/**
 	 * Updates Users table when a new user registers
 	 */
@@ -336,7 +338,7 @@ public class Create {
 	 * linkCourseQuiz
 	 * createQuesCon
 	 * linkQuizQuesCon
-	 * linkQuesConElements
+	 * fillQuesConElements
 	 * UserPermissions???
 	 * recordStudentResp
 	 * recordStudentGradesOnQuizzes

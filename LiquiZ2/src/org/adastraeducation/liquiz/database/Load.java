@@ -47,6 +47,11 @@ public class Load {
 		return sb.toString();
 	}
 
+	/**
+	 * 
+	 * @param DispElID
+	 * @return requested Displayable
+	 */
 	public static Displayable loadDispEl(int DispElID) {
 		//TODO should these load with ID?
 		Connection conn = null;
@@ -87,6 +92,12 @@ public class Load {
 		return d;
 	}
 
+	/**
+	 * 
+	 * @param AnsID
+	 * @param correct
+	 * @return requested Answer
+	 */
 	public static Answer loadAns(int AnsID, boolean correct) {
 		Connection conn = null;
 		Response res = null;
@@ -119,6 +130,7 @@ public class Load {
 	}
 	
 	// Loads all the answers in the StdSet requested
+	// TODO: load all StdSets at the beginning
 	public static StdChoiceTwo loadStdChoices(int SetID) {
 		Connection conn = null;
 		String name = null;
@@ -157,6 +169,11 @@ public class Load {
 		return sc;
 	}
 
+	/**
+	 * 
+	 * @param QuesID
+	 * @return requested Question
+	 */
 	public static Question loadQues(int QuesID) {
 		Connection conn = null;
 		Question q = null;
@@ -233,6 +250,7 @@ public class Load {
 		return q;
 	}
 
+	//TODO: load ALL
 	public static Policy loadPolicy(int PolID) {
 		Connection conn = null;
 		Policy pol = null;
@@ -270,6 +288,9 @@ public class Load {
 		return pol;
 	}
 
+	/**
+	 * loads all QuesCons to Database.quesCons
+	 */
 	public static void loadQuesCon() {
 		Connection conn = null;
 
@@ -303,6 +324,9 @@ public class Load {
 		}
 	}
 	
+	/**
+	 * loads all Quizzes to Database.quizzes
+	 */
 	public static void loadQuiz() {
 		Connection conn = null;
 		
@@ -336,6 +360,9 @@ public class Load {
 		}
 	}
 	
+	/**
+	 * loads all Courses to Database.courses
+	 */
 	public static void loadCourse() {
 		Connection conn = null;
 		
@@ -370,6 +397,9 @@ public class Load {
 		}
 	}
 	
+	/**
+	 * loads all Users to Database.users
+	 */
 	public static void loadUser() {
 		Connection conn = null;
 		
@@ -465,9 +495,12 @@ public class Load {
 	}
 	
 	/*
-	 * TODO: two types of methods
-	 * questions, answers, StdChoices, DispEls load one at a time and return
-	 * Users, Courses, quizzes, policies, question containers,  load everything (they'll call the above methods so the needed ones will be loaded as well)
-	 * Student Grade/QuizScore/Response load everything too but where to put it? 2D array?
+	 * two types of methods:
+	 * questions, answers, DispEls load one at a time and return
+	 * Users, Courses, quizzes, question containers load everything 
+	 * TODO: Policies & StdChoice should load all as well
+	 * (they'll call the above methods so the needed ones will be loaded as well)
+	 * TODO: Student Grade/QuizScore/Response load everything too but where to put it? 
+	 * 2D array?
 	 */
 }

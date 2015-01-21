@@ -22,7 +22,7 @@ public class Database {
 	private static ArrayList<Displayable> displayables = new ArrayList<Displayable>();
 	
 	/**
-	 * "Adders" and Getters
+	 * Setters and Getters
 	 * Note that id starts at 1 and index starts at 0, so the first space in each ArrayList is empty
 	 */
 	
