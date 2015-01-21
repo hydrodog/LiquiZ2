@@ -267,4 +267,4 @@ INSERT INTO StudentQuizScores
 VALUES (1, 1, 100);
 
 INSERT INTO StudentGrades
-VALUES (1, 100);
+VALUES (1, 1, 100);

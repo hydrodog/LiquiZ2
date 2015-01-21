@@ -249,6 +249,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`StudentGrades` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentGrades` (
   `Student` INT NOT NULL,
+  `Course` INT NOT NULL,
   `Grade` DOUBLE NOT NULL);
 
 DROP TABLE IF EXISTS `LiquiZ`.`ViewAnsToQues` ;
