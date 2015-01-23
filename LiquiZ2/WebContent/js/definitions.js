@@ -293,7 +293,7 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   if(typeof showHide == 'string'){
     showHide = choices[showHide];
   }
-  var isSolid = answerList.placevalue?true:false;
+  var isSolid = typeof answerList.placevalue != "undefined"?true:false;
   if(answerList.placevalue){
     answerList = answerList.placevalue;
   }else{
@@ -843,6 +843,22 @@ function standard(name,array){
 }
 
 /*
+blanks the quiz, primarily used for Editor interface
+*/
+function blankQuiz(quiz){
+  $(quiz).find('textarea').each(function(){
+    $(this).val("");
+  });
+  $(quiz).find('select').each(function(){
+    $(this).val($(this).find('option:first').val());
+    $(this).trigger("chosen:updated.chosen");
+    console.log("setting: "+$(this).val());
+  });
+  //TODO: hide proper sections
+  //TODO: Radio and checkboxes.
+}
+
+/*
 returns time in hh:mm:ss
 used for human readable display
 */
@@ -884,8 +900,13 @@ function quiz(object){
     timeDiv = document.createElement("DIV");
   }
   
-  var SUBMIT = document.createElement("BUTTON");
-  $(SUBMIT).text(options.submit);
+  var SUBMIT = buttonWithLabelAndOnClick(options.submit,function(){
+    SUBMIT_ONE_QUIZ(quizContainer);
+    if(options.isEditor)
+        blankQuiz(quizContainer);
+  });
+
+  
   if(options.timed){
     $(timeDiv).text("Time Elapsed - 00:00:00");
     $(quizContainer).append(timeDiv);
@@ -895,7 +916,6 @@ function quiz(object){
     $(questions[i]).addClass('Q');
     $(quizContainer).append(questions[i]);
   }
-  
   
   $(quizContainer).append(SUBMIT);
   setTabIndex(SUBMIT);
@@ -922,10 +942,7 @@ function quiz(object){
     $(quizContainer).append(serverSend);
     $(quizContainer).attr("isEditor","true");
   }
-
-  $(SUBMIT).on("click",function(){
-    SUBMIT_ONE_QUIZ(quizContainer);
-  });
+  
   
   document.body.appendChild(quizContainer);
   
