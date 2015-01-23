@@ -740,26 +740,20 @@ function sendQuestion(obj){
   var i = 1;
   while(obj["choices:"+i]){
     if(i == 1){
-      questionParams.ansrL = [""];
-      questionParams.correctL = ["Incorrect"];
+      questionParams.ansrL = [];
+      questionParams.correctL = [];
     }
     questionParams.ansrL.push(obj["choices:"+i]);
     questionParams.correctL.push(obj["correct:"+i]);
     
     i++;
   }
-  console.log(obj["placeholderText"]);
+  //console.log(obj["placeholderText"]);
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
   
-  for(var key in questionParams){
-   // console.log(key+":"+questionParams[key]);
-  }
-  for(var key in obj){
-    //console.log(key+":"+obj[key]);
-  }
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
 //  var qDisabler = document.createElement("DIV");
