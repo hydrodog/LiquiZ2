@@ -286,6 +286,7 @@ returns the created select (drop down) html element
 
 */
 function  dropDown(placeholder,answerList,showHide,isMultiple){
+  if(!answerList) return;
   if(typeof answerList == 'string'){
     answerList = choices[answerList];
   }
@@ -852,7 +853,7 @@ function blankQuiz(quiz){
   $(quiz).find('select').each(function(){
     $(this).val($(this).find('option:first').val());
     $(this).trigger("chosen:updated.chosen");
-    console.log("setting: "+$(this).val());
+    $(this).trigger("change");
   });
   //TODO: hide proper sections
   //TODO: Radio and checkboxes.
