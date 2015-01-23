@@ -1,3 +1,11 @@
+//TODO List:
+/*
+blankQuiz() : Radio and checkboxes.
+quiz() : fair timer starting.
+code() : interact with java server to run code.
+setTabIndex() : insert at tabindex
+*/
+
 //choices is the global object variable where reusable lists are stored
 var choices = {};
 //tabIndex is so that we can bounce from question to question using the tab button. tabIndex is basically a counter so that we can set the next index.
@@ -9,6 +17,10 @@ var showHideList=[];
 
 //JSON Object Storage for the Quiz Creator
 var questionJSONs = [];
+//when we want to edit or delete a question,
+//we have to make sure that we don't edit
+//a quesiton that stringifies in a similar fashion.
+var questionJSONsUIDs = [], questionJSONsUIDsCounter=0;
 
 
 //this is just here for reference!! No effect yet!
@@ -39,6 +51,7 @@ indexes to their value + 1 only if they are higher than the
 value you wish to set.
 */
 function setTabIndex(ques,index){
+  //TODO: make sure we can insert something at a tabindex (run through with a $().each() and update)
   if(!index)
       index = tabIndex;
   $(ques).attr("tabindex",""+tabIndex);
@@ -737,6 +750,8 @@ This sends a generated question to the new tab/ window
 */
 function sendQuestion(obj){
   questionJSONs.push(JSON.stringify(obj));
+  var stringObjID=questionJSONsUIDsCounter++
+  questionJSONsUIDs.push(stringObjID);
   var questionParams = {};
   var i = 1;
   while(obj["choices:"+i]){
@@ -757,6 +772,15 @@ function sendQuestion(obj){
   
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
+  var deleteBtn = buttonWithLabelAndOnClick("Delete",function(){
+      questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
+      questionJSONsUIDs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
+      
+      $(qParent).remove();
+    
+  });
+  $(deleteBtn).addClass("deleteBtn");
+  $(q).append(deleteBtn);
 //  var qDisabler = document.createElement("DIV");
   $(qParent).append(q);
   //$(qDisabler).addClass("qDisabler");
@@ -855,7 +879,6 @@ function blankQuiz(quiz){
     $(this).trigger("chosen:updated.chosen");
     $(this).trigger("change");
   });
-  //TODO: hide proper sections
   //TODO: Radio and checkboxes.
 }
 
@@ -884,8 +907,7 @@ var merge = function (obj,objM){
   return obj;
 };
 /*
-sets up a new quiz choices list
-TODO: add submit button to the end of each quiz
+sets up a new quiz
 */
 function quiz(object){
   var questions = object.qList;
@@ -965,7 +987,6 @@ function quiz(object){
     
   }
   
-  //will be removed on TODO completion
   
   
 }
