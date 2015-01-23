@@ -293,9 +293,12 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   if(typeof showHide == 'string'){
     showHide = choices[showHide];
   }
-  //if(answerList[0]!=""){
+  var isSolid = answerList.placevalue?true:false;
+  if(answerList.placevalue){
+    answerList = answerList.placevalue;
+  }else{
     answerList.unshift("");
-  //}
+  }
   var question = document.createElement("SELECT");
   $(question).addClass("question");
 
@@ -320,7 +323,7 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   for(var i = 0; i < answerList.length; i++){
     
     var option = document.createElement("OPTION");
-    if(i>0)
+    if(i>0 || isSolid)
       $(option).html(textObject(answerList[i]) +"&nbsp;");
     $(option).attr("value",answerList[i]);
     $(question).append(option);   
@@ -508,6 +511,7 @@ returns a radio button question
 radiocheckbox=function(quest) {
     var placeholder = quest.pHold;
     var answerList = quest.ansrL;
+    answerList=answerList.placevalue?answerList.placevalue:answerList;
     var showHide = quest.hideL;
     var isMultiple = quest.isCheck;
     if(typeof answerList == 'string'){
