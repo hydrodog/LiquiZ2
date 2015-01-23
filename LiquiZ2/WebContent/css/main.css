@@ -5,7 +5,11 @@
   font-color:#fff;
     font-size:18px ;
 }
-
+.deleteBtn{
+  position:absolute;
+  right:0px;
+  top:0px;
+}
 #top_bar{
   position:fixed;
   left:0%;
@@ -87,6 +91,7 @@ button{
   border-color:#54BCD6;
 }
 .Q{
+  position:relative;
   border-radius:10px;
   padding:10px;
   background-color:#0b9fc4;
