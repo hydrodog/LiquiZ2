@@ -772,14 +772,14 @@ function sendQuestion(obj){
   
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
-  var deleteBtn = buttonWithLabelAndOnClick("Delete",function(){
+  var deleteBtn = buttonWithLabelAndOnClick("",function(){
       questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
       questionJSONsUIDs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
       
       $(qParent).remove();
     
   });
-  $(deleteBtn).addClass("deleteBtn");
+  $(deleteBtn).addClass("but delbut");
   $(q).append(deleteBtn);
 //  var qDisabler = document.createElement("DIV");
   $(qParent).append(q);

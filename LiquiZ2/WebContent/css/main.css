@@ -5,12 +5,7 @@
   font-color:#fff;
     font-size:18px ;
 }
-.deleteBtn{
-  position:absolute;
-  right:0px;
-  top:0px;
-  background: url('../assets/img/chosen-sprite.png') no-repeat;
-}
+
 #top_bar{
   position:fixed;
   left:0%;
@@ -120,8 +115,9 @@ html{
   background-color:#444444;
   
 }
-
 .but {
+	position:absolute;
+	top:0px;
     width:24px;
     height:24px;
     border-width: 0;
@@ -134,6 +130,7 @@ html{
 }
 
 .delbut {
+    right:0px;
     background: url(../assets/img/delete.png);
     background-size:24px 24px;
 }
