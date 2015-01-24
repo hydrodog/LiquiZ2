@@ -81,6 +81,7 @@ textarea{
   
 }
 button{
+  cursor:pointer;
   border-radius:10px;
   padding:10px;
   background-color:#0b9fc4;
