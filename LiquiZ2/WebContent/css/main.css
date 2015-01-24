@@ -9,6 +9,7 @@
   position:absolute;
   right:0px;
   top:0px;
+  background: url('../assets/img/chosen-sprite.png') no-repeat;
 }
 #top_bar{
   position:fixed;
