@@ -126,6 +126,7 @@ html{
 }
 
 .editbut {
+    right:24px;
     background: url(../assets/img/edit.png);
     background-size:24px 24px;
 }
@@ -137,6 +138,7 @@ html{
 }
 
 .copybut {
+    right:48px;
     background: url(../assets/img/copy.png);
     background-size:24px 24px;
 }
