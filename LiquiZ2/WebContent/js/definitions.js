@@ -21,7 +21,8 @@ var questionJSONs = [];
 //we have to make sure that we don't edit
 //a quesiton that stringifies in a similar fashion.
 var questionJSONsUIDs = [], questionJSONsUIDsCounter=0;
-
+//This is in case we want to edit a question, we have to know its index
+var questionEditingIndex = -1;//-1 = no question
 
 //this is just here for reference!! No effect yet!
 var opts = {
@@ -395,7 +396,6 @@ returns a new multiquestion object
 multiquestion=function(quest){
   var defaults = {HTML:"",MakeArry:[],Arry:[]};
   quest = merge(defaults,quest);
-//console.log(question.MakeArry);
   //generate entire Object div
   var container = document.createElement("DIV");
   //gen question text
@@ -744,18 +744,18 @@ typeFromChoice={'Drop Down':'dropdown', 'Multidrop-down':'dropdownmultiple', 'Nu
 function paramSet (set,onThis,rename){
   if(set)
     onThis[rename] = set;
-  //console.log(onThis[rename]);
 }
 
 /*
 sets up everything for question editing
 */
 function editQuestion(stringObjID,quiz){
+ $(quiz).find("#saveAsNewQuestion").show();
+  questionEditingIndex=stringObjID;
    var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
   blankQuiz(quiz);
   for(var key in JSONobj){
     $(quiz).find('#'+key).find(".question").each(function(){
-      console.log("sudo"+key+"="+JSONobj[key]+";");
       if(JSONobj[key])
         $(this).val(JSONobj[key]);
       if($(this).is("select")){
@@ -777,9 +777,9 @@ function duplicateQuestion(stringObjID,quiz){
 /*
 This sends a generated question to the new tab/ window
 */
-function sendQuestion(obj,quiz){
+function sendQuestion(obj,quiz,overrideID){
   questionJSONs.push(JSON.stringify(obj));
-  var stringObjID=questionJSONsUIDsCounter++
+  var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
   questionJSONsUIDs.push(stringObjID);
   var questionParams = {};
   var i = 1;
@@ -796,7 +796,6 @@ function sendQuestion(obj,quiz){
     i++;
     }
   }
-  //console.log(obj["placeholderText"]);
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
@@ -832,29 +831,33 @@ function sendQuestion(obj,quiz){
   //$(qParent).addClass("qDisablerParent");
   //$(qDisabler).html("&nbsp;");
   //$(qParent).append(qDisabler);
-  console.log(q);
-  console.log($fakeTest);
-  $($fakeTest).append( qParent);
+
+  if(!overrideID && overrideID !== 0)
+    $($fakeTest).append( qParent);
+  else
+    $($fakeTest).find("#replacement-index-"+stringObjID).replaceWith(qParent);
+  
   $(q).addClass('Q');
   
   $(q).find('.chosen-select').chosen({});
-  //$().parent().before($submit);
-  $($submit).before(qParent);
+  $(qParent).attr('id',"replacement-index-"+stringObjID);
 
+  //$().parent().before($submit);
+    if(!overrideID && overrideID !== 0)
+  $($submit).before(qParent);
+  
 }
 /*
 This adds a new choice and is called by
 the addchoicebutton() object on click
 */
 function buttonAddChoice (e){
- // console.log();
   var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',HTML:'',MakeArry:[
       {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
       {type:'dropdown',HTML:'',ansrL:choices['incorrect'],ID:"correct-"+len}
     ]});
  // $(ques).addClass('Q');
-  console.log($(ques).find('.drop'));
   $(e.target).parent().append(ques  );
     $(ques).find('.chosen-select').chosen({});
     $(e.target).parent().find(".nonquestion").last().before(ques);
@@ -949,12 +952,10 @@ function msToTime(s) {
 sets up a new quiz with data recieved from the server
 */
 function generateQuiz(textdata,quiz){
-        console.log(textdata);
 
   var quizList = JSON.parse("["+textdata.replace(/\'/g,"\"")+"]");
 
   for(var key in quizList){
-    console.log(key);
      sendQuestion(quizList[key],quiz);
   }
 }
@@ -984,11 +985,26 @@ function quiz(object){
   if(options.timed){
     timeDiv = document.createElement("DIV");
   }
-  
-  var SUBMIT = buttonWithLabelAndOnClick(options.submit,function(){
+  var saveAsNewQuestion;
+  if(options.isEditor){
+    saveAsNewQuestion = buttonWithLabelAndOnClick("Save as New Question",function(){
+      $(saveAsNewQuestion).hide();
+      questionEditingIndex = -1;
     SUBMIT_ONE_QUIZ(quizContainer);
     if(options.isEditor)
         blankQuiz(quizContainer);
+    });
+  }
+  var SUBMIT = buttonWithLabelAndOnClick(options.submit,function(){
+    if(saveAsNewQuestion)
+      $(saveAsNewQuestion).hide();
+    if(questionEditingIndex!=-1)
+        SUBMIT_ONE_QUIZ(quizContainer,questionEditingIndex);
+    else
+        SUBMIT_ONE_QUIZ(quizContainer);
+    if(options.isEditor)
+        blankQuiz(quizContainer);
+    questionEditingIndex = -1;
   });
 
   
@@ -1022,10 +1038,19 @@ function quiz(object){
             alert(errMsg);
         }});
     });
+
+    
+        $(saveAsNewQuestion).attr("id","saveAsNewQuestion");
+
+    setTabIndex(saveAsNewQuestion);
     setTabIndex(serverSend);
+    $(quizContainer).append("&nbsp;");
+    $(quizContainer).append(saveAsNewQuestion);
     $(quizContainer).append("&nbsp;");
     $(quizContainer).append(serverSend);
     $(quizContainer).attr("isEditor","true");
+          $(saveAsNewQuestion).hide();
+
   }
   
   
