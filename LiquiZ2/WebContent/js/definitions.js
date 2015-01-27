@@ -270,10 +270,11 @@ function textArea(rows,cols,placeholder,hasclass){
 This is called on the value change of a radio or drop down
 when that object must show or hide stuff
 */
-function showHideClassChangeCall(event){
-      if(event.data.showHide[parseInt($(this).data("index"))].length > 0)
-        $("."+event.data.showHide[parseInt($(this).data("index"))]).hide();
-      $("."+event.data.showHide[this.selectedIndex]).show();
+function showHideClassChangeCall(showHide){  
+  if(showHide[parseInt($(this).data("index"))])
+      if(showHide[parseInt($(this).data("index"))].length > 0)
+        $("."+showHide[parseInt($(this).data("index"))]).hide();
+      $("."+showHide[this.selectedIndex]).show();
       $(this).data("index",""+this.selectedIndex);
 }
 
@@ -284,7 +285,9 @@ function showHideClass(question,showHide){
   $(question).data("index","0");
   if(showHide){
     showHideList.push(showHide);
-    $(question).change({showHide:showHide},showHideClassChangeCall);
+    question.onchange=function(){
+      showHideClassChangeCall.call(question,showHide);
+    };
   }
 }
 
@@ -744,23 +747,43 @@ function paramSet (set,onThis,rename){
   //console.log(onThis[rename]);
 }
 
+/*
+sets up everything for question editing
+*/
+function editQuestion(stringObjID,quiz){
+   var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+  blankQuiz(quiz);
+  for(var key in JSONobj){
+    $(quiz).find('#'+key).find(".question").each(function(){
+      console.log("sudo"+key+"="+JSONobj[key]+";");
+      if(JSONobj[key])
+        $(this).val(JSONobj[key]);
+      if($(this).is("select")){
+        $(this).trigger("chosen:updated.chosen");
+        $(this).trigger("change");
+      }
+    });
+    
+  }
+  
+}
 
 /*
 This sends a generated question to the new tab/ window
 */
-function sendQuestion(obj){
+function sendQuestion(obj,quiz){
   questionJSONs.push(JSON.stringify(obj));
   var stringObjID=questionJSONsUIDsCounter++
   questionJSONsUIDs.push(stringObjID);
   var questionParams = {};
   var i = 1;
-  while(obj["choices:"+i]){
+  while(obj["choices-"+i]){
     if(i == 1){
       questionParams.ansrL = [];
       questionParams.correctL = [];
     }
-    questionParams.ansrL.push(obj["choices:"+i]);
-    questionParams.correctL.push(obj["correct:"+i]);
+    questionParams.ansrL.push(obj["choices-"+i]);
+    questionParams.correctL.push(obj["correct-"+i]);
     
     i++;
   }
@@ -780,6 +803,13 @@ function sendQuestion(obj){
     
   });
   $(deleteBtn).addClass("but delbut");
+  var editBtn = buttonWithLabelAndOnClick("",function(){
+      editQuestion(stringObjID,quiz);
+    
+  });
+  $(editBtn).addClass("but editbut");
+  
+  $(q).append(editBtn);
   $(q).append(deleteBtn);
 //  var qDisabler = document.createElement("DIV");
   $(qParent).append(q);
@@ -805,8 +835,8 @@ function buttonAddChoice (e){
  // console.log();
   var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',HTML:'',MakeArry:[
-      {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices:"+len},
-      {type:'dropdown',HTML:'',ansrL:choices['incorrect'],ID:"correct:"+len}
+      {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
+      {type:'dropdown',HTML:'',ansrL:choices['incorrect'],ID:"correct-"+len}
     ]});
  // $(ques).addClass('Q');
   console.log($(ques).find('.drop'));
@@ -875,9 +905,13 @@ function blankQuiz(quiz){
     $(this).val("");
   });
   $(quiz).find('select').each(function(){
-    $(this).val($(this).find('option:first').val());
-    $(this).trigger("chosen:updated.chosen");
-    $(this).trigger("change");
+    var firstVal = $(this).find('option:first').val(),
+        thisVal = $(this).val();
+    if(firstVal!=thisVal){
+        $(this).val(firstVal?firstVal:false);
+        $(this).trigger("chosen:updated.chosen");
+        $(this).trigger("change");
+    }
   });
   //TODO: Radio and checkboxes.
 }
