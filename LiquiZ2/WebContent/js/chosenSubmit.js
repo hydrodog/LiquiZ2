@@ -15,7 +15,7 @@ for(var k = 0; k < showHideList.length; k++){
   }
 }
 
-function SUBMIT_ONE_QUIZ(quiz){
+function SUBMIT_ONE_QUIZ(quiz,questionEditingIndex){
 
   var i = 1;
   var allSend = "";
@@ -58,7 +58,7 @@ function SUBMIT_ONE_QUIZ(quiz){
   if($(quiz).attr("isEditor") != "true"){
     alert(allSend);
   }else if(sendData){
-    sendQuestion(sendData,quiz);
+    sendQuestion(sendData,quiz,(questionEditingIndex||questionEditingIndex===0)?questionEditingIndex:false);
   }
 }
 
