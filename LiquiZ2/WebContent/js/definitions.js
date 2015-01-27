@@ -946,6 +946,19 @@ function msToTime(s) {
   return (hrs<10?"0"+hrs:hrs) + ':' + (mins<10?"0"+mins:mins) + ':' + (secs<10?"0"+secs:secs);// + '.' + ms;
 }
 /*
+sets up a new quiz with data recieved from the server
+*/
+function generateQuiz(textdata,quiz){
+        console.log(textdata);
+
+  var quizList = JSON.parse("["+textdata.replace(/\'/g,"\"")+"]");
+
+  for(var key in quizList){
+    console.log(key);
+     sendQuestion(quizList[key],quiz);
+  }
+}
+/*
 merge function to merge objects
 */
 
@@ -1004,7 +1017,7 @@ function quiz(object){
            url: "http://bluecode.altervista.org/bean/response.php",
         data: "quiz="+questionJSONs.join(",").replace(/\"/g,"'"),
         dataType: "text",
-          success: function(data){alert(data);},
+          success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
             alert(errMsg);
         }});
@@ -1035,7 +1048,6 @@ function quiz(object){
     start();
     
   }
-  
   
   
 }
