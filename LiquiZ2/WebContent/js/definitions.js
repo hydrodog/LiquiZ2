@@ -777,15 +777,18 @@ function sendQuestion(obj,quiz){
   questionJSONsUIDs.push(stringObjID);
   var questionParams = {};
   var i = 1;
-  while(obj["choices-"+i]){
+  for(var key in obj){
+    if(key.indexOf("choices-")==0){
     if(i == 1){
       questionParams.ansrL = [];
       questionParams.correctL = [];
     }
-    questionParams.ansrL.push(obj["choices-"+i]);
-    questionParams.correctL.push(obj["correct-"+i]);
+    questionParams.ansrL.push(obj[key]);
+    var correct = obj[key].replace("choices-","correct-");
+    questionParams.correctL.push(correct);
     
     i++;
+    }
   }
   //console.log(obj["placeholderText"]);
   paramSet (obj["questionHTML"],questionParams,"HTML");
