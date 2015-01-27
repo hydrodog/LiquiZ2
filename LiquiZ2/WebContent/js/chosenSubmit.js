@@ -47,7 +47,6 @@ function SUBMIT_ONE_QUIZ(quiz){
         if(!$(this).parent().attr("id"))
            $(this).parent().attr("id","-"+i++);
         allSend+=(allSend.length>0?",\n":"")+("{"+$(this).parent().attr("id")+":"+val+"}");
-        
         sendData[$(this).parent().attr("id")]=val;
       }
       
@@ -59,8 +58,7 @@ function SUBMIT_ONE_QUIZ(quiz){
   if($(quiz).attr("isEditor") != "true"){
     alert(allSend);
   }else if(sendData){
-    
-    sendQuestion(sendData);
+    sendQuestion(sendData,quiz);
   }
 }
 
