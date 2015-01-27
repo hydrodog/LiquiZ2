@@ -765,9 +765,15 @@ function editQuestion(stringObjID,quiz){
     });
     
   }
-  
 }
 
+/*
+duplicates a question held in JSON storage
+*/
+function duplicateQuestion(stringObjID,quiz){
+   var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+   sendQuestion(JSONobj,quiz);
+}
 /*
 This sends a generated question to the new tab/ window
 */
@@ -811,7 +817,13 @@ function sendQuestion(obj,quiz){
     
   });
   $(editBtn).addClass("but editbut");
+  var copyBtn = buttonWithLabelAndOnClick("",function(){
+      duplicateQuestion(stringObjID,quiz);
+    
+  });
+  $(copyBtn).addClass("but copybut");
   
+  $(q).append(copyBtn);
   $(q).append(editBtn);
   $(q).append(deleteBtn);
 //  var qDisabler = document.createElement("DIV");
