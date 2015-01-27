@@ -791,7 +791,7 @@ function duplicateQuestion(stringObjID,quiz){
 This sends a generated question to the new tab/ window
 */
 function sendQuestion(obj,quiz,overrideID){
-  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(stringObjID)==-1)
+  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(overrideID)==-1)
     overrideID=false;
   
   var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
