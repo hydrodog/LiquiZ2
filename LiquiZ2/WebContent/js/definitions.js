@@ -64,8 +64,9 @@ This function returns a button that is used to add
 more choices to the drop down questions
 */
 addchoicesbutton = function(){
-  return buttonWithLabelAndOnClick("Add Choice",buttonAddChoice);
-}
+  var but = buttonWithLabelAndOnClick("Add Choice",buttonAddChoice);
+  $(but).addClass('addChoice');
+  return but;}
 
 /*
 generic make a button with a onclick
@@ -93,7 +94,9 @@ This function returns a button that is used to remove
 choices from the drop down questions
 */
 removechoicesbutton = function(){
-  return buttonWithLabelAndOnClick("Remove Choice",buttonRemoveChoice);
+  var but = buttonWithLabelAndOnClick("Remove Choice",buttonRemoveChoice);
+  $(but).addClass('removeChoice');
+  return but;
 }
 
 /*
@@ -754,6 +757,16 @@ function editQuestion(stringObjID,quiz){
   questionEditingIndex=stringObjID;
    var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
   blankQuiz(quiz);
+  var highnum = 3;
+  for(var key in JSONobj){
+    if(key.indexOf("choices-")==0){
+      var num = parseInt(key.replace("choices-",""));
+      if(num>highnum)
+        highnum=num;
+    }
+  }
+  makeChoiceCount(highnum,quiz);
+
   for(var key in JSONobj){
     $(quiz).find('#'+key).find(".question").each(function(){
       if(JSONobj[key])
@@ -778,6 +791,9 @@ function duplicateQuestion(stringObjID,quiz){
 This sends a generated question to the new tab/ window
 */
 function sendQuestion(obj,quiz,overrideID){
+  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(stringObjID)==-1)
+    overrideID=false;
+  
   var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
   if(!overrideID && overrideID !== 0){
   questionJSONs.push(JSON.stringify(obj));
@@ -855,15 +871,26 @@ function sendQuestion(obj,quiz,overrideID){
 This adds a new choice and is called by
 the addchoicebutton() object on click
 */
-function buttonAddChoice (e){
+function buttonAddChoice (e,currentNumber){
+  if(!currentNumber && currentNumber !== 0){
+    currentNumber = 0;
+    $(e.target).parent().find('*').each(function(){
+    var id = $(this).attr('id');
+    if(id && id.indexOf("choices-")==0)
+      currentNumber++;
+  });
+  }
   var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',HTML:'',MakeArry:[
       {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
-      {type:'dropdown',HTML:'',ansrL:choices['incorrect'],ID:"correct-"+len}
+    {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+len}
     ]});
- // $(ques).addClass('Q');
-  $(e.target).parent().append(ques  );
-    $(ques).find('.chosen-select').chosen({});
+  var hiddenWorkaround = document.createElement("DIV");
+  $(document.body).append(hiddenWorkaround);
+     $(hiddenWorkaround).append(ques  );
+    $(hiddenWorkaround).find('.chosen-select').chosen({});
+    $(e.target).parent().append($(hiddenWorkaround).children());
+    $(hiddenWorkaround).remove();
     $(e.target).parent().find(".nonquestion").last().before(ques);
 
 }
@@ -923,6 +950,8 @@ function standard(name,array){
 blanks the quiz, primarily used for Editor interface
 */
 function blankQuiz(quiz){
+  if($(quiz).attr("isEditor")=="true")
+    makeChoiceCount(3,quiz);
   $(quiz).find('textarea').each(function(){
     $(this).val("");
   });
@@ -952,6 +981,31 @@ function msToTime(s) {
   
   return (hrs<10?"0"+hrs:hrs) + ':' + (mins<10?"0"+mins:mins) + ':' + (secs<10?"0"+secs:secs);// + '.' + ms;
 }
+
+/*
+adds or removes choice options until quiz has desired amount
+*/
+function makeChoiceCount(targetNumber,quiz){
+  if(targetNumber < 3) targetNumber = 3;
+  var currentNumber = 0;
+  $(quiz).find('*').each(function(){
+    var id = $(this).attr('id');
+    if(id && id.indexOf("choices-")==0)
+      currentNumber++;
+  });
+  if(currentNumber < targetNumber){
+    while(currentNumber!=targetNumber){
+      buttonAddChoice({target:$(quiz).find('.addChoice')[0]},currentNumber);
+      currentNumber++;
+    }
+  }else{
+    while(currentNumber!=targetNumber){
+      buttonRemoveChoice({target:$(quiz).find('.removeChoice')[0]},currentNumber);
+      currentNumber--;
+    }
+  }
+}
+
 /*
 sets up a new quiz with data recieved from the server
 */
