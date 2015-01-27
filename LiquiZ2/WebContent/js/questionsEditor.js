@@ -25,16 +25,16 @@ quiz({qList:[
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your text here...',ID:"placeholderText"}),
     html({HTML:'Choices:'}),
     multiquestion({HTML:'',Arry:[
-      essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices:1"}),
-      dropdown({HTML:'',ansrL:choices['correct'],ID:"correct:1"})
+      essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-1"}),
+      dropdown({HTML:'',ansrL:choices['correct'],ID:"correct-1"})
     ]}),
     multiquestion({HTML:'',Arry:[
-      essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices:2"}),
-      dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct:2"})
+      essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-2"}),
+      dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct-2"})
     ]}),
     multiquestion({HTML:'',Arry:[
-      essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices:3"}),
-      dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct:3"})
+      essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-3"}),
+      dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct-3"})
     ]}),
     html({HTML:'<br>'}),
     question({type:'addchoicesbutton'}),
