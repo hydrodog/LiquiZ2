@@ -1,6 +1,6 @@
 //must have a blank option one for question of type dropdown
 
-standard('qTypes',['Drop Down', 'Multidrop-down', 'Number Fillin', 'Essay', 'Code']);
+standard('qTypes',['Single Response', 'Multiple Response', 'Number Fillin', 'Essay', 'Code']);
 
 standard('qTypes2',['','dropdowns', 'multidropdowns', 'numfillins', 'essays', 'codes']);//link to problem
 standard('correct',new solidText(['Correct','Incorrect']));
@@ -23,6 +23,7 @@ quiz({qList:[
   //question type choice determines which questionSet is shown
   questionSet({class:'dropdowns multidropdowns',qList:[
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your text here...',ID:"placeholderText"}),
+    checkbox({HTML:'',ansrL:['is drop-down'],ID:"isDropDown"}),
     html({HTML:'Choices:'}),
     multiquestion({HTML:'',Arry:[
       essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-1"}),
