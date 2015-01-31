@@ -5,7 +5,14 @@ standard('qTypes',['Single Response', 'Multiple Response', 'Number Fillin', 'Ess
 standard('qTypes2',['','dropdowns', 'multidropdowns', 'numfillins', 'essays', 'codes']);//link to problem
 standard('correct',new solidText(['Correct','Incorrect']));
 standard('incorrect',new solidText(['Incorrect','Correct']));
-possibleRegexes=new solidText(["No Checking","Mass","Length"]);
+possibleRegexes=new solidText(["No Checking","Mass","Length","New Pattern"]);
+possibleRegexesHideL = [];
+for(var key in possibleRegexes.placevalue){
+  if(key<possibleRegexes.placevalue.length-1){
+    possibleRegexesHideL.push("");
+  }
+}
+    possibleRegexesHideL.push("NewRegexMachine");
 
 quiz({qList:[
   
@@ -46,7 +53,12 @@ quiz({qList:[
     essay({HTML:'Base Code:',rows:3,cols:30,pHold:'Your base code here...',ID:"baseCode"})
   ]}),
   questionSet({class:'numfillins essays',qList:[
-    dropdown({HTML:'Regex Pattern',ansrL:possibleRegexes,ID:"regexPattern"}),
+    dropdown({HTML:'Regex Pattern',hideL:possibleRegexesHideL,ansrL:possibleRegexes,ID:"regexPattern"}),
+    questionSet({class:'NewRegexMachine',qList:[
+        essay({HTML:'Your New Regex:',rows:3,cols:30,pHold:new solidText('/yourRegex/g'),ID:"placeholderText"}),
+    question({type:'saveregexlocalbutton'}),
+    question({type:'saveregexglobalbutton'})
+    ]}),
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
   ]})
   
