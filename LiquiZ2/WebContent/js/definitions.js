@@ -743,7 +743,7 @@ function questionText(text){
 fills in Type[]() function properly
 
 */
-typeFromChoice={'Drop Down':'dropdown', 'Multidrop-down':'dropdownmultiple', 'Number Fillin':'number', 'Essay':'essay', 'Code':'code'};
+typeFromChoice={'Single Response':'dropdown', 'Multiple Response':'dropdownmultiple', 'Number Fillin':'number', 'Essay':'essay', 'Code':'code'};
 function paramSet (set,onThis,rename){
   if(set)
     onThis[rename] = set;
@@ -769,11 +769,28 @@ function editQuestion(stringObjID,quiz){
 
   for(var key in JSONobj){
     $(quiz).find('#'+key).find(".question").each(function(){
+      if(JSONobj[key].constructor.toString().indexOf("Array")!=-1 && $(this).is("form")){
+        console.log(JSONobj[key]);
+        console.log($(this).children());
+        var checked = $(this).find("input[type='checkbox']");
+           for(var i = 0; i < checked.length; i++){
+             if(JSONobj[key].indexOf($(checked[i]).val())!=-1){
+               $(checked[i]).prop("checked",true);
+             }
+           }
+      }
       if(JSONobj[key])
         $(this).val(JSONobj[key]);
       if($(this).is("select")){
         $(this).trigger("chosen:updated.chosen");
         $(this).trigger("change");
+      }else if($(this).is("form")){
+       var checked = $(this).find("input[type='radio']");
+           for(var i = 0; i < checked.length; i++){
+             if(JSONobj[key] == $(checked[i]).val()){
+               $(checked[i]).prop("checked",true);
+             }
+           } 
       }
     });
     
@@ -963,6 +980,26 @@ function blankQuiz(quiz){
         $(this).trigger("chosen:updated.chosen");
         $(this).trigger("change");
     }
+  });
+  $(quiz).find('select').each(function(){
+    var firstVal = $(this).find('option:first').val(),
+        thisVal = $(this).val();
+    if(firstVal!=thisVal){
+        $(this).val(firstVal?firstVal:false);
+        $(this).trigger("chosen:updated.chosen");
+        $(this).trigger("change");
+    }
+  });
+  $(quiz).find('form').each(function(){
+         if($(this).is('.checkbox')){
+           var checked = $(this).find("input[type='checkbox']:checked");
+           for(var i = 0; i < checked.length; i++){
+             $(checked[i]).prop("checked",false);
+           }
+         }else{
+           $(this).find("input[type='radio']:checked").prop("checked",false);
+         }
+     
   });
   //TODO: Radio and checkboxes.
 }
