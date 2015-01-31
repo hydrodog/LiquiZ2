@@ -62,6 +62,38 @@ function setTabIndex(ques,index){
   tabIndex++;
 }
 
+
+/*
+button that saves the regex so that it can be used for this quiz only
+*/
+saveregexlocalbutton = function(){
+  return buttonWithLabelAndOnClick("Save for this quiz",saveLocalRegex);
+}
+
+/*
+button that saves the regex so that it can be used for all future quizzes
+*/
+saveregexglobalbutton = function(){
+  return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
+}
+
+/*
+NOTE NO SERVER CONNECTION, BUT IT WILL SAVE TO
+LOCAL STORAGE
+actually saves regex to quiz
+*/
+function saveLocalRegex(e){
+  
+}
+
+/*
+NOTE NO SERVER CONNECTION, SO THE FOLLOWING IS A LIE!
+actually saves regex to server
+*/
+function saveGlobalRegex(e){
+  
+}
+
 /*
 This function returns a button that is used to add
 more choices to the drop down questions
@@ -69,7 +101,8 @@ more choices to the drop down questions
 addchoicesbutton = function(){
   var but = buttonWithLabelAndOnClick("Add Choice",buttonAddChoice);
   $(but).addClass('addChoice');
-  return but;}
+  return but;
+}
 
 /*
 generic make a button with a onclick
@@ -281,7 +314,8 @@ function showHideClassChangeCall(showHide){
   if(showHide[parseInt($(this).data("index"))])
       if(showHide[parseInt($(this).data("index"))].length > 0)
         $("."+showHide[parseInt($(this).data("index"))]).hide();
-      $("."+showHide[this.selectedIndex]).show();
+      if(showHide[this.selectedIndex].length>0)
+        $("."+showHide[this.selectedIndex]).show();
       $(this).data("index",""+this.selectedIndex);
 }
 
