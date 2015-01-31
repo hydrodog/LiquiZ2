@@ -4,6 +4,7 @@ blankQuiz() : Radio and checkboxes.
 quiz() : fair timer starting.
 code() : interact with java server to run code.
 setTabIndex() : insert at tabindex
+radio and checkbox for ids collide
 */
 
 //choices is the global object variable where reusable lists are stored
@@ -836,6 +837,12 @@ function sendQuestion(obj,quiz,overrideID){
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
+  if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
+    if(questionParams["type"]=="dropdown")
+      questionParams["type"]="radio";
+    else
+      questionParams["type"]="checkbox";
+  }
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
   
   var q = question(questionParams);
