@@ -4,13 +4,15 @@ blankQuiz() : Radio and checkboxes.
 quiz() : fair timer starting.
 code() : interact with java server to run code.
 setTabIndex() : insert at tabindex
-radio and checkbox for ids collide
 */
 
 //choices is the global object variable where reusable lists are stored
 var choices = {};
 //tabIndex is so that we can bounce from question to question using the tab button. tabIndex is basically a counter so that we can set the next index.
 var tabIndex = 1;
+
+//Sel IDs collided, this fixes it
+var selIDNoConflict = 0;
 
 //This is needed to store the show/hide lists until the end so we can hide everything!
 //This is for sections that need to be hidden unless certain choices are made.
@@ -557,7 +559,7 @@ radiocheckbox=function(quest) {
     var input = document.createElement("INPUT");
 
 	$(input).attr("name","sel");
-	$(input).attr("id","sel"+i);
+	$(input).attr("id","sel"+i+"no"+selIDNoConflict);
       $(input).attr("type",isMultiple?"checkbox":"radio");
 	$(input).attr("value",answerList[i]);
 	$(question).append(input);   
@@ -565,10 +567,11 @@ radiocheckbox=function(quest) {
     var label = document.createElement("LABEL");
     $(label).append(textObject(answerList[i]));
     $(label).append("<br>");
-    $(label).attr("for","sel"+i);
+    $(label).attr("for","sel"+i+"no"+selIDNoConflict);
     $(question).append(label);
     
   }
+  selIDNoConflict++;
   showHideClass(showHide);
     setTabIndex(question);
     return Q(quest,
