@@ -5,7 +5,7 @@ standard('qTypes',['Single Response', 'Multiple Response', 'Number Fillin', 'Ess
 standard('qTypes2',['','dropdowns', 'multidropdowns', 'numfillins', 'essays', 'codes']);//link to problem
 standard('correct',new solidText(['Correct','Incorrect']));
 standard('incorrect',new solidText(['Incorrect','Correct']));
-
+possibleRegexes=new solidText(["No Checking","Mass","Length"]);
 
 quiz({qList:[
   
@@ -46,6 +46,7 @@ quiz({qList:[
     essay({HTML:'Base Code:',rows:3,cols:30,pHold:'Your base code here...',ID:"baseCode"})
   ]}),
   questionSet({class:'numfillins essays',qList:[
+    dropdown({HTML:'Regex Pattern',ansrL:possibleRegexes,ID:"regexPattern"}),
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
   ]})
   
