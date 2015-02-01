@@ -4,6 +4,9 @@ blankQuiz() : Radio and checkboxes.
 quiz() : fair timer starting.
 code() : interact with java server to run code.
 setTabIndex() : insert at tabindex
+key down event for radio & checkboxes to make sure they accept enter as an option
+solidText() gets blanked on blank quiz fix, but make sure it supports images.
+
 */
 
 //choices is the global object variable where reusable lists are stored
