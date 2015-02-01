@@ -5,14 +5,18 @@ standard('qTypes',['Single Response', 'Multiple Response', 'Number Fillin', 'Ess
 standard('qTypes2',['','dropdowns', 'multidropdowns', 'numfillins', 'essays', 'codes']);//link to problem
 standard('correct',new solidText(['Correct','Incorrect']));
 standard('incorrect',new solidText(['Incorrect','Correct']));
-possibleRegexes=new solidText(["No Checking","Mass","Length","New Pattern"]);
+
+//need to pull from server
+possibleRegexes=new solidText(JSON.parse(localStorage.getItem("localRegexName")));
 possibleRegexesHideL = [];
+
+//Adds the new patter show hide as the last option
 for(var key in possibleRegexes.placevalue){
   if(key<possibleRegexes.placevalue.length-1){
     possibleRegexesHideL.push("");
   }
 }
-    possibleRegexesHideL.push("NewRegexMachine");
+possibleRegexesHideL.push("NewRegexMachine");
 
 quiz({qList:[
   
@@ -52,14 +56,19 @@ quiz({qList:[
   questionSet({class:'codes',qList:[
     essay({HTML:'Base Code:',rows:3,cols:30,pHold:'Your base code here...',ID:"baseCode"})
   ]}),
-  questionSet({class:'numfillins essays',qList:[
+  questionSet({class:'numfillins',qList:[
     dropdown({HTML:'Regex Pattern',hideL:possibleRegexesHideL,ansrL:possibleRegexes,ID:"regexPattern"}),
     questionSet({class:'NewRegexMachine',qList:[
-        essay({HTML:'Your New Regex:',rows:3,cols:30,pHold:new solidText('/yourRegex/g'),ID:"placeholderText"}),
-    question({type:'saveregexlocalbutton'}),
-    question({type:'saveregexglobalbutton'})
+        essay({HTML:'Pattern Name:',rows:3,cols:30,pHold:new solidText('Your Regex'),ID:"regexName"}),
+        essay({HTML:'Your New Regex:',rows:3,cols:30,pHold:new solidText('/yourRegex/g'),ID:"regexFillin"}),
+        question({type:'saveregexlocalbutton'}),
+        question({type:'saveregexglobalbutton'})
     ]}),
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
+  ]}),
+  questionSet({class:'essays',qList:[
+    essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
   ]})
+
   
   ],opts:{submit:"Save Question", isEditor:true, timed:false}});
