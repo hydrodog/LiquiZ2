@@ -78,20 +78,47 @@ saveregexglobalbutton = function(){
 }
 
 /*
-NOTE NO SERVER CONNECTION, BUT IT WILL SAVE TO
-LOCAL STORAGE
 actually saves regex to quiz
 */
 function saveLocalRegex(e){
-  
+  var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
+  var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
+  var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
+$(regexPattern).append(makeOption(0,true,[regexFillin.val()]))
+$(regexPattern).val(regexFillin.val());
+$(regexPattern).trigger("chosen:updated.chosen");
+$(regexPattern).trigger("change");
+    saveRegexToServer(regexName.val(),regexFillin.val());
+
 }
 
 /*
 NOTE NO SERVER CONNECTION, SO THE FOLLOWING IS A LIE!
+BUT IT WILL SAVE TOLOCAL STORAGE
 actually saves regex to server
 */
 function saveGlobalRegex(e){
-  
+  saveLocalRegex(e);
+  //saveRegexToServer($(e.target).parent().parent().find("#regexFillin").find('textarea').val());
+}
+
+/*
+save regex to local storage
+*/
+function saveRegexToServer (name,pattern){
+  pushThisToThatLS(name,"localRegexName");
+  pushThisToThatLS(pattern,"localRegexPattern");
+}
+
+/*
+pushes to a json array in local storage. Testing purposes mainly
+*/
+function pushThisToThatLS(pushThis, toThat){
+  var localValue = localStorage.getItem(toThat);
+  var currentPatterns =localValue?JSON.parse(localValue):[];
+  //if(currentPatterns.indexOf(pushThis)==-1)
+     currentPatterns.splice(0,0,pushThis);
+  localStorage.setItem(toThat,JSON.stringify(currentPatterns));
 }
 
 /*
@@ -311,10 +338,9 @@ This is called on the value change of a radio or drop down
 when that object must show or hide stuff
 */
 function showHideClassChangeCall(showHide){  
-  if(showHide[parseInt($(this).data("index"))])
-      if(showHide[parseInt($(this).data("index"))].length > 0)
+      if(showHide[parseInt($(this).data("index"))] && showHide[parseInt($(this).data("index"))].length > 0)
         $("."+showHide[parseInt($(this).data("index"))]).hide();
-      if(showHide[this.selectedIndex].length>0)
+      if(showHide[this.selectedIndex] && showHide[this.selectedIndex].length>0)
         $("."+showHide[this.selectedIndex]).show();
       $(this).data("index",""+this.selectedIndex);
 }
@@ -331,8 +357,16 @@ function showHideClass(question,showHide){
     };
   }
 }
+/*
 
-
+*/
+function makeOption(i,isSolid,answerList){
+  var option = document.createElement("OPTION");
+    if(i>0 || isSolid)
+      $(option).html(textObject(answerList[i]) +"&nbsp;");
+    $(option).attr("value",answerList[i]);
+    return option;
+}
 /*
 dropDown
 placeholder - does not accept placeholder.placevalue
@@ -379,13 +413,7 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   
   //adds the possible answers as 'options' in a 'select' element
   for(var i = 0; i < answerList.length; i++){
-    
-    var option = document.createElement("OPTION");
-    if(i>0 || isSolid)
-      $(option).html(textObject(answerList[i]) +"&nbsp;");
-    $(option).attr("value",answerList[i]);
-    $(question).append(option);   
-    
+        $(question).append(makeOption(i,isSolid,answerList));   
   }
   
   showHideClass(question,showHide);
@@ -1215,3 +1243,25 @@ function quiz(object){
   
   
 }
+/*
+
+*/
+function setUpJSONArray(array,name){
+  if(!localStorage.getItem(name))
+    localStorage.setItem(name,JSON.stringify(array));
+}
+
+/*
+in case regex has not yet been initialized
+*/
+function initRegexStorage(){
+  setUpJSONArray(["No Checking","Mass","Length","New Pattern"],"localRegexName");
+  setUpJSONArray(["/.*/g","/asdf/g","/sss/g","NOT_A_REGEX"],"localRegexPattern");
+}
+initRegexStorage();
+
+
+
+
+
+
