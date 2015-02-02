@@ -892,7 +892,7 @@ function dragBarVarSetUp(e,addclass){
       var container = $(dragBar).parent().parent()[0];
       var rect = container.getBoundingClientRect();
       offset.x=rect.left;
-      offset.y=rect.top+$(window).scrollTop();
+      offset.y=rect.top+$(newtab.window).scrollTop();
   if(addclass){
       mousePosition.x = e.pageX || e.clientX;
     mousePosition.y = e.pageY || e.clientY;
@@ -932,7 +932,8 @@ $(newtab.document).on("mouseup",function(){
   var matchRect = container.getBoundingClientRect(),closestRect=matchRect,closestObj=container,closestI=0;
   while(checkObj){
     if("replacement-index-"+i!=thisID){
-    checkObj = document.getElementById("replacement-index-"+i);
+    checkObj = $($fakeTest).find("#replacement-index-"+i)[0];
+      console.log(checkObj);
       if(checkObj){
         var thisRect = checkObj.getBoundingClientRect();
         var thisDistance = getDistance(thisRect,matchRect);
