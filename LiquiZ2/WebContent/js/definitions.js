@@ -9,8 +9,6 @@ solidText() gets blanked on blank quiz fix, but make sure it supports images.
 DRAGGING: make sure to scroll when elem is at the bottom or top of screen, also maybe add a index box to change without dragging.
 ADD delete button for regexes
 
-Get Order of questions from drag indexes
-
 */
 
 //choices is the global object variable where reusable lists are stored
@@ -972,6 +970,7 @@ $(newtab.document).on("mouseup",function(){
       
     }
     $(container).removeClass("moving");
+    $(container).css("width","auto");
           $(container).css("left",0);
           $(container).css("top",0);
   
