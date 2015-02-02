@@ -6,6 +6,8 @@ code() : interact with java server to run code.
 setTabIndex() : insert at tabindex
 key down event for radio & checkboxes to make sure they accept enter as an option
 solidText() gets blanked on blank quiz fix, but make sure it supports images.
+DRAGGING: make sure to scroll when elem is at the bottom or top of screen, also maybe add a index box to change without dragging.
+
 
 */
 
@@ -17,6 +19,11 @@ var tabIndex = 1;
 //Sel IDs collided, this fixes it
 var selIDNoConflict = 0;
 
+//this is for dragging, b/c we need global support
+var dragBar = null;
+var mousePosition = {x:-1,y:-1};
+var offset = {x:-1,y:-1};
+  
 //This is needed to store the show/hide lists until the end so we can hide everything!
 //This is for sections that need to be hidden unless certain choices are made.
 var showHideList=[];
@@ -599,6 +606,7 @@ returns a radio button question
 radiocheckbox=function(quest) {
     var placeholder = quest.pHold;
     var answerList = quest.ansrL;
+    answerList=answerList||[];
     answerList=answerList.placevalue?answerList.placevalue:answerList;
     var showHide = quest.hideL;
     var isMultiple = quest.isCheck;
@@ -873,6 +881,98 @@ function duplicateQuestion(stringObjID,quiz){
    var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
    sendQuestion(JSONobj,quiz);
 }
+
+/*
+sets up dragBar vars
+*/
+function dragBarVarSetUp(e,addclass){
+
+      var container = $(dragBar).parent().parent()[0];
+      var rect = container.getBoundingClientRect();
+      offset.x=rect.left;
+      offset.y=rect.top+$(window).scrollTop();
+  if(addclass){
+      mousePosition.x = e.pageX || e.clientX;
+    mousePosition.y = e.pageY || e.clientY;
+          $(container).css("width",$(container).width());
+
+      $(container).css("left",offset.x);
+      $(container).css("top",offset.y);
+      $(dragBar).parent().parent().addClass("moving");
+  }
+}
+/*
+Global Drag
+*/
+$(newtab.document).on("mousemove",function(e){
+  if(dragBar){
+    if(mousePosition.x < 0 || mousePosition.y < 0){
+    dragBarVarSetUp(e,true);
+
+    }else{
+      var container = $(dragBar).parent().parent()[0];
+      var currentPosition = {x:e.pageX || e.clientX,y:e.pageY || e.clientY};
+      offset.x+=currentPosition.x-mousePosition.x;
+      offset.y+=currentPosition.y-mousePosition.y;
+      console.log(offset);
+      mousePosition.x = e.pageX || e.clientX;
+      mousePosition.y = e.pageY || e.clientY;
+      $(container).css("left",offset.x);
+      $(container).css("top",offset.y);
+    }
+  }
+  });
+$(newtab.document).on("mouseup",function(){
+  if(dragBar){
+  var container = $(dragBar).parent().parent()[0];
+  var thisID = $(container).attr("id");
+  var i = 0, checkObj=true,shortestDistance = -1;
+  var matchRect = container.getBoundingClientRect(),closestRect=matchRect,closestObj=container;
+  while(checkObj){
+    if("replacement-index-"+i!=thisID){
+    checkObj = document.getElementById("replacement-index-"+i);
+      if(checkObj){
+        var thisRect = checkObj.getBoundingClientRect();
+        var thisDistance = getDistance(thisRect,matchRect);
+        if(shortestDistance<0 || shortestDistance>thisDistance){
+          shortestDistance=thisDistance;
+          closestRect=thisRect;
+          closestObj=checkObj;
+        }
+      }
+    }
+    i++;
+  }
+        console.log(closestObj);
+        console.log(matchRect);
+      console.log(thisRect);  
+    if((matchRect.top+matchRect.bottom)/2<(closestRect.top+closestRect.bottom)/2){
+      console.log("before");
+
+          $(closestObj).before(container);
+    }else{
+            console.log("after");
+
+          $(closestObj).after(container);
+
+    }
+    $(container).removeClass("moving");
+          $(container).css("left",0);
+          $(container).css("top",0);
+  
+  }
+    dragBar=null;
+  });
+/*
+gets the distance between the top left of two rects
+*/
+function getDistance(rect1,rect2){
+  var xd = rect1.left-rect2.left;
+  var yd = rect1.top-rect2.top;
+  return Math.sqrt(xd*xd+yd*yd);
+}
+
+
 /*
 This sends a generated question to the new tab/ window
 */
@@ -915,6 +1015,21 @@ function sendQuestion(obj,quiz,overrideID){
   
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
+  var dragQuestionBar = document.createElement("DIV");
+  
+  $(dragQuestionBar).on("mousedown",function(e){
+    mousePosition = {x:-1,y:-1};
+    offset = {x:-1,y:-1};
+    dragBar=dragQuestionBar;
+        dragBarVarSetUp(e);
+
+  });
+  
+  $(dragQuestionBar).addClass("dragBar");
+  
+    $(dragQuestionBar).html("&nbsp;");
+
+  
   var deleteBtn = buttonWithLabelAndOnClick("",function(){
       questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
       questionJSONsUIDs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
@@ -934,6 +1049,7 @@ function sendQuestion(obj,quiz,overrideID){
   });
   $(copyBtn).addClass("but copybut");
   
+  $(q).prepend(dragQuestionBar);
   $(q).append(copyBtn);
   $(q).append(editBtn);
   $(q).append(deleteBtn);
