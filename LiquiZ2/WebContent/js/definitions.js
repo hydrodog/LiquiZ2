@@ -7,7 +7,9 @@ setTabIndex() : insert at tabindex
 key down event for radio & checkboxes to make sure they accept enter as an option
 solidText() gets blanked on blank quiz fix, but make sure it supports images.
 DRAGGING: make sure to scroll when elem is at the bottom or top of screen, also maybe add a index box to change without dragging.
+ADD delete button for regexes
 
+Get Order of questions from drag indexes
 
 */
 
@@ -912,7 +914,7 @@ $(newtab.document).on("mousemove",function(e){
     }else{
       var container = $(dragBar).parent().parent()[0];
       var currentPosition = {x:e.pageX || e.clientX,y:e.pageY || e.clientY};
-      offset.x+=currentPosition.x-mousePosition.x;
+      //offset.x+=currentPosition.x-mousePosition.x;
       offset.y+=currentPosition.y-mousePosition.y;
       console.log(offset);
       mousePosition.x = e.pageX || e.clientX;
@@ -927,7 +929,7 @@ $(newtab.document).on("mouseup",function(){
   var container = $(dragBar).parent().parent()[0];
   var thisID = $(container).attr("id");
   var i = 0, checkObj=true,shortestDistance = -1;
-  var matchRect = container.getBoundingClientRect(),closestRect=matchRect,closestObj=container;
+  var matchRect = container.getBoundingClientRect(),closestRect=matchRect,closestObj=container,closestI=0;
   while(checkObj){
     if("replacement-index-"+i!=thisID){
     checkObj = document.getElementById("replacement-index-"+i);
@@ -938,23 +940,35 @@ $(newtab.document).on("mouseup",function(){
           shortestDistance=thisDistance;
           closestRect=thisRect;
           closestObj=checkObj;
+          closestI=i;
         }
       }
     }
     i++;
   }
-        console.log(closestObj);
-        console.log(matchRect);
-      console.log(thisRect);  
+        
+    
+    
+    if(closestObj!=container){
+    var index = questionJSONsUIDs.indexOf(parseInt(thisID.replace("replacement-index-","")));
+    var index2=index;
+      
     if((matchRect.top+matchRect.bottom)/2<(closestRect.top+closestRect.bottom)/2){
-      console.log("before");
 
           $(closestObj).before(container);
+           index2 = questionJSONsUIDs.indexOf(closestI);
+
+    
+      
     }else{
-            console.log("after");
+           index2 = questionJSONsUIDs.indexOf(closestI)+1;
 
           $(closestObj).after(container);
 
+    }
+    questionJSONs.splice(index2,0,questionJSONs.splice(index,1)[0]);
+    questionJSONsUIDs.splice(index2,0,questionJSONsUIDs.splice(index,1)[0]);
+      
     }
     $(container).removeClass("moving");
           $(container).css("left",0);
@@ -1363,7 +1377,7 @@ function quiz(object){
   
 }
 /*
-
+sets up an array to a named localStorage space
 */
 function setUpJSONArray(array,name){
   if(!localStorage.getItem(name))
