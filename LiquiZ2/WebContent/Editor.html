@@ -15,52 +15,50 @@
     <div id="top_bar">
       <img src="./assets/img/title_logo.png"/>
     </div>
-        <div id="top_bar_fill">
+    <div id="top_bar_fill">
     </div>
     
       <script>
-          var newtab = window.open("","editor");
+        var newtab = window.open("","editor");
 
         if(!newtab || newtab.closed || typeof newtab.closed=='undefined') 
-{ 
-     //POPUP BLOCKED
-newtab=this;
-  alert("Your experience may be better if you enable popups and reload this page.");
-}else{
-        
-        
-        $(newtab.document.body).empty();
-        //$(newtab.document.body).append("<div id='fakeTest'></div>");
-      $(newtab.document).find('head').empty();
-      $(newtab.document).find('head').append(
-        '<meta charset="utf-8">'+
-        '<title>SITQuiz.</title>'+
-        '<link rel="stylesheet" href="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/css/chosen.css">'+
-        '<link rel="stylesheet" href="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/css/main.css">'+
-        '<script src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/js/jq.js" type="text/javascript">'+
-        '</sc'+'ript><script src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/js/chosen_jquery.js" type="text/javascript">'
-      );
-  $(newtab.document.body).append(
-        '<div id="top_bar">'+
-        '<img src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/assets/img/title_logo.png"/>'+
-        '</div> <div id="top_bar_fill"></div>');
-}
+          { 
+          //POPUP BLOCKED
+          newtab=this;
+          alert("Your experience may be better if you enable popups and reload this page.");
+        }else{
+          $(newtab.document.body).empty();
+          //$(newtab.document.body).append("<div id='fakeTest'></div>");
+          $(newtab.document).find('head').empty();
+          $(newtab.document).find('head').append(
+            '<meta charset="utf-8">'+
+            '<title>SITQuiz.</title>'+
+            '<link rel="stylesheet" href="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/css/chosen.css">'+
+            '<link rel="stylesheet" href="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/css/main.css">'+
+            '<script src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/js/jq.js" type="text/javascript">'+
+            '</sc'+'ript><script src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/js/chosen_jquery.js" type="text/javascript">'
+          );
+          $(newtab.document.body).append(
+            '<div id="top_bar">'+
+            '<img src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/assets/img/title_logo.png"/>'+
+            '</div> <div id="top_bar_fill"></div>');
+        }
         $(newtab.document.body).append(
         "<div id = 'fakeTest' class='quiz'>"+
         '<button id="submit" tabindex="14">Submit Quiz</button>'+
         "</div>"
-
-      );
-            var $fakeTest = $(newtab.document.body).find('#fakeTest');
-                        var $submit = $(newtab.document.body).find('#submit');
+        );
+        
+        var $fakeTest = $(newtab.document.body).find('#fakeTest');
+        var $submit = $(newtab.document.body).find('#submit');
 
     </script>
-        <script type="text/javascript" src="./js/questionsEditor.js"></script>
+    <script type="text/javascript" src="./js/questionsEditor.js"></script>
     <script type="text/javascript" src="./js/chosenSubmit.js"></script>  
-     <script>
-    $(newtab.document.body).find('#submit').on("click",function(){
-       SUBMIT_ONE_QUIZ($(newtab.document.body).find('#fakeTest')[0]);
-    });
+    <script>
+      $(newtab.document.body).find('#submit').on("click",function(){
+        SUBMIT_ONE_QUIZ($(newtab.document.body).find('#fakeTest')[0]);
+      });
     </script>
   </body>
 </html>

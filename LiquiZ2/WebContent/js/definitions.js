@@ -32,7 +32,7 @@ var showHideList=[];
 var questionJSONs = [];
 //when we want to edit or delete a question,
 //we have to make sure that we don't edit
-//a quesiton that stringifies in a similar fashion.
+//a question that stringifies in a similar fashion.
 var questionJSONsUIDs = [], questionJSONsUIDsCounter=0;
 //This is in case we want to edit a question, we have to know its index
 var questionEditingIndex = -1;//-1 = no question
@@ -94,7 +94,7 @@ function saveLocalRegex(e){
   var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
   var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
   var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
-$(regexPattern).append(makeOption(0,true,[regexFillin.val()]))
+$(regexPattern).append(makeOption(0,true,[regexFillin.val()]));
 $(regexPattern).val(regexFillin.val());
 $(regexPattern).trigger("chosen:updated.chosen");
 $(regexPattern).trigger("change");
