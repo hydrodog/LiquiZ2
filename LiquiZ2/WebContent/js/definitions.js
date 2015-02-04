@@ -23,7 +23,7 @@ var selIDNoConflict = 0;
 var dragBar = null;
 var mousePosition = {x:-1,y:-1};
 var offset = {x:-1,y:-1};
-  
+
 //This is needed to store the show/hide lists until the end so we can hide everything!
 //This is for sections that need to be hidden unless certain choices are made.
 var showHideList=[];
@@ -32,7 +32,7 @@ var showHideList=[];
 var questionJSONs = [];
 //when we want to edit or delete a question,
 //we have to make sure that we don't edit
-//a question that stringifies in a similar fashion.
+//a quesiton that stringifies in a similar fashion.
 var questionJSONsUIDs = [], questionJSONsUIDsCounter=0;
 //This is in case we want to edit a question, we have to know its index
 var questionEditingIndex = -1;//-1 = no question
@@ -67,7 +67,7 @@ value you wish to set.
 function setTabIndex(ques,index){
   //TODO: make sure we can insert something at a tabindex (run through with a $().each() and update)
   if(!index)
-      index = tabIndex;
+    index = tabIndex;
   $(ques).attr("tabindex",""+tabIndex);
   tabIndex++;
 }
@@ -79,28 +79,28 @@ button that saves the regex so that it can be used for this quiz only
 saveregexlocalbutton = function(){
   return buttonWithLabelAndOnClick("Save for this quiz",saveLocalRegex);
 }
-
-/*
-button that saves the regex so that it can be used for all future quizzes
-*/
-saveregexglobalbutton = function(){
-  return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
-}
-
-/*
-actually saves regex to quiz
-*/
-function saveLocalRegex(e){
-  var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
-  var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
-  var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
-$(regexPattern).append(makeOption(0,true,[regexFillin.val()]));
-$(regexPattern).val(regexFillin.val());
-$(regexPattern).trigger("chosen:updated.chosen");
-$(regexPattern).trigger("change");
-    saveRegexToServer(regexName.val(),regexFillin.val());
-
-}
+  
+  /*
+  button that saves the regex so that it can be used for all future quizzes
+  */
+  saveregexglobalbutton = function(){
+    return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
+  }
+    
+    /*
+    actually saves regex to quiz
+    */
+    function saveLocalRegex(e){
+      var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
+      var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
+      var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
+      $(regexPattern).append(makeOption(0,true,[regexFillin.val()]))
+        $(regexPattern).val(regexFillin.val());
+      $(regexPattern).trigger("chosen:updated.chosen");
+      $(regexPattern).trigger("change");
+      saveRegexToServer(regexName.val(),regexFillin.val());
+      
+    }
 
 /*
 NOTE NO SERVER CONNECTION, SO THE FOLLOWING IS A LIE!
@@ -127,7 +127,7 @@ function pushThisToThatLS(pushThis, toThat){
   var localValue = localStorage.getItem(toThat);
   var currentPatterns =localValue?JSON.parse(localValue):[];
   //if(currentPatterns.indexOf(pushThis)==-1)
-     currentPatterns.splice(0,0,pushThis);
+  currentPatterns.splice(0,0,pushThis);
   localStorage.setItem(toThat,JSON.stringify(currentPatterns));
 }
 
@@ -140,27 +140,27 @@ addchoicesbutton = function(){
   $(but).addClass('addChoice');
   return but;
 }
-
-/*
-generic make a button with a onclick
-*/
-buttonWithLabelAndOnClick = function(label,onclick){
-  var button = document.createElement("BUTTON");
-  $(button).text(label);
-  $(button).on("click",onclick);
-  setTabIndex(button);
-  return button;
-}
-
-/*
-This function removes choices and is called on click of
-the removechoicebutton() object
-*/
-function buttonRemoveChoice (e){
-  var childs = $(e.target).parent().find('.multiquestion');
-  if(childs.length>0)
-  $(childs[childs.length-1]).remove();
-}
+  
+  /*
+  generic make a button with a onclick
+  */
+  buttonWithLabelAndOnClick = function(label,onclick){
+    var button = document.createElement("BUTTON");
+    $(button).text(label);
+    $(button).on("click",onclick);
+    setTabIndex(button);
+    return button;
+  }
+    
+    /*
+    This function removes choices and is called on click of
+    the removechoicebutton() object
+    */
+    function buttonRemoveChoice (e){
+      var childs = $(e.target).parent().find('.multiquestion');
+      if(childs.length>0)
+        $(childs[childs.length-1]).remove();
+    }
 
 /*
 This function returns a button that is used to remove
@@ -171,43 +171,43 @@ removechoicesbutton = function(){
   $(but).addClass('removeChoice');
   return but;
 }
-
-/*
-this was for the infinite questions which should 
-be done later and returns a question element along
-with any children elements needed
-*/
-var construct = function (obj,i){
-  var temp = {};
   
-  for(var key in obj) {
-    if(obj.hasOwnProperty(key)) {
-      if(obj[key].change_me){
-        temp[key] = construct(obj[key],i);
-      }else{
-        temp[key] = clone(obj[key],i);
+  /*
+  this was for the infinite questions which should 
+  be done later and returns a question element along
+  with any children elements needed
+  */
+  var construct = function (obj,i){
+    var temp = {};
+    
+    for(var key in obj) {
+      if(obj.hasOwnProperty(key)) {
+        if(obj[key].change_me){
+          temp[key] = construct(obj[key],i);
+        }else{
+          temp[key] = clone(obj[key],i);
+        }
       }
     }
-  }
-  return question(temp);
-};
+    return question(temp);
+  };
 
 /*
 This purely clones an object, but does work with
 the construct function
 */
 function clone(obj) {
-    if(obj == null || typeof(obj) != 'object')
-        return obj;
-
-    var temp = [];// changed
-
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key)) {
-            temp[key] = clone(obj[key]);
-        }
+  if(obj == null || typeof(obj) != 'object')
+    return obj;
+  
+  var temp = [];// changed
+  
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      temp[key] = clone(obj[key]);
     }
-    return temp;
+  }
+  return temp;
 }
 
 /*
@@ -348,11 +348,11 @@ This is called on the value change of a radio or drop down
 when that object must show or hide stuff
 */
 function showHideClassChangeCall(showHide){  
-      if(showHide[parseInt($(this).data("index"))] && showHide[parseInt($(this).data("index"))].length > 0)
-        $("."+showHide[parseInt($(this).data("index"))]).hide();
-      if(showHide[this.selectedIndex] && showHide[this.selectedIndex].length>0)
-        $("."+showHide[this.selectedIndex]).show();
-      $(this).data("index",""+this.selectedIndex);
+  if(showHide[parseInt($(this).data("index"))] && showHide[parseInt($(this).data("index"))].length > 0)
+    $("."+showHide[parseInt($(this).data("index"))]).hide();
+  if(showHide[this.selectedIndex] && showHide[this.selectedIndex].length>0)
+    $("."+showHide[this.selectedIndex]).show();
+  $(this).data("index",""+this.selectedIndex);
 }
 
 /*
@@ -372,10 +372,10 @@ function showHideClass(question,showHide){
 */
 function makeOption(i,isSolid,answerList){
   var option = document.createElement("OPTION");
-    if(i>0 || isSolid)
-      $(option).html(textObject(answerList[i]) +"&nbsp;");
-    $(option).attr("value",answerList[i]);
-    return option;
+  if(i>0 || isSolid)
+    $(option).html(textObject(answerList[i]) +"&nbsp;");
+  $(option).attr("value",answerList[i]);
+  return option;
 }
 /*
 dropDown
@@ -388,9 +388,9 @@ returns the created select (drop down) html element
 */
 function  dropDown(placeholder,answerList,showHide,isMultiple){
   if(!answerList) return;
-  if(typeof answerList == 'string'){
-    answerList = choices[answerList];
-  }
+    if(typeof answerList == 'string'){
+      answerList = choices[answerList];
+    }
   answerList=clone(answerList);
   if(typeof showHide == 'string'){
     showHide = choices[showHide];
@@ -403,7 +403,7 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   }
   var question = document.createElement("SELECT");
   $(question).addClass("question");
-
+  
   //placeholder
   $(question).attr("data-placeholder",placeholder||"Pick an Answer...");
   //stuff to make chosen recoginze this
@@ -423,13 +423,13 @@ function  dropDown(placeholder,answerList,showHide,isMultiple){
   
   //adds the possible answers as 'options' in a 'select' element
   for(var i = 0; i < answerList.length; i++){
-        $(question).append(makeOption(i,isSolid,answerList));   
+    $(question).append(makeOption(i,isSolid,answerList));   
   }
   
   showHideClass(question,showHide);
   
   setTabIndex(question);
-
+  
   return question;
 }
 
@@ -448,21 +448,21 @@ dropdownmultiple - select list multiple response
 returns a series question set
 */
 series=function(question){
-
+  
   var questionList = [];
   for(var i = 0; i < 10; i++){
     questionList.push(questionsFromText(question.qText,i));
   }
   
-return Q(question,
-         questionSet('series',questionList));  
+  return Q(question,
+           questionSet('series',questionList));  
 };
 
 /*
 returns a number fillin question
 */
 number=function(question){
-
+  
   return Q(question,
            textArea(1,question.cols,question.pHold||"","number"));;
   
@@ -483,9 +483,9 @@ multiquestion=function(quest){
   $(container).addClass('multiquestion');
   
   //if we have any questions in object format, we make them into divs.
-    for(var i = 0; i < quest.MakeArry.length; i++){
-        quest.Arry.push(question(quest.MakeArry[i]));
-    }
+  for(var i = 0; i < quest.MakeArry.length; i++){
+    quest.Arry.push(question(quest.MakeArry[i]));
+  }
   
   
   //adds question to multiquestion (to be added to the quiz)
@@ -511,8 +511,8 @@ multiquestion=function(quest){
     
   }
   
-      questionSuper(container,quest);
-
+  questionSuper(container,quest);
+  
   //make sure we can read the answer later (for recursion if desired)
   return container;
   
@@ -527,8 +527,8 @@ html=function(question){
   //gen question text
   $(container).html( question.HTML);
   $(container).addClass("nonquestion");
-    questionSuper(container,question);
-
+  questionSuper(container,question);
+  
   
   //for multiquestions
   return container;
@@ -540,7 +540,7 @@ returns a
 code question
 */
 code=function(question){
-
+  
   
   //generate entire Object div
   var container = Q(question,
@@ -566,8 +566,8 @@ code=function(question){
   $(compile).text("compile");
   $(compile).addClass("button compile");
   $(container).append(compile);
-      questionSuper(container,question);
-
+  questionSuper(container,question);
+  
   return container;   
   
   
@@ -594,61 +594,69 @@ dropdown=function(question){
 returns a dropdown with multiple selection 
 */
 dropdownmultiple=function(question){
-
+  
   return Q(question,
            dropDown(question.pHold,question.ansrL,question.hideL,true));;
   
 };
 
+function checkToggleKeyDown(e){
+  if(e.which == 13){
+    $(this).prop("checked",!$(this).is(":checked"));
+  }
+}
+
+
 /*
 returns a radio button question
 */
 radiocheckbox=function(quest) {
-    var placeholder = quest.pHold;
-    var answerList = quest.ansrL;
-    answerList=answerList||[];
-    answerList=answerList.placevalue?answerList.placevalue:answerList;
-    var showHide = quest.hideL;
-    var isMultiple = quest.isCheck;
-    if(typeof answerList == 'string'){
-	answerList = choices[answerList];
-    }
-    if(typeof showHide == 'string'){
-	showHide = choices[showHide];
-    }
-    var question = document.createElement("FORM");
-    if(isMultiple){
-	//for CSS  
-	$(question).addClass("checkbox");
-    }else{
-	//for CSS
-	$(question).addClass("radio");
-    }
+  var placeholder = quest.pHold;
+  var answerList = quest.ansrL;
+  answerList=answerList||[];
+  answerList=answerList.placevalue?answerList.placevalue:answerList;
+  var showHide = quest.hideL;
+  var isMultiple = quest.isCheck;
+  if(typeof answerList == 'string'){
+    answerList = choices[answerList];
+  }
+  if(typeof showHide == 'string'){
+    showHide = choices[showHide];
+  }
+  var question = document.createElement("FORM");
+  if(isMultiple){
+    //for CSS  
+    $(question).addClass("checkbox");
+  }else{
+    //for CSS
+    $(question).addClass("radio");
+  }
   
-    
-    //adds the possible answers as 'input' inside the 'form' element
-    for(var i = 0; i < answerList.length; i++){
+  
+  //adds the possible answers as 'input' inside the 'form' element
+  for(var i = 0; i < answerList.length; i++){
     
     var input = document.createElement("INPUT");
-
-	$(input).attr("name","sel");
-	$(input).attr("id","sel"+i+"no"+selIDNoConflict);
-      $(input).attr("type",isMultiple?"checkbox":"radio");
-	$(input).attr("value",answerList[i]);
-	$(question).append(input);   
-      
+    
+    $(input).attr("name","sel");
+    $(input).attr("id","sel"+i+"no"+selIDNoConflict);
+    $(input).attr("type",isMultiple?"checkbox":"radio");
+    $(input).attr("value",answerList[i]);
+    $(question).append(input);   
+    
     var label = document.createElement("LABEL");
     $(label).append(textObject(answerList[i]));
     $(label).append("<br>");
     $(label).attr("for","sel"+i+"no"+selIDNoConflict);
     $(question).append(label);
-    
+    $(input).on("keydown",checkToggleKeyDown);
+    $(input).on("focus",function(){  console.log("SDF");});
   }
   selIDNoConflict++;
   showHideClass(showHide);
-    setTabIndex(question);
-    return Q(quest,
-                    question);
+  setTabIndex(question);
+  return Q(quest,
+           question);
   //return container;
 };
 
@@ -656,38 +664,38 @@ radiocheckbox=function(quest) {
 returns a radio elem
 */
 radio = function(quest) {
-    quest.isCheck = false;
-    return radiocheckbox(quest);
+  quest.isCheck = false;
+  return radiocheckbox(quest);
 }
-
-/*
-returns a checkbox elem
-*/
-checkbox = function(quest) {
+  
+  /*
+  returns a checkbox elem
+  */
+  checkbox = function(quest) {
     quest.isCheck = true;
     return radiocheckbox(quest);
-}
-
-
-
-/*
-Eventually I plan to use json and each array in json becomes an object so
-[object,[object2, ...],[object3,[object4,...]...]...]
-would make something like
-<object>
-<object2>
-...
-</object2>
-<object3>
-<object4>
-...
-</object4>
-...
-</object3>
-...
-</object>
-*/
-choices.nums=['0','1','2','3','4','5','6','7','8','9'];
+  }
+    
+    
+    
+    /*
+    Eventually I plan to use json and each array in json becomes an object so
+    [object,[object2, ...],[object3,[object4,...]...]...]
+    would make something like
+    <object>
+    <object2>
+    ...
+    </object2>
+    <object3>
+    <object4>
+    ...
+    </object4>
+    ...
+    </object3>
+    ...
+    </object>
+    */
+    choices.nums=['0','1','2','3','4','5','6','7','8','9'];
 choices.nums.repeats=true;
 
 /*
@@ -782,16 +790,16 @@ function constructorObj(object){
 makes sure that images are displayed properly
 */
 function textObject(text){
-if(text.url){
-	    text=text.url;
-	    if(text.length>0){
-		    return "<img src='"+text+"' />";
-	    }
-	}else{
-	    if(text.length>0){
-            return text;
-        }
-	}
+  if(text.url){
+    text=text.url;
+    if(text.length>0){
+      return "<img src='"+text+"' />";
+    }
+  }else{
+    if(text.length>0){
+      return text;
+    }
+  }
 }
 
 /*
@@ -803,10 +811,10 @@ else fills span with html from 'text'
 function questionText(text){
   if(text){
     var questionTextContainer;
-
-      questionTextContainer = document.createElement("PRE");
-      $(questionTextContainer).html(textObject(text));
-
+    
+    questionTextContainer = document.createElement("PRE");
+    $(questionTextContainer).html(textObject(text));
+    
     $(questionTextContainer).addClass("HTML");
     $(questionTextContainer).addClass("nonquestion");
     
@@ -830,9 +838,9 @@ function paramSet (set,onThis,rename){
 sets up everything for question editing
 */
 function editQuestion(stringObjID,quiz){
- $(quiz).find("#saveAsNewQuestion").show();
+  $(quiz).find("#saveAsNewQuestion").show();
   questionEditingIndex=stringObjID;
-   var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+  var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
   blankQuiz(quiz);
   var highnum = 3;
   for(var key in JSONobj){
@@ -843,18 +851,16 @@ function editQuestion(stringObjID,quiz){
     }
   }
   makeChoiceCount(highnum,quiz);
-
+  
   for(var key in JSONobj){
     $(quiz).find('#'+key).find(".question").each(function(){
       if(JSONobj[key].constructor.toString().indexOf("Array")!=-1 && $(this).is("form")){
-        console.log(JSONobj[key]);
-        console.log($(this).children());
         var checked = $(this).find("input[type='checkbox']");
-           for(var i = 0; i < checked.length; i++){
-             if(JSONobj[key].indexOf($(checked[i]).val())!=-1){
-               $(checked[i]).prop("checked",true);
-             }
-           }
+        for(var i = 0; i < checked.length; i++){
+          if(JSONobj[key].indexOf($(checked[i]).val())!=-1){
+            $(checked[i]).prop("checked",true);
+          }
+        }
       }
       if(JSONobj[key])
         $(this).val(JSONobj[key]);
@@ -862,12 +868,12 @@ function editQuestion(stringObjID,quiz){
         $(this).trigger("chosen:updated.chosen");
         $(this).trigger("change");
       }else if($(this).is("form")){
-       var checked = $(this).find("input[type='radio']");
-           for(var i = 0; i < checked.length; i++){
-             if(JSONobj[key] == $(checked[i]).val()){
-               $(checked[i]).prop("checked",true);
-             }
-           } 
+        var checked = $(this).find("input[type='radio']");
+        for(var i = 0; i < checked.length; i++){
+          if(JSONobj[key] == $(checked[i]).val()){
+            $(checked[i]).prop("checked",true);
+          }
+        } 
       }
     });
     
@@ -878,27 +884,27 @@ function editQuestion(stringObjID,quiz){
 duplicates a question held in JSON storage
 */
 function duplicateQuestion(stringObjID,quiz){
-   var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
-   sendQuestion(JSONobj,quiz);
+  var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+  sendQuestion(JSONobj,quiz);
 }
 
 /*
 sets up dragBar vars
 */
 function dragBarVarSetUp(e,addclass){
-
-      var container = $(dragBar).parent().parent()[0];
-      var rect = container.getBoundingClientRect();
-      offset.x=rect.left;
-      offset.y=rect.top+$(newtab.window).scrollTop();
+  
+  var container = $(dragBar).parent().parent()[0];
+  var rect = container.getBoundingClientRect();
+  offset.x=rect.left;
+  offset.y=rect.top+$(newtab.window).scrollTop();
   if(addclass){
-      mousePosition.x = e.pageX || e.clientX;
+    mousePosition.x = e.pageX || e.clientX;
     mousePosition.y = e.pageY || e.clientY;
-          $(container).css("width",$(container).width());
-
-      $(container).css("left",offset.x);
-      $(container).css("top",offset.y);
-      $(dragBar).parent().parent().addClass("moving");
+    $(container).css("width",$(container).width());
+    
+    $(container).css("left",offset.x);
+    $(container).css("top",offset.y);
+    $(dragBar).parent().parent().addClass("moving");
   }
 }
 /*
@@ -907,76 +913,74 @@ Global Drag
 $(newtab.document).on("mousemove",function(e){
   if(dragBar){
     if(mousePosition.x < 0 || mousePosition.y < 0){
-    dragBarVarSetUp(e,true);
-
+      dragBarVarSetUp(e,true);
+      
     }else{
       var container = $(dragBar).parent().parent()[0];
       var currentPosition = {x:e.pageX || e.clientX,y:e.pageY || e.clientY};
       //offset.x+=currentPosition.x-mousePosition.x;
       offset.y+=currentPosition.y-mousePosition.y;
-      console.log(offset);
       mousePosition.x = e.pageX || e.clientX;
       mousePosition.y = e.pageY || e.clientY;
       $(container).css("left",offset.x);
       $(container).css("top",offset.y);
     }
   }
-  });
+});
 $(newtab.document).on("mouseup",function(){
   if(dragBar){
-  var container = $(dragBar).parent().parent()[0];
-  var thisID = $(container).attr("id");
-  var i = 0, checkObj=true,shortestDistance = -1;
-  var matchRect = container.getBoundingClientRect(),closestRect=matchRect,closestObj=container,closestI=0;
-  while(checkObj){
-    if("replacement-index-"+i!=thisID){
-    checkObj = $($fakeTest).find("#replacement-index-"+i)[0];
-      console.log(checkObj);
-      if(checkObj){
-        var thisRect = checkObj.getBoundingClientRect();
-        var thisDistance = getDistance(thisRect,matchRect);
-        if(shortestDistance<0 || shortestDistance>thisDistance){
-          shortestDistance=thisDistance;
-          closestRect=thisRect;
-          closestObj=checkObj;
-          closestI=i;
+    var container = $(dragBar).parent().parent()[0];
+    var thisID = $(container).attr("id");
+    var i = 0, checkObj=true,shortestDistance = -1;
+    var matchRect = container.getBoundingClientRect(),closestRect=matchRect,closestObj=container,closestI=0;
+    while(checkObj){
+      if("replacement-index-"+i!=thisID){
+        checkObj = $($fakeTest).find("#replacement-index-"+i)[0];
+        if(checkObj){
+          var thisRect = checkObj.getBoundingClientRect();
+          var thisDistance = getDistance(thisRect,matchRect);
+          if(shortestDistance<0 || shortestDistance>thisDistance){
+            shortestDistance=thisDistance;
+            closestRect=thisRect;
+            closestObj=checkObj;
+            closestI=i;
+          }
         }
       }
+      i++;
     }
-    i++;
-  }
-        
+    
     
     
     if(closestObj!=container){
-    var index = questionJSONsUIDs.indexOf(parseInt(thisID.replace("replacement-index-","")));
-    var index2=index;
+      var index = questionJSONsUIDs.indexOf(parseInt(thisID.replace("replacement-index-","")));
+      var index2=index;
       
-    if((matchRect.top+matchRect.bottom)/2<(closestRect.top+closestRect.bottom)/2){
-
-          $(closestObj).before(container);
-           index2 = questionJSONsUIDs.indexOf(closestI);
-
-    
-      
-    }else{
-           index2 = questionJSONsUIDs.indexOf(closestI)+1;
-
-          $(closestObj).after(container);
-
-    }
-    questionJSONs.splice(index2,0,questionJSONs.splice(index,1)[0]);
-    questionJSONsUIDs.splice(index2,0,questionJSONsUIDs.splice(index,1)[0]);
+      if((matchRect.top+matchRect.bottom)/2<(closestRect.top+closestRect.bottom)/2){
+        
+        $(closestObj).before(container);
+        index2 = questionJSONsUIDs.indexOf(closestI);
+        
+        
+        
+      }else{
+        index2 = questionJSONsUIDs.indexOf(closestI)+1;
+        
+        $(closestObj).after(container);
+        
+      }
+      questionJSONs.splice(index2,0,questionJSONs.splice(index,1)[0]);
+      questionJSONsUIDs.splice(index2,0,questionJSONsUIDs.splice(index,1)[0]);
       
     }
     $(container).removeClass("moving");
     $(container).css("width","auto");
-          $(container).css("left",0);
-          $(container).css("top",0);
-  
+    $(container).css("left",0);
+    $(container).css("top",0);
+    
   }
-    dragBar=null;
-  });
+  dragBar=null;
+});
 /*
 gets the distance between the top left of two rects
 */
@@ -996,8 +1000,8 @@ function sendQuestion(obj,quiz,overrideID){
   
   var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
   if(!overrideID && overrideID !== 0){
-  questionJSONs.push(JSON.stringify(obj));
-  questionJSONsUIDs.push(stringObjID);
+    questionJSONs.push(JSON.stringify(obj));
+    questionJSONsUIDs.push(stringObjID);
   }else{
     questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1,JSON.stringify(obj));
   }
@@ -1005,21 +1009,20 @@ function sendQuestion(obj,quiz,overrideID){
   var i = 1;
   for(var key in obj){
     if(key.indexOf("choices-")==0){
-    if(i == 1){
-      questionParams.ansrL = [];
-      questionParams.correctL = [];
-    }
-    questionParams.ansrL.push(obj[key]);
-    var correct = obj[key].replace("choices-","correct-");
-    questionParams.correctL.push(correct);
-    
-    i++;
+      if(i == 1){
+        questionParams.ansrL = [];
+        questionParams.correctL = [];
+      }
+      questionParams.ansrL.push(obj[key]);
+      var correct = obj[key].replace("choices-","correct-");
+      questionParams.correctL.push(correct);
+      
+      i++;
     }
   }
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
-  
   if(obj["questionType"]=="dropdown"||obj["questionType"]=="dropdownmultiple"){
   if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
     if(questionParams["type"]=="dropdown")
@@ -1038,30 +1041,30 @@ function sendQuestion(obj,quiz,overrideID){
     mousePosition = {x:-1,y:-1};
     offset = {x:-1,y:-1};
     dragBar=dragQuestionBar;
-        dragBarVarSetUp(e);
-
+    dragBarVarSetUp(e);
+    
   });
   
   $(dragQuestionBar).addClass("dragBar");
   
-    $(dragQuestionBar).html("&nbsp;");
-
+  $(dragQuestionBar).html("&nbsp;");
+  
   
   var deleteBtn = buttonWithLabelAndOnClick("",function(){
-      questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
-      questionJSONsUIDs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
-      
-      $(qParent).remove();
+    questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
+    questionJSONsUIDs.splice(questionJSONsUIDs.indexOf(stringObjID),1);
+    
+    $(qParent).remove();
     
   });
   $(deleteBtn).addClass("but delbut");
   var editBtn = buttonWithLabelAndOnClick("",function(){
-      editQuestion(stringObjID,quiz);
+    editQuestion(stringObjID,quiz);
     
   });
   $(editBtn).addClass("but editbut");
   var copyBtn = buttonWithLabelAndOnClick("",function(){
-      duplicateQuestion(stringObjID,quiz);
+    duplicateQuestion(stringObjID,quiz);
     
   });
   $(copyBtn).addClass("but copybut");
@@ -1070,13 +1073,13 @@ function sendQuestion(obj,quiz,overrideID){
   $(q).append(copyBtn);
   $(q).append(editBtn);
   $(q).append(deleteBtn);
-//  var qDisabler = document.createElement("DIV");
+  //  var qDisabler = document.createElement("DIV");
   $(qParent).append(q);
   //$(qDisabler).addClass("qDisabler");
   //$(qParent).addClass("qDisablerParent");
   //$(qDisabler).html("&nbsp;");
   //$(qParent).append(qDisabler);
-
+  
   if(!overrideID && overrideID !== 0)
     $($fakeTest).append( qParent);
   else
@@ -1086,10 +1089,10 @@ function sendQuestion(obj,quiz,overrideID){
   
   $(q).find('.chosen-select').chosen({});
   $(qParent).attr('id',"replacement-index-"+stringObjID);
-
+  
   //$().parent().before($submit);
-    if(!overrideID && overrideID !== 0)
-  $($submit).before(qParent);
+  if(!overrideID && overrideID !== 0)
+    $($submit).before(qParent);
   
 }
 /*
@@ -1100,24 +1103,24 @@ function buttonAddChoice (e,currentNumber){
   if(!currentNumber && currentNumber !== 0){
     currentNumber = 0;
     $(e.target).parent().find('*').each(function(){
-    var id = $(this).attr('id');
-    if(id && id.indexOf("choices-")==0)
-      currentNumber++;
-  });
+      var id = $(this).attr('id');
+      if(id && id.indexOf("choices-")==0)
+        currentNumber++;
+    });
   }
   var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',HTML:'',MakeArry:[
-      {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
+    {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
     {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+len}
-    ]});
+  ]});
   var hiddenWorkaround = document.createElement("DIV");
   $(document.body).append(hiddenWorkaround);
-     $(hiddenWorkaround).append(ques  );
-    $(hiddenWorkaround).find('.chosen-select').chosen({});
-    $(e.target).parent().append($(hiddenWorkaround).children());
-    $(hiddenWorkaround).remove();
-    $(e.target).parent().find(".nonquestion").last().before(ques);
-
+  $(hiddenWorkaround).append(ques  );
+  $(hiddenWorkaround).find('.chosen-select').chosen({});
+  $(e.target).parent().append($(hiddenWorkaround).children());
+  $(hiddenWorkaround).remove();
+  $(e.target).parent().find(".nonquestion").last().before(ques);
+  
 }
 
 function questionSuper(element,params){
@@ -1184,30 +1187,30 @@ function blankQuiz(quiz){
     var firstVal = $(this).find('option:first').val(),
         thisVal = $(this).val();
     if(firstVal!=thisVal){
-        $(this).val(firstVal?firstVal:false);
-        $(this).trigger("chosen:updated.chosen");
-        $(this).trigger("change");
+      $(this).val(firstVal?firstVal:false);
+      $(this).trigger("chosen:updated.chosen");
+      $(this).trigger("change");
     }
   });
   $(quiz).find('select').each(function(){
     var firstVal = $(this).find('option:first').val(),
         thisVal = $(this).val();
     if(firstVal!=thisVal){
-        $(this).val(firstVal?firstVal:false);
-        $(this).trigger("chosen:updated.chosen");
-        $(this).trigger("change");
+      $(this).val(firstVal?firstVal:false);
+      $(this).trigger("chosen:updated.chosen");
+      $(this).trigger("change");
     }
   });
   $(quiz).find('form').each(function(){
-         if($(this).is('.checkbox')){
-           var checked = $(this).find("input[type='checkbox']:checked");
-           for(var i = 0; i < checked.length; i++){
-             $(checked[i]).prop("checked",false);
-           }
-         }else{
-           $(this).find("input[type='radio']:checked").prop("checked",false);
-         }
-     
+    if($(this).is('.checkbox')){
+      var checked = $(this).find("input[type='checkbox']:checked");
+      for(var i = 0; i < checked.length; i++){
+        $(checked[i]).prop("checked",false);
+      }
+    }else{
+      $(this).find("input[type='radio']:checked").prop("checked",false);
+    }
+    
   });
   //TODO: Radio and checkboxes.
 }
@@ -1255,11 +1258,11 @@ function makeChoiceCount(targetNumber,quiz){
 sets up a new quiz with data recieved from the server
 */
 function generateQuiz(textdata,quiz){
-
+  
   var quizList = JSON.parse("["+textdata.replace(/\'/g,"\"")+"]");
-
+  
   for(var key in quizList){
-     sendQuestion(quizList[key],quiz);
+    sendQuestion(quizList[key],quiz);
   }
 }
 /*
@@ -1293,8 +1296,8 @@ function quiz(object){
     saveAsNewQuestion = buttonWithLabelAndOnClick("Save as New Question",function(){
       $(saveAsNewQuestion).hide();
       questionEditingIndex = -1;
-    SUBMIT_ONE_QUIZ(quizContainer);
-    if(options.isEditor)
+      SUBMIT_ONE_QUIZ(quizContainer);
+      if(options.isEditor)
         blankQuiz(quizContainer);
     });
   }
@@ -1302,14 +1305,14 @@ function quiz(object){
     if(saveAsNewQuestion)
       $(saveAsNewQuestion).hide();
     if(questionEditingIndex!=-1)
-        SUBMIT_ONE_QUIZ(quizContainer,questionEditingIndex);
+      SUBMIT_ONE_QUIZ(quizContainer,questionEditingIndex);
     else
-        SUBMIT_ONE_QUIZ(quizContainer);
+      SUBMIT_ONE_QUIZ(quizContainer);
     if(options.isEditor)
-        blankQuiz(quizContainer);
+      blankQuiz(quizContainer);
     questionEditingIndex = -1;
   });
-
+  
   
   if(options.timed){
     $(timeDiv).text("Time Elapsed - 00:00:00");
@@ -1323,28 +1326,28 @@ function quiz(object){
   
   $(quizContainer).append(SUBMIT);
   setTabIndex(SUBMIT);
-
+  
   //on editor, send to server button
   if(options.isEditor){
     var serverSend = buttonWithLabelAndOnClick("Save Quiz",function(){
-     alert("send to server:\n"+questionJSONs.join(",")); 
+      alert("send to server:\n"+questionJSONs.join(",")); 
       
       //when sending data to the server, we must change " to ' to avoid &quot waste.
       //must also join array by ","
       $.ajax({
         type: "POST",
-           url: "http://bluecode.altervista.org/bean/response.php",
+        url: "http://bluecode.altervista.org/bean/response.php",
         data: "quiz="+questionJSONs.join(",").replace(/\"/g,"'"),
         dataType: "text",
-          success: function(data){prompt("returned",data);},
+        success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
-            alert(errMsg);
+          alert(errMsg);
         }});
     });
-
     
-        $(saveAsNewQuestion).attr("id","saveAsNewQuestion");
-
+    
+    $(saveAsNewQuestion).attr("id","saveAsNewQuestion");
+    
     setTabIndex(saveAsNewQuestion);
     setTabIndex(serverSend);
     $(quizContainer).append("&nbsp;");
@@ -1352,8 +1355,8 @@ function quiz(object){
     $(quizContainer).append("&nbsp;");
     $(quizContainer).append(serverSend);
     $(quizContainer).attr("isEditor","true");
-          $(saveAsNewQuestion).hide();
-
+    $(saveAsNewQuestion).hide();
+    
   }
   
   
@@ -1395,7 +1398,6 @@ function initRegexStorage(){
   setUpJSONArray(["/.*/g","/asdf/g","/sss/g","NOT_A_REGEX"],"localRegexPattern");
 }
 initRegexStorage();
-
 
 
 
