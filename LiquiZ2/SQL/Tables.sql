@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Policies` (
 DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
-  `DispElID` INT NOT NULL AUTO_INCREMENT -- Not sure I'll need this but needed for diagram I think
+  `DispElID` INT NOT NULL AUTO_INCREMENT, -- Not sure I'll need this but needed for diagram I think
   `Type` CHAR(4) NOT NULL, -- text, image, video, audio, etc
   PRIMARY KEY (`DispElID`));
 
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Courses` (
   PRIMARY KEY (`CourseID`),
   UNIQUE INDEX `CID_UNIQUE` (`CourseID` ASC));
 
-
+d
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`CoursesQuizzes`
 -- -----------------------------------------------------
