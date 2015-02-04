@@ -910,7 +910,8 @@ function dragBarVarSetUp(e,addclass){
 /*
 Global Drag
 */
-$(newtab.document).on("mousemove",function(e){
+
+$(document).on("mousemove",function(e){
   if(dragBar){
     if(mousePosition.x < 0 || mousePosition.y < 0){
       dragBarVarSetUp(e,true);
@@ -927,7 +928,7 @@ $(newtab.document).on("mousemove",function(e){
     }
   }
 });
-$(newtab.document).on("mouseup",function(){
+$(document).on("mouseup",function(){
   if(dragBar){
     var container = $(dragBar).parent().parent()[0];
     var thisID = $(container).attr("id");
@@ -1379,7 +1380,7 @@ function quiz(object){
     start();
     
   }
-  
+  console.log(quiz);
   
 }
 /*
