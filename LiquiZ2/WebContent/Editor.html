@@ -19,8 +19,8 @@
     </div>
     
       <script>
-        var newtab = window.open("","editor");
-
+        var newtab = null;// window.open("","editor");
+	
         if(!newtab || newtab.closed || typeof newtab.closed=='undefined') 
           { 
           //POPUP BLOCKED
@@ -40,8 +40,9 @@
           );
           $(newtab.document.body).append(
             '<div id="top_bar">'+
-            '<img src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/assets/img/title_logo.png"/>'+
-            '</div> <div id="top_bar_fill"></div>');
+            '<img src="https://raw.githubusercontent.com/hydrodog/LiquiZ2/master/LiquiZ2/WebContent/assets/img/title_logo.png" />'+
+            '</div> <div id="top_bar_fill"></div>'
+);
         }
         $(newtab.document.body).append(
         "<div id = 'fakeTest' class='quiz'>"+
