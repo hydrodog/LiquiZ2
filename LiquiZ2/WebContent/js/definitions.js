@@ -1019,11 +1019,14 @@ function sendQuestion(obj,quiz,overrideID){
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
+  
+  if(obj["questionType"]=="dropdown"||obj["questionType"]=="dropdownmultiple"){
   if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
     if(questionParams["type"]=="dropdown")
       questionParams["type"]="radio";
     else
       questionParams["type"]="checkbox";
+  }
   }
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
   
