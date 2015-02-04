@@ -71,4 +71,4 @@ quiz({qList:[
   ]})
 
   
-  ],opts:{submit:"Save Question", isEditor:true, timed:false}});
+  ],opts:{timed:false, submit:"Save Question", isEditor:true}});
