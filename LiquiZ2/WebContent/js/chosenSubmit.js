@@ -53,7 +53,6 @@ function SUBMIT_ONE_QUIZ(quiz,questionEditingIndex){
     }
 
   });
-      console.log(allSend);
 
   if($(quiz).attr("isEditor") != "true"){
     alert(allSend);
@@ -61,21 +60,3 @@ function SUBMIT_ONE_QUIZ(quiz,questionEditingIndex){
     sendQuestion(sendData,quiz,(questionEditingIndex||questionEditingIndex===0)?questionEditingIndex:false);
   }
 }
-
-/*Will send all quizes if need be
-$("#sendAll").on("click",function(){
-var i = 0;
-$(".quiz").find(".question").each(function(){
-var val = $(this).val();
-if(val==null){
-val = "No Answer";
-}
-if(val.length < 1){
-val = "No Answer";
-}
-alert("q"+i+": "+val);
-i++;
-});
-
-});
-*/
