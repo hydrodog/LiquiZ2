@@ -1,0 +1,28 @@
+input {
+  font-family: Arial, sans;
+  font-size: 12pt;
+}
+
+.mat,.matquest {
+  font-family: courier, fixed;
+  font-size: 12pt;
+  size: 4;
+  width: 50px;
+}
+
+.fillin {
+  font-family: Arial, sans;
+  font-size: 16pt;
+  background-color: #008020;
+}
+
+.essay {
+  font-family: Arial, sans;
+  font-size: 12pt;
+  width: 500px;
+  height: 400px;
+}
+
+.dropdown {
+  
+}
