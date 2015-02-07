@@ -9,6 +9,14 @@ solidText() gets blanked on blank quiz fix, but make sure it supports images.
 DRAGGING: make sure to scroll when elem is at the bottom or top of screen, also maybe add a index box to change without dragging.
 ADD delete button for regexes
 
+
+REGEX - there's a bug with the naming
+
+Reformat for optimal server interaction
+
+Get around &quot; nonsense
+
+
 */
 
 //choices is the global object variable where reusable lists are stored
@@ -94,8 +102,8 @@ saveregexlocalbutton = function(){
       var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
       var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
       var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
-      $(regexPattern).append(makeOption(0,true,[regexFillin.val()]))
-        $(regexPattern).val(regexFillin.val());
+      $(regexPattern).append(makeOption(0,true,[regexName.val()]))
+        $(regexPattern).val(regexName.val());
       $(regexPattern).trigger("chosen:updated.chosen");
       $(regexPattern).trigger("change");
       saveRegexToServer(regexName.val(),regexFillin.val());
@@ -840,7 +848,7 @@ sets up everything for question editing
 function editQuestion(stringObjID,quiz){
   $(quiz).find("#saveAsNewQuestion").show();
   questionEditingIndex=stringObjID;
-  var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+  var JSONobj = formatAsEditable(JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]));
   blankQuiz(quiz);
   var highnum = 3;
   for(var key in JSONobj){
@@ -993,20 +1001,10 @@ function getDistance(rect1,rect2){
 
 
 /*
-This sends a generated question to the new tab/ window
+This formats a question object from id:value to what gets thrown into the question() function
 */
-function sendQuestion(obj,quiz,overrideID){
-  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(overrideID)==-1)
-    overrideID=false;
-  
-  var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
-  if(!overrideID && overrideID !== 0){
-    questionJSONs.push(JSON.stringify(obj));
-    questionJSONsUIDs.push(stringObjID);
-  }else{
-    questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1,JSON.stringify(obj));
-  }
-  var questionParams = {};
+function formatAsQuestion(obj){
+var questionParams = {};
   var i = 1;
   for(var key in obj){
     if(key.indexOf("choices-")==0){
@@ -1015,7 +1013,7 @@ function sendQuestion(obj,quiz,overrideID){
         questionParams.correctL = [];
       }
       questionParams.ansrL.push(obj[key]);
-      var correct = obj[key].replace("choices-","correct-");
+      var correct = obj[key.replace("choices-","correct-")];
       questionParams.correctL.push(correct);
       
       i++;
@@ -1024,16 +1022,90 @@ function sendQuestion(obj,quiz,overrideID){
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
-  if(obj["questionType"]=="dropdown"||obj["questionType"]=="dropdownmultiple"){
+
+  if(questionParams["type"]=="dropdown"||questionParams["type"]=="dropdownmultiple"){
   if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
+    
     if(questionParams["type"]=="dropdown")
       questionParams["type"]="radio";
     else
       questionParams["type"]="checkbox";
   }
   }
+
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
+return questionParams;
+}
+/*
+inverts obj[key] (returns val)
+to obj[val] (returns key)
+*/
+function getKey (obj, value){
+  for(var key in obj){
+    if(obj[key] == value){
+      return key;
+    }
+  }
+  return null;
+};
+
+/*
+This formats a question() object to id:value
+*/
+function formatAsEditable(obj){
+
+var questionParams = {};
+  var i = 1;
+if(obj.ansrL){
+  for(var key in obj.ansrL){
+    questionParams["choices-"+i]=obj.ansrL[key];
+    questionParams["correct-"+i]=obj.correctL[key];
+      i++;
+  }
+}
+  paramSet (obj["HTML"],questionParams,"questionHTML");
+  paramSet (obj["pHold"],questionParams,"placeholderText");
+if(obj["type"]=="dropdown"||obj["type"]=="dropdownmultiple"){
+questionParams["isDropDown"]=["is drop-down"];
+}
+if(obj["type"]=="radio"){
+obj["type"]="dropdown";
+}
+if(obj["type"]=="checkbox"){
+obj["type"]="dropdownmultiple";
+}
+  paramSet (getKey(typeFromChoice,obj["type"]),questionParams,"questionType");
+if(obj["type"]=="code")
+  paramSet ((obj["baseCode"]?obj["baseCode"].placevalue:null),questionParams,"pHold");
+return questionParams;
+}
+
+/*
+This sends a generated question to the new tab/ window
+*/
+function sendQuestion(obj,quiz,overrideID){
+  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(overrideID)==-1)
+    overrideID=false;
   
+  var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
+  
+  
+  
+  appendEditable(formatAsQuestion(obj),overrideID,stringObjID,quiz);
+}
+/*
+creates and appends a teacher editable question for the quiz
+*/
+function appendEditable(questionParams,overrideID,stringObjID,quiz){
+
+if(!overrideID && overrideID !== 0){
+    questionJSONs.push(JSON.stringify(questionParams));
+    questionJSONsUIDs.push(stringObjID);
+  }else{
+    questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1,JSON.stringify(questionParams));
+  }
+
+
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
   var dragQuestionBar = document.createElement("DIV");
@@ -1094,8 +1166,9 @@ function sendQuestion(obj,quiz,overrideID){
   //$().parent().before($submit);
   if(!overrideID && overrideID !== 0)
     $($submit).before(qParent);
-  
 }
+
+
 /*
 This adds a new choice and is called by
 the addchoicebutton() object on click
@@ -1109,10 +1182,10 @@ function buttonAddChoice (e,currentNumber){
         currentNumber++;
     });
   }
-  var len = ($(e.target).parent().find(".question").length)/2-1;
+  //var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',HTML:'',MakeArry:[
-    {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
-    {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+len}
+    {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+(currentNumber+1)},
+    {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+(currentNumber+1)}
   ]});
   var hiddenWorkaround = document.createElement("DIV");
   $(document.body).append(hiddenWorkaround);
@@ -1331,14 +1404,14 @@ function quiz(object){
   //on editor, send to server button
   if(options.isEditor){
     var serverSend = buttonWithLabelAndOnClick("Save Quiz",function(){
-      alert("send to server:\n"+questionJSONs.join(",")); 
+      alert("send to server:\n["+questionJSONs.join(",")+"]"); 
       
       //when sending data to the server, we must change " to ' to avoid &quot waste.
       //must also join array by ","
       $.ajax({
         type: "POST",
         url: "http://bluecode.altervista.org/bean/response.php",
-        data: "quiz="+questionJSONs.join(",").replace(/\"/g,"'"),
+        data: "quiz=["+questionJSONs.join(",")+"]",
         dataType: "text",
         success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
@@ -1380,7 +1453,6 @@ function quiz(object){
     start();
     
   }
-  console.log(quiz);
   
 }
 /*
@@ -1399,6 +1471,7 @@ function initRegexStorage(){
   setUpJSONArray(["/.*/g","/asdf/g","/sss/g","NOT_A_REGEX"],"localRegexPattern");
 }
 initRegexStorage();
+
 
 
 
