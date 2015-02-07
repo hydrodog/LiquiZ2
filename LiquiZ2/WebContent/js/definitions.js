@@ -16,6 +16,9 @@ Reformat for optimal server interaction
 
 Get around &quot; nonsense
 
+FYIs:
+The following will make a quiz out of what we send to the server
+quiz(JSON.parse(formatQuestionJSONsForExportAJAX())) 
 
 */
 
@@ -1200,6 +1203,7 @@ function buttonAddChoice (e,currentNumber){
 }
 
 function questionSuper(element,params){
+  //just an fyi, quiz object comes through here
   if(params.ID){
     $(element).attr("id",params.ID);
   }
@@ -1366,7 +1370,8 @@ function formatQuestionJSONsForExportAJAX(){
 sets up a new quiz
 */
 function quiz(object){
-  var questions = object.qList;
+  var makeListQuestions = object.makeL||[];
+  var questions = object.qList||[];
   var options={
     timed:false,
     submit:"SUBMIT",
@@ -1406,6 +1411,12 @@ function quiz(object){
     $(quizContainer).append(timeDiv);
   }
   $(quizContainer).addClass('quiz');
+  
+  
+  
+  for(var i = 0; i < makeListQuestions.length; i++){
+    questions.splice(0,0,question(makeListQuestions[i]));
+  }
   for(var i = 0; i < questions.length; i++){
     $(questions[i]).addClass('Q');
     $(quizContainer).append(questions[i]);
@@ -1449,7 +1460,7 @@ function quiz(object){
   
   
   document.body.appendChild(quizContainer);
-  
+  questionSuper(quizContainer,options);
   /*
   TODO, quiz starts hidden with a click to take quiz button.
   Then run the start function to make the quiz appear,
