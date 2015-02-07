@@ -12,6 +12,8 @@ ADD delete button for regexes
 
 REGEX - there's a bug with the naming
 
+Reformat for optimal server interaction
+
 Get around &quot; nonsense
 
 
@@ -230,7 +232,7 @@ function mutable(text,index){
 This is the infinite question generator
 */
 function questionInf(object){
-  var qClass = object.class;
+  var qClass = object.Class;
   var questions = object.qList;
   var container = document.createElement("DIV");
   
@@ -257,7 +259,7 @@ with the intent to take a class to
 be added
 */
 function questionSet(object){
-  var qClass = object.class,
+  var qClass = object.Class,
       questions = object.qList;
   var container = document.createElement("DIV");
   
@@ -447,6 +449,8 @@ code - code textarea
 essay - essay textarea
 dropdown - select list single response
 dropdownmultiple - select list multiple response
+radio - single select
+checkbox - multiselect
 */
 
 
@@ -1012,7 +1016,7 @@ var questionParams = {};
       }
       questionParams.ansrL.push(obj[key]);
       var correct = obj[key.replace("choices-","correct-")];
-      questionParams.correctL.push(correct);
+      questionParams.correctL.push((correct=="Correct"));
       
       i++;
     }
@@ -1057,7 +1061,7 @@ var questionParams = {};
 if(obj.ansrL){
   for(var key in obj.ansrL){
     questionParams["choices-"+i]=obj.ansrL[key];
-    questionParams["correct-"+i]=obj.correctL[key];
+    questionParams["correct-"+i]=obj.correctL[key]?"Correct":"Incorrect";
       i++;
   }
 }
@@ -1198,6 +1202,9 @@ function buttonAddChoice (e,currentNumber){
 function questionSuper(element,params){
   if(params.ID){
     $(element).attr("id",params.ID);
+  }
+  if(params.Class){
+    $(element).addClass(params.Class);
   }
 }
 
