@@ -12,8 +12,6 @@ ADD delete button for regexes
 
 REGEX - there's a bug with the naming
 
-Reformat for optimal server interaction
-
 Get around &quot; nonsense
 
 
@@ -480,7 +478,7 @@ number=function(question){
 returns a new multiquestion object
 */
 multiquestion=function(quest){
-  var defaults = {HTML:"",MakeArry:[],Arry:[]};
+  var defaults = {HTML:"",makeL:[],qList:[]};
   quest = merge(defaults,quest);
   //generate entire Object div
   var container = document.createElement("DIV");
@@ -491,14 +489,14 @@ multiquestion=function(quest){
   $(container).addClass('multiquestion');
   
   //if we have any questions in object format, we make them into divs.
-  for(var i = 0; i < quest.MakeArry.length; i++){
-    quest.Arry.push(question(quest.MakeArry[i]));
+  for(var i = 0; i < quest.makeL.length; i++){
+    quest.qList.push(question(quest.makeL[i]));
   }
   
   
   //adds question to multiquestion (to be added to the quiz)
-  for(var i = 0; i < quest.Arry.length; i++){
-    $(container).append(quest.Arry[i]);
+  for(var i = 0; i < quest.qList.length; i++){
+    $(container).append(quest.qList[i]);
     
     /*
     To find the 'question' of each 'container' div,
@@ -508,14 +506,14 @@ multiquestion=function(quest){
     
     */
     
-    if($(quest.Arry[i]).is('div')){
-      $(quest.Arry[i]).children().each(function(){
+    if($(quest.qList[i]).is('div')){
+      $(quest.qList[i]).children().each(function(){
         if($(this).index()==1){
           $(this).addClass("question");
         }
       });
     }
-    $(quest.Arry[i]).addClass('insidemulti');
+    $(quest.qList[i]).addClass('insidemulti');
     
   }
   
@@ -1183,7 +1181,7 @@ function buttonAddChoice (e,currentNumber){
     });
   }
   //var len = ($(e.target).parent().find(".question").length)/2-1;
-  var ques = question({type:'multiquestion',HTML:'',MakeArry:[
+  var ques = question({type:'multiquestion',HTML:'',makeL:[
     {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+(currentNumber+1)},
     {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+(currentNumber+1)}
   ]});
@@ -1349,6 +1347,14 @@ var merge = function (obj,objM){
   }
   return obj;
 };
+
+/*
+
+*/
+function formatQuestionJSONsForExportAJAX(){
+  return '{"makeL":['+questionJSONs.join(",")+"]}"
+}
+
 /*
 sets up a new quiz
 */
@@ -1404,14 +1410,15 @@ function quiz(object){
   //on editor, send to server button
   if(options.isEditor){
     var serverSend = buttonWithLabelAndOnClick("Save Quiz",function(){
-      alert("send to server:\n["+questionJSONs.join(",")+"]"); 
+      var formatedText = formatQuestionJSONsForExportAJAX();
+      alert("send to server:\n"+formatedText); 
       
       //when sending data to the server, we must change " to ' to avoid &quot waste.
       //must also join array by ","
       $.ajax({
         type: "POST",
         url: "http://bluecode.altervista.org/bean/response.php",
-        data: "quiz=["+questionJSONs.join(",")+"]",
+        data: "quiz="+formatedText,
         dataType: "text",
         success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
