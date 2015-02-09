@@ -387,7 +387,7 @@ The full diagram of the table structure is shown below.
 
 * Sequence - To save the order of question containers within the quiz
 
-**QuesCon** - Has only one column to keep track of question container ID’s and allow for auto incrementing
+**QuesCon** - A "QuesCon" is a container contains the problem like "What's your name. " and the box need to fill or choices could be chosen. Has only one column to keep track of question container ID’s and allow for auto increment.
 
 * QuesConID - Auto incremented primary key
 
