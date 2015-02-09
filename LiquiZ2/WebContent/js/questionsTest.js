@@ -44,7 +44,7 @@ quiz({qList:[
   
   question({type:"number",HTML:"What is 7 x 5 ",cols:10,pHold:"Num..."}),
   
-  question({type:"multiquestion",HTML:"Choose the options to make the code work!<br/>",Arry:[
+  question({type:"multiquestion",HTML:"Choose the options to make the code work!<br/>",qList:[
     question({type:"html",HTML: "public static void"}),
     
     question({type:"dropdown",ansrL:choices['code_ques']}),

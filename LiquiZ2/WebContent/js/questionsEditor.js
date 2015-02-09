@@ -32,19 +32,19 @@ quiz({qList:[
   essay({HTML:'Question Text:',rows:3,cols:30,pHold:'Your text here...',ID:"questionHTML"}),
   
   //question type choice determines which questionSet is shown
-  questionSet({class:'dropdowns multidropdowns',qList:[
+  questionSet({Class:'dropdowns multidropdowns',qList:[
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your text here...',ID:"placeholderText"}),
     checkbox({HTML:'',ansrL:['is drop-down'],ID:"isDropDown"}),
     html({HTML:'Choices:'}),
-    multiquestion({HTML:'',Arry:[
+    multiquestion({HTML:'',qList:[
       essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-1"}),
       dropdown({HTML:'',ansrL:choices['correct'],ID:"correct-1"})
     ]}),
-    multiquestion({HTML:'',Arry:[
+    multiquestion({HTML:'',qList:[
       essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-2"}),
       dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct-2"})
     ]}),
-    multiquestion({HTML:'',Arry:[
+    multiquestion({HTML:'',qList:[
       essay({rows:3,cols:30,pHold:'Your text here...',ID:"choices-3"}),
       dropdown({HTML:'',ansrL:choices['incorrect'],ID:"correct-3"})
     ]}),
@@ -53,12 +53,12 @@ quiz({qList:[
     question({type:'removechoicesbutton'})
   ]}),
   
-  questionSet({class:'codes',qList:[
+  questionSet({Class:'codes',qList:[
     essay({HTML:'Base Code:',rows:3,cols:30,pHold:'Your base code here...',ID:"baseCode"})
   ]}),
-  questionSet({class:'numfillins',qList:[
+  questionSet({Class:'numfillins',qList:[
     dropdown({HTML:'Regex Pattern',hideL:possibleRegexesHideL,ansrL:possibleRegexes,ID:"regexPattern"}),
-    questionSet({class:'NewRegexMachine',qList:[
+    questionSet({Class:'NewRegexMachine',qList:[
         essay({HTML:'Pattern Name:',rows:3,cols:30,pHold:new solidText('Your Regex'),ID:"regexName"}),
         essay({HTML:'Your New Regex:',rows:3,cols:30,pHold:new solidText('/yourRegex/g'),ID:"regexFillin"}),
         question({type:'saveregexlocalbutton'}),
@@ -66,7 +66,7 @@ quiz({qList:[
     ]}),
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
   ]}),
-  questionSet({class:'essays',qList:[
+  questionSet({Class:'essays',qList:[
     essay({HTML:'Placeholder Text:',rows:3,cols:30,pHold:'Your placeholder text here...',ID:"placeholderText"})
   ]})
 

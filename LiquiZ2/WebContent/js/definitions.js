@@ -9,6 +9,17 @@ solidText() gets blanked on blank quiz fix, but make sure it supports images.
 DRAGGING: make sure to scroll when elem is at the bottom or top of screen, also maybe add a index box to change without dragging.
 ADD delete button for regexes
 
+
+REGEX - there's a bug with the naming
+
+Reformat for optimal server interaction
+
+Get around &quot; nonsense
+
+FYIs:
+The following will make a quiz out of what we send to the server
+quiz(JSON.parse(formatQuestionJSONsForExportAJAX())) 
+
 */
 
 //choices is the global object variable where reusable lists are stored
@@ -78,29 +89,29 @@ button that saves the regex so that it can be used for this quiz only
 */
 saveregexlocalbutton = function(){
   return buttonWithLabelAndOnClick("Save for this quiz",saveLocalRegex);
-}
+};
+
+/*
+button that saves the regex so that it can be used for all future quizzes
+*/
+saveregexglobalbutton = function(){
+  return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
+};
+
+/*
+actually saves regex to quiz
+*/
+function saveLocalRegex(e){
+  var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
+  var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
+  var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
+  $(regexPattern).append(makeOption(0,true,[regexName.val()]))
+    $(regexPattern).val(regexName.val());
+  $(regexPattern).trigger("chosen:updated.chosen");
+  $(regexPattern).trigger("change");
+  saveRegexToServer(regexName.val(),regexFillin.val());
   
-  /*
-  button that saves the regex so that it can be used for all future quizzes
-  */
-  saveregexglobalbutton = function(){
-    return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
-  }
-    
-    /*
-    actually saves regex to quiz
-    */
-    function saveLocalRegex(e){
-      var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
-      var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
-      var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
-      $(regexPattern).append(makeOption(0,true,[regexFillin.val()]))
-        $(regexPattern).val(regexFillin.val());
-      $(regexPattern).trigger("chosen:updated.chosen");
-      $(regexPattern).trigger("change");
-      saveRegexToServer(regexName.val(),regexFillin.val());
-      
-    }
+}
 
 /*
 NOTE NO SERVER CONNECTION, SO THE FOLLOWING IS A LIE!
@@ -139,28 +150,28 @@ addchoicesbutton = function(){
   var but = buttonWithLabelAndOnClick("Add Choice",buttonAddChoice);
   $(but).addClass('addChoice');
   return but;
+};
+
+/*
+generic make a button with a onclick
+*/
+buttonWithLabelAndOnClick = function(label,onclick){
+  var button = document.createElement("BUTTON");
+  $(button).text(label);
+  $(button).on("click",onclick);
+  setTabIndex(button);
+  return button;
+};
+
+/*
+This function removes choices and is called on click of
+the removechoicebutton() object
+*/
+function buttonRemoveChoice (e){
+  var childs = $(e.target).parent().find('.multiquestion');
+  if(childs.length>0)
+    $(childs[childs.length-1]).remove();
 }
-  
-  /*
-  generic make a button with a onclick
-  */
-  buttonWithLabelAndOnClick = function(label,onclick){
-    var button = document.createElement("BUTTON");
-    $(button).text(label);
-    $(button).on("click",onclick);
-    setTabIndex(button);
-    return button;
-  }
-    
-    /*
-    This function removes choices and is called on click of
-    the removechoicebutton() object
-    */
-    function buttonRemoveChoice (e){
-      var childs = $(e.target).parent().find('.multiquestion');
-      if(childs.length>0)
-        $(childs[childs.length-1]).remove();
-    }
 
 /*
 This function returns a button that is used to remove
@@ -170,27 +181,27 @@ removechoicesbutton = function(){
   var but = buttonWithLabelAndOnClick("Remove Choice",buttonRemoveChoice);
   $(but).addClass('removeChoice');
   return but;
-}
+};
+
+/*
+this was for the infinite questions which should 
+be done later and returns a question element along
+with any children elements needed
+*/
+var construct = function (obj,i){
+  var temp = {};
   
-  /*
-  this was for the infinite questions which should 
-  be done later and returns a question element along
-  with any children elements needed
-  */
-  var construct = function (obj,i){
-    var temp = {};
-    
-    for(var key in obj) {
-      if(obj.hasOwnProperty(key)) {
-        if(obj[key].change_me){
-          temp[key] = construct(obj[key],i);
-        }else{
-          temp[key] = clone(obj[key],i);
-        }
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      if(obj[key].change_me){
+        temp[key] = construct(obj[key],i);
+      }else{
+        temp[key] = clone(obj[key],i);
       }
     }
-    return question(temp);
-  };
+  }
+  return question(temp);
+};
 
 /*
 This purely clones an object, but does work with
@@ -224,7 +235,7 @@ function mutable(text,index){
 This is the infinite question generator
 */
 function questionInf(object){
-  var qClass = object.class;
+  var qClass = object.Class;
   var questions = object.qList;
   var container = document.createElement("DIV");
   
@@ -251,7 +262,7 @@ with the intent to take a class to
 be added
 */
 function questionSet(object){
-  var qClass = object.class,
+  var qClass = object.Class,
       questions = object.qList;
   var container = document.createElement("DIV");
   
@@ -441,6 +452,8 @@ code - code textarea
 essay - essay textarea
 dropdown - select list single response
 dropdownmultiple - select list multiple response
+radio - single select
+checkbox - multiselect
 */
 
 
@@ -472,7 +485,7 @@ number=function(question){
 returns a new multiquestion object
 */
 multiquestion=function(quest){
-  var defaults = {HTML:"",MakeArry:[],Arry:[]};
+  var defaults = {HTML:"",makeL:[],qList:[]};
   quest = merge(defaults,quest);
   //generate entire Object div
   var container = document.createElement("DIV");
@@ -483,14 +496,14 @@ multiquestion=function(quest){
   $(container).addClass('multiquestion');
   
   //if we have any questions in object format, we make them into divs.
-  for(var i = 0; i < quest.MakeArry.length; i++){
-    quest.Arry.push(question(quest.MakeArry[i]));
+  for(var i = 0; i < quest.makeL.length; i++){
+    quest.qList.push(question(quest.makeL[i]));
   }
   
   
   //adds question to multiquestion (to be added to the quiz)
-  for(var i = 0; i < quest.Arry.length; i++){
-    $(container).append(quest.Arry[i]);
+  for(var i = 0; i < quest.qList.length; i++){
+    $(container).append(quest.qList[i]);
     
     /*
     To find the 'question' of each 'container' div,
@@ -500,14 +513,14 @@ multiquestion=function(quest){
     
     */
     
-    if($(quest.Arry[i]).is('div')){
-      $(quest.Arry[i]).children().each(function(){
+    if($(quest.qList[i]).is('div')){
+      $(quest.qList[i]).children().each(function(){
         if($(this).index()==1){
           $(this).addClass("question");
         }
       });
     }
-    $(quest.Arry[i]).addClass('insidemulti');
+    $(quest.qList[i]).addClass('insidemulti');
     
   }
   
@@ -666,36 +679,36 @@ returns a radio elem
 radio = function(quest) {
   quest.isCheck = false;
   return radiocheckbox(quest);
-}
-  
-  /*
-  returns a checkbox elem
-  */
-  checkbox = function(quest) {
-    quest.isCheck = true;
-    return radiocheckbox(quest);
-  }
-    
-    
-    
-    /*
-    Eventually I plan to use json and each array in json becomes an object so
-    [object,[object2, ...],[object3,[object4,...]...]...]
-    would make something like
-    <object>
-    <object2>
-    ...
-    </object2>
-    <object3>
-    <object4>
-    ...
-    </object4>
-    ...
-    </object3>
-    ...
-    </object>
-    */
-    choices.nums=['0','1','2','3','4','5','6','7','8','9'];
+};
+
+/*
+returns a checkbox elem
+*/
+checkbox = function(quest) {
+  quest.isCheck = true;
+  return radiocheckbox(quest);
+};
+
+
+
+/*
+Eventually I plan to use json and each array in json becomes an object so
+[object,[object2, ...],[object3,[object4,...]...]...]
+would make something like
+<object>
+<object2>
+...
+</object2>
+<object3>
+<object4>
+...
+</object4>
+...
+</object3>
+...
+</object>
+*/
+choices.nums=['0','1','2','3','4','5','6','7','8','9'];
 choices.nums.repeats=true;
 
 /*
@@ -840,7 +853,7 @@ sets up everything for question editing
 function editQuestion(stringObjID,quiz){
   $(quiz).find("#saveAsNewQuestion").show();
   questionEditingIndex=stringObjID;
-  var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+  var JSONobj = formatAsEditable(JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]));
   blankQuiz(quiz);
   var highnum = 3;
   for(var key in JSONobj){
@@ -993,19 +1006,9 @@ function getDistance(rect1,rect2){
 
 
 /*
-This sends a generated question to the new tab/ window
+This formats a question object from id:value to what gets thrown into the question() function
 */
-function sendQuestion(obj,quiz,overrideID){
-  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(overrideID)==-1)
-    overrideID=false;
-  
-  var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
-  if(!overrideID && overrideID !== 0){
-    questionJSONs.push(JSON.stringify(obj));
-    questionJSONsUIDs.push(stringObjID);
-  }else{
-    questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1,JSON.stringify(obj));
-  }
+function formatAsQuestion(obj){
   var questionParams = {};
   var i = 1;
   for(var key in obj){
@@ -1015,8 +1018,8 @@ function sendQuestion(obj,quiz,overrideID){
         questionParams.correctL = [];
       }
       questionParams.ansrL.push(obj[key]);
-      var correct = obj[key].replace("choices-","correct-");
-      questionParams.correctL.push(correct);
+      var correct = obj[key.replace("choices-","correct-")];
+      questionParams.correctL.push((correct=="Correct"));
       
       i++;
     }
@@ -1024,15 +1027,89 @@ function sendQuestion(obj,quiz,overrideID){
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
-  if(obj["questionType"]=="dropdown"||obj["questionType"]=="dropdownmultiple"){
-  if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
-    if(questionParams["type"]=="dropdown")
-      questionParams["type"]="radio";
-    else
-      questionParams["type"]="checkbox";
+  
+  if(questionParams["type"]=="dropdown"||questionParams["type"]=="dropdownmultiple"){
+    if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
+      
+      if(questionParams["type"]=="dropdown")
+        questionParams["type"]="radio";
+      else
+        questionParams["type"]="checkbox";
+    }
   }
-  }
+  
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
+  return questionParams;
+}
+/*
+inverts obj[key] (returns val)
+to obj[val] (returns key)
+*/
+function getKey (obj, value){
+  for(var key in obj){
+    if(obj[key] == value){
+      return key;
+    }
+  }
+  return null;
+};
+
+/*
+This formats a question() object to id:value
+*/
+function formatAsEditable(obj){
+  
+  var questionParams = {};
+  var i = 1;
+  if(obj.ansrL){
+    for(var key in obj.ansrL){
+      questionParams["choices-"+i]=obj.ansrL[key];
+      questionParams["correct-"+i]=obj.correctL[key]?"Correct":"Incorrect";
+      i++;
+    }
+  }
+  paramSet (obj["HTML"],questionParams,"questionHTML");
+  paramSet (obj["pHold"],questionParams,"placeholderText");
+  if(obj["type"]=="dropdown"||obj["type"]=="dropdownmultiple"){
+    questionParams["isDropDown"]=["is drop-down"];
+  }
+  if(obj["type"]=="radio"){
+    obj["type"]="dropdown";
+  }
+  if(obj["type"]=="checkbox"){
+    obj["type"]="dropdownmultiple";
+  }
+  paramSet (getKey(typeFromChoice,obj["type"]),questionParams,"questionType");
+  if(obj["type"]=="code")
+    paramSet ((obj["baseCode"]?obj["baseCode"].placevalue:null),questionParams,"pHold");
+  return questionParams;
+}
+
+/*
+This sends a generated question to the new tab/ window
+*/
+function sendQuestion(obj,quiz,overrideID){
+  if((overrideID || overrideID === 0) && questionJSONsUIDs.indexOf(overrideID)==-1)
+    overrideID=false;
+  
+  var stringObjID=(overrideID||overrideID===0)?overrideID:questionJSONsUIDsCounter++;
+  
+  
+  
+  appendEditable(formatAsQuestion(obj),overrideID,stringObjID,quiz);
+}
+/*
+creates and appends a teacher editable question for the quiz
+*/
+function appendEditable(questionParams,overrideID,stringObjID,quiz){
+  
+  if(!overrideID && overrideID !== 0){
+    questionJSONs.push(JSON.stringify(questionParams));
+    questionJSONsUIDs.push(stringObjID);
+  }else{
+    questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1,JSON.stringify(questionParams));
+  }
+  
   
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
@@ -1094,8 +1171,9 @@ function sendQuestion(obj,quiz,overrideID){
   //$().parent().before($submit);
   if(!overrideID && overrideID !== 0)
     $($submit).before(qParent);
-  
 }
+
+
 /*
 This adds a new choice and is called by
 the addchoicebutton() object on click
@@ -1109,10 +1187,10 @@ function buttonAddChoice (e,currentNumber){
         currentNumber++;
     });
   }
-  var len = ($(e.target).parent().find(".question").length)/2-1;
-  var ques = question({type:'multiquestion',HTML:'',MakeArry:[
-    {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+len},
-    {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+len}
+  //var len = ($(e.target).parent().find(".question").length)/2-1;
+  var ques = question({type:'multiquestion',HTML:'',makeL:[
+    {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+(currentNumber+1)},
+    {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+(currentNumber+1)}
   ]});
   var hiddenWorkaround = document.createElement("DIV");
   $(document.body).append(hiddenWorkaround);
@@ -1125,8 +1203,12 @@ function buttonAddChoice (e,currentNumber){
 }
 
 function questionSuper(element,params){
+  //just an fyi, quiz object comes through here
   if(params.ID){
     $(element).attr("id",params.ID);
+  }
+  if(params.Class){
+    $(element).addClass(params.Class);
   }
 }
 
@@ -1276,11 +1358,20 @@ var merge = function (obj,objM){
   }
   return obj;
 };
+
+/*
+
+*/
+function formatQuestionJSONsForExportAJAX(){
+  return '{"makeL":['+questionJSONs.join(",")+"]}"
+    }
+
 /*
 sets up a new quiz
 */
 function quiz(object){
-  var questions = object.qList;
+  var makeListQuestions = object.makeL||[];
+  var questions = object.qList||[];
   var options={
     timed:false,
     submit:"SUBMIT",
@@ -1320,6 +1411,12 @@ function quiz(object){
     $(quizContainer).append(timeDiv);
   }
   $(quizContainer).addClass('quiz');
+  
+  
+  
+  for(var i = 0; i < makeListQuestions.length; i++){
+    questions.splice(0,0,question(makeListQuestions[i]));
+  }
   for(var i = 0; i < questions.length; i++){
     $(questions[i]).addClass('Q');
     $(quizContainer).append(questions[i]);
@@ -1331,14 +1428,15 @@ function quiz(object){
   //on editor, send to server button
   if(options.isEditor){
     var serverSend = buttonWithLabelAndOnClick("Save Quiz",function(){
-      alert("send to server:\n"+questionJSONs.join(",")); 
+      var formatedText = formatQuestionJSONsForExportAJAX();
+      alert("send to server:\n"+formatedText); 
       
       //when sending data to the server, we must change " to ' to avoid &quot waste.
       //must also join array by ","
       $.ajax({
         type: "POST",
         url: "http://bluecode.altervista.org/bean/response.php",
-        data: "quiz="+questionJSONs.join(",").replace(/\"/g,"'"),
+        data: "quiz="+formatedText,
         dataType: "text",
         success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
@@ -1362,7 +1460,7 @@ function quiz(object){
   
   
   document.body.appendChild(quizContainer);
-  
+  questionSuper(quizContainer,options);
   /*
   TODO, quiz starts hidden with a click to take quiz button.
   Then run the start function to make the quiz appear,
@@ -1380,7 +1478,6 @@ function quiz(object){
     start();
     
   }
-  console.log(quiz);
   
 }
 /*
@@ -1399,6 +1496,7 @@ function initRegexStorage(){
   setUpJSONArray(["/.*/g","/asdf/g","/sss/g","NOT_A_REGEX"],"localRegexPattern");
 }
 initRegexStorage();
+
 
 
 
