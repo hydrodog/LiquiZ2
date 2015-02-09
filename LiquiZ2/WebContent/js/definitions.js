@@ -89,29 +89,29 @@ button that saves the regex so that it can be used for this quiz only
 */
 saveregexlocalbutton = function(){
   return buttonWithLabelAndOnClick("Save for this quiz",saveLocalRegex);
-}
+};
+
+/*
+button that saves the regex so that it can be used for all future quizzes
+*/
+saveregexglobalbutton = function(){
+  return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
+};
+
+/*
+actually saves regex to quiz
+*/
+function saveLocalRegex(e){
+  var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
+  var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
+  var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
+  $(regexPattern).append(makeOption(0,true,[regexName.val()]))
+    $(regexPattern).val(regexName.val());
+  $(regexPattern).trigger("chosen:updated.chosen");
+  $(regexPattern).trigger("change");
+  saveRegexToServer(regexName.val(),regexFillin.val());
   
-  /*
-  button that saves the regex so that it can be used for all future quizzes
-  */
-  saveregexglobalbutton = function(){
-    return buttonWithLabelAndOnClick("Save to server",saveGlobalRegex);
-  }
-    
-    /*
-    actually saves regex to quiz
-    */
-    function saveLocalRegex(e){
-      var regexFillin = $(e.target).parent().parent().find("#regexFillin").find('textarea');
-      var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
-      var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
-      $(regexPattern).append(makeOption(0,true,[regexName.val()]))
-        $(regexPattern).val(regexName.val());
-      $(regexPattern).trigger("chosen:updated.chosen");
-      $(regexPattern).trigger("change");
-      saveRegexToServer(regexName.val(),regexFillin.val());
-      
-    }
+}
 
 /*
 NOTE NO SERVER CONNECTION, SO THE FOLLOWING IS A LIE!
@@ -150,28 +150,28 @@ addchoicesbutton = function(){
   var but = buttonWithLabelAndOnClick("Add Choice",buttonAddChoice);
   $(but).addClass('addChoice');
   return but;
+};
+
+/*
+generic make a button with a onclick
+*/
+buttonWithLabelAndOnClick = function(label,onclick){
+  var button = document.createElement("BUTTON");
+  $(button).text(label);
+  $(button).on("click",onclick);
+  setTabIndex(button);
+  return button;
+};
+
+/*
+This function removes choices and is called on click of
+the removechoicebutton() object
+*/
+function buttonRemoveChoice (e){
+  var childs = $(e.target).parent().find('.multiquestion');
+  if(childs.length>0)
+    $(childs[childs.length-1]).remove();
 }
-  
-  /*
-  generic make a button with a onclick
-  */
-  buttonWithLabelAndOnClick = function(label,onclick){
-    var button = document.createElement("BUTTON");
-    $(button).text(label);
-    $(button).on("click",onclick);
-    setTabIndex(button);
-    return button;
-  }
-    
-    /*
-    This function removes choices and is called on click of
-    the removechoicebutton() object
-    */
-    function buttonRemoveChoice (e){
-      var childs = $(e.target).parent().find('.multiquestion');
-      if(childs.length>0)
-        $(childs[childs.length-1]).remove();
-    }
 
 /*
 This function returns a button that is used to remove
@@ -181,27 +181,27 @@ removechoicesbutton = function(){
   var but = buttonWithLabelAndOnClick("Remove Choice",buttonRemoveChoice);
   $(but).addClass('removeChoice');
   return but;
-}
+};
+
+/*
+this was for the infinite questions which should 
+be done later and returns a question element along
+with any children elements needed
+*/
+var construct = function (obj,i){
+  var temp = {};
   
-  /*
-  this was for the infinite questions which should 
-  be done later and returns a question element along
-  with any children elements needed
-  */
-  var construct = function (obj,i){
-    var temp = {};
-    
-    for(var key in obj) {
-      if(obj.hasOwnProperty(key)) {
-        if(obj[key].change_me){
-          temp[key] = construct(obj[key],i);
-        }else{
-          temp[key] = clone(obj[key],i);
-        }
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      if(obj[key].change_me){
+        temp[key] = construct(obj[key],i);
+      }else{
+        temp[key] = clone(obj[key],i);
       }
     }
-    return question(temp);
-  };
+  }
+  return question(temp);
+};
 
 /*
 This purely clones an object, but does work with
@@ -679,36 +679,36 @@ returns a radio elem
 radio = function(quest) {
   quest.isCheck = false;
   return radiocheckbox(quest);
-}
-  
-  /*
-  returns a checkbox elem
-  */
-  checkbox = function(quest) {
-    quest.isCheck = true;
-    return radiocheckbox(quest);
-  }
-    
-    
-    
-    /*
-    Eventually I plan to use json and each array in json becomes an object so
-    [object,[object2, ...],[object3,[object4,...]...]...]
-    would make something like
-    <object>
-    <object2>
-    ...
-    </object2>
-    <object3>
-    <object4>
-    ...
-    </object4>
-    ...
-    </object3>
-    ...
-    </object>
-    */
-    choices.nums=['0','1','2','3','4','5','6','7','8','9'];
+};
+
+/*
+returns a checkbox elem
+*/
+checkbox = function(quest) {
+  quest.isCheck = true;
+  return radiocheckbox(quest);
+};
+
+
+
+/*
+Eventually I plan to use json and each array in json becomes an object so
+[object,[object2, ...],[object3,[object4,...]...]...]
+would make something like
+<object>
+<object2>
+...
+</object2>
+<object3>
+<object4>
+...
+</object4>
+...
+</object3>
+...
+</object>
+*/
+choices.nums=['0','1','2','3','4','5','6','7','8','9'];
 choices.nums.repeats=true;
 
 /*
@@ -1009,7 +1009,7 @@ function getDistance(rect1,rect2){
 This formats a question object from id:value to what gets thrown into the question() function
 */
 function formatAsQuestion(obj){
-var questionParams = {};
+  var questionParams = {};
   var i = 1;
   for(var key in obj){
     if(key.indexOf("choices-")==0){
@@ -1027,19 +1027,19 @@ var questionParams = {};
   paramSet (obj["questionHTML"],questionParams,"HTML");
   paramSet (obj["placeholderText"],questionParams,"pHold");
   paramSet (typeFromChoice[obj["questionType"]],questionParams,"type");
-
+  
   if(questionParams["type"]=="dropdown"||questionParams["type"]=="dropdownmultiple"){
-  if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
-    
-    if(questionParams["type"]=="dropdown")
-      questionParams["type"]="radio";
-    else
-      questionParams["type"]="checkbox";
+    if(!(obj["isDropDown"] && obj["isDropDown"][0] == "is drop-down")){
+      
+      if(questionParams["type"]=="dropdown")
+        questionParams["type"]="radio";
+      else
+        questionParams["type"]="checkbox";
+    }
   }
-  }
-
+  
   paramSet (obj["baseCode"]?new solidText(obj["baseCode"]):null,questionParams,"pHold");
-return questionParams;
+  return questionParams;
 }
 /*
 inverts obj[key] (returns val)
@@ -1058,31 +1058,31 @@ function getKey (obj, value){
 This formats a question() object to id:value
 */
 function formatAsEditable(obj){
-
-var questionParams = {};
+  
+  var questionParams = {};
   var i = 1;
-if(obj.ansrL){
-  for(var key in obj.ansrL){
-    questionParams["choices-"+i]=obj.ansrL[key];
-    questionParams["correct-"+i]=obj.correctL[key]?"Correct":"Incorrect";
+  if(obj.ansrL){
+    for(var key in obj.ansrL){
+      questionParams["choices-"+i]=obj.ansrL[key];
+      questionParams["correct-"+i]=obj.correctL[key]?"Correct":"Incorrect";
       i++;
+    }
   }
-}
   paramSet (obj["HTML"],questionParams,"questionHTML");
   paramSet (obj["pHold"],questionParams,"placeholderText");
-if(obj["type"]=="dropdown"||obj["type"]=="dropdownmultiple"){
-questionParams["isDropDown"]=["is drop-down"];
-}
-if(obj["type"]=="radio"){
-obj["type"]="dropdown";
-}
-if(obj["type"]=="checkbox"){
-obj["type"]="dropdownmultiple";
-}
+  if(obj["type"]=="dropdown"||obj["type"]=="dropdownmultiple"){
+    questionParams["isDropDown"]=["is drop-down"];
+  }
+  if(obj["type"]=="radio"){
+    obj["type"]="dropdown";
+  }
+  if(obj["type"]=="checkbox"){
+    obj["type"]="dropdownmultiple";
+  }
   paramSet (getKey(typeFromChoice,obj["type"]),questionParams,"questionType");
-if(obj["type"]=="code")
-  paramSet ((obj["baseCode"]?obj["baseCode"].placevalue:null),questionParams,"pHold");
-return questionParams;
+  if(obj["type"]=="code")
+    paramSet ((obj["baseCode"]?obj["baseCode"].placevalue:null),questionParams,"pHold");
+  return questionParams;
 }
 
 /*
@@ -1102,15 +1102,15 @@ function sendQuestion(obj,quiz,overrideID){
 creates and appends a teacher editable question for the quiz
 */
 function appendEditable(questionParams,overrideID,stringObjID,quiz){
-
-if(!overrideID && overrideID !== 0){
+  
+  if(!overrideID && overrideID !== 0){
     questionJSONs.push(JSON.stringify(questionParams));
     questionJSONsUIDs.push(stringObjID);
   }else{
     questionJSONs.splice(questionJSONsUIDs.indexOf(stringObjID),1,JSON.stringify(questionParams));
   }
-
-
+  
+  
   var q = question(questionParams);
   var qParent = document.createElement("DIV");
   var dragQuestionBar = document.createElement("DIV");
@@ -1364,7 +1364,7 @@ var merge = function (obj,objM){
 */
 function formatQuestionJSONsForExportAJAX(){
   return '{"makeL":['+questionJSONs.join(",")+"]}"
-}
+    }
 
 /*
 sets up a new quiz
