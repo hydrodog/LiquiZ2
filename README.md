@@ -11,11 +11,13 @@ Yijin Kang
 
 Poornima Kuna
 
+Stephen Oro
+
 [Add your name here]
 
 ## Introduction
 
-[describe the purpose of the LiquiZ system.  What is it supposed to achieve? What are the major features and highlights? Do not get too detailed, this is supposed to be general.
+LiquiZ is a quiz, testing, and homework platform that looks to solve the problems user experience, efficiency, and capability of modern platforms in the educational field. In user experience, LiquiZ is built to be intuitive and smooth, while providing greater freedom to the educators who use it. In terms of efficiency, the LiquiZ platform takes advantage of content caching to only dynamically load the content that is specific to each quiz or course. LiquiZ makes further improvements in its ability to randomize not only the order of questions and answers, but also can modify equation and basic code questions to create individualized tests, making tests more secure against cheating. LiquiZ optimizes interaction through the efficient design of the server, in which major improvements have been made in preloading information for access. User specific random quizzes are generated prior to the test day to ensure no time is wasted on this step when a user requests a quiz. Alongside this improvement, the server provides faster access by preloading information into RAM, which manifests itself in faster access over the traditional approach of making multiple requests to a single database. In capability, the LiquiZ platform excells by providing a wider array of question types than current systems, which allows educators to test with questions better suited to their subjects. 
 
 ## System Architecture
 
