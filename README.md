@@ -405,7 +405,7 @@ The full diagram of the table structure is shown below.
 
 * Type - A 4-character string to designate the row as containing either a question or a display element (!!)should be a bit/boolean instead. DE types are stored elsewhere
 
- **Questions** - Contains information about the question in a question container. A "question" is actually a radio box, a blank box need to fill text or one choice of a single choice or multiple choice selection. 
+**Questions** - Contains information about the question in a question container. A "question" is actually a radio box, a blank box need to fill text or one choice of a single choice or multiple choice selection. 
 
 * QuesID - Auto incremented primary key
 
