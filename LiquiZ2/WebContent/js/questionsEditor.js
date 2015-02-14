@@ -29,7 +29,8 @@ quiz({qList:[
     ,ID:"questionType"
   }),
 
-  essay({HTML:'Question Text:',rows:3,cols:30,pHold:'Your text here...',ID:"questionHTML"}),
+  //essay({HTML:'Question Text:',rows:3,cols:30,pHold:'Your text here...',ID:"questionHTML"}),
+  singular({HTML:'Question Text:',width:480,height:100,pHold:'Your text here...',ID:"questionHTML"}),
   
   //question type choice determines which questionSet is shown
   questionSet({Class:'dropdowns multidropdowns',qList:[

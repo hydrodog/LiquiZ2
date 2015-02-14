@@ -66,6 +66,111 @@ var opts = {
   displayAllQuestions: true
 };
 
+/*
+gets and sets any kind of element we have, just call ValueOf.get/set on it!
+*/
+var ValueOf={
+  get:function(element){
+    if(this[element.localName.toLowerCase()])
+      return this[element.localName.toLowerCase()](element);
+    else
+      return $(element).val();
+  },
+  set:function(element,value){
+    console.log(element);
+if(this[element.localName.toLowerCase()])
+      this[element.localName.toLowerCase()](element,value);
+    else
+      $(element).val(value);
+  },
+  textarea:function(element,value){
+    if(arguments.length==1){
+      return $(element).val();
+    }else{
+      if(value === false)
+        value = "";
+      $(element).val(value);
+    }
+  },
+  select:function(element,value){
+    if(arguments.length==1){
+          return $(element).val();
+    }else{
+      if(value===false)
+         value = $(element).find('option:first').val();
+      if(!value)
+        value = false;
+      if(value != $(element).val()){
+      $(element).val(value);
+        $(element).trigger("chosen:updated.chosen");
+        $(element).trigger("change");
+      }
+    }
+  },
+  form:function(element,value){
+    var val;
+    if($(element).is('.checkbox')){
+      var checked = $(element).find("input[type='checkbox']"+(arguments.length==1?":checked":""));
+      val = [];
+           for(var i = 0; i < checked.length; i++){
+             if(arguments.length==1){
+             val.push($(checked[i]).val());
+           }else{
+             if(typeof value == "object"){
+             if(value.indexOf($(checked[i]).val())!=-1){
+                 checked[i].checked=true;
+             }else{
+                 checked[i].checked=false;
+             }
+             }else{
+               if($(checked[i]).val()==value || typeof value == "boolean")
+                 checked[i].checked=value?true:false;
+             }
+             }
+               
+           }
+          return val.length > 0 ? val : null;
+
+         }else{
+           if(arguments.length==1){
+           return $(element).find("input[type='radio']:checked").val();
+           }else{
+                   var inputs = $(element).find("input");
+                for(var i = 0; i < inputs.length; i++){
+                  if($(inputs[i]).val()==value){
+                                     inputs[i].checked=true;
+                  }else{
+                                     inputs[i].checked=false;
+
+                  }
+           }
+           }
+         }
+  },
+  div:function(element,value){
+    if($(element).is(".singular")){
+      var editingArea = $(element).find("#singular-editing-area")[0];
+      if(arguments.length==1){
+      if($(editingArea).attr("textis")=="HTML"){
+        return editingArea.textContent;
+      }else{
+        return editingArea.innerHTML;
+      }
+      }else{
+        if(value===false){
+          value="";
+        }
+        if($(editingArea).attr("textis")=="HTML"){
+        editingArea.textContent=value;
+      }else{
+        editingArea.innerHTML=value;
+      }
+      }
+    }else{
+    return null;
+    }
+  }
+};
 
 /*
 the actual setting of the tab index needs updating, and this
@@ -592,7 +697,18 @@ returns an essay question
 */
 essay=function(question){
   return Q(question,
-           textArea(question.rows,question.cols,question.pHold||"","essay"));;   
+           textArea(question.rows,question.cols,question.pHold||"","essay"));  
+};
+
+/*
+returns a stgular textarea
+*/
+singular=function(question){
+  
+  var textEditor = Singular.create({width:question.width, height:question.height});
+  questionSuper(textEditor,question);
+return Q(question,
+           textEditor);    
 };
 
 /*
@@ -867,7 +983,7 @@ function editQuestion(stringObjID,quiz){
   
   for(var key in JSONobj){
     $(quiz).find('#'+key).find(".question").each(function(){
-      if(JSONobj[key].constructor.toString().indexOf("Array")!=-1 && $(this).is("form")){
+      /*if(JSONobj[key].constructor.toString().indexOf("Array")!=-1 && $(this).is("form")){
         var checked = $(this).find("input[type='checkbox']");
         for(var i = 0; i < checked.length; i++){
           if(JSONobj[key].indexOf($(checked[i]).val())!=-1){
@@ -887,7 +1003,9 @@ function editQuestion(stringObjID,quiz){
             $(checked[i]).prop("checked",true);
           }
         } 
-      }
+      }*/
+      ValueOf.set(this,JSONobj[key]);
+
     });
     
   }
@@ -897,7 +1015,8 @@ function editQuestion(stringObjID,quiz){
 duplicates a question held in JSON storage
 */
 function duplicateQuestion(stringObjID,quiz){
-  var JSONobj = JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]);
+  var JSONobj = formatAsEditable(JSON.parse(questionJSONs[questionJSONsUIDs.indexOf(stringObjID)]));
+  
   sendQuestion(JSONobj,quiz);
 }
 
@@ -1263,37 +1382,22 @@ blanks the quiz, primarily used for Editor interface
 function blankQuiz(quiz){
   if($(quiz).attr("isEditor")=="true")
     makeChoiceCount(3,quiz);
-  $(quiz).find('textarea').each(function(){
-    $(this).val("");
+  /*$(quiz).find('textarea').each(function(){
+    ValueOf.set(this,"");
   });
+ 
   $(quiz).find('select').each(function(){
     var firstVal = $(this).find('option:first').val(),
         thisVal = $(this).val();
     if(firstVal!=thisVal){
-      $(this).val(firstVal?firstVal:false);
-      $(this).trigger("chosen:updated.chosen");
-      $(this).trigger("change");
-    }
-  });
-  $(quiz).find('select').each(function(){
-    var firstVal = $(this).find('option:first').val(),
-        thisVal = $(this).val();
-    if(firstVal!=thisVal){
-      $(this).val(firstVal?firstVal:false);
-      $(this).trigger("chosen:updated.chosen");
-      $(this).trigger("change");
+          ValueOf.set(this,firstVal||false);
     }
   });
   $(quiz).find('form').each(function(){
-    if($(this).is('.checkbox')){
-      var checked = $(this).find("input[type='checkbox']:checked");
-      for(var i = 0; i < checked.length; i++){
-        $(checked[i]).prop("checked",false);
-      }
-    }else{
-      $(this).find("input[type='radio']:checked").prop("checked",false);
-    }
-    
+     ValueOf.set(this,false);
+  });*/
+  $(quiz).find('.question').each(function(){
+    ValueOf.set(this,false);
   });
   //TODO: Radio and checkboxes.
 }

@@ -1,16 +1,5 @@
 
 
-*{
-  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-  font-color:#fff;
-    font-size:18px ;
-       -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
 .moving{
   position:absolute;
   z-index:100000;
@@ -50,6 +39,11 @@ height:32px;
   
 }
 
+form{
+  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+    font-size:18px ;
+  
+}
 textarea{
   display:inline-block;
   vertical-align: middle;
@@ -61,6 +55,12 @@ textarea{
   margin:5px;
   color:white;
   
+  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+    font-size:18px ;
+}
+pre{
+   font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+    font-size:18px ;
 }
 .drop{
   width:350px;
@@ -102,6 +102,8 @@ textarea{
   
 }
 button{
+  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+    font-size:18px ;
   cursor:pointer;
   border-radius:10px;
   padding:10px;
@@ -125,6 +127,7 @@ img{
   vertical-align: middle;
 }
 .quiz{
+  
   border-radius:10px;
   padding:10px;
   background-color:#555555;
