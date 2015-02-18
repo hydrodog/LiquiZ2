@@ -99,7 +99,7 @@ public class Util extends HttpServlet{
 		String answerText, warningPattern ;
 		Answer answers = null;
 		FillIn q = new FillIn();
-		q.setAnswers(answers);
+		q.setAns(answers);
 	    answerText = request.getParameter("answer");
 	    warningPattern = request.getParameter("warningPattern");
 	    boolean hasWarning = warningPattern != null;
@@ -155,7 +155,7 @@ public class Util extends HttpServlet{
 		  answers[i] = new Answer(choice, false);
 		}
 		MultiAnswer q = new MultiAnswer();
-		q.setAnswer(answers); 
+		q.setAns(answers); 
 		return q;
 	}
 	public Question createRegexQuestion(HttpServletRequest request){
@@ -163,7 +163,7 @@ public class Util extends HttpServlet{
 		QuestionPattern regexPattern;
 		Answer answers = null;
 		RegexQuestion q = new RegexQuestion();
-		q.setAnswers(answers);
+		q.setAns(answers);
 	    answerText = request.getParameter("answer");
 	  //  regexPattern = request.getParameter("regexString");
 	  //  q.setPattern(regexPattern);   TODO: Check!

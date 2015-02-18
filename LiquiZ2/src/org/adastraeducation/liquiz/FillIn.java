@@ -23,7 +23,6 @@ import org.adastraeducation.liquiz.util.Number;
 import org.adastraeducation.liquiz.util.WarningPattern;
 
 public class FillIn extends Question {
-	private Answer answer; //TODO: remove
 	
 	// add attributes to merge Regex Questions.
 	// If hasPattern is true and pattern!=null, it means it is a fillin question also a Regex Question
@@ -56,15 +55,21 @@ public class FillIn extends Question {
 
 	public FillIn(int id, int points, int level, String answer) {
 		super(id, points, level);
-		this.answer = new Answer(answer, true); //TODO: change into ArrayList? or remove constructor
+		ArrayList<Answer> ans = new ArrayList<Answer>();
+		ans.add(new Answer(answer, true));
+		this.setAns(ans);
 		warningPattern = null;
 		pattern = null;
 		appro = null;
 	}
 	
+	// Make sure the Answers are initialized with Strings for now. 
+	
 	public FillIn(int id, int points, int level, Answer answer) {
 		super(id, points, level);
-		this.answer=answer; //TODO: change into ArrayList? or remove constructor
+		ArrayList<Answer> ans = new ArrayList<Answer>();
+		ans.add(answer);
+		this.setAns(ans);
 		warningPattern = null;
 		pattern = null;
 		appro = null;
@@ -77,7 +82,9 @@ public class FillIn extends Question {
 	// the new constructor including all of the elements
 	public FillIn(int id, int points, int level, Answer answer, WarningPattern wp, QuestionPattern qp, Number number){
 		super(id,points, level);
-		this.answer = answer; //TODO: change into ArrayList? or remove constructor
+		ArrayList<Answer> ans = new ArrayList<Answer>();
+		ans.add(answer);
+		this.setAns(ans);
 		this.warningPattern=wp;
 		this.pattern = qp;
 		this.appro = number;
@@ -86,7 +93,9 @@ public class FillIn extends Question {
 	// the new constructor including all of the elements
 	public FillIn(int points, int level, Answer answer, WarningPattern wp, QuestionPattern qp, Number number){
 		super(points, level);
-		this.answer = answer; //TODO: change into ArrayList? or remove constructor
+		ArrayList<Answer> ans = new ArrayList<Answer>();
+		ans.add(answer);
+		this.setAns(ans);
 		this.warningPattern=wp;
 		this.pattern = qp;
 		this.appro = number;
@@ -104,15 +113,6 @@ public class FillIn extends Question {
 	
 	//get Tag
 	public String getTagName() { return "FillIn"; }
-	
-	// getter and setter
-	public Answer getAnswer(){
-		return answer;
-	}
-	
-	public void setAnswers(Answer answer){
-		this.answer=answer;
-	}
 
 	public WarningPattern getWarningPattern() {
 		return warningPattern;
@@ -191,13 +191,15 @@ public class FillIn extends Question {
 	
 	public boolean isCorrect(String s) {
 		if(pattern==null&&appro==null){      //it is a fillin question
-			if(s.equals(this.answer.getAnswer()))
-				return true;
-			else
-				return false;
+			for (Answer a : this.getAnsAsArray()) {
+				if(s.equals(a.getAnswer()))
+					return true;
+			}
+			return false;
 		}
 		else if(pattern==null&&appro!=null){   // it is a regex question
-			String ans = this.answer.getAnswer();
+			Answer a = this.getAnsAsArray()[0];
+			String ans = a.getAnswer();
 			double target = Double.parseDouble(ans);
 			if(appro.equal(target))
 				return true;
@@ -205,14 +207,16 @@ public class FillIn extends Question {
 				return false;
 		}
 		else if(pattern!=null&&appro==null){   // it is a Number Question
-			String ans = this.answer.getAnswer();
+			Answer a = this.getAnsAsArray()[0];
+			String ans = a.getAnswer();
 			if(pattern.isMatch(ans))
 				return true;
 			else
 				return false;
 		}
 		else{                               // it is a RegexNumber Question
-			String ans = this.answer.getAnswer();
+			Answer a = this.getAnsAsArray()[0];
+			String ans = a.getAnswer();
 			if(pattern.isMatch(ans)){
 				String temp = pattern.getValue(ans);
 				double target = Double.parseDouble(temp);

@@ -2,6 +2,7 @@ package org.adastraeducation.liquiz.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.adastraeducation.liquiz.*;
 
@@ -12,6 +13,14 @@ import org.adastraeducation.liquiz.*;
  *
  */
 public class Load {
+	
+//	public static void main(String[] args) {
+//		loadUser();
+//		loadQuesCon();
+//		loadQuiz();		
+////		loadCourse();
+//	}
+	
 	/**
 	 * 
 	 * @param DispElID
@@ -22,28 +31,34 @@ public class Load {
 		StringBuilder sb = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT Element, Type FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
-			p.setInt(1, DispElID);
-			ResultSet rs = p.executeQuery();
+			PreparedStatement p1 = conn.prepareStatement("SELECT Type FROM DisplayElements WHERE DispElID=?");
+			p1.setInt(1, DispElID);
+			ResultSet rs1 = p1.executeQuery();
 			
-			rs.next();
-			if (rs.getString("Type").equals("text")) {
+			PreparedStatement p2 = conn.prepareStatement("SELECT DispEl, Element FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
+			p2.setInt(1, DispElID);
+			ResultSet rs2 = p2.executeQuery();
+			
+			if (rs1.next() && rs1.getString("Type").equals("text")) {
 				// Longer Strings are split up
 				sb = new StringBuilder();
-				while (rs.next()) {
-					sb.append(rs.getString("Element"));
+				while (rs2.next()) {
+					sb.append(rs2.getString("Element"));
 				}
 			} else {
 				// DisplayElement requested is not text
 				// TODO: Exception
 			}
-			rs.close();
+			
+			rs1.close();
+			rs2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
 		
+		System.out.println(sb.toString());
 		return sb.toString();
 	}
 
@@ -58,32 +73,37 @@ public class Load {
 		Displayable d = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT Element, Type FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
-			p.setInt(1, DispElID);
-			ResultSet rs = p.executeQuery();
+			PreparedStatement p1 = conn.prepareStatement("SELECT Type FROM DisplayElements WHERE DispElID=?");
+			p1.setInt(1, DispElID);
+			ResultSet rs1 = p1.executeQuery();
+			
+			PreparedStatement p2 = conn.prepareStatement("SELECT DispEl, Element FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
+			p2.setInt(1, DispElID);
+			ResultSet rs2 = p2.executeQuery();
 			
 			String type = null;
 			// Figure out what type of Displayable to load
-			if (rs.next()) {
-				type = rs.getString("Type");
+			if (rs1.next() && rs2.next()) {
+				type = rs1.getString("Type");
 			} else {
 				System.out.print("No Displayables found");
 			}
 			
 			if (type.equals("text")) {
-				String s = loadText(rs.getInt("DispEl"));
+				String s = loadText(rs2.getInt("DispEl"));
 				d = new Text(s);
 			} else if (type.equals("img")) {
-				d = new Image(rs.getString("Element"));
+				d = new Image(rs2.getString("Element"));
 			} else if (type.equals("aud")) {
-				d = new Audio(rs.getString("Element"));
+				d = new Audio(rs2.getString("Element"));
 			} else if (type.equals("vid")) {
-				d = new Video(rs.getString("Element"));
+				d = new Video(rs2.getString("Element"));
 			} else {
 				d = null;
 			}
 			Database.setDisp(DispElID, d);
-			rs.close();
+			rs1.close();
+			rs2.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -109,14 +129,16 @@ public class Load {
 			p.setInt(1, AnsID);
 			ResultSet rs = p.executeQuery();
 
-			if (rs.getInt("Element") != 0) {
-				a = new Answer(AnsID, loadDispEl(rs.getInt("Element")), correct);
-				if (rs.getInt("Response") != 0) {
-					res = new Response(loadDispEl(rs.getInt("Response")));
-					a.setResponse(res);
+			if(rs.next()) {
+				if (rs.getInt("Element") != 0) {
+					a = new Answer(AnsID, loadDispEl(rs.getInt("Element")), correct);
+					if (rs.getInt("Response") != 0) {
+						res = new Response(loadDispEl(rs.getInt("Response")));
+						a.setResponse(res);
+					}
+				} else {
+					// TODO Range
 				}
-			} else {
-				// TODO Range
 			}
 			
 			rs.close();
@@ -193,51 +215,57 @@ public class Load {
 			selQA.setInt(1, QuesID);
 			ResultSet QA = selQA.executeQuery();
 			
-			// Figure out what type of Question to load
-			String type = ques.getString("QType");
-			if (type.equals("Fill")) {
-				while(QA.next()) {
-					// find the answer
-					int ansID = QA.getInt("Ans");
-					Answer a = loadAns(ansID, QA.getBoolean("Correct"));
-					// add it to the answers ArrayList
-					answers.add(a);
-				}
-				q = new FillIn(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answers); 
-			} else if (type.startsWith("M")) {
-				//all types of multi
-				if (QA.getInt("Ans") != 0) {
+			if(ques.next() && QA.next()) {
+				// Figure out what type of Question to load
+				String type = ques.getString("QType");
+				if (type.equals("Fill")) {
 					while(QA.next()) {
 						// find the answer
 						int ansID = QA.getInt("Ans");
 						Answer a = loadAns(ansID, QA.getBoolean("Correct"));
-						// add the answer to the ArrayList
+						// add it to the answers ArrayList
 						answers.add(a);
 					}
-				} else {
-					// load the StdSet
-					sc = loadStdChoices(QA.getInt("StdSet"));
-					while (QA.next()) {
-						// go through the StdSet and check for answers to be marked correct
-						if (QA.getBoolean("Correct")) {
-							sc.setAnswer(QA.getInt("Sequence"));
+					q = new FillIn(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answers); 
+				} else if (type.startsWith("M")) {
+					//all types of multi
+					if (QA.getInt("Ans") != 0) {
+						do {
+							// find the answer
+							int ansID = QA.getInt("Ans");
+							Answer a = loadAns(ansID, QA.getBoolean("Correct"));
+							// add the answer to the ArrayList
+							answers.add(a);
+						} while(QA.next());
+					} else {
+						// load the StdSet
+						sc = loadStdChoices(QA.getInt("StdSet"));
+						while (QA.next()) {
+							// go through the StdSet and check for answers to be marked correct
+							if (QA.getBoolean("Correct")) {
+								sc.setAnswer(QA.getInt("Sequence"));
+							}
 						}
+						// match the answers ArrayList to the StdSet answers ArrayList
+						answers = sc.getAnswers();
 					}
-					// match the answers ArrayList to the StdSet answers ArrayList
-					answers = sc.getAnswers();
+					
+					//turn answers into Answer[] array
+					Answer[] answersArr = Arrays.copyOf(answers.toArray(), answers.size(), Answer[].class); 
+					
+					// load the appropriate question type
+					if (type.equals("Mult")) {
+						q = new MultiAnswer(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answersArr);
+					} else if (type.equals("MCDD")) {
+						q = new MultiChoiceDropdown(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answersArr);
+					} else if (type.equals("MCRa")) {
+						q = new MultiChoiceRadio(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answersArr);
+					} else {
+						//TODO: any other multis?
+					}
 				}
-				// load the appropriate question type
-				if (type.equals("Mult")) {
-					q = new MultiAnswer(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), (Answer[]) answers.toArray());
-				} else if (type.equals("MCDD")) {
-					q = new MultiChoiceDropdown(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), (Answer[]) answers.toArray());
-				} else if (type.equals("MCRa")) {
-					q = new MultiChoiceRadio(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), (Answer[]) answers.toArray());
-				} else {
-					//TODO: any other multis?
-				}
+				//TODO: else if(type.equals("")) ...
 			}
-			//TODO: else if(type.equals("")) ...
 			
 			ques.close();
 			QA.close();
@@ -264,18 +292,20 @@ public class Load {
 			// set fields of the policy
 			pol = new Policy();
 			pol.setID(PolID);
-			pol.setAttemptNum(rs.getInt("Attempts"));
-			pol.setTimed(rs.getBoolean("Timed"));
-			if (rs.getBoolean("Timed")) {
-				pol.setDuration(rs.getInt("TimeLimit"));
-			}
-			pol.setShowAns(rs.getBoolean("ShowAns"));
-			pol.setScored(rs.getBoolean("Scored"));
-			pol.setGrade(rs.getInt("Grade"));
-			pol.setShuffleQues(rs.getBoolean("ShuffleQues"));
-			pol.setShuffleAns(rs.getBoolean("ShuffleAns"));
-			if (rs.getString("AccessCode") != null) {
-				pol.setAccessCode(rs.getString("AccessCode"));
+			if(rs.next()) {
+				pol.setAttemptNum(rs.getInt("Attempts"));
+				pol.setTimed(rs.getBoolean("Timed"));
+				if (rs.getBoolean("Timed")) {
+					pol.setDuration(rs.getInt("TimeLimit"));
+				}
+				pol.setShowAns(rs.getBoolean("ShowAns"));
+				pol.setScored(rs.getBoolean("Scored"));
+				pol.setGrade(rs.getInt("Grade"));
+				pol.setShuffleQues(rs.getBoolean("ShuffleQues"));
+				pol.setShuffleAns(rs.getBoolean("ShuffleAns"));
+				if (rs.getString("AccessCode") != null) {
+					pol.setAccessCode(rs.getString("AccessCode"));
+				}
 			}
 
 			Database.setPolicy(PolID, pol);
@@ -296,25 +326,41 @@ public class Load {
 
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT * FROM QuesConElements ORDER BY Sequence ASC");
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM QuesConElements ORDER BY QuesCon, Sequence ASC");
 			ResultSet rs = p.executeQuery();
 
 			ArrayList<Displayable> dispEls = new ArrayList<Displayable>();
 			QuestionContainer qc = null;
 			
+			int QCID = 1;
+			
 			while (rs.next()) {
-				// load all of the elements in the QuestionContainer and put it in dispEls ArrayList
+				if (rs.getInt("QuesCon") != QCID) {
+					// turn dispEls into displayables array and create QuesCon 
+					Displayable[] displayables = Arrays.copyOf(dispEls.toArray(), dispEls.size(), Displayable[].class);
+					
+					qc = new QuestionContainer(QCID, displayables);
+					Database.setQuesCon(QCID, qc);
+					System.out.println("QuesCon " + QCID + " loaded");
+					
+					dispEls.clear();
+				}
+				// load element in the QuestionContainer and put it in dispEls ArrayList
 				String element = rs.getString("Type");
-				if (element.equals("disp")) {
+				if (element.equals("Elem")) {
 					dispEls.add(loadDispEl(rs.getInt("Element")));
 				} else {
 					dispEls.add(loadQues(rs.getInt("Ques")));
 				}
-				// turn dispEls into a QuestionContainer & put it in the database
-				int QCID = rs.getInt("QCID");
-				qc = new QuestionContainer(QCID, (Displayable[])dispEls.toArray());
-				Database.setQuesCon(QCID, qc);
+				
+				QCID = rs.getInt("QuesCon");
 			}
+			//put last QuesCon in Database ArrayList
+			Displayable[] displayables = Arrays.copyOf(dispEls.toArray(), dispEls.size(), Displayable[].class);
+			
+			qc = new QuestionContainer(QCID, displayables);
+			Database.setQuesCon(QCID, qc);
+			System.out.println("QuesCon " + QCID + " loaded");
 			rs.close();
 			
 		} catch(SQLException e) {
@@ -348,6 +394,11 @@ public class Load {
 				while(rs2.next()) {
 					quiz.addQuestionContainer(Database.getQuesCon(rs2.getInt("QuesCon")));
 				}
+				
+				StringBuilder sb = new StringBuilder();
+				quiz.writeHTML(sb);
+				System.out.print(sb.toString());
+				
 				Database.setQuiz(rs1.getInt("QuizID"), quiz);
 				rs2.close();
 			}
@@ -418,6 +469,7 @@ public class Load {
 				String email = rs.getString("Email");
 				user = new User(id, un, pw, fn, ln, email);
 				Database.setUser(id, user);
+				System.out.println("User " + id + " loaded");
 			}
 			rs.close();
 		} catch (SQLException e) {

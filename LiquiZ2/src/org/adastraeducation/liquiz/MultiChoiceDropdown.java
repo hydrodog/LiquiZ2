@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 
 public class MultiChoiceDropdown extends Question {
-	protected Answer[] answers;
 	protected StdChoice stdchoice;
 	protected StdChoiceTwo sc;
 
@@ -15,13 +14,11 @@ public class MultiChoiceDropdown extends Question {
 		super(level, points);
 	}
 	public MultiChoiceDropdown(int id, int level, int points, Answer[] answers) {
-		super(id, level, points);
-		this.answers = answers.clone();
+		super(id, level, points, answers);
 	}
 
 	public MultiChoiceDropdown(int level, int points, Answer[] answers) {
-		super(level, points);
-		this.answers = answers.clone();
+		super(level, points, answers);
 	}
 	
 	//constructors with ArrayList<Answer> instead of Answer[]
@@ -79,14 +76,6 @@ public class MultiChoiceDropdown extends Question {
 	public String getTagName() {
 		return "MultiChoice";
 	}
-
-//	Question parent class has getAns() and setAns()
-//	public Answer[] getAnswers() {
-//		return answers;
-//	}
-//	public void setAnswers(Answer[] ans) {
-//		this.answers = ans;
-//	}
 
 	public void writeHTML(StringBuilder b) {
 		// Standard Choice options

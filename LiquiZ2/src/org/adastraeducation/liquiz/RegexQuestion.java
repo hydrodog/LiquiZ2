@@ -41,7 +41,8 @@ public class RegexQuestion extends FillIn {
 	 * For regexQuestion, the answer will only store the value. It is necessary for it to store the pattern
 	 */
 	public boolean isCorrect(String s) {
-		String temp = this.getAnswer().getAnswer();
+		Answer a = this.getAnsAsArray()[0];
+		String temp = a.getAnswer();
 		String ans = pattern.getValue(s);
 		if(ans==null)
 			return false;

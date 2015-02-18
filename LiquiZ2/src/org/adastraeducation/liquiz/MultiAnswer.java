@@ -4,25 +4,9 @@ import java.util.ArrayList;
 
 
 public class MultiAnswer extends MultiChoiceDropdown {
-	private Answer [] answers; // would like to switch to ArrayList<Answer> in Question class
-	
-	// There are duplicate getters and setters now plus the one in the Question parent class -Yijin
-	
+		
 	/**********************Added getter and setter for serialization********************************/
-	public Answer[] getAnswer(){
-		return answers;
-	}
-	
-	public void setAnswer(Answer[] a){
-		answers = a;
-	}
-	
-//	public Answer[] getAnswers() {
-//		return answers;
-//	}
-//	public void setAnswers(Answer[] answers) {
-//		this.answers = answers;
-//	}
+//	TODO: change serialization to use getAnsAsArray() and setAns() in Question class
 
 	public MultiAnswer() {
 	}
@@ -57,7 +41,10 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		return "MultiAnswer";
 	}
 	
-	public void writeHTML(StringBuilder b ){	
+	public void writeHTML(StringBuilder b ){
+		
+		Answer[] ans = this.getAnsAsArray();
+		
 		if (stdchoice != null) {
 
 			stdchoice.writeHTMLMultiSelection(b);
@@ -66,17 +53,24 @@ public class MultiAnswer extends MultiChoiceDropdown {
 
 		
 			b.append("<select multiple>");
-			for (int i = 0; i < answers.length; i++){
-				b.append("<option value= '" + answers[i].getAnswer() + "'>"+ answers[i].getAnswer() +"  </option> ");
+			for (int i = 0; i < ans.length; i++){
+				b.append("<option value= '");
+				ans[i].getGAns().writeHTML(b);
+				b.append("'>");
+				ans[i].getGAns().writeHTML(b);
+				b.append("  </option> ");
 			 }
 			b.append("</select>");
-			b.append("</br>");
+			b.append("</br>\n");
 		}
        
 	}
 	public void writeJS(StringBuilder b ){
-		for (int i = 0; i < answers.length; i++){
-			b.append("new MultipleChoice(" +answers[i].getAnswer() +")");
+		Answer[] ans = this.getAnsAsArray();
+		for (int i = 0; i < ans.length; i++){
+			b.append("new MultipleChoice(");
+			ans[i].getGAns().writeHTML(b);
+			b.append(")");
 		}
 	}	
 }

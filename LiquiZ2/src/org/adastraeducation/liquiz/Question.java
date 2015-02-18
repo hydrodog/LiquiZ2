@@ -32,6 +32,19 @@ public abstract class Question implements Displayable {
 		setHashId(id);
 	}
 	
+	public Question (int id, int points, int level, Answer[] answers) {
+		this.id = id;
+		this.points = points;
+		this.level = level;
+		this.answers = new ArrayList<Answer>(Arrays.asList(answers)); 
+	}
+	
+	public Question (int points, int level, Answer[] answers) {
+		this.points = points;
+		this.level = level;
+		this.answers = new ArrayList<Answer>(Arrays.asList(answers));
+	}
+	
 	public Question (int id, int points, int level, ArrayList<Answer> answers) {
 		this.id = id;
 		this.points = points;
@@ -63,6 +76,13 @@ public abstract class Question implements Displayable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public void setAns(Answer ans) {
+		ArrayList<Answer> ansList = new ArrayList<Answer>();
+		ansList.add(ans);
+		this.answers = ansList;
+	}
+	
 	public ArrayList<Answer> getAns() {
 		return answers;
 	}
@@ -72,7 +92,8 @@ public abstract class Question implements Displayable {
 	
 	// might change everything to ArrayLists later
 	public Answer[] getAnsAsArray() {
-		return (Answer[]) answers.toArray();
+		Answer[] answersArr = Arrays.copyOf(answers.toArray(), answers.size(), Answer[].class); 
+		return answersArr;
 	}
 	public void setAns(Answer[] answers) {
 		this.answers = new ArrayList<Answer>(Arrays.asList(answers));
