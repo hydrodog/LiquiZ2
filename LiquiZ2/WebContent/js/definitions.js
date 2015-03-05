@@ -78,7 +78,7 @@ var ValueOf={
   },
   set:function(element,value){
     console.log(element);
-    if(this[element.localName.toLowerCase()])
+if(this[element.localName.toLowerCase()])
       this[element.localName.toLowerCase()](element,value);
     else
       $(element).val(value);
@@ -112,60 +112,62 @@ var ValueOf={
     if($(element).is('.checkbox')){
       var checked = $(element).find("input[type='checkbox']"+(arguments.length==1?":checked":""));
       val = [];
-      for(var i = 0; i < checked.length; i++){
-        if(arguments.length==1){
-          val.push($(checked[i]).val());
-        }else{
-          if(typeof value == "object"){
-            if(value.indexOf($(checked[i]).val())!=-1){
-              checked[i].checked=true;
-            }else{
-              checked[i].checked=false;
-            }
-          } else{
-            if($(checked[i]).val()==value || typeof value == "boolean")
-              checked[i].checked=value?true:false;
-          }
-        }
-      }
-      return val.length > 0 ? val : null;
+           for(var i = 0; i < checked.length; i++){
+             if(arguments.length==1){
+             val.push($(checked[i]).val());
+           }else{
+             if(typeof value == "object"){
+             if(value.indexOf($(checked[i]).val())!=-1){
+                 checked[i].checked=true;
+             }else{
+                 checked[i].checked=false;
+             }
+             }else{
+               if($(checked[i]).val()==value || typeof value == "boolean")
+                 checked[i].checked=value?true:false;
+             }
+             }
+               
+           }
+          return val.length > 0 ? val : null;
 
-    }else{
-      if(arguments.length==1){
-        return $(element).find("input[type='radio']:checked").val();
-      }else{
-        var inputs = $(element).find("input");
-        for(var i = 0; i < inputs.length; i++){
-          if($(inputs[i]).val()==value){
-            inputs[i].checked=true;
-          }else{
-            inputs[i].checked=false;
-          }
-        }
-      }
-    }
+         }else{
+           if(arguments.length==1){
+           return $(element).find("input[type='radio']:checked").val();
+           }else{
+                   var inputs = $(element).find("input");
+                for(var i = 0; i < inputs.length; i++){
+                  if($(inputs[i]).val()==value){
+                                     inputs[i].checked=true;
+                  }else{
+                                     inputs[i].checked=false;
+
+                  }
+           }
+           }
+         }
   },
   div:function(element,value){
     if($(element).is(".singular")){
       var editingArea = $(element).find("#singular-editing-area")[0];
       if(arguments.length==1){
-        if($(editingArea).attr("textis")=="HTML"){
-          return editingArea.textContent;
-        }else{
-          return editingArea.innerHTML;
-        }
+      if($(editingArea).attr("textis")=="HTML"){
+        return editingArea.textContent;
+      }else{
+        return editingArea.innerHTML;
+      }
       }else{
         if(value===false){
           value="";
         }
         if($(editingArea).attr("textis")=="HTML"){
-          editingArea.textContent=value;
-        }else{
-          editingArea.innerHTML=value;
-        }
+        editingArea.textContent=value;
+      }else{
+        editingArea.innerHTML=value;
+      }
       }
     }else{
-      return null;
+    return null;
     }
   }
 };
@@ -209,10 +211,11 @@ function saveLocalRegex(e){
   var regexName = $(e.target).parent().parent().find("#regexName").find('textarea');
   var regexPattern = $(e.target).parent().parent().find("#regexPattern").find('select');
   $(regexPattern).append(makeOption(0,true,[regexName.val()]))
-  $(regexPattern).val(regexName.val());
+    $(regexPattern).val(regexName.val());
   $(regexPattern).trigger("chosen:updated.chosen");
   $(regexPattern).trigger("change");
   saveRegexToServer(regexName.val(),regexFillin.val());
+  
 }
 
 /*
@@ -354,6 +357,7 @@ function questionInf(object){
   }
   $(container).addClass(qClass); 
   
+  
   return container;
 }
 
@@ -430,6 +434,11 @@ function textArea(rows,cols,placeholder,hasclass){
   var textarea = document.createElement("TEXTAREA");
   //set sizing
   $(textarea).attr("rows",""+rows);
+  
+  
+  
+  
+  
   $(textarea).attr("cols",""+cols);
   
   //optional placeholder or pre assigned value
@@ -493,11 +502,11 @@ isMultiple - differentiates between dropdown and dropdownmultiple
 returns the created select (drop down) html element
 
 */
-function dropDown(placeholder,answerList,showHide,isMultiple){
+function  dropDown(placeholder,answerList,showHide,isMultiple){
   if(!answerList) return;
-  if(typeof answerList == 'string'){
-    answerList = choices[answerList];
-  }
+    if(typeof answerList == 'string'){
+      answerList = choices[answerList];
+    }
   answerList=clone(answerList);
   if(typeof showHide == 'string'){
     showHide = choices[showHide];
@@ -698,7 +707,7 @@ singular=function(question){
   
   var textEditor = Singular.create({width:question.width, height:question.height});
   questionSuper(textEditor,question);
-  return Q(question,
+return Q(question,
            textEditor);    
 };
 
@@ -1459,7 +1468,7 @@ var merge = function (obj,objM){
 */
 function formatQuestionJSONsForExportAJAX(){
   return '{"makeL":['+questionJSONs.join(",")+"]}"
-}
+    }
 
 /*
 sets up a new quiz
@@ -1510,7 +1519,7 @@ function quiz(object){
   
   
   for(var i = 0; i < makeListQuestions.length; i++){
-    questions.splice(0,0,question(makeListQuestions[i]));
+    questions.push(question(makeListQuestions[i]));
   }
   for(var i = 0; i < questions.length; i++){
     $(questions[i]).addClass('Q');
@@ -1536,8 +1545,7 @@ function quiz(object){
         success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
           alert(errMsg);
-        }
-      });
+        }});
     });
     
     
