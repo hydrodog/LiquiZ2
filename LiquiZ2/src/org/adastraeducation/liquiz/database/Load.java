@@ -8,7 +8,6 @@ import org.adastraeducation.liquiz.*;
 
 /**
  * Loading objects based on database information
- * Need to work on where the objects go after being created...
  * @author yijinkang
  *
  */
@@ -152,7 +151,7 @@ public class Load {
 	}
 	
 	// Loads all the answers in the StdSet requested
-	public static StdChoiceTwo loadStdChoices() {
+	public static void loadStdChoices() {
 		Connection conn = null;
 		String name = null;
 		ArrayList<Answer> ans = new ArrayList<Answer>();
@@ -187,7 +186,6 @@ public class Load {
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-		return sc;
 	}
 
 	/**
@@ -259,6 +257,8 @@ public class Load {
 					} else {
 						//TODO: any other multis?
 					}
+				} else if (type.equals("code")) {
+					
 				}
 				//TODO: else if(type.equals("")) ...
 			}
@@ -274,7 +274,7 @@ public class Load {
 		return q;
 	}
 
-	public static Policy loadPolicy() {
+	public static void loadPolicies() {
 		Connection conn = null;
 		Policy pol = null;
 		
@@ -309,7 +309,6 @@ public class Load {
 		} finally {
 			DatabaseMgr.returnConnection(conn);
 		}
-		return pol;
 	}
 
 	/**
@@ -543,8 +542,7 @@ public class Load {
 	/*
 	 * two types of methods:
 	 * questions, answers, DispEls load one at a time and return
-	 * Users, Courses, quizzes, question containers load everything 
-	 * TODO: Policies & StdChoice should load all as well
+	 * Users, Courses, Policies, Quizzes, Question Containers, StdChoicess load everything 
 	 * (they'll call the above methods so the needed ones will be loaded as well)
 	 * TODO: Student Grade/QuizScore/Response load everything too but where to put it? 
 	 * 2D array?
