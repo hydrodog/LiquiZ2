@@ -122,5 +122,5 @@ public abstract class Question implements Displayable {
 	}
 	
 	public abstract boolean isCorrect(String s); // will delete eventually
-	public abstract boolean isCorrect(Displayable d);
+	public abstract boolean isCorrect(DisplayElement d);
 }

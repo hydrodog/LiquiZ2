@@ -39,13 +39,15 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 		} else {
 
 			// Regular options
-			b.append("<select>");
+			b.append("<select>\n");
 			for (int i = 0; i < this.getAnsAsArray().length; i++) {
-				b.append("<option> <input type='radio' value= '" + this.getAnsAsArray()[i].getAnswer() + "'> "+ this.getAnsAsArray()[i].getAnswer() +" </option> ");
+				b.append("<option> <input type='radio' value= '" + this.getAnsAsArray()[i].getName() + "'> ");
+				this.getAnsAsArray()[i].writeHTML(b);
+				b.append(" </option>\n ");
 			}
-			b.append("</select>");
+			b.append("</select>\n");
 			b.append("</br>");
-			b.append("</br>");
+			b.append("</br>\n");
 		}
 
 	}
@@ -53,7 +55,7 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 
 	public void writeJS(StringBuilder b ) {
 		for (int i = 0; i < this.getAnsAsArray().length; i++) {
-			b.append("multichoice(").append(this.getAnsAsArray()[i].getAnswer()).append(')');
+			b.append("multichoice(").append(this.getAnsAsArray()[i].getName()).append(')');
 		}
 	}
 	

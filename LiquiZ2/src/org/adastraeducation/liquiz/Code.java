@@ -54,7 +54,7 @@ public class Code extends Question {
 		return false;
 	}
 	
-	public boolean isCorrect(Displayable d) {
+	public boolean isCorrect(DisplayElement d) {
 		// TODO placeholder? I don't know how it's being checked
 		return false;
 	}

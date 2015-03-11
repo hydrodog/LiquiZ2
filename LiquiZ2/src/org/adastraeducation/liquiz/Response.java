@@ -3,36 +3,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Response implements Displayable {
-	private Displayable displayable;
-	private ArrayList<Displayable> displayables;
+	private DisplayElement displayEl;
+	private ArrayList<DisplayElement> displayEls;
 
 	public Response() {
-		displayables = new ArrayList<Displayable>();
+		displayEls = new ArrayList<DisplayElement>();
 	}
 	// not sure why it's a list so I'm making a new one...
-	public Response(Displayable[] list) {
-		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+	public Response(DisplayElement[] list) {
+		displayEls = new ArrayList<DisplayElement>(Arrays.asList(list));
 	}
 	
-	public Response(Displayable d) {
-		displayable = d;
+	public Response(DisplayElement d) {
+		displayEl = d;
 	}
 	
-	public ArrayList<Displayable> getDisplayables() {
-		return this.displayables;
+	public ArrayList<DisplayElement> getDisplayables() {
+		return this.displayEls;
 	}
 
-	public void add(Displayable d){
-		displayables.add(d);
+	public void add(DisplayElement d){
+		displayEls.add(d);
 	}
 
-	public void delete(Displayable d){
-		displayables.remove(d);
+	public void delete(DisplayElement d){
+		displayEls.remove(d);
 	}
 
 	public void writeHTML (StringBuilder b) {
 		b.append("<div class='response'>\n");
-		for (Displayable d : displayables) {
+		for (Displayable d : displayEls) {
 			d.writeHTML(b);
 		}
 		b.append("</div>\n");
@@ -40,7 +40,7 @@ public class Response implements Displayable {
 
 	public void writeXML (StringBuilder b) {
 		b.append("<R>");
-		for (Displayable d : displayables) {
+		for (Displayable d : displayEls) {
 			d.writeXML(b);
 		}
 		b.append("</R>");
@@ -48,12 +48,12 @@ public class Response implements Displayable {
 
 	public void writeJS (StringBuilder b) {
 		b.append("{title: 'Response', content:[");
-		if (displayables.size() > 0) {
-			displayables.get(0).writeJS(b);
-			if (displayables.size() > 1) {
-				for (int i = 1; i < displayables.size(); i++) {
+		if (displayEls.size() > 0) {
+			displayEls.get(0).writeJS(b);
+			if (displayEls.size() > 1) {
+				for (int i = 1; i < displayEls.size(); i++) {
 					b.append(',');
-					displayables.get(i);
+					displayEls.get(i);
 				}
 			}
 		}

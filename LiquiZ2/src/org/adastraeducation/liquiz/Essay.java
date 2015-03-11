@@ -55,7 +55,7 @@ public class Essay extends Question {
 		return false;
 	}
 
-	public boolean isCorrect(Displayable d) {
+	public boolean isCorrect(DisplayElement d) {
 		return false;
 	}
 	

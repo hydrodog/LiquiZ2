@@ -130,7 +130,7 @@ public class Quiz implements Displayable {
 		for(QuestionContainer qc : this.qContainers) {
 			qc.writeHTML(b);
 		}
-		b.append("</div>\n");
+		b.append("\n</div>\n");
 	}
 	
 	public void writeXML (StringBuilder b) {

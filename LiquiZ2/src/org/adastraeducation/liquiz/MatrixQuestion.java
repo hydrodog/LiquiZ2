@@ -79,7 +79,7 @@ public class MatrixQuestion extends Question {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	public boolean isCorrect(Displayable d) {
+	public boolean isCorrect(DisplayElement d) {
 		// TODO
 		return false;
 	}

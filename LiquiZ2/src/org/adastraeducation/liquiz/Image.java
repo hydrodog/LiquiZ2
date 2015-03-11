@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Image implements Displayable {
+public class Image extends DisplayElement {
 	private String width;
 	private String height;
 	private String name;

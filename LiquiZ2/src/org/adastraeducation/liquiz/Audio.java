@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Audio implements Displayable {
+public class Audio extends DisplayElement {
 	private String source;
 	private String type;
 
@@ -14,6 +14,10 @@ public class Audio implements Displayable {
 	public Audio(String source, String type){
 		this.source = source;		
 	}
+	public String getName() {
+		return source;
+	}
+	//TODO: the above & below overlap
 	public String getSource() {
 		return source;
 	}

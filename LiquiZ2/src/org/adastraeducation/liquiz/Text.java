@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Text implements Displayable {
+public class Text extends DisplayElement {
 	private String text;
 	
 	public Text(){
@@ -21,6 +21,10 @@ public class Text implements Displayable {
 	
 	public void setText(String t){
 		text = t;
+	}
+	
+	public String getName() {
+		return text;
 	}
 	
 	@Override

@@ -104,8 +104,9 @@ public class StdChoiceTwo {
 	public void writeHTMLDropdown(StringBuilder b){
 		b.append("<select>");
 		for (int i = 0; i < answers.size(); i++) {
-			b.append("<option value='" + answers.get(i).getAnswer() + "'> "
-					+ answers.get(i).getAnswer() + " </option> ");
+			b.append("<option value='" + answers.get(i).getName() + "'> ");
+			answers.get(i).writeHTML(b);
+			b.append(" </option> ");
 		}
 		b.append("</select>");
 		b.append("</br>");
@@ -114,8 +115,9 @@ public class StdChoiceTwo {
 	public void writeHTMLRadio(StringBuilder b) {
 		
 		for (int i = 0; i < answers.size(); i++){
-			b.append("<input type=\"radio\" name='").append(name).append("'>")
-					.append(answers.get(i).getAnswer()).append("<br>");}
+			b.append("<input type=\"radio\" name='").append(name).append("'>");
+			answers.get(i).writeHTML(b);
+			b.append("<br>");}
 		
 	}
 
@@ -124,7 +126,9 @@ public class StdChoiceTwo {
 	public void writeHTMLMultiSelection(StringBuilder b) {
 		b.append("<select multiple>");
 		for (int i = 0; i < answers.size(); i++){
-			b.append("<option value= '" + answers.get(i).getAnswer() + "'>"+ answers.get(i).getAnswer() +"  </option> ");
+			b.append("<option value= '" + answers.get(i).getName() + "'>");
+			answers.get(i).writeHTML(b);
+			b.append("  </option> ");
 		 }
 		b.append("</select>");
 		b.append("</br>");

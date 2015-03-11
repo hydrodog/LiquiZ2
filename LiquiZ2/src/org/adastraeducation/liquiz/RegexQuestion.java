@@ -17,10 +17,10 @@ public class RegexQuestion extends FillIn {
 	private QuestionPattern pattern; //The regex pattern that will be used
 	
 	//constructors
-	public RegexQuestion(int id, int points, int level, String answer, QuestionPattern pattern) {
-		super(id,points,level, answer);
-		this.pattern = pattern;
-	}
+//	public RegexQuestion(int id, int points, int level, String answer, QuestionPattern pattern) {
+//		super(id,points,level, answer);
+//		this.pattern = pattern;
+//	}
 	
 	public RegexQuestion(int id, int points, int level, Answer answer, QuestionPattern pattern) {
 		super(id,points,level, answer);
@@ -42,7 +42,7 @@ public class RegexQuestion extends FillIn {
 	 */
 	public boolean isCorrect(String s) {
 		Answer a = this.getAnsAsArray()[0];
-		String temp = a.getAnswer();
+		String temp = a.getName();
 		String ans = pattern.getValue(s);
 		if(ans==null)
 			return false;

@@ -44,9 +44,9 @@ public class Test {
 				new Text("What is a dinosaur?"),
 				new MultiChoiceDropdown(1, 1,
 						new ArrayList<>(Arrays.asList(
-							new Answer("T-Rex", true),
-							new Answer("Shark"),
-							new Answer("mouse")
+							new Answer(new Text("T-Rex"), true),
+							new Answer(new Text("Shark")),
+							new Answer(new Text("mouse"))
 						))
 				)
 			}
@@ -130,13 +130,13 @@ public class Test {
 		Quiz quiz = new Quiz();
 		quiz.setName("This has responses");
 		Response r1 = new Response(
-			new Displayable[] {
+			new DisplayElement[] {
 				new Text("Great job!"),
 				new Video("1.mpg")
 			}
 		);
 		Response r2 = new Response(
-			new Displayable[] {
+			new DisplayElement[] {
 				new Text("Not quite right"), 
 				new Video("2.mpg"),
 			}
@@ -174,18 +174,18 @@ public class Test {
 				new Text("What is this video about ?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<>(Arrays.asList(
-						new Answer("Train"),
-						new Answer("Cable Car"), 
-						new Answer("Bus")
+						new Answer(new Text("Train")),
+						new Answer(new Text("Cable Car")), 
+						new Answer(new Text("Bus"))
 					))
 				),
 				new Audio("audio1.mp3", "audio/mpeg"),
 				new Text("What animal sounds like this ?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<>(Arrays.asList(
-						new Answer("Cat"),
-						new Answer("Dog"), 
-						new Answer("Horse")
+						new Answer(new Text("Cat")),
+						new Answer(new Text("Dog")), 
+						new Answer(new Text("Horse"))
 					))
 				)
 			}

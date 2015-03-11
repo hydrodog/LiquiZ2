@@ -87,31 +87,35 @@ public class StdChoice {
 //	}
 	
 	public void writeHTMLDropdown(StringBuilder b){
-		b.append("<select>");
+		b.append("<select>\n");
 		for (int i = 0; i < answers.length; i++) {
-			b.append("<option value='" + answers[i].getAnswer() + "'> "
-					+ answers[i].getAnswer() + " </option> ");
+			b.append("<option value='" + answers[i].getName() + "'> ");
+			answers[i].writeHTML(b);
+			b.append(" </option> ");
 		}
-		b.append("</select>");
-		b.append("</br>");
+		b.append("</select>\n");
+		b.append("</br>\n");
 		
 	}
 	public void writeHTMLRadio(StringBuilder b) {
 		
 		for (int i = 0; i < answers.length; i++){
-			b.append("<input type=\"radio\" name='").append(name).append("'>")
-					.append(answers[i].getAnswer()).append("<br>");}
-		
+			b.append("<input type=\"radio\" name='").append(name).append("'>");
+			answers[i].writeHTML(b);
+			b.append("<br>");
+		}
 	}
 
 	
 
 	public void writeHTMLMultiSelection(StringBuilder b) {
-		b.append("<select multiple>");
+		b.append("<select multiple>\n");
 		for (int i = 0; i < answers.length; i++){
-			b.append("<option value= '" + answers[i].getAnswer() + "'>"+ answers[i].getAnswer() +"  </option> ");
+			b.append("<option value= '" + answers[i].getName() + "'>");
+			answers[i].writeHTML(b);
+			b.append("  </option> ");
 		 }
-		b.append("</select>");
+		b.append("</select>\n");
 		b.append("</br>");
 		// TODO Auto-generated method stub
 		

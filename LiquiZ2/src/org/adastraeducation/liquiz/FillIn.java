@@ -53,15 +53,15 @@ public class FillIn extends Question {
 	 * @param answer
 	 */
 
-	public FillIn(int id, int points, int level, String answer) {
-		super(id, points, level);
-		ArrayList<Answer> ans = new ArrayList<Answer>();
-		ans.add(new Answer(answer, true));
-		this.setAns(ans);
-		warningPattern = null;
-		pattern = null;
-		appro = null;
-	}
+//	public FillIn(int id, int points, int level, String answer) {
+//		super(id, points, level);
+//		ArrayList<Answer> ans = new ArrayList<Answer>();
+//		ans.add(new Answer(answer, true));
+//		this.setAns(ans);
+//		warningPattern = null;
+//		pattern = null;
+//		appro = null;
+//	}
 	
 	// Make sure the Answers are initialized with Strings for now. 
 	
@@ -101,7 +101,7 @@ public class FillIn extends Question {
 		this.appro = number;
 	}
 	
-	public boolean isCorrect(Displayable d) {
+	public boolean isCorrect(DisplayElement d) {
 		ArrayList<Answer> answers = this.getAns();
 		for (int i = 0; i < answers.size(); i++) {
 			if (answers.get(i).getCorrect() && d.equals(answers.get(i).getGAns())) {
@@ -192,14 +192,14 @@ public class FillIn extends Question {
 	public boolean isCorrect(String s) {
 		if(pattern==null&&appro==null){      //it is a fillin question
 			for (Answer a : this.getAnsAsArray()) {
-				if(s.equals(a.getAnswer()))
+				if(s.equals(a.getName()))
 					return true;
 			}
 			return false;
 		}
 		else if(pattern==null&&appro!=null){   // it is a regex question
 			Answer a = this.getAnsAsArray()[0];
-			String ans = a.getAnswer();
+			String ans = a.getName();
 			double target = Double.parseDouble(ans);
 			if(appro.equal(target))
 				return true;
@@ -208,7 +208,7 @@ public class FillIn extends Question {
 		}
 		else if(pattern!=null&&appro==null){   // it is a Number Question
 			Answer a = this.getAnsAsArray()[0];
-			String ans = a.getAnswer();
+			String ans = a.getName();
 			if(pattern.isMatch(ans))
 				return true;
 			else
@@ -216,7 +216,7 @@ public class FillIn extends Question {
 		}
 		else{                               // it is a RegexNumber Question
 			Answer a = this.getAnsAsArray()[0];
-			String ans = a.getAnswer();
+			String ans = a.getName();
 			if(pattern.isMatch(ans)){
 				String temp = pattern.getValue(ans);
 				double target = Double.parseDouble(temp);

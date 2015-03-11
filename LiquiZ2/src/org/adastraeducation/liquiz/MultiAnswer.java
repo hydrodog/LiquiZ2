@@ -43,15 +43,15 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		} else {
 
 		
-			b.append("<select multiple>");
+			b.append("<select multiple>\n");
 			for (int i = 0; i < ans.length; i++){
 				b.append("<option value= '");
 				ans[i].getGAns().writeHTML(b);
 				b.append("'>");
 				ans[i].getGAns().writeHTML(b);
-				b.append("  </option> ");
+				b.append("  </option>\n ");
 			 }
-			b.append("</select>");
+			b.append("</select>\n");
 			b.append("</br>\n");
 		}
        

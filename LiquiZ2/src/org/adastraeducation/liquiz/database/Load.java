@@ -65,12 +65,12 @@ public class Load {
 	/**
 	 * 
 	 * @param DispElID
-	 * @return requested Displayable
+	 * @return requested DisplayElement
 	 */
-	public static Displayable loadDispEl(int DispElID) {
+	public static DisplayElement loadDispEl(int DispElID) {
 		//TODO should these load with ID?
 		Connection conn = null;
-		Displayable d = null;
+		DisplayElement d = null;
 		try {
 			conn = DatabaseMgr.getConnection();
 			PreparedStatement p1 = conn.prepareStatement("SELECT Type FROM DisplayElements WHERE DispElID=?");
@@ -152,8 +152,7 @@ public class Load {
 	}
 	
 	// Loads all the answers in the StdSet requested
-	// TODO: load all StdSets at the beginning
-	public static StdChoiceTwo loadStdChoices(int SetID) {
+	public static StdChoiceTwo loadStdChoices() {
 		Connection conn = null;
 		String name = null;
 		ArrayList<Answer> ans = new ArrayList<Answer>();
@@ -163,26 +162,26 @@ public class Load {
 			conn = DatabaseMgr.getConnection();
 			
 			// load the set
-			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM StdSet WHERE StdSetID=?");
-			p1.setInt(1, SetID);
+			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM StdSet");
 			ResultSet rs1 = p1.executeQuery();
-			if (rs1.next()) {
-				name = rs1.getString("Name");
-			}
 			
-			// load the individual choices
 			PreparedStatement p2 = conn.prepareStatement("SELECT * FROM StdChoices WHERE StdSetID=?");
-			p2.setInt(1, SetID);
-			ResultSet rs2 = p2.executeQuery();
-			// add the choices to the ans ArrayList<Answer>
-			while (rs2.next()) {
-				ans.add(new Answer(loadDispEl(rs2.getInt("Element")),rs2.getInt("Sequence")));
+			while (rs1.next()) {
+				name = rs1.getString("Name");
+				// load the individual choices
+				p2.setInt(1, rs1.getInt("StdSetID"));
+				ResultSet rs2 = p2.executeQuery();
+				// add the choices to the ans ArrayList<Answer>
+				while (rs2.next()) {
+					ans.add(new Answer(loadDispEl(rs2.getInt("Element")),rs2.getInt("Sequence")));
+				}
+				rs2.close();
+				sc = new StdChoiceTwo(rs1.getInt("StdSetID"), name, ans);
+				Database.setStdChoice(rs1.getInt("StdSetID"), sc);
 			}
 			
 			rs1.close();
-			rs2.close();
-			sc = new StdChoiceTwo(SetID, name, ans);
-			Database.setStdChoice(SetID, sc);
+
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -239,7 +238,7 @@ public class Load {
 						} while(QA.next());
 					} else {
 						// load the StdSet
-						sc = loadStdChoices(QA.getInt("StdSet"));
+						sc = Database.getStdChoice(QA.getInt("StdSet"));
 						while (QA.next()) {
 							// go through the StdSet and check for answers to be marked correct
 							if (QA.getBoolean("Correct")) {
@@ -275,21 +274,19 @@ public class Load {
 		return q;
 	}
 
-	//TODO: load ALL
-	public static Policy loadPolicy(int PolID) {
+	public static Policy loadPolicy() {
 		Connection conn = null;
 		Policy pol = null;
 		
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("SELECT * FROM Policies WHERE PolID=?");
-			p.setInt(1, PolID);
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM Policies");
 			ResultSet rs = p.executeQuery();
 
 			// set fields of the policy
 			pol = new Policy();
-			pol.setID(PolID);
-			if(rs.next()) {
+			while(rs.next()) {
+				pol.setID(rs.getInt("PolID"));
 				pol.setAttemptNum(rs.getInt("Attempts"));
 				pol.setTimed(rs.getBoolean("Timed"));
 				if (rs.getBoolean("Timed")) {
@@ -303,9 +300,9 @@ public class Load {
 				if (rs.getString("AccessCode") != null) {
 					pol.setAccessCode(rs.getString("AccessCode"));
 				}
+				Database.setPolicy(pol.getID(), pol);
 			}
-
-			Database.setPolicy(PolID, pol);
+			
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -381,7 +378,7 @@ public class Load {
 			Quiz quiz = null;
 			// load all quizzes
 			while (rs1.next()) {
-				Policy policy = loadPolicy(rs1.getInt("Policy")); //set Policy
+				Policy policy = Database.getPolicy(rs1.getInt("Policy"));
 				quiz = new Quiz(rs1.getInt("QuizID"), policy);
 				
 				//find & load QuestionContainers

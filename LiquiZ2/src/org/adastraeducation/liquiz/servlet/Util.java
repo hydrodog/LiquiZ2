@@ -104,7 +104,7 @@ public class Util extends HttpServlet{
 	    warningPattern = request.getParameter("warningPattern");
 	    boolean hasWarning = warningPattern != null;
 	    System.out.println(hasWarning); // TODO: CHECK!
-	  	Answer answer = new Answer(answerText, true);
+	  	Answer answer = new Answer(new Text(answerText), true);
 	  	return q;
 	}
 	
@@ -128,7 +128,7 @@ public class Util extends HttpServlet{
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("dropdown_choices" + (i+1));
-		  answers[i] = new Answer(choice, false);
+		  answers[i] = new Answer(new Text(choice), false);
 		}
 		MultiChoiceDropdown q = new MultiChoiceDropdown();
 		q.setAns(answers); 
@@ -140,7 +140,7 @@ public class Util extends HttpServlet{
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("radio_choices" + (i+1));
-		  answers[i] = new Answer(choice, false);
+		  answers[i] = new Answer(new Text(choice), false);
 		}
 		MultiChoiceRadio q = new MultiChoiceRadio();
 		q.setAns(answers); 
@@ -152,7 +152,7 @@ public class Util extends HttpServlet{
 		Answer[] answers = new Answer[numChoices];
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("multi_choices" + (i+1));
-		  answers[i] = new Answer(choice, false);
+		  answers[i] = new Answer(new Text(choice), false);
 		}
 		MultiAnswer q = new MultiAnswer();
 		q.setAns(answers); 
@@ -167,7 +167,7 @@ public class Util extends HttpServlet{
 	    answerText = request.getParameter("answer");
 	  //  regexPattern = request.getParameter("regexString");
 	  //  q.setPattern(regexPattern);   TODO: Check!
-	  	Answer answer = new Answer(answerText, true);
+	  	Answer answer = new Answer(new Text(answerText), true);
 	  	return q;
 	}
 	

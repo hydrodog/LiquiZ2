@@ -56,7 +56,7 @@ public class MultiChoiceDropdown extends Question {
 		return new MultiChoiceDropdown(level, points, answers);
 	}
 	
-	public boolean isCorrect(Displayable d) {
+	public boolean isCorrect(DisplayElement d) {
 		ArrayList<Answer> answers = this.getAns();
 		for (int i = 0; i < answers.size(); i++) {
 			if (answers.get(i).getCorrect() && d.equals(answers.get(i).getGAns())) {
@@ -79,14 +79,15 @@ public class MultiChoiceDropdown extends Question {
 		} else {
 
 			// Regular options
-			b.append("<select>");
+			b.append("<select>\n");
 			for (int i = 0; i < this.getAns().size(); i++) {
-				b.append("<option value='" + this.getAns().get(i).getAnswer() + "'> "
-						+ this.getAns().get(i).getAnswer() + " </option> ");
+				b.append("<option value='" + this.getAns().get(i).getName() + "'> ");
+				this.getAns().get(i).writeHTML(b);
+				b.append(" </option> \n");
 			}
-			b.append("</select>");
+			b.append("</select>\n");
 			b.append("</br>");
-			b.append("</br>");
+			b.append("</br>\n");
 		}
 
 	}

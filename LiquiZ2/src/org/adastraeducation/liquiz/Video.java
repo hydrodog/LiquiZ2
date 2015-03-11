@@ -1,11 +1,15 @@
 package org.adastraeducation.liquiz;
 
-public class Video implements Displayable {
+public class Video extends DisplayElement {
 	private String video;
 	private int width;
 	private int height;
 	private String type;
 	
+	public String getName() {
+		return video;
+	}
+	//TODO: the above & below overlap
 	public String getVideo(){
 		return this.video;
 	}
@@ -53,8 +57,8 @@ public class Video implements Displayable {
 	//<source src="movie.mp4" type="video/mp4">
 	//<source src="movie.ogg" type="video/ogg">
 	public void writeHTML(StringBuilder b){
-		b.append("<video controls width=\""+ width +"\" height=\""+ height +"\">");
-		b.append("<source src=\"" + video +  "\" type =\""+ type + "\"/>");
+		b.append("<video controls width=\""+ width +"\" height=\""+ height +"\">\n");
+		b.append("<source src=\"" + video +  "\" type =\""+ type + "\"/>\n");
 		b.append("</video>");
 		
 	}
