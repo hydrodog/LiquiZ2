@@ -10,15 +10,6 @@ public class MultiAnswer extends MultiChoiceDropdown {
 
 	public MultiAnswer() {
 	}
-
-	public MultiAnswer(int id, int level, int points, 
-			Answer[] answers) {
-		super(id, level, points, answers);
-	}
-	public MultiAnswer(int level, int points, 
-			Answer[] answers) {
-		super(level, points, answers);
-	}
 	
 	// same as above two constructors but with ArrayList
 	public MultiAnswer(int id, int level, int points, ArrayList<Answer> answers) {

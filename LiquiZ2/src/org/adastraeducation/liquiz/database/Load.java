@@ -250,16 +250,13 @@ public class Load {
 						answers = sc.getAnswers();
 					}
 					
-					//turn answers into Answer[] array
-					Answer[] answersArr = Arrays.copyOf(answers.toArray(), answers.size(), Answer[].class); 
-					
 					// load the appropriate question type
 					if (type.equals("Mult")) {
-						q = new MultiAnswer(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answersArr);
+						q = new MultiAnswer(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answers);
 					} else if (type.equals("MCDD")) {
-						q = new MultiChoiceDropdown(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answersArr);
+						q = new MultiChoiceDropdown(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answers);
 					} else if (type.equals("MCRa")) {
-						q = new MultiChoiceRadio(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answersArr);
+						q = new MultiChoiceRadio(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answers);
 					} else {
 						//TODO: any other multis?
 					}

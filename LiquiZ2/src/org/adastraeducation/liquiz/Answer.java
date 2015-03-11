@@ -110,6 +110,7 @@ public class Answer implements Displayable {
 	}
 	
 	//TODO: Dov says add graphical answer back in here once it works
+
 	public String graphanswer(){
 		return "<input type=\"radio\" value = " + ans + "\" alt=\"" + ans + "\" width=\""+ width+"\" height=\""+height+"\"><br>";
 	}
@@ -130,4 +131,6 @@ public class Answer implements Displayable {
 		}
 		b.append(ans).append("</A>");
 	}
+
+	
 }

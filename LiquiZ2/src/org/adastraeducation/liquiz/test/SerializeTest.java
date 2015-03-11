@@ -5,6 +5,8 @@ import org.adastraeducation.liquiz.util.NumberWarningPattern;
 import org.adastraeducation.liquiz.util.SpecializedPattern;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.beans.XMLEncoder;
@@ -42,11 +44,11 @@ public class SerializeTest {
 			new Displayable[] {
 				new Text("What is a dinosaur?"),
 				new MultiChoiceDropdown(1, 1,
-						new Answer[]{
-							new Answer("T-Rex", true),
-							new Answer("Shark"),
-							new Answer("mouse")
-						}
+					new ArrayList<Answer>(Arrays.asList(
+						new Answer("T-Rex", true),
+						new Answer("Shark"),
+						new Answer("mouse")
+					))
 				)
 			}
 		);
@@ -171,15 +173,17 @@ public class SerializeTest {
 				new Video("video1.mp4",480, 360,"video/mp4"),
 				new Text("What is this video about ?"),
 				new MultiChoiceDropdown(4, 5,
-				new Answer[] {new Answer("Train"),
-				    new Answer("Cable Car"), new Answer("Bus")
-				  }),
+					new ArrayList<Answer>(Arrays.asList(new Answer("Train"),
+					    new Answer("Cable Car"), new Answer("Bus")
+					))
+				),
 				new Audio("audio1.mp3", "audio/mpeg"),
 				new Text("What animal sounds like this ?"),
 				new MultiChoiceDropdown(4, 5,
-						new Answer[] {new Answer("Cat"),
-						    new Answer("Dog"), new Answer("Horse")
-				})
+					new ArrayList<Answer>(Arrays.asList(new Answer("Cat"),
+					    new Answer("Dog"), new Answer("Horse")
+					))
+				)
 			}
 		);
 		quiz.addQuestionContainer(qc);

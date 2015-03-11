@@ -6,15 +6,6 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 	public MultiChoiceRadio() {
 	}
 
-	public MultiChoiceRadio(int id, int level, int points,
-				Answer[] answers) {
-		super(id, level, points, answers);
-	}
-	public MultiChoiceRadio(int level, int points,
-			Answer[] answers) {
-	super(level, points, answers);
-	}
-	// same as above two constructors with ArrayList
 	public MultiChoiceRadio(int id, int level, int points, ArrayList<Answer> answers) {
 		super(id, level, points, answers);
 	}

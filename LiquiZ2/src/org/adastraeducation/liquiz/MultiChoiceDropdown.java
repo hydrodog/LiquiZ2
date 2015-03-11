@@ -13,13 +13,6 @@ public class MultiChoiceDropdown extends Question {
 	public MultiChoiceDropdown(int level, int points) {
 		super(level, points);
 	}
-	public MultiChoiceDropdown(int id, int level, int points, Answer[] answers) {
-		super(id, level, points, answers);
-	}
-
-	public MultiChoiceDropdown(int level, int points, Answer[] answers) {
-		super(level, points, answers);
-	}
 	
 	//constructors with ArrayList<Answer> instead of Answer[]
 	public MultiChoiceDropdown(int id, int level, int points, ArrayList<Answer> answers) {
