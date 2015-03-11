@@ -1309,7 +1309,7 @@ function buttonAddChoice (e,currentNumber){
   //var len = ($(e.target).parent().find(".question").length)/2-1;
   var ques = question({type:'multiquestion',HTML:'',makeL:[
     {type:'essay',rows:3,cols:30,pHold:'Your text here...',ID:"choices-"+(currentNumber+1)},
-    {type:'dropdown',HTML:'',ansrL:choices[currentNumber?'incorrect':'correct'],ID:"correct-"+(currentNumber+1)}
+    {type:'checkbox',HTML:'',ansrL:['Correct'],ID:"correct-"+(currentNumber+1)}
   ]});
   var hiddenWorkaround = document.createElement("DIV");
   $(document.body).append(hiddenWorkaround);
@@ -1468,7 +1468,7 @@ var merge = function (obj,objM){
 */
 function formatQuestionJSONsForExportAJAX(){
   return '{"makeL":['+questionJSONs.join(",")+"]}"
-    }
+}
 
 /*
 sets up a new quiz
@@ -1545,7 +1545,8 @@ function quiz(object){
         success: function(data){prompt("returned",data);},
         failure: function(errMsg) {
           alert(errMsg);
-        }});
+        }}
+      );
     });
     
     
