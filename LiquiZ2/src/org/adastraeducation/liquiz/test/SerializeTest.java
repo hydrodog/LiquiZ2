@@ -1,8 +1,6 @@
 package org.adastraeducation.liquiz.test;
 
 import org.adastraeducation.liquiz.equation.*;
-import org.adastraeducation.liquiz.util.NumberWarningPattern;
-import org.adastraeducation.liquiz.util.SpecializedPattern;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ public class SerializeTest {
 				new Text("What is "),
 				eq,
 				new Text("?"),
-				new FillIn(3, 1, 1)
+				new FillIn(3, 1, new Answer(new Text("1"), true))
 			}
 			);
 		quiz.addQuestionContainer(qc);
@@ -85,14 +83,14 @@ public class SerializeTest {
 				new Text("What is "),
 				eq1,
 				new Text("?"),
-				new FillIn(40, 1, 1, null, new NumberWarningPattern(3),null,null)
+				new NumberRange(1, 3, 2, 0, 99) //id 1, 3 points, level 2, accept 0 to 99 as correct
 			}
 			);
 		quiz.addQuestionContainer(qc);
 
 		qc = new QuestionContainer(
 				new Displayable[] {
-					new Video("1.mpg"),
+					new Video("1.mpg",0,0),
 					new Text("Describe the main character in the video in 200 words or less"),
 					new Essay()
 				}
@@ -103,7 +101,7 @@ public class SerializeTest {
 				new Displayable[] {
 					new Text("Listen to the audio clip and write down the words"),
 					new Audio("1.mp3"),
-					new FillIn(5,1,1)
+					new FillIn(5,1,new Answer(new Text("words, words, words")))
 				}
 			);
 		quiz.addQuestionContainer(qc);
@@ -132,13 +130,13 @@ public class SerializeTest {
 		Response r1 = new Response(
 			new DisplayElement[] {
 				new Text("Great job!"),
-				new Video("1.mpg")
+				new Video("1.mpg",0,0)
 			}
 		);
 		Response r2 = new Response(
 			new DisplayElement[] {
 				new Text("Not quite right"), 
-				new Video("2.mpg"),
+				new Video("2.mpg",0,0)
 			}
 		);
 		/*
@@ -170,7 +168,7 @@ public class SerializeTest {
 		quiz.setName("Multimedia Quiz");
 		QuestionContainer qc = new QuestionContainer(
 			new Displayable[] {
-				new Video("video1.mp4",480, 360,"video/mp4"),
+				new Video("video1.mp4",480, 360),
 				new Text("What is this video about ?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<Answer>(Arrays.asList(
@@ -179,7 +177,7 @@ public class SerializeTest {
 					    new Answer(new Text("Bus"))
 					))
 				),
-				new Audio("audio1.mp3", "audio/mpeg"),
+				new Audio("audio1.mp3"),
 				new Text("What animal sounds like this ?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<Answer>(Arrays.asList(

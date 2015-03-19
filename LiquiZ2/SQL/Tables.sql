@@ -38,14 +38,10 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Policies` (
 DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
-<<<<<<< HEAD
-  `DispElID` INT NOT NULL AUTO_INCREMENT, -- Not sure I'll need this but needed for diagram I think
-=======
-  `DispElID` INT NOT NULL AUTO_INCREMENT, -- Not sure I'll need this but needed for diagram I think 
->>>>>>> 8d540e604a5a1ab98601abb9b3addd92f2177194
+  `DispElID` INT NOT NULL AUTO_INCREMENT,
+  `Element` VARCHAR(21000) NOT NULL,
   `Type` CHAR(4) NOT NULL, -- text, image, video, audio, etc
   PRIMARY KEY (`DispElID`));
-
 
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`Quizzes`
@@ -88,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Courses` (
   PRIMARY KEY (`CourseID`),
   UNIQUE INDEX `CID_UNIQUE` (`CourseID` ASC));
 
-d
+
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`CoursesQuizzes`
 -- -----------------------------------------------------
@@ -147,17 +143,6 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Answers` (
   `LowBound` INT NULL COMMENT 'to accept a range of numbers (lower bound)',
   `HighBound` INT NULL COMMENT 'to accept a range of numbers (upper bound)',
   PRIMARY KEY (`AnsID`));
-
-
--- -----------------------------------------------------
--- Table `LiquiZ`.`DispElSeq`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `LiquiZ`.`DispElSeq` ;
-
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`DispElSeq` (
-  `DispEl` INT NOT NULL, -- DisplayElements.DispElID
-  `Element` VARCHAR(255) NOT NULL, -- String represents text or file name
-  `Sequence` INT NOT NULL); -- For longer strings
 
 
 -- -----------------------------------------------------

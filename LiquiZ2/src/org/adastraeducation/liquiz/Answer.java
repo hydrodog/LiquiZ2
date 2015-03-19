@@ -5,96 +5,57 @@ package org.adastraeducation.liquiz;
  * It is for answers for every question
  */
 
-public class Answer implements Displayable {
+public class Answer implements Displayable, Cloneable {
 	private int id;
-//	private String ans;
-	private DisplayElement gAns;
+	private DisplayElement ans;
 	private boolean correct;
 	private int index;// for standard choice
-	private String width; // for graphical answer
-	private String height;// for graphical answer	
 	private Response res; // Response
 	
-	
-//	public Answer(String ans, boolean correct) {
-//		this.ans = ans;
-//		this.correct = correct;
-//	}
-//	public Answer(String ans) {
-//		this(ans, false);
-//	}
-	public Answer(DisplayElement ans, boolean correct, Response r) {
-		gAns = ans;
+	public Answer(int id, DisplayElement ans, boolean correct, Response r) {
+		this.id = id;
+		this.ans = ans;
 		this.correct = correct;
 		res = r;
 	}
-	public Answer(DisplayElement ans, boolean correct) {
-		gAns = ans;
-		this.correct = correct;
+	
+	public Answer(DisplayElement ans, boolean correct, Response r) {
+		this(-1, ans, correct, r);
 	}
-	public Answer(int id, DisplayElement ans, boolean correct) {
-		this.id = id;
-		gAns = ans;
-		this.correct = correct;
+	public Answer(DisplayElement ans, boolean correct) {
+		this(ans, correct, null);
 	}
 	public Answer(DisplayElement ans) {
-		this(ans, false);
+		this(ans, false, null);
 	}
-	//public Answer() { this(null, false); }
+	public Answer() { this(null, false, null); }
 	
-//	public Answer(String ans, int index) {
-//		this.ans = ans;
-//		this.index = index;
-//		this.correct = false;
-//	}
 	public Answer(DisplayElement ans, int index) {
-		gAns = ans;
+		this.ans = ans;
 		this.index = index;
 		this.correct = false;
 	}
-//	public Answer(String ans, int index, boolean correct) {
-//		this.ans = ans;
-//		this.index = index;
-//		this.correct = correct;
-//	}
+
     public Answer(DisplayElement ans, int index, boolean correct) {
-    	gAns = ans;
+    		this.ans = ans;
 		this.index = index;
 		this.correct = correct;
 	}
     
-//    public String getAnswer() {
-//    	return ans;
-//    }
-//    public void setAnswer(String ans) {
-//    	this.ans = ans;
-//    }
-	public DisplayElement getGAns() {
-		return gAns;
+	public DisplayElement getAnswer() {
+		return ans;
 	}
-	public void setGAns(DisplayElement ans) {
-		gAns = ans;
+	public void setAnswer(DisplayElement ans) {
+		this.ans = ans;
 	}
 	public String getName() {
-		return gAns.getName();
+		return ans.getName();
 	}
 	public int getIndex() {
 		return index;
 	}
 	public void setIndex(int index) {
 		this.index = index;
-	}
-	public String getWidth() {
-		return width;
-	}
-	public void setWidth(String width) {
-		this.width = width;
-	}
-	public String getHeight() {
-		return height;
-	}
-	public void setHeight(String height) {
-		this.height = height;
 	}
 
 	public void setCorrect(boolean correct){
@@ -112,16 +73,12 @@ public class Answer implements Displayable {
 		return res;
 	}
 	
-	//TODO: Dov says add graphical answer back in here once it works
-
-//	public String graphanswer(){
-//		return "<input type=\"radio\" value = " + ans + "\" alt=\"" + ans + "\" width=\""+ width+"\" height=\""+height+"\"><br>";
-//	}
+	public Answer clone() {
+		return new Answer(id, ans, correct, res);
+	}
 
 	public void writeHTML(StringBuilder b) {
-//		b.append("<input type='radio' name='")
-//				.append(ans).append("'>").append("<br>");
-		gAns.writeHTML(b);
+		ans.writeHTML(b);
 		
 	}
 	public void writeJS(StringBuilder b) {
@@ -133,9 +90,7 @@ public class Answer implements Displayable {
 		} else {
 			b.append("<A>");
 		}
-		gAns.writeXML(b);
+		ans.writeXML(b);
 		b.append("</A>");
 	}
-
-	
 }

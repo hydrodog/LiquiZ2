@@ -2,6 +2,7 @@ package org.adastraeducation.liquiz.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+
 import org.adastraeducation.liquiz.*;
 
 /**
@@ -11,21 +12,72 @@ import org.adastraeducation.liquiz.*;
  */
 
 public class Database {
-	private static ArrayList<User> users = new ArrayList<User>();
-	private static ArrayList<Course> courses = new ArrayList<Course>();
-	private static ArrayList<Policy> policies = new ArrayList<Policy>();
-	private static ArrayList<Quiz> quizzes = new ArrayList<Quiz>(); 
-	private static ArrayList<QuestionContainer> quesCons = new ArrayList<QuestionContainer>();
-	private static ArrayList<Question> questions = new ArrayList<Question>();
-	private static ArrayList<Answer> answers = new ArrayList<Answer>();
-	private static ArrayList<StdChoiceTwo> stdChoices = new ArrayList<StdChoiceTwo>(); 
-	private static ArrayList<Displayable> displayables = new ArrayList<Displayable>();
+	private static ArrayList<User> users;
+	private static ArrayList<Course> courses;
+	private static ArrayList<Policy> policies;
+	private static ArrayList<Quiz> quizzes;
+	private static ArrayList<QuestionContainer> quesCons;
+	private static ArrayList<Question> questions;
+	private static ArrayList<Answer> answers;
+	private static ArrayList<StdChoiceTwo> stdChoices;
+	private static ArrayList<DisplayElement> displayElements;
+	
+	private static int getMaxOf(String sql) {
+		Connection conn = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = DatabaseMgr.getConnection();
+			PreparedStatement p1 = conn.prepareStatement(sql); 
+			rs = p1.executeQuery();
+			
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs!=null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				DatabaseMgr.returnConnection(conn);
+			}
+		}
+		return 0;
+	}
+	
+	private static <T> ArrayList<T> getMax(String column, String table, Class<T> type) {
+		int max = getMaxOf("select max(" + column + ") from " + table);
+		System.out.println(max);
+		ArrayList<T> a = new ArrayList<T>(max);
+		a.add(null);
+		return a;
+	}
+	
+	static {
+		users = getMax("UserID","Users", User.class);
+		courses = getMax("CourseID","Courses", Course.class);
+		policies = getMax("PolID","Policies", Policy.class);
+		quizzes = getMax("QuizID","Quizzes", Quiz.class); 
+		quesCons = getMax("QuesConID", "QuesCon", QuestionContainer.class);
+		questions = getMax("QuesID","Questions", Question.class);
+		answers = getMax("AnsID","Answers",Answer.class);
+		//stdChoices = new ArrayList<StdChoiceTwo>(); 
+		displayElements = getMax("DispElID","DisplayElements", DisplayElement.class);
+	}
 	
 	/**
 	 * Setters and Getters
 	 * Note that id starts at 1 and index starts at 0, so the first space in each ArrayList is empty
 	 */
 	
+	public static void addUser(User u) {
+		users.add(u);
+	}
 	public static void setUser(int id, User u) {
 		users.set(id, u);
 	}
@@ -62,6 +114,9 @@ public class Database {
 	public static Question getQues(int id) {
 		return questions.get(id);
 	}
+	public static void addAns(Answer a) {
+		answers.add(a);
+	}
 	public static void setAns(int id, Answer a) {
 		answers.set(id, a);
 	}
@@ -74,10 +129,13 @@ public class Database {
 	public static StdChoiceTwo getStdChoice(int id) {
 		return stdChoices.get(id);
 	}
-	public static void setDisp(int id, Displayable d) {
-		displayables.set(id, d);
+	public static void addDisp(DisplayElement d) {
+		displayElements.add(d);
 	}
-	public static Displayable getDisp(int id) {
-		return displayables.get(id);
+	public static void setDisp(int id, DisplayElement d) {
+		displayElements.set(id, d);
+	}
+	public static DisplayElement getDisp(int id) {
+		return displayElements.get(id);
 	}
 }

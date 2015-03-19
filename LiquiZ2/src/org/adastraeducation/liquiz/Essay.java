@@ -1,5 +1,9 @@
 package org.adastraeducation.liquiz;
 
+import java.util.ArrayList;
+
+import org.adastraeducation.liquiz.util.Util;
+
 public class Essay extends Question {
 	private String defaultText;
 	public Essay() {
@@ -8,7 +12,7 @@ public class Essay extends Question {
 
 	public Essay(int id, int level, int points,
 				String defaultText) {
-		super(id, level, points);
+		super(id, level, points, (ArrayList<Answer>) null);
 		this.defaultText = defaultText;
 	}
 	
@@ -41,22 +45,21 @@ public class Essay extends Question {
  	}
 
 	public void writeJS(StringBuilder b ) {
-		b.append("essay('").append(Quiz.escapeJS(defaultText))
+		b.append("essay('").append(Util.escapeJS(defaultText))
 			.append("')");
 	}
 	public void writeXML(StringBuilder b ) {
-		b.append("<essay>").append(Quiz.escapeXML(defaultText))
+		b.append("<essay>").append(Util.escapeXML(defaultText))
 			.append("</essay>");
 	}
 
+	public boolean isAutomaticGrading() {
+		return true;
+	}
+	
 	@Override
 	public boolean isCorrect(String s) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	public boolean isCorrect(DisplayElement d) {
-		return false;
-	}
-	
 }

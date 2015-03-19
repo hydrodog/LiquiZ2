@@ -2,57 +2,58 @@ package org.adastraeducation.liquiz;
 import org.adastraeducation.liquiz.util.*;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/*
+/**
+ * Represent a single question with regex pattern for right answer
  * Yingzhu 
- *  * Useless temporarily. Do not use them, Use Fillin instead.
  */
-
 public class RegexQuestion extends FillIn {	
+	private Pattern pattern; // match to determine if correct
+	private String warning; // sent to client so javascript can check if answer is in the right form
 	
 	public RegexQuestion() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	private QuestionPattern pattern; //The regex pattern that will be used
-	
-	//constructors
-//	public RegexQuestion(int id, int points, int level, String answer, QuestionPattern pattern) {
-//		super(id,points,level, answer);
-//		this.pattern = pattern;
-//	}
-	
-	public RegexQuestion(int id, int points, int level, Answer answer, QuestionPattern pattern) {
-		super(id,points,level, answer);
-		this.pattern = pattern;
+	public RegexQuestion(int id, int points, int level, String regex, String warning) {
+		super(id,points,level,(ArrayList<Answer>) null);
+		this.pattern = Pattern.compile(regex);
+		this.warning = warning;
 	}
 
-	public String getTagName() { return "RegexQuestion"; }
-	
-	public void setPattern(QuestionPattern pattern){
-		this.pattern = pattern;
+	public void setPattern(String regex){
+		this.pattern=Pattern.compile(regex);
 	}
 	
-	public QuestionPattern getPattern(){
-		return pattern;
+	public String getPattern(){
+		return pattern.toString();
 	}
 	
+	public void setWarning(String warning) {
+		this.warning = warning;
+	}
+	
+	public String getWarning() {
+		return warning;
+	}
+
 	/*
-	 * For regexQuestion, the answer will only store the value. It is necessary for it to store the pattern
+	 * Returns true if regex pattern matches typed answer
 	 */
 	public boolean isCorrect(String s) {
-		Answer a = this.getAnsAsArray()[0];
-		String temp = a.getName();
-		String ans = pattern.getValue(s);
-		if(ans==null)
-			return false;
-		else{
-			if(temp.equals(ans))
-				return true;
-			else
-				return false;
-		}
+		Matcher m = pattern.matcher(s);
+		return m.matches();
 	}
 	
-
+	//<input id='123' class='fillin' type='text' onblur='showWarningPattern(this, "\\d\\d\\d")'/> 
+	public void writeHTML(StringBuilder b) {
+		b.append("<input id='").append(getId()).append("' class='fillin' type='text' ");
+		if(warning != null) {
+			b.append("onblur='showWarningPattern(this, \"").append(Util.escapeRegex(warning)).append("\")'/>\n");
+			b.append(" <div id=\"FW").append(this.getId()).append("\"");
+		}
+		b.append("/>\n");
+	}
 }

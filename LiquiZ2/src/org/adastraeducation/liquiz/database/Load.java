@@ -13,12 +13,57 @@ import org.adastraeducation.liquiz.*;
  */
 public class Load {
 	
-//	public static void main(String[] args) {
+	public static void main(String[] args) {
 //		loadUser();
+		loadDispEl();
 //		loadQuesCon();
 //		loadQuiz();		
-////		loadCourse();
-//	}
+//		loadCourse();
+	}
+	
+	public static void loadAns() {
+		Connection conn = null;
+		Response res = null;
+
+		try {
+			conn = DatabaseMgr.getConnection();
+			PreparedStatement p = conn.prepareStatement("SELECT * FROM Answers");
+			ResultSet rs = p.executeQuery();
+			
+//			| AnsID     | int(11) | NO   | PRI | NULL    | auto_increment |
+//			| Response  | int(11) | YES  |     | NULL    |                |
+//			| Element   | int(11) | YES  |     | NULL    |                |
+//			| LowBound  | int(11) | YES  |     | NULL    |                |
+//			| HighBound | int(11) | YES  |     | NULL    |                |
+			
+			while(rs.next()) {
+				int ansID = rs.getInt("AnsID");
+				int resID = rs.getInt("Response");
+				int elemID = rs.getInt("Element");
+				int lowBound = rs.getInt("LowBound"); //TODO: make double in tables
+				int highBound = rs.getInt("HighBound");
+				boolean correct = false;
+				
+				if (elemID != 0) {
+					Answer a = new Answer(ansID, null, correct, null);
+					if (rs.getInt("Response") != 0) {
+						res = new Response(Database.getDisp(rs.getInt("Response")));
+						a.setResponse(res);
+					}
+					Database.addAns(a);
+				} else {
+					// TODO Range
+				}
+			}
+			
+			rs.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.returnConnection(conn);
+		}
+	}
+
 	
 	/**
 	 * 
@@ -66,43 +111,34 @@ public class Load {
 	 * @param DispElID
 	 * @return requested DisplayElement
 	 */
-	public static DisplayElement loadDispEl(int DispElID) {
+	public static DisplayElement loadDispEl() {
 		//TODO should these load with ID?
 		Connection conn = null;
 		DisplayElement d = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p1 = conn.prepareStatement("SELECT Type FROM DisplayElements WHERE DispElID=?");
-			p1.setInt(1, DispElID);
+			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM DisplayElements");
 			ResultSet rs1 = p1.executeQuery();
 			
-			PreparedStatement p2 = conn.prepareStatement("SELECT DispEl, Element FROM DispElSeq WHERE DispEl=? ORDER BY Sequence ASC");
-			p2.setInt(1, DispElID);
-			ResultSet rs2 = p2.executeQuery();
-			
-			String type = null;
-			// Figure out what type of Displayable to load
-			if (rs1.next() && rs2.next()) {
+			while(rs1.next()) {
+				String type = null;
+				// Figure out what type of Displayable to load
 				type = rs1.getString("Type");
-			} else {
-				System.out.print("No Displayables found");
+				
+				if (type.equals("text")) {
+					d = new Text(rs1.getString("Element"));
+				} else if (type.equals("img")) {
+					d = new Image(rs1.getString("Element"),0,0);
+				} else if (type.equals("aud")) {
+					d = new Audio(rs1.getString("Element"));
+				} else if (type.equals("vid")) {
+					d = new Video(rs1.getString("Element"),0,0);
+				} else {
+					d = null;
+				}
+				Database.addDisp(d);
 			}
-			
-			if (type.equals("text")) {
-				String s = loadText(rs2.getInt("DispEl"));
-				d = new Text(s);
-			} else if (type.equals("img")) {
-				d = new Image(rs2.getString("Element"));
-			} else if (type.equals("aud")) {
-				d = new Audio(rs2.getString("Element"));
-			} else if (type.equals("vid")) {
-				d = new Video(rs2.getString("Element"));
-			} else {
-				d = null;
-			}
-			Database.setDisp(DispElID, d);
 			rs1.close();
-			rs2.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -130,9 +166,9 @@ public class Load {
 
 			if(rs.next()) {
 				if (rs.getInt("Element") != 0) {
-					a = new Answer(AnsID, loadDispEl(rs.getInt("Element")), correct);
+					a = new Answer(AnsID, Database.getDisp(rs.getInt("Element")), correct, null);
 					if (rs.getInt("Response") != 0) {
-						res = new Response(loadDispEl(rs.getInt("Response")));
+						res = new Response(Database.getDisp(rs.getInt("Response")));
 						a.setResponse(res);
 					}
 				} else {
@@ -172,7 +208,7 @@ public class Load {
 				ResultSet rs2 = p2.executeQuery();
 				// add the choices to the ans ArrayList<Answer>
 				while (rs2.next()) {
-					ans.add(new Answer(loadDispEl(rs2.getInt("Element")),rs2.getInt("Sequence")));
+					ans.add(new Answer(Database.getDisp(rs2.getInt("Element")),rs2.getInt("Sequence")));
 				}
 				rs2.close();
 				sc = new StdChoiceTwo(rs1.getInt("StdSetID"), name, ans);
@@ -208,7 +244,7 @@ public class Load {
 			ResultSet ques = selQues.executeQuery();
 			
 			//find the corresponding answers
-			PreparedStatement selQA = conn.prepareStatement("SELECT * FROM QuesAnsSeq WHERE Ques=? ORDER BY Sequence ASC");
+			PreparedStatement selQA = conn.prepareStatement("SELECT * FROM QuesAnsSeq, Answers WHERE Ques=? ORDER BY Sequence ASC");
 			selQA.setInt(1, QuesID);
 			ResultSet QA = selQA.executeQuery();
 			
@@ -216,13 +252,13 @@ public class Load {
 				// Figure out what type of Question to load
 				String type = ques.getString("QType");
 				if (type.equals("Fill")) {
-					while(QA.next()) {
+					do {
 						// find the answer
 						int ansID = QA.getInt("Ans");
 						Answer a = loadAns(ansID, QA.getBoolean("Correct"));
 						// add it to the answers ArrayList
 						answers.add(a);
-					}
+					} while(QA.next());
 					q = new FillIn(ques.getInt("QuesID"), ques.getInt("Points"), ques.getInt("Level"), answers); 
 				} else if (type.startsWith("M")) {
 					//all types of multi
@@ -341,7 +377,7 @@ public class Load {
 				// load element in the QuestionContainer and put it in dispEls ArrayList
 				String element = rs.getString("Type");
 				if (element.equals("Elem")) {
-					dispEls.add(loadDispEl(rs.getInt("Element")));
+					dispEls.add(Database.getDisp(rs.getInt("Element")));
 				} else {
 					dispEls.add(loadQues(rs.getInt("Ques")));
 				}
@@ -461,7 +497,7 @@ public class Load {
 				String ln = rs.getString("LastName");
 				String email = rs.getString("Email");
 				user = new User(id, un, pw, fn, ln, email);
-				Database.setUser(id, user);
+				Database.addUser(user);
 				System.out.println("User " + id + " loaded");
 			}
 			rs.close();
@@ -528,7 +564,7 @@ public class Load {
 			ResultSet rs = p.executeQuery();
 			
 			if (rs.next()) {
-				d = loadDispEl(rs.getInt("Response"));
+				d = Database.getDisp(rs.getInt("Response"));
 			}
 			rs.close();
 		} catch (SQLException e) {

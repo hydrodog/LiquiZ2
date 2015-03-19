@@ -1,56 +1,26 @@
 package org.adastraeducation.liquiz;
 
-public class Image extends DisplayElement {
-	private String width;
-	private String height;
-	private String name;
-	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+public class Image extends RectangularMedia {
 	public Image(){
-		name = null;		
+		super();		
 	}
+	//TODO: is it alright to leave width and height 0?
+//	public Image(String image){
+//		super(image);
+//	}
 	
-	/*********************Added getters and setters for serialization*************************************/
-	public String getWidth(){
-		return width;
-	}
-	
-	public void setWidth(String w){
-		this.width = w;
-	}
-	
-	public String getHeight(){
-		return height;
-	}
-	
-	public void setHeight(String h){
-		this.height = h;
-	}
-	
-	//TODO: Add Image constructor here!!
-	public Image(String image){
-		this.name= image;
-	}
-	
-	public Image(String image, String width, String height){
-		this.name = image;
-		this.height= height;
-		this.width= width;
+	public Image(String image, int width, int height){
+		super(image, width, height);
 	}
 
 	public void writeHTML(StringBuilder b){
-		b.append("<img src='" + name + "' style = width:"+ width + "px;height:"+ height + "px>");
+		b.append("<img src='" + getSource() + "' style = width:"+ getWidth() + "px;height:"+ getHeight() + "px>");
 	}
 
 	// to do : how to represent image in JavaScript
 	//TODO: image id should not be hardcoded to 1!!!
 	public void writeJS(StringBuilder b){
-		b.append("image('" + name + "')");
+		b.append("image('" + getSource() + "')");
 	}
 	
 	public void writeXML(StringBuilder b) {

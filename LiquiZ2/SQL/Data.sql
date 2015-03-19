@@ -2,7 +2,6 @@ USE `LiquiZ` ;
 DELETE FROM Answers;
 DELETE FROM Courses;
 DELETE FROM CoursesQuizzes; 
-DELETE FROM DispElSeq;
 DELETE FROM DisplayElements;
 DELETE FROM Policies;
 DELETE FROM QuesAnsSeq;
@@ -36,24 +35,16 @@ VALUES (1, 1, 1);
 
 -- Elements to go into first qc
 INSERT INTO DisplayElements
-VALUES (1, "text");
-INSERT INTO DispElSeq
-VALUES (1, "What is the color of the sky?", 1);
-INSERT INTO DispElSeq
-VALUES (1, "Example of longer text", 2);
+VALUES (1, "What is the color of the sky?", "text");
 
 INSERT INTO Questions
 VALUES (1, 3, 1, "Fill");
 INSERT INTO DisplayElements
-VALUES(2, "text");
-INSERT INTO DispElSeq
-VALUES (2, "Blue", 1);
+VALUES(2, "Blue", "text");
 INSERT INTO Answers (AnsID, Element)
 VALUES (1, 2);
 INSERT INTO DisplayElements
-VALUES (3, "text");
-INSERT INTO DispElSeq
-VALUES (3, "Light Blue", 1);
+VALUES (3, "Light Blue", "text");
 INSERT INTO Answers (AnsID, Element)
 VALUES (2, 3);
 
@@ -75,32 +66,22 @@ VALUES (1, 2, 1, "Ques");
 INSERT INTO QuesCon
 VALUES (2);
 INSERT INTO DisplayElements
-VALUES (4, "img");
-INSERT INTO DispElSeq
-VALUES (4, "image.jpg", 1);
+VALUES (4, "image.jpg", "img");
 INSERT INTO DisplayElements
-VALUES (5, "text");
-INSERT INTO DispElSeq
-VALUES (5, "Which animal is shown in the picture?", 1);
+VALUES (5, "Which animal is shown in the picture?", "text");
 
 INSERT INTO Questions
 VALUES (2, 5, 2, "Mult");
 INSERT INTO DisplayElements
-VALUES (6, "text");
-INSERT INTO DispElSeq
-VALUES (6, "Dog", 1);
+VALUES (6, "Dog", "text");
 INSERT INTO Answers(AnsID, Element)
 VALUES (3, 6);
 INSERT INTO DisplayElements
-VALUES (7, "text");
-INSERT INTO DispElSeq
-VALUES (7, "Cat", 1);
+VALUES (7, "Cat", "text");
 INSERT INTO Answers(AnsID, Element)
 VALUES (4, 7);
 INSERT INTO DisplayElements
-VALUES (8, "text");
-INSERT INTO DispElSeq
-VALUES (8, "Dragon", 1);
+VALUES (8, "Dragon", "text");
 INSERT INTO Answers(AnsID, Element)
 VALUES (5, 8);
 
@@ -133,37 +114,27 @@ INSERT INTO StdSet
 VALUES(1, "Poll");
 
 INSERT INTO DisplayElements
-VALUES(9, "text");
-INSERT INTO DispElSeq
-VALUES(9, "Strongly Agree", 1);
+VALUES(9, "Strongly Agree", "text");
 INSERT INTO StdChoices
 VALUES(1, 9, 1);
 
 INSERT INTO DisplayElements
-VALUES(10, "text");
-INSERT INTO DispElSeq
-VALUES(10, "Agree", 1);
+VALUES(10, "Agree", "text");
 INSERT INTO StdChoices
 VALUES(1, 10, 2);
 
 INSERT INTO DisplayElements
-VALUES(11, "text");
-INSERT INTO DispElSeq
-VALUES(11, "No Opinion", 1);
+VALUES(11, "No Opinion", "text");
 INSERT INTO StdChoices
 VALUES(1, 11, 3);
 
 INSERT INTO DisplayElements
-VALUES(12, "text");
-INSERT INTO DispElSeq
-VALUES(12, "Disagree", 1);
+VALUES(12, "Disagree", "text");
 INSERT INTO StdChoices
 VALUES(1, 12, 4);
 
 INSERT INTO DisplayElements
-VALUES(13, "text");
-INSERT INTO DispElSeq
-VALUES(13, "Strongly Disagree", 1);
+VALUES(13, "Strongly Disagree", "text");
 INSERT INTO StdChoices
 VALUES(1, 13, 5);
 
@@ -172,37 +143,27 @@ INSERT INTO StdSet
 VALUES(2, "Complexity");
 
 INSERT INTO DisplayElements
-VALUES(14, "text");
-INSERT INTO DispElSeq
-VALUES(14, "O(1)", 1);
+VALUES(14, "O(1)", "text");
 INSERT INTO StdChoices
 VALUES(2, 14, 1);
 
 INSERT INTO DisplayElements
-VALUES(15, "text");
-INSERT INTO DispElSeq
-VALUES(15, "O(n)", 1);
+VALUES(15, "O(n)", "text");
 INSERT INTO StdChoices
 VALUES(2, 15, 2);
 
 INSERT INTO DisplayElements
-VALUES(16, "text");
-INSERT INTO DispElSeq
-VALUES(16, "O(n^2)", 1);
+VALUES(16, "O(n^2)", "text");
 INSERT INTO StdChoices
 VALUES(2, 16, 3);
 
 INSERT INTO DisplayElements
-VALUES(17, "text");
-INSERT INTO DispElSeq
-VALUES(17, "O(n^3)", 1);
+VALUES(17, "O(n^3)", "text");
 INSERT INTO StdChoices
 VALUES(2, 17, 4);
 
 INSERT INTO DisplayElements
-VALUES(18, "text");
-INSERT INTO DispElSeq
-VALUES(18, "O(n logn)", 1);
+VALUES(18, "O(n logn)", "text");
 INSERT INTO StdChoices
 VALUES(2, 18, 5);
 
@@ -211,37 +172,27 @@ INSERT INTO StdSet
 VALUES(3, "Colors");
 
 INSERT INTO DisplayElements
-VALUES(19, "text");
-INSERT INTO DispElSeq
-VALUES(19, "Blue", 1);
+VALUES(19, "Blue", "text");
 INSERT INTO StdChoices
 VALUES(3, 19, 1);
 
 INSERT INTO DisplayElements
-VALUES(20, "text");
-INSERT INTO DispElSeq
-VALUES(20, "Red", 1);
+VALUES(20, "Red", "text");
 INSERT INTO StdChoices
 VALUES(3, 20, 2);
 
 INSERT INTO DisplayElements
-VALUES(21, "text");
-INSERT INTO DispElSeq
-VALUES(21, "Green", 1);
+VALUES(21, "Green", "text");
 INSERT INTO StdChoices
 VALUES(3, 21, 3);
 
 INSERT INTO DisplayElements
-VALUES(22, "text");
-INSERT INTO DispElSeq
-VALUES(22, "Orange", 1);
+VALUES(22, "Orange", "text");
 INSERT INTO StdChoices
 VALUES(3, 22, 4);
 
 INSERT INTO DisplayElements
-VALUES(23, "text");
-INSERT INTO DispElSeq
-VALUES(23, "Purple", 1);
+VALUES(23, "Purple", "text");
 INSERT INTO StdChoices
 VALUES(3, 23, 5);
 
@@ -250,16 +201,12 @@ INSERT INTO Users
 VALUES (2, "A", "A", "aa", "password", "abcd@gmail.com");
 
 INSERT INTO DisplayElements
-VALUES (24, "text");
-INSERT INTO DispElSeq
-VALUES (24, "Blue", 1);
+VALUES (24, "Blue", "text");
 INSERT INTO StudentResponses
 VALUES (2, 1, 24, 1);
 
 INSERT INTO DisplayElements
-VALUES (25, "text");
-INSERT INTO DispElSeq
-VALUES (25, "Cat", 1);
+VALUES (25, "Cat", "text");
 INSERT INTO StudentResponses
 VALUES (2, 2, 25, 1);
 

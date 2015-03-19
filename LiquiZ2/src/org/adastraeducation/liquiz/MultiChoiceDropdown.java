@@ -2,110 +2,65 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-
+import org.adastraeducation.liquiz.util.Util;
 
 public class MultiChoiceDropdown extends Question {
-	protected StdChoice stdchoice;
-	protected StdChoiceTwo sc;
-
+	public MultiChoiceDropdown(int id, int points, int level, ArrayList<Answer> answers) {
+		super(id, points, level, answers);
+	}
+	
+	public MultiChoiceDropdown(int id, int points, int level, String stdChoiceName) {
+		super(id, points, level, NamedObjects.getStdChoice(stdChoiceName));
+	}
+	
 	public MultiChoiceDropdown() {
 	}
-	public MultiChoiceDropdown(int level, int points) {
-		super(level, points);
+	public MultiChoiceDropdown(int points, int level) {
+		super(points, level);
 	}
 	
-	//constructors with ArrayList<Answer> instead of Answer[]
-	public MultiChoiceDropdown(int id, int level, int points, ArrayList<Answer> answers) {
-		super(id, level, points, answers);
-	}
-	public MultiChoiceDropdown(int level, int points, ArrayList<Answer> answers) {
-		super(level, points, answers);
+	public MultiChoiceDropdown(int points, int level, ArrayList<Answer> answers) {
+		super(points, level, answers);
 	}
 
-	public MultiChoiceDropdown(int level, int points, String stdChoiceName) {
-		super(level, points);
-		stdchoice = new StdChoice(stdChoiceName);
+	public MultiChoiceDropdown(int points, int level, String stdChoiceName) {
+		this(points, level, NamedObjects.getStdChoice(stdChoiceName));
 	}
 	// added a new method to accommodate the right answer choice
-	public MultiChoiceDropdown(int level, int points, String stdChoiceName, int rightAns) {
-		super(level, points);
-		stdchoice = new StdChoice(stdChoiceName, rightAns);
-	}
-	//constructors with StdChoiceTwo
-	public MultiChoiceDropdown(int level, int points, StdChoiceTwo sc) {
-		super(level, points);
-		this.sc = sc;
-	}
-	public MultiChoiceDropdown(int id, int level, int points, StdChoiceTwo sc) {
-		super(id, level, points);
-		this.sc = sc;
-	}
-
-	public static MultiChoiceDropdown createRandomNum(int level, int points, Answer ans, int index, int choices) {
-		// something to randomize the other Answer choices and put in ans among the array
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		answers.set(index, ans);
-		for(int i = 0; i < choices; i++){
-			if (answers.get(i).equals(null)) {
-//				answers.set(i, TODO: generate something random);
-			} else {
-				continue;
-			}
-		}
-		
-		return new MultiChoiceDropdown(level, points, answers);
+	public MultiChoiceDropdown(int points, int level, String stdChoiceName, int rightAns) {
+		this(points, level, NamedObjects.getStdChoice(stdChoiceName));
+		this.getAns().get(rightAns).setCorrect(true);
 	}
 	
-	public boolean isCorrect(DisplayElement d) {
+	public boolean isCorrect(String s) {
 		ArrayList<Answer> answers = this.getAns();
 		for (int i = 0; i < answers.size(); i++) {
-			if (answers.get(i).getCorrect() && d.equals(answers.get(i).getGAns())) {
+			if (answers.get(i).getCorrect() && s.equals(answers.get(i).getName())) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public String getTagName() {
-		return "MultiChoice";
-	}
-
 	public void writeHTML(StringBuilder b) {
-		// Standard Choice options
-		if (stdchoice != null) {
-
-			stdchoice.writeHTMLDropdown(b);
-
-		} else {
-
-			// Regular options
-			b.append("<select>\n");
-			for (int i = 0; i < this.getAns().size(); i++) {
-				b.append("<option value='" + this.getAns().get(i).getName() + "'> ");
-				this.getAns().get(i).writeHTML(b);
-				b.append(" </option> \n");
-			}
-			b.append("</select>\n");
-			b.append("</br>");
-			b.append("</br>\n");
+		// Regular options
+		b.append("<select>\n");
+		for (Answer ans : getAns()) {
+			b.append("<option value='" + ans.getName() + "'> ");
+			ans.writeHTML(b);
+			b.append(" </option> \n");
 		}
-
+		b.append("</select>\n");
+		b.append("</br>");
+		b.append("</br>\n");
 	}
 
 	public void writeJS(StringBuilder b) {
-		b.append("multichoice([");
-		for (int i = 0; i < this.getAns().size(); i++) {
-			this.getAns().get(i).writeJS(b);
-		}
+		Util.writeAnsListAsJS("dropdown", getAns(), b);
 	}
 
 	public void writeXML(StringBuilder b) {
-		for (int i = 0; i < this.getAns().size(); i++)
-			this.getAns().get(i).writeXML(b);
-	}
-	@Override
-	public boolean isCorrect(String s) {
-		// TODO Auto-generated method stub
-		return false;
+		for (Answer ans : getAns())
+			ans.writeXML(b);
 	}
 }

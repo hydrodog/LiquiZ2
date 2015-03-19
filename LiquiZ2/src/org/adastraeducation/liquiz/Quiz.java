@@ -24,14 +24,7 @@ public class Quiz implements Displayable {
 		int n = (int)((b-a)/step) + 1;
 		return a + r.nextInt(n) * step;
 	}
-	// TODO: make this escape strings in single quotes
-	public static String escapeJS(String s) {
-		return s;
-	}
-	// TODO: make this escape strings in single quotes
-	public static String escapeXML(String s) {
-		return s;
-	}
+
 	private int id; // unique id for db and XML
 	private String name; // display name, possibly per Course?
 	private ArrayList<QuestionContainer> qContainers;

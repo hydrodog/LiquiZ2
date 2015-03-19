@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.adastraeducation.liquiz.database.Database;
+
 public abstract class Question implements Displayable {
 	private int id,points,level;
 	private ArrayList<Answer> answers;
@@ -12,52 +14,42 @@ public abstract class Question implements Displayable {
 		count = 0;
 	}
 	
-	private static HashMap<Integer,Question> questionDictionary = new HashMap<Integer,Question>();
-	private void setHashId(int id){
-		this.id = id;
-		questionDictionary.put(this.id, this);
-	}
-	public Question() {}
-	
-	public Question (int id, int points, int level) {
-		this.points= points;
-		this.level= level;
-		setHashId(id);
-	}	
-	
-	public Question(int points, int level) {
-		this.id = count++;
-		this.points = points;
-		this.level = level;
-		setHashId(id);
-	}
-	
-	public Question (int id, int points, int level, Answer[] answers) {
-		this.id = id;
-		this.points = points;
-		this.level = level;
-		this.answers = new ArrayList<Answer>(Arrays.asList(answers)); 
-	}
-	
-	public Question (int points, int level, Answer[] answers) {
-		this.points = points;
-		this.level = level;
-		this.answers = new ArrayList<Answer>(Arrays.asList(answers));
-	}
-	
 	public Question (int id, int points, int level, ArrayList<Answer> answers) {
 		this.id = id;
 		this.points = points;
 		this.level = level;
 		this.answers = answers;
+		Database.setQues(id, this);
+	}
+	
+	public Question (int id, int points, int level, Answer ans) {
+		this(id, points, level, makeListFromAnswer(ans));
 	}
 	
 	public Question (int points, int level, ArrayList<Answer> answers) {
-		this.points = points;
-		this.level = level;
-		this.answers = answers;
+		this(getUniqueID(), points, level, answers);
+	}
+	
+	public Question (int points, int level, Answer ans) {
+		this(getUniqueID(), points, level, makeListFromAnswer(ans));
+	}
+	
+	public Question() {}
+	
+	public Question(int points, int level) {
+		this(points, level, (ArrayList<Answer>) null);
+	}
+	
+	public static int getUniqueID() {
+		return count++;
 	}
 		
+	private static ArrayList<Answer> makeListFromAnswer(Answer a) {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		answers.add(a);
+		return answers;
+	}
+	
 	public int getPoints() {
 		return points;
 	}
@@ -82,24 +74,12 @@ public abstract class Question implements Displayable {
 		ansList.add(ans);
 		this.answers = ansList;
 	}
-	
-	public ArrayList<Answer> getAns() {
-		return answers;
-	}
 	public void setAns(ArrayList<Answer> answers) {
 		this.answers = answers;
 	}
-	
-	// might change everything to ArrayLists later
-	public Answer[] getAnsAsArray() {
-		Answer[] answersArr = Arrays.copyOf(answers.toArray(), answers.size(), Answer[].class); 
-		return answersArr;
+	public ArrayList<Answer> getAns() {
+		return answers;
 	}
-	public void setAns(Answer[] answers) {
-		this.answers = new ArrayList<Answer>(Arrays.asList(answers));
-	}
-	
-	public abstract String getTagName();
 	
 	protected void writeAttrs(StringBuilder b) {
 		writeAttr(b, "id", id);
@@ -121,6 +101,8 @@ public abstract class Question implements Displayable {
 		}
 	}
 	
-	public abstract boolean isCorrect(String s); // will delete eventually
-	public abstract boolean isCorrect(DisplayElement d);
+	public abstract boolean isCorrect(String s);
+	public boolean isAutomaticGrading() {
+		return true;
+	}
 }

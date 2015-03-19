@@ -1,4 +1,6 @@
 package org.adastraeducation.liquiz;
+
+import java.util.ArrayList;
 /*
  * @author Dov Kruger
  * Represents a matrix of numeric fillin questions to quickly
@@ -26,13 +28,13 @@ public class MatrixQuestion extends Question {
 	
 	public MatrixQuestion(){}
 	
-	public MatrixQuestion(int id, int level, int points, int rows, int cols) {
-		super(id, level, points);
+	public MatrixQuestion(int id, int points, int level, int rows, int cols) {
+		super(id, points, level, (ArrayList<Answer>) null);
 		this.rows = rows;
 		this.cols = cols;
 	}
-	public MatrixQuestion(int level, int points, int rows, int cols) {
-		super(level, points);
+	public MatrixQuestion(int points, int level, int rows, int cols) {
+		super(points, level);
 		this.rows = rows;
 		this.cols = cols;
 	}
@@ -52,8 +54,6 @@ public class MatrixQuestion extends Question {
 		b.append("</table>");
 	}
 
-	public String getTagName() { return "matrixquestion"; }
-	
 	//TODO: Fix the commas after each row, they aren't there!
 	@Override
 	public void writeJS(StringBuilder b) {

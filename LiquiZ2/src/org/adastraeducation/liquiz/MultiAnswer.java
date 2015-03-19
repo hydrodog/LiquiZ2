@@ -2,6 +2,8 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
+import org.adastraeducation.liquiz.util.Util;
+
 
 public class MultiAnswer extends MultiChoiceDropdown {
 		
@@ -11,57 +13,35 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	public MultiAnswer() {
 	}
 	
-	// same as above two constructors but with ArrayList
-	public MultiAnswer(int id, int level, int points, ArrayList<Answer> answers) {
-		super(id, level, points, answers);
+	public MultiAnswer(int id, int points, int level, ArrayList<Answer> answers) {
+		super(id, points, level, answers);
 	}
-	public MultiAnswer(int level, int points, ArrayList<Answer> answers) {
-		super(level, points, answers);
-	}
-	
-	public MultiAnswer(int level, int points, String stdChoiceName, int [] rightAns) {
-		// TODO Auto-generated constructor stub
-		super(level, points);
-		stdchoice = new StdChoice(stdChoiceName, rightAns);
+	public MultiAnswer(int points, int level, ArrayList<Answer> answers) {
+		super(points, level, answers);
 	}
 	
+	public MultiAnswer(int points, int level, String stdChoiceName, int [] rightAns) {
+		super(points, level, stdChoiceName);
+		for (int i : rightAns) {
+			this.getAns().get(i).setCorrect(true);
+		}
+	}
 
 	//TODO: Override IsCorrect()
 	
-	public String getTagName() {
-		return "MultiAnswer";
-	}
-	
 	public void writeHTML(StringBuilder b ){
 		
-		Answer[] ans = this.getAnsAsArray();
-		
-		if (stdchoice != null) {
-
-			stdchoice.writeHTMLMultiSelection(b);
-
-		} else {
-
-		
-			b.append("<select multiple>\n");
-			for (int i = 0; i < ans.length; i++){
-				b.append("<option value= '");
-				ans[i].getGAns().writeHTML(b);
-				b.append("'>");
-				ans[i].getGAns().writeHTML(b);
-				b.append("  </option>\n ");
-			 }
-			b.append("</select>\n");
-			b.append("</br>\n");
-		}
+		b.append("<select multiple>\n");
+		for (Answer ans : getAns()){
+			b.append("<option value= '").append(ans.getName()).append("'>");
+			ans.writeHTML(b);
+			b.append("  </option>\n ");
+		 }
+		b.append("</select>\n");
+		b.append("</br>\n");
        
 	}
 	public void writeJS(StringBuilder b ){
-		Answer[] ans = this.getAnsAsArray();
-		for (int i = 0; i < ans.length; i++){
-			b.append("new MultipleChoice(");
-			ans[i].getGAns().writeHTML(b);
-			b.append(")");
-		}
+		Util.writeAnsListAsJS("multiAnswer", getAns(), b);
 	}	
 }

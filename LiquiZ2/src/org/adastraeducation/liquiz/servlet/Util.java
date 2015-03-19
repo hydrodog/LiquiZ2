@@ -1,9 +1,9 @@
 package org.adastraeducation.liquiz.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.*;
-import org.adastraeducation.liquiz.util.QuestionPattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -80,11 +80,11 @@ public class Util extends HttpServlet{
 	    String questionText = request.getParameter("question_text");
 	    qc.add(new Text(questionText));
 		String image = request.getParameter("image_src");
-		qc.add(new Image(image));
+		qc.add(new Image(image,0,0));
 		String audio = request.getParameter("audio_src");
 		qc.add(new Audio(audio));
 		String video = request.getParameter("video_src");
-		qc.add(new Video(video));
+		qc.add(new Video(video,0,0));
 		qc.add(q);
 	    quiz.addQuestionContainer(qc);
 	}
@@ -125,10 +125,10 @@ public class Util extends HttpServlet{
 	public Question createMultiChoiceDropdown(HttpServletRequest request){
 		int numChoices = Integer.parseInt(request.getParameter("multichoice_dropdown_number"));
 		//int numChoices = 4 + (Integer.parseInt(request.getParameter("multichoice_dropdown_number")));
-		Answer[] answers = new Answer[numChoices];
+		ArrayList<Answer> answers = new ArrayList<Answer>(numChoices);
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("dropdown_choices" + (i+1));
-		  answers[i] = new Answer(new Text(choice), false);
+		  answers.add(new Answer(new Text(choice), false));
 		}
 		MultiChoiceDropdown q = new MultiChoiceDropdown();
 		q.setAns(answers); 
@@ -137,10 +137,10 @@ public class Util extends HttpServlet{
 	public Question createMultiChoiceRadio(HttpServletRequest request){
 		int numChoices = Integer.parseInt(request.getParameter("multichoice_radio_number"));
 		//int numChoices = 4 + (Integer.parseInt(request.getParameter("multichoice_radio_number")));
-		Answer[] answers = new Answer[numChoices];
+		ArrayList<Answer> answers = new ArrayList<Answer>(numChoices);
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("radio_choices" + (i+1));
-		  answers[i] = new Answer(new Text(choice), false);
+		  answers.add(new Answer(new Text(choice), false));
 		}
 		MultiChoiceRadio q = new MultiChoiceRadio();
 		q.setAns(answers); 
@@ -149,10 +149,10 @@ public class Util extends HttpServlet{
 	public Question createMultiAnswer(HttpServletRequest request) {
 		int numChoices = Integer.parseInt(request.getParameter("multichoice_number"));
 		//int numChoices = 4 + (Integer.parseInt(request.getParameter("multichoice_number")));
-		Answer[] answers = new Answer[numChoices];
+		ArrayList<Answer> answers = new ArrayList<Answer>(numChoices);
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("multi_choices" + (i+1));
-		  answers[i] = new Answer(new Text(choice), false);
+		  answers.add(new Answer(new Text(choice), false));
 		}
 		MultiAnswer q = new MultiAnswer();
 		q.setAns(answers); 
@@ -160,7 +160,6 @@ public class Util extends HttpServlet{
 	}
 	public Question createRegexQuestion(HttpServletRequest request){
 		String answerText ;
-		QuestionPattern regexPattern;
 		Answer answers = null;
 		RegexQuestion q = new RegexQuestion();
 		q.setAns(answers);

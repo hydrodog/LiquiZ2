@@ -10,10 +10,6 @@ public class Text extends DisplayElement {
 	public Text(String text) {
 		this.text = text;
 	}
-	public String getTagName() 
-	{
-		return "Text"; 
-	}
 	
 	public String getText(){
 		return text;
