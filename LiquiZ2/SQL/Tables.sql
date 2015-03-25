@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
   `DispElID` INT NOT NULL AUTO_INCREMENT,
   `Element` VARCHAR(21000) NOT NULL,
-  `Type` CHAR(4) NOT NULL, -- text, image, video, audio, etc
+  `DispType` CHAR(4) NOT NULL, -- text, image, video, audio, etc
   PRIMARY KEY (`DispElID`));
 
 -- -----------------------------------------------------

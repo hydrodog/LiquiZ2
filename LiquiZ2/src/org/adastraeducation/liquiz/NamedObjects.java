@@ -28,8 +28,14 @@ public class NamedObjects {
 	
 	static {
 		lookUpStdChoice = new HashMap<String, ArrayList<Answer>>();
-		lookUpPattern = new HashMap<String, Pattern>();
+		ArrayList<Answer> comp = new ArrayList<Answer>();
+		comp.add(new Answer(new Text("O(1)")));
+		comp.add(new Answer(new Text("O(n)")));
+		comp.add(new Answer(new Text("O(n^2)")));
+		comp.add(new Answer(new Text("O(n log(n))")));
+		lookUpStdChoice.put("Complexity", comp);
 		
+		lookUpPattern = new HashMap<String, Pattern>();
 		lookUpPattern.put("Mass", Pattern.compile("(\\d{0,2}(\\.\\d{0,2}))(kg|kilogram)"));
 		lookUpPattern.put("Length", Pattern.compile("(\\d{0,2}(\\.\\d{0,2}))(m|meter)"));
 	}

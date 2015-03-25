@@ -2,12 +2,11 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-/*
- * author:Yingzhu
- * This is for Number question
- * Useless temporarily. Do not use them, Use Fillin instead.
+/**
+ * Accept a range of numerical answers
+ * @author yijinkang
+ *
  */
-
 public class NumberRange extends FillIn {
 	private double min;
 	private double max;

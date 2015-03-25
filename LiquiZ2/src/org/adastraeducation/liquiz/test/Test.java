@@ -83,7 +83,7 @@ public class Test {
 				new Text("What is "),
 				eq1,
 				new Text("?"),
-				new NumberRange(1, 3, 2, 0, 99) //id 1, 3 points, level 2, accept 0 to 99 as correct
+				new NumberRange(1, 3, 2, 0.0, 99.0) //id 1, 3 points, level 2, accept 0 to 99 as correct
 			}
 			);
 		quiz.addQuestionContainer(qc);
@@ -197,16 +197,16 @@ public class Test {
 		quiz.setName("Multiple- Quiz");
 		QuestionContainer qc = new QuestionContainer(
 			new Displayable[] {
-				new Text("Can all birds fly ?"),
-				new MultiChoiceDropdown(1, 5, "Poll"),
+//				new Text("Can all birds fly ?"),
+//				new MultiChoiceDropdown(1, 5, "Poll"),
 				new Text("What is the complexity of BubbleSort ?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
 				new Text("What is the complexity of QuickSort?"),
 				new MultiChoiceRadio(1, 5, "Complexity"),
-				new Text("What are the colors of an apple ?"),
-				new MultiAnswer(1, 5, "Colors", new int []{2,3}),
-				new Text("Name the insects:"),
-				new MultiAnswer(1, 5, "Insects", new int []{3,4,5})
+//				new Text("What are the colors of an apple ?"),
+//				new MultiAnswer(1, 5, "Colors", new int []{2,3}),
+//				new Text("Name the insects:"),
+//				new MultiAnswer(1, 5, "Insects", new int []{3,4,5})
 	
 			}
 		);
@@ -232,23 +232,23 @@ public class Test {
 		fw.close();		
 	}
 
-	public static void writeXML(String filename, Quiz quiz) throws IOException {
-		XMLEncoder enc = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
-		enc.writeObject(quiz);
-		enc.close();
-	}
-
-	public static Quiz readXML(String filename) throws IOException {
-		XMLDecoder dec = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
-		Quiz q = (Quiz)dec.readObject();
-		dec.close();
-		return q;
-	}
+//	public static void writeXML(String filename, Quiz quiz) throws IOException {
+//		XMLEncoder enc = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
+//		enc.writeObject(quiz);
+//		enc.close();
+//	}
+//
+//	public static Quiz readXML(String filename) throws IOException {
+//		XMLDecoder dec = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
+//		Quiz q = (Quiz)dec.readObject();
+//		dec.close();
+//		return q;
+//	}
 	public static void testOutput(String baseName, Displayable d) throws IOException {
 		writeHTML(baseName + ".html", d); 
 		writeJS(baseName + ".js", d);
-		if (d instanceof Quiz)
-			writeXML(baseName + ".xml", (Quiz)d); 
+//		if (d instanceof Quiz)
+//			writeXML(baseName + ".xml", (Quiz)d); 
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -257,12 +257,25 @@ public class Test {
 		testOutput("output/test3", test3());
 		
 		/*testing Course*/
-		Course testCourse = new Course(1, "Test Course");
-		testCourse.addQuiz(test1());
-		testCourse.addQuiz(test2());
-		testCourse.addQuiz(test3());
-		testCourse.addQuiz(test4());
-		testOutput("output/testCourse", testCourse);
+//		Course testCourse = new Course(1, "Test Course");
+//		testCourse.addQuiz(test1());
+//		testCourse.addQuiz(test2());
+//		testCourse.addQuiz(test3());
+//		testCourse.addQuiz(test4());
+//		testOutput("output/testCourse", testCourse);
+		
+		
+//		StringBuilder b1 = new StringBuilder();
+//		test1().writeHTML(b1);
+//		System.out.println(b1.toString());
+//		
+////		StringBuilder b2 = new StringBuilder();
+////		test2().writeHTML(b2);
+////		System.out.println(b2.toString());
+//		
+//		StringBuilder b3 = new StringBuilder();
+//		test3().writeHTML(b3);
+//		System.out.println(b3.toString());
 	}
 
 }

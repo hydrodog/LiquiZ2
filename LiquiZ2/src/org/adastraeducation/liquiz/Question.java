@@ -19,7 +19,7 @@ public abstract class Question implements Displayable {
 		this.points = points;
 		this.level = level;
 		this.answers = answers;
-		Database.setQues(id, this);
+//		Database.setQues(id, this);
 	}
 	
 	public Question (int id, int points, int level, Answer ans) {

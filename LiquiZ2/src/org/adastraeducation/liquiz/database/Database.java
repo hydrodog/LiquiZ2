@@ -75,6 +75,18 @@ public class Database {
 	 * Note that id starts at 1 and index starts at 0, so the first space in each ArrayList is empty
 	 */
 	
+	public static void reportSizes() {
+		System.out.println("Users: " + (users.size()-1));
+		System.out.println("Courses: " + (courses.size()-1));
+		System.out.println("Policies: " + (policies.size()-1));
+		System.out.println("Quizzes: " + (quizzes.size()-1));
+		System.out.println("Question Containers: " + (quesCons.size()-1));
+		System.out.println("Questions: "+ (questions.size()-1));
+		System.out.println("Answers: "+ (answers.size()-1));
+		//std choices
+		System.out.println("DisplayElements: " + (displayElements.size()-1));
+	}
+	
 	public static void addUser(User u) {
 		users.add(u);
 	}
@@ -84,11 +96,17 @@ public class Database {
 	public static User getUser(int id) {
 		return users.get(id);
 	}
+	public static void addCourse(Course c) {
+		courses.add(c);
+	}
 	public static void setCourse(int id, Course c) {
 		courses.set(id, c);
 	}
 	public static Course getCourse(int id) {
 		return courses.get(id);
+	}
+	public static void addPolicy(Policy p) {
+		policies.add(p);
 	}
 	public static void setPolicy(int id, Policy p) {
 		policies.set(id, p);
@@ -96,17 +114,26 @@ public class Database {
 	public static Policy getPolicy(int id) {
 		return policies.get(id);
 	}
+	public static void addQuiz(Quiz q) {
+		quizzes.add(q);
+	}
 	public static void setQuiz(int id, Quiz q) {
 		quizzes.set(id, q);
 	}
 	public static Quiz getQuiz(int id) {
 		return quizzes.get(id);
 	}
+	public static void addQuesCon(QuestionContainer qc) {
+		quesCons.add(qc);
+	}
 	public static void setQuesCon(int id, QuestionContainer qc) {
 		quesCons.set(id, qc);
 	}
 	public static QuestionContainer getQuesCon(int id) {
 		return quesCons.get(id);
+	}
+	public static void addQues(Question q) {
+		questions.add(q);
 	}
 	public static void setQues(int id, Question q) {
 		questions.set(id, q);
@@ -122,6 +149,9 @@ public class Database {
 	}
 	public static Answer getAns(int id) {
 		return answers.get(id);
+	}
+	public static void addStdChoice(StdChoiceTwo sc) {
+		stdChoices.add(sc);
 	}
 	public static void setStdChoice(int id, StdChoiceTwo sc) {
 		stdChoices.set(id, sc);

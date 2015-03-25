@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -78,6 +79,31 @@ public class DatabaseMgr {
 		}
 	}
 	
+	public static ResultSet execQuery(String sql) throws SQLException {
+		Connection conn = getConnection();
+		PreparedStatement p = conn.prepareStatement(sql);
+		return p.executeQuery();
+	}
+	
+	public static ResultSet execQuery(String sql, int par) throws SQLException {
+		Connection conn = getConnection();
+		PreparedStatement p = conn.prepareStatement(sql);
+		p.setInt(1, par);
+		return p.executeQuery();
+	}
+	
+	public static void closeResultSet(ResultSet rs) {
+		if (rs == null) {
+			return;
+		}
+		try {
+			rs.close();
+			returnConnection(rs.getStatement().getConnection());
+		} catch (SQLException e) {
+			
+		}
+		
+	}
 	
 	//do the select query
 	public static ResultSet select(String sql){

@@ -52,6 +52,39 @@ CREATE  OR REPLACE VIEW `ViewCAnsToQues` AS
 SELECT * from ViewAnsToQues
 WHERE Correct=1;
 
+
+-- -----------------------------------------------------
+-- View QuesCon
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `LiquiZ`.`ViewQuesCon` ;
+DROP TABLE IF EXISTS `LiquiZ`.`ViewQuesCon`;
+USE `LiquiZ`;
+CREATE  OR REPLACE VIEW `ViewQuesCon` AS 
+SELECT QuesConElements.QuesCon, DisplayElements.DispElID, DisplayElements.Element, Questions.QuesID, Questions.QType, Questions.Points, Questions.Level
+FROM QuesConElements
+LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
+LEFT JOIN DisplayElements ON QuesConElements.Element = DisplayElements.DispElID
+ORDER BY QuesConElements.QuesCon, QuesConElements.Sequence ASC;
+-- QuesCon | DispElID | Element | QuesID | QType | Points | Level
+
+
+-- -----------------------------------------------------
+-- View QuesConWAns
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `LiquiZ`.`ViewQuesConWAns` ;
+DROP TABLE IF EXISTS `LiquiZ`.`ViewQuesConWAns`;
+USE `LiquiZ`;
+CREATE  OR REPLACE VIEW `ViewQuesConWAns` AS 
+SELECT QuesConElements.QuesCon, QuesConElements.Type, DisplayElements.DispElID, DisplayElements.Element, DisplayElements.DispType, Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, Answers.AnsID, QuesAnsSeq.Correct
+FROM QuesConElements
+LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
+LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques
+LEFT JOIN Answers ON QuesAnsSeq.Ans = Answers.AnsID
+LEFT JOIN StdChoices ON QuesAnsSeq.StdChoice = StdChoices.StdSetID
+LEFT JOIN DisplayElements ON QuesConElements.Element = DisplayElements.DispElID OR Answers.Element = DisplayElements.DispElID OR Answers.Response = DisplayElements.DispElID
+ORDER BY QuesConElements.QuesCon, QuesConElements.Sequence, QuesAnsSeq.Sequence ASC;
+-- QuesCon | Type | DispElID | Element | DispType | QuesID | QType | Points | Level | AnsID | Correct
+
 -- -----------------------------------------------------
 -- View Quiz
 -- -----------------------------------------------------
@@ -59,12 +92,33 @@ DROP VIEW IF EXISTS `LiquiZ`.`ViewQuiz` ;
 DROP TABLE IF EXISTS `LiquiZ`.`ViewQuiz`;
 USE `LiquiZ`;
 CREATE  OR REPLACE VIEW `ViewQuiz` AS 
-SELECT QuizzesQuesCons.Quiz, QuizzesQuesCons.QuesCon, Questions.QuesID, Questions.QType, DispElSeq.Element
+SELECT QuizzesQuesCons.Quiz, QuizzesQuesCons.QuesCon, DisplayElements.DispElID, DisplayElements.Element, Questions.QuesID, Questions.QType, Questions.Points, Questions.Level
 FROM QuizzesQuesCons
 LEFT JOIN QuesConElements ON QuizzesQuesCons.QuesCon = QuesConElements.QuesCon
 LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
-LEFT JOIN DispElSeq ON QuesConElements.Element = DispElSeq.DispEl
-ORDER BY QuizzesQuesCons.Sequence, QuesConElements.Sequence, DispElSeq.Sequence ASC;
+LEFT JOIN DisplayElements ON QuesConElements.Element = DisplayElements.DispElID
+ORDER BY QuizzesQuesCons.Sequence, QuesConElements.Sequence ASC;
+-- Quiz | QuesCon | DispElID | Element | QuesID | QType | Points | Level
+
+
+-- -----------------------------------------------------
+-- View Quiz with all possible Answers
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `LiquiZ`.`ViewQuizWAns` ;
+DROP TABLE IF EXISTS `LiquiZ`.`ViewQuizWAns`;
+USE `LiquiZ`;
+CREATE  OR REPLACE VIEW `ViewQuizWAns` AS 
+SELECT QuizzesQuesCons.Quiz, QuizzesQuesCons.QuesCon, DisplayElements.DispElID, DisplayElements.Element, Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, Answers.AnsID, QuesAnsSeq.Correct
+FROM QuizzesQuesCons
+LEFT JOIN QuesConElements ON QuizzesQuesCons.QuesCon = QuesConElements.QuesCon
+LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
+LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques
+LEFT JOIN Answers ON QuesAnsSeq.Ans = Answers.AnsID
+LEFT JOIN StdChoices ON QuesAnsSeq.StdChoice = StdChoices.StdSetID
+LEFT JOIN DisplayElements ON QuesConElements.Element = DisplayElements.DispElID OR Answers.Element = DisplayElements.DispElID OR Answers.Response = DisplayElements.DispElID
+ORDER BY QuizzesQuesCons.Sequence, QuesConElements.Sequence ASC;
+-- Quiz | QuesCon | DispElID | Element | QuesID | QType | Points | Level | AnsID | Correct
+
 
 -- -----------------------------------------------------
 -- View Quiz with Correct Answers only
@@ -76,19 +130,3 @@ CREATE  OR REPLACE VIEW `ViewQuizWCAns` AS
 SELECT * FROM ViewQuizWAns
 WHERE Correct IS NULL OR Correct=1;
 
--- -----------------------------------------------------
--- View Quiz with all possible Answers
--- -----------------------------------------------------
-DROP VIEW IF EXISTS `LiquiZ`.`ViewQuizWAns` ;
-DROP TABLE IF EXISTS `LiquiZ`.`ViewQuizWAns`;
-USE `LiquiZ`;
-CREATE  OR REPLACE VIEW `ViewQuizWAns` AS 
-SELECT QuizzesQuesCons.Quiz, QuizzesQuesCons.QuesCon, DispElSeq.DispEl, DispElSeq.Element, Questions.QuesID, Questions.Points, Answers.AnsID, QuesAnsSeq.Correct
-FROM QuizzesQuesCons
-LEFT JOIN QuesConElements ON QuizzesQuesCons.QuesCon = QuesConElements.QuesCon
-LEFT JOIN Questions ON QuesConElements.Ques = Questions.QuesID
-LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques
-LEFT JOIN Answers ON QuesAnsSeq.Ans = Answers.AnsID
-LEFT JOIN StdChoices ON QuesAnsSeq.StdChoice = StdChoices.StdSetID
-LEFT JOIN DispElSeq ON QuesConElements.Element = DispElSeq.DispEl OR Answers.Element = DispElSeq.DispEl OR Answers.Response = DispElSeq.DispEl
-ORDER BY QuizzesQuesCons.Sequence, QuesConElements.Sequence, DispElSeq.Sequence ASC;

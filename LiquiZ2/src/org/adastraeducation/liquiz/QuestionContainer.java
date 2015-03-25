@@ -46,6 +46,8 @@ public class QuestionContainer implements Displayable {
 		b.append("<div class='question'>\n");
 		for (Displayable d : displayables) {
 			d.writeHTML(b);
+			//TODO: should there be a new line or a space separating each? 
+			//should we create objects to represent spaces & newlines?
 		}
 		b.append("</div>\n");
 	}
