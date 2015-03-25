@@ -24,13 +24,13 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 	}
 	
 	public void writeHTML(StringBuilder b) {
-		b.append("<select>\n");
+	
 		for (Answer ans : this.getAns()) {
-			b.append("<option> <input type='radio' value= '" + ans.getName() + "'> ");
+			b.append("<input type='radio' value= '" + ans.getName() + "'> ");
 			ans.writeHTML(b);
-			b.append(" </option>\n ");
+			b.append(" </br>\n ");
 		}
-		b.append("</select>\n");
+		
 		b.append("</br>");
 		b.append("</br>\n");
 
