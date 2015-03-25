@@ -19,7 +19,6 @@ public class Database {
 	private static ArrayList<QuestionContainer> quesCons;
 	private static ArrayList<Question> questions;
 	private static ArrayList<Answer> answers;
-	private static ArrayList<StdChoiceTwo> stdChoices;
 	private static ArrayList<DisplayElement> displayElements;
 	
 	private static int getMaxOf(String sql) {
@@ -66,7 +65,6 @@ public class Database {
 		quesCons = getMax("QuesConID", "QuesCon", QuestionContainer.class);
 		questions = getMax("QuesID","Questions", Question.class);
 		answers = getMax("AnsID","Answers",Answer.class);
-		//stdChoices = new ArrayList<StdChoiceTwo>(); 
 		displayElements = getMax("DispElID","DisplayElements", DisplayElement.class);
 	}
 	
@@ -149,15 +147,6 @@ public class Database {
 	}
 	public static Answer getAns(int id) {
 		return answers.get(id);
-	}
-	public static void addStdChoice(StdChoiceTwo sc) {
-		stdChoices.add(sc);
-	}
-	public static void setStdChoice(int id, StdChoiceTwo sc) {
-		stdChoices.set(id, sc);
-	}
-	public static StdChoiceTwo getStdChoice(int id) {
-		return stdChoices.get(id);
 	}
 	public static void addDisp(DisplayElement d) {
 		displayElements.add(d);

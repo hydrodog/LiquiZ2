@@ -20,10 +20,6 @@ import java.util.regex.Pattern;
  */
 public class NamedObjects {
 	private static HashMap<String, ArrayList<Answer>> lookUpStdChoice;
-//	public static QuestionPattern MASS = new QuestionPattern("([0-9|\.]+)(kg|kilogram)");
-//	public static QuestionPattern LENGTH = new QuestionPattern("([0-9|\.]+)(m|meter)");
-//	public static QuestionPattern TIME = new QuestionPattern("([0-9|\.]+)(s|second)");
-//	public static QuestionPattern VELOCITY = new QuestionPattern("([0-9|\.]+)(m\\/s|meter\\/second)");
 	private static HashMap<String, Pattern> lookUpPattern;
 	
 	static {
@@ -36,6 +32,10 @@ public class NamedObjects {
 		lookUpStdChoice.put("Complexity", comp);
 		
 		lookUpPattern = new HashMap<String, Pattern>();
+//		public static QuestionPattern MASS = new QuestionPattern("([0-9|\.]+)(kg|kilogram)");
+//		public static QuestionPattern LENGTH = new QuestionPattern("([0-9|\.]+)(m|meter)");
+//		public static QuestionPattern TIME = new QuestionPattern("([0-9|\.]+)(s|second)");
+//		public static QuestionPattern VELOCITY = new QuestionPattern("([0-9|\.]+)(m\\/s|meter\\/second)");
 		lookUpPattern.put("Mass", Pattern.compile("(\\d{0,2}(\\.\\d{0,2}))(kg|kilogram)"));
 		lookUpPattern.put("Length", Pattern.compile("(\\d{0,2}(\\.\\d{0,2}))(m|meter)"));
 	}

@@ -39,8 +39,10 @@ DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
   `DispElID` INT NOT NULL AUTO_INCREMENT,
-  `Element` VARCHAR(21000) NOT NULL,
-  `DispType` CHAR(4) NOT NULL, -- text, image, video, audio, etc
+  `Element` VARCHAR(21000) NOT NULL, -- text or source (name)
+  `DispType` CHAR(4) NOT NULL, -- text, img, vid, aud, etc
+  `Width` INT NULL,
+  `Height` INT NULL,
   PRIMARY KEY (`DispElID`));
 
 -- -----------------------------------------------------
@@ -103,6 +105,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`QuesCon` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesCon` (
   `QuesConID` INT NOT NULL AUTO_INCREMENT,
+  `QuesConName` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`QuesConID`)
   );
 
@@ -140,8 +143,8 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Answers` (
   `AnsID` INT NOT NULL AUTO_INCREMENT,
   `Response` INT NULL, -- DisplayElements.DispElID
   `Element` INT NULL COMMENT 'The DispEl that represents the answer', -- DisplayElements.DispElID
-  `LowBound` INT NULL COMMENT 'to accept a range of numbers (lower bound)',
-  `HighBound` INT NULL COMMENT 'to accept a range of numbers (upper bound)',
+  `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
+  `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
   PRIMARY KEY (`AnsID`));
 
 
@@ -163,7 +166,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`StdChoices` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`StdChoices` (
   `StdSetID` INT NOT NULL, -- StdSet.StdSetID
-  `Element` INT NOT NULL, -- DisplayElements.DispElID
+  `Answer` INT NOT NULL, -- Answers.AnsID
   `Sequence` INT NOT NULL);
 
 
@@ -175,10 +178,11 @@ DROP TABLE IF EXISTS `LiquiZ`.`QuesAnsSeq` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesAnsSeq` (
   `Ques` INT NOT NULL,
   `Ans` INT NULL,
-  `StdSet` INT NULL,
-  `StdChoice` INT NULL, -- Sequence, so we can set correct
   `Sequence` INT NULL,
-  `Correct` BIT(1) NULL); -- 0/1
+  `Correct` BIT(1) NULL, -- 0/1 for Ans
+  `StdSet` INT NULL,
+  `StdCorrect` INT NULL -- Index of correct answer
+);
 
 
 -- -----------------------------------------------------

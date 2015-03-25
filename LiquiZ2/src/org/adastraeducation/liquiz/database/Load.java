@@ -158,61 +158,54 @@ public class Load {
 //		return a;
 //	}
 	
-//	// Loads all the answers in the StdSet requested
-//	public static void loadStdChoices() {
-//		Connection conn = null;
-//		String name = null;
-//		ArrayList<Answer> ans = new ArrayList<Answer>();
-//		StdChoiceTwo sc = null;
-//		
-//		try {
-//			conn = DatabaseMgr.getConnection();
-//			
-//			// load the set
-//			PreparedStatement p1 = conn.prepareStatement("SELECT * FROM StdSet");
-//			ResultSet rs1 = p1.executeQuery();
-//			
-//			PreparedStatement p2 = conn.prepareStatement("SELECT * FROM StdChoices WHERE StdSetID=?");
-//			while (rs1.next()) {
-//				name = rs1.getString("Name");
-//				// load the individual choices
-//				p2.setInt(1, rs1.getInt("StdSetID"));
-//				ResultSet rs2 = p2.executeQuery();
-//				// add the choices to the ans ArrayList<Answer>
-//				while (rs2.next()) {
-//					ans.add(new Answer(Database.getDisp(rs2.getInt("Element")),rs2.getInt("Sequence")));
-//				}
-//				rs2.close();
-//				sc = new StdChoiceTwo(rs1.getInt("StdSetID"), name, ans);
-//				Database.addStdChoice(sc);
-//			}
-//			
-//			rs1.close();
-//
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			DatabaseMgr.returnConnection(conn);
-//		}
-//	}
+	// Load all StdChoices to HashMap in NamedObjects
+	public static void loadStdChoices() {
+		ResultSet rs = null;
+		ArrayList<Answer> ans = new ArrayList<Answer>();
+		
+		try {
+			rs = DatabaseMgr.execQuery("SELECT StdSet.StdSetID, StdSet.Name, StdChoices.Answer");
+			
+			rs.next();
+			String name = rs.getString("Name");
+			do {
+				if (!name.equals(rs.getString("Name"))) {
+					// Next is new StdSet
+					NamedObjects.addStdChoice(name, ans);
+					name = rs.getString("Name");
+					ans.clear();
+				}
+				ans.add(Database.getAns(rs.getInt("Answer")));
+			} while (rs.next());
+			
+			//add last stdchoice
+			NamedObjects.addStdChoice(name, ans);
+			name = rs.getString("Name");
+			ans.clear();
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.closeResultSet(rs);
+		}
+	}
 
 	public static Question loadQues() {
 		ResultSet rs = null;
 		int quesID, points, level;
 		Question q = null;
 		ArrayList<Answer> answers = new ArrayList<Answer>();
-		StdChoiceTwo sc = null;
 
 		try {
-			rs = DatabaseMgr.execQuery("SELECT Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, QuesAnsSeq.Ans, QuesAnsSeq.Correct FROM Questions LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques");
+			rs = DatabaseMgr.execQuery("SELECT Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, QuesAnsSeq.Ans, QuesAnsSeq.Correct, QuesAnsSeq.StdSet, QuesAnsSeq.StdCorrect FROM Questions LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques");
 			
 			/*
-			 * SELECT Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, QuesAnsSeq.Ans, QuesAnsSeq.Correct 
+			 * SELECT Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, QuesAnsSeq.Ans, QuesAnsSeq.Correct,  QuesAnsSeq.StdSet, QuesAnsSeq.StdCorrect 
 			 * FROM Questions 
 			 * LEFT JOIN QuesAnsSeq 
 			 * ON Questions.QuesID = QuesAnsSeq.Ques
 			 * 
-			 * QuesID | Points | Level | Ans | Correct
+			 * QuesID | Points | Level | Ans | Correct | StdSet | StdCorrect
 			 * TODO maybe load range here and directly add it to the question
 			 */
 			while(rs.next()) {
@@ -244,16 +237,11 @@ public class Load {
 							level = rs.getInt("Level");
 						} while(rs.next() && rs.getInt("QuesID") == quesID); 
 					} else {
-						// load the StdSet
-						sc = Database.getStdChoice(rs.getInt("StdSet"));
-						while (rs.next()) {
-							// go through the StdSet and check for answers to be marked correct
-							if (rs.getBoolean("Correct")) {
-								sc.setAnswer(rs.getInt("Sequence"));
-							}
-						}
-						// match the answers ArrayList to the StdSet answers ArrayList
-						answers = sc.getAnswers();
+						// load the StdSet to answers
+						answers = NamedObjects.getCloneOfStdChoice(rs.getString("StdSet")); //TODO 
+						// set the correct one
+						answers.get(rs.getInt("StdCorrect")).setCorrect(true);
+						
 						quesID = rs.getInt("QuesID");
 						points = rs.getInt("Points");
 						level = rs.getInt("Level");
@@ -332,8 +320,7 @@ public class Load {
  * ORDER BY QuesConElements.QuesCon, QuesConElements.Sequence, QuesAnsSeq.Sequence ASC;
  * 
  * QuesCon | Type | Element | Ques | Ans | Correct	
- * 
- * TODO: QuesAnsSeq needs QC mapping?		
+ * 	
  */
 			ArrayList<Displayable> disps = new ArrayList<Displayable>();
 			QuestionContainer qc = null;

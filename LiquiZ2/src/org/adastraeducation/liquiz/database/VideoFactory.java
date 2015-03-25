@@ -7,6 +7,6 @@ import org.adastraeducation.liquiz.*;
 
 public class VideoFactory extends DisplayElementFactory {
 	public Video create(ResultSet rs) throws SQLException {
-		return new Video(rs.getString("Element"), 0,0);
+		return new Video(rs.getString("Element"), rs.getInt("Width"), rs.getInt("Height"));
 	}
 }
