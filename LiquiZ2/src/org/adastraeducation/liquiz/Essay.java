@@ -38,7 +38,7 @@ public class Essay extends Question {
 	}
 
 	public void writeHTML(StringBuilder b ){		
-		b.append("<textarea name='' class='essay'>");
+		b.append("<textarea name='' rows='10' cols='50' class='essay'>");
 		//TODO: check that this text is properly escaped for HTML
 		b.append(defaultText);
 		b.append("</textarea>");
