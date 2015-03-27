@@ -22,20 +22,21 @@
             
                 Title  <input type="text" name="title">
                 QuestionType
-                <select name="question_type" size="1" onchange="changeQuestion(this)">
-                    <option value="FillIn" selected>Fill-In</option>
+                 <select id="target" name="question_type" size="1">
+                    <option value = "QuestionType">(Select a question type)</option>
+                    <option value="FillIn" >Fill-In</option>
                     <option value="Essay" >Essay</option> 
                     <option value="Code" >Code</option>                
                     <option value="MultiChoiceDropdown">MultiChoice-Dropdown</option>
                     <option value="MultiChoiceRadio">MultiChoice-Radio</option>
                     <option value="MultiAnswer">MultiAnswer</option>
-                    <option value="RegexQuestion">Regex-Question</option>
-                    
+                    <option value="Regex">Regex</option>
+                    <option value="Matrix"> Matrix </option>
                 </select>
-                                
             </div>
             
             </br>
+            
             <div id="common_attribute" align="left">
                 Level<input type="text" name="level" value="1">
                 Points<input type="text" name="points" value="1">
@@ -151,7 +152,7 @@
                
             </br>
                 
-            <div id="fillin_attribute" align="left" >
+           <div id="FillIn" class="visible" align="left" >
             Answer<input type="text" name="answer">   
             	</br>
                 </br>
@@ -181,7 +182,7 @@
                  <div style="clear:both"></div>
             </div>
             
-              <div id="essay_attribute" align="left" style= "display:none">
+             <div id="Essay" class="visible" align="left" >
                 <div>
                     Type your Essay</br>
                		<textarea name="essay_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
@@ -198,16 +199,14 @@
                 </div>
             </div>
             
-            <div id="code_attribute" align="left" style= "display:none">
-            
+            <div id="Code" class="visible"align="left" >
             Programming Language
                 <select name="code_type" size="1">
                     <option value="C++">C++</option>
                     <option value="Java" >Java</option> 
-                    
                 </select>
-                
                 </br></br>
+                
                 <div>
                     Type your Code</br>
                		<textarea name="code_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
@@ -219,15 +218,12 @@
 					<font color="black">Words remaining: </font><font color="red"> 
    					<span id="show_remaining_words">120</span>
 					</font>
-
-    
                 </div>
             </div>
             
             
-            <div id="multidropdown_attribute" align="left" style= "display:none">
+             <div id="MultiChoiceDropdown" class="visible" align="left" >
                 <div>
-                
                     Multiple choice - Dropdown :
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
@@ -238,17 +234,13 @@
                    </br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_2" ></br>
                    </br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_3" ></br>
                    </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_4" ></br>
-                	</form>
-                   
+                   </form>
                 </div>
-                
                 <div id="dropdown"></div>
-                
-                
             </div>
             
             
-            <div id="multiradio_attribute" align="left" style= "display:none">
+             <div id="MultiChoiceRadio" class="visible" align="left" >
                 <div>
                     Multiple choice - Radio :
                     &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
@@ -268,7 +260,7 @@
           	</div>
             	
             
-            <div id="multianswer_attribute" align="left" style= "display:none">
+          <div id="MultiAnswer" class="visible" align="left" >
                 <div>
                    Multiple Answer Choices:
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
@@ -288,7 +280,7 @@
                 <div id="multichoices"></div>
             </div>
             
-            <div id="regexQuestion_attribute" align="left" style= "display:none">
+            <div id="Regex" class="visible" align="left"  >
             Answer<input type="text" name="answer">   
             	</br>
                 </br>
@@ -301,6 +293,7 @@
                 </br>
                 </div>
             </div>
+            <script src="assets/js1/displayChange.js"></script>
             
             </br>
             
