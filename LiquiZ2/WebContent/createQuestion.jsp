@@ -10,7 +10,7 @@
     <body>
     <!-- This style will later go into CSS..-->
     <style>
-	 .visible {
+	 .invisible {
 	 display: none;
 		 }
     </style>
@@ -152,7 +152,7 @@
                
             </br>
                 
-           <div id="FillIn" class="visible" align="left" >
+           <div id="FillIn" class="invisible" align="left" >
             Answer<input type="text" name="answer">   
             	</br>
                 </br>
@@ -182,7 +182,7 @@
                  <div style="clear:both"></div>
             </div>
             
-             <div id="Essay" class="visible" align="left" >
+             <div id="Essay" class="invisible" align="left" >
                 <div>
                     Type your Essay</br>
                		<textarea name="essay_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
@@ -199,7 +199,7 @@
                 </div>
             </div>
             
-            <div id="Code" class="visible"align="left" >
+            <div id="Code" class="invisible"align="left" >
             Programming Language
                 <select name="code_type" size="1">
                     <option value="C++">C++</option>
@@ -222,7 +222,7 @@
             </div>
             
             
-             <div id="MultiChoiceDropdown" class="visible" align="left" >
+             <div id="MultiChoiceDropdown" class="invisible" align="left" >
                 <div>
                     Multiple choice - Dropdown :
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
@@ -240,7 +240,7 @@
             </div>
             
             
-             <div id="MultiChoiceRadio" class="visible" align="left" >
+             <div id="MultiChoiceRadio" class="invisible" align="left" >
                 <div>
                     Multiple choice - Radio :
                     &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
@@ -260,7 +260,7 @@
           	</div>
             	
             
-          <div id="MultiAnswer" class="visible" align="left" >
+          <div id="MultiAnswer" class="invisible" align="left" >
                 <div>
                    Multiple Answer Choices:
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
@@ -280,7 +280,7 @@
                 <div id="multichoices"></div>
             </div>
             
-            <div id="Regex" class="visible" align="left"  >
+            <div id="Regex" class="invisible" align="left"  >
             Answer<input type="text" name="answer">   
             	</br>
                 </br>
