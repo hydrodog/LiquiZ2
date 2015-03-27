@@ -8,6 +8,13 @@
         <script src="assets/js/func.js"></script>
     </head>
     <body>
+    <!-- This style will later go into CSS..-->
+    <style>
+	 .visible {
+	 display: none;
+		 }
+    </style>
+ 
     	 <h2> Questions </h2>
         <form method="GET" action="addQuestion.jsp">
             <div id="div_title" align="left">
