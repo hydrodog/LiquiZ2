@@ -4,7 +4,7 @@ document.getElementById('target')
         var vis = document.querySelector('.vis'),   
             target = document.getElementById(this.value);
         if (vis !== null) {
-            vis.className = 'visible';
+            vis.className = 'invisible';
         }
         if (target !== null ) {
             target.className = 'vis';
