@@ -73,6 +73,7 @@ public class NamedObjects {
 		
 		return copy;
 	}
+	//These methods are to get the file location of "regexPatterns" into the bean through FileLocation.jsp file
 	public String getFileLocation() {
 	return fileLocation;
 	}
