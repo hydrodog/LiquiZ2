@@ -73,6 +73,13 @@ public class NamedObjects {
 		
 		return copy;
 	}
+	public String getFileLocation() {
+	return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+	this.fileLocation = fileLocation;
+	}
 	
 	//TODO: write methods to write out hashmaps to database
 }
