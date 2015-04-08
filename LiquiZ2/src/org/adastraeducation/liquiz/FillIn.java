@@ -58,7 +58,7 @@ public class FillIn extends Question {
 	@Override
 	//<input id='123' class='fillin' type='text' onblur='showNumberWarning(this, "\\d\\d\\d")'/> 
 	public void writeHTML(StringBuilder b) {
-		b.append("<input id='").append(getId()).append("' class='fillin' type='text' />");
+		b.append("<input id='").append(getId()).append("' class='fillin' type='text' />\n");
 	}
 
 	@Override

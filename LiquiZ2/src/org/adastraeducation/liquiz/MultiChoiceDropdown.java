@@ -51,8 +51,6 @@ public class MultiChoiceDropdown extends Question {
 			b.append(" </option> \n");
 		}
 		b.append("</select>\n");
-		b.append("</br>");
-		b.append("</br>\n");
 	}
 
 	public void writeJS(StringBuilder b) {

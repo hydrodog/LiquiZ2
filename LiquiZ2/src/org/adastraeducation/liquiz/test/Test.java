@@ -169,7 +169,7 @@ public class Test {
 		QuestionContainer qc = new QuestionContainer(
 			new Displayable[] {
 				new Video("video1.mp4",480, 360),
-				new Text("What is this video about ?"),
+				new Text("What is this video about?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<>(Arrays.asList(
 						new Answer(new Text("Train")),
@@ -178,7 +178,7 @@ public class Test {
 					))
 				),
 				new Audio("audio1.mp3"),
-				new Text("What animal sounds like this ?"),
+				new Text("What animal sounds like this?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<>(Arrays.asList(
 						new Answer(new Text("Cat")),
@@ -199,7 +199,7 @@ public class Test {
 			new Displayable[] {
 //				new Text("Can all birds fly ?"),
 //				new MultiChoiceDropdown(1, 5, "Poll"),
-				new Text("What is the complexity of BubbleSort ?"),
+				new Text("What is the complexity of BubbleSort?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
 				new Text("What is the complexity of QuickSort?"),
 				new MultiChoiceRadio(1, 5, "Complexity"),
@@ -257,12 +257,12 @@ public class Test {
 		testOutput("output/test3", test3());
 		
 		/*testing Course*/
-//		Course testCourse = new Course(1, "Test Course");
-//		testCourse.addQuiz(test1());
+		Course testCourse = new Course(1, "Test Course");
+		testCourse.addQuiz(test1());
 //		testCourse.addQuiz(test2());
-//		testCourse.addQuiz(test3());
+		testCourse.addQuiz(test3());
 //		testCourse.addQuiz(test4());
-//		testOutput("output/testCourse", testCourse);
+		testOutput("output/quizList", testCourse); //TODO: submit technically shouldn't be in trailer, if it matters
 		
 		
 //		StringBuilder b1 = new StringBuilder();

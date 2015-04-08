@@ -250,6 +250,7 @@ public class Load {
 						points = rs.getInt("Points");
 						level = rs.getInt("Level");
 						type = rs.getString("QType");
+						answers.clear();
 					}
 					
 					if (rs.getInt("Ans") != 0) { // for DisplayElement answers

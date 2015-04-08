@@ -49,7 +49,7 @@ public class QuestionContainer implements Displayable {
 			//TODO: should there be a new line or a space separating each? 
 			//should we create objects to represent spaces & newlines?
 		}
-		b.append("</div>\n");
+		b.append("\n</div>\n\n");
 	}
 
 	public void writeXML (StringBuilder b) {

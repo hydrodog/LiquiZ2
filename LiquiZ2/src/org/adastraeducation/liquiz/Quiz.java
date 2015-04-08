@@ -123,7 +123,7 @@ public class Quiz implements Displayable {
 		for(QuestionContainer qc : this.qContainers) {
 			qc.writeHTML(b);
 		}
-		b.append("\n</div>\n");
+		b.append("\n<input type='submit' value='Submit'>\n</div>\n");
  	}
 	
 	public void writeXML (StringBuilder b) {
