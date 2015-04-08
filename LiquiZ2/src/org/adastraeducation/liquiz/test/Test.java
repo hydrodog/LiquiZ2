@@ -197,7 +197,7 @@ public class Test {
 		quiz.setName("Multiple- Quiz");
 		QuestionContainer qc = new QuestionContainer(
 			new Displayable[] {
-//				new Text("Can all birds fly ?"),
+//				new Text("Can all birds fly?"),
 //				new MultiChoiceDropdown(1, 5, "Poll"),
 				new Text("What is the complexity of BubbleSort?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
@@ -255,27 +255,15 @@ public class Test {
 		testOutput("output/test1", test1());
 //		testOutput("output/test2", test2());
 		testOutput("output/test3", test3());
+		testOutput("output/test4", test4());
 		
 		/*testing Course*/
 		Course testCourse = new Course(1, "Test Course");
 		testCourse.addQuiz(test1());
 //		testCourse.addQuiz(test2());
 		testCourse.addQuiz(test3());
-//		testCourse.addQuiz(test4());
-		testOutput("output/quizList", testCourse); //TODO: submit technically shouldn't be in trailer, if it matters
-		
-		
-//		StringBuilder b1 = new StringBuilder();
-//		test1().writeHTML(b1);
-//		System.out.println(b1.toString());
-//		
-////		StringBuilder b2 = new StringBuilder();
-////		test2().writeHTML(b2);
-////		System.out.println(b2.toString());
-//		
-//		StringBuilder b3 = new StringBuilder();
-//		test3().writeHTML(b3);
-//		System.out.println(b3.toString());
+		testCourse.addQuiz(test4());
+		testOutput("output/quizList", testCourse);
 	}
 
 }

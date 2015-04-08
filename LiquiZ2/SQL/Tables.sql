@@ -39,11 +39,26 @@ DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
   `DispElID` INT NOT NULL AUTO_INCREMENT,
-  `Element` VARCHAR(21000) NOT NULL, -- text or source (name)
-  `DispType` CHAR(4) NOT NULL, -- text, img, vid, aud, etc
+  `TextElement` VARCHAR(21000) NULL, -- text or source (name)
+  `MediaID` INT NULL, 
+  `DispType` CHAR(3) NOT NULL, -- txt or med
+  PRIMARY KEY (`DispElID`));
+
+-- -----------------------------------------------------
+-- Table `LiquiZ`.`Media`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Liquiz`.`Media` ;
+
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`Media` (
+  `MediaID` INT NOT NULL AUTO_INCREMENT, 
+  `OrigName` VARCHAR(255) NOT NULL,
+  `Path` VARCHAR(21000) NOT NULL,
+  `MediaType` CHAR(3) NOT NULL, -- img, aud, vid
   `Width` INT NULL,
   `Height` INT NULL,
-  PRIMARY KEY (`DispElID`));
+  PRIMARY KEY (`MediaID`)
+);
+
 
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`Quizzes`
@@ -54,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Quizzes` (
   `QuizID` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(255) NULL,
   `Desc` INT NULL,
-  `Policy` INT NOT NULL, -- Policies.PolID
+  `PolID` INT NOT NULL, -- Policies.PolID
   `Privacy` CHAR(1) NOT NULL,
   PRIMARY KEY (`QuizID`),
   UNIQUE INDEX `QID_UNIQUE` (`QuizID` ASC));
@@ -69,7 +84,10 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `QuesID` INT NOT NULL AUTO_INCREMENT,
   `Points` INT NOT NULL,
   `Level` INT NULL,
-  `QType` CHAR(4) NOT NULL,
+  `QuesType` CHAR(4) NOT NULL,
+  `Pattern` VARCHAR(10) NULL, -- for regex
+  `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
+  `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
   PRIMARY KEY (`QuesID`),
   UNIQUE INDEX `QuesID_UNIQUE` (`QuesID` ASC));
 
@@ -90,11 +108,11 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Courses` (
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`CoursesQuizzes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `LiquiZ`.`CoursesQuizzes` ;
+DROP TABLE IF EXISTS `LiquiZ`.`Courses_Quizzes` ;
 
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`CoursesQuizzes` (
-  `Course` INT NULL, -- Courses.CourseID
-  `Quiz` INT NULL, -- Quizzes.QuizID
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`Courses_Quizzes` (
+  `CourseID` INT NULL, -- Courses.CourseID
+  `QuizID` INT NULL, -- Quizzes.QuizID
   `Sequence` INT NULL);
 
 
@@ -113,11 +131,11 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesCon` (
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`QuizzesQuesCons`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `LiquiZ`.`QuizzesQuesCons` ;
+DROP TABLE IF EXISTS `LiquiZ`.`Quizzes_QuesCons` ;
 
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuizzesQuesCons` (
-  `Quiz` INT NOT NULL, -- Quizzes.QuizID
-  `QuesCon` INT NOT NULL, -- QuesCon.QuesConID
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`Quizzes_QuesCons` (
+  `QuizID` INT NOT NULL, -- Quizzes.QuizID
+  `QuesConID` INT NOT NULL, -- QuesCon.QuesConID
   `Sequence` INT NOT NULL);
 
 
@@ -127,10 +145,10 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuizzesQuesCons` (
 DROP TABLE IF EXISTS `LiquiZ`.`QuesConElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesConElements` (
-  `QuesCon` INT NOT NULL, -- QuesCon.QuesConID
+  `QuesConID` INT NOT NULL, -- QuesCon.QuesConID
   `Sequence` INT NOT NULL,
-  `Element` INT NULL, -- DisplayElements.DispElID
-  `Ques` INT NULL, -- Questions.QuesID
+  `DispElID` INT NULL, -- DisplayElements.DispElID
+  `QuesID` INT NULL, -- Questions.QuesID
   `Type` CHAR(4) NOT NULL); -- disp or ques
 
 
@@ -142,9 +160,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`Answers` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`Answers` (
   `AnsID` INT NOT NULL AUTO_INCREMENT,
   `Response` INT NULL, -- DisplayElements.DispElID
-  `Element` INT NULL COMMENT 'The DispEl that represents the answer', -- DisplayElements.DispElID
-  `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
-  `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
+  `DispElID` INT NOT NULL COMMENT 'The DispEl that represents the answer', -- DisplayElements.DispElID
   PRIMARY KEY (`AnsID`));
 
 
@@ -173,15 +189,15 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StdChoices` (
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`QuesAnsSeq`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `LiquiZ`.`QuesAnsSeq` ;
+DROP TABLE IF EXISTS `LiquiZ`.`Ques_Ans` ;
 
-CREATE TABLE IF NOT EXISTS `LiquiZ`.`QuesAnsSeq` (
-  `Ques` INT NOT NULL,
-  `Ans` INT NULL,
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`Ques_Ans` (
+  `QuesID` INT NOT NULL,
+  `AnsID` INT NULL,
   `Sequence` INT NULL,
   `Correct` BIT(1) NULL, -- 0/1 for Ans
-  `StdSet` INT NULL,
-  `StdCorrect` INT NULL -- Index of correct answer
+  `StdSetID` VARCHAR(255) NULL,
+  `StdCorrectIndex` INT NULL -- Index of correct answer
 );
 
 
@@ -206,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Users` (
 DROP TABLE IF EXISTS `LiquiZ`.`UserPermissions` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`UserPermissions` (
-  `User` INT NOT NULL,
+  `UserID` INT NOT NULL,
   `Entity` INT NULL COMMENT 'Course or Quiz... other Users?',
   `EType` CHAR(4) NULL COMMENT 'Course or Quiz... other Users?',
   `Permissions` INT NULL COMMENT 'each bit represents a permission');

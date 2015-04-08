@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  */
 public class NumberRange extends FillIn {
-	private double min;
+	private double min;	
 	private double max;
 	
 	public NumberRange(int id, int points, int level, double min, double max){

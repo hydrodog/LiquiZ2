@@ -1,15 +1,16 @@
 USE `LiquiZ` ;
 DELETE FROM Answers;
 DELETE FROM Courses;
-DELETE FROM CoursesQuizzes; 
+DELETE FROM Courses_Quizzes; 
 DELETE FROM DisplayElements;
+DELETE FROM Media;
 DELETE FROM Policies;
-DELETE FROM QuesAnsSeq;
+DELETE FROM Ques_Ans;
 DELETE FROM QuesCon; 
 DELETE FROM QuesConElements;
 DELETE FROM Questions;
 DELETE FROM Quizzes;
-DELETE FROM QuizzesQuesCons;
+DELETE FROM Quizzes_QuesCons;
 DELETE FROM StdChoices;
 DELETE FROM StdSet;
 DELETE FROM StudentGrades; 
@@ -27,83 +28,117 @@ VALUES (1, "Intro Java", "a");
 INSERT INTO Policies (PolID, Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns)
 VALUES (1, "Homework", 0, 1, 0, 10, 0, 0);
 
-INSERT INTO Quizzes (QuizID, Name, Policy, Privacy)
+INSERT INTO Quizzes (QuizID, Name, PolID, Privacy)
 VALUES (1, "ThisIsAQuiz", 1, "a");
 
-INSERT INTO CoursesQuizzes
+INSERT INTO Courses_Quizzes
 VALUES (1, 1, 1);
 
--- Elements to go into first qc
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (1, "What is the color of the sky?", "text");
+-- first QC
+INSERT INTO QuesCon
+VALUES (1, "The Sky");
 
-INSERT INTO Questions
+-- Elements to go into first qc
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (1, "What is the color of the sky?", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType)
 VALUES (1, 3, 1, "Fill");
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(2, "Blue", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(2, "Blue", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES (1, 2);
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (3, "Light Blue", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (3, "Light Blue", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES (2, 3);
 
 -- Connect questions to answers
-INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
 VALUES (1, 1, 1, 1);
-INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
 VALUES (1, 2, 2, 1);
 
 -- Add DispEls and Questions to qc
-INSERT INTO QuesCon
-VALUES (1, "The Sky");
-INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
+INSERT INTO QuesConElements (QuesConID, Sequence, DispElID, Type)
 VALUES (1, 1, 1, "Elem");
-INSERT INTO QuesConElements (QuesCon, Sequence, Ques, Type)
+INSERT INTO QuesConElements (QuesConId, Sequence, QuesId, Type)
 VALUES (1, 2, 1, "Ques");
 
--- Elements to go into second qc
+-- Second QC
 INSERT INTO QuesCon
 VALUES (2, "Animal Identification");
-INSERT INTO DisplayElements
-VALUES (4, "image.jpg", "img", 600, 480);
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (5, "Which animal is shown in the picture?", "text");
 
-INSERT INTO Questions
-VALUES (2, 5, 2, "Mult");
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (6, "Dog", "text");
-INSERT INTO Answers(AnsID, Element)
+-- Elements to go into second qc
+INSERT INTO DisplayElements (DispElID, MediaID, DispType)
+VALUES (4, 1, "med");
+INSERT INTO Media
+VALUES (1, "cat.jpg", "image.jpg", "img", 275, 183);
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (5, "Which animal is shown in the picture?", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType)
+VALUES (2, 5, 2, "MCRa");
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (6, "Dog", "txt");
+INSERT INTO Answers(AnsID, DispElID)
 VALUES (3, 6);
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (7, "Cat", "text");
-INSERT INTO Answers(AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (7, "Cat", "txt");
+INSERT INTO Answers(AnsID, DispElID)
 VALUES (4, 7);
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (8, "Dragon", "text");
-INSERT INTO Answers(AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (8, "Dragon", "txt");
+INSERT INTO Answers(AnsID, DispElID)
 VALUES (5, 8);
 
-INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
+-- Connect questions to answers
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
 VALUES (2, 3, 1, 0);
-INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
 VALUES (2, 4, 2, 1);
-INSERT INTO QuesAnsSeq (Ques, Ans, Sequence, Correct)
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
 VALUES (2, 5, 3, 0);
 
-INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
+-- Add DispEls and Questions to qc
+INSERT INTO QuesConElements (QuesConID, Sequence, DispElID, Type)
 VALUES (2, 1, 4, "Elem");
-INSERT INTO QuesConElements (QuesCon, Sequence, Element, Type)
+INSERT INTO QuesConElements (QuesConID, Sequence, DispElID, Type)
 VALUES (2, 2, 5, "Elem");
-INSERT INTO QuesConElements (QuesCon, Sequence, Ques, Type)
+INSERT INTO QuesConElements (QuesConID, Sequence, QuesID, Type)
 VALUES (2, 3, 2, "Ques");
 
+-- Third QC
+INSERT INTO QuesCon
+VALUES (3, "Opinion");
+
+-- Elements to go into third qc
+INSERT INTO DisplayElements(DispElID, TextElement, DispType)
+VALUES (26, "Did you like this quiz?", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType)
+VALUES (3, 0, 0, "MCRa");
+
+-- Connect question to std answer set
+INSERT INTO Ques_Ans (QuesID, Sequence, StdSetID)
+VALUES(3, 1, "Yes/No");
+
+-- Add DispEls and Questions to qc
+INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
+VALUES (3, 1, 26, "Elem");
+INSERT INTO QuesConElements(QuesConID, Sequence, QuesID, Type)
+VALUES (3, 2, 3, "Ques");
+
 -- Connect QuesCons to Quiz
-INSERT INTO QuizzesQuesCons
+INSERT INTO Quizzes_QuesCons
 VALUES (1, 1, 1);
-INSERT INTO QuizzesQuesCons
+INSERT INTO Quizzes_QuesCons
 VALUES (1, 2, 2);
+INSERT INTO Quizzes_QuesCons
+VALUES (1, 3, 3);
 
 -- Yijin Kang has admin permissions over Quiz 1
 INSERT INTO UserPermissions
@@ -113,37 +148,37 @@ VALUES (1, 1, "Quiz", 1);
 INSERT INTO StdSet
 VALUES(1, "Poll");
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(9, "Strongly Agree", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(9, "Strongly Agree", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(6, 9);
 INSERT INTO StdChoices
 VALUES(1, 6, 1);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(10, "Agree", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(10, "Agree", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(7, 10);
 INSERT INTO StdChoices
 VALUES(1, 7, 2);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(11, "No Opinion", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(11, "No Opinion", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(8, 11);
 INSERT INTO StdChoices
 VALUES(1, 8, 3);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(12, "Disagree", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(12, "Disagree", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(9, 12);
 INSERT INTO StdChoices
 VALUES(1, 9, 4);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(13, "Strongly Disagree", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(13, "Strongly Disagree", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(10, 13);
 INSERT INTO StdChoices
 VALUES(1, 10, 5);
@@ -152,37 +187,37 @@ VALUES(1, 10, 5);
 INSERT INTO StdSet
 VALUES(2, "Complexity");
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(14, "O(1)", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(14, "O(1)", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(11, 14);
 INSERT INTO StdChoices
 VALUES(2, 11, 1);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(15, "O(n)", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(15, "O(n)", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(12, 15);
 INSERT INTO StdChoices
 VALUES(2, 12, 2);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(16, "O(n^2)", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(16, "O(n^2)", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(13, 16);
 INSERT INTO StdChoices
 VALUES(2, 13, 3);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(17, "O(n^3)", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(17, "O(n^3)", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(14, 17);
 INSERT INTO StdChoices
 VALUES(2, 14, 4);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(18, "O(n logn)", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(18, "O(n logn)", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(15, 18);
 INSERT INTO StdChoices
 VALUES(2, 15, 5);
@@ -191,37 +226,37 @@ VALUES(2, 15, 5);
 INSERT INTO StdSet
 VALUES(3, "Colors");
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(19, "Blue", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(19, "Blue", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(16, 19);
 INSERT INTO StdChoices
 VALUES(3, 16, 1);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(20, "Red", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(20, "Red", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(17, 20);
 INSERT INTO StdChoices
 VALUES(3, 17, 2);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(21, "Green", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(21, "Green", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(18, 21);
 INSERT INTO StdChoices
 VALUES(3, 18, 3);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(22, "Orange", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(22, "Orange", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(19, 22);
 INSERT INTO StdChoices
 VALUES(3, 19, 4);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES(23, "Purple", "text");
-INSERT INTO Answers (AnsID, Element)
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES(23, "Purple", "txt");
+INSERT INTO Answers (AnsID, DispElID)
 VALUES(20, 10);
 INSERT INTO StdChoices
 VALUES(3, 20, 5);
@@ -230,13 +265,13 @@ VALUES(3, 20, 5);
 INSERT INTO Users
 VALUES (2, "A", "A", "aa", "password", "abcd@gmail.com");
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (24, "Blue", "text");
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (24, "Blue", "txt");
 INSERT INTO StudentResponses
 VALUES (2, 1, 24, 1);
 
-INSERT INTO DisplayElements (DispElID, Element, DispType)
-VALUES (25, "Cat", "text");
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (25, "Cat", "txt");
 INSERT INTO StudentResponses
 VALUES (2, 2, 25, 1);
 

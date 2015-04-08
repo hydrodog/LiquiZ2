@@ -26,7 +26,7 @@ public class Quiz implements Displayable {
 	}
 
 	private int id; // unique id for db and XML
-	private String name; // display name, possibly per Course?
+	private String name, desc; // display name & description, TODO possibly per Course? or copy renamed quiz
 	private ArrayList<QuestionContainer> qContainers;
 	private Policy policy ; 
 	
@@ -44,6 +44,14 @@ public class Quiz implements Displayable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getDesc() {
+		return desc;
+	}
+	
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public ArrayList<QuestionContainer> getQContainers() {
@@ -93,8 +101,10 @@ public class Quiz implements Displayable {
 		this.policy = new Policy();*/
 	}
 	
-	public Quiz(int id, Policy plc) {
+	public Quiz(int id, String name, String desc, Policy plc) {
 		this.id=id;
+		this.name = name;
+		this.desc = desc;
 		this.qContainers = new ArrayList<QuestionContainer>();
 		policy = plc;
 	}
@@ -123,7 +133,8 @@ public class Quiz implements Displayable {
 		for(QuestionContainer qc : this.qContainers) {
 			qc.writeHTML(b);
 		}
-		b.append("\n<input type='submit' value='Submit'>\n</div>\n");
+		b.append("\n<input type='submit' value='Submit'>\n"); //TODO: submit what/action
+		b.append("</div>\n");
  	}
 	
 	public void writeXML (StringBuilder b) {

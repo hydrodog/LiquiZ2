@@ -32,6 +32,7 @@ public class Load {
 		loadQuiz();
 		loadCourse();
 		loadUser();
+		
 		Database.reportSizes();
 	}
 	
@@ -46,20 +47,47 @@ public class Load {
 		//TODO: question types
 	}
 	
-	public static void loadDispEl() {
+	public static void loadMedia() {
 		ResultSet rs = null;
 		try {
-			rs = DatabaseMgr.execQuery("SELECT * FROM DisplayElements");
+			rs = DatabaseMgr.execQuery("SELECT * FROM Media ORDER BY MediaID ASC");
 			
-			while(rs.next()) {
-				String type = null;
-				// Figure out what type of Displayable to load
-				type = rs.getString("DispType");
+			while (rs.next()) {
+				String type = rs.getString("MediaType");
+				//need to figure out what type of Media to load
 				DisplayElementFactory f = displayElementTypeMap.get(type);
 				if (f == null) {
 					System.out.println("Factory not found, type = " + type);
 				} else {
 					Database.addDisp(f.create(rs));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.closeResultSet(rs);;
+		}
+	}
+	
+	public static void loadDispEl() {
+		ResultSet rs = null;
+		try {
+			rs = DatabaseMgr.execQuery("SELECT DisplayElements.DispElID, DisplayElements.TextElement, DisplayElements.DispType, Media.Path, Media.MediaType, Media.Width, Media.Height FROM DisplayElements LEFT JOIN Media ON DisplayElements.MediaID = Media.MediaID ORDER BY DispElID ASC");
+			
+			while(rs.next()) {
+				String dType = rs.getString("DispType");
+				if (dType.equals("txt")) {
+					Database.addDisp(new Text(rs.getString("TextElement")));
+				} else {
+					String mType = rs.getString("MediaType");
+					//need to figure out what type of Media to load
+					DisplayElementFactory f = displayElementTypeMap.get(mType);
+					if (f == null) {
+						System.out.println("Factory not found, type = " + mType);
+					} else {
+						System.out.println(mType + " factory creating");
+						Database.addDisp(f.create(rs));
+					}
 				}
 			}
 		} catch(SQLException e) {
@@ -94,32 +122,24 @@ public class Load {
 		ResultSet rs = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT * FROM Answers");
+			rs = DatabaseMgr.execQuery("SELECT * FROM Answers ORDER BY AnsID ASC");
 			
-//			| AnsID     | int(11) | NO   | PRI | NULL    | auto_increment |
-//			| Response  | int(11) | YES  |     | NULL    |                |
-//			| Element   | int(11) | YES  |     | NULL    |                |
-//			| LowBound  | int(11) | YES  |     | NULL    |                |
-//			| HighBound | int(11) | YES  |     | NULL    |                |
+//			| AnsID     | int(11) | NO   | PRI | NOT NULL    | auto_increment |
+//			| Response  | int(11) | YES  |     |     NULL    |                |
+//			| Element   | int(11) | YES  |     | NOT NULL    |                |
 			
 			while(rs.next()) {
 				int ansID = rs.getInt("AnsID");
 				int resID = rs.getInt("Response");
-				int elemID = rs.getInt("Element");
-				int lowBound = rs.getInt("LowBound"); //TODO: make double in tables
-				int highBound = rs.getInt("HighBound");
+				int elemID = rs.getInt("DispElID");
 				boolean correct = false;
 				
-				if (elemID != 0) {
-					Answer a = new Answer(ansID, Database.getDisp(elemID), correct, null);
-					if (rs.getInt("Response") != 0) {
-						Response res = new Response(Database.getDisp(resID));
-						a.setResponse(res);
-					}
-					Database.addAns(a);
-				} else {
-					// TODO Range
+				Answer a = new Answer(ansID, Database.getDisp(elemID), correct, null);
+				if (rs.getInt("Response") != 0) {
+					Response res = new Response(Database.getDisp(resID));
+					a.setResponse(res);
 				}
+				Database.addAns(a);
 			}
 			
 			rs.close();
@@ -174,7 +194,7 @@ public class Load {
 		ArrayList<Answer> ans = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT StdSet.StdSetID, StdSet.Name, StdChoices.Answer FROM StdSet LEFT JOIN StdChoices ON StdSet.StdSetID = StdChocies.StdSetID");
+			rs = DatabaseMgr.execQuery("SELECT StdSet.StdSetID, StdSet.Name, StdChoices.Answer FROM StdSet LEFT JOIN StdChoices ON StdSet.StdSetID = StdChoices.StdSetID ORDER BY StdSet.StdSetID ASC");
 
 			if (rs.next()){
 				String name = rs.getString("Name");
@@ -205,28 +225,30 @@ public class Load {
 		//TODO: once QuestionFactories are completed
 		ResultSet rs = null;
 		int quesID, points, level;
+		double min=0, max=0;
 		String type;
 		Question q = null;
 		ArrayList<Answer> answers = new ArrayList<Answer>();
 
 		try {
-			rs = DatabaseMgr.execQuery("SELECT Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, QuesAnsSeq.Ans, QuesAnsSeq.Correct, QuesAnsSeq.StdSet, QuesAnsSeq.StdCorrect FROM Questions LEFT JOIN QuesAnsSeq ON Questions.QuesID = QuesAnsSeq.Ques");
+			StringBuilder b = new StringBuilder();
+			b.append("SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, ");
+			b.append("Ques_Ans.AnsID, Ques_Ans.Correct, Ques_Ans.StdSetID, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.LowBound, Questions.HighBound ");
+			b.append("FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID ");
+			b.append("ORDER BY QuesID ASC");
+			
+			rs = DatabaseMgr.execQuery(b.toString());
 			
 			/*
-			 * SELECT Questions.QuesID, Questions.QType, Questions.Points, Questions.Level, QuesAnsSeq.Ans, QuesAnsSeq.Correct,  QuesAnsSeq.StdSet, QuesAnsSeq.StdCorrect 
-			 * FROM Questions 
-			 * LEFT JOIN QuesAnsSeq 
-			 * ON Questions.QuesID = QuesAnsSeq.Ques
-			 * 
-			 * QuesID | QType | Points | Level | Ans | Correct | StdSet | StdCorrect
-			 * TODO maybe load range here and directly add it to the question
+			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetID | StdCorrectIndex | Pattern | LowBound | HighBound
+			 * TODO load range here and directly add it to the question
 			 */
 			
 			if (rs.next()) {
 				quesID = rs.getInt("QuesID");
 				points = rs.getInt("Points");
 				level = rs.getInt("Level");
-				type = rs.getString("QType");
+				type = rs.getString("QuesType");
 				
 				do {
 					if(quesID != rs.getInt("QuesID")) { // if the next row is a new question, finalize the previous question
@@ -241,6 +263,8 @@ public class Load {
 							q = new MultiChoiceRadio(quesID, points, level, new ArrayList<Answer>(answers));
 						} else if (type.equals("Code")) {
 							q = new Code(quesID, points, level, new String()); // TODO: code default text
+						} else if (type.equals("NumR")) {
+							q = new NumberRange(quesID, points, level, min, max);
 						}
 						
 						Database.addQues(q); // add question to database
@@ -249,21 +273,25 @@ public class Load {
 						quesID = rs.getInt("QuesID"); 
 						points = rs.getInt("Points");
 						level = rs.getInt("Level");
-						type = rs.getString("QType");
+						type = rs.getString("QuesType");
 						answers.clear();
 					}
 					
-					if (rs.getInt("Ans") != 0) { // for DisplayElement answers
-						Answer a = Database.getAns(rs.getInt("Ans"));
+					if (rs.getInt("AnsID") != 0) { // for DisplayElement answers
+						Answer a = Database.getAns(rs.getInt("AnsID"));
 						a.setCorrect(rs.getBoolean("Correct"));
 						answers.add(a);
-					} else { // for Standard Answers
+					} else if (!rs.getString("StdSetID").equals("")) { // for Standard Answers
 						// load the StdSet to answers
-						answers = NamedObjects.getCloneOfStdChoice(rs.getString("StdSet")); 
+						answers = NamedObjects.getCloneOfStdChoice(rs.getString("StdSetID")); 
 						// set the correct one
-						answers.get(rs.getInt("StdCorrect")).setCorrect(true);
+						if(rs.getInt("StdCorrectIndex") != 0) {
+							answers.get(rs.getInt("StdCorrectIndex")).setCorrect(true);
+						}
+					} else { // for Number Range Questions
+						min = rs.getDouble("LowBound");
+						max = rs.getDouble("Highbound");
 					}
-					
 				} while(rs.next());
 				
 				// create appropriate question type for last question
@@ -277,6 +305,8 @@ public class Load {
 					q = new MultiChoiceRadio(quesID, points, level, new ArrayList<Answer>(answers));
 				} else if (type.equals("Code")) {
 					q = new Code(quesID, points, level, new String()); // TODO: code default text
+				} else if (type.equals("NumR")) {
+					q = new NumberRange(quesID, points, level, min, max);
 				}
 				
 				Database.addQues(q); // add question to database
@@ -295,7 +325,7 @@ public class Load {
 		ResultSet rs = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT * FROM Policies");
+			rs = DatabaseMgr.execQuery("SELECT * FROM Policies ORDER BY PolID ASC");
 
 			// set fields of the policy
 			pol = new Policy();
@@ -330,14 +360,14 @@ public class Load {
 		ResultSet rs = null;
 
 		try {
-			rs = DatabaseMgr.execQuery("SELECT QuesCon, Type, Element, Ques FROM QuesConElements ORDER BY QuesCon, Sequence ASC;");
+			rs = DatabaseMgr.execQuery("SELECT QuesConID, Type, DispElID, QuesID FROM QuesConElements ORDER BY QuesConID, Sequence ASC");
 
 /*
  * SELECT QuesCon, Type, Element, Ques 
  * FROM QuesConElements 
  * ORDER BY QuesCon, Sequence ASC;
  * 
- * QuesCon | Type | Element | Ques
+ * QuesConID | Type | DispElID | QuesID
  * 	
  */
 			ArrayList<Displayable> disps = new ArrayList<Displayable>();
@@ -346,20 +376,20 @@ public class Load {
 			int QCID = 1;
 			
 			while (rs.next()) {
-				if (rs.getInt("QuesCon") != QCID) {
+				if (rs.getInt("QuesConID") != QCID) {
 					// turn dispEls into displayables array and create QuesCon 
 					Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
 					
 					qc = new QuestionContainer(QCID, displayables);
 					Database.addQuesCon(qc); 
-					QCID = rs.getInt("QuesCon");
+					QCID = rs.getInt("QuesConID");
 					disps.clear();
 				}
 				// load element in the QuestionContainer and put it in dispEls ArrayList
 				if (rs.getString("Type").equals("Elem")) { // load DisplayElement
-					disps.add(Database.getDisp(rs.getInt("Element")));
+					disps.add(Database.getDisp(rs.getInt("DispElID")));
 				} else { // load Question
-					disps.add(Database.getQues(rs.getInt("Ques")));
+					disps.add(Database.getQues(rs.getInt("QuesID")));
 				}
 			}
 			//put last QuesCon in Database ArrayList
@@ -381,27 +411,28 @@ public class Load {
 	public static void loadQuiz() {
 		ResultSet rs = null;
 		try {
-			rs = DatabaseMgr.execQuery("SELECT Quizzes.QuizID, Quizzes.Name, Quizzes.Desc, Quizzes.Policy, Quizzes.Privacy, QuizzesQuesCons.QuesCon FROM Quizzes LEFT JOIN QuizzesQuesCons ON Quizzes.QuizID = QuizzesQuesCons.Quiz ORDER BY Quizzes.QuizID, QuizzesQuesCons.Sequence ASC");
+			rs = DatabaseMgr.execQuery("SELECT Quizzes.QuizID, Quizzes.Name, Quizzes.Desc, Quizzes.PolID, Quizzes.Privacy, Quizzes_QuesCons.QuesConID FROM Quizzes LEFT JOIN Quizzes_QuesCons ON Quizzes.QuizID = Quizzes_QuesCons.QuizID ORDER BY Quizzes.QuizID, Quizzes_QuesCons.Sequence ASC");
 			
 			/*
-			 * SELECT Quizzes.QuizID, Quizzes.Name, Quizzes.Desc, Quizzes.Policy, Quizzes.Privacy, QuizzesQuesCons.QuesCon 
+			 * SELECT Quizzes.QuizID, Quizzes.Name, Quizzes.Desc, Quizzes.PolID, Quizzes.Privacy, Quizzes_QuesCons.QuesConID 
 			 * FROM Quizzes 
-			 * LEFT JOIN QuizzesQuesCons ON Quizzes.QuizID = QuizzesQuesCons.Quiz 
+			 * LEFT JOIN Quizzes_QuesCons ON Quizzes.QuizID = Quizzes_QuesCons.QuizID 
 			 * ORDER BY Quizzes.QuizID, QuizzesQuesCons.Sequence ASC
 			 * 
-			 * QuizID | Name | Desc | Policy | Privacy | QuesCon
+			 * QuizID | Name | Desc | PolId | Privacy | QuesConID
 			 */
 			
 			Quiz quiz = null;
 			int quizID = 0;
 			while (rs.next()) {
 				if (quizID != rs.getInt("QuizID")) { // if new quiz
-					Policy policy = Database.getPolicy(rs.getInt("Policy"));
-					quiz = new Quiz(rs.getInt("QuizID"), policy);
-					Database.addQuiz(quiz);
+					Policy policy = Database.getPolicy(rs.getInt("PolID"));
+					String name = rs.getString("Name");
+					String desc = rs.getString("Desc");
+					Database.addQuiz(new Quiz(rs.getInt("QuizID"), name, desc, policy));
 					quizID = rs.getInt("QuizID");
 				}
-				quiz.addQuestionContainer(Database.getQuesCon(rs.getInt("QuesCon")));
+				Database.getQuiz(quizID).addQuestionContainer(Database.getQuesCon(rs.getInt("QuesConID")));
 			} 
 			
 		} catch(SQLException e) {
@@ -418,7 +449,7 @@ public class Load {
 		ResultSet rs = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT Courses.CourseID, Courses.Name, Courses.Privacy, CoursesQuizzes.Quiz  FROM Courses LEFT JOIN CoursesQuizzes ON Courses.CourseID = CoursesQuizzes.Course ORDER BY Courses.CourseID, CoursesQuizzes.Sequence ASC");
+			rs = DatabaseMgr.execQuery("SELECT Courses.CourseID, Courses.Name, Courses.Privacy, Courses_Quizzes.QuizID  FROM Courses LEFT JOIN Courses_Quizzes ON Courses.CourseID = CoursesQuizzes.Course ORDER BY Courses.CourseID, CoursesQuizzes.Sequence ASC");
 			
 			/*
 			 * SELECT Courses.CourseID, Courses.Name, Courses.Privacy, CoursesQuizzes.Quiz 

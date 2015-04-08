@@ -7,6 +7,6 @@ import org.adastraeducation.liquiz.*;
 
 public class ImageFactory extends DisplayElementFactory {
 	public Image create(ResultSet rs) throws SQLException {
-		return new Image(rs.getString("Element"), rs.getInt("Width"), rs.getInt("Height"));
+		return new Image(rs.getString("Path"), rs.getInt("Width"), rs.getInt("Height"));
 	}
 }

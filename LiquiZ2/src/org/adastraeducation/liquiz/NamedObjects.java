@@ -28,12 +28,18 @@ public class NamedObjects {
 	 
 	static {
 		lookUpStdChoice = new HashMap<String, ArrayList<Answer>>();
+		
 		ArrayList<Answer> comp = new ArrayList<Answer>();
 		comp.add(new Answer(new Text("O(1)")));
 		comp.add(new Answer(new Text("O(n)")));
 		comp.add(new Answer(new Text("O(n^2)")));
 		comp.add(new Answer(new Text("O(n log(n))")));
 		lookUpStdChoice.put("Complexity", comp);
+		
+		ArrayList<Answer> yesNo = new ArrayList<Answer>();
+		yesNo.add(new Answer(new Text("Yes")));
+		yesNo.add(new Answer(new Text("No")));
+		lookUpStdChoice.put("Yes/No", yesNo);
 		
 //		lookUpPattern = new HashMap<String, Pattern>();
 //		public static QuestionPattern MASS = new QuestionPattern("([0-9|\.]+)(kg|kilogram)");

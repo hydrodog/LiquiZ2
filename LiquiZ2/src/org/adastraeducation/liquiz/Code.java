@@ -15,7 +15,7 @@ public class Code extends Question {
 	}
 	
 	public void setDefaultText(String defaultText) {
-		this.defaultText=defaultText;		
+		this.defaultText=defaultText;
 	}
 
 	public Code(int id, int points, int level, 
