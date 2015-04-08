@@ -1,11 +1,13 @@
 package org.adastraeducation.liquiz.database;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import org.adastraeducation.liquiz.*;
+import org.adastraeducation.liquiz.test.Test;
 
 /**
  * Loading objects based on database information
@@ -14,7 +16,14 @@ import org.adastraeducation.liquiz.*;
  */
 public class Load {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		loadAll();
+		for (int i = 1; i <= 1; i++) { // there is currently 1 quiz in the database
+			Test.testOutput("output/dbtest"+i, Database.getQuiz(i));
+		}
+	}
+	
+	public static void loadAll() {
 		loadDispEl();
 		loadAns();
 		loadQues();
@@ -25,6 +34,7 @@ public class Load {
 		loadUser();
 		Database.reportSizes();
 	}
+	
 	static HashMap<String, DisplayElementFactory> displayElementTypeMap;
 	static {
 		displayElementTypeMap = new HashMap<String, DisplayElementFactory>();
@@ -161,27 +171,28 @@ public class Load {
 	// Load all StdChoices to HashMap in NamedObjects
 	public static void loadStdChoices() {
 		ResultSet rs = null;
-		ArrayList<Answer> ans = new ArrayList<Answer>();
+		ArrayList<Answer> ans = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT StdSet.StdSetID, StdSet.Name, StdChoices.Answer");
-			
-			rs.next();
-			String name = rs.getString("Name");
-			do {
-				if (!name.equals(rs.getString("Name"))) {
-					// Next is new StdSet
-					NamedObjects.addStdChoice(name, ans);
-					name = rs.getString("Name");
-					ans.clear();
-				}
-				ans.add(Database.getAns(rs.getInt("Answer")));
-			} while (rs.next());
-			
-			//add last stdchoice
-			NamedObjects.addStdChoice(name, ans);
-			name = rs.getString("Name");
-			ans.clear();
+			rs = DatabaseMgr.execQuery("SELECT StdSet.StdSetID, StdSet.Name, StdChoices.Answer FROM StdSet LEFT JOIN StdChoices ON StdSet.StdSetID = StdChocies.StdSetID");
+
+			if (rs.next()){
+				String name = rs.getString("Name");
+				ans = new ArrayList<Answer>();
+				
+				do {
+					if (!name.equals(rs.getString("Name"))) {
+						// Next is new StdSet
+						NamedObjects.addStdChoice(name, new ArrayList<Answer>(ans));
+						name = rs.getString("Name");
+						ans.clear();
+					}
+					ans.add(Database.getAns(rs.getInt("Answer")));
+				} while (rs.next());
+				
+				//add last stdchoice
+				NamedObjects.addStdChoice(name, new ArrayList<Answer>(ans));
+			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -191,8 +202,10 @@ public class Load {
 	}
 
 	public static Question loadQues() {
+		//TODO: once QuestionFactories are completed
 		ResultSet rs = null;
 		int quesID, points, level;
+		String type;
 		Question q = null;
 		ArrayList<Answer> answers = new ArrayList<Answer>();
 
@@ -205,64 +218,69 @@ public class Load {
 			 * LEFT JOIN QuesAnsSeq 
 			 * ON Questions.QuesID = QuesAnsSeq.Ques
 			 * 
-			 * QuesID | Points | Level | Ans | Correct | StdSet | StdCorrect
+			 * QuesID | QType | Points | Level | Ans | Correct | StdSet | StdCorrect
 			 * TODO maybe load range here and directly add it to the question
 			 */
-			while(rs.next()) {
-				// Figure out what type of Question to load
-				String type = rs.getString("QType");
-				if (type.equals("Fill")) {
-					do {
-						// find the answer
+			
+			if (rs.next()) {
+				quesID = rs.getInt("QuesID");
+				points = rs.getInt("Points");
+				level = rs.getInt("Level");
+				type = rs.getString("QType");
+				
+				do {
+					if(quesID != rs.getInt("QuesID")) { // if the next row is a new question, finalize the previous question
+						// create appropriate question type
+						if (type.equals("Fill")) {
+							q = new FillIn(quesID, points, level, new ArrayList<Answer>(answers));
+						} else if (type.equals("Mult")) {
+							q = new MultiAnswer(quesID, points, level, new ArrayList<Answer>(answers));
+						} else if (type.equals("MCDD")) {
+							q = new MultiChoiceDropdown(quesID, points, level, new ArrayList<Answer>(answers));
+						} else if (type.equals("MCRa")) {
+							q = new MultiChoiceRadio(quesID, points, level, new ArrayList<Answer>(answers));
+						} else if (type.equals("Code")) {
+							q = new Code(quesID, points, level, new String()); // TODO: code default text
+						}
+						
+						Database.addQues(q); // add question to database
+						
+						// reset ID, points, level, type to for new question
+						quesID = rs.getInt("QuesID"); 
+						points = rs.getInt("Points");
+						level = rs.getInt("Level");
+						type = rs.getString("QType");
+					}
+					
+					if (rs.getInt("Ans") != 0) { // for DisplayElement answers
 						Answer a = Database.getAns(rs.getInt("Ans"));
 						a.setCorrect(rs.getBoolean("Correct"));
-						// add it to the answers ArrayList
 						answers.add(a);
-						quesID = rs.getInt("QuesID");
-						points = rs.getInt("Points");
-						level = rs.getInt("Level");
-					} while(rs.next() && rs.getInt("QuesID") == quesID);
-					q = new FillIn(quesID, points, level, answers); 
-				} else if (type.startsWith("M")) {
-					//all types of multi
-					if (rs.getInt("Ans") != 0) {
-						do {
-							// find the answer
-							Answer a = Database.getAns(rs.getInt("Ans"));
-							a.setCorrect(rs.getBoolean("Correct"));
-							// add it to the answers ArrayList
-							answers.add(a);
-							quesID = rs.getInt("QuesID");
-							points = rs.getInt("Points");
-							level = rs.getInt("Level");
-						} while(rs.next() && rs.getInt("QuesID") == quesID); 
-					} else {
+					} else { // for Standard Answers
 						// load the StdSet to answers
-						answers = NamedObjects.getCloneOfStdChoice(rs.getString("StdSet")); //TODO 
+						answers = NamedObjects.getCloneOfStdChoice(rs.getString("StdSet")); 
 						// set the correct one
 						answers.get(rs.getInt("StdCorrect")).setCorrect(true);
-						
-						quesID = rs.getInt("QuesID");
-						points = rs.getInt("Points");
-						level = rs.getInt("Level");
 					}
 					
-					// load the appropriate question type
-					if (type.equals("Mult")) {
-						q = new MultiAnswer(quesID, points, level, answers);
-					} else if (type.equals("MCDD")) {
-						q = new MultiChoiceDropdown(quesID, points, level, answers);
-					} else if (type.equals("MCRa")) {
-						q = new MultiChoiceRadio(quesID, points, level, answers);
-					} else {
-						//TODO: any other multis?
-					}
-				} else if (type.equals("code")) {
-					
+				} while(rs.next());
+				
+				// create appropriate question type for last question
+				if (type.equals("Fill")) {
+					q = new FillIn(quesID, points, level, new ArrayList<Answer>(answers));
+				} else if (type.equals("Mult")) {
+					q = new MultiAnswer(quesID, points, level, new ArrayList<Answer>(answers));
+				} else if (type.equals("MCDD")) {
+					q = new MultiChoiceDropdown(quesID, points, level, new ArrayList<Answer>(answers));
+				} else if (type.equals("MCRa")) {
+					q = new MultiChoiceRadio(quesID, points, level, new ArrayList<Answer>(answers));
+				} else if (type.equals("Code")) {
+					q = new Code(quesID, points, level, new String()); // TODO: code default text
 				}
-				//TODO: else if(type.equals("")) ...
-				Database.addQues(q);
+				
+				Database.addQues(q); // add question to database
 			}
+
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -311,15 +329,14 @@ public class Load {
 		ResultSet rs = null;
 
 		try {
-			rs = DatabaseMgr.execQuery("SELECT QuesConElements.QuesCon, QuesConElements.Type, QuesConElements.Element, QuesConElements.Ques, QuesAnsSeq.Ans, QuesAnsSeq.Correct FROM QuesConElements LEFT JOIN QuesAnsSeq ON QuesConElements.Ques = QuesAnsSeq.Ques ORDER BY QuesConElements.QuesCon, QuesConElements.Sequence, QuesAnsSeq.Sequence ASC;");
+			rs = DatabaseMgr.execQuery("SELECT QuesCon, Type, Element, Ques FROM QuesConElements ORDER BY QuesCon, Sequence ASC;");
 
 /*
- * SELECT QuesConElements.QuesCon, QuesConElements.Type, QuesConElements.Element, QuesConElements.Ques, QuesAnsSeq.Ans, QuesAnsSeq.Correct 
+ * SELECT QuesCon, Type, Element, Ques 
  * FROM QuesConElements 
- * LEFT JOIN QuesAnsSeq ON QuesConElements.Ques = QuesAnsSeq.Ques 
- * ORDER BY QuesConElements.QuesCon, QuesConElements.Sequence, QuesAnsSeq.Sequence ASC;
+ * ORDER BY QuesCon, Sequence ASC;
  * 
- * QuesCon | Type | Element | Ques | Ans | Correct	
+ * QuesCon | Type | Element | Ques
  * 	
  */
 			ArrayList<Displayable> disps = new ArrayList<Displayable>();
@@ -333,18 +350,16 @@ public class Load {
 					Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
 					
 					qc = new QuestionContainer(QCID, displayables);
-					Database.addQuesCon(qc); //TODO add
+					Database.addQuesCon(qc); 
+					QCID = rs.getInt("QuesCon");
 					disps.clear();
 				}
 				// load element in the QuestionContainer and put it in dispEls ArrayList
-				String element = rs.getString("Type");
-				if (element.equals("Elem")) { // load DisplayElement
+				if (rs.getString("Type").equals("Elem")) { // load DisplayElement
 					disps.add(Database.getDisp(rs.getInt("Element")));
 				} else { // load Question
 					disps.add(Database.getQues(rs.getInt("Ques")));
 				}
-				
-				QCID = rs.getInt("QuesCon");
 			}
 			//put last QuesCon in Database ArrayList
 			Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
@@ -437,7 +452,7 @@ public class Load {
 		ResultSet rs = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT * from USERS");
+			rs = DatabaseMgr.execQuery("SELECT * from Users");
 			
 			User user = null;
 			while (rs.next()) {

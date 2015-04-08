@@ -124,7 +124,7 @@ public class Quiz implements Displayable {
 			qc.writeHTML(b);
 		}
 		b.append("\n</div>\n");
-	}
+ 	}
 	
 	public void writeXML (StringBuilder b) {
 		b.append("<quiz id='' title=''>");
