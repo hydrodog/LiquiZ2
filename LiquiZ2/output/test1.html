@@ -5,9 +5,9 @@
 </head>
 <body>
 
-<h1>LiquiZ test</h1><form class='quiz classname' action='quizSubmit.jsp' method='post'>
+<h1>LiquiZ test</h1><form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>
 <div class='quesHeader'>1 points</div><div class='question'>
-What is a dinosaur?<select>
+What is a dinosaur?<select name='0' form='quizForm'>
 <option value='T-Rex'> T-Rex </option> 
 <option value='Shark'> Shark </option> 
 <option value='mouse'> mouse </option> 
@@ -16,19 +16,19 @@ What is a dinosaur?<select>
 </div>
 
 <div class='quesHeader'>3 points</div><div class='question'>
-What is 77.0+65.0?<input name='1' class='fillin' type='text' />
+What is 83.0+31.0?<input name='1' class='fillin' type='text' />
 
 </div>
 
 <div class='quesHeader'>3 points</div><div class='question'>
-What is 35.0+24.0?<input name='1' class='fillin' type='text' />
+What is 42.0+86.0?<input name='1' class='fillin' type='text' />
 
 </div>
 
 <div class='quesHeader'>0 points</div><div class='question'>
 <video controls width="0" height="0">
 <source src="1.mpg" type ="video/null"/>
-</video>Describe the main character in the video in 200 words or less<textarea name='' rows='10' cols='50' class='essay'></textarea>
+</video>Describe the main character in the video in 200 words or less<textarea name='' rows='10' cols='50' form='quizForm' class='essay'></textarea>
 </div>
 
 <div class='quesHeader'>5 points</div><div class='question'>
@@ -38,17 +38,17 @@ Listen to the audio clip and write down the words<audio controls><source src="1.
 
 <div class='quesHeader'>1 points</div><div class='question'>
 Solve the matrix addition<table class='mat'>
-<tr><td>-2.0</td><td>1.0</td><td>-1.0</td></tr>
-<tr><td>-2.0</td><td>1.0</td><td>1.0</td></tr>
-<tr><td>1.0</td><td>0.0</td><td>1.0</td></tr>
+<tr><td>1.0</td><td>2.0</td><td>0.0</td></tr>
+<tr><td>1.0</td><td>-3.0</td><td>2.0</td></tr>
+<tr><td>1.0</td><td>-2.0</td><td>-1.0</td></tr>
 </table>+<table class='mat'>
-<tr><td>0.0</td><td>0.0</td><td>-1.0</td></tr>
-<tr><td>0.0</td><td>-3.0</td><td>-2.0</td></tr>
-<tr><td>1.0</td><td>2.0</td><td>-1.0</td></tr>
+<tr><td>-2.0</td><td>-1.0</td><td>-1.0</td></tr>
+<tr><td>0.0</td><td>-2.0</td><td>0.0</td></tr>
+<tr><td>-1.0</td><td>-3.0</td><td>0.0</td></tr>
 </table><table class='matquest'>
-<tr><td><input name='3' class='matquest'/></td><td><input name='3' class='matquest'/></td><td><input name='3' class='matquest'/></td></tr>
-<tr><td><input name='3' class='matquest'/></td><td><input name='3' class='matquest'/></td><td><input name='3' class='matquest'/></td></tr>
-<tr><td><input name='3' class='matquest'/></td><td><input name='3' class='matquest'/></td><td><input name='3' class='matquest'/></td></tr>
+<tr><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td></tr>
+<tr><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td></tr>
+<tr><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td><td><textarea name='3' class='matquest' form='quizForm' rows='1' cols='2'></textarea></td></tr>
 </table>
 </div>
 

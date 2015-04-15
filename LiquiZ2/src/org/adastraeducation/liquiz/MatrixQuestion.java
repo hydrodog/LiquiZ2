@@ -42,8 +42,8 @@ public class MatrixQuestion extends Question {
 	@Override
 	public void writeHTML(StringBuilder b) {
 		b.append("<table class='matquest'>\n");
-		final String EL = "<input name='" +
-				getId() + "' class='matquest'/>"; 
+		final String EL = "<textarea name='" +
+				getId() + "' class='matquest' form='quizForm' rows='1' cols='2'></textarea>"; 
 		for (int i = 0; i < rows; i++) {
 			b.append("<tr>");
 			for (int j = 0; j < cols; j++) {

@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Ques_Ans` (
   `AnsID` INT NULL,
   `Sequence` INT NULL,
   `Correct` BIT(1) NULL, -- 0/1 for Ans
-  `StdSetID` VARCHAR(255) NULL,
+  `StdSetName` VARCHAR(255) NULL,
   `StdCorrectIndex` INT NULL -- Index of correct answer
 );
 

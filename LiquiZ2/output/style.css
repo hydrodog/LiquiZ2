@@ -43,10 +43,14 @@ select {
 	margin: 0px 5px 0px 5px;
 }
 select[multiple] {
-	
+	display:block;
+	margin: 5px 0px 5px 0px;
 }
 textarea {
 	display:block;
+}
+textarea.code {
+	font-family: courier, monospace;
 }
 input[type="text"] {
 	margin: 0px 5px 0px 5px;
@@ -61,7 +65,4 @@ input[type="submit"] {
 }
 input[type="radio"] {
 	
-}
-input.matquest {
-	size: 1; /* ? */
 }

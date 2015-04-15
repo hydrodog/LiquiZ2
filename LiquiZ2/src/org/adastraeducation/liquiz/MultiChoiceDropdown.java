@@ -48,7 +48,7 @@ public class MultiChoiceDropdown extends Question {
 
 	public void writeHTML(StringBuilder b) {
 		// Regular options
-		b.append("<select>\n");
+		b.append("<select name='").append(getId()).append("' form='quizForm'>\n");
 		for (Answer ans : getAns()) {
 			b.append("<option value='" + ans.getName() + "'> ");
 			ans.writeHTML(b);

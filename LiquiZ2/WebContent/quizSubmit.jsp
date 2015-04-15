@@ -16,13 +16,17 @@
 	Enumeration quesIDs = request.getParameterNames();
 	int score = 0;
 	int total = 0;
+	String lang = null; // the programming language used in code question
 	int percent = 0;
 
 	while (quesIDs.hasMoreElements()) {
 		String id = (String) quesIDs.nextElement();
 		if(id.equals("quizID")) {
 			total = Score.getTotalPoints(Integer.parseInt(request.getParameter(id)));
-		} else {
+		} else if (id.equals("selectLang")) {
+			lang = request.getParameter(id);
+		}
+		else {
 			String res = request.getParameter(id);
 			score += Score.correctQues(Integer.parseInt(id), res);
 		}

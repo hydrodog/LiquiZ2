@@ -25,12 +25,13 @@ public class Code extends Question {
 	}
 
 	public void writeHTML(StringBuilder b ){
-		b.append("<select name='selectLang'>\n")
-			.append("<option value='c++'>c++</option>\n")
+		b.append("<br>Choose your language:");
+		b.append("<select name='selectLang' form='quizForm'>\n")
+			.append("<option value='C++'>C++</option>\n")
 			.append("<option value='Java'>Java</option>\n")
-			.append("</select>\n<br/>\n");
+			.append("</select>\n");
 		//TODO: make list of languages defined in object
-		b.append("<textarea name='' class='code'>");
+		b.append("<textarea name='' rows='10' cols='50' form='quizForm' class='code'>");
 		//TODO: check that this text is properly escaped for HTML
 		b.append(defaultText);
 		b.append("</textarea>");

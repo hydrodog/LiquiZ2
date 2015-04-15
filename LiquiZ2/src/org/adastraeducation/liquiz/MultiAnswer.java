@@ -35,14 +35,13 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	
 	public void writeHTML(StringBuilder b ){
 		
-		b.append("<select multiple>\n");
+		b.append("<select name='").append(getId()).append("' form='quizForm' multiple>\n");
 		for (Answer ans : getAns()){
 			b.append("<option value= '").append(ans.getName()).append("'>");
 			ans.writeHTML(b);
 			b.append("  </option>\n ");
 		 }
 		b.append("</select>\n");
-		b.append("</br>\n");
        
 	}
 	public void writeJS(StringBuilder b ){

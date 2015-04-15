@@ -110,6 +110,68 @@ VALUES (2, 2, 5, "Elem");
 INSERT INTO QuesConElements (QuesConID, Sequence, QuesID, Type)
 VALUES (2, 3, 2, "Ques");
 
+
+
+
+
+
+
+
+-- Sixth QC (will be 2nd in quiz)
+INSERT INTO QuesCon
+VALUES (6, "Choosing animals");
+
+-- Elements to go into second qc
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (30, "Select all animals from the list", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType)
+VALUES (7, 5, 3, "Mult");
+
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (31, "Dog", "txt");
+INSERT INTO Answers(AnsID, DispElID)
+VALUES (21, 31);
+
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (32, "Cat", "txt");
+INSERT INTO Answers(AnsID, DispElID)
+VALUES (22, 32);
+
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (33, "Computer", "txt");
+INSERT INTO Answers(AnsID, DispElID)
+VALUES (23, 33);
+
+INSERT INTO DisplayElements (DispElID, TextElement, DispType)
+VALUES (34, "Dragon", "txt");
+INSERT INTO Answers(AnsID, DispElID)
+VALUES (24, 34);
+
+-- Connect questions to answers
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
+VALUES (7, 21, 1, 1);
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
+VALUES (7, 22, 2, 1);
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
+VALUES (7, 23, 3, 0);
+INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
+VALUES (7, 24, 4, 1);
+
+-- Add DispEls and Questions to qc
+INSERT INTO QuesConElements (QuesConID, Sequence, DispElID, Type)
+VALUES (6, 1, 30, "Elem");
+INSERT INTO QuesConElements (QuesConID, Sequence, QuesID, Type)
+VALUES (6, 3, 7, "Ques");
+
+
+
+
+
+
+
+
 -- Third QC
 INSERT INTO QuesCon
 VALUES (3, "Opinion");
@@ -120,11 +182,11 @@ VALUES (26, "Did you like this quiz?", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType)
-VALUES (3, 0, 0, "MCRa");
+VALUES (3, 0, 0, "MCDD");
 
 -- Connect question to std answer set
-INSERT INTO Ques_Ans (QuesID, Sequence, StdSetID)
-VALUES(3, 1, "Yes/No");
+INSERT INTO Ques_Ans (QuesID, StdSetName)
+VALUES(3, "Yes/No");
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
@@ -132,13 +194,75 @@ VALUES (3, 1, 26, "Elem");
 INSERT INTO QuesConElements(QuesConID, Sequence, QuesID, Type)
 VALUES (3, 2, 3, "Ques");
 
+-- Fourth QC
+INSERT INTO QuesCon
+VALUES (4, "Hello World");
+
+-- Elements to go into fourth qc
+INSERT INTO DisplayElements(DispElID, TextElement, DispType)
+VALUES (27, "Write a method to output Hello World to the console.", "txt");
+
+INSERT INTO DisplayElements(DispElID, TextElement, DispType) 
+VALUES (28, "Was this question hard?", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType)
+VALUES (4, 10, 5, "Code");
+INSERT INTO Questions (QuesID, Points, Level, QuesType)
+VALUES (5, 0, 0, "Essa");
+
+-- Add DispEls and Questions to qc
+
+INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
+VALUES (4, 1, 27, "Elem");
+INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
+VALUES (4, 2, 4, "Ques");
+INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
+VALUES (4, 3, 28, "Elem");
+INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
+VALUES (4, 4, 5, "Ques");
+
+-- Fifth QC
+INSERT INTO QuesCon
+VALUES (5, "Number Range");
+
+-- Elements to go into fifth qc
+INSERT INTO DisplayElements(DispElID, TextElement, DispType)
+VALUES (29, "Write a number between 0 and 10.", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType, LowBound, HighBound)
+VALUES (6, 1, 1, "NumR", 0, 10);
+
+-- Add DispEls and Questions to qc
+INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
+VALUES (5, 1, 29, "Elem");
+INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
+VALUES (5, 2, 6, "Ques");
+
+
+
+
+
 -- Connect QuesCons to Quiz
 INSERT INTO Quizzes_QuesCons
 VALUES (1, 1, 1);
 INSERT INTO Quizzes_QuesCons
-VALUES (1, 2, 2);
+VALUES (1, 6, 2);
 INSERT INTO Quizzes_QuesCons
-VALUES (1, 3, 3);
+VALUES (1, 2, 3);
+INSERT INTO Quizzes_QuesCons
+VALUES (1, 4, 4);
+INSERT INTO Quizzes_QuesCons
+VALUES (1, 5, 5);
+INSERT INTO Quizzes_QuesCons
+VALUES (1, 3, 6);
+
+
+
+
+
+
 
 -- Yijin Kang has admin permissions over Quiz 1
 INSERT INTO UserPermissions

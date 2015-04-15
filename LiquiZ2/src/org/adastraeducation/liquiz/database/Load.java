@@ -234,14 +234,14 @@ public class Load {
 			DatabaseMgr.printRemainingConns();
 			String sql = 
 				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, " + 
-				"Ques_Ans.AnsID, Ques_Ans.Correct, Ques_Ans.StdSetID, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.LowBound, Questions.HighBound " +
+				"Ques_Ans.AnsID, Ques_Ans.Correct, Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.LowBound, Questions.HighBound " +
 				"FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID " +
-				"ORDER BY QuesID ASC";
+				"ORDER BY Questions.QuesID, Ques_Ans.Sequence ASC";
 			DatabaseMgr.printRemainingConns();
 			rs = DatabaseMgr.execQuery(sql);
 			
 			/*
-			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetID | StdCorrectIndex | Pattern | LowBound | HighBound
+			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | Pattern | LowBound | HighBound
 			 * TODO load range here and directly add it to the question
 			 */
 			
@@ -269,6 +269,8 @@ public class Load {
 							q = new Code(quesID, points, level, new String()); // TODO: code default text
 						} else if (type.equals("NumR")) {
 							q = new NumberRange(quesID, points, level);
+						} else if (type.equals("Essa")) {
+							q = new Essay(quesID, points, level, new String()); //TODO: essay default text
 						}
 						
 						Database.addQues(q); // add question to database
@@ -280,9 +282,9 @@ public class Load {
 						Answer a = Database.getAns(rs.getInt("AnsID"));
 						a.setCorrect(rs.getBoolean("Correct"));
 						q.addAns(a);
-					} else if (!rs.getString("StdSetID").equals("")) { // for Standard Answers
+					} else if (rs.getString("StdSetName") != null) { // for Standard Answers
 						// load the StdSet to answers
-						q.setAns(NamedObjects.getCloneOfStdChoice(rs.getString("StdSetID"))); 
+						q.setAns(NamedObjects.getCloneOfStdChoice(rs.getString("StdSetName"))); 
 						// set the correct one
 						if(rs.getInt("StdCorrectIndex") != 0) {
 							q.getAns().get(rs.getInt("StdCorrectIndex")).setCorrect(true);

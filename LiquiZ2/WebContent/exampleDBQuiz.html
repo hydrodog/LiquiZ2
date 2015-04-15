@@ -5,26 +5,50 @@
 </head>
 <body>
 
-<h1>LiquiZ test</h1><form class='quiz classname' action='quizSubmit.jsp' method='post'>
+<h1>LiquiZ test</h1>
+<form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>
 <div class='quesHeader'>3 points</div><div class='question'>
 What is the color of the sky?<input name='1' class='fillin' type='text' />
 
 </div>
 
 <div class='quesHeader'>5 points</div><div class='question'>
+Select all animals from the list<select name='7' form='quizForm' multiple>
+<option value= 'Dog'>Dog  </option>
+ <option value= 'Cat'>Cat  </option>
+ <option value= 'Computer'>Computer  </option>
+ <option value= 'Dragon'>Dragon  </option>
+ </select>
+
+</div>
+
+<div class='quesHeader'>5 points</div><div class='question'>
 <img src='image.jpg' style = width:275px;height:183px>Which animal is shown in the picture?<div class='radio'>
-<input type='radio' name='2' value='Dragon'> Dragon </br>
- <input type='radio' name='2' value='Dog'> Dog </br>
+<input type='radio' name='2' value='Dog'> Dog </br>
  <input type='radio' name='2' value='Cat'> Cat </br>
+ <input type='radio' name='2' value='Dragon'> Dragon </br>
  </div>
 
 </div>
 
+<div class='quesHeader'>10 points</div><div class='question'>
+Write a method to output Hello World to the console.<br>Choose your language:<select name='selectLang' form='quizForm'>
+<option value='C++'>C++</option>
+<option value='Java'>Java</option>
+</select>
+<textarea name='' rows='10' cols='50' form='quizForm' class='code'></textarea>Was this question hard?<textarea name='' rows='10' cols='50' form='quizForm' class='essay'></textarea>
+</div>
+
+<div class='quesHeader'>1 points</div><div class='question'>
+Write a number between 0 and 10.<input name='6' class='fillin' type='text' />
+
+</div>
+
 <div class='quesHeader'>0 points</div><div class='question'>
-Did you like this quiz?<div class='radio'>
-<input type='radio' name='3' value='Yes'> Yes </br>
- <input type='radio' name='3' value='No'> No </br>
- </div>
+Did you like this quiz?<select name='3' form='quizForm'>
+<option value='Yes'> Yes </option> 
+<option value='No'> No </option> 
+</select>
 
 </div>
 
@@ -34,4 +58,4 @@ Did you like this quiz?<div class='radio'>
 <input type='submit' value='Submit'>
 </form>
 </body>
-</html>
+</html>
