@@ -1,0 +1,1 @@
+{ title: 'A new quiz', className: 'class', content: [{title: 'foo', className: 'claz' , content:['What is the complexity of BubbleSort?',dropdown([,,,]),'What is the complexity of QuickSort?',radio([,,,])] };]}

@@ -5,8 +5,8 @@
 </head>
 <body>
 
-<h1>LiquiZ test</h1><div class='quiz classname'>
-<div class='question'>
+<h1>LiquiZ test</h1><form class='quiz classname' action='quizSubmit.jsp' method='post'>
+<div class='quesHeader'>8 points</div><div class='question'>
 <video controls width="480" height="360">
 <source src="video1.mp4" type ="video/null"/>
 </video>What is this video about?<select>
@@ -23,7 +23,9 @@
 </div>
 
 
+<input type='hidden' name='quizID' value='0'>
+
 <input type='submit' value='Submit'>
-</div>
+</form>
 </body>
 </html>

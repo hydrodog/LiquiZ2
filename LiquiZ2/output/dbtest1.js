@@ -1,0 +1,1 @@
+{ title: 'A new quiz', className: 'class', content: [{title: 'foo', className: 'claz' , content:['What is the color of the sky?',fillin()] };{title: 'foo', className: 'claz' , content:[image('image.jpg'),'Which animal is shown in the picture?',radio([,,])] };{title: 'foo', className: 'claz' , content:['Did you like this quiz?',radio([,])] };]}
