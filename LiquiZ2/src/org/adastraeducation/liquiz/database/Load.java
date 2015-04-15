@@ -347,43 +347,54 @@ public class Load {
 		ResultSet rs = null;
 
 		try {
-			rs = DatabaseMgr.execQuery("SELECT QuesConID, Type, DispElID, QuesID FROM QuesConElements ORDER BY QuesConID, Sequence ASC");
+			rs = DatabaseMgr.execQuery("SELECT QuesCon.QuesConID, QuesCon.QuesConName, QuesConElements.Type, QuesConElements.DispElID, QuesConElements.QuesID " +
+					"FROM QuesCon " +
+					"LEFT JOIN QuesConElements " +
+					"ON QuesCon.QuesConID = QuesConElements.QuesConID " +
+					"ORDER BY QuesCon.QuesConID, QuesConElements.Sequence ASC ");
 
 /*
- * SELECT QuesCon, Type, Element, Ques 
- * FROM QuesConElements 
- * ORDER BY QuesCon, Sequence ASC;
+ * SELECT QuesCon.QuesConID, QuesCon.QuesConName, QuesConElements.Type, QuesConElements.DispElID, QuesConElements.QuesID
+ * FROM QuesCon
+ * LEFT JOIN QuesConElements 
+ * ON QuesCon.QuesConID = QuesConElements.QuesConID
+ * ORDER BY QuesCon.QuesConID, QuesConElements.Sequence ASC;
  * 
- * QuesConID | Type | DispElID | QuesID
+ * QuesConID | QuesConName | Type | DispElID | QuesID
  * 	
  */
+			int QCID;
+			String quesConName;
 			ArrayList<Displayable> disps = new ArrayList<Displayable>();
 			QuestionContainer qc = null;
 			
-			int QCID = 1;
-			
-			while (rs.next()) {
-				if (rs.getInt("QuesConID") != QCID) {
-					// turn dispEls into displayables array and create QuesCon 
-					Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
-					
-					qc = new QuestionContainer(QCID, displayables);
-					Database.addQuesCon(qc); 
-					QCID = rs.getInt("QuesConID");
-					disps.clear();
-				}
-				// load element in the QuestionContainer and put it in dispEls ArrayList
-				if (rs.getString("Type").equals("Elem")) { // load DisplayElement
-					disps.add(Database.getDisp(rs.getInt("DispElID")));
-				} else { // load Question
-					disps.add(Database.getQues(rs.getInt("QuesID")));
-				}
+			if (rs.next()) {
+				QCID = rs.getInt("QuesConID");
+				quesConName = rs.getString("QuesConName");
+				
+				do {
+					if (rs.getInt("QuesConID") != QCID) {
+						// turn dispEls into displayables array and create QuesCon 
+						Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
+						
+						qc = new QuestionContainer(QCID, quesConName, displayables);
+						Database.addQuesCon(qc); 
+						QCID = rs.getInt("QuesConID");
+						quesConName = rs.getString("QuesConName");
+						disps.clear();
+					}
+					// load element in the QuestionContainer and put it in dispEls ArrayList
+					if (rs.getString("Type").equals("Elem")) { // load DisplayElement
+						disps.add(Database.getDisp(rs.getInt("DispElID")));
+					} else { // load Question
+						disps.add(Database.getQues(rs.getInt("QuesID")));
+					}
+				} while (rs.next());
+				//put last QuesCon in Database ArrayList
+				Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
+				qc = new QuestionContainer(QCID, quesConName, displayables);
+				Database.addQuesCon(qc);
 			}
-			//put last QuesCon in Database ArrayList
-			Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
-			
-			qc = new QuestionContainer(QCID, displayables);
-			Database.addQuesCon(qc);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {

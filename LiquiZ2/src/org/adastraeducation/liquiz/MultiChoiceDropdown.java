@@ -36,14 +36,14 @@ public class MultiChoiceDropdown extends Question {
 		super(id, points, level);
 	}
 	
-	public boolean isCorrect(String s) {
+	public int grade(String s) {
 		ArrayList<Answer> answers = this.getAns();
 		for (int i = 0; i < answers.size(); i++) {
 			if (answers.get(i).getCorrect() && s.equals(answers.get(i).getName())) {
-				return true;
+				return getPoints();
 			}
 		}
-		return false;
+		return 0;
 	}
 
 	public void writeHTML(StringBuilder b) {

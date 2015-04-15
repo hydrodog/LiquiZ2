@@ -31,7 +31,7 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		super (id, points, level);
 	}
 
-	//TODO: Override IsCorrect()
+	//TODO: Override grade()
 	
 	public void writeHTML(StringBuilder b ){
 		

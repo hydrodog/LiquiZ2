@@ -24,9 +24,16 @@ public class NumberRange extends FillIn {
 	/*
 	 * Returns true if typed number is within correct range
 	 */
-	public boolean isCorrect(String s) {
-		double d = Double.parseDouble(s);
-		return min<=d && d<=max;
+	public int grade(String s) {
+		try {
+			double d = Double.parseDouble(s);
+			if(min<=d && d<=max) {
+				return getPoints();
+			}
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	public double getMin() {

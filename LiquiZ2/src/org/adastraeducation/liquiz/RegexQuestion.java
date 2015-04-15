@@ -42,9 +42,12 @@ public class RegexQuestion extends FillIn {
 	/*
 	 * Returns true if regex pattern matches typed answer
 	 */
-	public boolean isCorrect(String s) {
+	public int grade(String s) {
 		Matcher m = pattern.matcher(s);
-		return m.matches();
+		if(m.matches()) {
+			return getPoints();
+		}
+		return 0;
 	}
 	
 	//<input id='123' class='fillin' type='text' onblur='showWarningPattern(this, "\\d\\d\\d")'/> 

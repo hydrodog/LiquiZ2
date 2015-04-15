@@ -54,9 +54,9 @@ public class Essay extends Question {
 	}
 	
 	@Override
-	public boolean isCorrect(String s) {
+	public int grade(String s) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 	
 	public boolean isAutomaticGrading() {

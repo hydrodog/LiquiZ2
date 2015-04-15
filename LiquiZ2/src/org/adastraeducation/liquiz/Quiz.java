@@ -148,6 +148,7 @@ public class Quiz implements Displayable {
 		//TODO: everyone add className to each object
 		// if it is null, don't add a classname
 		// if it is a string, append (as below)
+		b.append("<h2>").append(getName()).append("</h2>");
 		b.append("<form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>\n");
 		for(QuestionContainer qc : this.qContainers) {
 			qc.writeHTML(b);

@@ -4,16 +4,19 @@ import java.util.Arrays;
 
 public class QuestionContainer implements Displayable {
 	private int id;
+	private String name;
 	private ArrayList<Displayable> displayables;
 
 	public QuestionContainer() {
 		displayables = new ArrayList<Displayable>();
 	}
-	public QuestionContainer(Displayable[] list) {
+	public QuestionContainer(String name, Displayable[] list) {
+		this.name = name;
 		displayables = new ArrayList<Displayable>(Arrays.asList(list));
 	}
-	public QuestionContainer(int id, Displayable[] list) {
+	public QuestionContainer(int id, String name, Displayable[] list) {
 		this.id = id;
+		this.name = name;
 		displayables = new ArrayList<Displayable>(Arrays.asList(list));
 	}
 	public ArrayList<Displayable> getDisplayables() {
@@ -41,6 +44,10 @@ public class QuestionContainer implements Displayable {
 	public void delete(Displayable d){
 		displayables.remove(d);
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	public int getTotalPoints() {
 		int totalPoints = 0;
@@ -54,7 +61,7 @@ public class QuestionContainer implements Displayable {
 	}
 	
 	public void writeHTML (StringBuilder b) {
-		b.append("<div class='quesHeader'>").append(getTotalPoints()).append(" points</div>");
+		b.append("<div class='quesHeader'>").append(getName()).append(": ").append(getTotalPoints()).append(" points</div>");
 		b.append("<div class='question'>\n");
 		for (Displayable d : displayables) {
 			d.writeHTML(b);

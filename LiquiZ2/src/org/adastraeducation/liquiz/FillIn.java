@@ -51,14 +51,14 @@ public class FillIn extends Question {
 	 * Returns true if typed answer exactly matches a correct answer
 	 */
 	@Override
-	public boolean isCorrect(String s) {
+	public int grade(String s) {
 		System.out.print(s);
 		for (Answer a : this.getAns()) {
 			if(s.equals(a.getName())) {
-				return true;
+				return getPoints();
 			}
 		}
-		return false;
+		return 0;
 	}
 
 	@Override

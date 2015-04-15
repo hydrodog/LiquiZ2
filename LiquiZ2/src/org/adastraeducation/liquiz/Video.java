@@ -14,9 +14,9 @@ public class Video extends RectangularMedia {
 	//<source src="movie.mp4" type="video/mp4">
 	//<source src="movie.ogg" type="video/ogg">
 	public void writeHTML(StringBuilder b){
-		b.append("<video controls width=\""+ getWidth() +"\" height=\""+ getHeight() +"\">\n");
+		b.append("\n<video controls width=\""+ getWidth() +"\" height=\""+ getHeight() +"\">\n");
 		b.append("<source src=\"" + getSource() +  "\" type =\"video/"+ getType() + "\"/>\n");
-		b.append("</video>");
+		b.append("</video>\n");
 	}
 	// to do : how to represent image in JavaScript
 	public void writeJS(StringBuilder b){

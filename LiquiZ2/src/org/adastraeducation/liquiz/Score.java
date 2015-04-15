@@ -14,12 +14,7 @@ public class Score {
 	
 	public static int correctQues(int quesID, String res) {
 		Question ques = Database.getQues(quesID);
-		if(ques.isAutomaticGrading()) {
-			if(ques.isCorrect(res)) {
-				return ques.getPoints();
-			} 
-		}
-		return 0;
+		return ques.grade(res);
 	}
 	
 	public static int getTotalPoints(int quizID) {

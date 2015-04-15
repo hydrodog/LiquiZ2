@@ -37,7 +37,7 @@ public class Test {
 		quiz.setId(1);
 		quiz.setName("Animals");
 		// for multiChoiceDropDown
-		QuestionContainer qc = new QuestionContainer(
+		QuestionContainer qc = new QuestionContainer("Dinosaurs",
 			new Displayable[] {
 				new Text("What is a dinosaur?"),
 				new MultiChoiceDropdown(1, 1,
@@ -60,7 +60,7 @@ public class Test {
 		map.put("y", y);
 		Equation eq = new Equation(	"x+y",map);
 		
-		qc = new QuestionContainer(
+		qc = new QuestionContainer("Math",
 			new Displayable[] {
 				new Text("What is "),
 				eq,
@@ -78,7 +78,7 @@ public class Test {
 		map.put("y1", y1);
 		Equation eq1 = new Equation(	"x1+y1",map);
 		
-		qc = new QuestionContainer(
+		qc = new QuestionContainer("Math",
 			new Displayable[] {
 				new Text("What is "),
 				eq1,
@@ -88,7 +88,7 @@ public class Test {
 			);
 		quiz.addQuestionContainer(qc);
 
-		qc = new QuestionContainer(
+		qc = new QuestionContainer("Characterization",
 				new Displayable[] {
 					new Video("1.mpg",0,0),
 					new Text("Describe the main character in the video in 200 words or less"),
@@ -97,7 +97,7 @@ public class Test {
 			);
 		quiz.addQuestionContainer(qc);
 		
-		qc = new QuestionContainer(
+		qc = new QuestionContainer("Listening Skills",
 				new Displayable[] {
 					new Text("Listen to the audio clip and write down the words"),
 					new Audio("1.mp3"),
@@ -111,7 +111,7 @@ public class Test {
 		Matrix m2 = new Matrix(3,3,-3,3);
 		// create a 3x3 matrix worth 1 point, level 1
 		MatrixQuestion m3 = new MatrixQuestion(1, 1, 3, 3);
-		quiz.addQuestionContainer(qc = new QuestionContainer(
+		quiz.addQuestionContainer(qc = new QuestionContainer("Matrix Math",
 			new Displayable[] {
 				new Text("Solve the matrix addition"),
 				m1,
@@ -166,7 +166,7 @@ public class Test {
 	public static Quiz test3() {
 		Quiz quiz = new Quiz();
 		quiz.setName("Multimedia Quiz");
-		QuestionContainer qc = new QuestionContainer(
+		QuestionContainer qc = new QuestionContainer("Multimedia Questions",
 			new Displayable[] {
 				new Video("video1.mp4",480, 360),
 				new Text("What is this video about?"),
@@ -195,13 +195,13 @@ public class Test {
 	public static Quiz test4() {
 		Quiz quiz = new Quiz();
 		quiz.setName("Multiple- Quiz");
-		QuestionContainer qc = new QuestionContainer(
+		QuestionContainer qc = new QuestionContainer("Complexity",
 			new Displayable[] {
 //				new Text("Can all birds fly?"),
 //				new MultiChoiceDropdown(1, 5, "Poll"),
 				new Text("What is the complexity of BubbleSort?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
-				new Text("What is the complexity of QuickSort?"),
+				new Text("<br>What is the complexity of QuickSort?"),
 				new MultiChoiceRadio(1, 5, "Complexity"),
 //				new Text("What are the colors of an apple ?"),
 //				new MultiAnswer(1, 5, "Colors", new int []{2,3}),

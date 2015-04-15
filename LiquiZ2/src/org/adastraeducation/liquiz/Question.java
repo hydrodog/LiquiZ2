@@ -112,7 +112,7 @@ public abstract class Question implements Displayable {
 		}
 	}
 	
-	public abstract boolean isCorrect(String s);
+	public abstract int grade(String s);
 	public boolean isAutomaticGrading() {
 		return true;
 	}
