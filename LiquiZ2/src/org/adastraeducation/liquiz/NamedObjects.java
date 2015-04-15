@@ -49,19 +49,6 @@ public class NamedObjects {
 //		lookUpPattern.put("Mass", Pattern.compile("(\\d{0,2}(\\.\\d{0,2}))(kg|kilogram)"));
 //		lookUpPattern.put("Length", Pattern.compile("(\\d{0,2}(\\.\\d{0,2}))(m|meter)"));
 	}
-	
-	public static void regexHash() throws IOException{
-		lookUpPattern = new HashMap<String, Pattern>();
-		FileReader fr =new FileReader(fileLocation+File.separator+"regexPatterns.txt");
-		fr.toString();
-			BufferedReader inp =  new BufferedReader(fr);
-			String line = "";
-			while((line = inp.readLine()) != null){
-				String parts[] = line.split("\\s+");
-				lookUpPattern.put(parts[0], Pattern.compile(parts[1]));
-			}
-			inp.close();
-	  }
 
 	public static void addStdChoice(String name, ArrayList<Answer> answers) {
 		for (Answer ans : answers) {
