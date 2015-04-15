@@ -62,7 +62,7 @@ public class Course implements Displayable {
 	 */
 	
 	public void writeHTML(StringBuilder b) {
-		b.append("<div class='courseName'>" + name + "</div>\n");
+		b.append("<h2 class='courseName'>" + name + "</h2>\n");
 		b.append("<div class='quizList'>\n");
 		for (Quiz q : quizzes) {
 			b.append("<div class='quizName'>" + q.getName() + "</div>\n"); 
