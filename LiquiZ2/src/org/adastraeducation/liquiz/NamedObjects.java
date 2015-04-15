@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 public class NamedObjects {
 	private static HashMap<String, ArrayList<Answer>> lookUpStdChoice;
-	private static HashMap<String, Pattern> lookUpPattern;
+	private static HashMap<String, HashMap<String,Pattern>> lookUpPattern;
 	private static String fileLocation;
 	 
 	static {
@@ -70,21 +70,24 @@ public class NamedObjects {
 		return copy;
 	}
 	
-	public static void addRegexPattern(String name, Pattern pat) {
-		lookUpPattern.put(name, pat);
+	public static Pattern getRegexPattern(String catName, String patName) {
+		return lookUpPattern.get(catName).get(patName);
 	}
-	//TODO: this was made to temporarily fix error in FormInput.java. Probably not the best way to do this
+	
+	public static void addRegexPatternSet(String catName, String patName, Pattern pat) {
+		lookUpPattern.get(catName).put(patName, pat);
+	}
 	public static void addRegexPattern(String name, HashMap<String,Pattern> map) {
-		lookUpPattern = map;
+		lookUpPattern.put(name, map);
 	}
 	
 	//These methods are to get the file location of "regexPatterns" into the bean through FileLocation.jsp file
 	public String getFileLocation() {
-	return fileLocation;
+		return fileLocation;
 	}
 
 	public void setFileLocation(String fileLocation) {
-	this.fileLocation = fileLocation;
+		this.fileLocation = fileLocation;
 	}
 	
 	//TODO: write methods to write out hashmaps to database
