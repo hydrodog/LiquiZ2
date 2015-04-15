@@ -16,10 +16,16 @@ import java.util.Stack;
 public class DatabaseMgr {
 	private static Stack<Connection> connections = new Stack<Connection>();
 	private static Object lock = new Object();
+	
+	public static void hello() {
+		System.out.println("Hello");
+	}
 
 	static {
 		Properties p = new Properties(); // TODO: LOAD PROPERTIES!
 		try {
+			String pwd = new java.io.File(".").getCanonicalPath();
+			System.out.println(pwd);
 			p.load(new FileInputStream("conf/quiz.properties"));
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -60,8 +66,14 @@ public class DatabaseMgr {
 	 * if this code is multithreaded
 	 * @return
 	 */
+	public static void printRemainingConns() {
+		System.out.println(connections.size() + " connections remaining");
+	}
+	
 	public static Connection getConnection() {
 		synchronized(lock) {
+			System.out.print("Entered getConnection(): ");
+			DatabaseMgr.printRemainingConns();
 			if (connections.isEmpty()) {
 				System.out.println("Stack Empty!");
 				return null;
@@ -77,6 +89,8 @@ public class DatabaseMgr {
 		synchronized(lock) {
 			connections.push(c);
 		}
+		System.out.print("Returned connection: ");
+		DatabaseMgr.printRemainingConns();
 	}
 	
 	public static ResultSet execQuery(String sql) throws SQLException {
@@ -85,22 +99,18 @@ public class DatabaseMgr {
 		return p.executeQuery();
 	}
 	
-	public static ResultSet execQuery(String sql, int par) throws SQLException {
-		Connection conn = getConnection();
-		PreparedStatement p = conn.prepareStatement(sql);
-		p.setInt(1, par);
-		return p.executeQuery();
-	}
-	
 	public static void closeResultSet(ResultSet rs) {
 		if (rs == null) {
 			return;
 		}
 		try {
+			Statement stmt = rs.getStatement();
+			Connection conn = stmt.getConnection();
 			rs.close();
-			returnConnection(rs.getStatement().getConnection());
+			stmt.close();
+			returnConnection(conn);
 		} catch (SQLException e) {
-			
+			e.printStackTrace();
 		}
 		
 	}

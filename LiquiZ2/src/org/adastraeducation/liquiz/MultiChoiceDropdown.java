@@ -32,6 +32,10 @@ public class MultiChoiceDropdown extends Question {
 		this.getAns().get(rightAns).setCorrect(true);
 	}
 	
+	public MultiChoiceDropdown(int id, int points, int level) {
+		super(id, points, level);
+	}
+	
 	public boolean isCorrect(String s) {
 		ArrayList<Answer> answers = this.getAns();
 		for (int i = 0; i < answers.size(); i++) {

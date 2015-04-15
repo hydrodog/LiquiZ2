@@ -94,6 +94,25 @@ public class Quiz implements Displayable {
 		this.policy = p;
 	}
 	
+	public int getTotalPoints() {
+		int totalPoints = 0;
+		for (QuestionContainer quesCon : qContainers) {
+			totalPoints += quesCon.getTotalPoints();
+		}
+		return totalPoints;
+	}
+	
+	public boolean needsGrading() {
+		for (QuestionContainer quesCon : qContainers) {
+			for (Displayable d : quesCon.getDisplayables()) {
+				if (d instanceof Question && ! ((Question) d).isAutomaticGrading()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public Quiz() {
 /*		this.id = 0;
 		this.name = "defaultName";
@@ -129,12 +148,13 @@ public class Quiz implements Displayable {
 		//TODO: everyone add className to each object
 		// if it is null, don't add a classname
 		// if it is a string, append (as below)
-		b.append("<div class='quiz classname'>\n");
+		b.append("<form class='quiz classname' action='quizSubmit.jsp' method='post'>\n");
 		for(QuestionContainer qc : this.qContainers) {
 			qc.writeHTML(b);
 		}
+		b.append("\n<input type='hidden' name='quizID' value='").append(getId()).append("'>\n");
 		b.append("\n<input type='submit' value='Submit'>\n"); //TODO: submit what/action
-		b.append("</div>\n");
+		b.append("</form>\n");
  	}
 	
 	public void writeXML (StringBuilder b) {

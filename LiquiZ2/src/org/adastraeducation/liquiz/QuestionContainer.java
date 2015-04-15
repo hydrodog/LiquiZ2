@@ -42,7 +42,19 @@ public class QuestionContainer implements Displayable {
 		displayables.remove(d);
 	}
 
+	public int getTotalPoints() {
+		int totalPoints = 0;
+		for (Displayable d : displayables) {
+			if (d instanceof Question) {
+				Question q = (Question) d;
+				totalPoints += q.getPoints();
+			}
+		}
+		return totalPoints;
+	}
+	
 	public void writeHTML (StringBuilder b) {
+		b.append("<div class='quesHeader'>").append(getTotalPoints()).append(" points</div>");
 		b.append("<div class='question'>\n");
 		for (Displayable d : displayables) {
 			d.writeHTML(b);

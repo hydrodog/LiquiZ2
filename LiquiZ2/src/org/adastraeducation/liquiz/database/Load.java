@@ -17,7 +17,8 @@ import org.adastraeducation.liquiz.test.Test;
 public class Load {
 	
 	public static void main(String[] args) throws IOException {
-		loadAll();
+		Database.start();
+//		loadAll();
 		for (int i = 1; i <= 1; i++) { // there is currently 1 quiz in the database
 			Test.testOutput("output/dbtest"+i, Database.getQuiz(i));
 		}
@@ -70,6 +71,7 @@ public class Load {
 	}
 	
 	public static void loadDispEl() {
+		System.out.println("Entered loadDispEl");
 		ResultSet rs = null;
 		try {
 			rs = DatabaseMgr.execQuery("SELECT DisplayElements.DispElID, DisplayElements.TextElement, DisplayElements.DispType, Media.Path, Media.MediaType, Media.Width, Media.Height FROM DisplayElements LEFT JOIN Media ON DisplayElements.MediaID = Media.MediaID ORDER BY DispElID ASC");
@@ -119,6 +121,7 @@ public class Load {
 //	}
 	
 	public static void loadAns() {
+		System.out.println("Entered loadAns");
 		ResultSet rs = null;
 		
 		try {
@@ -141,8 +144,6 @@ public class Load {
 				}
 				Database.addAns(a);
 			}
-			
-			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -178,7 +179,6 @@ public class Load {
 //				}
 //			}
 //			
-//			rs.close();
 //			Database.addAns(a);
 //		} catch(SQLException e) {
 //			e.printStackTrace();
@@ -190,6 +190,7 @@ public class Load {
 	
 	// Load all StdChoices to HashMap in NamedObjects
 	public static void loadStdChoices() {
+		System.out.println("Entered loadStdChoices");
 		ResultSet rs = null;
 		ArrayList<Answer> ans = null;
 		
@@ -225,19 +226,19 @@ public class Load {
 		//TODO: once QuestionFactories are completed
 		ResultSet rs = null;
 		int quesID, points, level;
-		double min=0, max=0;
 		String type;
+		
 		Question q = null;
-		ArrayList<Answer> answers = new ArrayList<Answer>();
 
 		try {
-			StringBuilder b = new StringBuilder();
-			b.append("SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, ");
-			b.append("Ques_Ans.AnsID, Ques_Ans.Correct, Ques_Ans.StdSetID, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.LowBound, Questions.HighBound ");
-			b.append("FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID ");
-			b.append("ORDER BY QuesID ASC");
-			
-			rs = DatabaseMgr.execQuery(b.toString());
+			DatabaseMgr.printRemainingConns();
+			String sql = 
+				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, " + 
+				"Ques_Ans.AnsID, Ques_Ans.Correct, Ques_Ans.StdSetID, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.LowBound, Questions.HighBound " +
+				"FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID " +
+				"ORDER BY QuesID ASC";
+			DatabaseMgr.printRemainingConns();
+			rs = DatabaseMgr.execQuery(sql);
 			
 			/*
 			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetID | StdCorrectIndex | Pattern | LowBound | HighBound
@@ -245,71 +246,55 @@ public class Load {
 			 */
 			
 			if (rs.next()) {
-				quesID = rs.getInt("QuesID");
-				points = rs.getInt("Points");
-				level = rs.getInt("Level");
-				type = rs.getString("QuesType");
+				quesID = -1;
 				
 				do {
-					if(quesID != rs.getInt("QuesID")) { // if the next row is a new question, finalize the previous question
-						// create appropriate question type
-						if (type.equals("Fill")) {
-							q = new FillIn(quesID, points, level, new ArrayList<Answer>(answers));
-						} else if (type.equals("Mult")) {
-							q = new MultiAnswer(quesID, points, level, new ArrayList<Answer>(answers));
-						} else if (type.equals("MCDD")) {
-							q = new MultiChoiceDropdown(quesID, points, level, new ArrayList<Answer>(answers));
-						} else if (type.equals("MCRa")) {
-							q = new MultiChoiceRadio(quesID, points, level, new ArrayList<Answer>(answers));
-						} else if (type.equals("Code")) {
-							q = new Code(quesID, points, level, new String()); // TODO: code default text
-						} else if (type.equals("NumR")) {
-							q = new NumberRange(quesID, points, level, min, max);
-						}
-						
-						Database.addQues(q); // add question to database
-						
-						// reset ID, points, level, type to for new question
+					if(quesID != rs.getInt("QuesID")) { // if the next row is a new question, create new question
+						// reset ID, points, level, type for new question
 						quesID = rs.getInt("QuesID"); 
 						points = rs.getInt("Points");
 						level = rs.getInt("Level");
 						type = rs.getString("QuesType");
-						answers.clear();
+						
+						// create appropriate question type
+						if (type.equals("Fill")) {
+							q = new FillIn(quesID, points, level);
+						} else if (type.equals("Mult")) {
+							q = new MultiAnswer(quesID, points, level);
+						} else if (type.equals("MCDD")) {
+							q = new MultiChoiceDropdown(quesID, points, level);
+						} else if (type.equals("MCRa")) {
+							q = new MultiChoiceRadio(quesID, points, level);
+						} else if (type.equals("Code")) {
+							q = new Code(quesID, points, level, new String()); // TODO: code default text
+						} else if (type.equals("NumR")) {
+							q = new NumberRange(quesID, points, level);
+						}
+						
+						Database.addQues(q); // add question to database
+
 					}
 					
+					//add answer to q
 					if (rs.getInt("AnsID") != 0) { // for DisplayElement answers
 						Answer a = Database.getAns(rs.getInt("AnsID"));
 						a.setCorrect(rs.getBoolean("Correct"));
-						answers.add(a);
+						q.addAns(a);
 					} else if (!rs.getString("StdSetID").equals("")) { // for Standard Answers
 						// load the StdSet to answers
-						answers = NamedObjects.getCloneOfStdChoice(rs.getString("StdSetID")); 
+						q.setAns(NamedObjects.getCloneOfStdChoice(rs.getString("StdSetID"))); 
 						// set the correct one
 						if(rs.getInt("StdCorrectIndex") != 0) {
-							answers.get(rs.getInt("StdCorrectIndex")).setCorrect(true);
+							q.getAns().get(rs.getInt("StdCorrectIndex")).setCorrect(true);
 						}
-					} else { // for Number Range Questions
-						min = rs.getDouble("LowBound");
-						max = rs.getDouble("Highbound");
+					} else { 
+						if (q instanceof NumberRange) {
+							// for Number Range Questions
+							((NumberRange) q).setMin(rs.getDouble("LowBound"));
+							((NumberRange) q).setMax(rs.getDouble("Highbound"));
+						}
 					}
 				} while(rs.next());
-				
-				// create appropriate question type for last question
-				if (type.equals("Fill")) {
-					q = new FillIn(quesID, points, level, new ArrayList<Answer>(answers));
-				} else if (type.equals("Mult")) {
-					q = new MultiAnswer(quesID, points, level, new ArrayList<Answer>(answers));
-				} else if (type.equals("MCDD")) {
-					q = new MultiChoiceDropdown(quesID, points, level, new ArrayList<Answer>(answers));
-				} else if (type.equals("MCRa")) {
-					q = new MultiChoiceRadio(quesID, points, level, new ArrayList<Answer>(answers));
-				} else if (type.equals("Code")) {
-					q = new Code(quesID, points, level, new String()); // TODO: code default text
-				} else if (type.equals("NumR")) {
-					q = new NumberRange(quesID, points, level, min, max);
-				}
-				
-				Database.addQues(q); // add question to database
 			}
 
 		} catch(SQLException e) {
@@ -397,7 +382,6 @@ public class Load {
 			
 			qc = new QuestionContainer(QCID, displayables);
 			Database.addQuesCon(qc);
-			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -449,7 +433,7 @@ public class Load {
 		ResultSet rs = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT Courses.CourseID, Courses.Name, Courses.Privacy, Courses_Quizzes.QuizID  FROM Courses LEFT JOIN Courses_Quizzes ON Courses.CourseID = CoursesQuizzes.Course ORDER BY Courses.CourseID, CoursesQuizzes.Sequence ASC");
+			rs = DatabaseMgr.execQuery("SELECT Courses.CourseID, Courses.Name, Courses.Privacy, Courses_Quizzes.QuizID  FROM Courses LEFT JOIN Courses_Quizzes ON Courses.CourseID = Courses_Quizzes.CourseID ORDER BY Courses.CourseID, Courses_Quizzes.Sequence ASC");
 			
 			/*
 			 * SELECT Courses.CourseID, Courses.Name, Courses.Privacy, CoursesQuizzes.Quiz 
@@ -468,7 +452,7 @@ public class Load {
 					course = new Course(rs.getInt("CourseID"), rs.getString("Name"));
 					Database.addCourse(course);
 				}
-				course.addQuiz(Database.getQuiz(rs.getInt("Quiz")));
+				course.addQuiz(Database.getQuiz(rs.getInt("QuizID")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -497,7 +481,6 @@ public class Load {
 				user = new User(id, un, pw, fn, ln, email);
 				Database.addUser(user);
 			}
-			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -517,7 +500,6 @@ public class Load {
 			if (rs.next()) {
 				grade = rs.getDouble("Grade");
 			}
-			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -540,7 +522,6 @@ public class Load {
 			if (rs.next()) {
 				score = rs.getInt("Score");
 			}
-			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -563,7 +544,6 @@ public class Load {
 			if (rs.next()) {
 				d = Database.getDisp(rs.getInt("Response"));
 			}
-			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

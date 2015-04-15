@@ -31,6 +31,10 @@ public class FillIn extends Question {
 	public FillIn(int points, int level, Answer answer){
 		super(points, level, answer);
 	}
+	
+	public FillIn(int id, int points, int level) {
+		super (id, points, level);
+	}
 
 	/**
 	 * Convenience Constructor: create a fillin question with a 
@@ -48,17 +52,19 @@ public class FillIn extends Question {
 	 */
 	@Override
 	public boolean isCorrect(String s) {
+		System.out.print(s);
 		for (Answer a : this.getAns()) {
-			if(s.equals(a.getName()))
+			if(s.equals(a.getName())) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-	//<input id='123' class='fillin' type='text' onblur='showNumberWarning(this, "\\d\\d\\d")'/> 
+	//<input name='123' class='fillin' type='text' onblur='showNumberWarning(this, "\\d\\d\\d")'/> 
 	public void writeHTML(StringBuilder b) {
-		b.append("<input id='").append(getId()).append("' class='fillin' type='text' />\n");
+		b.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
 	}
 
 	@Override

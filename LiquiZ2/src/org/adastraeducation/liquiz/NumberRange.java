@@ -17,6 +17,10 @@ public class NumberRange extends FillIn {
 		this.max = max;
 	}
 	
+	public NumberRange(int id, int points, int level){
+		super(id,points,level,(ArrayList<Answer>) null);
+	}
+	
 	/*
 	 * Returns true if typed number is within correct range
 	 */

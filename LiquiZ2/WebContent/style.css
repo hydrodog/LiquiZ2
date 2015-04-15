@@ -1,0 +1,67 @@
+body {
+	font-family:Optima, Calibri, Arial, sans-serif;
+	background-color: #888888;
+}
+.quiz {
+	margin: 10px;
+	padding: 10px;
+	background-color:#555555;
+	border-radius: 5px;
+	font-size: 20px;
+}
+.quesHeader {
+	margin: 10px 10px 0px 10px;
+	padding: 10px;
+	background-color: #FFFFFF;
+	border-radius: 5px 5px 0px 0px;
+	font-size: 16px;
+	color: #888888;
+}
+.question {
+	margin: 0px 10px 10px 10px;
+	padding: 10px;
+	background-color: #0b9fc4;
+	border-radius: 0px 0px 5px 5px;
+}
+h1 {
+	font-family: "Bookman Antiqua", serif;
+}
+img {
+	display:block;
+	margin: 5px 0px 5px 0px;
+}
+audio {
+	display:block;
+	margin: 5px 0px 5px 0px;
+}
+video {
+	display:block;
+	margin: 5px 0px 5px 0px;
+}
+select {
+	font-size:16px;
+	margin: 0px 5px 0px 5px;
+}
+select[multiple] {
+	
+}
+textarea {
+	display:block;
+}
+input[type="text"] {
+	margin: 0px 5px 0px 5px;
+}
+input[type="submit"] {
+	font-size:16px;
+	border-radius: 5px;
+	margin: 10px;
+}
+.radio {
+	font-size:16px;
+}
+input[type="radio"] {
+	
+}
+input.matquest {
+	size: 1; /* ? */
+}

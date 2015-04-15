@@ -26,6 +26,10 @@ public class MultiAnswer extends MultiChoiceDropdown {
 			this.getAns().get(i).setCorrect(true);
 		}
 	}
+	
+	public MultiAnswer(int id, int points, int level) {
+		super (id, points, level);
+	}
 
 	//TODO: Override IsCorrect()
 	

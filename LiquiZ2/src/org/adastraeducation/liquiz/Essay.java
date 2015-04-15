@@ -52,14 +52,14 @@ public class Essay extends Question {
 		b.append("<essay>").append(Util.escapeXML(defaultText))
 			.append("</essay>");
 	}
-
-	public boolean isAutomaticGrading() {
-		return true;
-	}
 	
 	@Override
 	public boolean isCorrect(String s) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public boolean isAutomaticGrading() {
 		return false;
 	}
 }

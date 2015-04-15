@@ -23,6 +23,10 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 		super(id, points, level, stdChoiceName);
 	}
 	
+	public MultiChoiceRadio(int id, int points, int level) {
+		super(id, points, level);
+	}
+	
 	public void writeHTML(StringBuilder b) {
 		b.append("<div class='radio'>\n");
 		for (Answer ans : this.getAns()) {

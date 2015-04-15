@@ -22,13 +22,9 @@ public class Database {
 	private static ArrayList<DisplayElement> displayElements;
 	
 	private static int getMaxOf(String sql) {
-		Connection conn = null;
 		ResultSet rs = null;
-		
 		try {
-			conn = DatabaseMgr.getConnection();
-			PreparedStatement p1 = conn.prepareStatement(sql); 
-			rs = p1.executeQuery();
+			rs = DatabaseMgr.execQuery(sql);
 			
 			if (rs.next()) {
 				return rs.getInt(1);
@@ -36,15 +32,7 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs!=null) {
-					rs.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				DatabaseMgr.returnConnection(conn);
-			}
+			DatabaseMgr.closeResultSet(rs);
 		}
 		return 0;
 	}
@@ -57,6 +45,10 @@ public class Database {
 		return a;
 	}
 	
+	public static void start() {
+		
+	}
+	
 	static {
 		users = getMax("UserID","Users", User.class);
 		courses = getMax("CourseID","Courses", Course.class);
@@ -66,6 +58,8 @@ public class Database {
 		questions = getMax("QuesID","Questions", Question.class);
 		answers = getMax("AnsID","Answers",Answer.class);
 		displayElements = getMax("DispElID","DisplayElements", DisplayElement.class);
+		System.out.println("Now loading all");
+		Load.loadAll();
 	}
 	
 	/**

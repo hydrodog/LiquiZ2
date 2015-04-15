@@ -26,6 +26,13 @@ public abstract class Question implements Displayable {
 		this(id, points, level, makeListFromAnswer(ans));
 	}
 	
+	public Question (int id, int points, int level) {
+		this.id = id;
+		this.points = points;
+		this.level = level;
+		answers = new ArrayList<Answer>();
+	}
+	
 	public Question (int points, int level, ArrayList<Answer> answers) {
 		this(getUniqueID(), points, level, answers);
 	}
@@ -67,6 +74,10 @@ public abstract class Question implements Displayable {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void addAns(Answer ans) {
+		answers.add(ans);
 	}
 	
 	public void setAns(Answer ans) {
