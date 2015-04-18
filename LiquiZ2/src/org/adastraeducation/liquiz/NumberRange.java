@@ -51,6 +51,4 @@ public class NumberRange extends FillIn {
 	public void setMax(double max) {
 		this.max = max;
 	}
-	
-	
 }

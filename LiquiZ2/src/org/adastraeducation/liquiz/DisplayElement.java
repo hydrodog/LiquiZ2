@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 /**
- * Text and Media
+ * Includes Text and Media
  * @author yijinkang
  *
  */

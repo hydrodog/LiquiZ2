@@ -44,6 +44,11 @@ public class RegexQuestion extends FillIn {
 	 */
 	public int grade(String s) {
 		Matcher m = pattern.matcher(s);
+		/*
+		 * TODO: make sure there's nothing else in the answer: ^(red | white | blue)$
+		 * A way to add them ourselves rather than depending on user to remember
+		 * Warn teacher
+		 */
 		if(m.matches()) {
 			return getPoints();
 		}
@@ -52,7 +57,7 @@ public class RegexQuestion extends FillIn {
 	
 	//<input id='123' class='fillin' type='text' onblur='showWarningPattern(this, "\\d\\d\\d")'/> 
 	public void writeHTML(StringBuilder b) {
-		b.append("<input id='").append(getId()).append("' class='fillin' type='text' ");
+		b.append("<input name='").append(getId()).append("' class='fillin' type='text' ");
 		if(warning != null) {
 			b.append("onblur='showWarningPattern(this, \"").append(Util.escapeRegex(warning)).append("\")'/>\n");
 			b.append(" <div id=\"FW").append(this.getId()).append("\"");

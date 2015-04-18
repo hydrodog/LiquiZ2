@@ -15,6 +15,7 @@ public class MultiChoiceDropdown extends Question {
 	
 	public MultiChoiceDropdown() {
 	}
+	
 	public MultiChoiceDropdown(int points, int level) {
 		super(points, level);
 	}

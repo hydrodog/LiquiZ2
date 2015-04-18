@@ -1,4 +1,6 @@
 package org.adastraeducation.liquiz.test;
+import org.adastraeducation.liquiz.database.Database;
+import org.adastraeducation.liquiz.database.Load;
 import org.adastraeducation.liquiz.equation.*;
 
 import java.io.*;
@@ -41,7 +43,7 @@ public class Test {
 			new Displayable[] {
 				new Text("What is a dinosaur?"),
 				new MultiChoiceDropdown(1, 1,
-						new ArrayList<>(Arrays.asList(
+						new ArrayList<Answer>(Arrays.asList(
 							new Answer(new Text("T-Rex"), true),
 							new Answer(new Text("Shark")),
 							new Answer(new Text("mouse"))
@@ -128,16 +130,16 @@ public class Test {
 		Quiz quiz = new Quiz();
 		quiz.setName("This has responses");
 		Response r1 = new Response(
-			new DisplayElement[] {
+			new ArrayList<DisplayElement>(Arrays.asList(
 				new Text("Great job!"),
 				new Video("1.mpg",0,0)
-			}
+			))
 		);
 		Response r2 = new Response(
-			new DisplayElement[] {
+			new ArrayList<DisplayElement>(Arrays.asList(
 				new Text("Not quite right"), 
-				new Video("2.mpg",0,0),
-			}
+				new Video("2.mpg",0,0)
+			))
 		);
 		/*
 		QuestionContainer qc = new QuestionContainer(
@@ -256,7 +258,7 @@ public class Test {
 //		testOutput("output/test2", test2());
 		testOutput("output/test3", test3());
 		testOutput("output/test4", test4());
-		
+
 		/*testing Course*/
 		Course testCourse = new Course(1, "Test Course");
 		testCourse.addQuiz(test1());

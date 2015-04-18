@@ -18,12 +18,12 @@ public class Load {
 	
 	public static void main(String[] args) throws IOException {
 		Database.start();
-//		loadAll();
+//		loadAll(); // the static initializer in Database will load everything
 		for (int i = 1; i <= 1; i++) { // there is currently 1 quiz in the database
 			Test.testOutput("output/dbtest"+i, Database.getQuiz(i));
 		}
 	}
-	
+
 	public static void loadAll() {
 		loadDispEl();
 		loadAns();
@@ -45,7 +45,7 @@ public class Load {
 		displayElementTypeMap.put("aud", new AudioFactory());
 		displayElementTypeMap.put("vid", new VideoFactory());
 		
-		//TODO: question types
+		//TODO: question types?
 	}
 	
 	public static void loadMedia() {
@@ -150,43 +150,6 @@ public class Load {
 			DatabaseMgr.closeResultSet(rs);
 		}
 	}
-
-//	/**
-//	 * @param AnsID
-//	 * @param correct
-//	 * @return requested Answer
-//	 */
-//	public static Answer loadAns(int AnsID, boolean correct) {
-//		Connection conn = null;
-//		Response res = null;
-//		Answer a = null;
-//
-//		try {
-//			conn = DatabaseMgr.getConnection();
-//			PreparedStatement p = conn.prepareStatement("SELECT * FROM Answers WHERE AnsID=?");
-//			p.setInt(1, AnsID);
-//			ResultSet rs = p.executeQuery();
-//
-//			if(rs.next()) {
-//				if (rs.getInt("Element") != 0) {
-//					a = new Answer(AnsID, Database.getDisp(rs.getInt("Element")), correct, null);
-//					if (rs.getInt("Response") != 0) {
-//						res = new Response(Database.getDisp(rs.getInt("Response")));
-//						a.setResponse(res);
-//					}
-//				} else {
-//					// TODO Range
-//				}
-//			}
-//			
-//			Database.addAns(a);
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			DatabaseMgr.returnConnection(conn);
-//		}
-//		return a;
-//	}
 	
 	// Load all StdChoices to HashMap in NamedObjects
 	public static void loadStdChoices() {
@@ -222,8 +185,8 @@ public class Load {
 		}
 	}
 
-	public static Question loadQues() {
-		//TODO: once QuestionFactories are completed
+	public static void loadQues() {
+        //TODO: once QuestionFactories are completed
 		ResultSet rs = null;
 		int quesID, points, level;
 		String type;
@@ -244,7 +207,7 @@ public class Load {
 			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | Pattern | LowBound | HighBound
 			 * TODO load range here and directly add it to the question
 			 */
-			
+            
 			if (rs.next()) {
 				quesID = -1;
 				
@@ -297,6 +260,7 @@ public class Load {
 						}
 					}
 				} while(rs.next());
+
 			}
 
 		} catch(SQLException e) {
@@ -304,7 +268,6 @@ public class Load {
 		} finally {
 			DatabaseMgr.closeResultSet(rs);
 		}
-		return q;
 	}
 
 	public static void loadPolicies() {

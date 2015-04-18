@@ -128,16 +128,16 @@ public class SerializeTest {
 		Quiz quiz = new Quiz();
 		quiz.setName("This has responses");
 		Response r1 = new Response(
-			new DisplayElement[] {
+			new ArrayList<DisplayElement>(Arrays.asList(
 				new Text("Great job!"),
 				new Video("1.mpg",0,0)
-			}
+			))
 		);
 		Response r2 = new Response(
-			new DisplayElement[] {
+			new ArrayList<DisplayElement>(Arrays.asList(
 				new Text("Not quite right"), 
 				new Video("2.mpg",0,0)
-			}
+			))
 		);
 		/*
 		QuestionContainer qc = new QuestionContainer(

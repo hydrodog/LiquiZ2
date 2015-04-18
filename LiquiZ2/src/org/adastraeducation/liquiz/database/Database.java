@@ -46,7 +46,7 @@ public class Database {
 	}
 	
 	public static void start() {
-		
+		// static initializer will load everything
 	}
 	
 	static {
