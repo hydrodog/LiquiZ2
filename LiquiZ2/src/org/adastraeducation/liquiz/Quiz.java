@@ -154,7 +154,7 @@ public class Quiz implements Displayable {
 			qc.writeHTML(b);
 		}
 		b.append("\n<input type='hidden' name='quizID' value='").append(getId()).append("'>\n");
-		b.append("\n<input type='submit' value='Submit'>\n"); //TODO: submit what/action
+		b.append("\n<input type='submit' value='Submit'>\n");
 		b.append("</form>\n");
  	}
 	

@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `Points` INT NOT NULL,
   `Level` INT NULL,
   `QuesType` CHAR(4) NOT NULL,
+  `CaseSensitive` BIT(1) NULL, -- for fillin
   `Pattern` VARCHAR(255) NULL, -- for regex
   `PatternName` VARCHAR(255) NULL, -- to use stored regex
   `Warning` VARCHAR(255) NULL, -- for regex warnings

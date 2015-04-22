@@ -17,7 +17,7 @@ public class Image extends RectangularMedia {
 		b.append("<img src='" + getSource() + "' style = width:"+ getWidth() + "px;height:"+ getHeight() + "px>");
 	}
 
-	// to do : how to represent image in JavaScript
+	//TODO: how to represent image in JavaScript
 	//TODO: image id should not be hardcoded to 1!!!
 	public void writeJS(StringBuilder b){
 		b.append("image('" + getSource() + "')");

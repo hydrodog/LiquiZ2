@@ -43,8 +43,8 @@ INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (1, "What is the color of the sky?", "txt");
 
 -- Question and answers
-INSERT INTO Questions (QuesID, Points, Level, QuesType)
-VALUES (1, 3, 1, "Fill");
+INSERT INTO Questions (QuesID, Points, Level, QuesType, CaseSensitive)
+VALUES (1, 3, 1, "Fill", 0);
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES(2, "Blue", "txt");
 INSERT INTO Answers (AnsID, DispElID)
@@ -247,11 +247,11 @@ VALUES (7, "Regex Question");
 
 -- Elements to go into third qc
 INSERT INTO DisplayElements(DispElID, TextElement, DispType)
-VALUES (35, "A regex question?", "txt");
+VALUES (35, "Type a digit", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType, Pattern)
-VALUES (8, 0, 0, RegX, "PUT PATTERN HERE");
+VALUES (8, 1, 0, "RegX", "[0-9]");
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
@@ -276,6 +276,8 @@ INSERT INTO Quizzes_QuesCons
 VALUES (1, 5, 5);
 INSERT INTO Quizzes_QuesCons
 VALUES (1, 3, 6);
+INSERT INTO Quizzes_QuesCons
+VALUES (1, 7, 7);
 
 
 

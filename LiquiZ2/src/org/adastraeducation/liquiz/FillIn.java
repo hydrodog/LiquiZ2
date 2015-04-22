@@ -18,6 +18,8 @@ package org.adastraeducation.liquiz;
 import java.util.ArrayList;
 
 public class FillIn extends Question {
+	boolean caseSensitive;
+	
 	public FillIn(int id, int points, int level, ArrayList<Answer> answers) {
 		super(id, points, level, answers);
 	}
@@ -46,16 +48,29 @@ public class FillIn extends Question {
 	 */
 	
 	public FillIn(){}
+	
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
+	}
 
 	/*
 	 * Returns true if typed answer exactly matches a correct answer
 	 */
 	@Override
 	public double grade(String[] s) {
-		// TODO case sensitive?
 		for (Answer a : getAns()) {
-			if(s[0].equals(a.getName())) {
-				return (double) getPoints();
+			if(caseSensitive) {
+				if(s[0].equals(a.getName())) {
+					return (double) getPoints();
+				}
+			} else {
+				if(s[0].equalsIgnoreCase(a.getName())) {
+					return (double) getPoints();
+				}
 			}
 		}
 		return 0;
@@ -64,7 +79,7 @@ public class FillIn extends Question {
 	@Override
 	//<input name='123' class='fillin' type='text' onblur='showNumberWarning(this, "\\d\\d\\d")'/> 
 	public void writeHTML(StringBuilder b) {
-		b.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
+		b.append("<input name='").append(getId()).append("' class='fillin' type='text' />");
 	}
 
 	@Override

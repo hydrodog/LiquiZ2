@@ -10,7 +10,7 @@ public class Course implements Displayable {
 	private int id;
 	private String name;
 	// private String classname, qListClassName; // for user to override HTML class for style
-	// TODO: is this needed? would users want to customize their list of quizzes?
+	// TODO: is this classname needed? would users want to customize their list of quizzes?
 	private ArrayList<Quiz> quizzes;
 
 	public Course() {

@@ -22,11 +22,11 @@ public class DatabaseMgr {
 	}
 
 	static {
-		Properties p = new Properties(); // TODO: LOAD PROPERTIES!
+		Properties p = new Properties(); 
 		try {
 			String pwd = new java.io.File(".").getCanonicalPath();
 			System.out.println(pwd);
-			p.load(new FileInputStream("conf/quiz.properties"));
+			p.load(new FileInputStream("conf/quiz.properties")); // TODO: Where to put conf/quiz.properties for Tomcat?
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {

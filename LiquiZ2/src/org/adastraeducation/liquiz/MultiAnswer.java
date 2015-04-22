@@ -32,8 +32,6 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		super (id, points, level);
 	}
 
-	//TODO: Override grade()
-	
 	public double grade(String[] s) {
 		double pointsPerAns = ((double) getPoints())/getAns().size();
 		double points = 0;

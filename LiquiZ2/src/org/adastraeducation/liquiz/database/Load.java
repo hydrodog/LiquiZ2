@@ -45,7 +45,7 @@ public class Load {
 		displayElementTypeMap.put("aud", new AudioFactory());
 		displayElementTypeMap.put("vid", new VideoFactory());
 		
-		//TODO: question types?
+		//TODO: QuestionFactories?
 	}
 	
 	public static void loadMedia() {
@@ -151,7 +151,7 @@ public class Load {
 		}
 	}
 	
-	// Load all StdChoices to HashMap in NamedObjects
+	// Load all StdChoices to HashMap in NamedObjects - does not run; currently hardcoded into NamedObjects
 	public static void loadStdChoices() {
 		System.out.println("Entered loadStdChoices");
 		ResultSet rs = null;
@@ -221,6 +221,7 @@ public class Load {
 						// create appropriate question type
 						if (type.equals("Fill")) {
 							q = new FillIn(quesID, points, level);
+							((FillIn) q).setCaseSensitive(rs.getBoolean("CaseSensitive"));
 						} else if (type.equals("Mult")) {
 							q = new MultiAnswer(quesID, points, level);
 						} else if (type.equals("MCDD")) {
@@ -228,7 +229,7 @@ public class Load {
 						} else if (type.equals("MCRa")) {
 							q = new MultiChoiceRadio(quesID, points, level);
 						} else if (type.equals("Code")) {
-							q = new Code(quesID, points, level, rs.getString("DefaultCode"));
+							q = new Code(quesID, points, level, rs.getString("DefaultText"));
 						} else if (type.equals("NumR")) {
 							q = new NumberRange(quesID, points, level);
 						} else if (type.equals("RegX")) { //int id, int points, int level, String regex, String warning
@@ -238,7 +239,7 @@ public class Load {
 								q = new RegexQuestion(quesID, points, level, rs.getString("PatternName"), rs.getString("Warning"), true);
 							}
 						} else if (type.equals("Essa")) {
-							q = new Essay(quesID, points, level, rs.getString("DefaultCode")); 
+							q = new Essay(quesID, points, level, rs.getString("DefaultText")); 
 						}
 						
 						Database.addQues(q); // add question to database
@@ -449,7 +450,7 @@ public class Load {
 		ResultSet rs = null;
 		
 		try {
-			rs = DatabaseMgr.execQuery("SELECT * from Users");
+			rs = DatabaseMgr.execQuery("SELECT * from Users ORDER BY UserID");
 			
 			User user = null;
 			while (rs.next()) {
