@@ -23,6 +23,8 @@ public class Code extends Question {
 		super(id, points, level, (ArrayList<Answer>) null);
 		this.defaultText = defaultText;
 	}
+	
+	//TODO: compile button, compile & run button; compare with desired output
 
 	public void writeHTML(StringBuilder b ){
 		b.append("<br>Choose your language:");
@@ -51,7 +53,7 @@ public class Code extends Question {
 	}
 
 	@Override
-	public int grade(String s) {
+	public double grade(String[] s) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

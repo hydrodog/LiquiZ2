@@ -24,9 +24,9 @@ public class NumberRange extends FillIn {
 	/*
 	 * Returns true if typed number is within correct range
 	 */
-	public int grade(String s) {
+	public double grade(String[] s) {
 		try {
-			double d = Double.parseDouble(s);
+			double d = Double.parseDouble(s[0]);
 			if(min<=d && d<=max) {
 				return getPoints();
 			}

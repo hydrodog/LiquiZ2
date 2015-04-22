@@ -14,7 +14,7 @@
 <div class='quiz'> <!-- temp called quiz for styling purposes -->
 <% 
 	Enumeration quesIDs = request.getParameterNames();
-	int score = 0;
+	double score = 0;
 	int total = 0;
 	String lang = null; // the programming language used in code question
 	int percent = 0;
@@ -27,12 +27,12 @@
 			lang = request.getParameter(id);
 		}
 		else {
-			String res = request.getParameter(id);
+			String[] res = request.getParameterValues(id);
 			score += Score.correctQues(Integer.parseInt(id), res);
 		}
 	}
 	
-	percent = (int) Math.floor((double) score / (double) total * 100);
+	percent = (int) Math.floor(score / (double) total * 100);
 	
 %>
 

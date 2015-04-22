@@ -12,9 +12,10 @@ public class Score {
 	
 //	public int
 	
-	public static int correctQues(int quesID, String res) {
+	public static double correctQues(int quesID, String[] res) {
 		Question ques = Database.getQues(quesID);
 		return ques.grade(res);
+		
 	}
 	
 	public static int getTotalPoints(int quizID) {

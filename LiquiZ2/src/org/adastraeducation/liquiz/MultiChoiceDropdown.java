@@ -37,11 +37,11 @@ public class MultiChoiceDropdown extends Question {
 		super(id, points, level);
 	}
 	
-	public int grade(String s) {
+	public double grade(String[] s) {
 		ArrayList<Answer> answers = this.getAns();
 		for (int i = 0; i < answers.size(); i++) {
-			if (answers.get(i).getCorrect() && s.equals(answers.get(i).getName())) {
-				return getPoints();
+			if (answers.get(i).getCorrect() && s[0].equals(answers.get(i).getName())) {
+				return (double) getPoints();
 			}
 		}
 		return 0;

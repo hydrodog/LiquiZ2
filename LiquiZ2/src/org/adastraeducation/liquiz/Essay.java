@@ -54,7 +54,7 @@ public class Essay extends Question {
 	}
 	
 	@Override
-	public int grade(String s) {
+	public double grade(String[] s) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

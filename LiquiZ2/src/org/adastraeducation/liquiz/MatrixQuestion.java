@@ -75,12 +75,9 @@ public class MatrixQuestion extends Question {
 		System.out.println(buf);
 	}
 	@Override
-	public int grade(String s) {
+	public double grade(String[] s) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	public boolean isCorrect(DisplayElement d) {
-		// TODO
-		return false;
-	}
+
 }

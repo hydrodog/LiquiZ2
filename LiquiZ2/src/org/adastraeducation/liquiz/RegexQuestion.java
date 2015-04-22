@@ -42,8 +42,8 @@ public class RegexQuestion extends FillIn {
 	/*
 	 * Returns true if regex pattern matches typed answer
 	 */
-	public int grade(String s) {
-		Matcher m = pattern.matcher(s);
+	public double grade(String[] s) {
+		Matcher m = pattern.matcher(s[0]);
 		/*
 		 * TODO: make sure there's nothing else in the answer: ^(red | white | blue)$
 		 * A way to add them ourselves rather than depending on user to remember

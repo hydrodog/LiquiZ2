@@ -51,11 +51,11 @@ public class FillIn extends Question {
 	 * Returns true if typed answer exactly matches a correct answer
 	 */
 	@Override
-	public int grade(String s) {
-		System.out.print(s);
-		for (Answer a : this.getAns()) {
-			if(s.equals(a.getName())) {
-				return getPoints();
+	public double grade(String[] s) {
+		// TODO case sensitive?
+		for (Answer a : getAns()) {
+			if(s[0].equals(a.getName())) {
+				return (double) getPoints();
 			}
 		}
 		return 0;
