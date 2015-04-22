@@ -1,6 +1,5 @@
 package org.adastraeducation.liquiz;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Response implements Displayable {
 	private ArrayList<DisplayElement> displayEls;
