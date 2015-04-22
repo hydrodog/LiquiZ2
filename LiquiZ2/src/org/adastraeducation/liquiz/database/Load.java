@@ -10,7 +10,7 @@ import org.adastraeducation.liquiz.*;
 import org.adastraeducation.liquiz.test.Test;
 
 /**
- * Loading objects based on database information
+ * Loading objects to ArrayLists in Database class based on database information
  * @author yijinkang
  *
  */
@@ -25,14 +25,14 @@ public class Load {
 	}
 
 	public static void loadAll() {
-		loadDispEl();
+		loadDispEls();
 		loadAns();
 		loadQues();
 		loadPolicies();
-		loadQuesCon();
-		loadQuiz();
-		loadCourse();
-		loadUser();
+		loadQuesCons();
+		loadQuizzes();
+		loadCourses();
+		loadUsers();
 		
 		Database.reportSizes();
 	}
@@ -70,7 +70,7 @@ public class Load {
 		}
 	}
 	
-	public static void loadDispEl() {
+	public static void loadDispEls() {
 		System.out.println("Entered loadDispEl");
 		ResultSet rs = null;
 		try {
@@ -186,7 +186,7 @@ public class Load {
 	}
 
 	public static void loadQues() {
-        //TODO: once QuestionFactories are completed
+        //TODO: if/once QuestionFactories are completed
 		ResultSet rs = null;
 		int quesID, points, level;
 		String type;
@@ -196,16 +196,15 @@ public class Load {
 		try {
 			DatabaseMgr.printRemainingConns();
 			String sql = 
-				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, " + 
-				"Ques_Ans.AnsID, Ques_Ans.Correct, Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.LowBound, Questions.HighBound " +
+				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, Ques_Ans.AnsID, Ques_Ans.Correct, " + 
+				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.LowBound, Questions.HighBound " +
 				"FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID " +
 				"ORDER BY Questions.QuesID, Ques_Ans.Sequence ASC";
 			DatabaseMgr.printRemainingConns();
 			rs = DatabaseMgr.execQuery(sql);
 			
 			/*
-			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | Pattern | LowBound | HighBound
-			 * TODO load range here and directly add it to the question
+			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | Pattern | Warning | DefaultText | LowBound | HighBound
 			 */
             
 			if (rs.next()) {
@@ -229,11 +228,13 @@ public class Load {
 						} else if (type.equals("MCRa")) {
 							q = new MultiChoiceRadio(quesID, points, level);
 						} else if (type.equals("Code")) {
-							q = new Code(quesID, points, level, new String()); // TODO: code default text
+							q = new Code(quesID, points, level, rs.getString("DefaultCode"));
 						} else if (type.equals("NumR")) {
 							q = new NumberRange(quesID, points, level);
+						} else if (type.equals("RegX")) { //int id, int points, int level, String regex, String warning
+							q = new RegexQuestion(quesID, points, level, rs.getString("Pattern"), rs.getString("Warning"));
 						} else if (type.equals("Essa")) {
-							q = new Essay(quesID, points, level, new String()); //TODO: essay default text
+							q = new Essay(quesID, points, level, rs.getString("DefaultCode")); 
 						}
 						
 						Database.addQues(q); // add question to database
@@ -306,7 +307,7 @@ public class Load {
 	/**
 	 * loads all QuesCons to Database.quesCons
 	 */
-	public static void loadQuesCon() {
+	public static void loadQuesCons() {
 		ResultSet rs = null;
 
 		try {
@@ -368,7 +369,7 @@ public class Load {
 	/**
 	 * loads all Quizzes to Database.quizzes
 	 */
-	public static void loadQuiz() {
+	public static void loadQuizzes() {
 		ResultSet rs = null;
 		try {
 			rs = DatabaseMgr.execQuery("SELECT Quizzes.QuizID, Quizzes.Name, Quizzes.Desc, Quizzes.PolID, Quizzes.Privacy, Quizzes_QuesCons.QuesConID FROM Quizzes LEFT JOIN Quizzes_QuesCons ON Quizzes.QuizID = Quizzes_QuesCons.QuizID ORDER BY Quizzes.QuizID, Quizzes_QuesCons.Sequence ASC");
@@ -405,7 +406,7 @@ public class Load {
 	/**
 	 * loads all Courses to Database.courses
 	 */
-	public static void loadCourse() {
+	public static void loadCourses() {
 		ResultSet rs = null;
 		
 		try {
@@ -440,7 +441,7 @@ public class Load {
 	/**
 	 * loads all Users to Database.users
 	 */
-	public static void loadUser() {
+	public static void loadUsers() {
 		ResultSet rs = null;
 		
 		try {
@@ -527,13 +528,4 @@ public class Load {
 		}
 		return d;
 	}
-	
-	/*
-	 * two types of methods:
-	 * questions, answers, DispEls load one at a time and return
-	 * Users, Courses, Policies, Quizzes, Question Containers, StdChoicess load everything 
-	 * (they'll call the above methods so the needed ones will be loaded as well)
-	 * TODO: Student Grade/QuizScore/Response load everything too but where to put it? 
-	 * 2D array?
-	 */
 }

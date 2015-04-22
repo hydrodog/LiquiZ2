@@ -85,7 +85,9 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `Points` INT NOT NULL,
   `Level` INT NULL,
   `QuesType` CHAR(4) NOT NULL,
-  `Pattern` VARCHAR(10) NULL, -- for regex
+  `Pattern` VARCHAR(255) NULL, -- for regex
+  `Warning` VARCHAR(255) NULL, -- for regex warnings
+  `DefaultCode` VARCHAR(255) NULL, -- for code questions
   `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
   `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
   PRIMARY KEY (`QuesID`),

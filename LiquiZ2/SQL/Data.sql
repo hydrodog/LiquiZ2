@@ -241,6 +241,25 @@ INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
 VALUES (5, 2, 6, "Ques");
 
 
+-- Seventh QC
+INSERT INTO QuesCon
+VALUES (7, "Regex Question");
+
+-- Elements to go into third qc
+INSERT INTO DisplayElements(DispElID, TextElement, DispType)
+VALUES (35, "A regex question?", "txt");
+
+-- Question and answers
+INSERT INTO Questions (QuesID, Points, Level, QuesType, Pattern)
+VALUES (8, 0, 0, RegX, "PUT PATTERN HERE");
+
+-- Add DispEls and Questions to qc
+INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
+VALUES (7, 1, 35, "Elem");
+INSERT INTO QuesConElements(QuesConID, Sequence, QuesID, Type)
+VALUES (7, 2, 8, "Ques");
+
+
 
 
 
