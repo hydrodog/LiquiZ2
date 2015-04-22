@@ -197,14 +197,14 @@ public class Load {
 			DatabaseMgr.printRemainingConns();
 			String sql = 
 				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, Ques_Ans.AnsID, Ques_Ans.Correct, " + 
-				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.LowBound, Questions.HighBound " +
+				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.CaseSensitive, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.LowBound, Questions.HighBound " +
 				"FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID " +
 				"ORDER BY Questions.QuesID, Ques_Ans.Sequence ASC";
 			DatabaseMgr.printRemainingConns();
 			rs = DatabaseMgr.execQuery(sql);
 			
 			/*
-			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | Pattern | Warning | DefaultText | LowBound | HighBound
+			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | CaseSensitive | Pattern | Warning | DefaultText | LowBound | HighBound
 			 */
             
 			if (rs.next()) {
