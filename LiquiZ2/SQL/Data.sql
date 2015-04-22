@@ -127,7 +127,7 @@ VALUES (30, "Select all animals from the list", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType)
-VALUES (7, 5, 3, "Mult");
+VALUES (7, 4, 3, "Mult");
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (31, "Dog", "txt");
