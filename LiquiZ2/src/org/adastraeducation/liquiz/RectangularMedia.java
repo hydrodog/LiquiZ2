@@ -5,7 +5,7 @@ public abstract class RectangularMedia extends Media {
 	private int height;
 	
 	public RectangularMedia(){
-		super();	
+		super();
 	}
 	
 	/*********************Added getters and setters for serialization*************************************/
