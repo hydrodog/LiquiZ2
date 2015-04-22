@@ -232,7 +232,11 @@ public class Load {
 						} else if (type.equals("NumR")) {
 							q = new NumberRange(quesID, points, level);
 						} else if (type.equals("RegX")) { //int id, int points, int level, String regex, String warning
-							q = new RegexQuestion(quesID, points, level, rs.getString("Pattern"), rs.getString("Warning"));
+							if(!rs.getString("Pattern").equals(null)) { // Contains the pattern directly
+								q = new RegexQuestion(quesID, points, level, rs.getString("Pattern"), rs.getString("Warning"), false);
+							} else { // Contains only the stored regex's name
+								q = new RegexQuestion(quesID, points, level, rs.getString("PatternName"), rs.getString("Warning"), true);
+							}
 						} else if (type.equals("Essa")) {
 							q = new Essay(quesID, points, level, rs.getString("DefaultCode")); 
 						}

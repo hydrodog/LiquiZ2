@@ -17,9 +17,13 @@ public class RegexQuestion extends FillIn {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public RegexQuestion(int id, int points, int level, String regex, String warning) {
+	public RegexQuestion(int id, int points, int level, String regex, String warning, boolean byName) {
 		super(id,points,level,(ArrayList<Answer>) null);
-		this.pattern = Pattern.compile(regex);
+		if (byName) {
+			this.pattern = NamedObjects.getRegexPattern(regex);
+		} else {
+			this.pattern = Pattern.compile(regex);
+		}
 		this.warning = warning;
 	}
 

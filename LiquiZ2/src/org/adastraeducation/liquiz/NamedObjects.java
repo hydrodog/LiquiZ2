@@ -70,6 +70,16 @@ public class NamedObjects {
 		return copy;
 	}
 	
+	public static Pattern getRegexPattern(String patName) {
+		// Iterate through the categories and look for the pattern name
+		for (HashMap<String, Pattern> cat : lookUpPattern.values()) {
+			if(cat.containsKey(patName)) {
+				return cat.get(patName);
+			}
+		}
+		return null; 
+	}
+	
 	public static Pattern getRegexPattern(String catName, String patName) {
 		return lookUpPattern.get(catName).get(patName);
 	}
