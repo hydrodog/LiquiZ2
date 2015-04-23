@@ -1,0 +1,59 @@
+package org.adastraeducation.liquiz;
+
+import java.util.ArrayList;
+
+import org.adastraeducation.liquiz.util.Util;
+
+public class FileUpload extends Question {
+
+	private String label;
+
+	public FileUpload() {
+		label = "Submit";
+	}
+
+	public FileUpload(int id, int level, int points,String label) {
+		super(id, level, points, (ArrayList<Answer>) null);
+		this.label = label;
+	}
+	
+
+	/*******************Added getter and setter for serialization*************************/
+	public String getLabel(){
+		return label;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	public String getTagName() {
+		return "Button";
+	}
+
+	public void writeHTML(StringBuilder b ){	
+		b.append("<input type=\"file\" id=\"upload\" name=\"upload\" style=\"visibility: hidden; width: 1px; height: 1px\" multiple />");
+		b.append("<button name='' class='button' onClick=document.getElementById('upload').click(); return false;>");
+		//TODO: check that this text is properly escaped for HTML
+		b.append(label);
+		b.append("</button>");
+		
+ 	}
+
+	public void writeJS(StringBuilder b ) {
+		b.append("fileUpload");
+	}
+	public void writeXML(StringBuilder b ) {
+		b.append("<fileUpload/>");
+	}
+
+	public boolean isAutomaticGrading() {
+		return true;
+	}
+	
+	@Override
+	public double grade(String[] s) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}

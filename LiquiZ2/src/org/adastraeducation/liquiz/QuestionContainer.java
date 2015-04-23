@@ -14,6 +14,10 @@ public class QuestionContainer implements Displayable {
 		this.name = name;
 		displayables = new ArrayList<Displayable>(Arrays.asList(list));
 	}
+	public QuestionContainer(String name, ArrayList<Displayable> list) {
+		this.name = name;
+		displayables = new ArrayList<Displayable>(list);
+	}
 	public QuestionContainer(int id, String name, Displayable[] list) {
 		this.id = id;
 		this.name = name;
