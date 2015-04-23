@@ -86,4 +86,10 @@ public class Var implements Expression{
 	public void rpnReplaceVar(StringBuilder b){
 		b.append(operand);
 	}
+
+	public double randOperand()
+	{
+		operand=Quiz.random(min,  max, step);
+		return operand;
+	}
 }

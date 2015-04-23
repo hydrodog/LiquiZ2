@@ -1,8 +1,15 @@
 package org.adastraeducation.liquiz.equation;
-import java.util.*;
-import java.util.regex.*;
 
-import org.adastraeducation.liquiz.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.adastraeducation.liquiz.Displayable;
 
 /**
  * Present equations with random variables.
@@ -15,6 +22,7 @@ public class Equation implements Displayable {
 	private Expression func;
 	private double correctAnswer;
 	private HashMap<String,Var> variables;
+	private String equation;
 	
 	public Expression getFunc(){
 		return this.func; 
@@ -49,6 +57,7 @@ public class Equation implements Displayable {
 		ArrayList<String> equationSplit = this.parseQuestion(equation);
 		this.func = this.parseInfix(equationSplit);
 		correctAnswer = func.eval();
+		this.setEquation(equation);
 	}
 	
 	public Equation(Expression func, HashMap<String,Var> variables){
@@ -205,5 +214,22 @@ public class Equation implements Displayable {
 	public void writeJS(StringBuilder b) {
 		
 	}
+
+	public String getEquation() {
+		return equation;
+	}
+
+	public void setEquation(String equation) {
+		this.equation = equation;
+	}
 	
+	public void randomVar()
+	{
+		Iterator<Entry<String, Var>> it = variables.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<String, Var> pair = (Map.Entry<String, Var>)it.next();
+	        pair.getValue().randOperand();
+	    }
+		correctAnswer=func.eval();
+	}
 }

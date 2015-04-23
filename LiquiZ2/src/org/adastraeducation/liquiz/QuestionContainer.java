@@ -22,6 +22,10 @@ public class QuestionContainer implements Displayable {
 	public ArrayList<Displayable> getDisplayables() {
 		return this.displayables;
 	}
+
+	public QuestionContainer( Displayable[] list) {
+		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+	}
 	
 	public void setDisplayables(ArrayList<Displayable> d){
 		displayables = d;

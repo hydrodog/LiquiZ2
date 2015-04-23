@@ -34,6 +34,32 @@ public class Test {
 			e.printStackTrace();
 		}
 	}
+	public static Quiz test() {
+		//for Equation and Fillin, no WarningPattern
+		Quiz quiz = new Quiz();
+		Var x = new Var("x", 0, 99, 1);
+		Var y = new Var("y", 0, 99, 1);
+		HashMap<String,Var> map = new HashMap<String,Var>();
+		map.put("x",x);
+		map.put("y", y);
+		Equation eq = new Equation(	"x+y",map);
+		EquationQuestion eqQ = new EquationQuestion(eq,"[x]+[y]=[?];");
+		QuestionContainer qc = new QuestionContainer(new Displayable[] {eqQ});
+		
+
+		Var a = new Var("a", 0, 99, 1);
+		Var b = new Var("b", 0, 99, 1);
+		map = new HashMap<String,Var>();
+		map.put("a", a);
+		map.put("b", b);
+		eq = new Equation("a+b-1",map);
+		EquationQuestion eqQ1 = new EquationQuestion(eq,"<br>int a = [a];<br>int b = [b];<br>cout<< (a++) + (--b) << endl;<br>//result:[?];");
+		
+		QuestionContainer qc1 = new QuestionContainer(new Displayable[] {eqQ1});
+		quiz.addQuestionContainer(qc);
+		quiz.addQuestionContainer(qc1);
+		return quiz;
+	}
 	public static Quiz test1() {
 		Quiz quiz = new Quiz();
 		quiz.setId(1);
@@ -254,18 +280,20 @@ public class Test {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		testOutput("output/test1", test1());
+//		testOutput("output/test1", test1());
 //		testOutput("output/test2", test2());
-		testOutput("output/test3", test3());
-		testOutput("output/test4", test4());
-
-		/*testing Course*/
-		Course testCourse = new Course(1, "Test Course");
-		testCourse.addQuiz(test1());
+//		testOutput("output/test3", test3());
+//		testOutput("output/test4", test4());
+//
+//		/*testing Course*/
+//		Course testCourse = new Course(1, "Test Course");
+//		testCourse.addQuiz(test1());
 //		testCourse.addQuiz(test2());
-		testCourse.addQuiz(test3());
-		testCourse.addQuiz(test4());
-		testOutput("output/quizList", testCourse);
+//		testCourse.addQuiz(test3());
+//		testCourse.addQuiz(test4());
+//		testOutput("output/quizList", testCourse);
+		Quiz q =  test();
+		testOutput("output/quiz1",q);
 	}
 
 }
