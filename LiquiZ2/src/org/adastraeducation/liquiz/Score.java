@@ -26,7 +26,11 @@ public class Score {
 		return Database.getQuiz(quizID).needsGrading();
 	}
 	
-	public static void saveScore(int userID, int quizID, int score) {
-		// TODO: database storage
+	public static void saveStudentResponse(int userID, int quesID, String[] res, boolean correct, double score, int attemptNum) {
+		// TODO: Database ArrayList and mysql database storage using methods from Create
+	}
+	
+	public static void saveStudentQuizScore(int userID, int quizID, double score, int attemptNum) {
+		// TODO: Database ArrayList and mysql database storage using methods from Create
 	}
 }

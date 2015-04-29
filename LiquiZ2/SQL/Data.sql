@@ -413,15 +413,15 @@ VALUES (2, "A", "A", "aa", "password", "abcd@gmail.com");
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (24, "Blue", "txt");
 INSERT INTO StudentResponses
-VALUES (2, 1, 24, 1);
+VALUES (2, 1, 24, 1, 3, 1);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (25, "Cat", "txt");
 INSERT INTO StudentResponses
-VALUES (2, 2, 25, 1);
+VALUES (2, 2, 25, 1, 5, 1);
 
 INSERT INTO StudentQuizScores
-VALUES (1, 1, 100);
+VALUES (1, 1, 100, 1);
 
 INSERT INTO StudentGrades
 VALUES (1, 1, 100);

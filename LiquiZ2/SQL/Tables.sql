@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `Pattern` VARCHAR(255) NULL, -- for regex
   `PatternName` VARCHAR(255) NULL, -- to use stored regex
   `Warning` VARCHAR(255) NULL, -- for regex warnings
-  `DefaultText` VARCHAR(255) NULL, -- for code questions
+  `DefaultText` VARCHAR(255) NULL, -- for code/essay questions
   `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
   `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
   PRIMARY KEY (`QuesID`),
@@ -238,10 +238,13 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`UserPermissions` (
 DROP TABLE IF EXISTS `LiquiZ`.`StudentResponses` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentResponses` (
-  `Student` INT NOT NULL,
-  `Ques` INT NOT NULL,
-  `Response` INT NOT NULL,
-  `Correct` BIT(1) NULL);
+  `UserID` INT NOT NULL,
+  `QuesID` INT NOT NULL,
+  `DispElID` INT NOT NULL, -- null?
+  `Correct` BIT(1) NULL,
+  `QuesScore` DOUBLE NOT NULL,
+  `AttemptNum` INT NOT NULL
+  );
 
 
 -- -----------------------------------------------------
@@ -250,9 +253,11 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentResponses` (
 DROP TABLE IF EXISTS `LiquiZ`.`StudentQuizScores` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentQuizScores` (
-  `Student` INT NOT NULL,
-  `Quiz` INT NOT NULL,
-  `Score` INT NOT NULL);
+  `UserID` INT NOT NULL,
+  `QuizID` INT NOT NULL,
+  `Score` DOUBLE NOT NULL,
+  `AttemptNum` INT NOT NULL
+  );
 
 
 -- -----------------------------------------------------
