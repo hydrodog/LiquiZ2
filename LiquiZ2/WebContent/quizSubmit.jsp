@@ -13,22 +13,21 @@
 
 <div class='quiz'> <!-- temporarily called quiz for styling purposes -->
 <% 
-	int quizID = Integer.parseInt(request.getParameter("quizID"));
 	Enumeration<String> quesIDs = request.getParameterNames();
+	int quizID = 0;
 	double score = 0;
 	int total = 0;
-	String lang = null; // the programming language used in code question 
-	// TODO: if multiple code questions?
 	int percent = 0;
+	String lang = null; // the programming language used in code question 
 
 	while (quesIDs.hasMoreElements()) {
 		String id = quesIDs.nextElement();
 		if(id.equals("quizID")) {
-			total = Score.getTotalPoints(Integer.parseInt(request.getParameter(id)));
-		} else if (id.equals("selectLang")) {
-			lang = request.getParameter(id);
-		}
-		else {
+			quizID = Integer.parseInt(request.getParameter(id));
+			total = Score.getTotalPoints(quizID);
+		} else if (id.substring(0, 10).equals("selectLang")) {
+			lang = request.getParameter(id); // TODO: if multiple code questions?
+		} else { // Questions
 			String[] res = request.getParameterValues(id);
 			score += Score.correctQues(Integer.parseInt(id), res);
 		}
@@ -39,7 +38,7 @@
 %>
 
 <div class="quesHeader">
-Your quiz (ID <%= request.getParameter("quizID") %>) has been submitted.
+Your quiz (ID <%= quizID %>) has been submitted.
 </div>
 
 <div class="question">
@@ -53,9 +52,9 @@ Your score for this quiz is <%= score %> out of <%= total %> possible points, wh
 </div>
 
 <% if (Database.getQuiz(quizID).getPolicy().getShowAns()) { %>
-<!-- show quiz with given answers & correct answers -->
+<!-- show quiz with responses, given answers & correct answers -->
 <% } else { %>
-<!-- show quiz with given answers -->
+<!-- show quiz with responses, given answers -->
 <% } %>
 
 </div>
