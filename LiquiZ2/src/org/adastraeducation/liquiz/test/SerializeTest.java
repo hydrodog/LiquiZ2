@@ -39,16 +39,16 @@ public class SerializeTest {
 		quiz.setName("Animals");
 		// for multiChoiceDropDown
 		QuestionContainer qc = new QuestionContainer("Dinosaurs",
-			new Displayable[] {
-				new Text("What is a dinosaur?"),
-				new MultiChoiceDropdown(1, 1,
-					new ArrayList<Answer>(Arrays.asList(
-						new Answer(new Text("T-Rex"), true),
-						new Answer(new Text("Shark")),
-						new Answer(new Text("mouse"))
+				new ArrayList<Displayable> (Arrays.asList(
+						new Text("What is a dinosaur?"),
+						new MultiChoiceDropdown(1, 1,
+								new ArrayList<Answer>(Arrays.asList(
+									new Answer(new Text("T-Rex"), true),
+									new Answer(new Text("Shark")),
+									new Answer(new Text("mouse"))
+								))
+						)
 					))
-				)
-			}
 		);
 		quiz.addQuestionContainer(qc);
 		
@@ -61,13 +61,13 @@ public class SerializeTest {
 		Equation eq = new Equation(	"x+y",map);
 		
 		qc = new QuestionContainer("Math",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
 				eq,
 				new Text("?"),
 				new FillIn(3, 1, new Answer(new Text("1"), true))
-			}
-			);
+			))
+		);
 		quiz.addQuestionContainer(qc);
 		
 		//for Equation and Fillin, with WarningPattern
@@ -79,31 +79,31 @@ public class SerializeTest {
 		Equation eq1 = new Equation("x1+y1",map);
 		
 		qc = new QuestionContainer("Math",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
 				eq1,
 				new Text("?"),
-				new NumberRange(1, 3, 2, 0, 99) //id 1, 3 points, level 2, accept 0 to 99 as correct
-			}
-			);
+				new NumberRange(1, 3, 2, 0.0, 99.0) //id 1, 3 points, level 2, accept 0 to 99 as correct
+			))
+		);
 		quiz.addQuestionContainer(qc);
 
 		qc = new QuestionContainer("Characterization",
-				new Displayable[] {
-					new Video("1.mpg",0,0),
-					new Text("Describe the main character in the video in 200 words or less"),
-					new Essay()
-				}
-			);
+			new ArrayList<Displayable> (Arrays.asList(
+				new Video("1.mpg",0,0),
+				new Text("Describe the main character in the video in 200 words or less"),
+				new Essay()
+			))
+		);
 		quiz.addQuestionContainer(qc);
 		
 		qc = new QuestionContainer("Listening Skills",
-				new Displayable[] {
-					new Text("Listen to the audio clip and write down the words"),
-					new Audio("1.mp3"),
-					new FillIn(5,1,new Answer(new Text("words, words, words")))
-				}
-			);
+			new ArrayList<Displayable> (Arrays.asList(
+				new Text("Listen to the audio clip and write down the words"),
+				new Audio("1.mp3"),
+				new FillIn(5,1,new Answer(new Text("words, words, words")))
+			))
+		);
 		quiz.addQuestionContainer(qc);
 
 		// create two random 3x3 matrices filled with integers [-3..3]
@@ -112,13 +112,13 @@ public class SerializeTest {
 		// create a 3x3 matrix worth 1 point, level 1
 		MatrixQuestion m3 = new MatrixQuestion(1, 1, 3, 3);
 		quiz.addQuestionContainer(qc = new QuestionContainer("Matrix Math",
-			new Displayable[] {
+				new ArrayList<Displayable> (Arrays.asList(
 				new Text("Solve the matrix addition"),
 				m1,
 				new Text("+"),
 				m2,
 				m3
-			}
+			))
 		));
 
 		return quiz;
@@ -141,19 +141,29 @@ public class SerializeTest {
 		);
 		/*
 		QuestionContainer qc = new QuestionContainer(
-			new Displayable[] {
-				new Text("Fill in the following code"),
-				new FillIn(1, 1, 1),
+			new ArrayList<Displayable> (Arrays.asList(
+				new Text("Fill in the following code<br>"),
+				new FillIn(1, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("public"), true, r1)
+				))),
 				new Text("class A "),
-				new FillIn(2, 1, 1, "{"),
-				new Text("\n  "),
-				new FillIn(3, 1, 1, "private"),
-				new Text(" int x;\n  "),
-				new FillIn(4, 1, 1, "public"),
-				new FillIn(5, 1, 1, "A"),
-				new Text("() {\n"),
-				new Text("  x = 2;\n}\n")
-			}
+				new FillIn(2, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("{"), true, r1)
+				))),
+				new Text("<br>&nbsp;&nbsp;&nbsp;"),
+				new FillIn(3, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("private"), true, r1)
+				))),
+				new Text(" int x;<br>&nbsp;&nbsp;&nbsp;"),
+				new FillIn(4, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("public"), true, r1)
+				))),
+				new FillIn(5, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("A"), true, r1)
+				))),
+				new Text("() {<br>&nbsp;&nbsp;&nbsp;"),
+				new Text("x = 2;<br>}")
+			))
 		);
 		quiz.addQuestionContainer(qc);
 		*/
@@ -167,26 +177,26 @@ public class SerializeTest {
 		Quiz quiz = new Quiz();
 		quiz.setName("Multimedia Quiz");
 		QuestionContainer qc = new QuestionContainer("Multimedia Questions",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Video("video1.mp4",480, 360),
-				new Text("What is this video about ?"),
+				new Text("What is this video about?"),
 				new MultiChoiceDropdown(4, 5,
-					new ArrayList<Answer>(Arrays.asList(
+					new ArrayList<>(Arrays.asList(
 						new Answer(new Text("Train")),
-					    new Answer(new Text("Cable Car")),
-					    new Answer(new Text("Bus"))
+						new Answer(new Text("Cable Car")), 
+						new Answer(new Text("Bus"))
 					))
 				),
 				new Audio("audio1.mp3"),
-				new Text("What animal sounds like this ?"),
+				new Text("What animal sounds like this?"),
 				new MultiChoiceDropdown(4, 5,
-					new ArrayList<Answer>(Arrays.asList(
+					new ArrayList<>(Arrays.asList(
 						new Answer(new Text("Cat")),
-					    new Answer(new Text("Dog")), 
-					    new Answer(new Text("Horse"))
+						new Answer(new Text("Dog")), 
+						new Answer(new Text("Horse"))
 					))
 				)
-			}
+			))
 		);
 		quiz.addQuestionContainer(qc);
 		return quiz;
@@ -196,19 +206,19 @@ public class SerializeTest {
 		Quiz quiz = new Quiz();
 		quiz.setName("Multiple- Quiz");
 		QuestionContainer qc = new QuestionContainer("Some multiple choice questions",
-			new Displayable[] {
-				new Text("Can all birds fly ?"),
-				new MultiChoiceDropdown(1, 5, "Poll"),
-				new Text("What is the complexity of BubbleSort ?"),
+			new ArrayList<Displayable> (Arrays.asList(
+//				new Text("Can all birds fly?"),
+//				new MultiChoiceDropdown(1, 5, "Poll"),
+				new Text("What is the complexity of BubbleSort?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
-				new Text("What is the complexity of QuickSort?"),
-				new MultiChoiceRadio(1, 5, "Complexity"),
-				new Text("What are the colors of an apple ?"),
-				new MultiAnswer(1, 5, "Colors", new int []{2,3}),
-				new Text("Name the insects:"),
-				new MultiAnswer(1, 5, "Insects", new int []{3,4,5})
-	
-			}
+				new Text("<br>What is the complexity of QuickSort?"),
+				new MultiChoiceRadio(1, 5, "Complexity") //,
+//				new Text("What are the colors of an apple ?"),
+//				new MultiAnswer(1, 5, "Colors", new int []{2,3}),
+//				new Text("Name the insects:"),
+//				new MultiAnswer(1, 5, "Insects", new int []{3,4,5})
+			
+			))
 		);
 		quiz.addQuestionContainer(qc);
 		return quiz;

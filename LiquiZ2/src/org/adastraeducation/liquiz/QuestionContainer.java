@@ -10,25 +10,21 @@ public class QuestionContainer implements Displayable {
 	public QuestionContainer() {
 		displayables = new ArrayList<Displayable>();
 	}
-	public QuestionContainer(String name, Displayable[] list) {
-		this.name = name;
-		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+	public QuestionContainer(ArrayList<Displayable> list) {
+		displayables = list;
 	}
 	public QuestionContainer(String name, ArrayList<Displayable> list) {
 		this.name = name;
 		displayables = new ArrayList<Displayable>(list);
 	}
-	public QuestionContainer(int id, String name, Displayable[] list) {
+	public QuestionContainer(int id, String name, ArrayList<Displayable> list) {
 		this.id = id;
 		this.name = name;
-		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+		displayables = list;
 	}
+	
 	public ArrayList<Displayable> getDisplayables() {
-		return this.displayables;
-	}
-
-	public QuestionContainer( Displayable[] list) {
-		displayables = new ArrayList<Displayable>(Arrays.asList(list));
+		return displayables;
 	}
 	
 	public void setDisplayables(ArrayList<Displayable> d){
@@ -74,8 +70,8 @@ public class QuestionContainer implements Displayable {
 		for (Displayable d : displayables) {
 			d.writeHTML(b);
 			b.append("\n");
-			//TODO: should there be a new line or a space separating each? 
-			//should we create objects to represent spaces & newlines?
+			// TODO: should there be a new line or a space separating each? 
+			// should we create objects to represent spaces & newlines?
 		}
 		b.append("</div>\n\n");
 	}

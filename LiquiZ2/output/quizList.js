@@ -1,1 +1,1 @@
-quizList([quizref('Animals',1),quizref('Multimedia Quiz',0),quizref('Multiple- Quiz',0)])
+quizList([quizref('Animals',1),quizref('This has responses',0),quizref('Multimedia Quiz',0),quizref('Multiple- Quiz',0)])
