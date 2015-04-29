@@ -77,10 +77,11 @@ public class Answer implements Displayable, Cloneable {
 		return new Answer(id, ans, correct, res);
 	}
 
-	public void writeHTML(StringBuilder b) {
-		ans.writeHTML(b);
+	public void writeHTML(DisplayContext dc) {
+		ans.writeHTML(dc);
 		
 	}
+	
 	public void writeJS(StringBuilder b) {
 //		b.append('\'').append(ans).append('\'');
 	}

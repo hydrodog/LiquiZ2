@@ -92,6 +92,15 @@ public abstract class Question implements Displayable {
 		return answers;
 	}
 	
+	public Response getResponseFor(String answer) {
+		for (Answer ans : getAns()) {
+			if (answer.equals(ans.getName())) {
+				return ans.getResponse();
+			}
+		}
+		return null;
+	}
+	
 	protected void writeAttrs(StringBuilder b) {
 		writeAttr(b, "id", id);
 		writeAttr(b, "level", String.valueOf(level));

@@ -28,12 +28,12 @@ public class Response implements Displayable {
 		displayEls.remove(d);
 	}
 
-	public void writeHTML (StringBuilder b) {
-		b.append("<div class='response'>\n");
+	public void writeHTML (DisplayContext dc) {
+		dc.append("<div class='response'>\n");
 		for (Displayable d : displayEls) {
-			d.writeHTML(b);
+			d.writeHTML(dc);
 		}
-		b.append("</div>\n");
+		dc.append("</div>\n");
 	}
 
 	public void writeXML (StringBuilder b) {

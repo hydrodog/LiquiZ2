@@ -31,12 +31,12 @@ public class FileUpload extends Question {
 		return "Button";
 	}
 
-	public void writeHTML(StringBuilder b ){	
-		b.append("<input type=\"file\" id=\"upload\" name=\"").append(getId()).append("\" style=\"visibility: hidden; width: 1px; height: 1px\" multiple />");
-		b.append("<button name='' class='button' onClick=document.getElementById('upload').click(); return false;>");
+	public void writeHTML(DisplayContext dc ){	
+		dc.append("<input type=\"file\" id=\"upload\" name=\"").append(getId()).append("\" style=\"visibility: hidden; width: 1px; height: 1px\" multiple />");
+		dc.append("<button name='' class='button' onClick=document.getElementById('upload').click(); return false;>");
 		//TODO: check that this text is properly escaped for HTML
-		b.append(label);
-		b.append("</button>");
+		dc.append(label);
+		dc.append("</button>");
  	}
 	
 	public void writeJS(StringBuilder b ) {

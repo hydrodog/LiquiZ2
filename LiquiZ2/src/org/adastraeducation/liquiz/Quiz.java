@@ -144,18 +144,18 @@ public class Quiz implements Displayable {
 	}
 	
 
-	public void writeHTML (StringBuilder b)	{
+	public void writeHTML (DisplayContext dc)	{
 		//TODO: everyone add className to each object
 		// if it is null, don't add a classname
 		// if it is a string, append (as below)
-		b.append("<h2>").append(getName()).append("</h2>");
-		b.append("<form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>\n");
+		dc.append("<h2>").append(getName()).append("</h2>");
+		dc.append("<form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>\n");
 		for(QuestionContainer qc : this.qContainers) {
-			qc.writeHTML(b);
+			qc.writeHTML(dc);
 		}
-		b.append("\n<input type='hidden' name='quizID' value='").append(getId()).append("'>\n");
-		b.append("\n<input type='submit' value='Submit'>\n");
-		b.append("</form>\n");
+		dc.append("\n<input type='hidden' name='quizID' value='").append(getId()).append("'>\n");
+		dc.append("\n<input type='submit' value='Submit'>\n");
+		dc.append("</form>\n");
  	}
 	
 	public void writeXML (StringBuilder b) {

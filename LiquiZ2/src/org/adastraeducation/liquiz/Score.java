@@ -2,15 +2,6 @@ package org.adastraeducation.liquiz;
 import org.adastraeducation.liquiz.database.*;
 
 public class Score {
-//	private int quesID;
-//	private String res;
-//	
-//	public Score(int quesID, String res) {
-//		this.quesID = quesID;
-//		this.res = res;
-//	}
-	
-//	public int
 	
 	public static double correctQues(int quesID, String[] res) {
 		Question ques = Database.getQues(quesID);

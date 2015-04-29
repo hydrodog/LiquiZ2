@@ -64,16 +64,16 @@ public class QuestionContainer implements Displayable {
 		return totalPoints;
 	}
 	
-	public void writeHTML (StringBuilder b) {
-		b.append("<div class='quesHeader'>").append(getName()).append(": ").append(getTotalPoints()).append(" points</div>");
-		b.append("<div class='question'>\n");
+	public void writeHTML (DisplayContext dc) {
+		dc.append("<div class='quesHeader'>").append(getName()).append(": ").append(getTotalPoints()).append(" points</div>");
+		dc.append("<div class='question'>\n");
 		for (Displayable d : displayables) {
-			d.writeHTML(b);
-			b.append("\n");
+			d.writeHTML(dc);
+			dc.append("\n");
 			// TODO: should there be a new line or a space separating each? 
 			// should we create objects to represent spaces & newlines?
 		}
-		b.append("</div>\n\n");
+		dc.append("</div>\n\n");
 	}
 
 	public void writeXML (StringBuilder b) {

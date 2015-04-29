@@ -228,9 +228,9 @@ public class SerializeTest {
 			throws IOException {
 		FileWriter fw = new FileWriter(filename);
 		fw.write(header);
-		StringBuilder b = new StringBuilder(65536);
-		d.writeHTML(b);
-		fw.write(b.toString());
+		DisplayContext dc = new DisplayContext();
+		d.writeHTML(dc);
+		fw.write(dc.toString());
 		fw.write(trailer);
 		fw.close();
 	}

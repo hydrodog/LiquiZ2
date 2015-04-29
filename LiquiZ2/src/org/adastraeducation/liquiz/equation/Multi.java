@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Multi implements Expression{
 	private Expression op1;
 	private Expression op2;
@@ -32,16 +34,16 @@ public class Multi implements Expression{
 		b.append("*");
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		op1.infixReplaceVar(b);
-		b.append("*");
+	public void infixReplaceVar(DisplayContext dc){
+		op1.infixReplaceVar(dc);
+		dc.append("*");
 		if(op2 instanceof Var ){
-			op2.infixReplaceVar(b);
+			op2.infixReplaceVar(dc);
 		}
 		else{
-			b.append("(");
-			op2.infixReplaceVar(b);
-			b.append(")");
+			dc.append("(");
+			op2.infixReplaceVar(dc);
+			dc.append(")");
 		}
 	}
 	

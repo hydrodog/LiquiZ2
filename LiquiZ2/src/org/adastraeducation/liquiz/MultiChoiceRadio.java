@@ -27,16 +27,21 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 		super(id, points, level);
 	}
 	
-	public void writeHTML(StringBuilder b) {
-		b.append("<div class='radio'>\n");
-		for (Answer ans : this.getAns()) {
-			b.append("<input type='radio' name='" + getId() + "' value='" + ans.getName() + "'> ");
-			ans.writeHTML(b);
-			b.append(" <br>\n ");
+	public void writeHTML(DisplayContext dc) {
+		if(dc.isDisplayAnswers()) {
+			
+		} else if (dc.isDisplayResponses()) {
+			
+		} else {
+			dc.append("<div class='radio'>\n");
+			for (Answer ans : this.getAns()) {
+				dc.append("<input type='radio' name='" + getId() + "' value='" + ans.getName() + "'> ");
+				ans.writeHTML(dc);
+				dc.append(" <br>\n ");
+			}
+			
+			dc.append("</div>\n");
 		}
-		
-		b.append("</div>\n");
-
 	}
 
 	public void writeJS(StringBuilder b ) {

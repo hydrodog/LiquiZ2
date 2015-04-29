@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Sqrt implements Expression{
 	private Expression op;
 	
@@ -22,10 +24,10 @@ public class Sqrt implements Expression{
 		b.append("sqrt");
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		b.append("sqrt(");
-		op.infixReplaceVar(b);
-		b.append(")");
+	public void infixReplaceVar(DisplayContext dc){
+		dc.append("sqrt(");
+		op.infixReplaceVar(dc);
+		dc.append(")");
 	}
 	
 	public void rpnReplaceVar(StringBuilder b){

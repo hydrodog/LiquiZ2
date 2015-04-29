@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Cos implements Expression{
 	private Expression op;
 	
@@ -22,10 +24,10 @@ public class Cos implements Expression{
 		b.append("cos");
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		b.append("cos(");
-		op.infixReplaceVar(b);
-		b.append(")");
+	public void infixReplaceVar(DisplayContext dc){
+		dc.append("cos(");
+		op.infixReplaceVar(dc);
+		dc.append(")");
 	}
 	
 	public void rpnReplaceVar(StringBuilder b){

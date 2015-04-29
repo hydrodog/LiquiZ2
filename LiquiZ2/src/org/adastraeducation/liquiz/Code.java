@@ -26,17 +26,17 @@ public class Code extends Question {
 	
 	//TODO: compile button, compile & run button; compare with desired output
 
-	public void writeHTML(StringBuilder b ){
-		b.append("<br>Choose your language:");
-		b.append("<select name='selectLang" + getId() + "' form='quizForm'>\n")
+	public void writeHTML(DisplayContext dc ){
+		dc.append("<br>Choose your language:");
+		dc.append("<select name='selectLang" + getId() + "' form='quizForm'>\n")
 			.append("<option value='C++'>C++</option>\n")
 			.append("<option value='Java'>Java</option>\n")
 			.append("</select>\n");
 		//TODO: make list of languages defined in object
-		b.append("<textarea name='' rows='10' cols='50' form='quizForm' class='code'>");
+		dc.append("<textarea name='' rows='10' cols='50' form='quizForm' class='code'>");
 		//TODO: check that this text is properly escaped for HTML
-		b.append(defaultText);
-		b.append("</textarea>");
+		dc.append(defaultText);
+		dc.append("</textarea>");
  	}
 
 	public void writeJS(StringBuilder b) {

@@ -24,8 +24,8 @@ public class Text extends DisplayElement {
 	}
 	
 	@Override
-	public void writeHTML(StringBuilder b) {
-		b.append(text);
+	public void writeHTML(DisplayContext dc) {
+		dc.append(text);
 	}
 	@Override
 	public void writeJS(StringBuilder b) {

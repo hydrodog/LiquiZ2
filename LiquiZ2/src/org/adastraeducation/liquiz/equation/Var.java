@@ -1,5 +1,6 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
 import org.adastraeducation.liquiz.Quiz;
 
 public class Var implements Expression{
@@ -79,8 +80,8 @@ public class Var implements Expression{
 		b.append(name);
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		b.append(operand);
+	public void infixReplaceVar(DisplayContext dc){
+		dc.append(operand);
 	}
 	
 	public void rpnReplaceVar(StringBuilder b){

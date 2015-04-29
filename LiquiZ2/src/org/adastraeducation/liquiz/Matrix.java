@@ -123,16 +123,16 @@ public class Matrix implements Displayable {
 		return b.toString();
 	}
 	@Override
-	public void writeHTML(StringBuilder b) {
-		b.append("<table class='mat'>\n");
+	public void writeHTML(DisplayContext dc) {
+		dc.append("<table class='mat'>\n");
 		for (int i = 0; i < row; i++) {
-			b.append("<tr>");
+			dc.append("<tr>");
 			for (int j = 0; j < col; j++) {
-				b.append("<td>").append(data[i][j]).append("</td>");
+				dc.append("<td>").append(data[i][j]).append("</td>");
 			}
-			b.append("</tr>\n");
+			dc.append("</tr>\n");
 		}		
-		b.append("</table>");
+		dc.append("</table>");
 	}
 
 	//TODO: Fix the commas after each row, they aren't there!
@@ -167,9 +167,9 @@ public class Matrix implements Displayable {
 		System.out.println(a);
 		System.out.println(b);
 		System.out.println(c);
-		StringBuilder buf = new StringBuilder();
-		c.writeHTML(buf);
-		System.out.println(buf);
+		DisplayContext dc = new DisplayContext();
+		c.writeHTML(dc);
+		System.out.println(dc);
 	}
 
 }

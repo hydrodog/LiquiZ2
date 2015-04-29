@@ -37,13 +37,13 @@ public class Essay extends Question {
 		return "Essay";
 	}
 
-	public void writeHTML(StringBuilder b ){		
-		b.append("<textarea name='' rows='10' cols='50' form='quizForm' class='essay'>");
+	public void writeHTML(DisplayContext dc ){		
+		dc.append("<textarea name='' rows='10' cols='50' form='quizForm' class='essay'>");
 		//TODO: check that this text is properly escaped for HTML
-		b.append(defaultText);
-		b.append("</textarea>");
+		dc.append(defaultText);
+		dc.append("</textarea>");
  	}
-
+	
 	public void writeJS(StringBuilder b ) {
 		b.append("essay('").append(Util.escapeJS(defaultText))
 			.append("')");

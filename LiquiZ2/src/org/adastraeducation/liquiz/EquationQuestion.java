@@ -143,14 +143,14 @@ public class EquationQuestion extends Question {
 	}
 
 	@Override
-	public void writeHTML(StringBuilder b) {
+	public void writeHTML(DisplayContext dc) {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < stringList.size() - 1; ++i)
 		{
-			b.append(stringList.get(i));
-			b.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
+			dc.append(stringList.get(i));
+			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
 		}
-		b.append(stringList.get(stringList.size() - 1));
+		dc.append(stringList.get(stringList.size() - 1));
 	}
 	
 	@Override
