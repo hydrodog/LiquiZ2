@@ -44,9 +44,11 @@ public class Database {
 		a.add(null);
 		return a;
 	}
-	
+	/**
+	 * static initializer will load everything
+	 */
 	public static void start() {
-		// static initializer will load everything
+		
 	}
 	
 	static {
@@ -142,13 +144,13 @@ public class Database {
 	public static Answer getAns(int id) {
 		return answers.get(id);
 	}
-	public static void addDisp(DisplayElement d) {
+	public static void addDispEl(DisplayElement d) {
 		displayElements.add(d);
 	}
-	public static void setDisp(int id, DisplayElement d) {
+	public static void setDispel(int id, DisplayElement d) {
 		displayElements.set(id, d);
 	}
-	public static DisplayElement getDisp(int id) {
+	public static DisplayElement getDispEl(int id) {
 		return displayElements.get(id);
 	}
 }

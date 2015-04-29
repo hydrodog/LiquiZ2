@@ -17,8 +17,7 @@ import org.adastraeducation.liquiz.test.Test;
 public class Load {
 	
 	public static void main(String[] args) throws IOException {
-		Database.start();
-//		loadAll(); // the static initializer in Database will load everything
+		Database.start(); // the static initializer in Database will load everything
 		for (int i = 1; i <= 1; i++) { // there is currently 1 quiz in the database
 			Test.testOutput("output/dbtest"+i, Database.getQuiz(i));
 		}
@@ -44,31 +43,8 @@ public class Load {
 		displayElementTypeMap.put("img", new ImageFactory());
 		displayElementTypeMap.put("aud", new AudioFactory());
 		displayElementTypeMap.put("vid", new VideoFactory());
-		
-		//TODO: QuestionFactories?
 	}
-	
-	public static void loadMedia() {
-		ResultSet rs = null;
-		try {
-			rs = DatabaseMgr.execQuery("SELECT * FROM Media ORDER BY MediaID ASC");
-			
-			while (rs.next()) {
-				String type = rs.getString("MediaType");
-				//need to figure out what type of Media to load
-				DisplayElementFactory f = displayElementTypeMap.get(type);
-				if (f == null) {
-					System.out.println("Factory not found, type = " + type);
-				} else {
-					Database.addDisp(f.create(rs));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DatabaseMgr.closeResultSet(rs);;
-		}
-	}
+	//TODO: QuestionFactories?
 	
 	public static void loadDispEls() {
 		System.out.println("Entered loadDispEl");
@@ -79,7 +55,7 @@ public class Load {
 			while(rs.next()) {
 				String dType = rs.getString("DispType");
 				if (dType.equals("txt")) {
-					Database.addDisp(new Text(rs.getString("TextElement")));
+					Database.addDispEl(new Text(rs.getString("TextElement")));
 				} else {
 					String mType = rs.getString("MediaType");
 					//need to figure out what type of Media to load
@@ -87,8 +63,7 @@ public class Load {
 					if (f == null) {
 						System.out.println("Factory not found, type = " + mType);
 					} else {
-						System.out.println(mType + " factory creating");
-						Database.addDisp(f.create(rs));
+						Database.addDispEl(f.create(rs));
 					}
 				}
 			}
@@ -99,6 +74,9 @@ public class Load {
 		}
 	}
 	
+//	/**
+//	 * Load specific DisplayElement -- not anymore
+//	 */
 //	public static DisplayElement loadDispEl(ResultSet rs) {
 //		DisplayElement d = null;
 //		try {
@@ -137,9 +115,9 @@ public class Load {
 				int elemID = rs.getInt("DispElID");
 				boolean correct = false;
 				
-				Answer a = new Answer(ansID, Database.getDisp(elemID), correct, null);
+				Answer a = new Answer(ansID, Database.getDispEl(elemID), correct, null);
 				if (rs.getInt("Response") != 0) {
-					Response res = new Response(Database.getDisp(resID));
+					Response res = new Response(Database.getDispEl(resID));
 					a.setResponse(res);
 				}
 				Database.addAns(a);
@@ -186,7 +164,7 @@ public class Load {
 	}
 
 	public static void loadQues() {
-        //TODO: if/once QuestionFactories are completed
+        //TODO: if QuestionFactories are completed
 		ResultSet rs = null;
 		int quesID, points, level;
 		String type;
@@ -229,7 +207,11 @@ public class Load {
 						} else if (type.equals("MCRa")) {
 							q = new MultiChoiceRadio(quesID, points, level);
 						} else if (type.equals("Code")) {
-							q = new Code(quesID, points, level, rs.getString("DefaultText"));
+							String defaultText = rs.getString("DefaultText");
+							if (rs.wasNull()) {
+								defaultText = "";
+							}
+							q = new Code(quesID, points, level, defaultText);
 						} else if (type.equals("NumR")) {
 							q = new NumberRange(quesID, points, level);
 						} else if (type.equals("RegX")) { //int id, int points, int level, String regex, String warning
@@ -239,7 +221,11 @@ public class Load {
 								q = new RegexQuestion(quesID, points, level, rs.getString("PatternName"), rs.getString("Warning"), true);
 							}
 						} else if (type.equals("Essa")) {
-							q = new Essay(quesID, points, level, rs.getString("DefaultText")); 
+							String defaultText = rs.getString("DefaultText");
+							if (rs.wasNull()) {
+								defaultText = "";
+							}
+							q = new Essay(quesID, points, level, defaultText); 
 						}
 						
 						Database.addQues(q); // add question to database
@@ -310,7 +296,7 @@ public class Load {
 	}
 
 	/**
-	 * loads all QuesCons to Database.quesCons
+	 * Loads all QuesCons to Database.quesCons
 	 */
 	public static void loadQuesCons() {
 		ResultSet rs = null;
@@ -343,10 +329,8 @@ public class Load {
 				
 				do {
 					if (rs.getInt("QuesConID") != QCID) {
-						// turn dispEls into displayables array and create QuesCon 
-						Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
-						
-						qc = new QuestionContainer(QCID, quesConName, displayables);
+						// copy disps into another ArrayList and create QuesCon 
+						qc = new QuestionContainer(QCID, quesConName, new ArrayList(disps));
 						Database.addQuesCon(qc); 
 						QCID = rs.getInt("QuesConID");
 						quesConName = rs.getString("QuesConName");
@@ -354,14 +338,13 @@ public class Load {
 					}
 					// load element in the QuestionContainer and put it in dispEls ArrayList
 					if (rs.getString("Type").equals("Elem")) { // load DisplayElement
-						disps.add(Database.getDisp(rs.getInt("DispElID")));
+						disps.add(Database.getDispEl(rs.getInt("DispElID")));
 					} else { // load Question
 						disps.add(Database.getQues(rs.getInt("QuesID")));
 					}
 				} while (rs.next());
 				//put last QuesCon in Database ArrayList
-				Displayable[] displayables = Arrays.copyOf(disps.toArray(), disps.size(), Displayable[].class);
-				qc = new QuestionContainer(QCID, quesConName, displayables);
+				qc = new QuestionContainer(QCID, quesConName, new ArrayList(disps));
 				Database.addQuesCon(qc);
 			}
 		} catch(SQLException e) {
@@ -388,7 +371,6 @@ public class Load {
 			 * QuizID | Name | Desc | PolId | Privacy | QuesConID
 			 */
 			
-			Quiz quiz = null;
 			int quizID = 0;
 			while (rs.next()) {
 				if (quizID != rs.getInt("QuizID")) { // if new quiz
@@ -524,7 +506,7 @@ public class Load {
 			ResultSet rs = p.executeQuery();
 			
 			if (rs.next()) {
-				d = Database.getDisp(rs.getInt("Response"));
+				d = Database.getDispEl(rs.getInt("Response"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
