@@ -11,6 +11,7 @@
 <body>
 <% 
 StringBuilder b = new StringBuilder();
+// int quizID = Integer.parseInt(request.getParameter("quizID")); // for later
 Database.getQuiz(1).writeHTML(b);
 out.print(b.toString());
 %>
