@@ -148,11 +148,11 @@ public class EquationQuestion extends Question {
 		for(int i = 0; i < stringList.size() - 1; ++i)
 		{
 			b.append(stringList.get(i));
-			b.append("<input id='").append(getId()).append("' class='fillin' type='text' />\n");
+			b.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
 		}
 		b.append(stringList.get(stringList.size() - 1));
 	}
-
+	
 	@Override
 	public void writeJS(StringBuilder b) {
 		// TODO Auto-generated method stub

@@ -28,7 +28,7 @@ public class Code extends Question {
 
 	public void writeHTML(StringBuilder b ){
 		b.append("<br>Choose your language:");
-		b.append("<select name='selectLang' form='quizForm'>\n")
+		b.append("<select name='selectLang" + getId() + "' form='quizForm'>\n")
 			.append("<option value='C++'>C++</option>\n")
 			.append("<option value='Java'>Java</option>\n")
 			.append("</select>\n");
