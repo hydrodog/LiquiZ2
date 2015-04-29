@@ -6,21 +6,22 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
         </script>
         <script src="assets/js/func.js"></script>
+        <style>
+			.invisible {
+				display: none;
+			}
+	    </style>
     </head>
     <body>
     <!-- This style will later go into CSS..-->
-    <style>
-	 .invisible {
-	 display: none;
-		 }
-    </style>
+
  
-    	 <h2> Questions </h2>
+    	<h2> Questions </h2>
         <form method="GET" action="addQuestion.jsp">
             <div id="div_title" align="left">
-                </br>
+                <br>
             
-                Title  <input type="text" name="title">
+                Title <input type="text" name="title">
                 QuestionType
                  <select id="target" name="question_type" size="1">
                     <option value = "QuestionType">(Select a question type)</option>
@@ -31,23 +32,23 @@
                     <option value="MultiChoiceRadio">MultiChoice-Radio</option>
                     <option value="MultiAnswer">MultiAnswer</option>
                     <option value="Regex">Regex</option>
-                    <option value="Matrix"> Matrix </option>
+                    <option value="Matrix">Matrix</option>
                 </select>
             </div>
             
-            </br>
+            <br>
             
             <div id="common_attribute" align="left">
                 Level<input type="text" name="level" value="1">
                 Points<input type="text" name="points" value="1">
             </div>
            
-            </br>
+            <br>
             <div id="question_text" align="left">
-                Question Text</br>
+                Question Text<br>
                 <textarea name="question_text" rows="6" cols="40"></textarea>
             </div>
-            </br>
+            <br>
             
             
            
@@ -55,16 +56,16 @@
             	Image Upload
 				<input type="file" name = "image_src" id="image-input">
 				<input type="button" value="Load Selected Image" id="load-image" />
-				</br>
+				<br>
 				
 			</div>
 
 			<div>
-			    </br>
-       			<img id="image-container"/>
+			    <br>
+       			<img id="image-container" class="invisible"/>
     		</div>
     		
-    		</br>
+    		<br>
     		
     		<script>
     		(function(){
@@ -73,18 +74,14 @@
     		    var image = document.getElementById('image-container');
 
     		    document.getElementById('load-image').addEventListener('click', function(){
-
     		    	var fileUrl = window.URL.createObjectURL(fileInput.files[0]);
-
     		        image.src = fileUrl;
-
+    		        image.show();
     		    });
 
     		})();   
 
 			</script>
-			
-			
            
 			<div>
                 Audio Upload
@@ -94,10 +91,10 @@
 			</div>
 
 			<div>
-				</br>
-       			<audio id="audio-container" controls></audio>
-       			</br>
-       			</br>
+				<br>
+       			<audio id="audio-container" class="invisible" controls></audio>
+       			<br>
+       			<br>
     		</div>
     		
     		<script>
@@ -111,6 +108,7 @@
     		    	var fileUrl = window.URL.createObjectURL(fileInput.files[0]);
 
     		        audio.src = fileUrl;
+    		        audio.show();
 
     		    });
 
@@ -125,10 +123,10 @@
 			</div>
 
 			<div>
-				</br>
-       			<video id="video-container" controls></video>
-       			</br>
-       			</br>
+				<br>
+       			<video id="video-container" class="invisible" controls></video>
+       			<br>
+       			<br>
     		</div>
     		<script>
     		(function(){
@@ -137,30 +135,26 @@
     		    var video = document.getElementById('video-container');
 
     		    document.getElementById('load-video').addEventListener('click', function(){
-
     		    	var fileUrl = window.URL.createObjectURL(fileInput.files[0]);
-
     		        video.src = fileUrl;
-
+					video.show();
     		    });
 
     		})();   
 
 			</script>
-			
-		
                
-            </br>
+            <br>
                 
            <div id="FillIn" class="invisible" align="left" >
             Answer<input type="text" name="answer">   
-            	</br>
-                </br>
+            	<br>
+                <br>
                 <div>
                 <div style="float:left">
                     <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">Warning Pattern</br>
                 </div>
-                </br>
+                <br>
                 <div id="warningPattern_attribute" style="float:left;display:none; ">
                     <select name="warning_type" size="1">
                         <option value="NumberWarningPattern" selected>Fill-In</option>
@@ -168,13 +162,13 @@
                     Number Limits<input type="text" name="warningNumberLimit">
                 </div>
                 </div>
-                </br>
-                </br>
+                <br>
+                <br>
                 
                 <div style="float:left">
                     <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">Number Question</br>
                 </div>
-                </br>
+                <br>
                 <div id="numberQuestion_attribute" style="float:left;display:none;">
                     Input your exact number<input type="text" name="NumberQuestion_ExactNumber">
                     Input your approximate<input type="text" name="NumberQuestion_Approximate">
@@ -184,7 +178,7 @@
             
              <div id="Essay" class="invisible" align="left" >
                 <div>
-                    Type your Essay</br>
+                    Type your Essay<br>
                		<textarea name="essay_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
 					<br>
 					<font color="black">Word count:</font><font color="red"> 
@@ -205,10 +199,10 @@
                     <option value="C++">C++</option>
                     <option value="Java" >Java</option> 
                 </select>
-                </br></br>
+                <br><br>
                 
                 <div>
-                    Type your Code</br>
+                    Type your Code<br>
                		<textarea name="code_text" rows="10" cols="100" onkeypress=" return check_length(this, document.getElementById('count_number_words'), document.getElementById('show_remaining_words'));"></textarea>
 					<br>
 					<font color="black">Word count:</font><font color="red"> 
@@ -228,12 +222,12 @@
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
                     Add more options <input type="text" name="multichoice_dropdown_number" onchange="createDropDownChoices(this)" style="width: 30px;"  >
-                    </br>
+                   <br>
                    <form>
-                   </br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_1" ></br>
-                   </br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_2" ></br>
-                   </br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_3" ></br>
-                   </br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_4" ></br>
+                   <br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_1" ></br>
+                   <br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_2" ></br>
+                   <br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_3" ></br>
+                   <br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_4" ></br>
                    </form>
                 </div>
                 <div id="dropdown"></div>
@@ -246,12 +240,12 @@
                     &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
                     Add more options <input type="text" name="multichoice_radio_number" onchange="createRadioChoices(this)" style="width: 30px;"  >
-                    </br>
+                    <br>
                     <form>
-                   </br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_1" ></br>
-                   </br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_2" ></br>
-                   </br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_3" ></br>
-                   </br> Option 4: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_4" >
+                   <br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_1" ></br>
+                   <br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_2" ></br>
+                   <br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_3" ></br>
+                   <br> Option 4: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_4" >
                 	</form>
                    
                 </div>
@@ -266,39 +260,39 @@
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; Correct Answer  
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 
                     Add more options <input type="text" name="multianswer_number" onchange="createMultiChoices(this)" style="width: 30px;"   >
-                    </br>
+                    <br>
                     <form>
-                   </br> Option 1: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_1" ></br>
-                   </br> Option 2: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_2" ></br>
-                   </br> Option 3: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_3" ></br>
-                   </br> Option 4: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_4" >
+                   <br> Option 1: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_1" ></br>
+                   <br> Option 2: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_2" ></br>
+                   <br> Option 3: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_3" ></br>
+                   <br> Option 4: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_4" >
                 	</form>
                    
                 </div>
-                </br>
+                <br>
                 
                 <div id="multichoices"></div>
             </div>
             
             <div id="Regex" class="invisible" align="left"  >
             Answer<input type="text" name="answer">   
-            	</br>
-                </br>
+            	<br>
+                <br>
                 
                 <div style="clear:both"></div>             
                 <div style="float:left">
                     Input your Regex<input type="text" name="regexString">
                 </div>
                 <div style="clear:both"></div>
-                </br>
+                <br>
                 </div>
             </div>
             <script src="assets/js1/displayChange.js"></script>
             
-            </br>
+            <br>
             
             <div align="left">
-            </br></br>
+            <br><br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
                     <input type="submit" value="Submit" size="12">
