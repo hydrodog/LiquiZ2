@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Sin implements Expression{
 	private Expression op;
 	
@@ -22,10 +24,10 @@ public class Sin implements Expression{
 		b.append("sin");
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		b.append("sin(");
-		op.infixReplaceVar(b);
-		b.append(")");
+	public void infixReplaceVar(DisplayContext dc){
+		dc.append("sin(");
+		op.infixReplaceVar(dc);
+		dc.append(")");
 	}
 	
 	public void rpnReplaceVar(StringBuilder b){

@@ -60,12 +60,28 @@ public class RegexQuestion extends FillIn {
 	}
 	
 	//<input id='123' class='fillin' type='text' onblur='showWarningPattern(this, "\\d\\d\\d")'/> 
-	public void writeHTML(StringBuilder b) {
-		b.append("<input name='").append(getId()).append("' class='fillin' type='text' ");
-		if(warning != null) {
-			b.append("onblur='showWarningPattern(this, \"").append(Util.escapeRegex(warning)).append("\")'/>\n");
-			b.append(" <div id=\"FW").append(this.getId()).append("\"");
+	public void writeHTML(DisplayContext dc) {
+		if (dc.isDisplayAnswers()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+
+			dc.append("Possible answers:");
+		} else if (dc.isDisplayResponses()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+			
+			// TODO no Answer, thus no Response?
+		} else {
+			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' ");
+			if(warning != null) {
+				dc.append("onblur='showWarningPattern(this, \"").append(Util.escapeRegex(warning)).append("\")'/>\n");
+				dc.append(" <div id=\"FW").append(this.getId()).append("\"");
+			}
+			dc.append("/>\n");
 		}
-		b.append("/>\n");
 	}
 }

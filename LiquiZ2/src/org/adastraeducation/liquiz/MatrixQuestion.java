@@ -40,18 +40,18 @@ public class MatrixQuestion extends Question {
 	}
 	
 	@Override
-	public void writeHTML(StringBuilder b) {
-		b.append("<table class='matquest'>\n");
+	public void writeHTML(DisplayContext dc) {
+		dc.append("<table class='matquest'>\n");
 		final String EL = "<textarea name='" +
 				getId() + "' class='matquest' form='quizForm' rows='1' cols='2'></textarea>"; 
 		for (int i = 0; i < rows; i++) {
-			b.append("<tr>");
+			dc.append("<tr>");
 			for (int j = 0; j < cols; j++) {
-				b.append("<td>").append(EL).append("</td>");
+				dc.append("<td>").append(EL).append("</td>");
 			}
-			b.append("</tr>\n");
+			dc.append("</tr>\n");
 		}		
-		b.append("</table>");
+		dc.append("</table>");
 	}
 
 	//TODO: Fix the commas after each row, they aren't there!
@@ -68,9 +68,10 @@ public class MatrixQuestion extends Question {
 	}
 	public static void main(String[] args){
 		MatrixQuestion a = new MatrixQuestion(4, 1, 3,4);
+		DisplayContext dc = new DisplayContext();
+		a.writeHTML(dc);
+		dc.append("\n\n\n");
 		StringBuilder buf = new StringBuilder();
-		a.writeHTML(buf);
-		buf.append("\n\n\n");
 		a.writeXML(buf);
 		System.out.println(buf);
 	}

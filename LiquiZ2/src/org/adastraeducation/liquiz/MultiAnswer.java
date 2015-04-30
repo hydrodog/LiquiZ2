@@ -76,16 +76,20 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		System.out.println(q.grade(s4) + " should equal 1");
 	}
 	
-	public void writeHTML(StringBuilder b ){
-		
-		b.append("<select name='").append(getId()).append("' form='quizForm' multiple>\n");
-		for (Answer ans : getAns()){
-			b.append("<option value= '").append(ans.getName()).append("'>");
-			ans.writeHTML(b);
-			b.append("  </option>\n ");
-		 }
-		b.append("</select>\n");
-       
+	public void writeHTML(DisplayContext dc ){
+		if(dc.isDisplayAnswers()) {
+			
+		} else if (dc.isDisplayResponses()) {
+			
+		} else {
+			dc.append("<select name='").append(getId()).append("' form='quizForm' multiple>\n");
+			for (Answer ans : getAns()){
+				dc.append("<option value= '").append(ans.getName()).append("'>");
+				ans.writeHTML(dc);
+				dc.append("</option>\n ");
+			 }
+			dc.append("</select>\n");
+		}
 	}
 	public void writeJS(StringBuilder b ){
 		Util.writeAnsListAsJS("multiAnswer", getAns(), b);

@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Constant implements Expression {
 	
 	private double operand;
@@ -26,8 +28,8 @@ public class Constant implements Expression {
 	}
 
 
-	public void infixReplaceVar(StringBuilder b) {
-		b.append(operand);
+	public void infixReplaceVar(DisplayContext dc) {
+		dc.append(operand);
 		
 	}
 

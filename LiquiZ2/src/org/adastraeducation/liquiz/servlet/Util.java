@@ -90,9 +90,9 @@ public class Util extends HttpServlet{
 	}
 	
 	public String showQuiz(Quiz quiz){
-		StringBuilder b = new StringBuilder(65536);
-	    quiz.writeHTML(b);
-	    return b.toString();
+		DisplayContext dc = new DisplayContext();
+	    quiz.writeHTML(dc);
+	    return dc.toString();
 	}
 	
 	public Question createFillIn(HttpServletRequest request){

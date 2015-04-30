@@ -51,4 +51,24 @@ public class NumberRange extends FillIn {
 	public void setMax(double max) {
 		this.max = max;
 	}
+	
+	public void writeHTML(DisplayContext dc) {
+		if(dc.isDisplayAnswers()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+
+			dc.append("Possible answers:<br>Any number from ").append(min).append(" to ").append(max);
+		} else if (dc.isDisplayResponses()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+			
+			// TODO no Answer, thus no Response?
+		} else {
+			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />");
+		}
+	}
 }

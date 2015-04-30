@@ -42,22 +42,20 @@ public class Test {
 		HashMap<String,Var> map = new HashMap<String,Var>();
 		map.put("x",x);
 		map.put("y", y);
-		Equation eq = new Equation(	"x+y",map);
-		EquationQuestion eqQ = new EquationQuestion(eq,"[x]+[y]=[?];");
-		QuestionContainer qc = new QuestionContainer(new Displayable[] {eqQ});
-		
-
+		Equation eq = new Equation("x+y",map);
+		EquationQuestion eqQ1 = new EquationQuestion(eq,"[x]+[y]=[?];");
+		QuestionContainer qc1 = new QuestionContainer(new ArrayList<Displayable>(Arrays.asList(eqQ1)));
 		Var a = new Var("a", 0, 99, 1);
 		Var b = new Var("b", 0, 99, 1);
 		map = new HashMap<String,Var>();
 		map.put("a", a);
 		map.put("b", b);
 		eq = new Equation("a+b-1",map);
-		EquationQuestion eqQ1 = new EquationQuestion(eq,"<br>int a = [a];<br>int b = [b];<br>cout<< (a++) + (--b) << endl;<br>//result:[?];");
+		EquationQuestion eqQ2 = new EquationQuestion(eq,"int a = [a];<br>int b = [b];<br>cout<< (a++) + (--b) << endl;<br>//result:[?];");
+		QuestionContainer qc2 = new QuestionContainer(new ArrayList<Displayable>(Arrays.asList(eqQ2)));
 		
-		QuestionContainer qc1 = new QuestionContainer(new Displayable[] {eqQ1});
-		quiz.addQuestionContainer(qc);
 		quiz.addQuestionContainer(qc1);
+		quiz.addQuestionContainer(qc2);
 		return quiz;
 	}
 	public static Quiz test1() {
@@ -66,7 +64,7 @@ public class Test {
 		quiz.setName("Animals");
 		// for multiChoiceDropDown
 		QuestionContainer qc = new QuestionContainer("Dinosaurs",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is a dinosaur?"),
 				new MultiChoiceDropdown(1, 1,
 						new ArrayList<Answer>(Arrays.asList(
@@ -75,7 +73,7 @@ public class Test {
 							new Answer(new Text("mouse"))
 						))
 				)
-			}
+			))
 		);
 		
 		quiz.addQuestionContainer(qc);
@@ -89,64 +87,64 @@ public class Test {
 		Equation eq = new Equation(	"x+y",map);
 		
 		qc = new QuestionContainer("Math",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
 				eq,
 				new Text("?"),
 				new FillIn(3, 1, new Answer(new Text("1"), true))
-			}
-			);
+			))
+		);
 		quiz.addQuestionContainer(qc);
 		
 		//for Equation and Fillin, with WarningPattern
 		Var x1 = new Var("x1", 0, 99, 1);
 		Var y1 = new Var("y1", 0, 99, 1);
 		HashMap<String,Var> map1 = new HashMap<String,Var>();
-		map.put("x1",x1);
-		map.put("y1", y1);
-		Equation eq1 = new Equation(	"x1+y1",map);
+		map1.put("x1",x1);
+		map1.put("y1", y1);
+		Equation eq1 = new Equation("x1+y1",map1);
 		
 		qc = new QuestionContainer("Math",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
 				eq1,
 				new Text("?"),
 				new NumberRange(1, 3, 2, 0.0, 99.0) //id 1, 3 points, level 2, accept 0 to 99 as correct
-			}
-			);
+			))
+		);
 		quiz.addQuestionContainer(qc);
 
 		qc = new QuestionContainer("Characterization",
-				new Displayable[] {
-					new Video("1.mpg",0,0),
-					new Text("Describe the main character in the video in 200 words or less"),
-					new Essay()
-				}
-			);
+			new ArrayList<Displayable> (Arrays.asList(
+				new Video("1.mpg",0,0),
+				new Text("Describe the main character in the video in 200 words or less"),
+				new Essay()
+			))
+		);
 		quiz.addQuestionContainer(qc);
 		
 		qc = new QuestionContainer("Listening Skills",
-				new Displayable[] {
-					new Text("Listen to the audio clip and write down the words"),
-					new Audio("1.mp3"),
-					new FillIn(5,1,new Answer(new Text("words, words, words")))
-				}
-			);
+			new ArrayList<Displayable> (Arrays.asList(
+				new Text("Listen to the audio clip and write down the words"),
+				new Audio("1.mp3"),
+				new FillIn(5,1,new Answer(new Text("words, words, words")))
+			))
+		);
 		quiz.addQuestionContainer(qc);
 
 		// create two random 3x3 matrices filled with integers [-3..3]
 		Matrix m1 = new Matrix(3,3,-3,3);
 		Matrix m2 = new Matrix(3,3,-3,3);
 		// create a 3x3 matrix worth 1 point, level 1
-		MatrixQuestion m3 = new MatrixQuestion(1, 1, 3, 3);
+		MatrixQuestion mq = new MatrixQuestion(1, 1, 3, 3);
 		quiz.addQuestionContainer(qc = new QuestionContainer("Matrix Math",
-			new Displayable[] {
+				new ArrayList<Displayable> (Arrays.asList(
 				new Text("Solve the matrix addition"),
 				m1,
 				new Text("+"),
 				m2,
-				m3
-			}
+				mq
+			))
 		));
 
 		return quiz;
@@ -167,24 +165,35 @@ public class Test {
 				new Video("2.mpg",0,0)
 			))
 		);
-		/*
+		
 		QuestionContainer qc = new QuestionContainer(
-			new Displayable[] {
-				new Text("Fill in the following code"),
-				new FillIn(1, 1, 1),
+			new ArrayList<Displayable> (Arrays.asList(
+				new Text("Fill in the following code<br>"),
+				new FillIn(1, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("public"), true, r1)
+				))),
 				new Text("class A "),
-				new FillIn(2, 1, 1, "{"),
-				new Text("\n  "),
-				new FillIn(3, 1, 1, "private"),
-				new Text(" int x;\n  "),
-				new FillIn(4, 1, 1, "public"),
-				new FillIn(5, 1, 1, "A"),
-				new Text("() {\n"),
-				new Text("  x = 2;\n}\n")
-			}
+				new FillIn(2, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("{"), true, r1)
+				))),
+				new Text("<br>&nbsp;&nbsp;&nbsp;"),
+				new FillIn(3, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("private"), true, r1),
+						new Answer(new Text("public"), false, r2)
+				))),
+				new Text(" int x;<br>&nbsp;&nbsp;&nbsp;"),
+				new FillIn(4, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("public"), true, r1)
+				))),
+				new FillIn(5, 1, 1, new ArrayList<Answer>(Arrays.asList(
+						new Answer(new Text("A"), true, r1)
+				))),
+				new Text("() {<br>&nbsp;&nbsp;&nbsp;"),
+				new Text("x = 2;<br>}")
+			))
 		);
 		quiz.addQuestionContainer(qc);
-		*/
+		
 		return quiz;
 	}
 	/*
@@ -195,7 +204,7 @@ public class Test {
 		Quiz quiz = new Quiz();
 		quiz.setName("Multimedia Quiz");
 		QuestionContainer qc = new QuestionContainer("Multimedia Questions",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 				new Video("video1.mp4",480, 360),
 				new Text("What is this video about?"),
 				new MultiChoiceDropdown(4, 5,
@@ -214,7 +223,7 @@ public class Test {
 						new Answer(new Text("Horse"))
 					))
 				)
-			}
+			))
 		);
 		quiz.addQuestionContainer(qc);
 		return quiz;
@@ -224,19 +233,19 @@ public class Test {
 		Quiz quiz = new Quiz();
 		quiz.setName("Multiple- Quiz");
 		QuestionContainer qc = new QuestionContainer("Complexity",
-			new Displayable[] {
+			new ArrayList<Displayable> (Arrays.asList(
 //				new Text("Can all birds fly?"),
 //				new MultiChoiceDropdown(1, 5, "Poll"),
 				new Text("What is the complexity of BubbleSort?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
 				new Text("<br>What is the complexity of QuickSort?"),
-				new MultiChoiceRadio(1, 5, "Complexity"),
+				new MultiChoiceRadio(1, 5, "Complexity") //,
 //				new Text("What are the colors of an apple ?"),
 //				new MultiAnswer(1, 5, "Colors", new int []{2,3}),
 //				new Text("Name the insects:"),
 //				new MultiAnswer(1, 5, "Insects", new int []{3,4,5})
 	
-			}
+			))
 		);
 		quiz.addQuestionContainer(qc);
 		return quiz;
@@ -246,9 +255,9 @@ public class Test {
 			throws IOException {
 		FileWriter fw = new FileWriter(filename);
 		fw.write(header);
-		StringBuilder b = new StringBuilder(65536);
-		d.writeHTML(b);
-		fw.write(b.toString());
+		DisplayContext dc = new DisplayContext();
+		d.writeHTML(dc);
+		fw.write(dc.toString());
 		fw.write(trailer);
 		fw.close();
 	}
@@ -280,18 +289,18 @@ public class Test {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		testOutput("output/test1", test1());
-//		testOutput("output/test2", test2());
-//		testOutput("output/test3", test3());
-//		testOutput("output/test4", test4());
-//
-//		/*testing Course*/
-//		Course testCourse = new Course(1, "Test Course");
-//		testCourse.addQuiz(test1());
-//		testCourse.addQuiz(test2());
-//		testCourse.addQuiz(test3());
-//		testCourse.addQuiz(test4());
-//		testOutput("output/quizList", testCourse);
+		testOutput("output/test1", test1());
+		testOutput("output/test2", test2());
+		testOutput("output/test3", test3());
+		testOutput("output/test4", test4());
+
+		/*testing Course*/
+		Course testCourse = new Course(1, "Test Course");
+		testCourse.addQuiz(test1());
+		testCourse.addQuiz(test2());
+		testCourse.addQuiz(test3());
+		testCourse.addQuiz(test4());
+		testOutput("output/quizList", testCourse);
 		Quiz q =  test();
 		testOutput("output/quiz1",q);
 	}

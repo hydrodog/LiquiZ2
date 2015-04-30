@@ -6,27 +6,33 @@ import org.adastraeducation.liquiz.*;
 
 /**
  * Adds a row to tables with newly created entities
+ * Currently out of date with database
  * @author yijinkang
  *
  */
 public class Create {
 	
-	//TODO: add to Database ArrayLists as well!
+	// TODO: add to Database ArrayLists as well!
+	// TODO: use new DatabaseMgr.execStmt() method? Setting parameters though?
+	// TODO: should the parameters be the objects themselves?
 	
 	/**
 	 * Updates Users table when a new user registers
+	 * Last updated Apr 29 2015
 	 */
-	public static void createUser(String fName, String lName, String id, String pw, String email) {
+	public static void createUser(User user) {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
 			PreparedStatement p = conn.prepareStatement("INSERT INTO Users(FirstName, LastName, Username, Password, Email) VALUES(?,?,?,?,?)");
-			p.setString(1, fName);
-			p.setString(2, lName);
-			p.setString(3, id);
-			p.setString(4, pw);
-			p.setString(5, email);
+			p.setString(1, user.getFirstName());
+			p.setString(2, user.getLastName());
+			p.setInt(3, user.getID());
+			p.setString(4, user.getPasswd());
+			p.setString(5, user.getEmail());
 			p.execute();
+			
+			Database.addUser(user);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -36,6 +42,7 @@ public class Create {
 	
 	/**
 	 * Updates Courses table when a new course is created
+	 * TODO: privacy?
 	 */
 	public static void createCourse(String name, String privacy) {
 		Connection conn = null;
@@ -54,20 +61,23 @@ public class Create {
 	
 	/**
 	 * Updates Policies table when a policy type is created
+	 * Last updated Apr 29 2015
 	 */
-	public static void createPolicy(String name, int timed, int showAns, int scored, int grade, int shuffleQues, int shuffleAns) {
+	public static void createPolicy(Policy pol) {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
 			PreparedStatement p = conn.prepareStatement("INSERT INTO Policies(Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns) VALUES(?,?,?,?,?,?,?)");
-			p.setString(1, name);
-			p.setInt(2, timed);
-			p.setInt(3, showAns);
-			p.setInt(4, scored);
-			p.setInt(5, grade);
-			p.setInt(6, shuffleQues);
-			p.setInt(7, shuffleAns);
+			p.setString(1, pol.getName());
+			p.setBoolean(2, pol.getTimed());
+			p.setBoolean(3, pol.getShowAns());
+			p.setBoolean(4, pol.getScored());
+			p.setInt(5, pol.getGrade());
+			p.setBoolean(6, pol.getShuffleQues());
+			p.setBoolean(7, pol.getShuffleAns());
 			p.execute();
+			
+			Database.addPolicy(pol);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -77,6 +87,7 @@ public class Create {
 	
 	/**
 	 * Updates Quizzes table when a new quiz is created
+	 * TODO: privacy?
 	 */
 	public static void createQuiz(String name, int pol, String priv) {
 		Connection conn = null;
@@ -95,51 +106,56 @@ public class Create {
 	}
 	
 	/**
-	 * Updates DisplayElements table when a new one is created. 
-	 * Does NOT contain content of Display Element.
-	 * fillDispEl does that.
-	 * @return auto-generated key of new Display Element
+	 * Updates DisplayElements table and adds to Database ArrayList when a new one is created
+	 * Last updated Apr 29 2015
 	 */
-	public static int createDispEl(String type) {
+	public static void createDispEl(DisplayElement dispEl) {
 		Connection conn = null;
-		int key = -1;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p1 = conn.prepareStatement("INSERT INTO DisplayElements(Type) VALUES(?)");
-			p1.setString(1, type);
-			p1.execute();
 			
-			ResultSet rs = p1.getGeneratedKeys();
-			
-			if (rs.next()) {
-				key = rs.getInt(1);
-			} else {
-				// TODO: throw something;
+			if (dispEl instanceof Text) {
+				PreparedStatement p1 = conn.prepareStatement("INSERT INTO DisplayElements(TextElement, DispType) VALUES (?, 'txt')");
+				p1.setString(1, dispEl.getName());
+				p1.execute();
+			} else { // dispEl is a type of Media
+				PreparedStatement p1;
+				if (dispEl instanceof Audio) {
+					p1 = conn.prepareStatement("INSERT INTO Media(OrigName, Path, MediaType) VALUES (?,?,?)");
+					p1.setString(3, "aud");
+				} else { // dispEl is a type of RectangularMedia
+					RectangularMedia rMed = (RectangularMedia) dispEl;
+					p1 = conn.prepareStatement("INSERT INTO Media(OrigName, Path, MediaType, Width, Height) VALUES (?,?,?,?,?)");
+					String mediaType = "";
+					if (dispEl instanceof Image) {
+						mediaType = "img";
+					} else { // media type is video
+						mediaType = "vid";
+					}
+					p1.setString(3, mediaType);
+					p1.setInt(4, rMed.getWidth());
+					p1.setInt(5, rMed.getHeight());
+				}
+				
+				p1.setString(1, dispEl.getName()); // TODO: distinguish name & path/source
+				p1.setString(2, dispEl.getName());
+				p1.execute();
+				
+				ResultSet generatedKey = p1.getGeneratedKeys();
+				int key = -1;
+				if(generatedKey.next()) {
+					key = generatedKey.getInt(1);
+				} else {
+					// TODO: throw something
+				}
+				generatedKey.close();
+				
+				PreparedStatement p2 = conn.prepareStatement("INSERT INTO DisplayElements(MediaID, DispType) VALUES (?, 'med')");
+				p2.setInt(1, key);
+				p2.execute();
+				
+				Database.addDispEl(dispEl);
 			}
-			
-			rs.close();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DatabaseMgr.returnConnection(conn);
-		}
-		return key;
-	}
-	
-	/**
-	 * Fills in content of Display Element created by createDispEl
-	 * Long strings are added in multiple rows.
-	 */
-	public static void fillDispEl (int id, String element, int seq) {
-		Connection conn = null;
-		try {
-			conn = DatabaseMgr.getConnection();
-			PreparedStatement p2 = conn.prepareStatement("INSERT INTO DispElSeq VALUES(?,?,?)");
-			p2.setInt(1, id);
-			p2.setString(2, element);
-			p2.setInt(3, seq);
-			p2.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -149,6 +165,7 @@ public class Create {
 	
 	/**
 	 * Updates Questions table when a new one is created
+	 * object parameter
 	 * @return auto-generated key of new Question
 	 */
 	public static int createQues(int points, int level, String type) {
@@ -156,7 +173,7 @@ public class Create {
 		int key = -1;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Questions(Points,Level,QType) VALUES (?,?,?)");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Questions(Points,Level,QuesType) VALUES (?,?,?)");
 			p.setInt(1, points);
 			p.setInt(2, level);
 			p.setString(3, type);
@@ -187,7 +204,7 @@ public class Create {
 		int key = -1;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Answers(Response, Element) VALUES(?, ?)");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Answers(Response, DispElID) VALUES(?, ?)");
 			p.setInt(1, res);
 			p.setInt(2, el);
 			p.execute();
@@ -300,7 +317,7 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO QuesAnsSeq(Ques, Ans, Sequence, Correct) VALUES (?, ?, ?, ?)");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Ques_Ans(QuesID, AnsID, Sequence, Correct) VALUES (?, ?, ?, ?)");
 			p.setInt(1, qid);
 			p.setInt(2, aid);
 			p.setInt(3, seq);
@@ -320,11 +337,11 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO QuesAnsSeq(Ques, StdSet, Sequence, Correct) VALUES (?, ?, ?, ?)");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Ques_Seq(QuesID, StdSetName, Sequence, StdCorrectIndex) VALUES (?, ?, ?, ?)");
 			p.setInt(1, qid);
 			p.setInt(2, sid);
 			p.setInt(3, seq);
-			p.setBoolean(4, correct);
+			p.setInt(4, -1); // TODO: -1 as temp. index of correct answer must go here
 			p.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();

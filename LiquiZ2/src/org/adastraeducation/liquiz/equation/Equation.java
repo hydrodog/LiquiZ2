@@ -9,6 +9,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.adastraeducation.liquiz.DisplayContext;
 import org.adastraeducation.liquiz.Displayable;
 
 /**
@@ -199,8 +200,8 @@ public class Equation implements Displayable {
 
 
 	@Override
-	public void writeHTML(StringBuilder b) {	
-		func.infixReplaceVar(b);
+	public void writeHTML(DisplayContext dc) {	
+		func.infixReplaceVar(dc);
 	}
 
 	@Override

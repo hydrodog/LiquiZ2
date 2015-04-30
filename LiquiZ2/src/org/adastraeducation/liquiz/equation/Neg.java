@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Neg implements Expression{
 	private Expression op;
 	
@@ -23,10 +25,10 @@ public class Neg implements Expression{
 		b.append("neg");
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		b.append("neg(");
-		op.infixReplaceVar(b);
-		b.append(")");
+	public void infixReplaceVar(DisplayContext dc){
+		dc.append("neg(");
+		op.infixReplaceVar(dc);
+		dc.append(")");
 	}
 	
 	public void rpnReplaceVar(StringBuilder b){

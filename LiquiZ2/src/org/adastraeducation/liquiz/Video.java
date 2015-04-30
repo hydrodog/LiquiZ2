@@ -13,10 +13,10 @@ public class Video extends RectangularMedia {
 	}
 	//<source src="movie.mp4" type="video/mp4">
 	//<source src="movie.ogg" type="video/ogg">
-	public void writeHTML(StringBuilder b){
-		b.append("\n<video controls width=\""+ getWidth() +"\" height=\""+ getHeight() +"\">\n");
-		b.append("<source src=\"" + getSource() +  "\" type =\"video/"+ getType() + "\"/>\n");
-		b.append("</video>\n");
+	public void writeHTML(DisplayContext dc){
+		dc.append("\n<video controls width=\""+ getWidth() +"\" height=\""+ getHeight() +"\">\n");
+		dc.append("<source src=\"" + getSource() +  "\" type =\"video/"+ getType() + "\"/>\n");
+		dc.append("</video>\n");
 	}
 	// to do : how to represent image in JavaScript
 	public void writeJS(StringBuilder b){

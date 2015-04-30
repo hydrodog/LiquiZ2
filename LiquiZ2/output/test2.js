@@ -1,0 +1,1 @@
+{ title: 'A new quiz', className: 'class', content: [{title: 'foo', className: 'claz' , content:['Fill in the following code<br>',fillin(),'class A ',fillin(),'<br>&nbsp;&nbsp;&nbsp;',fillin(),' int x;<br>&nbsp;&nbsp;&nbsp;',fillin(),fillin(),'() {<br>&nbsp;&nbsp;&nbsp;','x = 2;<br>}'] };]}

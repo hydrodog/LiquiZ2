@@ -47,15 +47,21 @@ public class MultiChoiceDropdown extends Question {
 		return 0;
 	}
 
-	public void writeHTML(StringBuilder b) {
-		// Regular options
-		b.append("<select name='").append(getId()).append("' form='quizForm'>\n");
-		for (Answer ans : getAns()) {
-			b.append("<option value='" + ans.getName() + "'> ");
-			ans.writeHTML(b);
-			b.append(" </option> \n");
+	public void writeHTML(DisplayContext dc) {
+		if(dc.isDisplayAnswers()) {
+			
+		} else if (dc.isDisplayResponses()) {
+			
+		} else {
+			// Regular options
+			dc.append("<select name='").append(getId()).append("' form='quizForm'>\n");
+			for (Answer ans : getAns()) {
+				dc.append("<option value='" + ans.getName() + "'> ");
+				ans.writeHTML(dc);
+				dc.append(" </option> \n");
+			}
+			dc.append("</select>\n");
 		}
-		b.append("</select>\n");
 	}
 
 	public void writeJS(StringBuilder b) {

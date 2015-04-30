@@ -98,6 +98,12 @@ public class DatabaseMgr {
 		PreparedStatement p = conn.prepareStatement(sql);
 		return p.executeQuery();
 	}
+	// not sure this will work, since we need parameters to be set
+	public static void execStmt(String sql) throws SQLException {
+		Connection conn = getConnection();
+		PreparedStatement p = conn.prepareStatement(sql);
+		p.execute();
+	}
 	
 	public static void closeResultSet(ResultSet rs) {
 		if (rs == null) {

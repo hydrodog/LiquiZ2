@@ -13,8 +13,8 @@ public class Image extends RectangularMedia {
 		super(image, width, height);
 	}
 
-	public void writeHTML(StringBuilder b){
-		b.append("<img src='" + getSource() + "' style = width:"+ getWidth() + "px;height:"+ getHeight() + "px>");
+	public void writeHTML(DisplayContext dc){
+		dc.append("<img src='" + getSource() + "' style = width:"+ getWidth() + "px;height:"+ getHeight() + "px>");
 	}
 
 	//TODO: how to represent image in JavaScript

@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz.equation;
 
+import org.adastraeducation.liquiz.DisplayContext;
+
 public class Tan implements Expression{
 	private Expression op;
 	
@@ -22,10 +24,10 @@ public class Tan implements Expression{
 		b.append("tan");
 	}
 	
-	public void infixReplaceVar(StringBuilder b){
-		b.append("tan(");
-		op.infixReplaceVar(b);
-		b.append(")");
+	public void infixReplaceVar(DisplayContext dc){
+		dc.append("tan(");
+		op.infixReplaceVar(dc);
+		dc.append(")");
 	}
 	
 	public void rpnReplaceVar(StringBuilder b){

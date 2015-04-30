@@ -78,8 +78,32 @@ public class FillIn extends Question {
 
 	@Override
 	//<input name='123' class='fillin' type='text' onblur='showNumberWarning(this, "\\d\\d\\d")'/> 
-	public void writeHTML(StringBuilder b) {
-		b.append("<input name='").append(getId()).append("' class='fillin' type='text' />");
+	public void writeHTML(DisplayContext dc) {
+		if(dc.isDisplayAnswers()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+
+			dc.append("Possible answers:<br>");
+			for (Answer ans : getAns()) {
+				ans.writeHTML(dc);
+				dc.append("<br>");
+			}
+		} else if (dc.isDisplayResponses()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+			
+			dc.append("Teacher's comment:<br>");
+			Response res = getResponseFor("Your answer here");
+			if (res != null) { 
+				writeHTML(dc);
+			}
+		} else {
+			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />");
+		}
 	}
 
 	@Override

@@ -69,15 +69,15 @@ public class QuestionGroup implements Displayable {
 	}
 	
 	@Override
-	public void writeHTML(StringBuilder b) { 
+	public void writeHTML(DisplayContext dc) { 
 		// TODO How to format it and make it work as a form?
-		b.append("<div class='quesHeader'>").append(getName()).append(": ").append(getToAnswer() * getPointsPerQues()).append(" points</div>");
-		b.append("<div class='question' name='").append(getId()).append(">");
-		b.append("Choose ").append(getToAnswer()).append(" questions out of the following ").append(getTotal());
+		dc.append("<div class='quesHeader'>").append(getName()).append(": ").append(getToAnswer() * getPointsPerQues()).append(" points</div>");
+		dc.append("<div class='question' name='").append(getId()).append(">");
+		dc.append("Choose ").append(getToAnswer()).append(" questions out of the following ").append(getTotal());
 		for (QuestionContainer qc : quesCons) {
-			qc.writeHTML(b);
+			qc.writeHTML(dc);
 		}
-		b.append("</div>\n\n");
+		dc.append("</div>\n\n");
 	}
 
 	@Override

@@ -1,0 +1,1 @@
+{ title: 'A new quiz', className: 'class', content: [{title: 'foo', className: 'claz' , content:[''fillin()'1'] };{title: 'foo', className: 'claz' , content:['int a = 'fillin()'1'] };]}
