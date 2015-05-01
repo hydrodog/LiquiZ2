@@ -1,5 +1,12 @@
 package org.adastraeducation.liquiz;
-
+/**
+ * Represent a user with permission to access some or all pages.
+ * The ADMIN priviledge is equivalent to root in Linux, able to change permissions
+ * The DELEGATE priviledge enables giving others any priviledge the user has
+ * All other priviledges are not built in but user-defined per application
+ * @author Dov Kruger
+ *
+ */
 public class User {
 	// superuser uses bit 1, ADMIN has the right to change
 	// permissions on anything
@@ -24,31 +31,17 @@ public class User {
 		
 	}
 	
-	public User(String username, String passwd, String fName, String lName, String email) {
-		this.username = username;
-		this.passwd = passwd;
-		this.fName = fName;
-		this.lName = lName;
-		this.email = email;
-	}
-	
 	public User(String username, String passwd, String fName, String lName, String email, int permissions) {
+	}
+		
+	public User(int id, String username, String passwd, String fName, String lName, String email, int permissions) {
+		this.id = id;
 		this.username = username;
 		this.passwd = passwd;
 		this.fName = fName;
 		this.lName = lName;
 		this.email = email;
 		this.permissions = permissions;
-	}
-	
-	public User(int id, String username, String passwd, String fName, String lName, String email) {
-		this(username, passwd, fName, lName, email);
-		this.id = id;
-	}
-	
-	public User(int id, String username, String passwd, String fName, String lName, String email, int permissions) {
-		this(username, passwd, fName, lName, email, permissions);
-		this.id = id;
 	}
 	
 	public int getID() {
@@ -121,8 +114,5 @@ public class User {
 		if (username == null || passwd == null)
 			return false;
 		return username.equals("test") && passwd.equals("test");
-	}
-	public static void main(String[]a) {
-		System.out.println("test");
 	}
 }

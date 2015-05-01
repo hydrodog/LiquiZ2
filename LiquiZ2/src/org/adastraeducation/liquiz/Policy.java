@@ -1,17 +1,24 @@
 package org.adastraeducation.liquiz;
+/**
+ * A Policy represents how a quiz is modified and accessed.
+ * See also Assignment which controls when a Quiz is visible.
+ * 
+ * @author Tim Ding
+ *
+ */
 public class Policy {
-	public String name;
-	private int id;
-	private int attemptNum;
-	private boolean timed;
-	private int duration;
-	private boolean showAns;
-	private boolean scored;
-	private int grade;
-	private boolean shuffleQues;
-	private boolean shuffleAns;
-	private String accessCode;
-	
+	private int id;				// unique id in database
+	public String name; 		// display name of the policy
+	private int attemptNum;		// number of times students are allowed to take the quiz
+	private boolean timed;		// true if timed, false otherwise
+	private int duration;		// if timed is true, duration is the time allotted in seconds.
+	private boolean showAns;	// if true, then after grading display the answers
+	private boolean scored;		// if true, then this quiz is scored (otherwise do not score)
+	private int grade;			// the score from the quiz (TODO: should this be double?)
+	private boolean shuffleQues;// if true, randomly shuffle the question order
+	private boolean shuffleAns;	// if true, randomly shuffle the order of multiple choice answers
+	private String accessCode;	// if not null, this code is used to take the quiz
+	//TODO: restrict to local range of addresses, ie in class?
 	public String getName() {
 		return name;
 	}
