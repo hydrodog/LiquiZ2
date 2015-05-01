@@ -5,7 +5,8 @@
 <option value="">- choose existing or type a new one -</option>
 <option value=""></option>
 <option value=""></option>
-</select></td></tr>
+</select></td>
+<td><input type="button" value="delete"/><input type="button" value="copy"/></td></tr>
 <tr><td>Attempts permitted</td><td><input type="number" name="attempts" value="1"/></td></tr>
 <tr><td>Duration (seconds)</td><td><input type="number" name="duration" value="0"/></td></tr>
 <tr><td>Show answers</td><td>

@@ -7,6 +7,8 @@
 <jsp:useBean id="quiz" class="org.adastraeducation.liquiz.Quiz" scope="session"/>
 
 <%= request.getParameter("QuizContext")%>
-<%System.out.println("in addQuestion.jpg");%>
+<%
+  Quiz.addQuestion(request);
+System.out.println("in addQuestion.jsp");%>
 Quiz now has: <%= request.getAttribute("NumberOfQuestions") %> 
 questions in  <%= request.getAttribute("NumberOfQuestionContainers") %> question containers.
