@@ -96,7 +96,7 @@ function check_length(obj, cnt, rem)
     cnt.innerHTML = len;  
     rem.innerHTML = maxwords - len;  
     if (len > maxwords) {  
-        alert("Message in '" + obj.name + "' limited to " + maxwords + " words.");  
+        f("Message in '" + obj.name + "' limited to " + maxwords + " words.");  
         ary = ary.slice(0,maxwords-1);  
         obj.value = ary.join(" ");  
         cnt.innerHTML = maxwords;  
@@ -148,3 +148,87 @@ function createMultiChoices(obj) {
     }
     document.getElementById("multichoices").innerHTML=empty;
 }
+
+/*
+ * Add a css file to the header section. This is useful for dynamically loading
+ * the css file depending on the user's preferences.
+ */
+function appendCSSLink(src){
+	  var head = document.getElementsByTagName('head')[0];
+	  var link = document.createElement('LINK');
+	  link.rel="stylesheet";
+	  link.type="text/css";
+	  link.href=src;
+	  head.appendChild(link);
+	}
+
+function appendCSSText(css){
+    var head = document.getElementsByTagName('head')[0];
+    var s = document.createElement('style');
+    s.setAttribute('type', 'text/css');
+    if (s.styleSheet) {   // IE
+        s.styleSheet.cssText = css;
+    } else {                // the world
+        s.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(s);
+ }
+
+/*
+ * load a JSON string, evaluate it, and add the contents into the div box parameter
+ */
+var x;
+function loadData() {
+	var xmlhttp=new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function() {
+	  if (xmlhttp.readyState!=4 || xmlhttp.status!=200)
+		  return;
+	  eval(xmlhttp.responseText);
+	  initPage();
+	}
+	xmlhttp.open("GET","assets/js1/ajaxtest.js",true);
+	xmlhttp.send();
+}
+
+function f(div, sel) {
+	var s = document.createElement("SELECT");
+	for (var i = 0; i < sel.length; i+=2) {
+		var opt = document.createElement("OPTION");
+		opt.value = sel[i];
+		opt.text = sel[i+1];
+		s.appendChild(opt);
+	}
+	div.appendChild(s);
+}
+/*
+ * When a selection happens in the highlight function, call here 
+ *
+ */
+var selection;
+var selectionStart, selectionEnd;
+function highlight(code) {
+	selectionStart = code.selectionStart;
+	selectionEnd = code.selectionEnd;
+	selection = (code.value).substring(selectionStart,selectionEnd);
+}
+
+var commentList = [];
+function addComment() {
+	commentList.push(selectionStart);
+	commentList.push(selectionStop);
+	commentList.push(selection);
+}
+function initPage() {
+	appendCSSLink("assets/css/" + x.css + ".css");	
+	thisPage();
+}
+
+function submitComments() {
+	alert(commentList);
+} 
+function thisPage() {
+	//alert( document.getElementById("code"));
+	  document.getElementById("code").value=x.code;
+	  f(document.getElementById("a"), x.sel);
+}
+loadData();

@@ -1,4 +1,5 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html lang="en">
     
     <head>
@@ -31,10 +32,8 @@
                         <h2 class="form-signin-heading">
                             Please sign in
                         </h2>
-                        <input type="user" class="form-control" name="userName" placeholder="User name" required=""
-                        autofocus="" />
-                        <input type="password" class="form-control" name="passwd" placeholder="Password" required=""
-                        />
+                        <input type="user" class="form-control" name="userName" placeholder="User name" required="" autofocus="" />
+                        <input type="password" class="form-control" name="passwd" placeholder="Password" required=""/>
                         <input type="checkbox" value="remember-me" />
                         <b>
                             Remember me
