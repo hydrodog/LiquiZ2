@@ -143,7 +143,17 @@ public class Quiz implements Displayable {
 		qContainers.remove(Index);
 	}
 	
-
+	public void addQuestion(HttpRequest req) {
+		String questionType = req.getParameter("question_type");
+		if (questionType.equals("fillin")) {
+			/*
+			Fillin f = new Fillin( ....);
+			QuestionContainer qc = new QuestionContainer();
+			qc.add
+			addQuestionContainer();
+			*/
+		}
+	}
 	public void writeHTML (DisplayContext dc)	{
 		//TODO: everyone add className to each object
 		// if it is null, don't add a classname
