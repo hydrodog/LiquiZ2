@@ -19,15 +19,23 @@ function showNumberWarning(id,n) {
 
 
 function changeQuestion(obj) {
+	/*
+        document.getElementById("fillin_attribute").style.display="none";
+        document.getElementById("essay_attribute").style.display="none";
+        document.getElementById("multidropdown_attribute").style.display="none";
+        document.getElementById("multiradio_attribute").style.display="none";
+        document.getElementById("multianswer_attribute").style.display="none";
+        document.getElementById("regexQuestion_attribute").style.display="none";
+	 	document.getElementById(obj.value).style.display="";
+
+	 */
 	if (obj.value=="FillIn") {
         document.getElementById("fillin_attribute").style.display="";
         document.getElementById("essay_attribute").style.display="none";
         document.getElementById("multidropdown_attribute").style.display="none";
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
-        document.getElementById("regexQuestion_attribute").style.display="none";
-
-        
+        document.getElementById("regexQuestion_attribute").style.display="none";        
     }else if (obj.value=="Essay"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="";
@@ -35,8 +43,6 @@ function changeQuestion(obj) {
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
         document.getElementById("regexQuestion_attribute").style.display="none";
-
-
     }else if (obj.value=="Code"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("code_attribute").style.display="";
@@ -44,8 +50,6 @@ function changeQuestion(obj) {
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
         document.getElementById("regexQuestion_attribute").style.display="none";
-
-
     }
 	else if (obj.value=="MultiChoiceDropdown"){
         document.getElementById("fillin_attribute").style.display="none";
@@ -54,8 +58,6 @@ function changeQuestion(obj) {
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
         document.getElementById("regexQuestion_attribute").style.display="none";
-
-
     }
 	else if (obj.value=="MultiChoiceRadio"){
         document.getElementById("fillin_attribute").style.display="none";
@@ -64,8 +66,6 @@ function changeQuestion(obj) {
         document.getElementById("multiradio_attribute").style.display="";
         document.getElementById("multianswer_attribute").style.display="none";
         document.getElementById("regexQuestion_attribute").style.display="none";
-
-
     }else if(obj.value=="MultiAnswer"){
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
@@ -73,7 +73,6 @@ function changeQuestion(obj) {
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="";
         document.getElementById("regexQuestion_attribute").style.display="none";
-
     }else{
         document.getElementById("fillin_attribute").style.display="none";
         document.getElementById("essay_attribute").style.display="none";
@@ -81,16 +80,13 @@ function changeQuestion(obj) {
         document.getElementById("multiradio_attribute").style.display="none";
         document.getElementById("multianswer_attribute").style.display="none";
         document.getElementById("regexQuestion_attribute").style.display="";
-
     }
     
     
 }
 
 var maxwords = 120;  
-function check_length(obj, cnt, rem)  
-
-{  
+function check_length(obj, cnt, rem) {
     var ary = obj.value.split(" ");  
     var len = ary.length;  
     cnt.innerHTML = len;  
@@ -175,19 +171,21 @@ function appendCSSText(css){
  }
 
 /*
- * load a JSON string, evaluate it, and add the contents into the div box parameter
+ * Run a serverside script (the parameter)
+ * which prints a JSON string.
+ * load the JSON, evaluate it and call initPage() to update the page
  */
-var x;
-function loadData() {
-	var xmlhttp=new XMLHttpRequest();
-	xmlhttp.onreadystatechange=function() {
-	  if (xmlhttp.readyState!=4 || xmlhttp.status!=200)
-		  return;
-	  eval(xmlhttp.responseText);
+var page;
+function loadData(serverPage) {
+	var json=new XMLHttpRequest();
+	json.onreadystatechange=function() {
+	  if (json.readyState!=4 || json.status!=200)
+		  return;// TODO: Handle error if it doesn't come back
+	  eval("page="+json.responseText);
 	  initPage();
 	}
-	xmlhttp.open("GET","assets/js1/ajaxtest.js",true);
-	xmlhttp.send();
+	json.open("GET",serverPage,true);
+	json.send();
 }
 
 function f(div, sel) {
@@ -217,7 +215,9 @@ function addComment() {
 	commentList.push(selectionStart);
 	commentList.push(selectionStop);
 	commentList.push(selection);
+	alert(commentList);
 }
+
 function initPage() {
 	appendCSSLink("assets/css/" + x.css + ".css");	
 	thisPage();
@@ -226,9 +226,5 @@ function initPage() {
 function submitComments() {
 	alert(commentList);
 } 
-function thisPage() {
-	//alert( document.getElementById("code"));
-	  document.getElementById("code").value=x.code;
-	  f(document.getElementById("a"), x.sel);
-}
-loadData();
+
+

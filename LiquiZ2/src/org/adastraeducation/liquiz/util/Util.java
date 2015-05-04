@@ -2,6 +2,8 @@ package org.adastraeducation.liquiz.util;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.adastraeducation.liquiz.*;
 
 public class Util {
@@ -53,4 +55,11 @@ public class Util {
 	public static String escapeXML(String s) {
 		return s;
 	}
+	public static String standardAJAXHeader(HttpSession session) {
+		StringBuilder b = new StringBuilder(1024);
+		b.append("{\n").append("css:'").append
+		(session.getAttribute("css")).append('\'');	
+		return b.toString();
+	}
+
 }
