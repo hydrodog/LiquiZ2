@@ -219,7 +219,7 @@ function addComment() {
 }
 
 function initPage() {
-	appendCSSLink("assets/css/" + x.css + ".css");	
+	appendCSSLink("assets/css/" + page.css + ".css");	
 	thisPage();
 }
 
