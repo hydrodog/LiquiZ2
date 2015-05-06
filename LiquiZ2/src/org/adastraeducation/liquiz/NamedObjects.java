@@ -24,8 +24,7 @@ import java.util.regex.Pattern;
 public class NamedObjects {
 	private static HashMap<String, ArrayList<Answer>> lookUpStdChoice;
 	private static HashMap<String, HashMap<String,Pattern>> lookUpPattern;
-	private static String fileLocation;
-	 
+	
 	static {
 		lookUpStdChoice = new HashMap<String, ArrayList<Answer>>();
 		
@@ -91,14 +90,7 @@ public class NamedObjects {
 		lookUpPattern.put(name, map);
 	}
 	
-	//These methods are to get the file location of "regexPatterns" into the bean through FileLocation.jsp file
-	public String getFileLocation() {
-		return fileLocation;
-	}
 
-	public void setFileLocation(String fileLocation) {
-		this.fileLocation = fileLocation;
-	}
 	
 	//TODO: write methods to write out hashmaps to database
 }

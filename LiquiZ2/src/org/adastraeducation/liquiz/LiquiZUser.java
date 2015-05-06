@@ -11,8 +11,8 @@ public class LiquiZUser extends User {
 
 	public LiquiZUser() {}
 
-	public LiquiZUser(String id, String passwd, String fName, String lName, String email) {
-		super(id, passwd, fName, lName, email, 0);
+	public LiquiZUser(int id, String un, String passwd, String fName, String lName, String email) {
+		super(id, un, passwd, fName, lName, email, 0);
 	}
 	public static final int CREATE = 4; // include edit and delete maybe?
 	public static final int EDIT = 8; // only
