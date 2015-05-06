@@ -442,7 +442,7 @@ public class Load {
 				String fn = rs.getString("FirstName");
 				String ln = rs.getString("LastName");
 				String email = rs.getString("Email");
-				user = new User(id, un, pw, fn, ln, email);
+				user = new LiquiZUser(id, un, pw, fn, ln, email); // TODO: is this LiquiZUser or User?
 				Database.addUser(user);
 			}
 		} catch (SQLException e) {
