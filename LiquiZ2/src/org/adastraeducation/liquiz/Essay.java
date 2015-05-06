@@ -37,11 +37,25 @@ public class Essay extends Question {
 		return "Essay";
 	}
 
-	public void writeHTML(DisplayContext dc ){		
-		dc.append("<textarea name='' rows='10' cols='50' form='quizForm' class='essay'>");
-		//TODO: check that this text is properly escaped for HTML
-		dc.append(defaultText);
-		dc.append("</textarea>");
+	public void writeHTML(DisplayContext dc ){
+		if (dc.isDisplayResponses()) {
+			dc.append("<textarea disabled rows='10' cols='50'>");
+			String[] answer = {"Your answer here"};
+			if (dc.getStudentResponses() != null) {
+				answer = dc.getStudentResponses().getLatestResponse(getId());
+			}
+			dc.append(answer[0]);
+			dc.append("</textarea>");
+			
+			if(dc.isDisplayAnswers()) {
+				//TODO what to display as answer?
+			}
+		} else {
+			dc.append("<textarea name='").append(getId()).append("' rows='10' cols='50' form='quizForm' class='essay'>");
+			//TODO: check that this text is properly escaped for HTML
+			dc.append(defaultText);
+			dc.append("</textarea>");
+		}
  	}
 	
 	public void writeJS(StringBuilder b ) {

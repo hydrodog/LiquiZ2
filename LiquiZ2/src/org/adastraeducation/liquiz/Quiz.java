@@ -2,6 +2,7 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
 
 public class Quiz implements Displayable {
 	public static Random r;
@@ -143,7 +144,7 @@ public class Quiz implements Displayable {
 		qContainers.remove(Index);
 	}
 	
-	public void addQuestion(HttpRequest req) {
+	public void addQuestion(HttpServletRequest req) {
 		String questionType = req.getParameter("question_type");
 		if (questionType.equals("fillin")) {
 			/*
@@ -154,18 +155,33 @@ public class Quiz implements Displayable {
 			*/
 		}
 	}
-	public void writeHTML (DisplayContext dc)	{
+	public void writeHTML (DisplayContext dc) {
 		//TODO: everyone add className to each object
 		// if it is null, don't add a classname
 		// if it is a string, append (as below)
-		dc.append("<h2>").append(getName()).append("</h2>");
-		dc.append("<form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>\n");
+		if (!dc.isDisplayResponses()) { // print quiz for taking
+			dc.append("<h2>").append(getName()).append("</h2>");
+			dc.append("<form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>\n");
+		} else {
+			if(dc.isDisplayAnswers()) {
+				dc.append("<h4>Your answers and the correct answers</h4>");
+			} else { //DisplayResponses (only)
+				dc.append("<h4>Your answers</h4>");
+			}
+			dc.append("<div class='quiz'>"); // TODO: class is quiz for style for now
+		}
+		
 		for(QuestionContainer qc : this.qContainers) {
 			qc.writeHTML(dc);
 		}
-		dc.append("\n<input type='hidden' name='quizID' value='").append(getId()).append("'>\n");
-		dc.append("\n<input type='submit' value='Submit'>\n");
-		dc.append("</form>\n");
+		
+		if (!dc.isDisplayResponses()) { // print quiz for taking
+			dc.append("\n<input type='hidden' name='quizID' value='").append(getId()).append("'>\n");
+			dc.append("\n<input type='submit' value='Submit'>\n");
+			dc.append("</form>\n");
+		} else {
+			dc.append("</div>");
+		}
  	}
 	
 	public void writeXML (StringBuilder b) {

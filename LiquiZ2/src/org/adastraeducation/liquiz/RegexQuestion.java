@@ -61,20 +61,24 @@ public class RegexQuestion extends FillIn {
 	
 	//<input id='123' class='fillin' type='text' onblur='showWarningPattern(this, "\\d\\d\\d")'/> 
 	public void writeHTML(DisplayContext dc) {
-		if (dc.isDisplayAnswers()) {
-			dc.append("<textarea disabled>");
-			// TODO: get student's answer?
-			dc.append("Your answer here");
-			dc.append("</textarea><br>");
-
-			dc.append("Possible answers:");
-		} else if (dc.isDisplayResponses()) {
-			dc.append("<textarea disabled>");
-			// TODO: get student's answer?
-			dc.append("Your answer here");
-			dc.append("</textarea><br>");
+		if (dc.isDisplayResponses()) {
+			String[] answer = {"Your answer here"};
+			if (dc.getStudentResponses() != null) {
+				answer = dc.getStudentResponses().getLatestResponse(getId());
+			}
 			
-			// TODO no Answer, thus no Response?
+			dc.append("<input type='text' disabled value='");
+			dc.append(answer[0]);
+			dc.append("'><br>");
+			
+			// TODO Response though? No Answer object means no Response object 
+			// just add Answer object to add Response?
+			
+			if (dc.isDisplayAnswers()) {
+				dc.append("Possible answers:<br>Fulfill this regex pattern: ");
+				// TODO interpreting regex?
+				dc.append(pattern.toString());
+			}
 		} else {
 			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' ");
 			if(warning != null) {

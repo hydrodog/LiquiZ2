@@ -77,10 +77,45 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	}
 	
 	public void writeHTML(DisplayContext dc ){
-		if(dc.isDisplayAnswers()) {
+		if(dc.isDisplayResponses()) {
+			String[] answer = {"Your answer here"};
+			if (dc.getStudentResponses() != null) {
+				answer = dc.getStudentResponses().getLatestResponse(getId());
+			}
 			
-		} else if (dc.isDisplayResponses()) {
+			dc.append("<select disabled multiple>\n");
+			for (Answer ans : getAns()) {
+				dc.append("<option value='").append(ans.getName()).append("'");
+				for (String res : answer) {
+					if (res.equals(ans.getName())) {
+						dc.append(" selected");
+						break;
+					}
+				}
+				dc.append(">");
+				ans.writeHTML(dc);
+				dc.append("</option>\n");
+			}
+			dc.append("</select>\n");
 			
+			//TODO teacher's response?
+			
+			boolean hasAnswer = false;
+			for (Answer ans : getAns()) {
+				if (ans.getCorrect()) {
+					hasAnswer = true;
+					break;
+				}
+			}
+			if(dc.isDisplayAnswers() && hasAnswer) {
+				dc.append("Correct answers:");
+				for (Answer ans : getAns()) {
+					if(ans.getCorrect()) {
+						dc.append("<br>");
+						dc.append(ans.getName());
+					}
+				}
+			}
 		} else {
 			dc.append("<select name='").append(getId()).append("' form='quizForm' multiple>\n");
 			for (Answer ans : getAns()){

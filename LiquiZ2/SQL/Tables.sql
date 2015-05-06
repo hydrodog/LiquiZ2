@@ -240,7 +240,7 @@ DROP TABLE IF EXISTS `LiquiZ`.`StudentResponses` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentResponses` (
   `UserID` INT NOT NULL,
   `QuesID` INT NOT NULL,
-  `DispElID` INT NOT NULL, -- null?
+  `Response` VARCHAR(21000) NOT NULL, -- what type to store if multiple?
   `Correct` BIT(1) NULL,
   `QuesScore` DOUBLE NOT NULL,
   `AttemptNum` INT NOT NULL
@@ -279,7 +279,8 @@ DROP TABLE IF EXISTS `LiquiZ`.`UserActions` ;
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`UserActions` (
   `UserID` INT NOT NULL,
   `Action` INT NOT NULL,
-  `Time` INT NOT NULL);
+  `Time` DATETIME NOT NULL); -- YYYY-MM-DD HH:MM:SS
+-- use Date date; Timestamp ts = rs.getTimestamp; if(ts !=null) date = new Date(ts.gettime()));
 
 
 -- -----------------------------------------------------

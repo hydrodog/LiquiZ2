@@ -72,8 +72,8 @@ public class DatabaseMgr {
 	
 	public static Connection getConnection() {
 		synchronized(lock) {
-			System.out.print("Entered getConnection(): ");
-			DatabaseMgr.printRemainingConns();
+//			System.out.print("Entered getConnection(): ");
+//			DatabaseMgr.printRemainingConns();
 			if (connections.isEmpty()) {
 				System.out.println("Stack Empty!");
 				return null;

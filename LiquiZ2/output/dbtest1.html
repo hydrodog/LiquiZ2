@@ -5,7 +5,8 @@
 </head>
 <body>
 
-<h1>LiquiZ test</h1><h2>ThisIsAQuiz</h2><form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>
+<h1>LiquiZ test</h1>
+<h2>ThisIsAQuiz</h2><form id='quizForm' class='quiz classname' action='quizSubmit.jsp' method='post'>
 <div class='quesHeader'>The Sky: 3 points</div><div class='question'>
 What is the color of the sky?
 <input name='1' class='fillin' type='text' />
@@ -14,16 +15,16 @@ What is the color of the sky?
 <div class='quesHeader'>Choosing animals: 4 points</div><div class='question'>
 Select all animals from the list
 <select name='7' form='quizForm' multiple>
-<option value= 'Dog'>Dog  </option>
- <option value= 'Cat'>Cat  </option>
- <option value= 'Computer'>Computer  </option>
- <option value= 'Dragon'>Dragon  </option>
+<option value= 'Dog'>Dog</option>
+ <option value= 'Cat'>Cat</option>
+ <option value= 'Computer'>Computer</option>
+ <option value= 'Dragon'>Dragon</option>
  </select>
 
 </div>
 
 <div class='quesHeader'>Animal Identification: 5 points</div><div class='question'>
-<img src='image.jpg' style = width:275px;height:183px>
+<img src='assets/img/cat.jpg' style = width:275px;height:183px>
 Which animal is shown in the picture?
 <div class='radio'>
 <input type='radio' name='2' value='Dog'> Dog <br>
@@ -35,13 +36,13 @@ Which animal is shown in the picture?
 
 <div class='quesHeader'>Hello World: 10 points</div><div class='question'>
 Write a method to output Hello World to the console.
-<br>Choose your language:<select name='selectLang' form='quizForm'>
+<br>Choose your language:<select name='selectLang4' form='quizForm'>
 <option value='C++'>C++</option>
 <option value='Java'>Java</option>
 </select>
-<textarea name='' rows='10' cols='50' form='quizForm' class='code'></textarea>
+<textarea name='4' rows='10' cols='50' form='quizForm' class='code'></textarea>
 Was this question hard?
-<textarea name='' rows='10' cols='50' form='quizForm' class='essay'></textarea>
+<textarea name='5' rows='10' cols='50' form='quizForm' class='essay'></textarea>
 </div>
 
 <div class='quesHeader'>Number Range: 1 points</div><div class='question'>
@@ -70,4 +71,4 @@ Type a digit
 <input type='submit' value='Submit'>
 </form>
 </body>
-</html>
+</html>
