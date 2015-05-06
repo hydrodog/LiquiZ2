@@ -1,0 +1,8 @@
+{
+  css: "red",
+  
+  quizzes: [
+    { name: "processing0", outof: 100, published: true, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"}, 
+    { name: "java data types", outof: 100, published: true, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"},     
+  ]
+}
