@@ -14,9 +14,12 @@ public class Policy {
 	private int duration;		// if timed is true, duration is the time allotted in seconds.
 	private boolean showAns;	// if true, then after grading display the answers
 	private boolean scored;		// if true, then this quiz is scored (otherwise do not score)
-	private int grade;			// the score from the quiz (TODO: should this be double?)
+	private int grade;			// TODO: grade in policy makes no sense!
+	// have a policy to do something IF grade < x???
+	//the score from the quiz (TODO: should this be double?)
 	private boolean shuffleQues;// if true, randomly shuffle the question order
 	private boolean shuffleAns;	// if true, randomly shuffle the order of multiple choice answers
+	//TODO: require access from specific access point??
 	private String accessCode;	// if not null, this code is used to take the quiz
 	//TODO: restrict to local range of addresses, ie in class?
 	public String getName() {
