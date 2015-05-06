@@ -29,20 +29,25 @@ public class EquationQuestion extends Question {
 	private List<Map.Entry<String, Var>> variablesList;
 	private int questionIndex;
 	
+	private boolean randomPosition;
+	
 	public EquationQuestion()
 	{
 		super();
+		setRandomPosition(true);
 	}
 	
 	public EquationQuestion(String text)
 	{
 		super();
 		questionText = text;
+		setRandomPosition(true);
 	}
 	
 	public EquationQuestion(Equation equation,String text)
 	{
 		super();
+		setRandomPosition(true);
 		questionText = text;
 		setEq(equation);
 		generateAquestion();
@@ -52,6 +57,7 @@ public class EquationQuestion extends Question {
 	public EquationQuestion(Equation equation)
 	{
 		super();
+		setRandomPosition(true);
 		setEq(equation);
 	}
 
@@ -85,10 +91,17 @@ public class EquationQuestion extends Question {
 		        variablesList.add(pair);
 		    }
 			int size = variables.size();
-			questionIndex = Quiz.random(0, size);
+			if(randomPosition)
+				questionIndex = Quiz.random(0, size);
+			else
+				questionIndex = size;
 			stringList = new ArrayList<String>();
 			
-			System.out.println(getCorrectAnswer());
+			//System.out.println(getCorrectAnswer());
+			ArrayList<Answer> ans = new ArrayList<Answer>();
+			ans.add(new Answer(new Text(String.valueOf(getCorrectAnswer()))));
+			setAns(ans);
+			//if newStrFlag is true, start a new string, or continue append on the last one.
 			Boolean newStrFlag = true;
 			String textArr[] = questionText.split("\\[[^\\] ]+\\]");
 			Matcher matcher = Pattern.compile("\\[([^\\] ]+?)\\]").matcher(questionText);
@@ -107,11 +120,12 @@ public class EquationQuestion extends Question {
 				if(matcher.find())
 				{
 					String valStr = matcher.group(1);
-					
 					if(questionIndex == size)
 					{
 						if(valStr.equals(eq.getEquation()) || valStr.equals("?"))
+						{
 							newStrFlag = true;
+						}
 						else
 						{
 							double operand = variables.get(valStr).getOperand();
@@ -127,7 +141,9 @@ public class EquationQuestion extends Question {
 							stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
 						}
 						else if(variablesList.get(questionIndex).getKey().equals(valStr))
+						{
 							newStrFlag = true;
+						}
 						else{
 							double operand = variables.get(valStr).getOperand();
 							stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
@@ -145,12 +161,37 @@ public class EquationQuestion extends Question {
 	@Override
 	public void writeHTML(DisplayContext dc) {
 		// TODO Auto-generated method stub
-		for(int i = 0; i < stringList.size() - 1; ++i)
-		{
-			dc.append(stringList.get(i));
-			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
+		if(dc.isDisplayAnswers()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+
+			dc.append("Possible answers:<br>");
+			for (Answer ans : getAns()) {
+				ans.writeHTML(dc);
+				dc.append("<br>");
+			}
+		} else if (dc.isDisplayResponses()) {
+			dc.append("<textarea disabled>");
+			// TODO: get student's answer?
+			dc.append("Your answer here");
+			dc.append("</textarea><br>");
+			
+			dc.append("Teacher's comment:<br>");
+			Response res = getResponseFor("Your answer here");
+			if (res != null) { 
+				writeHTML(dc);
+			}
+		} else {
+			for(int i = 0; i < stringList.size() - 1; ++i)
+			{
+				dc.append(stringList.get(i));
+				dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
+			}
+			dc.append(stringList.get(stringList.size() - 1));
 		}
-		dc.append(stringList.get(stringList.size() - 1));
+		
 	}
 	
 	@Override
@@ -212,5 +253,13 @@ public class EquationQuestion extends Question {
 				return (double) getPoints();
 		}
 		return 0;
+	}
+
+	public boolean isRandomPosition() {
+		return randomPosition;
+	}
+
+	public void setRandomPosition(boolean randomPosition) {
+		this.randomPosition = randomPosition;
 	}
 }
