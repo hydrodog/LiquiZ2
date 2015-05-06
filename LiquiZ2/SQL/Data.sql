@@ -5,9 +5,9 @@ DELETE FROM Courses_Quizzes;
 DELETE FROM DisplayElements;
 DELETE FROM Media;
 DELETE FROM Policies;
-DELETE FROM Ques_Ans;
 DELETE FROM QuesCon; 
 DELETE FROM QuesConElements;
+DELETE FROM Ques_Ans;
 DELETE FROM Questions;
 DELETE FROM Quizzes;
 DELETE FROM Quizzes_QuesCons;
@@ -16,6 +16,7 @@ DELETE FROM StdSet;
 DELETE FROM StudentGrades; 
 DELETE FROM StudentQuizScores; 
 DELETE FROM StudentResponses; 
+DELETE FROM UserActions;
 DELETE FROM UserPermissions;
 DELETE FROM Users;
 

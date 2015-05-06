@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StdChoices` (
 
 
 -- -----------------------------------------------------
--- Table `LiquiZ`.`QuesAnsSeq`
+-- Table `LiquiZ`.`Ques_Seq`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `LiquiZ`.`Ques_Ans` ;
 
@@ -270,12 +270,43 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`StudentGrades` (
   `Course` INT NOT NULL,
   `Grade` DOUBLE NOT NULL);
 
+
+-- -----------------------------------------------------
+-- Table `LiquiZ`.`UserActions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LiquiZ`.`UserActions` ;
+
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`UserActions` (
+  `UserID` INT NOT NULL,
+  `Action` INT NOT NULL,
+  `Time` INT NOT NULL);
+
+
+-- -----------------------------------------------------
+-- Table `LiquiZ`.`UserActionCodes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LiquiZ`.`UserActionCodes` ;
+
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`UserActionCodes` (
+  `Code` INT NOT NULL,
+  `Action` CHAR(8) NOT NULL);
+
+INSERT INTO UserActionCodes
+VALUES (0, "LOGIN");
+INSERT INTO UserActionCodes
+VALUES (1, "LOGOUT");
+
+-- SELECT UserActions.UserID, UserActionCodes.Action, UserActions.Time FROM UserActions
+-- INNER JOIN UserActionCodes ON UserActions.Action = UserActionCodes.Code
+
+
 DROP TABLE IF EXISTS `LiquiZ`.`ViewAnsToQues` ;
 DROP TABLE IF EXISTS `LiquiZ`.`ViewQuiz` ;
 DROP TABLE IF EXISTS `LiquiZ`.`ViewQuizWAns` ;
 DROP VIEW IF EXISTS `LiquiZ`.`ViewAnsToQues` ;
 DROP VIEW IF EXISTS `LiquiZ`.`ViewQuiz` ;
 DROP VIEW IF EXISTS `LiquiZ`.`ViewQuizWAns` ;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
