@@ -1,4 +1,4 @@
-package org.adastraeducation.liquiz.test.bag;
+package org.adastraeducation.liquiz.mport.canvas;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;

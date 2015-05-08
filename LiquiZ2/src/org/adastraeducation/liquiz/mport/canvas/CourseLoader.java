@@ -1,4 +1,4 @@
-package org.adastraeducation.liquiz.test.bag;
+package org.adastraeducation.liquiz.mport.canvas;
 
 import org.adastraeducation.liquiz.Course;
 import org.adastraeducation.liquiz.Quiz;
