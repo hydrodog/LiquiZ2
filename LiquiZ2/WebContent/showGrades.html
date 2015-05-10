@@ -17,16 +17,19 @@
 		success : function(data) {
 			var items = [];
 			$.each(data, function(key, val) {
+				// get student name
 				if (key === "userName") {
 					console.log("name")
 					items.push("<h1 id='" + "userName" + "'>"
 							+ val.firstName + " " + val.lastNsme + "</h1>");
 				}
+				// get course code
 				if (key === "courseInfo") {
 					console.log("info")
 					items.push("<h2 id='" + "department" + "'>"
 							+ val.department + val.number + "</h2>");
 				}
+				// get quiz name and score
 				if (key === "quizList") {
 					console.log("quiz list")
 					$.each(val, function(index, quizObj) {
@@ -35,7 +38,7 @@
 					})
 				}
 			});
-
+			// add to html
 			$("<ul/>", {
 				"class" : "my-new-list",
 				html : items.join("")
