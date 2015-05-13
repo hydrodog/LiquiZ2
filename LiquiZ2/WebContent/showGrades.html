@@ -5,51 +5,29 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
 	
 </script>
+<script src="assets/js1/func.js"></script>
 <title>Show Scores</title>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<script type="text/javascript">
-	$.ajax({
-		url : "score.json",
-		dataType : 'json',
-		cache : false,
-		success : function(data) {
-			var items = [];
-			$.each(data, function(key, val) {
-				// get student name
-				if (key === "userName") {
-					console.log("name")
-					items.push("<h1 id='" + "userName" + "'>"
-							+ val.firstName + " " + val.lastName + "</h1>");
-				}
-				// get course code
-				if (key === "courseInfo") {
-					console.log("info")
-					items.push("<h2 id='" + "department" + "'>"
-							+ val.department + val.number + "</h2>");
-				}
-				// get quiz name and score
-				if (key === "quizList") {
-					console.log("quiz list")
-					$.each(val, function(index, quizObj) {
-						items.push("<li id='" + "quizList" + "'>"
-								+ quizObj.name + ": " + quizObj.score + "</li>");
-					})
-				}
-			});
-			// add to html
-			$("<ul/>", {
-				"class" : "my-new-list",
-				html : items.join("")
-			}).appendTo("body");
-		},
-		error : function() {
-			console.log("error")
-		}
-	})
-	console.log("func")
-</script>
 <body>
+<h1 id="student"></h1>
+<h2 id="course"></h2>
+<div id="quiz"></div>
 </body>
+<script>
+function thisPage() {
+	console.log(page);
+	document.getElementById("student").innerHTML = page.userName.firstName + " " + page.userName.lastName;
+	document.getElementById("course").innerHTML = page.courseInfo.department + " " + page.courseInfo.number;
+	for (var idx in page.quizList) {
+		var node = document.createElement("LI");                 // Create a <li> node
+		var textnode = document.createTextNode(page.quizList[idx].name + " " + page.quizList[idx].score);         // Create a text node
+		node.appendChild(textnode);                              // Append the text to <li>
+		document.getElementById("quiz").appendChild(node);     // Append <li> to <ul> with id
+	}
+	
+}
+loadData("showGrades_ajax.jsp")
+</script>
 </html>
