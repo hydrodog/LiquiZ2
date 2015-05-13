@@ -169,7 +169,6 @@ public class EquationQuestion extends Question {
 						}
 					}
 					else if(valStr.equals(eq.getEquation()) || valStr.equals("?")){
-
 						double operand = eq.getCorrectAnswer();
 						stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
 					}
@@ -182,21 +181,8 @@ public class EquationQuestion extends Question {
 			if(newStrFlag)
 			{
 				stringList.add("");
-				if(matcher.find())
-				{
-					String valStr = matcher.group(1);
-					if(textArr.length == questionIndex)
-					{
-						newStrFlag = true;
-						if(valStr.equals(eq.getEquation()) || valStr.equals("?")){
-							currentCorrectAnswer = eq.getCorrectAnswer();
-						}
-						else{
-							currentCorrectAnswer = variables.get(valStr).getOperand();
-						}
-					}
-				}
 			}
+			System.out.println(currentCorrectAnswer);
 
 			ArrayList<Answer> ans = new ArrayList<Answer>();
 			ans.add(new Answer(new Text(String.valueOf(currentCorrectAnswer))));
