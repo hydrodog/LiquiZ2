@@ -63,8 +63,7 @@ public class SerializeTest {
 		qc = new QuestionContainer("Math",
 			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
-				eq,
-				new Text("?"),
+				new EquationQuestion(eq),
 				new FillIn(3, 1, new Answer(new Text("1"), true))
 			))
 		);
@@ -81,7 +80,7 @@ public class SerializeTest {
 		qc = new QuestionContainer("Math",
 			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
-				eq1,
+				new EquationQuestion(eq1),
 				new Text("?"),
 				new NumberRange(1, 3, 2, 0.0, 99.0) //id 1, 3 points, level 2, accept 0 to 99 as correct
 			))

@@ -1,6 +1,5 @@
 package org.adastraeducation.liquiz.equation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,42 +8,78 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.adastraeducation.liquiz.DisplayContext;
-import org.adastraeducation.liquiz.Displayable;
-
 /**
- * Present equations with random variables.
- * It has two ways to parse the equations in string[]. One is in infix, and the other is in the RPN.
- * @author Yingzhu Wang
+ * 
+ * @author Yujie Liu
  *
  */
 
-public class Equation implements Displayable {
-	private Expression func;
+public class Equation{
 	private double correctAnswer;
 	private HashMap<String,Var> variables;
 	private String equation;
+	private String formedEquation;		// formed equation bracket the variable into square bracket
+	private int numberVariable;
 	
-	public Expression getFunc(){
-		return this.func; 
-	}
-	
-	public void setFunc(Expression e){
-		this.func = e;
-	}
-	
+	// value of function is the priority.
+	protected static HashMap<String,Integer> defaultFunction = null;
+	protected static HashMap<String,Double> defaultNumbers = null;
+	static {
+		defaultFunction = new HashMap<String,Integer>();
+		defaultNumbers = new HashMap<String,Double>();
+		defaultFunction.put("sin", 100);
+		defaultFunction.put("cos", 100);
+		defaultFunction.put("tan", 100);
+		defaultFunction.put("abs", 100);
+		defaultFunction.put("asin", 100);
+		defaultFunction.put("acos", 100);
+		defaultFunction.put("atan", 100);
+		defaultFunction.put("sqrt", 100);
+		defaultFunction.put("sin", 100);
+		defaultFunction.put("log", 100);
+		defaultFunction.put("ln", 100);
+		defaultFunction.put("exp", 100);
+		defaultFunction.put("ceil", 100);
+		defaultFunction.put("floor", 100);
+		defaultFunction.put("round", 100);
+		defaultFunction.put("^", 50);
+		defaultFunction.put("*", 20);
+		defaultFunction.put("/", 20);
+		defaultFunction.put("+", 10);
+		defaultFunction.put("-", 10);
+		defaultFunction.put("(", 1);
+		defaultFunction.put(")", 1);
+		defaultFunction.put(",", 1);
+		defaultNumbers.put("pi", Math.PI);
+		defaultNumbers.put("e", Math.E);
+    }
+
+	// Precompile all regular expressions used in parsing
+	private static final Pattern parseDigits =
+			Pattern.compile("^([0-9]+\\.?[0-9]*)");
+    private static final Pattern wordPattern =
+    		Pattern.compile("^(\\w[\\w\\d]*?)[^\\w\\d]");
+
+    /**
+     * get correct answer, correct answer cannot be set outside the class.
+     * @return
+     */
 	public double getCorrectAnswer(){
 		return this.correctAnswer;
 	}
 	
-	public void setCorrectAnswer(double ans){
-		this.correctAnswer = ans;
-	}
-	
+	/**
+	 * return the variables map
+	 * @return
+	 */
 	public HashMap<String,Var> getVariables(){
 		return variables;
 	}
 	
+	/**
+	 * set the varaibles map
+	 * @param h
+	 */
 	public void setVariables(HashMap<String,Var> h){
 		variables = h;
 	}
@@ -54,183 +89,269 @@ public class Equation implements Displayable {
 	}
 	
 	public Equation(String equation, HashMap<String,Var> variables){
+		
 		this.variables=variables;
-		ArrayList<String> equationSplit = this.parseQuestion(equation);
-		this.func = this.parseInfix(equationSplit);
-		correctAnswer = func.eval();
 		this.setEquation(equation);
+		// randomly generate variables
+		
+		try {
+			randomVar();
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public Equation(Expression func, HashMap<String,Var> variables){
-		this.func = func;
-		this.variables = variables;
-		correctAnswer=func.eval();
-	}
-
-	public Equation(Expression func){
-		this.func = func;
-		this.variables = new HashMap<String,Var>();
-		correctAnswer=func.eval();
-	}
-	public void setExpression(Expression e){
-		this.func=e;
-		correctAnswer=func.eval();
-	}
-	
-/*	public void setVariables(HashMap<String,Var> variables){
-		this.variables = variables;
-	}*/
-	
-
-	public String getTagName() { return "Equation"; }
-
-
-	public  Expression parseInfix(ArrayList<String> s){
-		Tree t = new Tree(s);
-		ArrayList<String> rpn = t.traverse();
-
-		return parseRPN(rpn);
-	}
-	// Precompile all regular expressions used in parsing
-	private static final Pattern parseDigits =
-			Pattern.compile("^[0-9]+$");
-    private static final Pattern wordPattern =
-    		Pattern.compile("[\\W]|([\\w]*)");
-
-    /*TODO: We can do much better than a switch statement,
-    * but it would require a hash map and lots of little objects
-    */
-    //TODO: Check if binary ops are backgwards? a b - ????
-	public  Expression parseRPN(ArrayList<String> s) {
-		Stack<Expression> stack = new Stack<Expression>();
-		for(int i = 0; i<s.size(); i++){
-			String temp = s.get(i);
-			if (Functions.MATHFUNCTIONS.contains(temp)) {
-				Expression op1 ;
-				Expression op2 ;
-				switch(temp){
-				case "+": 
-					op2=stack.pop();
-					op1=stack.pop();
-					stack.push(new Plus(op1,op2));
-					break;
-				case "-": 
-					op2=stack.pop();
-					op1=stack.pop();
-					stack.push( new Minus(op1,op2));
-					break;
-				case "*": 
-					op2=stack.pop();
-					op1=stack.pop();
-					stack.push( new Multi(op1,op2));break;
-				case "/": 
-					op2=stack.pop();
-					op1=stack.pop();
-					stack.push( new Div(op1,op2));break;
-				case "sin":
-					op1=stack.pop();
-					stack.push(new Sin(op1));break;
-				case "cos":
-					op1=stack.pop();
-					stack.push(new Cos(op1));break;
-				case "tan":
-					op1=stack.pop();
-					stack.push(new Tan(op1));break;
-				case "abs":
-					op1=stack.pop();
-					stack.push(new Abs(op1));break;
-				case "Asin":
-					op1=stack.pop();
-					stack.push(new Asin(op1));break;
-				case "Atan":
-					op1=stack.pop();
-					stack.push(new Atan(op1));break;
-				case "neg":
-					op1=stack.pop();
-					stack.push(new Neg(op1));break;
-				case "sqrt":
-					op1=stack.pop();
-					stack.push(new Sqrt(op1));break;	
-				default:break;
-				}
-
+	/**
+	 * compute the value of stack. and push the result into valstack.
+	 * @param valStack
+	 * @param funStack
+	 * @param type 0: compute 1 function
+	 * 		  type 1: compute until "("
+	 * 		  type 2: compute until the end
+	 * @param currentPriority: if type = 0 and top priority equal or bigger than current, then compute
+	 * @throws Exception invalid function
+	 */
+	public void compute(Stack<Double> valStack,Stack<String> funStack, int type, int currentPriority) throws Exception{
+		if(funStack.empty()){
+			return;
+		}
+		String fun = funStack.pop();
+		if(fun.equals("("))
+		{
+			if(type == 1){
+				return;
 			}
-			//deal with the space
-			else if(temp.equals(""))
-				;
-			else{
-				Matcher m = parseDigits.matcher(temp);
-				if (m.matches()){
-					double x = Double.parseDouble(temp);
-					stack.push(new Constant(x));
-				}
-				else{
-					stack.push(variables.get(temp));
-				}
+			else if(type == 0){
+				funStack.push("(");
+				return;
 			}
 		}
-		return stack.pop();
-	}
-	
-	public ArrayList<String> parseQuestion(String question){
-		ArrayList<String> s = new ArrayList<String>();
-	    Matcher m = wordPattern.matcher(question);    
-	    while(m.find()){
-	    	s.add(m.group());
-	    }
-		return s;
-	}
-	
-//	public ResultSet readDatabase(String sql){
-//		return DatabaseMgr.select(sql);
-//	}
-//	
-//	public void writeDatabase(String sql){
-//		DatabaseMgr.update(sql);
-//	}
-	
-/*	public Expression getExpression(){
-		return func;
-	}
-	
-	public double getCorrectAnswer(){
-		return correctAnswer;
-	}*/
-
-
-
-	@Override
-	public void writeHTML(DisplayContext dc) {	
-		func.infixReplaceVar(dc);
-	}
-
-	@Override
-	public void writeXML(StringBuilder b) {
-		b.append("<Equation question='");
-		func.infix(b);
-		b.append("'></Equation>");
-	}
-
-	@Override
-	public void writeJS(StringBuilder b) {
+		if(type > 0 || defaultFunction.get(fun) >= currentPriority){
+			if(fun.equals("(")){
+				throw new Exception("invalid parenthesis");
+			}
+			else if(fun.equals("+")){
+				double op2 = valStack.pop();
+				double op1 = valStack.pop();
+				valStack.push(op1 + op2);
+			}
+			else if(fun.equals("-")){
+				double op2 = valStack.pop();
+				double op1 = valStack.pop();
+				valStack.push(op1 - op2);
+			}
+			else if(fun.equals("*")){
+				double op2 = valStack.pop();
+				double op1 = valStack.pop();
+				valStack.push(op1 * op2);
+			}
+			else if(fun.equals("/")){
+				double op2 = valStack.pop();
+				double op1 = valStack.pop();
+				valStack.push(op1 / op2);
+			}
+			else if(fun.equals("^")){
+				double op2 = valStack.pop();
+				double op1 = valStack.pop();
+				valStack.push(Math.pow(op1, op2));
+			}
+			else if(fun.equals("abs")){
+				double op1 = valStack.pop();
+				valStack.push(Math.abs(op1));
+			}
+			else if(fun.equals("sin")){
+				double op1 = valStack.pop();
+				valStack.push(Math.sin(op1));
+			}
+			else if(fun.equals("cos")){
+				double op1 = valStack.pop();
+				valStack.push(Math.cos(op1));
+			}
+			else if(fun.equals("tan")){
+				double op1 = valStack.pop();
+				valStack.push(Math.tan(op1));
+			}
+			else if(fun.equals("asin")){
+				double op1 = valStack.pop();
+				valStack.push(Math.asin(op1));
+			}
+			else if(fun.equals("acos")){
+				double op1 = valStack.pop();
+				valStack.push(Math.acos(op1));
+			}
+			else if(fun.equals("atan")){
+				double op1 = valStack.pop();
+				valStack.push(Math.atan(op1));
+			}
+			else if(fun.equals("sqrt")){
+				double op1 = valStack.pop();
+				valStack.push(Math.sqrt(op1));
+			}
+			else if(fun.equals("ln")){
+				double op1 = valStack.pop();
+				valStack.push(Math.log(op1));
+			}
+			else if(fun.equals("log")){
+				double op1 = valStack.pop();
+				valStack.push(Math.log10(op1));
+			}
+			else if(fun.equals("exp")){
+				double op1 = valStack.pop();
+				valStack.push(Math.exp(op1));
+			}
+			else if(fun.equals("ceil")){
+				double op1 = valStack.pop();
+				valStack.push(Math.ceil(op1));
+			}
+			else if(fun.equals("floor")){
+				double op1 = valStack.pop();
+				valStack.push(Math.floor(op1));
+			}
+			else if(fun.equals("round")){
+				double op1 = valStack.pop();
+				valStack.push(1.0 * Math.round(op1));
+			}
+		}
+		else{
+			funStack.push(fun);
+			return;
+		}
 		
+		if(type == 1 || type == 2){
+			if(funStack.empty() == false){
+				compute(valStack,funStack,type,0);
+			}
+		}
 	}
 
+	/**
+	 * return the equation string
+	 * @return  the equation string
+	 */
 	public String getEquation() {
 		return equation;
 	}
 
+	/**
+	 * set equation, add the blank at the begin and end to use regular expression easier.
+	 * @param equation
+	 */
 	public void setEquation(String equation) {
-		this.equation = equation;
+		this.equation = " " + equation  + " ";
 	}
 	
-	public void randomVar()
+	/**
+	 * get equation with [] automatically.
+	 * @return
+	 */
+	public String getFormedEquation(){
+		return formedEquation;
+	}
+	
+	/**
+	 * return the number of variables used in the equation, including the result.
+	 * @return
+	 */
+	public int getNumberVariable(){
+		return numberVariable;
+	}
+	
+	/**
+	 * randomly generate an equation with new variables
+	 * @throws Exception
+	 */
+	public void randomVar() throws Exception
 	{
 		Iterator<Entry<String, Var>> it = variables.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, Var> pair = (Map.Entry<String, Var>)it.next();
+	        if(defaultFunction.containsKey(pair.getKey()) || defaultNumbers.containsKey(pair.getKey())){
+	        	throw new Exception("Variable contains default key");
+	        }
 	        pair.getValue().randOperand();
 	    }
-		correctAnswer=func.eval();
+
+	    formedEquation = equation;
+	    numberVariable = 0;
+		// check the formulas format and compute the inorder formula
+		Stack<Double> valStack = new Stack<Double>();
+		Stack<String> funStack = new Stack<String>();
+		boolean start = true; // used to check - is negative or minus;
+		for(int i = 0; i < equation.length(); ++i){
+			char c = equation.charAt(i);
+			switch(c){
+				case '(':
+					funStack.push("(");
+					start = true;
+					break;
+				case ')':
+					compute(valStack,funStack,1,0);
+					break;
+				case '+':
+				case '-':
+					if(start){
+						valStack.push(0.0);
+						start = false;
+					}
+				case '*':
+				case '/':
+				case '^':
+					String words = String.valueOf(c);
+					compute(valStack,funStack,0,defaultFunction.get(words));
+					funStack.push(words);
+					break;
+				default:
+					if(c >= '0' && c <= '9' )
+					{
+						Matcher matcher = parseDigits.matcher(equation.substring(i));
+						if(matcher.find())
+						{
+							words = matcher.group(1);
+							double value = Double.valueOf(words);
+							i += words.length() - 1;
+							valStack.push(value);
+							start = false;
+						}
+					}
+					else if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ){
+						String subStr = equation.substring(i);
+						Matcher matcher = wordPattern.matcher(subStr);
+						if(matcher.find())
+						{
+							words = matcher.group(1);
+							if(defaultFunction.containsKey(words)){
+								compute(valStack,funStack,0,defaultFunction.get(words));
+								funStack.push(words);
+								start = false;
+							}
+							else if(variables.containsKey(words)){
+								Var val = variables.get(words);
+								valStack.push(val.getOperand());
+								start = false;
+
+								String s1= formedEquation.substring(0,numberVariable*2 + i);
+								String s2 = formedEquation.substring(numberVariable*2 + i + words.length());
+								formedEquation = s1 + "[" + words + "]" + s2;
+								numberVariable++;
+							}
+							else if(defaultNumbers.containsKey(words)){
+								valStack.push(defaultNumbers.get(words));
+								start = false;
+							}
+							else{
+								throw new Exception("No definition of words " + words);
+							}
+							i += words.length() - 1;
+						}
+					}
+					break;
+			}
+		}
+		numberVariable++;
+		compute(valStack,funStack,2,0);
+		correctAnswer = valStack.peek();
+		formedEquation += "= [?] ";
 	}
 }
