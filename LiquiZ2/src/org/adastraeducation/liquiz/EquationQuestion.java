@@ -140,7 +140,7 @@ public class EquationQuestion extends Question {
 			Matcher matcher = Pattern.compile("\\[([^\\] ]+?)\\]").matcher(questionText);
 
 			if(randomPosition)
-				questionIndex = Quiz.random(0, textArr.length);
+				questionIndex = Quiz.random(0, textArr.length - 1);
 			else
 				questionIndex = eq.getNumberVariable();
 			for(int i = 0; i < textArr.length; ++i)
