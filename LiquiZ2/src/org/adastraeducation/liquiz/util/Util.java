@@ -58,7 +58,7 @@ public class Util {
 	public static String standardAJAXHeader(HttpSession session) {
 		StringBuilder b = new StringBuilder(1024);
 		b.append("{\n").append("css:'").append
-		(session.getAttribute("css")).append('\'');	
+		(session.getAttribute("css")).append("',\n");	
 		return b.toString();
 	}
 
