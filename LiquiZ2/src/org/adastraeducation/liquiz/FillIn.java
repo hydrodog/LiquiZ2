@@ -79,29 +79,44 @@ public class FillIn extends Question {
 	@Override
 	//<input name='123' class='fillin' type='text' onblur='showNumberWarning(this, "\\d\\d\\d")'/> 
 	public void writeHTML(DisplayContext dc) {
-		if(dc.isDisplayAnswers()) {
-			dc.append("<textarea disabled>");
-			// TODO: get student's answer?
-			dc.append("Your answer here");
-			dc.append("</textarea><br>");
-
-			dc.append("Possible answers:<br>");
-			for (Answer ans : getAns()) {
-				ans.writeHTML(dc);
-				dc.append("<br>");
+		if (dc.isDisplayResponses()) {
+			String[] answer = {"Your answer here"};
+			if (dc.getStudentResponses() != null) {
+				answer = dc.getStudentResponses().getLatestResponse(getId());
 			}
-		} else if (dc.isDisplayResponses()) {
-			dc.append("<textarea disabled>");
-			// TODO: get student's answer?
-			dc.append("Your answer here");
-			dc.append("</textarea><br>");
 			
-			dc.append("Teacher's comment:<br>");
-			Response res = getResponseFor("Your answer here");
-			if (res != null) { 
-				writeHTML(dc);
+			dc.append("<input type='text' disabled value='");
+			dc.append(answer[0]);
+			dc.append("'> ");
+			
+			if(dc.isDisplayAnswers()) {
+				Response res = getResponseFor(answer[0]);
+				if (res != null) { 
+					if (Score.correctQues(getId(), answer) == getPoints()) {
+						dc.append("<span class='response correct'>");
+					} else {
+						dc.append("<span class='response'>");
+					}
+					writeHTML(dc);
+					dc.append("</span>");
+				}
+				
+				boolean hasAnswer = false;
+				for (Answer ans : getAns()) {
+					if (ans.getCorrect()) {
+						hasAnswer = true;
+						break;
+					}
+				}
+				if (hasAnswer) {
+					dc.append("\n<br>Possible answers:<br>");
+					for (Answer ans : getAns()) {
+						ans.writeHTML(dc);
+						dc.append("<br>");
+					}
+				}
 			}
-		} else {
+		} else { // just show the empty box
 			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />");
 		}
 	}

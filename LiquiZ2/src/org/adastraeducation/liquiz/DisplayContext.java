@@ -1,9 +1,14 @@
 package org.adastraeducation.liquiz;
-
+/**
+ * Contains flags and information that writeHTML will need
+ * @author yijinkang
+ *
+ */
 public class DisplayContext {
 	private StringBuilder b;
-	boolean displayResponses;
-	boolean displayAnswers;
+	StudentResponses sr;
+	boolean displayResponses; // Shows student's response
+	boolean displayAnswers; // Shows student's response and the Response (feedback) and correct answers
 	
 	public DisplayContext() { // use getters/setters to set individual flags
 		b = new StringBuilder();
@@ -37,5 +42,17 @@ public class DisplayContext {
 	}
 	public void setDisplayAnswers(boolean displayAnswers) {
 		this.displayAnswers = displayAnswers;
+		if(displayAnswers) {
+			displayResponses = true; // if displaying answers, display responses as well
+		}
 	}
+
+	public StudentResponses getStudentResponses() {
+		return sr;
+	}
+
+	public void setStudentResponses(StudentResponses sr) {
+		this.sr = sr;
+	}
+	
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+	
+</script>
+<title>Show Scores</title>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script type="text/javascript">
+	$.ajax({
+		url : "score.json",
+		dataType : 'json',
+		cache : false,
+		success : function(data) {
+			var items = [];
+			$.each(data, function(key, val) {
+				// get student name
+				if (key === "userName") {
+					console.log("name")
+					items.push("<h1 id='" + "userName" + "'>"
+							+ val.firstName + " " + val.lastName + "</h1>");
+				}
+				// get course code
+				if (key === "courseInfo") {
+					console.log("info")
+					items.push("<h2 id='" + "department" + "'>"
+							+ val.department + val.number + "</h2>");
+				}
+				// get quiz name and score
+				if (key === "quizList") {
+					console.log("quiz list")
+					$.each(val, function(index, quizObj) {
+						items.push("<li id='" + "quizList" + "'>"
+								+ quizObj.name + ": " + quizObj.score + "</li>");
+					})
+				}
+			});
+			// add to html
+			$("<ul/>", {
+				"class" : "my-new-list",
+				html : items.join("")
+			}).appendTo("body");
+		},
+		error : function() {
+			console.log("error")
+		}
+	})
+	console.log("func")
+</script>
+<body>
+</body>
+</html>

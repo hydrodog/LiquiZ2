@@ -124,31 +124,31 @@ VALUES (6, "Choosing animals");
 
 -- Elements to go into second qc
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (30, "Select all animals from the list", "txt");
+VALUES (28, "Select all animals from the list", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType)
 VALUES (7, 4, 3, "Mult");
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (31, "Dog", "txt");
+VALUES (29, "Dog", "txt");
 INSERT INTO Answers(AnsID, DispElID)
-VALUES (21, 31);
+VALUES (21, 29);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (32, "Cat", "txt");
+VALUES (30, "Cat", "txt");
 INSERT INTO Answers(AnsID, DispElID)
-VALUES (22, 32);
+VALUES (22, 30);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (33, "Computer", "txt");
+VALUES (31, "Computer", "txt");
 INSERT INTO Answers(AnsID, DispElID)
-VALUES (23, 33);
+VALUES (23, 31);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (34, "Dragon", "txt");
+VALUES (32, "Dragon", "txt");
 INSERT INTO Answers(AnsID, DispElID)
-VALUES (24, 34);
+VALUES (24, 32);
 
 -- Connect questions to answers
 INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
@@ -162,7 +162,7 @@ VALUES (7, 24, 4, 1);
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements (QuesConID, Sequence, DispElID, Type)
-VALUES (6, 1, 30, "Elem");
+VALUES (6, 1, 28, "Elem");
 INSERT INTO QuesConElements (QuesConID, Sequence, QuesID, Type)
 VALUES (6, 3, 7, "Ques");
 
@@ -179,7 +179,7 @@ VALUES (3, "Opinion");
 
 -- Elements to go into third qc
 INSERT INTO DisplayElements(DispElID, TextElement, DispType)
-VALUES (26, "Did you like this quiz?", "txt");
+VALUES (24, "Did you like this quiz?", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType)
@@ -191,7 +191,7 @@ VALUES(3, "Yes/No");
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
-VALUES (3, 1, 26, "Elem");
+VALUES (3, 1, 24, "Elem");
 INSERT INTO QuesConElements(QuesConID, Sequence, QuesID, Type)
 VALUES (3, 2, 3, "Ques");
 
@@ -201,10 +201,10 @@ VALUES (4, "Hello World");
 
 -- Elements to go into fourth qc
 INSERT INTO DisplayElements(DispElID, TextElement, DispType)
-VALUES (27, "Write a method to output Hello World to the console.", "txt");
+VALUES (25, "Write a method to output Hello World to the console.", "txt");
 
 INSERT INTO DisplayElements(DispElID, TextElement, DispType) 
-VALUES (28, "Was this question hard?", "txt");
+VALUES (26, "Was this question hard?", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType)
@@ -215,11 +215,11 @@ VALUES (5, 0, 0, "Essa");
 -- Add DispEls and Questions to qc
 
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
-VALUES (4, 1, 27, "Elem");
+VALUES (4, 1, 25, "Elem");
 INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
 VALUES (4, 2, 4, "Ques");
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
-VALUES (4, 3, 28, "Elem");
+VALUES (4, 3, 26, "Elem");
 INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
 VALUES (4, 4, 5, "Ques");
 
@@ -229,7 +229,7 @@ VALUES (5, "Number Range");
 
 -- Elements to go into fifth qc
 INSERT INTO DisplayElements(DispElID, TextElement, DispType)
-VALUES (29, "Write a number between 0 and 10.", "txt");
+VALUES (27, "Write a number between 0 and 10.", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType, LowBound, HighBound)
@@ -237,7 +237,7 @@ VALUES (6, 1, 1, "NumR", 0, 10);
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
-VALUES (5, 1, 29, "Elem");
+VALUES (5, 1, 27, "Elem");
 INSERT INTO QuesConElements(QuesconID, Sequence, QuesID, Type)
 VALUES (5, 2, 6, "Ques");
 
@@ -248,7 +248,7 @@ VALUES (7, "Regex Question");
 
 -- Elements to go into third qc
 INSERT INTO DisplayElements(DispElID, TextElement, DispType)
-VALUES (35, "Type a digit", "txt");
+VALUES (33, "Type a digit", "txt");
 
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType, Pattern)
@@ -256,7 +256,7 @@ VALUES (8, 1, 0, "RegX", "[0-9]");
 
 -- Add DispEls and Questions to qc
 INSERT INTO QuesConElements(QuesConID, Sequence, DispElID, Type)
-VALUES (7, 1, 35, "Elem");
+VALUES (7, 1, 33, "Elem");
 INSERT INTO QuesConElements(QuesConID, Sequence, QuesID, Type)
 VALUES (7, 2, 8, "Ques");
 
@@ -411,15 +411,11 @@ VALUES(3, 20, 5);
 INSERT INTO Users
 VALUES (2, "A", "A", "aa", "password", "abcd@gmail.com");
 
-INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (24, "Blue", "txt");
 INSERT INTO StudentResponses
-VALUES (2, 1, 24, 1, 3, 1);
+VALUES (2, 1, "Blue", 1, 3, 1);
 
-INSERT INTO DisplayElements (DispElID, TextElement, DispType)
-VALUES (25, "Cat", "txt");
 INSERT INTO StudentResponses
-VALUES (2, 2, 25, 1, 5, 1);
+VALUES (2, 2, "Cat", 1, 5, 1);
 
 INSERT INTO StudentQuizScores
 VALUES (1, 1, 100, 1);

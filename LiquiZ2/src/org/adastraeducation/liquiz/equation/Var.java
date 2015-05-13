@@ -1,9 +1,8 @@
 package org.adastraeducation.liquiz.equation;
 
-import org.adastraeducation.liquiz.DisplayContext;
 import org.adastraeducation.liquiz.Quiz;
 
-public class Var implements Expression{
+public class Var{
 	private double operand;
 	private String name;
 	private double min;
@@ -72,22 +71,6 @@ public class Var implements Expression{
 		return operand;
 	}
 	
-	public void infix(StringBuilder b){
-		b.append(name);
-	}
-	
-	public void rpn(StringBuilder b){
-		b.append(name);
-	}
-	
-	public void infixReplaceVar(DisplayContext dc){
-		dc.append(operand);
-	}
-	
-	public void rpnReplaceVar(StringBuilder b){
-		b.append(operand);
-	}
-
 	public double randOperand()
 	{
 		operand=Quiz.random(min,  max, step);

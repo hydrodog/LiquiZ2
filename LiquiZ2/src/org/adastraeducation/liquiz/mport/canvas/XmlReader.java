@@ -1,4 +1,4 @@
-package org.adastraeducation.liquiz.test.bag;
+package org.adastraeducation.liquiz.mport.canvas;
 
 import java.io.File;
 import javax.xml.parsers.DocumentBuilder;

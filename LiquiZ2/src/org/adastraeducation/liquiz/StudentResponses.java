@@ -2,10 +2,15 @@ package org.adastraeducation.liquiz;
 
 import java.util.HashMap;
 
+/**
+ * Object to go into session's StudentResponses attribute
+ * @author yijinkang
+ *
+ */
 public class StudentResponses {
 	private HashMap<String, String[]> quesResponses;
 	// key is a concatenation of quesID and attempt number (ex 1.1)
-	private HashMap<String, Double> quizScores;
+	private HashMap<String, Double> quizScores; //TODO NOT SURE THIS IS NEEDED
 	// key is a concatenation of quizID and attempt number (ex 1.1)
 	
 	public StudentResponses() {
@@ -17,7 +22,12 @@ public class StudentResponses {
 		return quesResponses.get(quesAttempt);
 	}
 	
-	public void addResponse(int quesID, int attempt, String[] response) {
+	public String[] getLatestResponse(int quesID) {
+		return quesResponses.get(quesID + "." + getNumAttemptsOfQues(quesID));
+	}
+	
+	public void addResponse(int quesID, String[] response) {
+		int attempt = getNumAttemptsOfQues(quesID) + 1;
 		String quesAttempt = quesID + "." + attempt;
 		quesResponses.put(quesAttempt, response);
 	}
@@ -34,7 +44,8 @@ public class StudentResponses {
 		return quizScores.get(quizAttempt);
 	}
 	
-	public void addScore(int quizID, int attempt, double score) {
+	public void addScore(int quizID, double score) {
+		int attempt = getNumAttemptsOfQuiz(quizID);
 		String quizAttempt = quizID + "." + attempt;
 		quizScores.put(quizAttempt, score);
 	}

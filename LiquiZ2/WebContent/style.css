@@ -23,6 +23,10 @@ body {
 	background-color: #0b9fc4;
 	border-radius: 0px 0px 5px 5px;
 }
+.response {
+	background-color:yellow;
+	padding: 5px 0px 5px 0px;
+}
 h1 {
 	font-family: "Bookman Antiqua", serif;
 }

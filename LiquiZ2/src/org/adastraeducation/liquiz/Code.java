@@ -27,16 +27,37 @@ public class Code extends Question {
 	//TODO: compile button, compile & run button; compare with desired output
 
 	public void writeHTML(DisplayContext dc ){
-		dc.append("<br>Choose your language:");
-		dc.append("<select name='selectLang" + getId() + "' form='quizForm'>\n")
-			.append("<option value='C++'>C++</option>\n")
-			.append("<option value='Java'>Java</option>\n")
-			.append("</select>\n");
-		//TODO: make list of languages defined in object
-		dc.append("<textarea name='' rows='10' cols='50' form='quizForm' class='code'>");
-		//TODO: check that this text is properly escaped for HTML
-		dc.append(defaultText);
-		dc.append("</textarea>");
+		if (dc.isDisplayResponses()) {
+			dc.append("<br>Choose your language:");
+			dc.append("<select disabled>\n")
+				.append("<option value='C++'>C++</option>\n")
+				.append("<option value='Java'>Java</option>\n")
+				.append("</select>\n"); // TODO: how to deal with the language?? say "selected" for whichever option is selected
+			
+			dc.append("<textarea disabled rows='10' cols='50' class='code'>");
+			String[] answer = {"Your answer here"};
+			if (dc.getStudentResponses() != null) {
+				answer = dc.getStudentResponses().getLatestResponse(getId());
+			}
+			dc.append(answer[0]);
+			dc.append("</textarea>");
+			
+			if(dc.isDisplayAnswers()) {
+				//TODO what to display as answer?
+			}
+		} else {
+			dc.append("<br>Choose your language:");
+			dc.append("<select name='selectLang").append(getId()).append("' form='quizForm'>\n")
+				.append("<option value='C++'>C++</option>\n")
+				.append("<option value='Java'>Java</option>\n")
+				.append("</select>\n");
+			//TODO: make list of languages defined in object
+			dc.append("<textarea name='").append(getId()).append("' rows='10' cols='50' form='quizForm' class='code'>");
+			//TODO: check that this text is properly escaped for HTML
+			dc.append(defaultText);
+			dc.append("</textarea>");
+		}
+		
  	}
 
 	public void writeJS(StringBuilder b) {

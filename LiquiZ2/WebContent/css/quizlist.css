@@ -1,0 +1,212 @@
+
+A:link {text-decoration: none;color:#000}
+A:visited {text-decoration: none;color:#000}
+A:active {text-decoration: none}
+A:hover {font-size:24; font-weight:bold; color: #58ACFA;}
+
+#contentwrapper{
+	background-color:#D8D8D8;
+	float:left;
+	width:1500px;
+}
+#leftsidebar{
+	float:left;
+	width:150px;
+	height:970px;
+}
+
+#profname{
+	font-family: 'Abel', sans-serif; 
+	color:#000;
+	width:120px;
+	height:20px;
+	text-align:left;
+	position:relative;
+	left:10px;
+	
+}
+.Heading{
+	font-family: 'Abel', sans-serif; 
+	color:#000;
+	width:120px;
+	height:20px;
+	text-align:left;
+	position:relative;
+	left:30px;
+	top:20px;
+	
+}
+#quizparam{
+	margin-top:30px;
+}
+#divRow{
+	background-color:#FFF;
+	height:30px;
+	width:1000px;
+	line-height: 30px;
+	border:1px solid #D8D8D8; 
+	border-bottom: 0;
+	color:#848484;
+	margin-left:30px;
+	float:left;
+	left:10px;
+}
+
+#table{
+	top:20px;
+}
+#rightsidebar{
+	width:1100px;
+	height:970px;
+	margin-right:20px;
+	float:left;
+	background-color:#f0f0f0;
+	
+}
+.title{	
+	color:#000;
+	width:120px;
+	height:20px;
+	text-align:left;
+	position:relative;
+	left:10px;
+}
+
+/*div with side by side containers*/
+.name {	
+  float: left;
+ width:390px;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline
+}
+
+.outof {
+  width:70px;
+  float: left;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline
+}
+
+.published {
+  width:70px;
+  float: left;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline
+}
+
+#menu{
+  display: inline
+
+}
+#edit,#delete{
+	width:80px;
+	float:left;
+	display:inline
+}
+
+/*For dropdown menu */
+div#menu{
+background-color: #FFF;
+position: relative;
+z-index: 200;
+width:250px;
+height:100px;
+left:70px;
+}
+
+table.navbar
+{font: bold 16px/.5 'PT Sans Narrow', sans-serif;
+text-shadow: #000000 1px 1px 1px;
+margin: 0px;
+padding: 0px; 
+width:35px;
+}
+
+table.menu
+{font-size: 10pt;
+background-color: #FFF;
+margin: 0px;
+padding: 0px;
+}
+
+td.menuNormal
+{
+padding: 0px 0px 0px 5px;
+width: 160px;
+color: white;
+vertical-align: top; /* Sets the vertical alignment to the top of the div */
+background: #FFF;
+}
+
+td.menuHover
+{padding: 0px 0px 0px 5px;
+width: 160px;
+color: #0bd4ff;
+vertical-align: top;
+/*remove the following lines for drop-down menu with images*/
+background: #aaaaaa;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c0c0c0', endColorstr='#aaaaaa'); /* for IE */
+background-image: -webkit-gradient(linear, left top, left bottom, from(#c0c0c0), to(#aaaaaa)); /* for webkit browsers */
+background-image: -moz-linear-gradient(top,  #c0c0c0,  #aaaaaa); /* for firefox 3.6+ */ 
+border-right:1px solid #aaaaaa;
+border-left: 1px solid #aaaaaa;
+}
+
+div.menuNormal
+{display: none; /* States that this div should not display */
+font: 12px/1.5 tahoma, sans-serif;
+position: static; /* Tells the element to just flow with everything else */
+}
+
+div.menuHover
+{
+font: 14px/1.5 tahoma, sans-serif;
+background: #aaaaaa;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaaaaa', endColorstr='#c0c0c0'); /* for IE */
+background-image: -webkit-gradient(linear, left top, left bottom, from(#aaaaaa), to(#c0c0c0)); /* for webkit browsers */
+background-image: -moz-linear-gradient(top,  #aaaaaa,  #c0c0c0); /* for firefox 3.6+ */ 
+display: inline; /* Tells the div to generate an inline box with no line break*/
+position: absolute; /* Positions the element relative to the parent */
+}
+
+a.menuitem:link
+{text-decoration: none;
+color: white;
+padding: 2.5px;
+background: #cecfd0;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cecfd0', endColorstr='#c0c0c0'); /* for IE */
+background-image: -webkit-gradient(linear, left top, left bottom, from(#c0c0c0), to(#cecfd0)); /* for webkit browsers */
+background-image: -moz-linear-gradient(top,  #cecfd0,  #c0c0c0); /* for firefox 3.6+ */ 
+text-shadow: #000000 1px 1px 1px;
+display: block;
+} /* Display a line break before and after the box */
+
+a.menuitem:visited
+{text-decoration: none;
+width:100px;
+color: white;
+padding: 2.5px;
+border-bottom: 1px solid #aaaaaa;
+border-top: 1px solid #c0c0c0;
+display: block;} /* Display a line break before and after the box */
+
+a.menuitem:hover
+{text-decoration: none;
+color: #0bd4ff;
+padding: 2.5px;
+background: #c0c0c0;
+border-bottom: 1px solid #aaaaaa;
+border-top: 1px solid #c0c0c0;
+display: block;} /* Display a line break before and after the box */
+
+a.menuitem:active
+{text-decoration: none;
+color: #D8AFBE;
+padding: 2.5px;
+background: #e4e4e4;
+border-bottom: 1px solid #aaaaaa;
+border-top: 1px solid #c0c0c0;
+display: block;} /* Display a line break before and after the box */

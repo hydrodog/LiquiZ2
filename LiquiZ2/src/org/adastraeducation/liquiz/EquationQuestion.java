@@ -29,32 +29,69 @@ public class EquationQuestion extends Question {
 	private List<Map.Entry<String, Var>> variablesList;
 	private int questionIndex;
 	
+	private boolean randomPosition;
+	private double currentCorrectAnswer;
+	
 	public EquationQuestion()
 	{
 		super();
+		setRandomPosition(true);
 	}
 	
-	public EquationQuestion(String text)
+	/**
+	 * initialize the question with text
+	 * @param equation
+	 * @param text
+	 * @param rpos:	is randomly ask question
+	 */
+	public EquationQuestion(Equation equation,String text, boolean rpos)
 	{
 		super();
-		questionText = text;
-	}
-	
-	public EquationQuestion(Equation equation,String text)
-	{
-		super();
+		setRandomPosition(rpos);
 		questionText = text;
 		setEq(equation);
 		generateAquestion();
 	}
 	
+	/**
+	 * initialize the question without text, the question would be formed by equation itself
+	 * @param equation 
+	 * @param rpos 		is randomly ask question
+	 */
+	public EquationQuestion(Equation equation, boolean rpos)
+	{
+		super();
+		questionText = null;
+		setRandomPosition(rpos);
+		setEq(equation);
+		generateAquestion();
+	}
+	/**
+	 * initialize the question with text
+	 * @param equation
+	 * @param text
+	 */
+	public EquationQuestion(Equation equation,String text)
+	{
+		super();
+		setRandomPosition(true);
+		questionText = text;
+		setEq(equation);
+		generateAquestion();
+	}
 	
+	/**
+	 * initialize the question without text, the question would be formed by equation itself
+	 * @param equation 
+	 */
 	public EquationQuestion(Equation equation)
 	{
 		super();
+		questionText = null;
+		setRandomPosition(true);
 		setEq(equation);
+		generateAquestion();
 	}
-
 	public Equation getEq() {
 		return eq;
 	}
@@ -72,11 +109,22 @@ public class EquationQuestion extends Question {
 		questionText = text;
 	}
 	
+	/**
+	 * generate a question with new random parameter
+	 */
 	public void generateAquestion()
 	{
-		if(eq != null && questionText != null)
+		if(eq != null)
 		{
-			eq.randomVar();
+			try {
+				eq.randomVar();
+				if(questionText == null){
+					questionText = eq.getFormedEquation();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			HashMap<String,Var> variables = eq.getVariables();
 			variablesList = new ArrayList<Map.Entry<String, Var>>();
 			Iterator<Entry<String, Var>> it = variables.entrySet().iterator();
@@ -84,14 +132,17 @@ public class EquationQuestion extends Question {
 		        Map.Entry<String, Var> pair = (Map.Entry<String, Var>)it.next();
 		        variablesList.add(pair);
 		    }
-			int size = variables.size();
-			questionIndex = Quiz.random(0, size);
 			stringList = new ArrayList<String>();
 			
-			System.out.println(getCorrectAnswer());
+			//if newStrFlag is true, start a new string, or continue append on the last one.
 			Boolean newStrFlag = true;
 			String textArr[] = questionText.split("\\[[^\\] ]+\\]");
 			Matcher matcher = Pattern.compile("\\[([^\\] ]+?)\\]").matcher(questionText);
+
+			if(randomPosition)
+				questionIndex = Quiz.random(0, textArr.length);
+			else
+				questionIndex = eq.getNumberVariable();
 			for(int i = 0; i < textArr.length; ++i)
 			{
 				String text = textArr[i];
@@ -107,38 +158,49 @@ public class EquationQuestion extends Question {
 				if(matcher.find())
 				{
 					String valStr = matcher.group(1);
-					
-					if(questionIndex == size)
+					if(i == questionIndex)
 					{
-						if(valStr.equals(eq.getEquation()) || valStr.equals("?"))
-							newStrFlag = true;
-						else
-						{
-							double operand = variables.get(valStr).getOperand();
-							stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
+						newStrFlag = true;
+						if(valStr.equals(eq.getEquation()) || valStr.equals("?")){
+							currentCorrectAnswer = eq.getCorrectAnswer();
+						}
+						else{
+							currentCorrectAnswer = variables.get(valStr).getOperand();
 						}
 					}
-					else if(questionIndex < size)
-					{
-						if(valStr.equals(eq.getEquation()) || valStr.equals("?"))
-						{
+					else if(valStr.equals(eq.getEquation()) || valStr.equals("?")){
 
-							double operand = eq.getCorrectAnswer();
-							stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
-						}
-						else if(variablesList.get(questionIndex).getKey().equals(valStr))
-							newStrFlag = true;
-						else{
-							double operand = variables.get(valStr).getOperand();
-							stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
-						}
+						double operand = eq.getCorrectAnswer();
+						stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
+					}
+					else{
+						double operand = variables.get(valStr).getOperand();
+						stringList.set(stringList.size() - 1, stringList.get(stringList.size() - 1) + operand);
 					}
 				}
 			}
 			if(newStrFlag)
 			{
 				stringList.add("");
+				if(matcher.find())
+				{
+					String valStr = matcher.group(1);
+					if(textArr.length == questionIndex)
+					{
+						newStrFlag = true;
+						if(valStr.equals(eq.getEquation()) || valStr.equals("?")){
+							currentCorrectAnswer = eq.getCorrectAnswer();
+						}
+						else{
+							currentCorrectAnswer = variables.get(valStr).getOperand();
+						}
+					}
+				}
 			}
+
+			ArrayList<Answer> ans = new ArrayList<Answer>();
+			ans.add(new Answer(new Text(String.valueOf(currentCorrectAnswer))));
+			setAns(ans);
 		}
 	}
 
@@ -148,8 +210,49 @@ public class EquationQuestion extends Question {
 		for(int i = 0; i < stringList.size() - 1; ++i)
 		{
 			dc.append(stringList.get(i));
-			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />\n");
+
+			if (dc.isDisplayResponses()) {
+				String[] answer = {"Your answer here"};
+				if (dc.getStudentResponses() != null) {
+					answer = dc.getStudentResponses().getLatestResponse(getId());
+				}
+				
+				dc.append("<input type='text' disabled value='");
+				dc.append(answer[0]);
+				dc.append("'> ");
+				
+				if(dc.isDisplayAnswers()) {
+					Response res = getResponseFor(answer[0]);
+					if (res != null) { 
+						if (Score.correctQues(getId(), answer) == getPoints()) {
+							dc.append("<span class='response correct'>");
+						} else {
+							dc.append("<span class='response'>");
+						}
+						writeHTML(dc);
+						dc.append("</span>");
+					}
+					
+					boolean hasAnswer = false;
+					for (Answer ans : getAns()) {
+						if (ans.getCorrect()) {
+							hasAnswer = true;
+							break;
+						}
+					}
+					if (hasAnswer) {
+						dc.append("\n<br>Possible answers:<br>");
+						for (Answer ans : getAns()) {
+							ans.writeHTML(dc);
+							dc.append("<br>");
+						}
+					}
+				}
+			} else { // just show the empty box
+				dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />");
+			}
 		}
+
 		dc.append(stringList.get(stringList.size() - 1));
 	}
 	
@@ -176,21 +279,13 @@ public class EquationQuestion extends Question {
 		b.append("<text>").append(stringList.size() - 1).append("</text>");
 	}
 	
+	/**
+	 * get the correct answer for current 
+	 * @return
+	 */
 	public double getCorrectAnswer()
 	{
-		double val = 0;
-		if(variablesList != null)
-		{
-			if(questionIndex == variablesList.size())
-			{
-				val = eq.getCorrectAnswer();
-			}
-			else
-			{
-				val = variablesList.get(questionIndex).getValue().getOperand();
-			}
-		}
-		return val;
+		return currentCorrectAnswer;
 	}
 
 	@Override
@@ -198,19 +293,18 @@ public class EquationQuestion extends Question {
 		// TODO Auto-generated method stub
 		if(variablesList != null)
 		{
-			double val = 0;
-			if(questionIndex == variablesList.size())
-			{
-				val = eq.getCorrectAnswer();
-			}
-			else
-			{
-				val = variablesList.get(questionIndex).getValue().getOperand();
-			}
 			double ans = Double.valueOf(s[0]);
-			if(ans == val)
+			if(ans == currentCorrectAnswer)
 				return (double) getPoints();
 		}
 		return 0;
+	}
+
+	public boolean isRandomPosition() {
+		return randomPosition;
+	}
+
+	public void setRandomPosition(boolean randomPosition) {
+		this.randomPosition = randomPosition;
 	}
 }

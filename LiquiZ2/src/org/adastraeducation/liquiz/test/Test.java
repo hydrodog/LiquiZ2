@@ -37,13 +37,13 @@ public class Test {
 	public static Quiz test() {
 		//for Equation and Fillin, no WarningPattern
 		Quiz quiz = new Quiz();
-		Var x = new Var("x", 0, 99, 1);
-		Var y = new Var("y", 0, 99, 1);
+		Var x = new Var("xx1", 3, 3, 1);
+		Var y = new Var("y1", 2, 3, 1);
 		HashMap<String,Var> map = new HashMap<String,Var>();
-		map.put("x",x);
-		map.put("y", y);
-		Equation eq = new Equation("x+y",map);
-		EquationQuestion eqQ1 = new EquationQuestion(eq,"[x]+[y]=[?];");
+		map.put(x.getName(),x);
+		map.put(y.getName(), y);
+		Equation eq = new Equation("xx1^y1 * y1^xx1",map);
+		EquationQuestion eqQ1 = new EquationQuestion(eq);
 		QuestionContainer qc1 = new QuestionContainer(new ArrayList<Displayable>(Arrays.asList(eqQ1)));
 		Var a = new Var("a", 0, 99, 1);
 		Var b = new Var("b", 0, 99, 1);
@@ -89,9 +89,8 @@ public class Test {
 		qc = new QuestionContainer("Math",
 			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
-				eq,
-				new Text("?"),
-				new FillIn(3, 1, new Answer(new Text("1"), true))
+				new EquationQuestion(eq),
+				new Text("?")
 			))
 		);
 		quiz.addQuestionContainer(qc);
@@ -107,10 +106,9 @@ public class Test {
 		qc = new QuestionContainer("Math",
 			new ArrayList<Displayable> (Arrays.asList(
 				new Text("What is "),
-				eq1,
-				new Text("?"),
-				new NumberRange(1, 3, 2, 0.0, 99.0) //id 1, 3 points, level 2, accept 0 to 99 as correct
-			))
+				new EquationQuestion(eq1)
+					)
+			)
 		);
 		quiz.addQuestionContainer(qc);
 
@@ -269,11 +267,11 @@ public class Test {
 		fw.close();		
 	}
 
-//	public static void writeXML(String filename, Quiz quiz) throws IOException {
-//		XMLEncoder enc = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
-//		enc.writeObject(quiz);
-//		enc.close();
-//	}
+	public static void writeXML(String filename, Quiz quiz) throws IOException {
+		XMLEncoder enc = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
+		enc.writeObject(quiz);
+		enc.close();
+	}
 //
 //	public static Quiz readXML(String filename) throws IOException {
 //		XMLDecoder dec = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
@@ -284,23 +282,23 @@ public class Test {
 	public static void testOutput(String baseName, Displayable d) throws IOException {
 		writeHTML(baseName + ".html", d); 
 		writeJS(baseName + ".js", d);
-//		if (d instanceof Quiz)
-//			writeXML(baseName + ".xml", (Quiz)d); 
+		if (d instanceof Quiz)
+			writeXML(baseName + ".xml", (Quiz)d); 
 	}
 	
 	public static void main(String[] args) throws IOException {
-		testOutput("output/test1", test1());
-		testOutput("output/test2", test2());
-		testOutput("output/test3", test3());
-		testOutput("output/test4", test4());
+//		testOutput("output/test1", test1());
+//		testOutput("output/test2", test2());
+//		testOutput("output/test3", test3());
+//		testOutput("output/test4", test4());
 
 		/*testing Course*/
-		Course testCourse = new Course(1, "Test Course");
-		testCourse.addQuiz(test1());
-		testCourse.addQuiz(test2());
-		testCourse.addQuiz(test3());
-		testCourse.addQuiz(test4());
-		testOutput("output/quizList", testCourse);
+//		Course testCourse = new Course(1, "Test Course");
+//		testCourse.addQuiz(test1());
+//		testCourse.addQuiz(test2());
+//		testCourse.addQuiz(test3());
+//		testCourse.addQuiz(test4());
+//		testOutput("output/quizList", testCourse);
 		Quiz q =  test();
 		testOutput("output/quiz1",q);
 	}

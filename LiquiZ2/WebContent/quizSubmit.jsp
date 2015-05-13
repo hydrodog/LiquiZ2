@@ -12,32 +12,10 @@
 
 <div class='quiz'> <!-- temporarily called quiz for styling purposes -->
 <% 
-	Enumeration<String> quesIDs = request.getParameterNames();
-	int quizID = 0;
-	double score = 0;
-	int total = 0;
-	int percent = 0;
-	String lang = null; // the programming language used in code question 
-
-	while (quesIDs.hasMoreElements()) {
-		String id = quesIDs.nextElement();
-		if(id.equals("quizID")) {
-			quizID = Integer.parseInt(request.getParameter(id));
-			total = Score.getTotalPoints(quizID);
-		} else if (id.substring(0, 10).equals("selectLang")) {
-			lang = request.getParameter(id); 
-			// TODO: if multiple code questions?
-		} else { // Questions
-			String[] res = request.getParameterValues(id);
-			double addPoints = Score.correctQues(Integer.parseInt(id), res);
-			Score.saveStudentResponse(Integer.parseInt((String) session.getAttribute("userID")), Integer.parseInt(id), res, addPoints != 0, addPoints, ((StudentResponses) session.getAttribute("StudentResponses")).getNumAttemptsOfQues(Integer.parseInt(id))+1); 
-			score += addPoints;
-		}
-	}
-	
-	percent = (int) Math.floor(score / (double) total * 100);
-	Score.saveStudentQuizScore(Integer.parseInt((String) session.getAttribute("userID")), quizID, score, ((StudentResponses) session.getAttribute("StudentResponses")).getNumAttemptsOfQuiz(quizID)+1);
-	
+	int quizID = Integer.parseInt(request.getParameter("quizID")); // for debugging
+	double score = Score.gradeQuiz(request, session);
+	int total = Score.getTotalPoints(quizID);
+	int percent = (int) Math.floor(score / (double) total * 100);
 %>
 
 <div class="quesHeader">
@@ -45,19 +23,22 @@ Your quiz (ID <%= quizID %>) has been submitted.
 </div>
 
 <div class="question">
-Your score for this quiz is <%= score %> out of <%= total %> possible points, which is <%= percent %>%.
+Your score for this quiz is <%= score %> out of <%= total %> possible points, which is <%= percent %>%.<br>
 
 <% if (Score.needsGrading(quizID)) { %>
-<br>However, this quiz includes questions that must be manually graded. Check back later to see your updated grade.
+However, this quiz includes questions that must be manually graded. Check back later to see your updated grade.
 <%} else {%>
-<br>This score is final. All questions have been automatically graded. 
+This score is final. All questions have been automatically graded. 
 <% } %> 
 </div>
 
 <% DisplayContext dc = new DisplayContext();
-dc.setDisplayResponses(true);
-dc.setDisplayAnswers(Database.getQuiz(quizID).getPolicy().getShowAns());
+dc.setDisplayResponses(true); // display student's responses
+dc.setDisplayAnswers(Database.getQuiz(quizID).getPolicy().getShowAns()); // display correct answers if policy says to
+// TODO policy to show answers AT THE LAST ATTEMPT
+dc.setStudentResponses((StudentResponses) session.getAttribute("StudentResponses")); // give the StudentResponses
 Database.getQuiz(quizID).writeHTML(dc);
+System.out.print(dc.toString());
 out.print(dc.toString()); %>
 
 </div>

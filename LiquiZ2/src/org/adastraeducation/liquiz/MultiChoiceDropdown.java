@@ -48,10 +48,45 @@ public class MultiChoiceDropdown extends Question {
 	}
 
 	public void writeHTML(DisplayContext dc) {
-		if(dc.isDisplayAnswers()) {
+		if (dc.isDisplayResponses()) {
+			String[] answer = {"Your answer here"};
+			if (dc.getStudentResponses() != null) {
+				answer = dc.getStudentResponses().getLatestResponse(getId());
+			}
 			
-		} else if (dc.isDisplayResponses()) {
+			dc.append("<select disabled>\n");
+			for (Answer ans : getAns()) {
+				dc.append("<option value='").append(ans.getName()).append("'");
+				for (String res : answer) {
+					if (res.equals(ans.getName())) {
+						dc.append(" selected");
+						break;
+					}
+				}
+				dc.append(">");
+				ans.writeHTML(dc);
+				dc.append("</option>\n");
+			}
+			dc.append("</select><br>\n");
 			
+			// TODO responses?
+			
+			boolean hasAnswer = false;
+			for (Answer ans : getAns()) {
+				if (ans.getCorrect()) {
+					hasAnswer = true;
+					break;
+				}
+			}
+			if(dc.isDisplayAnswers() && hasAnswer) { //TODO think of a sleeker way to represent this
+				dc.append("Correct answer(s): ");
+				for (Answer ans : getAns()) {
+					if(ans.getCorrect()) {
+						dc.append("<br>");
+						dc.append(ans.getName());
+					}
+				}
+			} 
 		} else {
 			// Regular options
 			dc.append("<select name='").append(getId()).append("' form='quizForm'>\n");

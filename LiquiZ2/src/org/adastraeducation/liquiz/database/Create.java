@@ -357,8 +357,42 @@ public class Create {
 	 * linkQuizQuesCon
 	 * fillQuesConElements
 	 * UserPermissions???
-	 * recordStudentResp
-	 * recordStudentGradesOnQuizzes
 	 * recordStudentGrades
 	 */
+	
+	public static void recordStudentResponses(int userID, int quesID, String[] resp, boolean correct, double score, int attemptNum) {
+		System.out.println("in recordStudentResponses");
+		Connection conn = null;
+		try {
+			conn = DatabaseMgr.getConnection();
+			PreparedStatement p = conn.prepareStatement("INSERT INTO StudentResponses VALUES(?,?,?,?,?,?");
+			p.setInt(1, userID);
+			p.setInt(2, quesID);
+			// TODO parameter 3? 
+			p.setBoolean(4, correct);
+			p.setDouble(5, score);
+			p.setInt(6, attemptNum);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.returnConnection(conn);
+		}
+	}
+	
+	public static void recordStudentQuizScores(int userID, int quizID, double score, int attemptNum) {
+		System.out.println("in recordStudentQuizScores");
+		Connection conn = null;
+		try {
+			conn = DatabaseMgr.getConnection();
+			PreparedStatement p = conn.prepareStatement("INSERT INTO StudentQuizScores VALUES(?,?,?,?");
+			p.setInt(1, userID);
+			p.setInt(2, quizID);
+			p.setDouble(3, score);
+			p.setInt(4, attemptNum);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.returnConnection(conn);
+		}
+	}
 }
