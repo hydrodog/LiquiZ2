@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link href="css/quizlist.css" rel="stylesheet" type="text/css">
+<link href="css/menu.css" rel="stylesheet" type="text/css">
+<script src="assets/js1/func.js"></script>
+<script>
+	function thisPage() {
+
+		for (var i = 0; i < page.quizzes.length; i++) {
+			var divRow = document.createElement("div");
+			divRow.setAttribute("id", "divRow");
+			divRow.setAttribute("class", "divRow");
+			/*Name of quiz*/
+			var divElement = document.createElement("div");
+			divElement.setAttribute("id", "name");
+			divElement.setAttribute("class", "name");
+			var node = document.createTextNode(page.quizzes[i].name);
+			divElement.appendChild(node);
+			divRow.appendChild(divElement);
+
+			/*marks of quiz*/
+			var divElement1 = document.createElement("div");
+			divElement1.setAttribute("id", "outof");
+			divElement1.setAttribute("class", "outof");
+			var node1 = document.createTextNode(page.quizzes[i].outof);
+			divElement1.appendChild(node1);
+			divRow.appendChild(divElement1);
+
+			/*Status of quiz*/
+			var divElement2 = document.createElement("div");
+			divElement2.setAttribute("id", "published");
+			divElement2.setAttribute("class", "published");
+			var img = document.createElement("img");
+			if (page.quizzes[i].published == true) {
+				img.src = "assets/img/published.png";
+				img.width = "20";
+				img.height = "30";
+				img.id = "published";
+			} else {
+				img.src = "assets/img/unpublished.png";
+				img.width = "24";
+				img.height = "32";
+				img.id = "unpublished";
+			}
+			divElement2.appendChild(img);
+			divRow.appendChild(divElement2);
+			
+			//EDIT quiz
+			var divElement5 = document.createElement("div");
+			divElement5.setAttribute("id", "edit");
+			divElement5.setAttribute("class", "edit");
+			var edit = document.createElement("a");
+			
+			edit.setAttribute("href","..");
+			var editimg = document.createElement("img");
+			editimg.src="assets/img/edit.png";
+			editimg.width="12";
+			editimg.height="12";
+			var txt = document.createTextNode("EDIT");
+			edit.appendChild(editimg);
+			edit.appendChild(txt);
+			divElement5.appendChild(edit);
+			divRow.appendChild(divElement5);
+			
+			
+			
+			//Delete quiz
+			var divElement6 = document.createElement("div");
+			divElement6.setAttribute("id", "delete");
+			divElement6.setAttribute("class", "delete");
+			var del = document.createElement("a");
+			del.setAttribute("class","del");
+			del.setAttribute("href","..");
+			var delimg = document.createElement("img");
+			delimg.src="assets/img/deletebin.png";
+			delimg.width="12";
+			delimg.height="12";
+			var txtdel = document.createTextNode("DELETE");
+			del.appendChild(delimg);
+			del.appendChild(txtdel);
+			divElement6.appendChild(del);
+			divRow.appendChild(divElement6);
+			
+			/*Dates for opening,due,closing*/
+			var divElement4 = document.createElement("div");
+			divElement4.setAttribute("id", "menu");
+			divElement4.setAttribute("class", "menu");
+			var table = document.createElement("table");
+			table.setAttribute("class", "navbar");
+			var tr1 = document.createElement("tr");
+			table.appendChild(tr1);
+			var td1 = document.createElement("td");
+			td1.setAttribute("class", "menuNormal");
+			td1.setAttribute("onmouseover", "expand(this)");
+			td1.setAttribute("onmouseout", "collapse(this)");
+			var icon = document.createElement("img");
+			icon.src = "assets/img/calender.png";
+			icon.width = "20";
+			icon.height = "27";
+			icon.id = "icon";
+			td1.appendChild(icon);
+			var divmenuNormal = document.createElement("div");
+			divmenuNormal.setAttribute("class", "menuNormal");
+			td1.appendChild(divmenuNormal);
+			var menu = document.createElement("table");
+			menu.setAttribute("class", "menu");
+			divmenuNormal.appendChild(menu);
+			//opendate
+			var trOpen = document.createElement("tr");
+			menu.appendChild(trOpen);
+			var tdmenuNormalO = document.createElement("td");
+			tdmenuNormalO.setAttribute("class", "menuNormal");
+			trOpen.appendChild(tdmenuNormalO);
+			var hrefO = document.createElement("a");
+			hrefO.setAttribute("href", ".");
+			hrefO.setAttribute("class", "menuitem");
+			tdmenuNormalO.appendChild(hrefO);
+			var optionstxtO = document.createTextNode("Open date:");
+			var optionsO = document.createTextNode(page.quizzes[i].opendate);
+			hrefO.appendChild(optionstxtO);
+			hrefO.appendChild(optionsO);
+
+			//duedate
+			var trDue = document.createElement("tr");
+			menu.appendChild(trDue);
+			var tdmenuNormalD = document.createElement("td");
+			tdmenuNormalD.setAttribute("class", "menuNormal");
+			trDue.appendChild(tdmenuNormalD);
+			var hrefD = document.createElement("a");
+			hrefD.setAttribute("href", ".");
+			hrefD.setAttribute("class", "menuitem");
+			tdmenuNormalD.appendChild(hrefD);
+			var optionstxtD = document.createTextNode("Due date:");
+			var optionsD = document.createTextNode(page.quizzes[i].duedate);
+			hrefD.appendChild(optionstxtD);
+			hrefD.appendChild(optionsD);
+
+			//closedate
+			var trClose = document.createElement("tr");
+			menu.appendChild(trClose);
+			var tdmenuNormalC = document.createElement("td");
+			tdmenuNormalC.setAttribute("class", "menuNormal");
+			trClose.appendChild(tdmenuNormalC);
+			var hrefC = document.createElement("a");
+			hrefC.setAttribute("href", ".");
+			hrefC.setAttribute("class", "menuitem");
+			tdmenuNormalC.appendChild(hrefC);
+			var optionstxtC = document.createTextNode("Close date:");
+			var optionsC = document.createTextNode(page.quizzes[i].closedate);
+			hrefC.appendChild(optionstxtC);
+			hrefC.appendChild(optionsC);
+
+			tr1.appendChild(td1);
+			divElement4.appendChild(table);
+			divRow.appendChild(divElement4);
+				
+			
+
+			
+			
+			document.getElementById("quizparam").appendChild(divRow);
+
+			}
+
+	}
+
+	loadData("assets/js1/testlistquizzes.json")
+	//loadData("ManualGradeCode_ajax.jsp")
+</script>
+
+</head>
+<body>
+	<div id="contentwrapper">
+		<div id="leftsidebar">
+			<br>
+			<div id="profname">
+				<b>Programming</b>
+			</div>
+			<br>
+			<div class="title">
+				<a href=".">Home</a>
+			</div>
+			<br>
+			<div class="title">
+				<a href="..">Grades</a>
+			</div>
+			<br>
+			<div class="title">
+				<a href="..">Students</a>
+			</div>
+			<br>
+			<div class="title">
+				<a href="..">Courses</a>
+			</div>
+			<br>
+			<div class="title">
+				<a href="..">Syllabus</a>
+			</div>
+			<br>
+			<div class="title">
+				<a href="..">Settings</a>
+			</div>
+			<br>
+
+			<!-- end of home -->
+
+		</div>
+		<!--end of leftsidebar  -->
+
+		<div id="rightsidebar">
+			<div class="Heading">
+				<b>Quizzes</b>
+			</div>
+			<!-- end of heading -->
+			<div id="quizparam"></div>
+		</div>
+		<!-- end of quiparam -->
+		<!--end of rightsidebar  -->
+	</div>
+	<!--end of contentwrapper  -->
+</body>
+</html>
