@@ -31,7 +31,7 @@ public class NumberRange extends FillIn {
 				return getPoints();
 			}
 		} catch(NumberFormatException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		return 0;
 	}
@@ -67,7 +67,7 @@ public class NumberRange extends FillIn {
 			// just add Answer object to add Response?
 			
 			if (dc.isDisplayAnswers()) {
-				dc.append("Possible answers:<br>Any number from ").append(min).append(" to ").append(max);
+				dc.append("<div class='answersHead'>Possible answers:</div>Any number from ").append(min).append(" to ").append(max);
 			}
 		} else {
 			dc.append("<input name='").append(getId()).append("' class='fillin' type='text' />");

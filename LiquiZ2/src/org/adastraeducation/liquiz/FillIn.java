@@ -97,7 +97,7 @@ public class FillIn extends Question {
 					} else {
 						dc.append("<span class='response'>");
 					}
-					writeHTML(dc);
+					res.writeHTML(dc);
 					dc.append("</span>");
 				}
 				
@@ -109,7 +109,7 @@ public class FillIn extends Question {
 					}
 				}
 				if (hasAnswer) {
-					dc.append("\n<br>Possible answers:<br>");
+					dc.append("\n<div class='answersHead'>Possible answers:</div>");
 					for (Answer ans : getAns()) {
 						ans.writeHTML(dc);
 						dc.append("<br>");

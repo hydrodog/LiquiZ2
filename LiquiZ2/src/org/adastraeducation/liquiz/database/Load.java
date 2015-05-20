@@ -46,6 +46,9 @@ public class Load {
 	}
 	//TODO: QuestionFactories?
 	
+	/**
+	 * loads all DisplayElements stored in the database to the ArrayLists in the Database class
+	 */
 	public static void loadDispEls() {
 		System.out.println("Entered loadDispEl");
 		ResultSet rs = null;
@@ -98,6 +101,9 @@ public class Load {
 //		return d;
 //	}
 	
+	/**
+	 * loads all Answers stored in the database to the ArrayLists in the Database class
+	 */
 	public static void loadAns() {
 		System.out.println("Entered loadAns");
 		ResultSet rs = null;
@@ -130,6 +136,7 @@ public class Load {
 	}
 	
 	// Load all StdChoices to HashMap in NamedObjects - does not run; currently hardcoded into NamedObjects
+	// TODO: is this needed? is StdChoice going into the database?
 	public static void loadStdChoices() {
 		System.out.println("Entered loadStdChoices");
 		ResultSet rs = null;
@@ -163,6 +170,9 @@ public class Load {
 		}
 	}
 
+	/**
+	 * loads all Questions stored in the database to the ArrayLists in the Database class
+	 */
 	public static void loadQues() {
         //TODO: if QuestionFactories are completed
 		ResultSet rs = null;
@@ -262,6 +272,9 @@ public class Load {
 		}
 	}
 
+	/**
+	 * loads all Policies stored in the database to the ArrayLists in the Database class
+	 */
 	public static void loadPolicies() {
 		Policy pol = null;
 		ResultSet rs = null;
@@ -296,7 +309,7 @@ public class Load {
 	}
 
 	/**
-	 * Loads all QuesCons to Database.quesCons
+	 * Loads all QuesCons stored in the database to the ArrayLists in the Database class
 	 */
 	public static void loadQuesCons() {
 		ResultSet rs = null;
@@ -355,7 +368,7 @@ public class Load {
 	}
 	
 	/**
-	 * loads all Quizzes to Database.quizzes
+	 * loads all Quizzes stored in the database to the ArrayLists in the Database class
 	 */
 	public static void loadQuizzes() {
 		ResultSet rs = null;
@@ -391,7 +404,7 @@ public class Load {
 	}
 	
 	/**
-	 * loads all Courses to Database.courses
+	 * loads all Courses stored in the database to the ArrayLists in the Database class
 	 */
 	public static void loadCourses() {
 		ResultSet rs = null;
@@ -426,7 +439,7 @@ public class Load {
 	}
 	
 	/**
-	 * loads all Users to Database.users
+	 * loads all Users stored in the database to the ArrayLists in the Database class
 	 */
 	public static void loadUsers() {
 		ResultSet rs = null;

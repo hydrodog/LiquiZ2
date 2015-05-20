@@ -78,11 +78,11 @@ public class MultiAnswer extends MultiChoiceDropdown {
 	
 	public void writeHTML(DisplayContext dc ){
 		if(dc.isDisplayResponses()) {
-			String[] answer = {"Your answer here"};
-			if (dc.getStudentResponses() != null) {
+			String[] answer = {};
+			if (dc.getStudentResponses().getLatestResponse(getId()) != null) {
 				answer = dc.getStudentResponses().getLatestResponse(getId());
-			}
-			
+			} 
+
 			dc.append("<select disabled multiple>\n");
 			for (Answer ans : getAns()) {
 				dc.append("<option value='").append(ans.getName()).append("'");
@@ -108,7 +108,7 @@ public class MultiAnswer extends MultiChoiceDropdown {
 				}
 			}
 			if(dc.isDisplayAnswers() && hasAnswer) {
-				dc.append("Correct answers:");
+				dc.append("<span class='answersHead'>Correct answers:</span>");
 				for (Answer ans : getAns()) {
 					if(ans.getCorrect()) {
 						dc.append("<br>");

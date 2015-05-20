@@ -13,6 +13,7 @@ public class Response implements Displayable {
 	}
 	
 	public Response(DisplayElement d) {
+		displayEls = new ArrayList<DisplayElement>();
 		displayEls.add(d);
 	}
 	

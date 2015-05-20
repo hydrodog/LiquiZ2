@@ -6,7 +6,7 @@ import org.adastraeducation.liquiz.*;
 
 /**
  * Adds a row to tables with newly created entities
- * Currently out of date with database
+ * (Currently out of date with database)
  * @author yijinkang
  *
  */
@@ -360,6 +360,15 @@ public class Create {
 	 * recordStudentGrades
 	 */
 	
+	/**
+	 * Record a student's response to a question and points earned when a student takes a quiz
+	 * @param userID the student's database ID
+	 * @param quesID the ID of the question answered
+	 * @param resp the student's response to the question
+	 * @param correct whether the student answered correctly
+	 * @param score the number of points earned by the student
+	 * @param attemptNum the attempt number (number of previous attempts + 1)
+	 */
 	public static void recordStudentResponses(int userID, int quesID, String[] resp, boolean correct, double score, int attemptNum) {
 		System.out.println("in recordStudentResponses");
 		Connection conn = null;
@@ -379,6 +388,13 @@ public class Create {
 		}
 	}
 	
+	/**
+	 * Record a student's score on a quiz
+	 * @param userID the student's database ID
+	 * @param quizID the ID of the quiz taken
+	 * @param score the score earned by the student
+	 * @param attemptNum the attempt number (number of previous attempts + 1)
+	 */
 	public static void recordStudentQuizScores(int userID, int quizID, double score, int attemptNum) {
 		System.out.println("in recordStudentQuizScores");
 		Connection conn = null;

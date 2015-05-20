@@ -79,7 +79,7 @@ public class MultiChoiceDropdown extends Question {
 				}
 			}
 			if(dc.isDisplayAnswers() && hasAnswer) { //TODO think of a sleeker way to represent this
-				dc.append("Correct answer(s): ");
+				dc.append("<span class='answersHead'>Correct answer(s): </span>");
 				for (Answer ans : getAns()) {
 					if(ans.getCorrect()) {
 						dc.append("<br>");

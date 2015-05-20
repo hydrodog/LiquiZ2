@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_21" class="java.beans.XMLDecoder">
+ <object class="org.adastraeducation.liquiz.Quiz">
+  <void property="QContainers">
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>What is the color of the sky?</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.FillIn">
+         <void property="ans">
+          <object class="java.util.ArrayList">
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Blue</string>
+               </void>
+              </object>
+             </void>
+             <void property="correct">
+              <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Light Blue</string>
+               </void>
+              </object>
+             </void>
+             <void property="correct">
+              <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
+            </object>
+           </void>
+          </object>
+         </void>
+         <void property="id">
+          <int>1</int>
+         </void>
+         <void property="level">
+          <int>1</int>
+         </void>
+         <void property="points">
+          <int>3</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Select all animals from the list</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.MultiAnswer">
+         <void property="ans">
+          <object class="java.util.ArrayList">
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Dog</string>
+               </void>
+              </object>
+             </void>
+             <void property="correct">
+              <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Cat</string>
+               </void>
+              </object>
+             </void>
+             <void property="correct">
+              <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Computer</string>
+               </void>
+              </object>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Dragon</string>
+               </void>
+              </object>
+             </void>
+             <void property="correct">
+              <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
+            </object>
+           </void>
+          </object>
+         </void>
+         <void property="id">
+          <int>7</int>
+         </void>
+         <void property="level">
+          <int>3</int>
+         </void>
+         <void property="points">
+          <int>4</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Image">
+         <void property="height">
+          <int>183</int>
+         </void>
+         <void property="source">
+          <string>WebContent/assets/img/cat.jpg</string>
+         </void>
+         <void property="width">
+          <int>275</int>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Which animal is shown in the picture?</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.MultiChoiceRadio">
+         <void property="ans">
+          <object class="java.util.ArrayList">
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Dog</string>
+               </void>
+              </object>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Cat</string>
+               </void>
+              </object>
+             </void>
+             <void property="correct">
+              <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Dragon</string>
+               </void>
+              </object>
+             </void>
+            </object>
+           </void>
+          </object>
+         </void>
+         <void property="id">
+          <int>2</int>
+         </void>
+         <void property="level">
+          <int>2</int>
+         </void>
+         <void property="points">
+          <int>5</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Write a method to output Hello World to the console.</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Code">
+         <void property="id">
+          <int>4</int>
+         </void>
+         <void property="level">
+          <int>5</int>
+         </void>
+         <void property="points">
+          <int>10</int>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Was this question hard?</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Essay">
+         <void property="id">
+          <int>5</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Write a number between 0 and 10.</string>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Type a digit</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.RegexQuestion">
+         <void property="id">
+          <int>8</int>
+         </void>
+         <void property="points">
+          <int>1</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
+          <string>Did you like this quiz?</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.MultiChoiceDropdown">
+         <void property="ans">
+          <object class="java.util.ArrayList">
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>Yes</string>
+               </void>
+              </object>
+             </void>
+            </object>
+           </void>
+           <void method="add">
+            <object class="org.adastraeducation.liquiz.Answer">
+             <void property="answer">
+              <object class="org.adastraeducation.liquiz.Text">
+               <void property="text">
+                <string>No</string>
+               </void>
+              </object>
+             </void>
+            </object>
+           </void>
+          </object>
+         </void>
+         <void property="id">
+          <int>3</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+  <void property="id">
+   <int>1</int>
+  </void>
+  <void property="name">
+   <string>Example Quiz</string>
+  </void>
+  <void property="policy">
+   <object class="org.adastraeducation.liquiz.Policy">
+    <void property="ID">
+     <int>1</int>
+    </void>
+    <void property="attemptNum">
+     <int>1</int>
+    </void>
+    <void property="grade">
+     <int>10</int>
+    </void>
+    <void property="scored">
+     <boolean>false</boolean>
+    </void>
+    <void property="showAns">
+     <boolean>true</boolean>
+    </void>
+    <void property="shuffleAns">
+     <boolean>false</boolean>
+    </void>
+    <void property="shuffleQues">
+     <boolean>false</boolean>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
