@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import org.adastraeducation.liquiz.*;
 
 /**
- * In order to pre-load everything from database
+ * Contains ArrayLists that pre-load everything from the database and hold it in RAM
+ * Call functions from here when entities must be accessed
  * @author yijinkang
  *
  */
@@ -21,6 +22,11 @@ public class Database {
 	private static ArrayList<Answer> answers;
 	private static ArrayList<DisplayElement> displayElements;
 	
+	/**
+	 * Find out the maximum value in a column
+	 * @param sql 'select max([column_name]) from [table]'
+	 * @return maximum value in [column_name]
+	 */
 	private static int getMaxOf(String sql) {
 		ResultSet rs = null;
 		try {
@@ -37,6 +43,13 @@ public class Database {
 		return 0;
 	}
 	
+	/**
+	 * Find out the maximum value in the column of a table and return an ArrayList of that size
+	 * @param column the column name
+	 * @param table the table name
+	 * @param type the ArrayList type
+	 * @return an ArrayList with enough space to have each entity in the index of its ID number
+	 */
 	private static <T> ArrayList<T> getMax(String column, String table, Class<T> type) {
 		int max = getMaxOf("select max(" + column + ") from " + table);
 		System.out.println(max);
@@ -44,8 +57,9 @@ public class Database {
 		a.add(null);
 		return a;
 	}
+	
 	/**
-	 * static initializer will load everything
+	 * static initializer will load everything when this is called
 	 */
 	public static void start() {
 		
@@ -63,12 +77,10 @@ public class Database {
 		System.out.println("Now loading all");
 		Load.loadAll();
 	}
-	
+
 	/**
-	 * Setters and Getters
-	 * Note that id starts at 1 and index starts at 0, so the first space in each ArrayList is empty
+	 * Print the size of each ArrayList to the console
 	 */
-	
 	public static void reportSizes() {
 		System.out.println("Users: " + (users.size()-1));
 		System.out.println("Courses: " + (courses.size()-1));
@@ -80,6 +92,11 @@ public class Database {
 		//std choices
 		System.out.println("DisplayElements: " + (displayElements.size()-1));
 	}
+	
+	/*
+	 * Adders, Setters and Getters
+	 * Note that id starts at 1 and index starts at 0, so the first space in each ArrayList is empty
+	 */
 	
 	public static void addUser(User u) {
 		users.add(u);

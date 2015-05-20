@@ -35,6 +35,10 @@ VALUES (1, "Example Quiz", 1, "a");
 INSERT INTO Courses_Quizzes
 VALUES (1, 1, 1);
 
+-- Response DisplEl
+INSERT INTO DisplayElements(DispElID, TextElement, DispType)
+VALUES (34, "Good job!", "txt");
+
 -- first QC
 INSERT INTO QuesCon
 VALUES (1, "The Sky");
@@ -48,12 +52,12 @@ INSERT INTO Questions (QuesID, Points, Level, QuesType, CaseSensitive)
 VALUES (1, 3, 1, "Fill", 0);
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES(2, "Blue", "txt");
-INSERT INTO Answers (AnsID, DispElID)
-VALUES (1, 2);
+INSERT INTO Answers (AnsID, Response, DispElID)
+VALUES (1, 34, 2);
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (3, "Light Blue", "txt");
-INSERT INTO Answers (AnsID, DispElID)
-VALUES (2, 3);
+INSERT INTO Answers (AnsID, Response, DispElID)
+VALUES (2, 34, 3);
 
 -- Connect questions to answers
 INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)
@@ -88,8 +92,8 @@ INSERT INTO Answers(AnsID, DispElID)
 VALUES (3, 6);
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (7, "Cat", "txt");
-INSERT INTO Answers(AnsID, DispElID)
-VALUES (4, 7);
+INSERT INTO Answers(AnsID, Response, DispElID)
+VALUES (4, 34, 7);
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (8, "Dragon", "txt");
 INSERT INTO Answers(AnsID, DispElID)
@@ -132,13 +136,13 @@ VALUES (7, 4, 3, "Mult");
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (29, "Dog", "txt");
-INSERT INTO Answers(AnsID, DispElID)
-VALUES (21, 29);
+INSERT INTO Answers(AnsID, Response, DispElID)
+VALUES (21, 34, 29);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (30, "Cat", "txt");
-INSERT INTO Answers(AnsID, DispElID)
-VALUES (22, 30);
+INSERT INTO Answers(AnsID, Response, DispElID)
+VALUES (22, 34, 30);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (31, "Computer", "txt");
@@ -147,8 +151,8 @@ VALUES (23, 31);
 
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (32, "Dragon", "txt");
-INSERT INTO Answers(AnsID, DispElID)
-VALUES (24, 32);
+INSERT INTO Answers(AnsID, Response, DispElID)
+VALUES (24, 34, 32);
 
 -- Connect questions to answers
 INSERT INTO Ques_Ans (QuesID, AnsID, Sequence, Correct)

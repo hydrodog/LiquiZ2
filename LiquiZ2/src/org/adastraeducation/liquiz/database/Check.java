@@ -6,6 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Check {
+	/**
+	 * Verify a user's login using the database's user information
+	 * @param un the username inputted
+	 * @param pw the password inputted
+	 * @return whether the un/pw combination was found in the database
+	 */
 	public static boolean checkLogin(String un, String pw) {
 		Connection conn = null;
 		try {

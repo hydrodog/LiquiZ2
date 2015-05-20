@@ -29,8 +29,8 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 	
 	public void writeHTML(DisplayContext dc) {
 		if (dc.isDisplayResponses()) {
-			String[] answer = {"Your answer here"};
-			if (dc.getStudentResponses() != null) {
+			String[] answer = {};
+			if (dc.getStudentResponses().getLatestResponse(getId()) != null) {
 				answer = dc.getStudentResponses().getLatestResponse(getId());
 			}
 			
@@ -59,7 +59,7 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 				}
 			}
 			if(dc.isDisplayAnswers() && hasAnswer) { //TODO think of a sleeker way to represent this
-				dc.append("Correct answer(s): ");
+				dc.append("<span class='answersHead'>Correct answer(s): </span>");
 				for (Answer ans : getAns()) {
 					if(ans.getCorrect()) {
 						dc.append("<br>");

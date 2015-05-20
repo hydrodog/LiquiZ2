@@ -75,7 +75,7 @@ public class RegexQuestion extends FillIn {
 			// just add Answer object to add Response?
 			
 			if (dc.isDisplayAnswers()) {
-				dc.append("Possible answers:<br>Fulfill this regex pattern: ");
+				dc.append("<div class='answersHead'>Possible answers:</div>Fulfill this regex pattern: ");
 				// TODO interpreting regex?
 				dc.append(pattern.toString());
 			}

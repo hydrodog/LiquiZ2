@@ -4,13 +4,16 @@ import java.sql.*;
 import org.adastraeducation.liquiz.*;
 
 /**
- * update course infomation
- * @param name course name
- * @param privacy A 4-character string representing a privacy setting
+ * Makes changes to database entries to reflect edits to entities
  * @author yijinkang
  *
  */
 public class Edit {
+	/**
+	 * update course information (NOT DONE)
+	 * @param name the name of the course
+	 * @param privacy the course's privacy
+	 */
 	public void updateCourse(String name, String privacy) { 
 		Connection conn = null;
 		try {

@@ -29,6 +29,9 @@
              <void property="correct">
               <boolean>true</boolean>
              </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
             </object>
            </void>
            <void method="add">
@@ -42,6 +45,9 @@
              </void>
              <void property="correct">
               <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
              </void>
             </object>
            </void>
@@ -87,6 +93,9 @@
              <void property="correct">
               <boolean>true</boolean>
              </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
+             </void>
             </object>
            </void>
            <void method="add">
@@ -100,6 +109,9 @@
              </void>
              <void property="correct">
               <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
              </void>
             </object>
            </void>
@@ -125,6 +137,9 @@
              </void>
              <void property="correct">
               <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
              </void>
             </object>
            </void>
@@ -153,7 +168,7 @@
           <int>183</int>
          </void>
          <void property="source">
-          <string>img/cat.jpg</string>
+          <string>WebContent/assets/img/cat.jpg</string>
          </void>
          <void property="width">
           <int>275</int>
@@ -193,6 +208,9 @@
              </void>
              <void property="correct">
               <boolean>true</boolean>
+             </void>
+             <void property="response">
+              <object class="org.adastraeducation.liquiz.Response"/>
              </void>
             </object>
            </void>
@@ -282,6 +300,29 @@
        <void method="add">
         <object class="org.adastraeducation.liquiz.Text">
          <void property="text">
+          <string>Type a digit</string>
+         </void>
+        </object>
+       </void>
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.RegexQuestion">
+         <void property="id">
+          <int>8</int>
+         </void>
+         <void property="points">
+          <int>1</int>
+         </void>
+        </object>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.adastraeducation.liquiz.QuestionContainer">
+      <void property="displayables">
+       <void method="add">
+        <object class="org.adastraeducation.liquiz.Text">
+         <void property="text">
           <string>Did you like this quiz?</string>
          </void>
         </object>
@@ -322,36 +363,13 @@
       </void>
      </object>
     </void>
-    <void method="add">
-     <object class="org.adastraeducation.liquiz.QuestionContainer">
-      <void property="displayables">
-       <void method="add">
-        <object class="org.adastraeducation.liquiz.Text">
-         <void property="text">
-          <string>Type a digit</string>
-         </void>
-        </object>
-       </void>
-       <void method="add">
-        <object class="org.adastraeducation.liquiz.RegexQuestion">
-         <void property="id">
-          <int>8</int>
-         </void>
-         <void property="points">
-          <int>1</int>
-         </void>
-        </object>
-       </void>
-      </void>
-     </object>
-    </void>
    </object>
   </void>
   <void property="id">
    <int>1</int>
   </void>
   <void property="name">
-   <string>ThisIsAQuiz</string>
+   <string>Example Quiz</string>
   </void>
   <void property="policy">
    <object class="org.adastraeducation.liquiz.Policy">
