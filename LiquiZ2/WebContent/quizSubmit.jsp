@@ -8,6 +8,9 @@
 <title>Quiz Submitted!</title>
 </head>
 <body>
+<% session.setAttribute("StudentResponses", new StudentResponses()); %>
+
+
 <h1>LiquiZ</h1>
 
 <div class='quiz'> <!-- temporarily called quiz for styling purposes -->

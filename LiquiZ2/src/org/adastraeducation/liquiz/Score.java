@@ -16,11 +16,11 @@ public class Score {
 	
 	public static double gradeQuiz(HttpServletRequest request, HttpSession session) {
 		System.out.println("in gradeQuiz");
-		int userID = -1; //TEMP FOR TESTING
+		int userID = -1;
 		if (session.getAttribute("userID") != null) {
 			userID = Integer.parseInt((String) session.getAttribute("userID"));
 		}
-		StudentResponses sr = new StudentResponses(); //TEMP FOR TESTING
+		StudentResponses sr = new StudentResponses();
 		if (session.getAttribute("StudentResponses") != null) {
 			sr = (StudentResponses) session.getAttribute("StudentResponses");
 		}
