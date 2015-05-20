@@ -30,7 +30,7 @@ INSERT INTO Policies (PolID, Name, Timed, ShowAns, Scored, Grade, ShuffleQues, S
 VALUES (1, "Homework", 0, 1, 0, 10, 0, 0);
 
 INSERT INTO Quizzes (QuizID, Name, PolID, Privacy)
-VALUES (1, "ThisIsAQuiz", 1, "a");
+VALUES (1, "Example Quiz", 1, "a");
 
 INSERT INTO Courses_Quizzes
 VALUES (1, 1, 1);
@@ -75,7 +75,7 @@ VALUES (2, "Animal Identification");
 INSERT INTO DisplayElements (DispElID, MediaID, DispType)
 VALUES (4, 1, "med");
 INSERT INTO Media
-VALUES (1, "cat.jpg", "image.jpg", "img", 275, 183);
+VALUES (1, "cat.jpg", "WebContent/assets/img/cat.jpg", "img", 275, 183);
 INSERT INTO DisplayElements (DispElID, TextElement, DispType)
 VALUES (5, "Which animal is shown in the picture?", "txt");
 
@@ -276,10 +276,9 @@ VALUES (1, 4, 4);
 INSERT INTO Quizzes_QuesCons
 VALUES (1, 5, 5);
 INSERT INTO Quizzes_QuesCons
-VALUES (1, 3, 6);
+VALUES (1, 7, 6);
 INSERT INTO Quizzes_QuesCons
-VALUES (1, 7, 7);
-
+VALUES (1, 3, 7);
 
 
 

@@ -130,6 +130,7 @@ public class Load {
 	}
 	
 	// Load all StdChoices to HashMap in NamedObjects - does not run; currently hardcoded into NamedObjects
+	// TODO: is this needed? is StdChoice going into the database?
 	public static void loadStdChoices() {
 		System.out.println("Entered loadStdChoices");
 		ResultSet rs = null;

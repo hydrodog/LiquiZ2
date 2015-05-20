@@ -10,6 +10,7 @@
 </head>
 <body>
 <% 
+// TODO: where to put image?
 DisplayContext dc = new DisplayContext();
 // int quizID = Integer.parseInt(request.getParameter("quizID")); // for later
 Database.getQuiz(1).writeHTML(dc);
