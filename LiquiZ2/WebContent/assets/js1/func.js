@@ -120,7 +120,7 @@ function loadData(serverPage) {
 	json.send();
 }
 
-function f(div, sel) {
+function createSelectInDiv(div, sel) {
 	var s = document.createElement("SELECT");
 	for (var i = 0; i < sel.length; i+=2) {
 		var opt = document.createElement("OPTION");
