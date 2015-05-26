@@ -12,5 +12,6 @@
 <jsp:body>
 	<%-- Your code goes here --%>
 	<h1>Hello, world!</h1>
+	<h1>Goodbye, world!</h1>	
 </jsp:body>
 </t:base>
