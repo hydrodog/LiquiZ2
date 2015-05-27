@@ -1,4 +1,224 @@
+/*
+MIT license
+Copyright (c) <2007> < Steven Levithan >
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+*/
+
+function $ (el) {
+	if (el.nodeName) return el;
+	if (typeof el === "string") return document.getElementById(el);
+	return false;
+};
+function replaceHtml (el, html) {
+	var oldEl = $(el);
+	var newEl = oldEl.cloneNode(false);
+	newEl.innerHTML = html;
+	oldEl.parentNode.replaceChild(newEl, oldEl);
+	return newEl;
+};
+
+function replaceOuterHtml (el, html) {
+	el = replaceHtml(el, "");
+	if (el.outerHTML) { // If IE
+		var	id = el.id,
+			className = el.className,
+			nodeName = el.nodeName;
+		el.outerHTML = "<" + nodeName + " id=\"" + id + "\" class=\"" + className + "\">" + html + "</" + nodeName + ">";
+		el = $(id); // Reassign, since we just overwrote the element in the DOM
+	} else {
+		el.innerHTML = html;
+	}
+	return el;
+};
+
+function extend (to, from) {
+	for (var property in from) to[property] = from[property];
+	return to;
+};
+
+var	isWebKit = navigator.userAgent.indexOf("WebKit") > -1,
+	isIE /*@cc_on = true @*/,
+	isIE6 = isIE && !window.XMLHttpRequest;
+
+(function () {
+
+if (window.XRegExp)
+	return;
+
+var real = {
+	RegExp:  RegExp,
+	exec:    RegExp.prototype.exec,
+	match:   String.prototype.match,
+	replace: String.prototype.replace
+};
+
+
+var re = {
+	extended:            /(?:[^[#\s\\]+|\\(?:[\S\s]|$)|\[\^?]?(?:[^\\\]]+|\\(?:[\S\s]|$))*]?)+|(\s*#[^\n\r\u2028\u2029]*\s*|\s+)([?*+]|{[0-9]+(?:,[0-9]*)?})?/g,
+	singleLine:          /(?:[^[\\.]+|\\(?:[\S\s]|$)|\[\^?]?(?:[^\\\]]+|\\(?:[\S\s]|$))*]?)+|\./g,
+	characterClass:      /(?:[^\\[]+|\\(?:[\S\s]|$))+|\[\^?(]?)(?:[^\\\]]+|\\(?:[\S\s]|$))*]?/g,
+	capturingGroup:      /(?:[^[(\\]+|\\(?:[\S\s]|$)|\[\^?]?(?:[^\\\]]+|\\(?:[\S\s]|$))*]?|\((?=\?))+|(\()(?:<([$\w]+)>)?/g,
+	namedBackreference:  /(?:[^\\[]+|\\(?:[^k]|$)|\[\^?]?(?:[^\\\]]+|\\(?:[\S\s]|$))*]?|\\k(?!<[$\w]+>))+|\\k<([$\w]+)>([0-9]?)/g,
+	replacementVariable: /(?:[^$]+|\$(?![1-9$&`']|{[$\w]+}))+|\$(?:([1-9]\d*|[$&`'])|{([$\w]+)})/g
+};
+
+
+XRegExp = function (pattern, flags) {
+	flags = flags || "";
+
+	if (flags.indexOf("x") > -1) {
+		pattern = real.replace.call(pattern, re.extended, function ($0, $1, $2) {
+			// Keep backreferences separate from subsequent tokens unless the token is a quantifier
+			return $1 ? ($2 || "(?:)") : $0;
+		});
+	}
+
+	var hasNamedCapture = false;
+	if (flags.indexOf("k") > -1) {
+		var captureNames = [];
+		pattern = real.replace.call(pattern, re.capturingGroup, function ($0, $1, $2) {
+			if ($1) {
+				if ($2) hasNamedCapture = true;
+				captureNames.push($2 || null);
+				return "(";
+			} else {
+				return $0;
+			}
+		});
+		if (hasNamedCapture) {
+			// Replace named with numbered backreferences
+			pattern = real.replace.call(pattern, re.namedBackreference, function ($0, $1, $2) {
+				var index = $1 ? captureNames.indexOf($1) : -1;
+				// Keep backreferences separate from subsequent literal numbers
+				return index > -1 ? "\\" + (index + 1) + ($2 ? "(?:)" + $2 : "") : $0;
+			});
+		}
+	}
+
+	pattern = real.replace.call(pattern, re.characterClass, function ($0, $1) {
+		return $1 ? real.replace.call($0, "]", "\\]") : $0;
+	});
+
+	if (flags.indexOf("s") > -1) {
+		pattern = real.replace.call(pattern, re.singleLine, function ($0) {
+			return $0 === "." ? "[\\S\\s]" : $0;
+		});
+	}
+
+	var regex = real.RegExp(pattern, real.replace.call(flags, /[sxk]+/g, ""));
+	if (hasNamedCapture)
+		regex._captureNames = captureNames;
+	return regex;
+};
+
+RegExp.prototype.exec = function (str) {
+	var result = real.exec.call(this, str);
+	if (!(this._captureNames && result && result.length > 1))
+		return result;
+	for (var i = 1; i < result.length; i++) {
+		var name = this._captureNames[i - 1];
+		if (name)
+			result[name] = result[i];
+	}
+	return result;
+};
+
+String.prototype.replace = function (search, replacement) {
+	// If search is not a regex which uses named capturing groups, use the native replace method
+	if (!(search instanceof real.RegExp && search._captureNames))
+		return real.replace.apply(this, arguments);
+
+	if (typeof replacement === "function") {
+		return real.replace.call(this, search, function () {
+			// Convert arguments[0] from a string primitive to a String object which can store properties
+			arguments[0] = new String(arguments[0]);
+			// Store named backreferences on arguments[0] before calling replacement
+			for (var i = 0; i < search._captureNames.length; i++) {
+				if (search._captureNames[i])
+					arguments[0][search._captureNames[i]] = arguments[i + 1];
+			}
+			/* The context object ``this`` is set to the global context ``window`` as it should be with stand-
+			alone anonymous functions, although it's unlikely to be used within a replacement function. */
+			return replacement.apply(window, arguments);
+		});
+	} else {
+		return real.replace.call(this, search, function () {
+			var args = arguments;
+			return real.replace.call(replacement, re.replacementVariable, function ($0, $1, $2) {
+				// Numbered backreference or special variable
+				if ($1) {
+					switch ($1) {
+						case "$": return "$";
+						case "&": return args[0];
+						case "`": return args[args.length - 1].slice(0, args[args.length - 2]);
+						case "'": return args[args.length - 1].slice(args[args.length - 2] + args[0].length);
+						// Numbered backreference
+						default:
+							/* What does "$10" mean?
+							 - Backreference 10, if 10 or more capturing groups exist
+							 - Backreference 1 followed by "0", if 1-9 capturing groups exist
+							 - Otherwise, it's the string "$10" */
+							var literalNumbers = "";
+							$1 = +$1; // Cheap type-conversion
+							while ($1 > search._captureNames.length) {
+								literalNumbers = $1.split("").pop() + literalNumbers;
+								$1 = Math.floor($1 / 10); // Drop the last digit
+							}
+							return ($1 ? args[$1] : "$") + literalNumbers;
+					}
+				// Named backreference
+				} else if ($2) {
+					/* What does "${name}" mean?
+					 - Backreference to named capture "name", if it exists
+					 - Otherwise, it's the string "${name}" */
+					var index = search._captureNames.indexOf($2);
+					return index > -1 ? args[index + 1] : $0;
+				} else {
+					return $0;
+				}
+			});
+		});
+	}
+};
+
+})();
+// ...End anonymous function
+
+
+XRegExp.cache = function (pattern, flags) {
+	var key = "/" + pattern + "/" + (flags || "");
+	return XRegExp.cache[key] || (XRegExp.cache[key] = new XRegExp(pattern, flags));
+};
+
+if (!Array.prototype.indexOf) {
+	// JavaScript 1.6 compliant indexOf from MooTools 1.11; MIT License
+	Array.prototype.indexOf = function (item, from) {
+		var len = this.length;
+		for (var i = (from < 0) ? Math.max(0, len + from) : from || 0; i < len; i++) {
+			if (this[i] === item)
+				return i;
+		}
+		return -1;
+	};
+}
 var CheckRegex = {
 		fields: {
 			patternarea: new MatchingArea("patternarea"),
