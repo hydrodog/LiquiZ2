@@ -292,6 +292,7 @@ public class Load {
 					pol.setDuration(rs.getInt("TimeLimit"));
 				}
 				pol.setShowAns(rs.getBoolean("ShowAns"));
+				pol.setShowAnsOnLastAtt(rs.getBoolean("ShowAnsOnLastAtt"));
 				pol.setScored(rs.getBoolean("Scored"));
 				pol.setGrade(rs.getInt("Grade"));
 				pol.setShuffleQues(rs.getBoolean("ShuffleQues"));
@@ -463,6 +464,27 @@ public class Load {
 		} finally {
 			DatabaseMgr.closeResultSet(rs);
 		}
+	}
+	
+	/**
+	 * Find out how many times a student has taken a quiz
+	 * @param studentID
+	 * @param quizID
+	 * @return
+	 */
+	public static int getTakenTimes(int studentID, int quizID) {
+		ResultSet rs = null;
+		int attempts = 0;
+		try {
+			String query = "SELECT max(AttemptNum) FROM StudentQuizScores WHERE UserID=" + studentID + " AND QuizID=" + quizID;
+			rs = DatabaseMgr.execQuery(query);
+			attempts = rs.getInt(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseMgr.closeResultSet(rs);
+		}
+		return attempts;
 	}
 	
 	//TODO while loop

@@ -37,8 +37,14 @@ This score is final. All questions have been automatically graded.
 
 <% DisplayContext dc = new DisplayContext();
 dc.setDisplayResponses(true); // display student's responses
-dc.setDisplayAnswers(Database.getQuiz(quizID).getPolicy().getShowAns()); // display correct answers if policy says to
-// TODO policy to show answers AT THE LAST ATTEMPT
+
+Quiz quiz = Database.getQuiz(quizID); 
+
+boolean displayAnswers = quiz.getPolicy().getShowAns() || //display correct answers if policy says to always show or...
+		(quiz.getPolicy().getShowAnsOnLastAtt() && Load.getTakenTimes(((User) session.getAttribute("")).getID(), quiz.getId()) + 1 == quiz.getPolicy().getAttemptNum()); 
+		//if policy says to show on last attempt and this is the last attempt
+dc.setDisplayAnswers(displayAnswers); 
+
 dc.setStudentResponses((StudentResponses) session.getAttribute("StudentResponses")); // give the StudentResponses
 Database.getQuiz(quizID).writeHTML(dc);
 System.out.print(dc.toString());
