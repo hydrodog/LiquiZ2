@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taking a Quiz</title>
+	<script src="assets/js1/func.js"></script>
+	<script>
+	function thisPage() {
+		document.getElementById("title").innerHTML = page.quiz.title; // Fill in quiz title
+
+		var questions = document.getElementById("questions");
+		//drawQuiz(questions);
+		for (var i = 0; i < page.quiz.questionContainers.length; i++) {
+			var ques = page.quiz.questionContainers[i];
+			//create question header like: <div class='quesHeader'>Math: 2 points</div>
+			var quesHeader = document.createElement("div");
+			quesHeader.class = 'quesHeader';
+			quesHeader.innerHTML = ques.name + ": " + ques.points + " points";
+			questions.appendChild(quesHeader);
+			alert("1");
+			
+			var quesDiv = document.createElement("div");
+			quesDiv.class = 'question';
+			alert(ques.elements);
+			for (var j = 0; j < ques.elements.length; j++) {
+				//TODO not getting in here
+				var elem = ques.elements[j];
+				if (elem.type == "text") {
+					var text = document.createTextNode(elem.name);
+					ques.appendChild(text);
+				} else if(elem.type = "fillin") {
+					var fillin = document.createElement("input");
+					fillin.type = "text";
+					fillin.class = "fillin";
+					fillin.name = elem.id;
+					ques.append(fillin);
+				} else {
+					var errorMsg = document.createTextNode("Error: Element type not found");
+					ques.appendChild(errorMsg);
+				}
+			}
+			questions.appendChild(quesDiv);
+			alert("2");
+		} 
+		
+		document.getElementsByName("quizID")[0].value = page.quiz.id; // fill in quiz ID
+	}
+	//loadData("takequiz.json")
+	loadData("TakeQuiz_ajax.jsp");
+	
+	</script>
+</head>
+<body>
+<h2 id="title"></h2>
+<form id='quizForm' class='quiz' action='quizSubmit.jsp' method='get'>
+	<div id='questions'>
+		<!-- each qc is added dynamically -->
+	</div>
+	<input type='hidden' name='quizID'>
+	<input type='submit' value='Submit'>
+</form>
+</body>
+</html>
