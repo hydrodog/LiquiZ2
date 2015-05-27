@@ -39,9 +39,14 @@ public class FormInput {
 		System.out.println(name);
 		System.out.println(Rpattern);
 		System.out.println(pattern);
-		HashMap<String,Pattern> allPatterns = new  HashMap<String,Pattern>();
-		allPatterns.put(name, pattern);
-		NamedObjects.addRegexPattern(category,allPatterns);
+		if(NamedObjects.getRegexPattern(category)==null){
+		HashMap<String,Pattern> pat = new HashMap<String,Pattern>();
+		pat.put(Rpattern, pattern);
+		NamedObjects.addRegexPattern(name, pat) ;
+		}
+		else
+		NamedObjects.addRegexPatternSet(category, name, pattern);
+		
 		
 		return true;
 	}
