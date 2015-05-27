@@ -32,7 +32,7 @@
                         <h2 class="form-signin-heading">
                             Please sign in
                         </h2>
-                        <input type="user" class="form-control" name="userName" placeholder="User name" required="" autofocus="" />
+                        <input type="text" class="form-control" name="userName" placeholder="User name" required="" autofocus="" />
                         <input type="password" class="form-control" name="passwd" placeholder="Password" required=""/>
                         <input type="checkbox" value="remember-me" />
                         <b>

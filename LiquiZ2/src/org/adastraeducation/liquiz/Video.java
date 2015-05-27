@@ -15,6 +15,7 @@ public class Video extends RectangularMedia {
 	//<source src="movie.ogg" type="video/ogg">
 	public void writeHTML(DisplayContext dc){
 		dc.append("\n<video controls width=\""+ getWidth() +"\" height=\""+ getHeight() +"\">\n");
+		//TODO should src prepend a directory? where will the videos be?
 		dc.append("<source src=\"" + getSource() +  "\" type =\"video/"+ getType() + "\"/>\n");
 		dc.append("</video>\n");
 	}

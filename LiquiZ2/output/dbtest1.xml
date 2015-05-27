@@ -168,7 +168,7 @@
           <int>183</int>
          </void>
          <void property="source">
-          <string>WebContent/assets/img/cat.jpg</string>
+          <string>assets/img/cat.jpg</string>
          </void>
          <void property="width">
           <int>275</int>
@@ -378,9 +378,6 @@
     </void>
     <void property="attemptNum">
      <int>1</int>
-    </void>
-    <void property="grade">
-     <int>10</int>
     </void>
     <void property="scored">
      <boolean>false</boolean>

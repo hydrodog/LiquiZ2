@@ -90,15 +90,17 @@ public class FillIn extends Question {
 			dc.append("'> ");
 			
 			if(dc.isDisplayAnswers()) {
-				Response res = getResponseFor(answer[0]);
-				if (res != null) { 
-					if (Score.correctQues(getId(), answer) == getPoints()) {
-						dc.append("<span class='response correct'>");
-					} else {
-						dc.append("<span class='response'>");
+				if(answer.length > 0) {
+					Response res = getResponseFor(answer[0]);
+					if (res != null) { 
+						if (Score.correctQues(getId(), answer) == getPoints()) {
+							dc.append("<span class='response correct'>");
+						} else {
+							dc.append("<span class='response'>");
+						}
+						res.writeHTML(dc);
+						dc.append("</span>");
 					}
-					res.writeHTML(dc);
-					dc.append("</span>");
 				}
 				
 				boolean hasAnswer = false;

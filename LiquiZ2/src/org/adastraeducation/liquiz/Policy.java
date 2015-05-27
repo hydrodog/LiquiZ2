@@ -13,10 +13,9 @@ public class Policy {
 	private boolean timed;		// true if timed, false otherwise
 	private int duration;		// if timed is true, duration is the time allotted in seconds.
 	private boolean showAns;	// if true, then after grading display the answers
+	private boolean showAnsOnLastAtt;	// if true, then display answers on last attempt
 	private boolean scored;		// if true, then this quiz is scored (otherwise do not score)
-	private int grade;			// TODO: grade in policy makes no sense!
-	// have a policy to do something IF grade < x???
-	//the score from the quiz (TODO: should this be double?)
+	// TODO have a policy to do something IF grade < x???
 	private boolean shuffleQues;// if true, randomly shuffle the question order
 	private boolean shuffleAns;	// if true, randomly shuffle the order of multiple choice answers
 	//TODO: require access from specific access point??
@@ -69,20 +68,20 @@ public class Policy {
 		this.showAns = value;
 	}
 	
+	public boolean getShowAnsOnLastAtt() {
+		return showAnsOnLastAtt;
+	}
+
+	public void setShowAnsOnLastAtt(boolean showAnsOnLastAtt) {
+		this.showAnsOnLastAtt = showAnsOnLastAtt;
+	}
+
 	public boolean getScored() {
 		return this.scored;
 	}
 	
 	public void setScored(boolean value) {
 		this.scored = value;
-	}
-	
-	public int getGrade() {
-		return this.grade;
-	}
-	
-	public void setGrade(int value) {
-		this.grade = value;
 	}
 	
 	public boolean getShuffleQues() {
@@ -115,7 +114,6 @@ public class Policy {
 		duration = 300;
 		showAns = false;
 		scored = true;
-		grade = 0;
 		shuffleQues = true;
 		shuffleAns = true;
 		accessCode = "";

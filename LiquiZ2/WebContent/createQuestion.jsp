@@ -1,11 +1,11 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
         <title>CreateQuestions</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
         </script>
-        <script src="assets/js/func.js"></script>
+        <script src="assets/js1/func.js"></script>
         <style>
 			.invisible {
 				display: none;
@@ -152,7 +152,7 @@
                 <br>
                 <div>
                 <div style="float:left">
-                    <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">Warning Pattern</br>
+                    <input type="checkbox" name="warningPattern" onclick="showWarningPatternAttribute(this)">Warning Pattern<br>
                 </div>
                 <br>
                 <div id="warningPattern_attribute" style="float:left;display:none; ">
@@ -166,7 +166,7 @@
                 <br>
                 
                 <div style="float:left">
-                    <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">Number Question</br>
+                    <input type="checkbox" name="number" onclick="showNumberQuestionAttribute(this)">Number Question<br>
                 </div>
                 <br>
                 <div id="numberQuestion_attribute" style="float:left;display:none;">
@@ -224,10 +224,10 @@
                     Add more options <input type="text" name="multichoice_dropdown_number" onchange="createDropDownChoices(this)" style="width: 30px;"  >
                    <br>
                    <form>
-                   <br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_1" ></br>
-                   <br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_2" ></br>
-                   <br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_3" ></br>
-                   <br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_4" ></br>
+                   <br> Option 1: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_1" ><br>
+                   <br> Option 2: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_2" ><br>
+                   <br> Option 3: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_3" ><br>
+                   <br> Option 4: <input type="text" name="dropdown_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dropdown_choices" value ="choice_4" ><br>
                    </form>
                 </div>
                 <div id="dropdown"></div>
@@ -242,9 +242,9 @@
                     Add more options <input type="text" name="multichoice_radio_number" onchange="createRadioChoices(this)" style="width: 30px;"  >
                     <br>
                     <form>
-                   <br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_1" ></br>
-                   <br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_2" ></br>
-                   <br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_3" ></br>
+                   <br> Option 1: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_1" ><br>
+                   <br> Option 2: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_2" ><br>
+                   <br> Option 3: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_3" ><br>
                    <br> Option 4: <input type="text" name="radio_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="radio_choices" value ="choice_4" >
                 	</form>
                    
@@ -262,9 +262,9 @@
                     Add more options <input type="text" name="multianswer_number" onchange="createMultiChoices(this)" style="width: 30px;"   >
                     <br>
                     <form>
-                   <br> Option 1: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_1" ></br>
-                   <br> Option 2: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_2" ></br>
-                   <br> Option 3: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_3" ></br>
+                   <br> Option 1: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_1" ><br>
+                   <br> Option 2: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_2" ><br>
+                   <br> Option 3: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_3" ><br>
                    <br> Option 4: <input type="text" name="multi_choices">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="multi_choices" value ="choice_4" >
                 	</form>
                    
@@ -285,7 +285,6 @@
                 </div>
                 <div style="clear:both"></div>
                 <br>
-                </div>
             </div>
             <script src="assets/js1/displayChange.js"></script>
             

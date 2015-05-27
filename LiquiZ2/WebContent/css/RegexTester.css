@@ -1,0 +1,103 @@
+body {
+	color: #000;
+	background: #FFF;
+}
+
+body, div, pre, input, textarea {
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	list-style: none;
+}
+
+abbr, acronym {
+	border: 0;
+	font-variant: normal;
+}
+
+sup, sub {
+	line-height: -1px;
+	vertical-align: text-top;
+}
+
+sub {
+	vertical-align: text-bottom;
+}
+
+input, select {
+	font-family: inherit;
+}
+
+.small {
+	font-size: 90%;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.hidden {
+	display: none;
+}
+
+#body {
+	padding: 10px;
+}
+
+#patternarea {
+	height: 60px;
+	width: 50%;
+}
+
+#matcharea {
+	height: 100px;
+	width: 50%;
+	margin-top: 10px;
+}
+
+.matchingArea {
+	position: relative;
+	overflow: auto;
+	border: 1px solid #414141;
+	background: #ebebeb;
+}
+
+.matchingArea pre, .matchingArea textarea {
+	font: 80% "courier new", monospace;
+	width: 100%;
+}
+
+.matchingArea pre {
+	z-index: 1;
+	color: #c0c0c0;
+}
+
+.matchingArea textarea {
+	z-index: 2;
+	margin-left: -1px;
+	border: 1px;
+	background: transparent;
+	position: absolute;
+	top: 0;
+	height: 100%;
+	min-height: 100%;
+	overflow: hidden;
+}
+
+b, i, u {
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+}
+
+#matcharea b {
+	background: #f85e47;
+	color: #f85e47;
+}
+
+#matcharea i {
+	background: #58D3F7;
+	color: #58D3F7;
+}

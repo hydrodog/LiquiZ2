@@ -14,6 +14,7 @@ public class Image extends RectangularMedia {
 	}
 
 	public void writeHTML(DisplayContext dc){
+		//TODO should src prepend a directory? where will the images be?
 		dc.append("<img src='" + getSource() + "' style = width:"+ getWidth() + "px;height:"+ getHeight() + "px>");
 	}
 

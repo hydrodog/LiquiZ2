@@ -8,6 +8,7 @@ import java.util.HashMap;
  *
  */
 public class StudentResponses {
+	//TODO have multiple answer attempts in one object? or create a new one each time?
 	private HashMap<String, String[]> quesResponses;
 	// key is a concatenation of quesID and attempt number (ex 1.1)
 	private HashMap<String, Double> quizScores; //TODO NOT SURE THIS IS NEEDED
