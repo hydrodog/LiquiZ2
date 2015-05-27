@@ -33,7 +33,11 @@ function check_length(obj, cnt, rem) {
     }  
     return true;  
 }  
- 
+
+/**
+ * Used in createQuestion.jsp to show warning pattern options when user chooses to use them
+ * @param obj
+ */
 function showWarningPatternAttribute(obj) {
     if (obj.checked) {
         document.getElementById("warningPattern_attribute").style.display="";
@@ -42,6 +46,10 @@ function showWarningPatternAttribute(obj) {
     }
 }
 
+/**
+ * Used in createQuestion.jsp to show number pattern options when user chooses to use them
+ * @param obj
+ */
 function showNumberQuestionAttribute(obj) {
     if (obj.checked) {
         document.getElementById("numberQuestion_attribute").style.display="";
@@ -49,7 +57,10 @@ function showNumberQuestionAttribute(obj) {
         document.getElementById("numberQuestion_attribute").style.display="none";
     }
 }
-
+/**
+ * To add additional dropdown choices in createQuestion.jsp
+ * @param obj
+ */
 function createDropDownChoices(obj) {
     var empty="";
     document.getElementById("dropdown").innerHTML=empty;
@@ -59,6 +70,10 @@ function createDropDownChoices(obj) {
     document.getElementById("dropdown").innerHTML=empty;
 }
 
+/**
+ * To add additional radio choices in createQuestion.jsp
+ * @param obj
+ */
 function createRadioChoices(obj) {
     var empty="";
     document.getElementById("radio").innerHTML=empty;
@@ -68,6 +83,10 @@ function createRadioChoices(obj) {
     document.getElementById("radio").innerHTML=empty;
 }
 
+/**
+ * To add additional multiple select choices in createQuestion.jsp
+ * @param obj
+ */
 function createMultiChoices(obj) {
     var empty="";
     document.getElementById("multichoices").innerHTML=empty;
@@ -120,6 +139,10 @@ function loadData(serverPage) {
 	json.send();
 }
 
+/*
+ * Append a SELECT box to div with options from sel
+ * sel should be array with [value, text, value, text, ...]
+ */
 function f(div, sel) {
 	var s = document.createElement("SELECT");
 	for (var i = 0; i < sel.length; i+=2) {

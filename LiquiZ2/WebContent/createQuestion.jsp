@@ -5,7 +5,7 @@
         <title>CreateQuestions</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
         </script>
-        <script src="assets/js/func.js"></script>
+        <script src="assets/js1/func.js"></script>
         <style>
 			.invisible {
 				display: none;
