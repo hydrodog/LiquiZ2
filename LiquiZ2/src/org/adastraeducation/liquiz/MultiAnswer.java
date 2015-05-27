@@ -76,7 +76,7 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		System.out.println(q.grade(s4) + " should equal 1");
 	}
 	
-	public void writeHTML(DisplayContext dc ){
+	public void writeHTML(DisplayContext dc){
 		if(dc.isDisplayResponses()) {
 			String[] answer = {};
 			if (dc.getStudentResponses().getLatestResponse(getId()) != null) {
@@ -98,7 +98,19 @@ public class MultiAnswer extends MultiChoiceDropdown {
 			}
 			dc.append("</select>\n");
 			
-			//TODO teacher's response?
+			//TODO How to format these responses?
+			for (String stdAns : answer) {
+				Response res = getResponseFor(stdAns);
+				if (res != null) { 
+					if (Score.correctQues(getId(), answer) == getPoints()) {
+						dc.append("<span class='response correct'>");
+					} else {
+						dc.append("<span class='response'>");
+					}
+					res.writeHTML(dc);
+					dc.append("</span>");
+				}
+			}
 			
 			boolean hasAnswer = false;
 			for (Answer ans : getAns()) {
