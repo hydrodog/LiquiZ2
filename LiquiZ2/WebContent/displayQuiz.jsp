@@ -13,11 +13,12 @@
 // TODO: where to put image?
 /* 	String pwd = new java.io.File(".").getCanonicalPath();
 	out.println(pwd); */
-// ^ this gave me /Applications/Eclipse JEE/Eclipse JEE.app/Contents/MacOS but I tried putting it there
+// ^ this gave me /Applications/Eclipse JEE/Eclipse JEE.app/Contents/MacOS
 DisplayContext dc = new DisplayContext();
 // int quizID = Integer.parseInt(request.getParameter("quizID")); // for later
 Database.getQuiz(1).writeHTML(dc);
 out.print(dc.toString());
+System.out.print(dc.toString());
 %>
 </body>
 </html>

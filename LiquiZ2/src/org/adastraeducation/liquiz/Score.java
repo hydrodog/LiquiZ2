@@ -29,7 +29,7 @@ public class Score {
 		double score = 0;
 		
 		while (quesIDs.hasMoreElements()) {
-			String id = quesIDs.nextElement(); //TODO: note below, it shouldn't be >= 10. just >10. but weird errors rn
+			String id = quesIDs.nextElement(); //TODO: below, it shouldn't be >= 10. just >10. but weird errors rn
 			if (!id.equals("quizID") && !(id.length()>=10 && id.substring(0, 10).equals("selectLang"))) { // Questions only
 				String[] res = request.getParameterValues(id);
 				double addPoints = correctQues(Integer.parseInt(id), res);

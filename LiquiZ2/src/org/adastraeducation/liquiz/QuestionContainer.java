@@ -1,6 +1,5 @@
 package org.adastraeducation.liquiz;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class QuestionContainer implements Displayable {
 	private int id;

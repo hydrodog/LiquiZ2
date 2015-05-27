@@ -1,0 +1,8 @@
+{
+	css: "red",
+	course: "CPE-593",
+	grades: [
+	         { first: "dov", last: "kruger", grades: [10, 100, 50, 0, 0, 80, 100] },
+	         { first: "Shenghan", last: "gao", grades: [100, 90, 50, 80, 0, 80, 100] }
+	]
+}
