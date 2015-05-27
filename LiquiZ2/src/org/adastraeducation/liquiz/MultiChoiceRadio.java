@@ -49,7 +49,7 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 			}
 			dc.append("</div>\n");
 			
-			// TODO How to format this better?
+			// TODO How to format these responses better?
 			Response res = getResponseFor(answer[0]);
 			if (res != null) { 
 				if (Score.correctQues(getId(), answer) == getPoints()) {

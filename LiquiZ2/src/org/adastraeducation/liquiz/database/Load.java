@@ -294,7 +294,6 @@ public class Load {
 				pol.setShowAns(rs.getBoolean("ShowAns"));
 				pol.setShowAnsOnLastAtt(rs.getBoolean("ShowAnsOnLastAtt"));
 				pol.setScored(rs.getBoolean("Scored"));
-				pol.setGrade(rs.getInt("Grade"));
 				pol.setShuffleQues(rs.getBoolean("ShuffleQues"));
 				pol.setShuffleAns(rs.getBoolean("ShuffleAns"));
 				if (rs.getString("AccessCode") != null) {

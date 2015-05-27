@@ -69,7 +69,7 @@ public class MultiChoiceDropdown extends Question {
 			}
 			dc.append("</select><br>\n");
 			
-			// TODO How to format this better?
+			// TODO How to format these responses better?
 			Response res = getResponseFor(answer[0]);
 			if (res != null) { 
 				if (Score.correctQues(getId(), answer) == getPoints()) {

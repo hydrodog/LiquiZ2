@@ -98,7 +98,7 @@ public class MultiAnswer extends MultiChoiceDropdown {
 			}
 			dc.append("</select>\n");
 			
-			//TODO How to format these responses?
+			//TODO How to format these responses better?
 			for (String stdAns : answer) {
 				Response res = getResponseFor(stdAns);
 				if (res != null) { 
