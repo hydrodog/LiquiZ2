@@ -12,36 +12,16 @@
 		for (var i = 0; i < page.quiz.questionContainers.length; i++) {
 			var ques = page.quiz.questionContainers[i];
 			//create question header like: <div class='quesHeader'>Math: 2 points</div>
-			var quesHeader = document.createElement("div");
-			quesHeader.class = 'quesHeader';
-			quesHeader.innerHTML = ques.name + ": " + ques.points + " points";
-			questions.appendChild(quesHeader);
-			alert("1");
-			
-			var quesDiv = document.createElement("div");
-			quesDiv.class = 'question';
-			alert(ques.elements);
+			var quesHeader = mkdiv(questions, 'quesHeader', ques.name + ": " + ques.points + " points");			
+			var quesDiv = makediv(questions, 'question');
+
 			for (var j = 0; j < ques.elements.length; j++) {
-				//TODO not getting in here
 				var elem = ques.elements[j];
-				if (elem.type == "text") {
-					var text = document.createTextNode(elem.name);
-					ques.appendChild(text);
-				} else if(elem.type = "fillin") {
-					var fillin = document.createElement("input");
-					fillin.type = "text";
-					fillin.class = "fillin";
-					fillin.name = elem.id;
-					ques.append(fillin);
-				} else {
-					var errorMsg = document.createTextNode("Error: Element type not found");
-					ques.appendChild(errorMsg);
-				}
-			}
-			questions.appendChild(quesDiv);
-			alert("2");
-		} 
-		
+				var f= typeMap[elem.type];
+				var obj = f(elem);
+				quesDiv.appendChild(obj);
+		  } 
+		}
 		document.getElementsByName("quizID")[0].value = page.quiz.id; // fill in quiz ID
 	}
 	//loadData("takequiz.json")
