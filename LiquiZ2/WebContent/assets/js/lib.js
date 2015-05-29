@@ -332,16 +332,32 @@ Element.prototype.createSubmit = function() {
 Element.prototype.addQuestions = function(quizinfo, qlist) {
 //    quizinfo.display(this);
     this.createSubmit();
-    for (var i = 0; i < qlist.length; i++) {
+    var id = -1;
+    for (var i = 0; i < qlist.length; i++, id--) {
 	var ques = this.mkdiv("qc");
+	ques.id = id;
 	for (var j = 0; j < qlist[i].length; j++) {
 	    var q = qlist[i][j];
 	    var t = q.type;
 	    var newq = this.dispatch[t](q);
 	    ques.appendChild(newq);
 	}
+	ques.addEdit();
     }
     this.createSubmit();
+}
+
+Element.prototype.addButton = function(label) {
+	var b = document.createElement("input");
+	b.type = 'button';
+	b.value = label;
+	this.appendChild(b);
+}
+Element.prototype.addEdit = function() {
+	var div = this.mkdiv("editpane");
+	div.addButton("edit");
+	div.addButton("delete");
+	this.appendChild(div);
 }
 function build() {
     //    dump(multradio(19, ['test', 'yoho', 24]));
