@@ -1,0 +1,62 @@
+.qc {
+    background-color: #0040f0;
+    font-family: Arial, san-serif;
+    font-size: 12pt;
+    font-weight: bold;
+    border-style: solid;
+}
+
+.fillin .number {
+    font: 12pt Courier bold;
+    background-color: white;
+    color: black;
+}
+
+.code {
+    font: 12pt Courier bold;
+    background-color: black;
+    color: #00ff20;
+    width: 100%;
+}
+
+.multichoicedropdown {
+
+
+}
+
+.multichoiceradio {
+
+
+}
+
+.instructions {
+    background-color: #f88;
+    font: 14pt Arial, sanserif;
+}
+
+.box {
+    background-color: #8f8;
+    border: 1 solid #000;
+}
+
+.matrix {
+    font: 10pt Courier, fixed;
+    background-color: #40c0f0;
+}
+
+.cell .gridcell {
+    background-color: #f0f;
+    width: 40px;
+}
+
+.grid {
+    background-color: red;
+}
+
+.submit {
+    font-family: Arial;
+    font-size: 16pt;
+    font-weight: bold;
+    background-color: #f00;
+    color: white;
+}
