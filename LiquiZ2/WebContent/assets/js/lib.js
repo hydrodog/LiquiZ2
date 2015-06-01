@@ -190,7 +190,11 @@ function Quiz(quizinfo, qlist) {
         }
 
         if (this.editMode) {
-        	qc.appendChild(mkbutton("New Question"));
+        	var newB = mkbutton("New Question");
+        	newB.onclick = function() {
+        		
+        	}
+        	qc.appendChild(newB);
         }
     }
     this.createSubmit();
