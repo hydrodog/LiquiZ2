@@ -78,12 +78,13 @@ function qhead(title, points, level) {
     level =  (typeof(level) == 'undefined') ? 1 : level;
     return {type: 'qhe', title: title, points: points, level: level};
 }
+function br() { return {type: 'br'} } // line break
 function txt(txt)  { return {type: 'txt', text: txt}  } // plain text inside <span>
 function ins(txt)  { return {type: 'ins', text: txt}  } // instructions <span class="instructions">
 function lin(txt)  { return {type: 'lin', text: txt}  } // text within <p>
 function box(txt)  { return {type: 'box', text: txt}  } // text within div
 function gri(mat)  { return {type: 'mat', arr: mat,
-                 className: 'grid', readOnly: 1,
+                 className: 'grid', readOnly: 1, disabled: true,
                  rows: mat.length, cols: mat[0].length}   } // create a table based on matrix
 function img(file) { return {type: 'img', file: file} }
 function aud(file) { return {type: 'aud', file: file} }
@@ -93,7 +94,7 @@ function fil(id)       {    return {type: 'fil', id: id}              }
 function num(id)       {    return {type: 'num', id: id}              }
 function mcr(id, list) {    return {type: 'mcr', id: id, list: list}  }
 function mcd(id, list) {    return {type: 'mcd', id: id, list: list}  }
-function mat(id, rows, cols) { return {type: 'mat', rows: rows, cols: cols}; }
+function mat(id, rows, cols) { return {type: 'mat', className: 'grid answer', rows: rows, cols: cols}; }
 function ess(id, rows, cols,maxwords) { return {type: 'ess', rows: rows, cols: cols, maxwords: maxwords};  }
 // file upload
 function fup(id, accept)       {    return {type: 'fup', accept: accept } } // accept is a string: ".java,.txt"
@@ -137,8 +138,9 @@ function mkbutton(val) {
 
 function make(tag, inner, className) {
     var t = document.createElement(tag);
-    if (typeof(className) != 'undefined')
-    t.className = className;
+    if (className)
+        t.className = className;
+    // if (inner)
     t.innerHTML = inner;
     return t;
 }
@@ -254,6 +256,10 @@ Quiz.prototype.txt = function(txt) {
     return make('span', txt.text);
 }
 
+Quiz.prototype.br = function() {
+    return make('br');
+}
+
 Quiz.prototype.ins = function(ins) {
     return make('span', ins.text, 'instructions');
 }
@@ -337,7 +343,9 @@ Quiz.prototype.mat = function(mat) {
         var v = hasVal ? m[i][j] : '';
         var inp = this.numid(id + "_" + i + "," + j, v);
         if (mat.readOnly)
-        inp.readOnly = mat.readOnly;
+            inp.readOnly = mat.readOnly;
+        if (mat.disabled)
+            inp.disabled = true;
         td.appendChild(inp);
     }   
     }
@@ -363,21 +371,20 @@ Quiz.prototype.cli = function (cli) { // clickable image
 }
 
 Quiz.prototype.cloze = function (cloze) {
-    var count = 0;
     var t = cloze.text;
-    var last = 0;
-    var ind;
+    console.log(t)
+    var preItems = t.split("[[]]") // If you want default items in here, just parse with regex
     var pre = document.createElement("pre");
     pre.className = "code";
-    var f = fil(cloze.id);
-    while ((ind = t.search(clozeTarget)) >= 0) {
-    if (ind > 0)
-        pre.appendChild(this.txt(t.substring(0, ind-last)));
-    pre.appendChild(this.fil(cloze.id + "_" + count++));
-    t = t.substring(ind + 4);
+
+    for (i = 0; i < preItems.length; i++) {
+        pre.appendChild(this.txt({text: preItems[i]})) // this is janky as hell
+        console.log(preItems[i])
+        console.log(this.txt(preItems[i]))
+        if (i != preItems.length-1)
+            pre.appendChild(this.fil(cloze.id + "_" + i))
     }
-    pre.appendChild(this.txt(t));
-    return pre;
+    return pre
 }
 
 Quiz.prototype.cod = function(cod) {
@@ -406,7 +413,7 @@ function build() {
     [
         qhead("Mergesort"),
         lin("Show the first pass of Mergesort below"),
-        gri([[9, 8, 7, 6, 5, 4, 3, 1]]),
+        gri([[9, 8, 7, 6, 5, 4, 3, 1]]), br(),
         mat(1, 1, 8)
     ],
     [
