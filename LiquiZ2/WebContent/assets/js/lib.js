@@ -90,7 +90,7 @@ function mcd(id, list) {    return {type: 'mcd', id: id, list: list}  }
 function mat(id, rows, cols) { return {type: 'mat', rows: rows, cols: cols}; }
 function ess(id, rows, cols,maxwords) { return {type: 'ess', rows: rows, cols: cols, maxwords: maxwords};  }
 // file upload
-function fup(id)       {    return {type: 'fup' } }
+function fup(id, accept)       {    return {type: 'fup', accept: accept } } // accept is a string: ".java,.txt"
 //???
 function cli(id, file, xs, ys) {    return {type: 'cli', id: id, file: file, xs: xs, ys: ys}  }
 
@@ -323,6 +323,7 @@ Quiz.prototype.fup = function(fup) {
     var up = document.createElement("input");
     up.id = fup.id;
     up.type = "file";
+    up.accept = fup.accept;
     return up;
 }
 
@@ -422,7 +423,7 @@ function build() {
     [
         qhead("File Upload"),
         lin("Submit your homework for the 3n+1 problem as a single .java file"),
-        fup(7, "java"),     
+        fup(7, ".java"),     
     ],
 //      match(17, ["class", "object", "method", "message", "polymorphism", "encapsulation"],
 //        ["A concrete instance of a class",
