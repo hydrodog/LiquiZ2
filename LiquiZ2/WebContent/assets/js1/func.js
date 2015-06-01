@@ -139,15 +139,11 @@ function loadData(serverPage) {
 	json.send();
 }
 
-<<<<<<< HEAD
-function createSelectInDiv(div, sel) {
-=======
 /*
  * Append a SELECT box to div with options from sel
  * sel should be array with [value, text, value, text, ...]
  */
-function f(div, sel) {
->>>>>>> branch 'master' of https://github.com/hydrodog/LiquiZ2.git
+function createSelectInDiv(div, sel) {
 	var s = document.createElement("SELECT");
 	for (var i = 0; i < sel.length; i+=2) {
 		var opt = document.createElement("OPTION");
