@@ -84,6 +84,11 @@ h2 {
 
 .grid {
     background-color: red;
+    display: inline-block;
+}
+
+.grid.answer {
+    background-color: transparent;
 }
 
 .submit {

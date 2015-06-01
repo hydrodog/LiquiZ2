@@ -72,6 +72,7 @@ function qhead(title, points, level) {
     level =  (typeof(level) == 'undefined') ? 1 : level;
     return {type: 'qhe', title: title, points: points, level: level};
 }
+function br() { return {type: 'br'} } // line break
 function txt(txt)  { return {type: 'txt', text: txt}  } // plain text inside <span>
 function ins(txt)  { return {type: 'ins', text: txt}  } // instructions <span class="instructions">
 function lin(txt)  { return {type: 'lin', text: txt}  } // text within <p>
@@ -87,7 +88,7 @@ function fil(id)       {    return {type: 'fil', id: id}              }
 function num(id)       {    return {type: 'num', id: id}              }
 function mcr(id, list) {    return {type: 'mcr', id: id, list: list}  }
 function mcd(id, list) {    return {type: 'mcd', id: id, list: list}  }
-function mat(id, rows, cols) { return {type: 'mat', rows: rows, cols: cols}; }
+function mat(id, rows, cols) { return {type: 'mat', className: 'grid answer', rows: rows, cols: cols}; }
 function ess(id, rows, cols,maxwords) { return {type: 'ess', rows: rows, cols: cols, maxwords: maxwords};  }
 // file upload
 function fup(id, accept)       {    return {type: 'fup', accept: accept } } // accept is a string: ".java,.txt"
@@ -133,6 +134,7 @@ function make(tag, inner, className) {
     var t = document.createElement(tag);
     if (typeof(className) != 'undefined')
     t.className = className;
+    if (inner)
     t.innerHTML = inner;
     return t;
 }
@@ -229,6 +231,10 @@ Quiz.prototype.vid = function(vid) {
 
 Quiz.prototype.txt = function(txt) {
     return make('span', txt.text);
+}
+
+Quiz.prototype.br = function() {
+    return make('br');
 }
 
 Quiz.prototype.ins = function(ins) {
@@ -383,7 +389,7 @@ function build() {
     [
         qhead("Mergesort", 1, 1),
         lin("Show the first pass of Mergesort below"),
-        gri([[9, 8, 7, 6, 5, 4, 3, 1]]),
+        gri([[9, 8, 7, 6, 5, 4, 3, 1]]), br(),
         mat(1, 1, 8)
     ],
     [
