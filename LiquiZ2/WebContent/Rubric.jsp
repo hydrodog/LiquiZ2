@@ -12,6 +12,7 @@
 <select name="shuffleAnswers">
 <option value="T">Yes</option>
 <option value="F">No</option>
+</select>
 </td></tr>
 <tr><td>Access Code</td><td><input type="text" name="name"/></td></tr>
 </table>

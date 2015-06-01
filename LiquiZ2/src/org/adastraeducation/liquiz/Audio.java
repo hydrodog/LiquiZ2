@@ -12,6 +12,7 @@ public class Audio extends Media {
 	//<source src="horse.mp3" type="audio/mpeg">
 	public void writeHTML(DisplayContext dc){
 		dc.append("\n<audio controls>");
+		//TODO should src prepend a directory? where will the audio be?
 		dc.append("<source src=\"" + getSource() + "\"type =\"audio/"+ getType() + "\">");
 		dc.append("</audio>\n");
 	}

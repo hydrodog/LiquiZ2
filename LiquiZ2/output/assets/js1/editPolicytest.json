@@ -1,0 +1,12 @@
+{
+  css: "blue",
+  policy: {
+    name: "Shawn",
+    attempts: 4,
+    duration: 0,
+    showAnswers: false,
+    scored: false,
+    shuffleQuestions: false,
+    shuffleAnswers: false
+  }
+}

@@ -52,7 +52,6 @@ public class FileUpload extends Question {
 	
 	@Override
 	public double grade(String[] s) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 }

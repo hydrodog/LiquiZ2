@@ -8,7 +8,7 @@
 </head>
 <body>
 <%=request.getAttribute("result") %>
-</br>
+<br>
 <%=request.getAttribute("path") %>
 </body>
 </html>

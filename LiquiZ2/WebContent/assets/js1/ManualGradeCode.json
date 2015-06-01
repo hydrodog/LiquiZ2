@@ -1,0 +1,16 @@
+{
+	css: 'red',
+	sel: [-5, 'poorly named variable',    '-10', 'bad logic',     '3', 'should be initialized',
+	      '4', 'strange logic',    '5', 'this could be simpler',     '6', '???'
+	      ],
+	code: [
+	  {
+	    student: 'Dov',
+	    files: {
+	      'test.java': 'public class test {\n  private int x;\n  public test() {}\n  private char q = \'a\';\n}',
+	      'test.cc': '#include <iostream>\nusing namespace std;\nint main() {\n  cout << "hello\\n"; }'
+	      }
+	  ]
+	  }
+	]
+}

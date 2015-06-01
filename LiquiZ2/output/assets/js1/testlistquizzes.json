@@ -1,0 +1,15 @@
+{
+  quiz:"functions",
+  quizzes: [
+    { name: "Processing0", outof: 100, published: true, opendate: "20150501:120000", duedate: "20150510:120000",closedate: "20150515:120000"}, 
+    { name: "Java data types", outof: 50, published: false, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"},
+    { name: "Functions", outof: 100, published: true, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"},
+    { name: "Matrices", outof: 100, published: true, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"},
+     { name: "Hashmaps", outof: 50, published: false, opendate: "20150501:120000", duedate: "20150510:120000",closedate: "20150515:120000"}, 
+    { name: "Strings", outof: 10, published: false, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"},
+    { name: "Regular expressions", outof: 50, published: true, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"},
+    { name: "Algorithms", outof: 100, published: true, opendate: "20150501:120000", duedate: "20150501:120000",closedate: "20150501:120000"}
+    
+         
+  ]
+}

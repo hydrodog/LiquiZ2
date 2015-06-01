@@ -1,0 +1,95 @@
+.quiz {
+    font-family: Arial, san-serif;
+    background-color: #e0e0ff;
+    font-size:18pt;
+}
+
+h1 {
+
+}
+
+.points {
+}
+
+.qc {
+    background-color: #0040f0;
+    font-size: 12pt;
+    font-weight: normal;
+    border-style: none;
+    padding: 3px;
+    margin: 5px;
+}
+
+.qheader {
+    background-color: #8080d0;
+    padding: 0px;
+    margin: 1px;
+    width: 100%;
+    height: 30px;
+}
+
+h2 {
+    font-size: 16pt;
+}
+
+.qpoints .level {
+    font-size: 10pt;
+}
+
+.fillin .number {
+    font: 12pt Courier bold;
+    background-color: white;
+    color: black;
+}
+
+.code {
+    font: 12pt Courier bold;
+    background-color: black;
+    color: #00ff20;
+    width: 95%;
+    rows: 10;
+    cols: 80;
+}
+
+.multichoicedropdown {
+
+
+}
+
+.multichoiceradio {
+
+
+}
+
+.instructions {
+    background-color: #f88;
+    font: 14pt Arial, sanserif;
+}
+
+.box {
+    background-color: #8f8;
+    border: 1 solid #000;
+}
+
+.matrix {
+    font: 10pt Courier, fixed;
+    background-color: #40c0f0;
+}
+
+.cell .gridcell {
+    background-color: #f0f;
+    width: 40px;
+}
+
+.grid {
+    background-color: red;
+}
+
+.submit {
+    font-family: Arial;
+    font-size: 16pt;
+    font-weight: bold;
+    background-color: #00e;
+    color: white;
+}
+

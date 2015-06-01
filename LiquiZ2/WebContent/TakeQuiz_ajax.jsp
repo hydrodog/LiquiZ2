@@ -1,0 +1,41 @@
+<%= org.adastraeducation.liquiz.util.Util.standardAJAXHeader(session) %>
+	quiz: {
+		id:1,
+		title:"A Quiz",
+		questionContainers:[
+			{
+				id:1,
+				name:"Math",
+				points:2,
+				elements:[
+					{
+						type:"text",
+						id:1,
+						name:"What is 2+2?"
+					},
+					{
+						type:"fillin",
+						id:1,
+						answerList:[4]
+					}
+				]
+			},
+			{
+				id:2,
+				name:"Opinion",
+				points:0,
+				elements:[
+					{
+						type:"text",
+						id:2,
+						name:"Was this question hard?"
+					},
+					{
+						type:"essay",
+						id:2
+					}
+				]
+			}
+		]
+	}
+}

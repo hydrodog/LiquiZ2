@@ -67,12 +67,11 @@ public class Create {
 		Connection conn = null;
 		try {
 			conn = DatabaseMgr.getConnection();
-			PreparedStatement p = conn.prepareStatement("INSERT INTO Policies(Name, Timed, ShowAns, Scored, Grade, ShuffleQues, ShuffleAns) VALUES(?,?,?,?,?,?,?)");
+			PreparedStatement p = conn.prepareStatement("INSERT INTO Policies(Name, Timed, ShowAns, Scored, ShuffleQues, ShuffleAns) VALUES(?,?,?,?,?,?,?)");
 			p.setString(1, pol.getName());
 			p.setBoolean(2, pol.getTimed());
 			p.setBoolean(3, pol.getShowAns());
 			p.setBoolean(4, pol.getScored());
-			p.setInt(5, pol.getGrade());
 			p.setBoolean(6, pol.getShuffleQues());
 			p.setBoolean(7, pol.getShuffleAns());
 			p.execute();

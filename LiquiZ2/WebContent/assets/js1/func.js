@@ -33,7 +33,11 @@ function check_length(obj, cnt, rem) {
     }  
     return true;  
 }  
- 
+
+/**
+ * Used in createQuestion.jsp to show warning pattern options when user chooses to use them
+ * @param obj
+ */
 function showWarningPatternAttribute(obj) {
     if (obj.checked) {
         document.getElementById("warningPattern_attribute").style.display="";
@@ -42,6 +46,10 @@ function showWarningPatternAttribute(obj) {
     }
 }
 
+/**
+ * Used in createQuestion.jsp to show number pattern options when user chooses to use them
+ * @param obj
+ */
 function showNumberQuestionAttribute(obj) {
     if (obj.checked) {
         document.getElementById("numberQuestion_attribute").style.display="";
@@ -49,7 +57,10 @@ function showNumberQuestionAttribute(obj) {
         document.getElementById("numberQuestion_attribute").style.display="none";
     }
 }
-
+/**
+ * To add additional dropdown choices in createQuestion.jsp
+ * @param obj
+ */
 function createDropDownChoices(obj) {
     var empty="";
     document.getElementById("dropdown").innerHTML=empty;
@@ -59,6 +70,10 @@ function createDropDownChoices(obj) {
     document.getElementById("dropdown").innerHTML=empty;
 }
 
+/**
+ * To add additional radio choices in createQuestion.jsp
+ * @param obj
+ */
 function createRadioChoices(obj) {
     var empty="";
     document.getElementById("radio").innerHTML=empty;
@@ -68,6 +83,10 @@ function createRadioChoices(obj) {
     document.getElementById("radio").innerHTML=empty;
 }
 
+/**
+ * To add additional multiple select choices in createQuestion.jsp
+ * @param obj
+ */
 function createMultiChoices(obj) {
     var empty="";
     document.getElementById("multichoices").innerHTML=empty;
@@ -120,7 +139,11 @@ function loadData(serverPage) {
 	json.send();
 }
 
-function f(div, sel) {
+/*
+ * Append a SELECT box to div with options from sel
+ * sel should be array with [value, text, value, text, ...]
+ */
+function createSelectInDiv(div, sel) {
 	var s = document.createElement("SELECT");
 	for (var i = 0; i < sel.length; i+=2) {
 		var opt = document.createElement("OPTION");
@@ -176,3 +199,41 @@ function collapse(s)
   d.className = "menuNormal";
 }
 
+/* These are methods used in TakeQuiz.html to show blank questions */
+
+/**
+ * draw questions and add to the div that is passed in
+ */
+function drawQuiz(div) {
+	alert("drawing quiz");
+	for (var ques in page.quiz.questionContainers) { // draw each question in the page json and add it to the div
+		//create question header like: <div class='quesHeader'>Math: 2 points</div>
+		var quesHeader = document.createElement("div");
+		quesHeader.class = 'quesHeader';
+		quesHeader.innerHTML = ques.name + ": " + ques.points + " points";
+		div.appendChild(quesHeader);
+		
+		var quesDiv = document.createElement("div");
+		quesDiv.class = 'question';
+		for (var elem in quesDiv.elements) {
+			drawElement(elem, ques); //draw each element and add it to the question
+		}
+		div.appendChild(ques);
+	}
+}
+
+/**
+ * draw elem and add to div
+ */
+function drawElement(div, elem) {
+	if (elem.type == "text") {
+		var text = document.createTextNode(elem.name);
+		div.appendChild(text);
+	} else if(elem.type = "fillin") {
+		var fillin = document.createElement("input");
+		fillin.type = "text";
+		fillin.class = "fillin";
+		fillin.name = elem.id;
+		div.appendChild(fillin);
+	}
+}

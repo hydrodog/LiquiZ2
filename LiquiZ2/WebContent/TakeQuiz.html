@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taking a Quiz</title>
+	<script src="assets/js1/func.js"></script>
+	<script>
+	function thisPage() {
+		document.getElementById("title").innerHTML = page.quiz.title; // Fill in quiz title
+
+		var questions = document.getElementById("questions");
+		//drawQuiz(questions);
+		for (var i = 0; i < page.quiz.questionContainers.length; i++) {
+			var ques = page.quiz.questionContainers[i];
+			//create question header like: <div class='quesHeader'>Math: 2 points</div>
+			var quesHeader = mkdiv(questions, 'quesHeader', ques.name + ": " + ques.points + " points");			
+			var quesDiv = makediv(questions, 'question');
+
+			for (var j = 0; j < ques.elements.length; j++) {
+				var elem = ques.elements[j];
+				var f= typeMap[elem.type];
+				var obj = f(elem);
+				quesDiv.appendChild(obj);
+		  } 
+		}
+		document.getElementsByName("quizID")[0].value = page.quiz.id; // fill in quiz ID
+	}
+	//loadData("takequiz.json")
+	loadData("TakeQuiz_ajax.jsp");
+	
+	</script>
+</head>
+<body>
+<h2 id="title"></h2>
+<form id='quizForm' class='quiz' action='quizSubmit.jsp' method='get'>
+	<div id='questions'>
+		<!-- each qc is added dynamically -->
+	</div>
+	<input type='hidden' name='quizID'>
+	<input type='submit' value='Submit'>
+</form>
+</body>
+</html>
