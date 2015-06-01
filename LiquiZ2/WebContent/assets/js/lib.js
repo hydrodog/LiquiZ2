@@ -223,6 +223,7 @@ Quiz.prototype.aud = function(aud) {
 Quiz.prototype.vid = function(vid) {
     var vi = document.createElement("video");
     vi.src = Quiz.mediaLocations.vid + vid.file;
+    vi.controls = true;
     return vi;
 }
 
