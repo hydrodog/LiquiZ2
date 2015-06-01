@@ -78,7 +78,7 @@ function ins(txt)  { return {type: 'ins', text: txt}  } // instructions <span cl
 function lin(txt)  { return {type: 'lin', text: txt}  } // text within <p>
 function box(txt)  { return {type: 'box', text: txt}  } // text within div
 function gri(mat)  { return {type: 'mat', arr: mat,
-                 className: 'grid', readOnly: 1,
+                 className: 'grid', readOnly: 1, disabled: true,
                  rows: mat.length, cols: mat[0].length}   } // create a table based on matrix
 function img(file) { return {type: 'img', file: file} }
 function aud(file) { return {type: 'aud', file: file} }
@@ -320,7 +320,9 @@ Quiz.prototype.mat = function(mat) {
         var v = hasVal ? m[i][j] : '';
         var inp = this.numid(id + "_" + i + "," + j, v);
         if (mat.readOnly)
-        inp.readOnly = mat.readOnly;
+            inp.readOnly = mat.readOnly;
+        if (mat.disabled)
+            inp.disabled = true;
         td.appendChild(inp);
     }   
     }
