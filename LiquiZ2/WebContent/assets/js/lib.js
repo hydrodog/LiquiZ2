@@ -134,7 +134,7 @@ function make(tag, inner, className) {
     var t = document.createElement(tag);
     if (typeof(className) != 'undefined')
     t.className = className;
-    if (inner)
+    // if (inner)
     t.innerHTML = inner;
     return t;
 }
