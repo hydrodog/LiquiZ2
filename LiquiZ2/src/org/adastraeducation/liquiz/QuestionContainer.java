@@ -83,17 +83,11 @@ public class QuestionContainer implements Displayable {
 		b.append("</Q>");
 	}
 
-	public void writeJS (StringBuilder b) {
-		b.append("{title: 'foo', className: 'claz' , content:[");
-		if (displayables.size() > 0) {
-			displayables.get(0).writeJS(b);
-			if (displayables.size() > 1) {
-				for (int i = 1; i < displayables.size(); i++) {
-					b.append(',');
-					displayables.get(i).writeJS(b);;
-				}
-			}
+	public void writeJS (DisplayContext dc) {
+		dc.append("{title: 'foo', className: 'claz' , content:[");
+		for (int i = 0; i < displayables.size(); i++) {
+			displayables.get(i).writeJS(dc);
+			dc.append(",\n");
 		}
-		b.append("] };");
 	}
 }

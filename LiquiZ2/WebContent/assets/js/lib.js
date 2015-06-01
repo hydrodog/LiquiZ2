@@ -32,6 +32,12 @@ function mkdiv(parent, className) {
     return div;
 }
 
+function mkdivid(parent, id, className) {
+	var div = mkdiv(parent, className);
+	div.id = id;
+	return div;
+}
+
 function mktable(className, arr) {
     var t = document.createElement("table");
     t.className = className;
@@ -149,6 +155,7 @@ function QuizInfo(title, points, timelimit, remainingTries, datadir) {
     this.timelimit = timelimit;
     this.remaining = remainingTries;
     this.datadir = datadir;
+    this.editMode = 1;
 }
 QuizInfo.prototype.display = function(quiz) {
     quiz.appendChild(make("h1", this.title));
@@ -163,10 +170,26 @@ function Quiz(quizinfo, qlist) {
     this.div.className = "quiz";
     quizinfo.display(this.div);
     this.createSubmit();
-    for (var i = 0; i < qlist.length; i++) {
-        var qc = mkdiv(this.div, "qc");
-        for (var j = 0; j < qlist[i].length; j++)
+    var id = 1;
+    for (var i = 0; i < qlist.length; i++, id++) {
+        var qc = mkdivid(this.div, "qc" + id, "qc");
+        for (var j = 0; j < qlist[i].length; j++) {
             this.add(qc, qlist[i][j]);
+            if (this.editMode) {
+            	var edit = mkbutton("Edit");
+            	edit.onclick= function() {
+            		qc.innerHTML = "";
+            		
+            	}
+            	qc.appendChild(edit);
+            	qc.appendChild(mkbutton("Delete"));
+            	qc.appendChild(mkbutton("Copy"));
+            }
+        }
+
+        if (this.editMode) {
+        	qc.appendChild(mkbutton("New Question"));
+        }
     }
     this.createSubmit();
 }
@@ -381,7 +404,7 @@ function build() {
     var quizinfo  = new QuizInfo("Quiz Demo #1", 100, 0, 1, "assets/");
     var qlist = [
     [
-        qhead("Mergesort", 1, 1),
+        qhead("Mergesort"),
         lin("Show the first pass of Mergesort below"),
         gri([[9, 8, 7, 6, 5, 4, 3, 1]]),
         mat(1, 1, 8)
