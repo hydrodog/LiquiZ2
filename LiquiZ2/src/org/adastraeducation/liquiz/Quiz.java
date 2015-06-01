@@ -193,10 +193,14 @@ public class Quiz implements Displayable {
 	}
 	
 	public void writeJS (StringBuilder b) {
-		b.append("{ title: 'A new quiz', className: 'class', content: [");
+		//TODO: add data for point values, calculate remaining tries
+		//TODO: do something about directory
+		b.append("var quizinfo  = new QuizInfo(name, 100, 0, 1, 'assets/');";
+		b.append("var qlist = [\n");
 		for(QuestionContainer qc: this.qContainers) {
 			qc.writeJS(b);
 		}
-		b.append("]}");
+		b.append("];\n");
+		b.append("var q = new Quiz(quizinfo, qlist)");
 	}
 }

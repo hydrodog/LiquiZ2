@@ -30,6 +30,7 @@ h1 {
 
 h2 {
     font-size: 16pt;
+    margin: 0;
 }
 
 .qpoints .level {
@@ -43,12 +44,25 @@ h2 {
 }
 
 .code {
-    font: 12pt Courier bold;
+    font: 12pt monospace;
     background-color: black;
     color: #00ff20;
     width: 95%;
     rows: 10;
     cols: 80;
+}
+
+.code input {
+    font: 12pt monospace;
+    color: #00ff20;
+    background-color: black;
+    border-color: black;
+    border-style: none;
+    border-bottom-style: solid;
+    border-bottom-color: #00ff20;
+    border-width: 1px;
+    text-align: center;
+    width: 100px;
 }
 
 .multichoicedropdown {
@@ -83,6 +97,11 @@ h2 {
 
 .grid {
     background-color: red;
+    display: inline-block;
+}
+
+.grid.answer {
+    background-color: transparent;
 }
 
 .submit {
@@ -93,3 +112,10 @@ h2 {
     color: white;
 }
 
+input[disabled] {
+    background-color: white;
+    border-width: 1px;
+    color: black;
+    padding: 2px;
+    text-decoration-color: white;
+}

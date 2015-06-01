@@ -6,6 +6,6 @@ package org.adastraeducation.liquiz;
  */
 public interface Displayable {
 	public void writeHTML(DisplayContext dc);
-	public void writeJS(StringBuilder b);
+	public void writeJS(DisplayContext dc);
 	public void writeXML(StringBuilder b);	//TODO: might delete. will use XML serialization 
 }
