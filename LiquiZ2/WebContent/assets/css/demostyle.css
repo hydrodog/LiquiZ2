@@ -137,6 +137,10 @@ h2 {
     color: white;
 }
 
+.new-question-button {
+    display: block;
+}
+
 input[disabled] {
     background-color: white;
     border-width: 1px;

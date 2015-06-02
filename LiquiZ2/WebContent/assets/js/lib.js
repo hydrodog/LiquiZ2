@@ -181,11 +181,13 @@ function Quiz(quizinfo, qlist) {
         }
     }
     if (this.editMode) {
+        var c = mkdivid(this.div, "new-question-button", "qc new-question-button")
         var newB = mkbutton("New Question");
         newB.onclick = function() {
             alert('test');
         }
-        qc.appendChild(newB);
+        c.appendChild(newB)
+        this.add(c);
     }
     this.createSubmit();
 }
