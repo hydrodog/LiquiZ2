@@ -329,11 +329,15 @@ Quiz.prototype.select = function(id, list) {
     var s = document.createElement("select");
     s.id = id;
     s.className = "multichoicedropdown";
-    for (var i = 0; i < list.length; i++) {
     var opt = document.createElement("option");
-    opt.value = i;
-    opt.appendChild(this[list[i].type](list[i]));
+    opt.value = -1;
+    opt.appendChild(this.txt({text: "Select choice"}));
     s.appendChild(opt);
+    for (var i = 0; i < list.length; i++) {
+        var opt = document.createElement("option");
+        opt.value = i;
+        opt.appendChild(this[list[i].type](list[i]));
+        s.appendChild(opt);
     }
     return s;
 }
@@ -345,11 +349,11 @@ Quiz.prototype.mcd = function(mcd) {
 Quiz.prototype.match = function(match) { 
     var t = document.createElement("table");
     for (var i = 0; i < match.questions.length; ++i) {
-    var r = t.insertRow(i);
-    var q = r.insertCell(0);
-    this.add(q, match.questions[i]);
-    q = r.insertCell(1);
-    q.appendChild(this.select(match.id + "_" + i, match.answers));
+        var r = t.insertRow(i);
+        var q = r.insertCell(0);
+        this.add(q, match.questions[i]);
+        q = r.insertCell(1);
+        q.appendChild(this.select(match.id + "_" + i, match.answers));
     }
     return t;
 }
