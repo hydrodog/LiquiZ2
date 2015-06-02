@@ -372,7 +372,7 @@ function imgclick(e) {
 
 Quiz.prototype.cli = function (cli) { // clickable image
     var img = document.createElement("img");
-    img.src = cli.file;
+    img.src = Quiz.mediaLocations.img + cli.file;
     img.onClick = function(e) { alert(e); }
     return img;
 }
@@ -506,7 +506,7 @@ function build() {
     [
         qhead("Geography"),
         lin("Click on Texas"),
-        cli(16,"usmap.gif")
+        cli(16,"usmap.png")
     ]
     ];
     var q = new Quiz(quizinfo, qlist);   
