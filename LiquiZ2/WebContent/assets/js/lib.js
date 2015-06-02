@@ -171,31 +171,21 @@ function Quiz(quizinfo, qlist) {
     this.setDataDir(quizinfo.datadir);
     this.div.className = "quiz";
     quizinfo.display(this.div);
+    this.editMode = true;
     this.createSubmit();
     var id = 1;
     for (var i = 0; i < qlist.length; i++, id++) {
         var qc = mkdivid(this.div, "qc" + id, "qc");
         for (var j = 0; j < qlist[i].length; j++) {
             this.add(qc, qlist[i][j]);
-            if (this.editMode) {
-            	var edit = mkbutton("Edit");
-            	edit.onclick= function() {
-            		qc.innerHTML = "";
-            		
-            	}
-            	qc.appendChild(edit);
-            	qc.appendChild(mkbutton("Delete"));
-            	qc.appendChild(mkbutton("Copy"));
-            }
         }
-
-        if (this.editMode) {
-        	var newB = mkbutton("New Question");
-        	newB.onclick = function() {
-        		
-        	}
-        	qc.appendChild(newB);
+    }
+    if (this.editMode) {
+        var newB = mkbutton("New Question");
+        newB.onclick = function() {
+            alert('test');
         }
+        qc.appendChild(newB);
     }
     this.createSubmit();
 }
@@ -220,22 +210,35 @@ Quiz.prototype.createSubmit = function() {
     var div = mkdiv(this.div, "submit");
     div.appendChild(mkbutton("Submit The Quiz"));
     this.div.appendChild(div);
-}
+};
 
 Quiz.prototype.qhe = function(qhead) {
+    var td = document.createElement("td");
+    if (this.editMode) {
+    	var edit = mkbutton("Edit");
+    	edit.onclick= function() {
+    	   innerHTML = "";
+    		alert("test");
+    	};
+    	td.appendChild(edit);
+    	td.appendChild(mkbutton("Delete"));
+    	td.appendChild(mkbutton("Copy"));
+    }
+
     return mktable("qheader",
            [ [ mk("h2", qhead.title, ''),
                mk("span", "points:" + qhead.points, "qpoints"),
-               mk("span", "level:" +qhead.level, "level")
+               mk("span", "level:" +qhead.level, "level"),
+               td
              ]]);
-}
+};
 
 Quiz.prototype.img = function(img) {
     var im = document.createElement("img");
     im.src=Quiz.mediaLocations.img + img.file;
     im.width=300;
     return im;
-}
+};
 
 Quiz.prototype.aud = function(aud) {
     var au = document.createElement("audio");
@@ -400,7 +403,6 @@ Quiz.prototype.cod = function(cod) {
     return ta;
 }
 
-/*
 Quiz.prototype.ess = function(ess) {
     var ta = document.createElement("textarea");
     ta.className = "essay";
@@ -408,8 +410,7 @@ Quiz.prototype.ess = function(ess) {
     ta.cols = ess.cols;
     //ta.value = essay.text;
     return ta;
-}
-*/
+};
 
 function build() {
     var quizinfo  = new QuizInfo("Quiz Demo #1", 100, 0, 1, "assets/");
