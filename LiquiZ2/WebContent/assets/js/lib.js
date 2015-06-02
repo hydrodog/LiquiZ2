@@ -213,23 +213,38 @@ Quiz.prototype.createSubmit = function() {
 };
 
 Quiz.prototype.qhe = function(qhead) {
-    var td = document.createElement("td");
+    var editBox = document.createElement("div");
+    editBox.className = "edit"
     if (this.editMode) {
     	var edit = mkbutton("Edit");
     	edit.onclick= function() {
     	   innerHTML = "";
     		alert("test");
     	};
-    	td.appendChild(edit);
-    	td.appendChild(mkbutton("Delete"));
-    	td.appendChild(mkbutton("Copy"));
+    	editBox.appendChild(edit);
+    	editBox.appendChild(mkbutton("Delete"));
+    	editBox.appendChild(mkbutton("Copy"));
     }
+
+    div = document.createElement("div");
+    div.className = "qheader";
+    div.appendChild(mk("h2", qhead.title, ''));
+    
+    floatRight = document.createElement("div");
+    floatRight.className = "float-right";
+    floatRight.appendChild(mk("span", "points:" + qhead.points, "qpoints"));
+    floatRight.appendChild(mk("span", "level:" +qhead.level, "level"));
+    floatRight.appendChild(editBox);
+
+    div.appendChild(floatRight);
+
+    return div;
 
     return mktable("qheader",
            [ [ mk("h2", qhead.title, ''),
                mk("span", "points:" + qhead.points, "qpoints"),
                mk("span", "level:" +qhead.level, "level"),
-               td
+               editBox
              ]]);
 };
 

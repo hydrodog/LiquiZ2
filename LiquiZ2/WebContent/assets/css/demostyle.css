@@ -25,7 +25,26 @@ h1 {
     padding: 0px;
     margin: 1px;
     width: 100%;
-    height: 30px;
+    height: 32px;
+}
+
+.qheader h2 {
+    display: inline-block;
+}
+
+.qheader .float-right {
+    float: right;
+}
+
+.qheader .qpoints,
+.qheader .level,
+.qheader .edit {
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.qheader .edit {
+    padding-right: 0;
 }
 
 h2 {
