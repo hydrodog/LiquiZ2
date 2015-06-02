@@ -119,3 +119,8 @@ input[disabled] {
     padding: 2px;
     text-decoration-color: white;
 }
+
+img {
+    width: 700px;
+    height: auto;
+}
