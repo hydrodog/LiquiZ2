@@ -376,15 +376,12 @@ Quiz.prototype.cli = function (cli) { // clickable image
 
 Quiz.prototype.cloze = function (cloze) {
     var t = cloze.text;
-    console.log(t)
     var preItems = t.split("[[]]") // If you want default items in here, just parse with regex
     var pre = document.createElement("pre");
     pre.className = "code";
 
     for (i = 0; i < preItems.length; i++) {
         pre.appendChild(this.txt({text: preItems[i]})) // this is janky as hell
-        console.log(preItems[i])
-        console.log(this.txt(preItems[i]))
         if (i != preItems.length-1)
             pre.appendChild(this.fil(cloze.id + "_" + i))
     }
