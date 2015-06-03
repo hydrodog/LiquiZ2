@@ -171,31 +171,23 @@ function Quiz(quizinfo, qlist) {
     this.setDataDir(quizinfo.datadir);
     this.div.className = "quiz";
     quizinfo.display(this.div);
+    this.editMode = true;
     this.createSubmit();
     var id = 1;
     for (var i = 0; i < qlist.length; i++, id++) {
         var qc = mkdivid(this.div, "qc" + id, "qc");
         for (var j = 0; j < qlist[i].length; j++) {
             this.add(qc, qlist[i][j]);
-            if (this.editMode) {
-            	var edit = mkbutton("Edit");
-            	edit.onclick= function() {
-            		qc.innerHTML = "";
-            		
-            	}
-            	qc.appendChild(edit);
-            	qc.appendChild(mkbutton("Delete"));
-            	qc.appendChild(mkbutton("Copy"));
-            }
         }
-
-        if (this.editMode) {
-        	var newB = mkbutton("New Question");
-        	newB.onclick = function() {
-        		
-        	}
-        	qc.appendChild(newB);
+    }
+    if (this.editMode) {
+        var c = mkdivid(this.div, "new-question-button", "qc new-question-button")
+        var newB = mkbutton("New Question");
+        newB.onclick = function() {
+            alert('test');
         }
+        c.appendChild(newB)
+        this.add(c);
     }
     this.createSubmit();
 }
@@ -220,22 +212,50 @@ Quiz.prototype.createSubmit = function() {
     var div = mkdiv(this.div, "submit");
     div.appendChild(mkbutton("Submit The Quiz"));
     this.div.appendChild(div);
-}
+};
 
 Quiz.prototype.qhe = function(qhead) {
+    var editBox = document.createElement("div");
+    editBox.className = "edit"
+    if (this.editMode) {
+    	var edit = mkbutton("Edit");
+    	edit.onclick= function() {
+    	   innerHTML = "";
+    		alert("test");
+    	};
+    	editBox.appendChild(edit);
+    	editBox.appendChild(mkbutton("Delete"));
+    	editBox.appendChild(mkbutton("Copy"));
+    }
+
+    div = document.createElement("div");
+    div.className = "qheader";
+    div.appendChild(mk("h2", qhead.title, ''));
+    
+    floatRight = document.createElement("div");
+    floatRight.className = "float-right";
+    floatRight.appendChild(mk("span", "points:" + qhead.points, "qpoints"));
+    floatRight.appendChild(mk("span", "level:" +qhead.level, "level"));
+    floatRight.appendChild(editBox);
+
+    div.appendChild(floatRight);
+
+    return div;
+
     return mktable("qheader",
            [ [ mk("h2", qhead.title, ''),
                mk("span", "points:" + qhead.points, "qpoints"),
-               mk("span", "level:" +qhead.level, "level")
+               mk("span", "level:" +qhead.level, "level"),
+               editBox
              ]]);
-}
+};
 
 Quiz.prototype.img = function(img) {
     var im = document.createElement("img");
     im.src=Quiz.mediaLocations.img + img.file;
     im.width=300;
     return im;
-}
+};
 
 Quiz.prototype.aud = function(aud) {
     var au = document.createElement("audio");
@@ -309,11 +329,15 @@ Quiz.prototype.select = function(id, list) {
     var s = document.createElement("select");
     s.id = id;
     s.className = "multichoicedropdown";
-    for (var i = 0; i < list.length; i++) {
     var opt = document.createElement("option");
-    opt.value = i;
-    opt.appendChild(this[list[i].type](list[i]));
+    opt.value = -1;
+    opt.appendChild(this.txt({text: "Select choice"}));
     s.appendChild(opt);
+    for (var i = 0; i < list.length; i++) {
+        opt = document.createElement("option");
+        opt.value = i;
+        opt.appendChild(this[list[i].type](list[i]));
+        s.appendChild(opt);
     }
     return s;
 }
@@ -325,11 +349,11 @@ Quiz.prototype.mcd = function(mcd) {
 Quiz.prototype.match = function(match) { 
     var t = document.createElement("table");
     for (var i = 0; i < match.questions.length; ++i) {
-    var r = t.insertRow(i);
-    var q = r.insertCell(0);
-    this.add(q, match.questions[i]);
-    q = r.insertCell(1);
-    q.appendChild(this.select(match.id + "_" + i, match.answers));
+        var r = t.insertRow(i);
+        var q = r.insertCell(0);
+        this.add(q, match.questions[i]);
+        q = r.insertCell(1);
+        q.appendChild(this.select(match.id + "_" + i, match.answers));
     }
     return t;
 }
@@ -369,22 +393,19 @@ function imgclick(e) {
 
 Quiz.prototype.cli = function (cli) { // clickable image
     var img = document.createElement("img");
-    img.src = cli.file;
+    img.src = Quiz.mediaLocations.img + cli.file;
     img.onClick = function(e) { alert(e); }
     return img;
 }
 
 Quiz.prototype.cloze = function (cloze) {
     var t = cloze.text;
-    console.log(t)
     var preItems = t.split("[[]]") // If you want default items in here, just parse with regex
     var pre = document.createElement("pre");
     pre.className = "code";
 
     for (i = 0; i < preItems.length; i++) {
         pre.appendChild(this.txt({text: preItems[i]})) // this is janky as hell
-        console.log(preItems[i])
-        console.log(this.txt(preItems[i]))
         if (i != preItems.length-1)
             pre.appendChild(this.fil(cloze.id + "_" + i))
     }
@@ -400,7 +421,6 @@ Quiz.prototype.cod = function(cod) {
     return ta;
 }
 
-/*
 Quiz.prototype.ess = function(ess) {
     var ta = document.createElement("textarea");
     ta.className = "essay";
@@ -408,8 +428,7 @@ Quiz.prototype.ess = function(ess) {
     ta.cols = ess.cols;
     //ta.value = essay.text;
     return ta;
-}
-*/
+};
 
 function build() {
     var quizinfo  = new QuizInfo("Quiz Demo #1", 100, 0, 1, "assets/");
@@ -508,7 +527,7 @@ function build() {
     [
         qhead("Geography"),
         lin("Click on Texas"),
-        cli(16,"usmap.gif")
+        cli(16,"usmap.png")
     ]
     ];
     var q = new Quiz(quizinfo, qlist);   
