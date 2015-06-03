@@ -334,7 +334,7 @@ Quiz.prototype.select = function(id, list) {
     opt.appendChild(this.txt({text: "Select choice"}));
     s.appendChild(opt);
     for (var i = 0; i < list.length; i++) {
-        var opt = document.createElement("option");
+        opt = document.createElement("option");
         opt.value = i;
         opt.appendChild(this[list[i].type](list[i]));
         s.appendChild(opt);
