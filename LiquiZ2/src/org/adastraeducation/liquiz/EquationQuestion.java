@@ -192,7 +192,6 @@ public class EquationQuestion extends Question {
 
 	@Override
 	public void writeHTML(DisplayContext dc) {
-		// TODO Auto-generated method stub
 		for(int i = 0; i < stringList.size() - 1; ++i)
 		{
 			dc.append(stringList.get(i));
@@ -243,14 +242,14 @@ public class EquationQuestion extends Question {
 	}
 	
 	@Override
-	public void writeJS(StringBuilder b) {
-		// TODO Auto-generated method stub
+	public void writeJS(DisplayContext dc) {
+		writeJS("fillin", dc);
 		for(int i = 0; i < stringList.size() - 1; ++i)
 		{
-			b.append('\'').append(stringList.get(i)).append('\'');
-			b.append("fillin()");
+			dc.append('\'').append(stringList.get(i)).append('\'');
+			dc.append("fillin()");
 		}
-		b.append('\'').append(stringList.size() - 1).append('\'');
+		dc.append('\'').append(stringList.size() - 1).append('\'');
 	}
 
 	@Override
