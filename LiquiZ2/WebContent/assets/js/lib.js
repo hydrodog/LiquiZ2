@@ -181,11 +181,13 @@ function Quiz(quizinfo, qlist) {
         }
     }
     if (this.editMode) {
+        var c = mkdivid(this.div, "new-question-button", "qc new-question-button")
         var newB = mkbutton("New Question");
         newB.onclick = function() {
             alert('test');
         }
-        qc.appendChild(newB);
+        c.appendChild(newB)
+        this.add(c);
     }
     this.createSubmit();
 }
@@ -213,23 +215,38 @@ Quiz.prototype.createSubmit = function() {
 };
 
 Quiz.prototype.qhe = function(qhead) {
-    var td = document.createElement("td");
+    var editBox = document.createElement("div");
+    editBox.className = "edit"
     if (this.editMode) {
     	var edit = mkbutton("Edit");
     	edit.onclick= function() {
     	   innerHTML = "";
     		alert("test");
     	};
-    	td.appendChild(edit);
-    	td.appendChild(mkbutton("Delete"));
-    	td.appendChild(mkbutton("Copy"));
+    	editBox.appendChild(edit);
+    	editBox.appendChild(mkbutton("Delete"));
+    	editBox.appendChild(mkbutton("Copy"));
     }
+
+    div = document.createElement("div");
+    div.className = "qheader";
+    div.appendChild(mk("h2", qhead.title, ''));
+    
+    floatRight = document.createElement("div");
+    floatRight.className = "float-right";
+    floatRight.appendChild(mk("span", "points:" + qhead.points, "qpoints"));
+    floatRight.appendChild(mk("span", "level:" +qhead.level, "level"));
+    floatRight.appendChild(editBox);
+
+    div.appendChild(floatRight);
+
+    return div;
 
     return mktable("qheader",
            [ [ mk("h2", qhead.title, ''),
                mk("span", "points:" + qhead.points, "qpoints"),
                mk("span", "level:" +qhead.level, "level"),
-               td
+               editBox
              ]]);
 };
 
@@ -312,11 +329,15 @@ Quiz.prototype.select = function(id, list) {
     var s = document.createElement("select");
     s.id = id;
     s.className = "multichoicedropdown";
-    for (var i = 0; i < list.length; i++) {
     var opt = document.createElement("option");
-    opt.value = i;
-    opt.appendChild(this[list[i].type](list[i]));
+    opt.value = -1;
+    opt.appendChild(this.txt({text: "Select choice"}));
     s.appendChild(opt);
+    for (var i = 0; i < list.length; i++) {
+        opt = document.createElement("option");
+        opt.value = i;
+        opt.appendChild(this[list[i].type](list[i]));
+        s.appendChild(opt);
     }
     return s;
 }
@@ -328,11 +349,11 @@ Quiz.prototype.mcd = function(mcd) {
 Quiz.prototype.match = function(match) { 
     var t = document.createElement("table");
     for (var i = 0; i < match.questions.length; ++i) {
-    var r = t.insertRow(i);
-    var q = r.insertCell(0);
-    this.add(q, match.questions[i]);
-    q = r.insertCell(1);
-    q.appendChild(this.select(match.id + "_" + i, match.answers));
+        var r = t.insertRow(i);
+        var q = r.insertCell(0);
+        this.add(q, match.questions[i]);
+        q = r.insertCell(1);
+        q.appendChild(this.select(match.id + "_" + i, match.answers));
     }
     return t;
 }
