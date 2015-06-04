@@ -7,15 +7,15 @@ page = new Quiz( {
 } );
 page.addQuestion(1, "Mergesort", "matrix");
 page.instructions("Show the first pass of Mergesort below");
-   page.grid([[9, 8, 7, 6, 5, 4, 3, 1]]);
+   page.matrix([[9, 8, 7, 6, 5, 4, 3, 1]]);
    page.br();
 page.matrix(1, 1, 8);
 
     page.addQuestion(2, "Matrix Multiplication", 'matrix', 2); // 2 point question
     page.instructions("Show the result of matrix A * B");
-  //  page.grid([[1, 0, 2],[1, 1, -2],[2, 1, 0]]);
+   page.matrix([[1, 0, 2],[1, 1, -2],[2, 1, 0]]);
     page.span("*");
-  //  page.grid([[1, 1, -1],[-2, 1, 0],[1, 1, 3]]);
+   page.matrix([[1, 1, -1],[-2, 1, 0],[1, 1, 3]]);
     page.span("=");
     page.matrix(2, 3, 3);
 
