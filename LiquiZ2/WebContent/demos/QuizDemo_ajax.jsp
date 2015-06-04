@@ -7,8 +7,8 @@ page = new Quiz( {
 } );
 page.addQuestion(1, "Mergesort", "matrix");
 page.instructions("Show the first pass of Mergesort below");
-//    page.grid([[9, 8, 7, 6, 5, 4, 3, 1]]);
-//    page.br();
+   page.grid([[9, 8, 7, 6, 5, 4, 3, 1]]);
+   page.br();
 page.matrix(1, 1, 8);
 
     page.addQuestion(2, "Matrix Multiplication", 'matrix', 2); // 2 point question
@@ -19,13 +19,13 @@ page.matrix(1, 1, 8);
     page.span("=");
     page.matrix(2, 3, 3);
 
-    page.addQuestion(3, 'Java', 'code'),
-    page.instructions('Complete the code below so it prints "Hello"'),
+    page.addQuestion(3, 'Java', 'code');
+    page.instructions('Complete the code below so it prints "Hello"');
     page.code(3, "public A {\n  void   (String[] args) {\n  System.\n  }\n}\n", 10, 80);
 
     page.addQuestion(4, 'Java');
     page.instructions('Complete the following function so it computes factorial recursively.');
-    page.code(4, "public static void fact(int n) {\n\n\n\n}", 10, 80)
+    page.code(4, "public static void fact(int n) {\n\n\n\n}", 10, 80);
 
     page.addQuestion(5,'Java');
     page.instructions("Fill in the blanks to make the code correct");
@@ -71,7 +71,7 @@ page.matrix(1, 1, 8);
     page.aud("clip1.mp3");
     page.selectText(13, ['Yijin', 'Asher', 'Ying', 'Xuefan', 'Bob']);
 
-    page.addQuestion(14, 'Tacoma Narrows'),
+    page.addQuestion(14, 'Tacoma Narrows');
     page.instructions('Watch the following video, then explain what caused the bridge to fail.');
     page.vid("Tacoma Narrows Bridge Collapse.mp4");
     page.essay(14, 10, 80, 200);

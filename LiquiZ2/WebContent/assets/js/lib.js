@@ -133,7 +133,7 @@ function Quiz(quizinfo) {
 		this[k] = quizinfo[k];
 	}
     this.div = document.getElementById("quiz");
-    this.setDataDir(this.datadir);
+    // this.setDataDir(this.datadir);
     this.div.className = "quiz";
     this.displayHeader(this.div);
     this.editMode = true;
@@ -164,24 +164,39 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
     points = (typeof(points) == 'undefined') ? 1 : points;
     level =  (typeof(level) == 'undefined') ? 1 : level;
-    var td = document.createElement("td");
+    var editBox = document.createElement("div");
+    editBox.className = "edit";
     if (this.editMode) {
     	var edit = mkbutton("Edit");
     	edit.onclick= function() {
     		innerHTML = "";
     		alert("test");
     	};
-    	td.appendChild(edit);
-    	td.appendChild(mkbutton("Delete"));
-    	td.appendChild(mkbutton("Copy"));
+    	editBox.appendChild(edit);
+    	editBox.appendChild(mkbutton("Delete"));
+    	editBox.appendChild(mkbutton("Copy"));
     }
 
-    this.div.appendChild(mktable("qheader",
-    		[ [ mk("h2", this.title, ''),
-    		    mk("span", "points:" + points, "qpoints"),
-    		    mk("span", "level:" + level, "level"),
-    		    td
-    		    ]]));
+    header = document.createElement("div");
+    header.className = "qheader";
+    header.appendChild(mk("h2", title, ''));
+    
+    floatRight = document.createElement("div");
+    floatRight.className = "float-right";
+    floatRight.appendChild(mk("span", "points:" + points, "qpoints"));
+    floatRight.appendChild(mk("span", "level:" + level, "level"));
+    floatRight.appendChild(editBox);
+
+    header.appendChild(floatRight);
+
+    this.div.appendChild(header);
+
+    // this.div.appendChild(mktable("qheader",
+    // 		[ [ mk("h2", this.title, ''),
+    // 		    mk("span", "points:" + points, "qpoints"),
+    // 		    mk("span", "level:" + level, "level"),
+    // 		    editBox
+    // 		    ]]));
 };
 
 Quiz.mediaLocations = { // map where each kind of file is under assets
@@ -318,7 +333,7 @@ Quiz.prototype.selectImg = function(id, list) {
 		var opt = document.createElement("option");
 		opt.value = i;
 		var img = document.createElement("img");
-		img.src = list[i];
+		img.src = Quiz.mediaLocations.img + list[i];
 		opt.appendChild(img);
 		s.appendChild(opt);
 	}
