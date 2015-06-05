@@ -278,7 +278,9 @@ Quiz.prototype.box = function(txt) {
     this.q.appendChild(newChild);
 }
 
-Quiz.prototype.fillin = function(id) {
+Quiz.prototype.fillin = function(id, sendBack) {
+    if (sendBack)
+        return mkinput(id, 'text', 'fillin');
     this.q.appendChild(mkinput(id, 'text', 'fillin'));
 }
 
@@ -312,7 +314,7 @@ Quiz.prototype.mcRadioImg = function(id, src) {
 /*
  * Build dropdown list of text
  */
-Quiz.prototype.selectText = function(id, list) {
+Quiz.prototype.selectText = function(id, list, sendBack) {
 	var s = document.createElement("select");
 	s.id = id;
 	s.className = "multichoicedropdown";
@@ -322,6 +324,8 @@ Quiz.prototype.selectText = function(id, list) {
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
 	}
+    if (sendBack)
+        return s;
 	this.q.appendChild(s);
 }
 
@@ -350,7 +354,7 @@ Quiz.prototype.match = function(id, questions, answers) {
 	var q = r.insertCell(0);
 	q.appendChild(document.createTextNode(questions[i]));
 	q = r.insertCell(1);
-	q.appendChild(this.selectText(id + "_" + i, answers));
+	q.appendChild(this.selectText(id + "_" + i, answers, true));
     }
     this.q.appendChild(t);
 }
@@ -420,7 +424,7 @@ Quiz.prototype.cloze = function (id, txt) {
     for (var i = 0; i < preItems.length; ++i) {
         pre.appendChild(make('span', preItems[i], ''));
         if (i != preItems.length-1)
-        	pre.appendChild(this.fillin(id + "_" + i));
+        	pre.appendChild(this.fillin(id + "_" + i, true));
     }
     this.q.appendChild(pre);
 };
