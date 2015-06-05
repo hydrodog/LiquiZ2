@@ -26,6 +26,15 @@ function appendCSSText(css) {
     head.appendChild(s);
 }
 
+/*
+ * Test if an object exists
+ */
+function exists(type) {
+    if (type == "undefined")
+        return false;
+    return true;
+}
+
 var count = -5;
 function insertRow(t) {
   var r = t.insertRow(0);
@@ -149,7 +158,7 @@ Quiz.prototype.displayHeader = function() {
     //TODO: add remaining tries
 }
 
-Quiz.prototype.end = function() {
+Quiz.prototype.end = function(id) {
   if (this.editMode) {
     var newB = mkbutton("New Question");
     newB.onclick = function() {
@@ -163,8 +172,8 @@ Quiz.prototype.end = function() {
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
     this.q = document.getElementById("qc" + id);
-    points = (typeof(points) == 'undefined') ? 1 : points;
-    level =  (typeof(level) == 'undefined') ? 1 : level;
+    points = (!exists(typeof(points))) ? 1 : points;
+    level =  (!exists(typeof(level))) ? 1 : level;
     var editBox = document.createElement("div");
     editBox.className = "edit";
     if (this.editMode) {
@@ -270,18 +279,18 @@ Quiz.prototype.box = function(txt) {
 }
 
 Quiz.prototype.fillin = function(id) {
-    return mkinput(id, 'text', 'fillin');
+    this.q.appendChild(mkinput(id, 'text', 'fillin'));
 }
 
 Quiz.prototype.numeric = function(id) {
-    return mkinput(id, 'text', 'number');
+    this.q.appendChild(mkinput(id, 'text', 'number'));
 }
 
 Quiz.prototype.numid = function(id, v) {
     var inp = mkinput(id, 'text', 'cell');
     inp.size = 3;
     inp.value = v;
-    return inp;
+    this.q.appendChild(inp);
 }
 
 Quiz.prototype.add = function(parent, spec) {
@@ -313,7 +322,7 @@ Quiz.prototype.selectText = function(id, list) {
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
 	}
-	return s;
+	this.q.appendChild(s);
 }
 
 /*
@@ -331,7 +340,7 @@ Quiz.prototype.selectImg = function(id, list) {
 		opt.appendChild(img);
 		s.appendChild(opt);
 	}
-	return s;
+	this.q.appendChild(s);
 }
 
 Quiz.prototype.match = function(id, questions, answers) {
@@ -397,7 +406,7 @@ function imgclick(e) {
 
 Quiz.prototype.clickableImage = function (id, src, xs, ys) {
     var img = document.createElement("img");
-    img.src = Quiz.mediaLocations.img + cli.file;
+    img.src = Quiz.mediaLocations.img + src;
     img.onClick = function(e) { alert(e); }
     this.q.appendChild(img);
 };
@@ -463,6 +472,11 @@ function build() {
 }
 
 function processAJAX() {
-	appendCSSLink("assets/css/" + page.css + ".css");	// load the user's css skin
-	thisPage();
+    if (exists(typeof(page.css))) {
+    	appendCSSLink("assets/css/" + page.css + ".css");	// load the user's css skin
+    } else {
+        console.log("custom css didn't load. check css link in page.css");
+    }
+	if (exists(typeof(thisPage)))
+        thisPage();
 }
