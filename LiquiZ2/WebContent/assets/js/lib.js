@@ -346,7 +346,7 @@ Quiz.prototype.match = function(id, questions, answers) {
     this.q.appendChild(t);
 }
 
-Quiz.prototype.matrix = function(m, rows, cols, className,
+Quiz.prototype.matrix = function(id, m, rows, cols, className,
 				 colHeaders, rowHeaders) {
     var id = this.numeric(id); // base id
     var t = document.createElement("table");
@@ -355,15 +355,15 @@ Quiz.prototype.matrix = function(m, rows, cols, className,
     var hasColHeaders = typeof(colHeaders) != 'undefined';
     var hasRowHeaders = typeof(rowHeaders) != 'undefined';
     if (hasColHeaders) {
-    	var colheaders = hasRowHeaders ? [''] : [];
-    	for (var i = 1; i < m[0].length; i++)
-    	    colHeaders.push(i);
-    	m.splice(0,0, colHeaders);
-    	if(hasColHeaders) {
-    	    for (var i = 1; i < m.length; i++) {
-    		m[i].splice(0,0, rowHeaders[i]);
-    	    }
-    	}
+	var colheaders = hasRowHeaders ? [''] : [];
+	for (var i = 1; i < m[0].length; i++)
+	    colHeaders.push(i);
+	m.splice(0,0, colHeaders);
+	if(hasColHeaders) {
+	    for (var i = 1; i < m.length; i++) {
+		m[i].splice(0,0, rowHeaders[i]);
+	    }
+	}
     }
     for (var i = 0; i < rows; i++) {
 	var r = t.insertRow(i);
@@ -429,10 +429,10 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
 Quiz.prototype.essay = function(id, rows, cols, maxwords) {
     var ta = document.createElement("textarea");
     ta.className = "essay";
-    ta.rows = ess.rows;
-    ta.cols = ess.cols;
+    ta.rows = rows;
+    ta.cols = cols;
     //ta.value = essay.text;
-    this.q.appendChid(ta);
+    this.q.appendChild(ta);
 };
 
 var page;
