@@ -1,3 +1,40 @@
+/*
+ * Add a css file to the header section. This is useful for dynamically loading
+ * the css file depending on the user's preferences.
+ */
+function appendCSSLink(src) {
+	var head = document.getElementsByTagName('head')[0];
+	var link = document.createElement('LINK');
+	link.rel="stylesheet";
+	link.type="text/css";
+	link.href=src;
+	head.appendChild(link);
+}
+
+/*
+ * Add a css stylesheet to the current page
+ */
+function appendCSSText(css) {
+    var head = document.getElementsByTagName('head')[0];
+    var s = document.createElement('style');
+    s.setAttribute('type', 'text/css');
+    if (s.styleSheet) {   // IE
+        s.styleSheet.cssText = css;
+    } else {                // the world
+        s.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(s);
+}
+
+/*
+ * Test if an object exists
+ */
+function exists(type) {
+    if (type == "undefined")
+        return false;
+    return true;
+}
+
 var count = -5;
 function insertRow(t) {
   var r = t.insertRow(0);
@@ -20,10 +57,14 @@ function select(list) {
   return s;
 }
 
-function addSelect(divName, list) {
-  document.getElementById(divName).appendChild(select(list));
-}
 
+function dump(obj) {
+    var s = "";
+    for (var k in obj) {
+    s += k + "-->" + obj[k] + '\n';
+    }
+    console.log(s);
+}
 
 function mkdiv(parent, className) {
     var div = document.createElement("div");
@@ -58,70 +99,6 @@ function mk(tag, value, className) {
     return t;
 }
 
-function equation() {
-
-}
-/*
-Element.prototype.add = function(tag, className) {
-    var n = document.createElement(tag);
-    n.className = className;
-    this.appendChild(n);
-    return n;
-}
-Element.prototype.addText = function(text) {
-    var n = document.createTextNode(text);
-    this.appendChild(n);
-}
-*/
-function qhead(title, points, level) {
-    points = (typeof(points) == 'undefined') ? 1 : points;
-    level =  (typeof(level) == 'undefined') ? 1 : level;
-    return {type: 'qhe', title: title, points: points, level: level};
-}
-function br() { return {type: 'br'} } // line break
-function txt(txt)  { return {type: 'txt', text: txt}  } // plain text inside <span>
-function ins(txt)  { return {type: 'ins', text: txt}  } // instructions <span class="instructions">
-function lin(txt)  { return {type: 'lin', text: txt}  } // text within <p>
-function box(txt)  { return {type: 'box', text: txt}  } // text within div
-function gri(mat)  { return {type: 'mat', arr: mat,
-                 className: 'grid', readOnly: 1, disabled: true,
-                 rows: mat.length, cols: mat[0].length}   } // create a table based on matrix
-function img(file) { return {type: 'img', file: file} }
-function aud(file) { return {type: 'aud', file: file} }
-function vid(file) { return {type: 'vid', file: file} }
-
-function fil(id)       {    return {type: 'fil', id: id}              }
-function num(id)       {    return {type: 'num', id: id}              }
-function mcr(id, list) {    return {type: 'mcr', id: id, list: list}  }
-function mcd(id, list) {    return {type: 'mcd', id: id, list: list}  }
-function mat(id, rows, cols) { return {type: 'mat', className: 'grid answer', rows: rows, cols: cols}; }
-function ess(id, rows, cols,maxwords) { return {type: 'ess', rows: rows, cols: cols, maxwords: maxwords};  }
-// file upload
-function fup(id, accept)       {    return {type: 'fup', accept: accept } } // accept is a string: ".java,.txt"
-//???
-function cli(id, file, xs, ys) {    return {type: 'cli', id: id, file: file, xs: xs, ys: ys}  }
-
-// multiple fill-in-the-blank where [[a1]] is replaced by inputs
-function cloze(id, txt) {   return {type: 'cloze', id: id, text: txt}   }
-
-// enter code to be compiled, run, spindled, mutilateed
-function cod(id, txt, rows, cols) {  return {type: 'cod', id: id, text: txt, rows: rows, cols: cols}   }
-function match(id, questions, answers) {
-    return {type: 'match', id: id, questions: questions, answers: answers };
-}
-
-function dump(obj) {
-    var s = "";
-    for (var k in obj) {
-    s += k + "-->" + obj[k] + '\n';
-    }
-    alert(s);
-}
-var audioTypeMap = {
-    mp3: "mp3",
-    au:  "au"
-};
-
 function mkinput(id, type, className) {
     var inp = document.createElement("input");
     inp.id = id;
@@ -148,9 +125,9 @@ function make(tag, inner, className) {
 var clozeTarget = /[[]]/;
 
 /*
-  Information about quiz required for display on client side.
-  Much more data on server side in Policy.java
-*/
+
+//  Information about quiz required for display on client side.
+ // Much more data on server side in Policy.java
 function QuizInfo(title, points, timelimit, remainingTries, datadir) {
     this.title = title;
     this.points = points;
@@ -158,47 +135,72 @@ function QuizInfo(title, points, timelimit, remainingTries, datadir) {
     this.remaining = remainingTries;
     this.datadir = datadir;
     this.editMode = 1;
+}*/
+	
+function Quiz(quizinfo) {
+	for (var k in quizinfo) {
+		this[k] = quizinfo[k];
+	}
+    this.div = document.getElementById("quiz");
+    // this.setDataDir(this.datadir);
+    this.div.className = "quiz";
+    this.displayHeader(this.div);
+    this.editMode = true;
+    this.createSubmit();
 }
-QuizInfo.prototype.display = function(quiz) {
-    quiz.appendChild(make("h1", this.title));
-    quiz.appendChild(make("span", " Points: " + this.points, "points"));
+
+Quiz.prototype.displayHeader = function() {
+    this.div.appendChild(make("h1", this.title));
+    this.div.appendChild(make("span", " Points: " + this.points, "points"));
+    this.timer = mkdiv(this.div, "timer");
+    this.div.appendChild(this.timer);
     //TODO: add time and countdown
     //TODO: add remaining tries
 }
 
-function Quiz(quizinfo, qlist) {
-    this.div = document.getElementById("quiz");
-    this.setDataDir(quizinfo.datadir);
-    this.div.className = "quiz";
-    quizinfo.display(this.div);
-    this.createSubmit();
-    var id = 1;
-    for (var i = 0; i < qlist.length; i++, id++) {
-        var qc = mkdivid(this.div, "qc" + id, "qc");
-        for (var j = 0; j < qlist[i].length; j++) {
-            this.add(qc, qlist[i][j]);
-            if (this.editMode) {
-            	var edit = mkbutton("Edit");
-            	edit.onclick= function() {
-            		qc.innerHTML = "";
-            		
-            	}
-            	qc.appendChild(edit);
-            	qc.appendChild(mkbutton("Delete"));
-            	qc.appendChild(mkbutton("Copy"));
-            }
-        }
-
-        if (this.editMode) {
-        	var newB = mkbutton("New Question");
-        	newB.onclick = function() {
-        		
-        	}
-        	qc.appendChild(newB);
-        }
-    }
+Quiz.prototype.end = function(id) {
+  if (this.editMode) {
+    var newB = mkbutton("New Question");
+    newB.onclick = function() {
+    alert('test');
+  }
+  qc = mkdivid(this.div, "qc" + id, "qc");
+      qc.appendChild(newB);
+  }
     this.createSubmit();
 }
+Quiz.prototype.addQuestion = function(id, title, className, points, level) {
+    mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
+    this.q = document.getElementById("qc" + id);
+    points = (!exists(typeof(points))) ? 1 : points;
+    level =  (!exists(typeof(level))) ? 1 : level;
+    var editBox = document.createElement("div");
+    editBox.className = "edit";
+    if (this.editMode) {
+    	var edit = mkbutton("Edit");
+    	edit.onclick= function() {
+    		innerHTML = "";
+    		alert("test");
+    	};
+    	editBox.appendChild(edit);
+    	editBox.appendChild(mkbutton("Delete"));
+    	editBox.appendChild(mkbutton("Copy"));
+    }
+
+    header = document.createElement("div");
+    header.className = "qheader";
+    header.appendChild(mk("h2", title, ''));
+    
+    floatRight = document.createElement("div");
+    floatRight.className = "float-right";
+    floatRight.appendChild(mk("span", "points:" + points, "qpoints"));
+    floatRight.appendChild(mk("span", "level:" + level, "level"));
+    floatRight.appendChild(editBox);
+
+    header.appendChild(floatRight);
+
+    this.q.appendChild(header);
+};
 
 Quiz.mediaLocations = { // map where each kind of file is under assets
     png: "img/",         //TODO: map by class, like maps to map directory (harder)
@@ -220,296 +222,265 @@ Quiz.prototype.createSubmit = function() {
     var div = mkdiv(this.div, "submit");
     div.appendChild(mkbutton("Submit The Quiz"));
     this.div.appendChild(div);
-}
+};
 
-Quiz.prototype.qhe = function(qhead) {
-    return mktable("qheader",
-           [ [ mk("h2", qhead.title, ''),
-               mk("span", "points:" + qhead.points, "qpoints"),
-               mk("span", "level:" +qhead.level, "level")
-             ]]);
-}
 
-Quiz.prototype.img = function(img) {
+Quiz.prototype.img = function(src) {
     var im = document.createElement("img");
-    im.src=Quiz.mediaLocations.img + img.file;
-    im.width=300;
-    return im;
-}
+    im.src = Quiz.mediaLocations.img + src;
+    im.width = 300; //TODO: stop hardcoding this!
+    this.q.appendChild(im);
+};
 
-Quiz.prototype.aud = function(aud) {
+//var audioTypeMap = {
+//    mp3: "mp3",
+//    au:  "au"
+//};
+
+Quiz.prototype.aud = function(src) {
     var au = document.createElement("audio");
-    au.controls = 1; //TODO: proabbly wrong!
-    var s = document.createElement("source");
-    s.src = Quiz.mediaLocations.aud + aud.src;
-    var suffix = aud.file.search(/\.\w+$/);
-    var mediaType = audioTypeMap[aud.file.substr(suffix+1)]; //TODO: Fix this!
-    s.type = mediaType;
-    au.appendChild(s);
-    return au;
+    au.controls = true;
+    // var s = document.createElement("source");
+    au.src = Quiz.mediaLocations.aud + src;
+    // var suffix = aud.file.search(/\.\w+$/);
+//    var mediaType = audioTypeMap[aud.file.substr(suffix+1)]; //TODO: Fix this!
+    // s.type = mediaType;
+    // au.appendChild(s);
+    this.q.appendChild(au);
 }
 
-Quiz.prototype.vid = function(vid) {
+Quiz.prototype.vid = function(src) {
     var vi = document.createElement("video");
-    vi.src = Quiz.mediaLocations.vid + vid.file;
+    vi.src = Quiz.mediaLocations.vid + src;
     vi.controls = true;
-    return vi;
+    this.q.appendChild(vi);
 }
 
-Quiz.prototype.txt = function(txt) {
-    return make('span', txt.text);
+Quiz.prototype.span	 = function(txt) {
+    this.q.appendChild(make('span', txt, ''));
 }
 
 Quiz.prototype.br = function() {
-    return make('br');
+    this.q.appendChild(document.createElement('br'));
 }
 
-Quiz.prototype.ins = function(ins) {
-    return make('span', ins.text, 'instructions');
+Quiz.prototype.instructions = function(txt) {
+    this.q.appendChild(make('span', txt, 'instructions'));
 }
 
-Quiz.prototype.lin = function(lin) {
-    return make('p', lin.text);
+Quiz.prototype.p = function(txt) {
+    this.q.appendChild(make('p', txt));
 }
 
 Quiz.prototype.box = function(txt) {
     var div = mkdiv(this, "div", "box");
-    div.innerHTML = txt.text;
-    return div;
+    div.innerHTML = txt;
+    this.q.appendChild(newChild);
 }
 
-Quiz.prototype.fil = function(fil) {
-    return mkinput(fil.id, 'text', 'fillin');
+Quiz.prototype.fillin = function(id, sendBack) {
+    if (sendBack)
+        return mkinput(id, 'text', 'fillin');
+    this.q.appendChild(mkinput(id, 'text', 'fillin'));
 }
 
-Quiz.prototype.num = function(num) {
-    return mkinput(num.id, 'text', 'number');
+Quiz.prototype.numeric = function(id) {
+    this.q.appendChild(mkinput(id, 'text', 'number'));
 }
 
 Quiz.prototype.numid = function(id, v) {
     var inp = mkinput(id, 'text', 'cell');
     inp.size = 3;
     inp.value = v;
-    return inp;
+    this.q.appendChild(inp);
 }
 
 Quiz.prototype.add = function(parent, spec) {
     parent.appendChild(this[spec.type](spec));
 }
 
-Quiz.prototype.mcr = function(mcr) {
-    for (var i = 0; i < mcr.list.length; i++) {
-    this.div.appendChild(mkinput(mcr.id, 'radio', 'multichoiceradio'));
-    this.add(this.div, mcr.list[i]);
-    }
-    return this.div;
+Quiz.prototype.mcRadioText = function(id, txt) {
+    this.q.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
+    this.add(this.q, document.createTextNode(txt));
 }
 
-Quiz.prototype.select = function(id, list) {
-    var s = document.createElement("select");
-    s.id = id;
-    s.className = "multichoicedropdown";
-    for (var i = 0; i < list.length; i++) {
-    var opt = document.createElement("option");
-    opt.value = i;
-    opt.appendChild(this[list[i].type](list[i]));
-    s.appendChild(opt);
-    }
-    return s;
-}
-
-Quiz.prototype.mcd = function(mcd) {
-    return select(mcd.id, mcd.list);
-}
-
-Quiz.prototype.match = function(match) { 
-    var t = document.createElement("table");
-    for (var i = 0; i < match.questions.length; ++i) {
-    var r = t.insertRow(i);
-    var q = r.insertCell(0);
-    this.add(q, match.questions[i]);
-    q = r.insertCell(1);
-    q.appendChild(this.select(match.id + "_" + i, match.answers));
-    }
-    return t;
-}
-Quiz.prototype.mat = function(mat) {
-    var id = num(mat.id); // base id
-    var t = document.createElement("table");
-    t.className = mat.className;
-    var m = mat.arr;
-    var hasVal = typeof(m) != 'undefined';
-    for (var i = 0; i < mat.rows; i++) {
-    var r = t.insertRow(i);
-    r.className = "mat.rowClassName";
-    for (var j = 0; j < mat.cols; j++) {
-        var td = r.insertCell(j);
-        var v = hasVal ? m[i][j] : '';
-        var inp = this.numid(id + "_" + i + "," + j, v);
-        if (mat.readOnly)
-            inp.readOnly = mat.readOnly;
-        if (mat.disabled)
-            inp.disabled = true;
-        td.appendChild(inp);
-    }   
-    }
-    return t;
-}
-Quiz.prototype.fup = function(fup) {
-    var up = document.createElement("input");
-    up.id = fup.id;
-    up.type = "file";
-    up.accept = fup.accept;
-    return up;
-}
-
-function imgclick(e) {
-    alert(e);
-}
-
-Quiz.prototype.cli = function (cli) { // clickable image
-    var img = document.createElement("img");
-    img.src = cli.file;
-    img.onClick = function(e) { alert(e); }
-    return img;
-}
-
-Quiz.prototype.cloze = function (cloze) {
-    var t = cloze.text;
-    console.log(t)
-    var preItems = t.split("[[]]") // If you want default items in here, just parse with regex
-    var pre = document.createElement("pre");
-    pre.className = "code";
-
-    for (i = 0; i < preItems.length; i++) {
-        pre.appendChild(this.txt({text: preItems[i]})) // this is janky as hell
-        console.log(preItems[i])
-        console.log(this.txt(preItems[i]))
-        if (i != preItems.length-1)
-            pre.appendChild(this.fil(cloze.id + "_" + i))
-    }
-    return pre
-}
-
-Quiz.prototype.cod = function(cod) {
-    var ta = document.createElement("textarea");
-    ta.className = "code";
-    ta.rows = cod.rows;
-    ta.cols = cod.cols;
-    ta.value = cod.text;
-    return ta;
+Quiz.prototype.mcRadioImg = function(id, src) {
+    this.q.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
+    var img = document.createElement("image");
+    img.src = src;
+    this.q.appendChild(img);
 }
 
 /*
-Quiz.prototype.ess = function(ess) {
+ * Build dropdown list of text
+ */
+Quiz.prototype.selectText = function(id, list, sendBack) {
+	var s = document.createElement("select");
+	s.id = id;
+	s.className = "multichoicedropdown";
+	for (var i = 0; i < list.length; i++) {
+		var opt = document.createElement("option");
+		opt.value = i;
+		opt.appendChild(document.createTextNode(list[i]));
+		s.appendChild(opt);
+	}
+    if (sendBack)
+        return s;
+	this.q.appendChild(s);
+}
+
+/*
+ * Build dropdown list of images
+ */
+Quiz.prototype.selectImg = function(id, list) {
+	var s = document.createElement("select");
+	s.id = id;
+	s.className = "multichoicedropdown";
+	for (var i = 0; i < list.length; i++) {
+		var opt = document.createElement("option");
+		opt.value = i;
+		var img = document.createElement("img");
+		img.src = Quiz.mediaLocations.img + list[i];
+		opt.appendChild(img);
+		s.appendChild(opt);
+	}
+	this.q.appendChild(s);
+}
+
+Quiz.prototype.match = function(id, questions, answers) {
+    var t = document.createElement("table");
+    for (var i = 0; i < questions.length; ++i) {
+	var r = t.insertRow(i);
+	var q = r.insertCell(0);
+	q.appendChild(document.createTextNode(questions[i]));
+	q = r.insertCell(1);
+	q.appendChild(this.selectText(id + "_" + i, answers, true));
+    }
+    this.q.appendChild(t);
+}
+
+Quiz.prototype.matrix = function(id, m, rows, cols, className,
+				 colHeaders, rowHeaders) {
+    var id = this.numeric(id); // base id
+    var t = document.createElement("table");
+    t.className = className;
+    var hasVals = typeof(m) != 'undefined';
+    var hasColHeaders = typeof(colHeaders) != 'undefined';
+    var hasRowHeaders = typeof(rowHeaders) != 'undefined';
+    if (hasColHeaders) {
+	var colheaders = hasRowHeaders ? [''] : [];
+	for (var i = 1; i < m[0].length; i++)
+	    colHeaders.push(i);
+	m.splice(0,0, colHeaders);
+	if(hasColHeaders) {
+	    for (var i = 1; i < m.length; i++) {
+		m[i].splice(0,0, rowHeaders[i]);
+	    }
+	}
+    }
+    for (var i = 0; i < rows; i++) {
+	var r = t.insertRow(i);
+	r.className = "mat.rowClassName";
+	for (var j = 0; j < cols; j++) {
+            var td = r.insertCell(j);
+            var v = hasVals ? m[i][j] : '';
+            var inp = this.numid(id + "_" + i + "," + j, v);
+            if (mat.readOnly)
+		inp.readOnly = mat.readOnly;
+            if (mat.disabled)
+		inp.disabled = true;
+            td.appendChild(inp);
+	}
+    }
+    this.q.appendChild(t);
+};
+
+// accept is a string: ".java,.txt"
+Quiz.prototype.fileUpload = function(id, accept) {
+    var up = document.createElement("input");
+    up.id = id;
+    up.type = "file";	
+    up.accept = accept;
+    this.q.appendChild(up);
+};
+
+function imgclick(e) {
+    alert(e);
+};
+
+Quiz.prototype.clickableImage = function (id, src, xs, ys) {
+    var img = document.createElement("img");
+    img.src = Quiz.mediaLocations.img + src;
+    img.onClick = function(e) { alert(e); }
+    this.q.appendChild(img);
+};
+
+// multiple fill-in-the-blank where [[a1]] is replaced by inputs
+Quiz.prototype.cloze = function (id, txt) {
+    var preItems = txt.split("[[]]") // If you want default items in here, just parse with regex
+    var pre = document.createElement("pre");
+    pre.className = "code";
+
+    for (var i = 0; i < preItems.length; ++i) {
+        pre.appendChild(make('span', preItems[i], ''));
+        if (i != preItems.length-1)
+        	pre.appendChild(this.fillin(id + "_" + i, true));
+    }
+    this.q.appendChild(pre);
+};
+
+// enter code to be compiled, run, spindled, mutilated
+Quiz.prototype.code = function(id, txt, rows, cols) {
+    var ta = document.createElement("textarea");
+    ta.className = "code";
+    ta.rows = rows;
+    ta.cols = cols;
+    ta.value = txt;
+    this.q.appendChild(ta);
+};
+
+Quiz.prototype.essay = function(id, rows, cols, maxwords) {
     var ta = document.createElement("textarea");
     ta.className = "essay";
-    ta.rows = ess.rows;
-    ta.cols = ess.cols;
+    ta.rows = rows;
+    ta.cols = cols;
     //ta.value = essay.text;
-    return ta;
-}
-*/
+    this.q.appendChild(ta);
+};
 
+var page;
+
+/*
+ * Run a serverside script (the parameter)
+ * which prints a JSON string.
+ * load the JSON, evaluate it and call initPage() to update the page
+ */
 function build() {
-    var quizinfo  = new QuizInfo("Quiz Demo #1", 100, 0, 1, "assets/");
-    var qlist = [
-    [
-        qhead("Mergesort"),
-        lin("Show the first pass of Mergesort below"),
-        gri([[9, 8, 7, 6, 5, 4, 3, 1]]), br(),
-        mat(1, 1, 8)
-    ],
-    [
-        qhead("Matrix Multiplication", 1, 1),
-        lin("Show the result of matrix A * B"),
-        gri([[1, 0, 2],[1, 1, -2],[2, 1, 0]]), txt("*"),
-        gri([[1, 1, -1],[-2, 1, 0],[1, 1, 3]]), txt("="),
-        mat(2, 3, 3)
-    ],
-    [
-        qhead('Java'),
-        lin('Complete the code below so it prints "Hello"'),
-        cod(3, "public A {\n  void   (String[] args) {\n  System.\n  }\n}\n", 10, 80)
-    ],
-    [
-        qhead('Java'),
-        lin('Complete the following function so it computes factorial recursively.'),
-        cod(4, "public static void fact(int n) {\n\n\n\n}", 10, 80)
-    ],
-    [
-        qhead('Java'),
-        txt("Fill in the blanks to make the code correct"),
-        cloze(5, 'public [[]] A {\n  [[]] static [[]] main([[]] [] args) {\n  System.[[]].[[]]("hello");\n  }\n}')
-    ],
-    [
-        qhead("Object Oriented Terminology"),
-        lin("Match the object-oriented terminology to the meaning"),
-        match(6, [txt("class"), txt("object"), txt("method"), txt("message"),
-           txt("polymorphism"), txt("encapsulation")],
-          [txt("A concrete instance of a class"),
-           txt("A request made to an object"),
-           txt("Hiding the internal details of a class or object"),
-           txt("Sending the same message to different objects and getting different results"),
-           txt("A specification of an object"),
-           txt("A function that is applied to an object")
-          ])
-    ],
-    [
-        qhead("File Upload"),
-        lin("Submit your homework for the 3n+1 problem as a single .java file"),
-        fup(7, ".java"),     
-    ],
-//      match(17, ["class", "object", "method", "message", "polymorphism", "encapsulation"],
-//        ["A concrete instance of a class",
-//         "A request made to an object",
-//         "Hiding the internal details of a class or object",
-//         "Sending the same message to different objects and getting different results",
-//         "A specification of an object"
-//        ])
-    [
-        qhead("Graph Theory"),
-        lin("Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable."),
-        img("Bellmanford_3.png"),
-        mat(8, 3, 5)
-    ],
-    [
-        qhead("Arithmetic"),
-        txt("What is 2 + 2?"),
-        fil(10)
-    ],
-    [
-        qhead('Dinosaur'),
-        lin("Which one is the dinosaur?"),
-//      mcr(11, [img("cat2.jpg"), img("fish2.png"), img("trex.jpg")])
-    ],
-    [
-        qhead('Dinosaur'),
-        lin("Which one is the dinosaur?"),
-        mcd(12, [img("cat2.jpg"), img("fish2.png"), img("trex.jpg")])
-    ],
-    [
-        qhead('Multimedia'),
-        txt('listen to the following audio file and pick the name of the main character.'),
-        aud("clip1.mp3"),
-        mcd(13, [txt('Yijin'), txt('Asher'), txt('Ying'), txt('Xuefan'), txt('Bob')])
-    ],
-    [
-        qhead('Tacoma Narrows'),
-        txt('Watch the following video, then explain what caused the bridge to fail.'),
-        vid("Tacoma Narrows Bridge Collapse.mp4"),
-        ess(14, 10, 80, 200)
-    ],
-    [
-        qhead('Arithmetic'),
-        txt("What is the square root of 2 (four digits is fine)?"),
-        num(15)
-    ],
-    [
-        qhead("Geography"),
-        lin("Click on Texas"),
-        cli(16,"usmap.gif")
-    ]
-    ];
-    var q = new Quiz(quizinfo, qlist);   
+    // your page: test.html
+    // ajax url: test_ajax.jsp
+	var thisURL = window.location.href;
+	var last = thisURL.split("/");
+	last=last[last.length-1];
+	var baseFilename = last.split('.').slice(0,-1).join('');
+	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
+
+	var json=new XMLHttpRequest();
+	json.onreadystatechange=function() {
+	  if (json.readyState!=4 || json.status!=200)
+		  return;// TODO: Handle error if it doesn't come back
+	  eval("page="+json.responseText);
+	  processAJAX();
+	}
+	json.open("GET",ajax,true);
+	json.send();
+}
+
+function processAJAX() {
+    if (exists(typeof(page.css))) {
+    	appendCSSLink("assets/css/" + page.css + ".css");	// load the user's css skin
+    } else {
+        console.log("custom css didn't load. check css link in page.css");
+    }
+	if (exists(typeof(thisPage)))
+        thisPage();
 }

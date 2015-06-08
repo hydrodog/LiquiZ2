@@ -20,6 +20,10 @@ public class DisplayContext {
 		b.append(s);
 		return this;
 	}
+	public DisplayContext append(char c) {
+		b.append(c);
+		return this;
+	}
 	public DisplayContext append(int i) {
 		b.append(i);
 		return this;

@@ -123,4 +123,7 @@ public abstract class Question implements Displayable {
 	public boolean isAutomaticGrading() {
 		return true;
 	}
+	public void writeJS(String funcName, DisplayContext dc) {
+		dc.append(funcName).append('(').append(getId()).append(',');
+	}
 }

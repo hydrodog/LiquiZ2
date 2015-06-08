@@ -91,8 +91,9 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 		}
 	}
 
-	public void writeJS(StringBuilder b ) {
-		Util.writeAnsListAsJS("radio", getAns(), b);
+	public void writeJS(DisplayContext dc) {
+		writeJS("mcRadio", dc);
+		Util.writeAnsListAsJS(getAns(), dc);
 	}
 	
 }

@@ -58,9 +58,10 @@ public class Essay extends Question {
 		}
  	}
 	
-	public void writeJS(StringBuilder b ) {
-		b.append("essay('").append(Util.escapeJS(defaultText))
-			.append("')");
+	public void writeJS(DisplayContext dc) {
+		dc.append("essay(");
+		Util.escapeQuotedJS(defaultText, dc);
+		dc.append(')');
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<essay>").append(Util.escapeXML(defaultText))

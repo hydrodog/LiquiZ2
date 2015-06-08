@@ -20,8 +20,8 @@ public class Image extends RectangularMedia {
 
 	//TODO: how to represent image in JavaScript
 	//TODO: image id should not be hardcoded to 1!!!
-	public void writeJS(StringBuilder b){
-		b.append("image('" + getSource() + "')");
+	public void writeJS(DisplayContext dc){
+		dc.append("img('" + getSource() + "')");
 	}
 	
 	public void writeXML(StringBuilder b) {

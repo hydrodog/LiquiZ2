@@ -56,8 +56,9 @@ public class MatrixQuestion extends Question {
 
 	//TODO: Fix the commas after each row, they aren't there!
 	@Override
-	public void writeJS(StringBuilder b) {
-		b.append("matquest(").append(rows)
+	public void writeJS(DisplayContext dc) {
+		writeJS("mat", dc);
+		dc.append(',').append(rows)
 			.append(',').append(cols).append(')');
 	}
 

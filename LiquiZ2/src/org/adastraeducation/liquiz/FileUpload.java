@@ -39,8 +39,9 @@ public class FileUpload extends Question {
 		dc.append("</button>");
  	}
 	
-	public void writeJS(StringBuilder b ) {
-		b.append("fileUpload");
+	public void writeJS(DisplayContext dc) {
+		writeJS("fileUpload", dc);
+		dc.append(')');	
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<fileUpload/>");

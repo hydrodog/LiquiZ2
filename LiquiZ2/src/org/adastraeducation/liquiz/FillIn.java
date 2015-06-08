@@ -124,8 +124,9 @@ public class FillIn extends Question {
 	}
 
 	@Override
-	public void writeJS(StringBuilder b) {
-		b.append("fillin()");
+	public void writeJS(DisplayContext dc) {
+		writeJS("fillin", dc);
+		dc.append(")");
 	}
 
 	@Override

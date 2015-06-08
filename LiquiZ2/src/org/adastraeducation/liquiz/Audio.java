@@ -18,7 +18,7 @@ public class Audio extends Media {
 	}
 	// to do : how to represent image in JavaScript
 	public void writeJS(StringBuilder b){
-		b.append("new Audio(1, \"" + getSource() + "\")");
+		b.append("aud('").append(getSource()).append("')");
 	}
 	
 	public void writeXML(StringBuilder b) {

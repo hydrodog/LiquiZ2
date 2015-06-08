@@ -111,8 +111,10 @@ public class MultiChoiceDropdown extends Question {
 		}
 	}
 
-	public void writeJS(StringBuilder b) {
-		Util.writeAnsListAsJS("dropdown", getAns(), b);
+	public void writeJS(DisplayContext dc) {
+		writeJS("mcRadio", dc);
+		Util.writeAnsListAsJS(getAns(), dc);
+		dc.append('(');
 	}
 
 	public void writeXML(StringBuilder b) {

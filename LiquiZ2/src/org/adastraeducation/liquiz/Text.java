@@ -28,8 +28,9 @@ public class Text extends DisplayElement {
 		dc.append(text);
 	}
 	@Override
-	public void writeJS(StringBuilder b) {
-		b.append('\'').append(text).append('\'');
+	public void writeJS(DisplayContext dc) {
+		writeJS("txt", dc);
+		Util.   dc.append('\'').append(text).append('\'');
 	}
 	@Override
 	public void writeXML(StringBuilder b) {
