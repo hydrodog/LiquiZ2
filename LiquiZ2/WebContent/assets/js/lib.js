@@ -107,8 +107,8 @@ function mkinput(id, type, className) {
     return inp;
 }
 
-function mkbutton(val) {
-    var b = mkinput(null, 'button', 'submit');
+function mkbutton(val, id) {
+    var b = mkinput(id, 'button', 'submit');
     b.value = val;
     return b;
 }
@@ -177,14 +177,24 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     var editBox = document.createElement("div");
     editBox.className = "edit";
     if (this.editMode) {
-    	var edit = mkbutton("Edit");
-    	edit.onclick= function() {
-    		innerHTML = "";
-    		alert("test");
-    	};
+    	var edit = mkbutton("Edit", id+"-edit");
+        var del = mkbutton("Delete", id+"-delete");
+        var copy = mkbutton("Copy", id+"-copy");
+        edit.onclick = function() {
+            innerHTML = "";
+            console.log(edit.id);
+        };
+        del.onclick = function() {
+            innerHTML = "";
+            console.log(del.id);
+        };
+        copy.onclick = function() {
+            innerHTML = "";
+            console.log(copy.id);
+        };
     	editBox.appendChild(edit);
-    	editBox.appendChild(mkbutton("Delete"));
-    	editBox.appendChild(mkbutton("Copy"));
+    	editBox.appendChild(del);
+    	editBox.appendChild(copy);
     }
 
     header = document.createElement("div");
@@ -492,7 +502,7 @@ function build() {
 	var baseFilename = last.split('.').slice(0,-1).join('');
 	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
 
-	var json=new XMLHttpRequest();
+	var json = new XMLHttpRequest();
 	json.onreadystatechange=function() {
 	  if (json.readyState!=4 || json.status!=200)
 		  return;// TODO: Handle error if it doesn't come back

@@ -6,7 +6,7 @@ page = new Quiz( {
 	dataDir: "assets/"
 } );
 // question 1
-page.addQuestion(1, "Mergesort", "matrix");
+page.addQuestion(1, "Mergesort", "matrix", 0);
 page.instructions("Show the first pass of Mergesort below");
 page.matrix([[9, 8, 7, 6, 5, 4, 3, 1]]);
 page.br();
