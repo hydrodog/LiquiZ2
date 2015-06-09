@@ -318,8 +318,12 @@ Quiz.prototype.selectText = function(id, list, sendBack) {
 	var s = document.createElement("select");
 	s.id = id;
 	s.className = "multichoicedropdown";
+    var opt = document.createElement("option");
+    opt.value = -1;
+    opt.appendChild(document.createTextNode("Select one"));
+    s.appendChild(opt);
 	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("option");
+        opt = document.createElement("option");
 		opt.value = i;
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
@@ -350,11 +354,11 @@ Quiz.prototype.selectImg = function(id, list) {
 Quiz.prototype.match = function(id, questions, answers) {
     var t = document.createElement("table");
     for (var i = 0; i < questions.length; ++i) {
-	var r = t.insertRow(i);
-	var q = r.insertCell(0);
-	q.appendChild(document.createTextNode(questions[i]));
-	q = r.insertCell(1);
-	q.appendChild(this.selectText(id + "_" + i, answers, true));
+    	var r = t.insertRow(i);
+    	var q = r.insertCell(0);
+    	q.appendChild(document.createTextNode(questions[i]));
+    	q = r.insertCell(1);
+    	q.appendChild(this.selectText(id + "_" + i, answers, true));
     }
     this.q.appendChild(t);
 }
