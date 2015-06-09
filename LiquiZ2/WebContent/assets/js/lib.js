@@ -83,11 +83,11 @@ function mktable(className, arr) {
     var t = document.createElement("table");
     t.className = className;
     for (var i = 0; i < arr.length; i++) {
-    var tr = t.insertRow(i);
-    for (var j = 0; j < arr[i].length; ++j) {
-        var c = tr.insertCell(j);
-        c.appendChild(arr[i][j]);
-    }
+        var tr = t.insertRow(i);
+        for (var j = 0; j < arr[i].length; ++j) {
+            var c = tr.insertCell(j);
+            c.appendChild(arr[i][j]);
+        }
     }
     return t;
 }
@@ -225,10 +225,11 @@ Quiz.prototype.createSubmit = function() {
 };
 
 
-Quiz.prototype.img = function(src) {
+Quiz.prototype.img = function(src, returnValue) {
     var im = document.createElement("img");
     im.src = Quiz.mediaLocations.img + src;
-    im.width = 300; //TODO: stop hardcoding this!
+    if (returnValue)
+        return im;
     this.q.appendChild(im);
 };
 
@@ -305,10 +306,31 @@ Quiz.prototype.mcRadioText = function(id, txt) {
 }
 
 Quiz.prototype.mcRadioImg = function(id, src) {
-    this.q.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
-    var img = document.createElement("image");
-    img.src = src;
-    this.q.appendChild(img);
+    if (src.constructor === Array) {
+        l = [];
+        for (var i = 0; i < src.length; i++) {
+            radio = mkinput(id+"-"+i, 'radio', 'multichoiceradio');
+            radio.name = id;
+            label = document.createElement("label");
+            label.htmlFor = id+"-"+i;
+            label.appendChild(this.img(src[i], true));
+            group = [radio, label];
+            l.push(group);
+        }
+        this.q.appendChild(mktable("", l));
+    } else {
+        div = make("div", "", "radio-container");
+        label = document.createElement("label");
+        label.htmlFor = id;
+        radio = mkinput(id, 'radio', 'multichoiceradio');
+        radio.name = id;
+        div.appendChild(radio);
+        var img = document.createElement("img");
+        img.src = src;
+        label.appendChild(img);
+        div.appendChild(label);
+        this.q.appendChild(div);
+    }
 }
 
 /*

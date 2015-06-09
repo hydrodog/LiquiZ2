@@ -57,6 +57,7 @@ page.fileUpload(7, ".java");
 page.addQuestion(8, "Graph Theory", "matrix");
 page.instructions("Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable.");
 page.img("Bellmanford_3.png");
+page.br();
 page.matrix(8, 3, 5);
 
 // question 9
@@ -69,10 +70,7 @@ page.fillin(10);
 // question 11
 page.addQuestion(11, 'Dinosaur', "mcRadioImg");
 page.p("Which one is the dinosaur?");
-page.mcRadioImg(11);
-page.img("cat2.jpg");
-page.img("fish2.png");
-page.img("trex.jpg");
+page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]);
 
 // question 12
 page.addQuestion(12, 'Dinosaur', "selectImg");
