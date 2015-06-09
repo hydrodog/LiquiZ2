@@ -146,7 +146,7 @@ function Quiz(quizinfo) {
     this.div.className = "quiz";
     this.displayHeader(this.div);
     this.editMode = true;
-    this.createSubmit();
+    this.createSubmit(1);
 }
 
 Quiz.prototype.displayHeader = function() {
@@ -159,16 +159,17 @@ Quiz.prototype.displayHeader = function() {
 }
 
 Quiz.prototype.end = function(id) {
-  if (this.editMode) {
-    var newB = mkbutton("New Question");
-    newB.onclick = function() {
-    alert('test');
+    if (this.editMode) {
+        var newB = mkbutton("New Question", "new-question");
+        newB.onclick = function() {
+            console.log(newB.id);
+        };
+    qc = mkdivid(this.div, "qc" + id, "qc");
+        qc.appendChild(newB);
   }
-  qc = mkdivid(this.div, "qc" + id, "qc");
-      qc.appendChild(newB);
-  }
-    this.createSubmit();
-}
+    this.createSubmit(2);
+};
+
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
     this.q = document.getElementById("qc" + id);
@@ -228,9 +229,9 @@ Quiz.prototype.setDataDir = function(path) {
     Quiz.mediaLocations.aud = path + "/aud/";
     Quiz.mediaLocations.vid = path + "/vid/";
 }
-Quiz.prototype.createSubmit = function() {
+Quiz.prototype.createSubmit = function(id) {
     var div = mkdiv(this.div, "submit");
-    div.appendChild(mkbutton("Submit The Quiz"));
+    div.appendChild(mkbutton("Submit The Quiz", "submit-"+id));
     this.div.appendChild(div);
 };
 
