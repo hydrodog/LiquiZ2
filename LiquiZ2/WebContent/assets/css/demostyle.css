@@ -16,6 +16,10 @@
     margin: 5px;
 }
 
+.match-qc td {
+    padding: 1px 4px;
+}
+
 .qheader {
     background-color: #8080d0;
     padding: 0px;
