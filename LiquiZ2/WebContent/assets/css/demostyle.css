@@ -65,6 +65,7 @@ h2 {
     width: 95%;
     rows: 10;
     cols: 80;
+    padding: 4px;
 }
 
 .code input {
@@ -140,6 +141,10 @@ h2 {
 
 .new-question-button {
     display: block;
+}
+
+input {
+    outline: none;
 }
 
 input[disabled] {
