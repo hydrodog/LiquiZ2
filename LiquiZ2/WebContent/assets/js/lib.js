@@ -265,7 +265,7 @@ Quiz.prototype.br = function() {
 }
 
 Quiz.prototype.instructions = function(txt) {
-    this.q.appendChild(make('span', txt, 'instructions'));
+    this.q.appendChild(make('p', txt, 'instructions'));
 }
 
 Quiz.prototype.p = function(txt) {
@@ -361,7 +361,9 @@ Quiz.prototype.match = function(id, questions, answers) {
 
 Quiz.prototype.matrix = function(id, m, rows, cols, className,
 				 colHeaders, rowHeaders) {
-    var id = this.numeric(id); // base id
+    this.q.appendChild(make("span", "Matrix goes here", "matrix-placeholder"))
+    // this.span("Matrix goes here");
+/*    var id = this.numeric(id); // base id
     var t = document.createElement("table");
     t.className = className;
     var hasVals = typeof(m) != 'undefined';
@@ -392,7 +394,7 @@ Quiz.prototype.matrix = function(id, m, rows, cols, className,
             td.appendChild(inp);
 	}
     }
-    this.q.appendChild(t);
+    this.q.appendChild(t);*/
 };
 
 // accept is a string: ".java,.txt"

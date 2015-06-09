@@ -4,10 +4,6 @@
     font-size:18pt;
 }
 
-h1 {
-
-}
-
 .points {
 }
 
@@ -102,6 +98,11 @@ h2 {
 .box {
     background-color: #8f8;
     border: 1 solid #000;
+}
+
+.matrix-placeholder {
+    color: #000;
+    background-color: #f00;
 }
 
 .matrix {
