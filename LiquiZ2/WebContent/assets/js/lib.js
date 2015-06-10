@@ -26,6 +26,15 @@ function appendCSSText(css) {
     head.appendChild(s);
 }
 
+/*
+ * Test if an object exists
+ */
+function exists(type) {
+    if (type == "undefined")
+        return false;
+    return true;
+}
+
 var count = -5;
 function insertRow(t) {
   var r = t.insertRow(0);
@@ -74,11 +83,11 @@ function mktable(className, arr) {
     var t = document.createElement("table");
     t.className = className;
     for (var i = 0; i < arr.length; i++) {
-    var tr = t.insertRow(i);
-    for (var j = 0; j < arr[i].length; ++j) {
-        var c = tr.insertCell(j);
-        c.appendChild(arr[i][j]);
-    }
+        var tr = t.insertRow(i);
+        for (var j = 0; j < arr[i].length; ++j) {
+            var c = tr.insertCell(j);
+            c.appendChild(arr[i][j]);
+        }
     }
     return t;
 }
@@ -98,8 +107,8 @@ function mkinput(id, type, className) {
     return inp;
 }
 
-function mkbutton(val) {
-    var b = mkinput(null, 'button', 'submit');
+function mkbutton(val, id) {
+    var b = mkinput(id, 'button', 'submit');
     b.value = val;
     return b;
 }
@@ -133,11 +142,11 @@ function Quiz(quizinfo) {
 		this[k] = quizinfo[k];
 	}
     this.div = document.getElementById("quiz");
-    this.setDataDir(this.datadir);
+    // this.setDataDir(this.datadir);
     this.div.className = "quiz";
     this.displayHeader(this.div);
     this.editMode = true;
-    this.createSubmit();
+    this.createSubmit(1);
 }
 
 Quiz.prototype.displayHeader = function() {
@@ -149,39 +158,59 @@ Quiz.prototype.displayHeader = function() {
     //TODO: add remaining tries
 }
 
-Quiz.prototype.end = function() {
-  if (this.editMode) {
-    var newB = mkbutton("New Question");
-    newB.onclick = function() {
-    alert('test');
+Quiz.prototype.end = function(id) {
+    if (this.editMode) {
+        var newB = mkbutton("New Question", "new-question");
+        newB.onclick = function() {
+            console.log(newB.id);
+        };
+    qc = mkdivid(this.div, "qc" + id, "qc");
+        qc.appendChild(newB);
   }
-  qc = mkdivid(this.div, "qc" + id, "qc");
-      qc.appendChild(newB);
-  }
-    this.createSubmit();
-}
+    this.createSubmit(2);
+};
+
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
-    points = (typeof(points) == 'undefined') ? 1 : points;
-    level =  (typeof(level) == 'undefined') ? 1 : level;
-    var td = document.createElement("td");
+    this.q = document.getElementById("qc" + id);
+    points = (!exists(typeof(points))) ? 1 : points;
+    level =  (!exists(typeof(level))) ? 1 : level;
+    var editBox = document.createElement("div");
+    editBox.className = "edit";
     if (this.editMode) {
-    	var edit = mkbutton("Edit");
-    	edit.onclick= function() {
-    		innerHTML = "";
-    		alert("test");
-    	};
-    	td.appendChild(edit);
-    	td.appendChild(mkbutton("Delete"));
-    	td.appendChild(mkbutton("Copy"));
+    	var edit = mkbutton("Edit", id+"-edit");
+        var del = mkbutton("Delete", id+"-delete");
+        var copy = mkbutton("Copy", id+"-copy");
+        edit.onclick = function() {
+            innerHTML = "";
+            console.log(edit.id);
+        };
+        del.onclick = function() {
+            innerHTML = "";
+            console.log(del.id);
+        };
+        copy.onclick = function() {
+            innerHTML = "";
+            console.log(copy.id);
+        };
+    	editBox.appendChild(edit);
+    	editBox.appendChild(del);
+    	editBox.appendChild(copy);
     }
 
-    this.div.appendChild(mktable("qheader",
-    		[ [ mk("h2", this.title, ''),
-    		    mk("span", "points:" + points, "qpoints"),
-    		    mk("span", "level:" + level, "level"),
-    		    td
-    		    ]]));
+    header = document.createElement("div");
+    header.className = "qheader";
+    header.appendChild(mk("h2", title, ''));
+    
+    floatRight = document.createElement("div");
+    floatRight.className = "float-right";
+    floatRight.appendChild(mk("span", "points:" + points, "qpoints"));
+    floatRight.appendChild(mk("span", "level:" + level, "level"));
+    floatRight.appendChild(editBox);
+
+    header.appendChild(floatRight);
+
+    this.q.appendChild(header);
 };
 
 Quiz.mediaLocations = { // map where each kind of file is under assets
@@ -200,18 +229,19 @@ Quiz.prototype.setDataDir = function(path) {
     Quiz.mediaLocations.aud = path + "/aud/";
     Quiz.mediaLocations.vid = path + "/vid/";
 }
-Quiz.prototype.createSubmit = function() {
+Quiz.prototype.createSubmit = function(id) {
     var div = mkdiv(this.div, "submit");
-    div.appendChild(mkbutton("Submit The Quiz"));
+    div.appendChild(mkbutton("Submit The Quiz", "submit-"+id));
     this.div.appendChild(div);
 };
 
 
-Quiz.prototype.img = function(src) {
+Quiz.prototype.img = function(src, returnValue) {
     var im = document.createElement("img");
     im.src = Quiz.mediaLocations.img + src;
-    im.width = 300; //TODO: stop hardcoding this!
-    return im;
+    if (returnValue)
+        return im;
+    this.q.appendChild(im);
 };
 
 //var audioTypeMap = {
@@ -221,58 +251,60 @@ Quiz.prototype.img = function(src) {
 
 Quiz.prototype.aud = function(src) {
     var au = document.createElement("audio");
-    au.controls = 1; //TODO: proabbly wrong!
-    var s = document.createElement("source");
-    s.src = Quiz.mediaLocations.aud + src;
-    var suffix = aud.file.search(/\.\w+$/);
+    au.controls = true;
+    // var s = document.createElement("source");
+    au.src = Quiz.mediaLocations.aud + src;
+    // var suffix = aud.file.search(/\.\w+$/);
 //    var mediaType = audioTypeMap[aud.file.substr(suffix+1)]; //TODO: Fix this!
-    s.type = mediaType;
-    au.appendChild(s);
-    return au;
+    // s.type = mediaType;
+    // au.appendChild(s);
+    this.q.appendChild(au);
 }
 
 Quiz.prototype.vid = function(src) {
     var vi = document.createElement("video");
     vi.src = Quiz.mediaLocations.vid + src;
     vi.controls = true;
-    this.div.appendChild(vi);
+    this.q.appendChild(vi);
 }
 
 Quiz.prototype.span	 = function(txt) {
-    this.div.appendChild(make('span', txt, ''));
+    this.q.appendChild(make('span', txt, ''));
 }
 
 Quiz.prototype.br = function() {
-    this.div.appendChild(document.createElement('br'));
+    this.q.appendChild(document.createElement('br'));
 }
 
 Quiz.prototype.instructions = function(txt) {
-    this.div.appendChild(make('span', txt, 'instructions'));
+    this.q.appendChild(make('p', txt, 'instructions'));
 }
 
 Quiz.prototype.p = function(txt) {
-    this.div.appendChild(make('p', txt));
+    this.q.appendChild(make('p', txt));
 }
 
 Quiz.prototype.box = function(txt) {
     var div = mkdiv(this, "div", "box");
     div.innerHTML = txt;
-    this.div.appendChild(newChild);
+    this.q.appendChild(newChild);
 }
 
-Quiz.prototype.fillin = function(id) {
-    return mkinput(id, 'text', 'fillin');
+Quiz.prototype.fillin = function(id, sendBack) {
+    if (sendBack)
+        return mkinput(id, 'text', 'fillin');
+    this.q.appendChild(mkinput(id, 'text', 'fillin'));
 }
 
 Quiz.prototype.numeric = function(id) {
-    return mkinput(id, 'text', 'number');
+    this.q.appendChild(mkinput(id, 'text', 'number'));
 }
 
 Quiz.prototype.numid = function(id, v) {
     var inp = mkinput(id, 'text', 'cell');
     inp.size = 3;
     inp.value = v;
-    return inp;
+    this.q.appendChild(inp);
 }
 
 Quiz.prototype.add = function(parent, spec) {
@@ -280,31 +312,58 @@ Quiz.prototype.add = function(parent, spec) {
 }
 
 Quiz.prototype.mcRadioText = function(id, txt) {
-    this.div.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
-    this.add(this.div, document.createTextNode(txt));
+    this.q.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
+    this.add(this.q, document.createTextNode(txt));
 }
 
 Quiz.prototype.mcRadioImg = function(id, src) {
-    this.div.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
-    var img = document.createElement("image");
-    img.src = src;
-    this.div.appendChild(img);
+    if (src.constructor === Array) {
+        l = [];
+        for (var i = 0; i < src.length; i++) {
+            radio = mkinput(id+"-"+i, 'radio', 'multichoiceradio');
+            radio.name = id;
+            label = document.createElement("label");
+            label.htmlFor = id+"-"+i;
+            label.appendChild(this.img(src[i], true));
+            group = [radio, label];
+            l.push(group);
+        }
+        this.q.appendChild(mktable("", l));
+    } else {
+        div = make("div", "", "radio-container");
+        label = document.createElement("label");
+        label.htmlFor = id;
+        radio = mkinput(id, 'radio', 'multichoiceradio');
+        radio.name = id;
+        div.appendChild(radio);
+        var img = document.createElement("img");
+        img.src = src;
+        label.appendChild(img);
+        div.appendChild(label);
+        this.q.appendChild(div);
+    }
 }
 
 /*
  * Build dropdown list of text
  */
-Quiz.prototype.selectText = function(id, list) {
+Quiz.prototype.selectText = function(id, list, sendBack) {
 	var s = document.createElement("select");
 	s.id = id;
 	s.className = "multichoicedropdown";
+    var opt = document.createElement("option");
+    opt.value = -1;
+    opt.appendChild(document.createTextNode("Select one"));
+    s.appendChild(opt);
 	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("option");
+        opt = document.createElement("option");
 		opt.value = i;
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
 	}
-	return s;
+    if (sendBack)
+        return s;
+	this.q.appendChild(s);
 }
 
 /*
@@ -318,28 +377,30 @@ Quiz.prototype.selectImg = function(id, list) {
 		var opt = document.createElement("option");
 		opt.value = i;
 		var img = document.createElement("img");
-		img.src = list[i];
+		img.src = Quiz.mediaLocations.img + list[i];
 		opt.appendChild(img);
 		s.appendChild(opt);
 	}
-	return s;
+	this.q.appendChild(s);
 }
 
 Quiz.prototype.match = function(id, questions, answers) {
     var t = document.createElement("table");
     for (var i = 0; i < questions.length; ++i) {
-	var r = t.insertRow(i);
-	var q = r.insertCell(0);
-	q.appendChild(document.createTextNode(questions[i]));
-	q = r.insertCell(1);
-	q.appendChild(this.selectText(id + "_" + i, answers));
+    	var r = t.insertRow(i);
+    	var q = r.insertCell(0);
+    	q.appendChild(document.createTextNode(questions[i]));
+    	q = r.insertCell(1);
+    	q.appendChild(this.selectText(id + "_" + i, answers, true));
     }
-    return t;
+    this.q.appendChild(t);
 }
 
 Quiz.prototype.matrix = function(id, m, rows, cols, className,
 				 colHeaders, rowHeaders) {
-    var id = this.numeric(id); // base id
+    this.q.appendChild(make("span", "Matrix goes here", "matrix-placeholder"))
+    // this.span("Matrix goes here");
+/*    var id = this.numeric(id); // base id
     var t = document.createElement("table");
     t.className = className;
     var hasVals = typeof(m) != 'undefined';
@@ -370,7 +431,7 @@ Quiz.prototype.matrix = function(id, m, rows, cols, className,
             td.appendChild(inp);
 	}
     }
-    this.div.appendChild(t);
+    this.q.appendChild(t);*/
 };
 
 // accept is a string: ".java,.txt"
@@ -379,7 +440,7 @@ Quiz.prototype.fileUpload = function(id, accept) {
     up.id = id;
     up.type = "file";	
     up.accept = accept;
-    this.div.appendChild(up);
+    this.q.appendChild(up);
 };
 
 function imgclick(e) {
@@ -388,9 +449,9 @@ function imgclick(e) {
 
 Quiz.prototype.clickableImage = function (id, src, xs, ys) {
     var img = document.createElement("img");
-    img.src = Quiz.mediaLocations.img + cli.file;
+    img.src = Quiz.mediaLocations.img + src;
     img.onClick = function(e) { alert(e); }
-    this.div.appendChild(img);
+    this.q.appendChild(img);
 };
 
 // multiple fill-in-the-blank where [[a1]] is replaced by inputs
@@ -402,9 +463,9 @@ Quiz.prototype.cloze = function (id, txt) {
     for (var i = 0; i < preItems.length; ++i) {
         pre.appendChild(make('span', preItems[i], ''));
         if (i != preItems.length-1)
-        	pre.appendChild(this.fillin(id + "_" + i));
+        	pre.appendChild(this.fillin(id + "_" + i, true));
     }
-    this.div.appendChild(pre);
+    this.q.appendChild(pre);
 };
 
 // enter code to be compiled, run, spindled, mutilated
@@ -414,16 +475,16 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
     ta.rows = rows;
     ta.cols = cols;
     ta.value = txt;
-    this.div.appendChild(ta);
+    this.q.appendChild(ta);
 };
 
 Quiz.prototype.essay = function(id, rows, cols, maxwords) {
     var ta = document.createElement("textarea");
     ta.className = "essay";
-    ta.rows = ess.rows;
-    ta.cols = ess.cols;
+    ta.rows = rows;
+    ta.cols = cols;
     //ta.value = essay.text;
-    this.div.appendChid(ta);
+    this.q.appendChild(ta);
 };
 
 var page;
@@ -434,14 +495,15 @@ var page;
  * load the JSON, evaluate it and call initPage() to update the page
  */
 function build() {
+    // your page: test.html
+    // ajax url: test_ajax.jsp
 	var thisURL = window.location.href;
 	var last = thisURL.split("/");
 	last=last[last.length-1];
 	var baseFilename = last.split('.').slice(0,-1).join('');
-	console.log("base="+baseFilename);
 	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
 
-	var json=new XMLHttpRequest();
+	var json = new XMLHttpRequest();
 	json.onreadystatechange=function() {
 	  if (json.readyState!=4 || json.status!=200)
 		  return;// TODO: Handle error if it doesn't come back
@@ -453,6 +515,11 @@ function build() {
 }
 
 function processAJAX() {
-	appendCSSLink("assets/css/" + page.css + ".css");	// load the user's css skin
-	thisPage();
+    if (exists(typeof(page.css))) {
+    	appendCSSLink("assets/css/" + page.css + ".css");	// load the user's css skin
+    } else {
+        console.log("custom css didn't load. check css link in page.css");
+    }
+	if (exists(typeof(thisPage)))
+        thisPage();
 }

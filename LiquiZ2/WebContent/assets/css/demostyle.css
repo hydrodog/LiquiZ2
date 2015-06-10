@@ -4,10 +4,6 @@
     font-size:18pt;
 }
 
-h1 {
-
-}
-
 .points {
 }
 
@@ -18,6 +14,14 @@ h1 {
     border-style: none;
     padding: 3px;
     margin: 5px;
+}
+
+.match-qc td {
+    padding: 1px 4px;
+}
+
+.mcRadioImg-qc td {
+    padding: 2px;
 }
 
 .qheader {
@@ -69,6 +73,7 @@ h2 {
     width: 95%;
     rows: 10;
     cols: 80;
+    padding: 4px;
 }
 
 .code input {
@@ -102,6 +107,11 @@ h2 {
 .box {
     background-color: #8f8;
     border: 1 solid #000;
+}
+
+.matrix-placeholder {
+    color: #000;
+    background-color: #f00;
 }
 
 .matrix {
@@ -139,6 +149,10 @@ h2 {
 
 .new-question-button {
     display: block;
+}
+
+input {
+    outline: none;
 }
 
 input[disabled] {
