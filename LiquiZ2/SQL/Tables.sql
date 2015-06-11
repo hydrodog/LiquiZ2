@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Policies` (
   `ShowAns` BIT(1) NOT NULL DEFAULT 0,
   `ShowAnsOnLastAtt` BIT(1) NOT NULL DEFAULT 0,
   `Scored` BIT(1) NOT NULL DEFAULT 1,
+  `Grade` INT NOT NULL DEFAULT 0,
   `ShuffleQues` BIT(1) NOT NULL DEFAULT 0,
   `ShuffleAns` BIT(1) NOT NULL DEFAULT 0,
   `AccessCode` VARCHAR(255) NULL,
