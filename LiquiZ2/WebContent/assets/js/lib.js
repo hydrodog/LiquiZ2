@@ -83,11 +83,11 @@ function mktable(className, arr) {
     var t = document.createElement("table");
     t.className = className;
     for (var i = 0; i < arr.length; i++) {
-    var tr = t.insertRow(i);
-    for (var j = 0; j < arr[i].length; ++j) {
-        var c = tr.insertCell(j);
-        c.appendChild(arr[i][j]);
-    }
+        var tr = t.insertRow(i);
+        for (var j = 0; j < arr[i].length; ++j) {
+            var c = tr.insertCell(j);
+            c.appendChild(arr[i][j]);
+        }
     }
     return t;
 }
@@ -107,8 +107,8 @@ function mkinput(id, type, className) {
     return inp;
 }
 
-function mkbutton(val) {
-    var b = mkinput(null, 'button', 'submit');
+function mkbutton(val, id) {
+    var b = mkinput(id, 'button', 'submit');
     b.value = val;
     return b;
 }
@@ -146,7 +146,7 @@ function Quiz(quizinfo) {
     this.div.className = "quiz";
     this.displayHeader(this.div);
     this.editMode = true;
-    this.createSubmit();
+    this.createSubmit(1);
 }
 
 Quiz.prototype.displayHeader = function() {
@@ -159,16 +159,17 @@ Quiz.prototype.displayHeader = function() {
 }
 
 Quiz.prototype.end = function(id) {
-  if (this.editMode) {
-    var newB = mkbutton("New Question");
-    newB.onclick = function() {
-    alert('test');
+    if (this.editMode) {
+        var newB = mkbutton("New Question", "new-question");
+        newB.onclick = function() {
+            console.log(newB.id);
+        };
+    qc = mkdivid(this.div, "qc" + id, "qc");
+        qc.appendChild(newB);
   }
-  qc = mkdivid(this.div, "qc" + id, "qc");
-      qc.appendChild(newB);
-  }
-    this.createSubmit();
-}
+    this.createSubmit(2);
+};
+
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
     this.q = document.getElementById("qc" + id);
@@ -177,14 +178,24 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     var editBox = document.createElement("div");
     editBox.className = "edit";
     if (this.editMode) {
-    	var edit = mkbutton("Edit");
-    	edit.onclick= function() {
-    		innerHTML = "";
-    		alert("test");
-    	};
+    	var edit = mkbutton("Edit", id+"-edit");
+        var del = mkbutton("Delete", id+"-delete");
+        var copy = mkbutton("Copy", id+"-copy");
+        edit.onclick = function() {
+            innerHTML = "";
+            console.log(edit.id);
+        };
+        del.onclick = function() {
+            innerHTML = "";
+            console.log(del.id);
+        };
+        copy.onclick = function() {
+            innerHTML = "";
+            console.log(copy.id);
+        };
     	editBox.appendChild(edit);
-    	editBox.appendChild(mkbutton("Delete"));
-    	editBox.appendChild(mkbutton("Copy"));
+    	editBox.appendChild(del);
+    	editBox.appendChild(copy);
     }
 
     header = document.createElement("div");
@@ -218,17 +229,18 @@ Quiz.prototype.setDataDir = function(path) {
     Quiz.mediaLocations.aud = path + "/aud/";
     Quiz.mediaLocations.vid = path + "/vid/";
 }
-Quiz.prototype.createSubmit = function() {
+Quiz.prototype.createSubmit = function(id) {
     var div = mkdiv(this.div, "submit");
-    div.appendChild(mkbutton("Submit The Quiz"));
+    div.appendChild(mkbutton("Submit The Quiz", "submit-"+id));
     this.div.appendChild(div);
 };
 
 
-Quiz.prototype.img = function(src) {
+Quiz.prototype.img = function(src, returnValue) {
     var im = document.createElement("img");
     im.src = Quiz.mediaLocations.img + src;
-    im.width = 300; //TODO: stop hardcoding this!
+    if (returnValue)
+        return im;
     this.q.appendChild(im);
 };
 
@@ -265,7 +277,7 @@ Quiz.prototype.br = function() {
 }
 
 Quiz.prototype.instructions = function(txt) {
-    this.q.appendChild(make('span', txt, 'instructions'));
+    this.q.appendChild(make('p', txt, 'instructions'));
 }
 
 Quiz.prototype.p = function(txt) {
@@ -305,10 +317,31 @@ Quiz.prototype.mcRadioText = function(id, txt) {
 }
 
 Quiz.prototype.mcRadioImg = function(id, src) {
-    this.q.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
-    var img = document.createElement("image");
-    img.src = src;
-    this.q.appendChild(img);
+    if (src.constructor === Array) {
+        l = [];
+        for (var i = 0; i < src.length; i++) {
+            radio = mkinput(id+"-"+i, 'radio', 'multichoiceradio');
+            radio.name = id;
+            label = document.createElement("label");
+            label.htmlFor = id+"-"+i;
+            label.appendChild(this.img(src[i], true));
+            group = [radio, label];
+            l.push(group);
+        }
+        this.q.appendChild(mktable("", l));
+    } else {
+        div = make("div", "", "radio-container");
+        label = document.createElement("label");
+        label.htmlFor = id;
+        radio = mkinput(id, 'radio', 'multichoiceradio');
+        radio.name = id;
+        div.appendChild(radio);
+        var img = document.createElement("img");
+        img.src = src;
+        label.appendChild(img);
+        div.appendChild(label);
+        this.q.appendChild(div);
+    }
 }
 
 /*
@@ -318,8 +351,12 @@ Quiz.prototype.selectText = function(id, list, sendBack) {
 	var s = document.createElement("select");
 	s.id = id;
 	s.className = "multichoicedropdown";
+    var opt = document.createElement("option");
+    opt.value = -1;
+    opt.appendChild(document.createTextNode("Select one"));
+    s.appendChild(opt);
 	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("option");
+        opt = document.createElement("option");
 		opt.value = i;
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
@@ -350,18 +387,20 @@ Quiz.prototype.selectImg = function(id, list) {
 Quiz.prototype.match = function(id, questions, answers) {
     var t = document.createElement("table");
     for (var i = 0; i < questions.length; ++i) {
-	var r = t.insertRow(i);
-	var q = r.insertCell(0);
-	q.appendChild(document.createTextNode(questions[i]));
-	q = r.insertCell(1);
-	q.appendChild(this.selectText(id + "_" + i, answers, true));
+    	var r = t.insertRow(i);
+    	var q = r.insertCell(0);
+    	q.appendChild(document.createTextNode(questions[i]));
+    	q = r.insertCell(1);
+    	q.appendChild(this.selectText(id + "_" + i, answers, true));
     }
     this.q.appendChild(t);
 }
 
 Quiz.prototype.matrix = function(id, m, rows, cols, className,
 				 colHeaders, rowHeaders) {
-    var id = this.numeric(id); // base id
+    this.q.appendChild(make("span", "Matrix goes here", "matrix-placeholder"))
+    // this.span("Matrix goes here");
+/*    var id = this.numeric(id); // base id
     var t = document.createElement("table");
     t.className = className;
     var hasVals = typeof(m) != 'undefined';
@@ -392,7 +431,7 @@ Quiz.prototype.matrix = function(id, m, rows, cols, className,
             td.appendChild(inp);
 	}
     }
-    this.q.appendChild(t);
+    this.q.appendChild(t);*/
 };
 
 // accept is a string: ".java,.txt"
@@ -464,7 +503,7 @@ function build() {
 	var baseFilename = last.split('.').slice(0,-1).join('');
 	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
 
-	var json=new XMLHttpRequest();
+	var json = new XMLHttpRequest();
 	json.onreadystatechange=function() {
 	  if (json.readyState!=4 || json.status!=200)
 		  return;// TODO: Handle error if it doesn't come back
