@@ -136,9 +136,14 @@ h2 {
 .matrix input {
     /*border-width: 1px;*/
     width: 70px;
+    height: 100%;
     border: none;
     padding: 2px;
     background-color: white;
+}
+
+.matrix img {
+    width: 100px;
 }
 
 .cell {

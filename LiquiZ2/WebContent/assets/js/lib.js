@@ -433,6 +433,7 @@ Quiz.prototype.grid = function(id, list, header) {
             thead.appendChild(td);
         }
     }
+
     for (i = 0; i < list.length; i++) {
         r = t.insertRow(-1);
         for (j = 0; j < list[i].length; j++) {
@@ -448,27 +449,25 @@ Quiz.prototype.grid = function(id, list, header) {
 
 Quiz.prototype.suffixMap = {
     inputCount: 0,
-    jpg: this.img,
-    png: this.img,
-    gif: this.img,
+    jpg: Quiz.prototype.img,
+    png: Quiz.prototype.img,
+    gif: Quiz.prototype.img,
 };
+
+Quiz.prototype.tableInput = function(s, returnValue, id) {
+    input = mkinput(id + "_" + this.inputCount, "text", "grid-input");
+    this.inputCount++;
+    return input;
+};
+Quiz.prototype.suffixMap["%%input%%"] = Quiz.prototype.tableInput;
 
 Quiz.prototype.suffix = function(s, id) {
     s += "";
-    if (s === "%%input%%")
-        return this.tableInput(s, true, id);
-
     var suf = s.split('.').pop();
     if (this.suffixMap[suf])
        return this.suffixMap[suf](s, true, id);
     return this.span(s, true);
-}
-
-Quiz.prototype.tableInput = function(s, returnValue, id) {
-    input = mkinput(id + "_" + this.suffixMap.inputCount, "text", "grid-input");
-    this.suffixMap.inputCount++;
-    return input;
-}
+};
 
 // accept is a string: ".java,.txt"
 Quiz.prototype.fileUpload = function(id, accept) {
@@ -481,18 +480,18 @@ Quiz.prototype.fileUpload = function(id, accept) {
 
 function imgclick(e) {
     alert(e);
-};
+}
 
 Quiz.prototype.clickableImage = function (id, src, xs, ys) {
     var img = document.createElement("img");
     img.src = Quiz.mediaLocations.img + src;
-    img.onClick = function(e) { alert(e); }
+    img.onClick = function(e) { alert(e); };
     this.q.appendChild(img);
 };
 
-// multiple fill-in-the-blank where [[a1]] is replaced by inputs
+// multiple fill-in-the-blank where [[]] is replaced by inputs
 Quiz.prototype.cloze = function (id, txt) {
-    var preItems = txt.split("[[]]") // If you want default items in here, just parse with regex
+    var preItems = txt.split("[[]]");
     var pre = document.createElement("pre");
     pre.className = "code";
 

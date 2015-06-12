@@ -9,7 +9,7 @@ page = new Quiz( {
 // question 1
 page.addQuestion(1, "Mergesort", "grid", 0);
 page.instructions("Show the first pass of Mergesort below");
-page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1, "einstein.jpg"]]);
+page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]);
 page.br();
 page.emptyGrid("1_2", 1, 8);
 
@@ -105,7 +105,7 @@ page.addQuestion(17, "Matrix with images", "matrix");
 page.instructions("Fill in the grid");
 page.grid("17_1", [["headers 1", "header 2", "header 3"],
 				   ["euler.jpg", "hello", 4],
-				   ["later", "einstein.jpg", "%%input%%"]]);
+				   ["later", "einstein.jpg", "%%input%%"]], true);
 
 // question 18
 page.end(18);
