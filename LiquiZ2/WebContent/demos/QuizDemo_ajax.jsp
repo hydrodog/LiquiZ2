@@ -59,7 +59,7 @@ page.addQuestion(8, "Graph Theory", "matrix");
 page.instructions("Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable.");
 page.img("Bellmanford_3.png");
 page.br();
-page.emptyGrid("8_1", 3, 5);
+page.emptyGrid("8_1", 6, 6, [1, 2, 3, 4, 5, 6]);
 
 // question 9
 
