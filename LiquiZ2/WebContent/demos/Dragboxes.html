@@ -1,32 +1,22 @@
 <html>
   <script src="dragboxes.js"></script>
   <style>
-    #draw {
-    width: 600;
-    height: 600;
-    background-color: #ede;
-    font-family: Arial;
-    font-size:18pt;
+    table {
+      border-collapse: collapse;
+      border: 1px solid #000;
+      margin: 5px;
     }
-    .category {
-    position: absolute;
-    left: 400px;
-    top: 50px;
-    width: 300px;
-    height: 100px;
-    border-radius:20;
-    background-color: #f88;
+    td {
+      border: 1px solid #000;
+      padding: 3px;
+    }
+    td img {
+      width: 100px;
     }
   </style>
   <body onload="build()">
+    
     <div id="draw" style="width:100%">
-      <div class="category">
-	test
-      </div>
-      <div style="position: absolute; background-color: blue; left: 150; top: 50">
-	go
-      </div>
-
     </div>
   </body>
 </html>

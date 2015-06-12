@@ -244,11 +244,6 @@ Quiz.prototype.img = function(src, returnValue) {
     this.q.appendChild(im);
 };
 
-//var audioTypeMap = {
-//    mp3: "mp3",
-//    au:  "au"
-//};
-
 Quiz.prototype.aud = function(src) {
     var au = document.createElement("audio");
     au.controls = true;
@@ -268,8 +263,12 @@ Quiz.prototype.vid = function(src) {
     this.q.appendChild(vi);
 }
 
-Quiz.prototype.span	 = function(txt) {
-    this.q.appendChild(make('span', txt, ''));
+
+Quiz.prototype.span	 = function(txt, returnValue) {
+    span = make('span', txt, '');
+    if (returnValue)
+        return span;
+    this.q.appendChild(span);
 }
 
 Quiz.prototype.br = function() {
@@ -396,43 +395,80 @@ Quiz.prototype.match = function(id, questions, answers) {
     this.q.appendChild(t);
 }
 
-Quiz.prototype.matrix = function(id, m, rows, cols, className,
-				 colHeaders, rowHeaders) {
-    this.q.appendChild(make("span", "Matrix goes here", "matrix-placeholder"))
-    // this.span("Matrix goes here");
-/*    var id = this.numeric(id); // base id
-    var t = document.createElement("table");
-    t.className = className;
-    var hasVals = typeof(m) != 'undefined';
-    var hasColHeaders = typeof(colHeaders) != 'undefined';
-    var hasRowHeaders = typeof(rowHeaders) != 'undefined';
-    if (hasColHeaders) {
-	var colheaders = hasRowHeaders ? [''] : [];
-	for (var i = 1; i < m[0].length; i++)
-	    colHeaders.push(i);
-	m.splice(0,0, colHeaders);
-	if(hasColHeaders) {
-	    for (var i = 1; i < m.length; i++) {
-		m[i].splice(0,0, rowHeaders[i]);
-	    }
-	}
+Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
+    var l;
+    var returnHeader = false;
+    i = 0;
+    if (header) {
+        l = new Array(rows+1);
+        l[0] = header;
+        i = 1;
+        returnHeader = true;
+    } else {
+        l = new Array(rows);
     }
-    for (var i = 0; i < rows; i++) {
-	var r = t.insertRow(i);
-	r.className = "mat.rowClassName";
-	for (var j = 0; j < cols; j++) {
-            var td = r.insertCell(j);
-            var v = hasVals ? m[i][j] : '';
-            var inp = this.numid(id + "_" + i + "," + j, v);
-            if (mat.readOnly)
-		inp.readOnly = mat.readOnly;
-            if (mat.disabled)
-		inp.disabled = true;
-            td.appendChild(inp);
-	}
+
+    for (i; i < l.length; i++) {
+        l[i] = new Array(cols);
+        for (j = 0; j < l[i].length; j++) {
+            l[i][j] = "%%input%%";
+        }
     }
-    this.q.appendChild(t);*/
+    this.grid(id, l, returnHeader);
 };
+
+Quiz.prototype.grid = function(id, list, header) {
+    var d = document.createElement("div");
+    var t = document.createElement("table");
+    t.className = "matrix";
+    this.suffixMap.inputCount = 0;
+    if (header) {
+        headList = list.shift();
+        thead = t.createTHead();
+        for (i = 0; i < headList.length; i++) {
+            td = document.createElement("td");
+            td.className = "cell";
+            x = this.suffix(headList[i], id);
+            td.appendChild(x);
+            thead.appendChild(td);
+        }
+    }
+    for (i = 0; i < list.length; i++) {
+        r = t.insertRow(-1);
+        for (j = 0; j < list[i].length; j++) {
+            td = r.insertCell(-1);
+            td.className = "cell";
+            x = this.suffix(list[i][j], id);
+            td.appendChild(x);
+        }
+    }        
+    d.appendChild(t);
+    this.q.appendChild(d);
+};
+
+Quiz.prototype.suffixMap = {
+    inputCount: 0,
+    jpg: this.img,
+    png: this.img,
+    gif: this.img,
+};
+
+Quiz.prototype.suffix = function(s, id) {
+    s += "";
+    if (s === "%%input%%")
+        return this.tableInput(s, true, id);
+
+    var suf = s.split('.').pop();
+    if (this.suffixMap[suf])
+       return this.suffixMap[suf](s, true, id);
+    return this.span(s, true);
+}
+
+Quiz.prototype.tableInput = function(s, returnValue, id) {
+    input = mkinput(id + "_" + this.suffixMap.inputCount, "text", "grid-input");
+    this.suffixMap.inputCount++;
+    return input;
+}
 
 // accept is a string: ".java,.txt"
 Quiz.prototype.fileUpload = function(id, accept) {
