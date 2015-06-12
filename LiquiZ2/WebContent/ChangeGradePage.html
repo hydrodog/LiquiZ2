@@ -3,9 +3,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Insert DB Grading Schema</title>
         <script>
-            /* ---------------------------- */
-            /* XMLHTTPRequest Enable */
-            /* ---------------------------- */
+            // XMLHTTPRequest Enable
             function createObject() {
                 var request_type;
                 var browser = navigator.appName;
@@ -19,23 +17,18 @@
  
             var http = createObject();
  
- 
-            /* -------------------------- */
-            /* INSERT */
-            /* -------------------------- */
-            /* Required: var nocache is a random number to add to request. This value solve an Internet Explorer cache issue */
+            // var nocache is a random number to add to request. This value solve an Internet Explorer cache issue 
             var nocache = 0;
             function insert() {
-                // Optional: Show a waiting message in the layer with ID login_response
                 document.getElementById('insert_response').innerHTML = "Waiting..."
-                // Required: verify that all fileds is not empty. Use encodeURI() to solve some issues about character encoding.
+                // verify that all fileds is not empty. Use encodeURI() to solve some issues about character encoding.
                 var stuid = encodeURI(document.getElementById('stuid').value);
                 var qzid = encodeURI(document.getElementById('qzid').value);
                 var newg = encodeURI(document.getElementById('newg').value);
                 var admin = encodeURI(document.getElementById('admin').value);
                 // Set te random number to add to URL request
                 nocache = Math.random();
-                // Pass the login variables like URL variable
+                
                 http.open('get', 'insertLog.jsp?stuid='+stuid+'&qzid=' +qzid+'&newg=' +newg+'&admin=' +admin+'&nocache = '+nocache);
                 http.onreadystatechange = insertReply;
                 http.send(null);
@@ -43,7 +36,6 @@
             function insertReply() {
                 if(http.readyState == 4){
                     var response = http.responseText;
-                    // else if login is ok show a message: "Site added+ site URL".
                     document.getElementById('insert_response').innerHTML = ''+response;
                 }
             }
