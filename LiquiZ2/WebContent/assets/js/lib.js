@@ -443,14 +443,14 @@ Quiz.prototype.fileUpload = function(id, accept) {
     this.q.appendChild(up);
 };
 
-function imgclick(e) {
-    alert(e);
+function imgClick(e) {
+    console.log(e.clientX + "," + e.clientY);	
 };
 
 Quiz.prototype.clickableImage = function (id, src, xs, ys) {
     var img = document.createElement("img");
     img.src = Quiz.mediaLocations.img + src;
-    img.onClick = function(e) { alert(e); }
+    img.onclick = imgClick;
     this.q.appendChild(img);
 };
 

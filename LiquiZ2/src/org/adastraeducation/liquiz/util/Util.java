@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.adastraeducation.liquiz.*;
 
 public class Util {
-	public static void writeListAsJS(ArrayList<Displayable> list, StringBuilder b) {
+	public static void writeListAsJS(ArrayList<Displayable> list, DisplayContext b) {
 		b.append("[");
 		if (list.size() > 0) {
 			list.get(0).writeJS(b);
@@ -19,7 +19,7 @@ public class Util {
 		b.append("]");
 	}
 	
-	public static void writeListAsJS(String name, ArrayList<Displayable> list, StringBuilder b) {
+	public static void writeListAsJS(String name, ArrayList<Displayable> list, DisplayContext b) {
 		b.append(name).append('(');
 		writeListAsJS(list, b);
 		b.append(')');
@@ -39,21 +39,39 @@ public class Util {
 	}
 	
 	// TODO: make this escape strings in single quotes
-	public static String escapeJS(String s) {
-		return s;
+	public static void escape(String s, DisplayContext b) {
+		for (int i = 0; i < s.length(); i++) {
+			int c = s.charAt(i);
+			if (c >= mlEscapeMap.length) {
+				b.append(c);
+			} else {
+				String esc = mlEscapeMap[s.charAt(i)];
+				if (esc == null)
+					b.append(c);
+				else
+					b.append(esc);
+			}
+		}
+
 	}
 
+	private static String[] mlEscapeMap;
+	private static String[] quotedEscapeMap;
+	static {
+		mlEscapeMap = new String[256];
+		quotedEscapeMap = new String[256];
+		mlEscapeMap['\\'] = "\\\\";
+		mlEscapeMap['&'] = "&amp;";
+		mlEscapeMap['<'] = "&lt;";
+		mlEscapeMap['>'] = "&gt;";
+		System.arraycopy(mlEscapeMap, 0, quotedEscapeMap, 0, mlEscapeMap.length);
+		quotedEscapeMap['\''] = "\\'";  // this is the preferred quote to use in our javascript since we use " in java
+		quotedEscapeMap['"'] = "\\\""; // escape quoted strings, we prefer single quotes ' but just in case...
+	}
 	public static void escapeQuotedJS(String s, DisplayContext b) {
 		b.append('\'');
-		for (int i = 0; i < s.length(); i++)
-			switch(s.charAt(i)) {
-			case '+':
-				
-				default:
-					b.append(s.charAt(i));
-					break;
-			}
-			b.append('\'');
+		escape(s, b);
+		b.append('\'');
 	}
 
 	// TODO: make this escape strings in single quotes
