@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .quiz {
     font-family: Arial, san-serif;
     background-color: #e0e0ff;
@@ -109,34 +113,42 @@ h2 {
     border: 1 solid #000;
 }
 
-.matrix-placeholder {
-    color: #000;
-    background-color: #f00;
-}
-
 .matrix {
     font: 10pt Courier, fixed;
     background-color: #40c0f0;
-}
-
-.cell .gridcell {
-    background-color: #f0f;
-    width: 40px;
-}
-
-.grid {
-    background-color: red;
     display: inline-block;
+    border: 1px solid black;
+    border-collapse: collapse;
 }
 
-.grid input {
-    border-width: 1px;
+.matrix td {
+    border: 1px solid black;
+    width: 70px;
+    margin: 1px;
+    /*padding: 2px;*/
+    background-color: #aaa;
+}
+
+.matrix td span {
     padding: 2px;
-    width: 50px;
 }
 
-.grid.answer {
-    background-color: transparent;
+.matrix input {
+    /*border-width: 1px;*/
+    width: 70px;
+    height: 100%;
+    border: none;
+    padding: 2px;
+    background-color: white;
+}
+
+.matrix img {
+    width: 100px;
+}
+
+.cell {
+    background-color: white;
+    width: 40px;
 }
 
 .submit {
