@@ -1,3 +1,82 @@
+Util = {
+    /*
+     * Returns an html tag filled with the keys and values you pass in
+     * Second arg is an object filled with key, value pairs
+     * Returns undefined if no valid tag was passed.
+     */
+    make: function (tag, obj) {
+        // without a valid tag we can't continue
+        if (typeof tag === "undefined" || !tag) {
+            console.log("Util.make failed with \ntag: " + tag +
+                                              "\ninnerHTML: " + innerHTML +
+                                              "\nclassName: " + className +
+                                              "\nid: " + id);
+            return;
+        }
+        element = document.createElement(tag);
+        for (var i in obj) {
+            if (typeof obj[i] !== "undefined")
+                element[i] = obj[i];
+        }
+        return element;
+    },
+
+    /*
+     * Most of the following functions only take the innerHTML, the className, and 
+     * the id of the tag you want, in that order. Any cases that break this rule
+     * will be noted explicitly.
+     */
+    span: function (innerHTML, className, id) {
+        return this.make("span", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
+
+    div: function (innerHTML, className, id) {
+        return this.make("div", innerHTML, className, id);
+    },
+
+    p: function (innerHTML, className, id) {
+        return this.make("p", innerHTML, className, id);
+    },
+
+    /*
+     * This function takes the src as its first argument instead of innerHTML
+     */
+    img: function (src, className, id) {
+        result = this.make("img", null, className, id);
+        result.src = src;
+        return result;
+    },
+
+    textarea: function (innerHTML, className, id, rows, cols, placeholder) {
+        result = this.make("textarea", innerHTML, className, id);
+        result.rows = rows;
+        result.cols = cols;
+        result.placeholder = placeholder;
+        return result;
+    },
+
+};
+
+function build() {
+    element = Util.span("Test", "spanny");
+
+    console.log(element);
+    document.getElementById("quiz").appendChild(element);    
+}
+
+function make(tag, inner, className) {
+    var t = document.createElement(tag);
+    if (className)
+        t.className = className;
+    // if (inner)
+    t.innerHTML = inner;
+    return t;
+}
+
 /*
  * Add a css file to the header section. This is useful for dynamically loading
  * the css file depending on the user's preferences.
@@ -46,6 +125,14 @@ function insertRow(t) {
   r.appendChild(td);
 }
 
+function dump(obj) {
+    var s = "";
+    for (var k in obj) {
+    s += k + "-->" + obj[k] + '\n';
+    }
+    console.log(s);
+}
+
 function select(list) {
   var s = document.createElement("select");
   for (var i = 0; i < list.length; i++) {
@@ -55,15 +142,6 @@ function select(list) {
     s.appendChild(opt);
   }
   return s;
-}
-
-
-function dump(obj) {
-    var s = "";
-    for (var k in obj) {
-    s += k + "-->" + obj[k] + '\n';
-    }
-    console.log(s);
 }
 
 function mkdiv(parent, className) {
@@ -111,15 +189,6 @@ function mkbutton(val, id) {
     var b = mkinput(id, 'button', 'submit');
     b.value = val;
     return b;
-}
-
-function make(tag, inner, className) {
-    var t = document.createElement(tag);
-    if (className)
-        t.className = className;
-    // if (inner)
-    t.innerHTML = inner;
-    return t;
 }
 
 var clozeTarget = /[[]]/;
@@ -524,30 +593,30 @@ Quiz.prototype.essay = function(id, rows, cols, maxwords) {
 
 var page;
 
-/*
- * Run a serverside script (the parameter)
- * which prints a JSON string.
- * load the JSON, evaluate it and call initPage() to update the page
- */
-function build() {
-    // your page: test.html
-    // ajax url: test_ajax.jsp
-	var thisURL = window.location.href;
-	var last = thisURL.split("/");
-	last=last[last.length-1];
-	var baseFilename = last.split('.').slice(0,-1).join('');
-	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
+// /*
+//  * Run a serverside script (the parameter)
+//  * which prints a JSON string.
+//  * load the JSON, evaluate it and call initPage() to update the page
+//  */
+// function build() {
+//     // your page: test.html
+//     // ajax url: test_ajax.jsp
+// 	var thisURL = window.location.href;
+// 	var last = thisURL.split("/");
+// 	last=last[last.length-1];
+// 	var baseFilename = last.split('.').slice(0,-1).join('');
+// 	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
 
-	var json = new XMLHttpRequest();
-	json.onreadystatechange=function() {
-	  if (json.readyState!=4 || json.status!=200)
-		  return;// TODO: Handle error if it doesn't come back
-	  eval("page="+json.responseText);
-	  processAJAX();
-	}
-	json.open("GET",ajax,true);
-	json.send();
-}
+// 	var json = new XMLHttpRequest();
+// 	json.onreadystatechange=function() {
+// 	  if (json.readyState!=4 || json.status!=200)
+// 		  return;// TODO: Handle error if it doesn't come back
+// 	  eval("page="+json.responseText);
+// 	  processAJAX();
+// 	}
+// 	json.open("GET",ajax,true);
+// 	json.send();
+// }
 
 function processAJAX() {
     if (exists(typeof(page.css))) {
