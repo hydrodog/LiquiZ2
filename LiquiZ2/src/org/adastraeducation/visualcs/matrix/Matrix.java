@@ -135,10 +135,6 @@ public class Matrix {
 			s.close();
 		} catch (FileNotFoundException e) {	
 			e.printStackTrace();
-		}
-		
+		}	
 	}
-	
-
 }
-
