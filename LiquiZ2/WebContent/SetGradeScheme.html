@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Set grade scheme</title>
+        <script>
+            // XMLHTTPRequest Enable
+            function createObject() {
+                var request_type;
+                var browser = navigator.appName;
+                if(browser == "Microsoft Internet Explorer"){
+                    request_type = new ActiveXObject("Microsoft.XMLHTTP");
+                }else{
+                    request_type = new XMLHttpRequest();
+                }
+                return request_type;
+            }
+ 
+            var http = createObject();
+ 
+            //var nocache is a random number to add to request. This value solve an Internet Explorer cache issue
+            var nocache = 0;
+            function insert() {
+                document.getElementById('insert_response').innerHTML = "Just a second..."
+                // verify that all fileds is not empty. Use encodeURI() to solve some issues about character encoding.
+                var course = encodeURI(document.getElementById('course').value);
+                var term = encodeURI(document.getElementById('term').value);
+                
+                var aplus = encodeURI(document.getElementById('aplus').value);
+                var a = encodeURI(document.getElementById('a').value);
+                var aminus = encodeURI(document.getElementById('aminus').value);
+                
+                var bplus = encodeURI(document.getElementById('bplus').value);
+                var b = encodeURI(document.getElementById('b').value);
+                var bminus = encodeURI(document.getElementById('bminus').value);
+                
+                var cplus = encodeURI(document.getElementById('cplus').value);
+                var c = encodeURI(document.getElementById('c').value);
+                var cminus = encodeURI(document.getElementById('cminus').value);
+                
+                var dplus = encodeURI(document.getElementById('dplus').value);
+                var d = encodeURI(document.getElementById('d').value);
+                var dminus = encodeURI(document.getElementById('dminus').value);
+                
+                var f = encodeURI(document.getElementById('f').value);
+                // Set te random number to add to URL request
+                nocache = Math.random();
+                
+                http.open('get', 'insertGrade.jsp?course='+course+'&term=' +term+'&g1=' +aplus+'&g2=' +a+'&g3=' +aminus+'&g4=' +bplus+'&g5=' +b+'&g6=' +bminus+'&g7=' +cplus+'&g8=' +c+'&g9=' +cminus+'&g10=' +dplus+'&g11=' +d+'&g12=' +dminus+'&g13=' +f+'&nocache = '+nocache);
+                http.onreadystatechange = insertReply;
+                http.send(null);
+            }
+            function insertReply() {
+                if(http.readyState == 4){
+                    var response = http.responseText;
+                    document.getElementById('insert_response').innerHTML = ''+response;
+                }
+            }
+            
+            function fetch() {
+                document.getElementById('insert_response').innerHTML = "Just a second..."
+                var course = encodeURI(document.getElementById('course').value);
+                var term = encodeURI(document.getElementById('term').value);
+                nocache = Math.random();
+                
+                http.open('get', 'fetchGrade.jsp?course='+course+'&term='+term+'&nocache = '+nocache);
+                http.onreadystatechange = fetchReply;
+                http.send(null);
+            }
+            var text = "";
+        	
+            function fetchReply() {
+                var grade = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];
+            	var id_set = ["aplus", 'a', 'aminus', "bplus", 'b', 'bminus', "cplus", 'c', 'cminus', "dplus", 'd', 'dminus', 'f'];
+            	if(http.readyState == 4){
+                    var response = http.responseText.split('\n');
+                    console.log(response);
+                    for (var k in id_set)
+                    	document.getElementById(id_set[k]).value = '';	//set to empty first
+                    var flag = true;	//check if the term and course exist
+                    for (var k in response) {
+                    	if (response[k].match(/.*&.*/g)) {
+                    		flag = false;
+                    		var s = response[k].split('&')[0];
+                    		var g = response[k].split('&')[1].slice(0, -1);//don't know why it comes to be one digit longer, so just slice it
+                    		var position = grade.indexOf(g);
+                    		document.getElementById(id_set[position]).value = s;
+                    	}
+                    }
+                    if (flag) 
+                    	document.getElementById('insert_response').innerHTML = 'this course/term does not exist';
+                    else 
+                    	document.getElementById('insert_response').innerHTML = '';
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Set Grade Scheme Demo</h1>
+ 		<p> To use copy button, just type the course number and term, then it will fetch the data into the box</p>
+ 		
+ 
+            <table style="background-color: #ECE5B6;" width="50%" >
+ 
+                <tr>
+                    <th width="50%">Course</th>
+                    <td width="50%">
+                        <input type="number" name="course" id="course">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">Term</th>
+                    <td width="50%">
+                        <input type="text" name="term" id="term">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">A+</th>
+                    <td width="50%">
+                        <input type="number" name="aplus" id="aplus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">A</th>
+                    <td width="50%">
+                        <input type="number" name="a" id="a">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">A-</th>
+                    <td width="50%">
+                        <input type="number" name="aminus" id="aminus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">B+</th>
+                    <td width="50%">
+                        <input type="number" name="bplus" id="bplus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">B</th>
+                    <td width="50%">
+                        <input type="number" name="b" id="b">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">B-</th>
+                    <td width="50%">
+                        <input type="number" name="bminus" id="bminus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">C+</th>
+                    <td width="50%">
+                        <input type="number" name="cplus" id="cplus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">C</th>
+                    <td width="50%">
+                        <input type="number" name="c" id="c">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">C-</th>
+                    <td width="50%">
+                        <input type="number" name="cminus" id="cminus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">D+</th>
+                    <td width="50%">
+                        <input type="number" name="dplus" id="dplus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">D</th>
+                    <td width="50%">
+                        <input type="number" name="d" id="d">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">D-</th>
+                    <td width="50%">
+                        <input type="number" name="dminus" id="dminus">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th width="50%">F</th>
+                    <td width="50%">
+                        <input type="number" name="f" id="f">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th></th>
+                    <td width="50%">
+                    	<input onclick="insert()" type="submit" value="submit">
+                    	<input onclick="fetch()" type="submit" value="copy from this semester">
+                    </td>
+                </tr>
+            </table>
+        <br /><br /><br /><br />
+ 
+        <!-- Show Message for AJAX response -->
+        <div id="insert_response"></div>
+ 
+    </body>
+</html>

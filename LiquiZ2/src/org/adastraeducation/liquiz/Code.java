@@ -62,7 +62,7 @@ public class Code extends Question {
 
 	public void writeJS(DisplayContext dc) {
 		writeJS("code", dc);
-		dc.append(Util.escapeJS(defaultText)).append("')");
+		dc.append(Util.escape(defaultText)).append("')");
 	}
 	public void writeXML(StringBuilder b) {
 		b.append("<code>").append(Util.escapeXML(defaultText))

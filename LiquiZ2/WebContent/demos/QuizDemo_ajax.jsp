@@ -5,21 +5,22 @@ page = new Quiz( {
 	remainingTries: 1,
 	dataDir: "assets/"
 } );
+
 // question 1
-page.addQuestion(1, "Mergesort", "matrix", 0);
+page.addQuestion(1, "Mergesort", "grid", 0);
 page.instructions("Show the first pass of Mergesort below");
-page.matrix([[9, 8, 7, 6, 5, 4, 3, 1]]);
+page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]);
 page.br();
-page.matrix(1, 1, 8);
+page.emptyGrid("1_2", 1, 8);
 
 // question 2
 page.addQuestion(2, "Matrix Multiplication", 'matrix', 2); // 2 point question
 page.instructions("Show the result of matrix A * B");
-page.matrix([[1, 0, 2],[1, 1, -2],[2, 1, 0]]);
+page.grid("2_1", [[1, 0, 2],[1, 1, -2],[2, 1, 0]]);
 page.span("*");
-page.matrix([[1, 1, -1],[-2, 1, 0],[1, 1, 3]]);
+page.grid("2_2", [[1, 1, -1],[-2, 1, 0],[1, 1, 3]]);
 page.span("=");
-page.matrix(2, 3, 3);
+page.emptyGrid("2_3", 3, 3);
 
 // question 3
 page.addQuestion(3, 'Java', 'code');
@@ -58,7 +59,7 @@ page.addQuestion(8, "Graph Theory", "matrix");
 page.instructions("Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable.");
 page.img("Bellmanford_3.png");
 page.br();
-page.matrix(8, 3, 5);
+page.emptyGrid("8_1", 6, 6, [1, 2, 3, 4, 5, 6]);
 
 // question 9
 
@@ -100,4 +101,11 @@ page.instructions("Click on Texas");
 page.clickableImage(16,"usmap.png");
 
 // question 17
-page.end(17);
+page.addQuestion(17, "Matrix with images", "matrix");
+page.instructions("Fill in the grid");
+page.grid("17_1", [["headers 1", "header 2", "header 3"],
+				   ["euler.jpg", "hello", 4],
+				   ["later", "einstein.jpg", "%%input%%"]], true);
+
+// question 18
+page.end(18);

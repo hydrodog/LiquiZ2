@@ -45,5 +45,20 @@
 	<classpathentry kind="lib" path="C:/bin/tomcat8/lib/tomcat-util-scan.jar"/>
 	<classpathentry kind="lib" path="C:/bin/tomcat8/lib/tomcat-websocket.jar"/>
 	<classpathentry kind="lib" path="C:/bin/tomcat8/lib/websocket-api.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/core.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="/Users/funkyxym/Documents/java_ee_642project/VisualCS_me/processing_Library/jogl-all.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

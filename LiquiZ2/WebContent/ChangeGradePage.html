@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Insert DB Grading Schema</title>
+        <script>
+            // XMLHTTPRequest Enable
+            function createObject() {
+                var request_type;
+                var browser = navigator.appName;
+                if(browser == "Microsoft Internet Explorer"){
+                    request_type = new ActiveXObject("Microsoft.XMLHTTP");
+                }else{
+                    request_type = new XMLHttpRequest();
+                }
+                return request_type;
+            }
+ 
+            var http = createObject();
+ 
+            // var nocache is a random number to add to request. This value solve an Internet Explorer cache issue 
+            var nocache = 0;
+            function insert() {
+                document.getElementById('insert_response').innerHTML = "Waiting..."
+                // verify that all fileds is not empty. Use encodeURI() to solve some issues about character encoding.
+                var stuid = encodeURI(document.getElementById('stuid').value);
+                var qzid = encodeURI(document.getElementById('qzid').value);
+                var newg = encodeURI(document.getElementById('newg').value);
+                var admin = encodeURI(document.getElementById('admin').value);
+                // Set te random number to add to URL request
+                nocache = Math.random();
+                
+                http.open('get', 'insertLog.jsp?stuid='+stuid+'&qzid=' +qzid+'&newg=' +newg+'&admin=' +admin+'&nocache = '+nocache);
+                http.onreadystatechange = insertReply;
+                http.send(null);
+            }
+            function insertReply() {
+                if(http.readyState == 4){
+                    var response = http.responseText;
+                    document.getElementById('insert_response').innerHTML = ''+response;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Grade Changing Demo</h1>
+ 
+ 
+        <form action="javascript:insert()" method="post">
+            <table style="background-color: #ECE5B6;" width="50%" >
+ 
+                <tr>
+                    <th width="50%">student id</th>
+                    <td width="50%">
+                        <input type="number" name="stuid" id="stuid">
+                    </td>
+                </tr>
+                <tr>
+                    <th width="50%">quiz id</th>
+                    <td width="50%">
+                        <input type="number" name="qzid" id="qzid">
+                    </td>
+                </tr>
+                <tr>
+                    <th width="50%">new grade</th>
+                    <td width="50%">
+                        <input type="number" name="newg" id="newg">
+                    </td>
+                </tr>
+                <tr>
+                    <th width="50%">admin</th>
+                    <td width="50%">
+                        <input type="text" name="admin" id="admin">
+                    </td>
+                </tr>
+ 
+                <tr>
+                    <th></th>
+                    <td width="50%"><input type="submit" value="submit"></td>
+                </tr>
+            </table>
+        </form>
+        <br /><br /><br /><br />
+ 
+        <!-- Show Message for AJAX response -->
+        <div id="insert_response"></div>
+ 
+    </body>
+</html>
