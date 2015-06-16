@@ -1,4 +1,4 @@
-package org.adastraeducation.visualcs.graphs;
+package org.adastraeducation.visualcs.graph;
 
 //1  how to repaint after finish one animation?  store that image and then give out certain solution.  
 //2  how to output solution in txt file the, name

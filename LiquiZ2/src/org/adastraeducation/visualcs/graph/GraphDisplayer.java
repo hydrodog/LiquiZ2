@@ -1,4 +1,4 @@
-package org.adastraeducation.visualcs.graphs;
+package org.adastraeducation.visualcs.graph;
 
 
 public abstract class GraphDisplayer implements GraphObserver {

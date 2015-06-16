@@ -479,7 +479,8 @@ Quiz.prototype.fileUpload = function(id, accept) {
 };
 
 function imgClick(e) {
-    console.log(e.clientX + "," + e.clientY);	
+    console.log(e.clientX + "," + e.clientY);
+    
 };
 
 Quiz.prototype.clickableImage = function (id, src, xs, ys) {

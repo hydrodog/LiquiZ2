@@ -1,4 +1,4 @@
-package org.adastraeducation.visualcs.graphs;
+package org.adastraeducation.visualcs.graph;
 import java.util.*;
 
 import org.adastraeducation.visualcs.util.Generate_random_number;
