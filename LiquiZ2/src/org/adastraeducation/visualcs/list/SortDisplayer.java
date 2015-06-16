@@ -9,7 +9,7 @@ public abstract class SortDisplayer extends ArrayDisplayer {
 	
 	public void compare(int i, int j) {
 		setObserver(0, i);
-		setObserver(1, i);
+		setObserver(1, j);
 	}
 	public void rotate(int i, int j, int dir) {}
 	public void swap(int i, int j) {
