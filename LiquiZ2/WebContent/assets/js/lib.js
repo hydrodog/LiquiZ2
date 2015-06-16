@@ -4,7 +4,7 @@ Util = {
      * Second arg is an object filled with key, value pairs
      * Returns undefined if no valid tag was passed.
      */
-    make: function (tag, obj) {
+    make: function(tag, obj) {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.log("Util.make failed with \ntag: " + tag +
@@ -13,9 +13,9 @@ Util = {
                                               "\nid: " + id);
             return;
         }
-        element = document.createElement(tag);
+        var element = document.createElement(tag);
         for (var i in obj) {
-            if (typeof obj[i] !== "undefined")
+            if (typeof obj[i] !== "undefined" && obj[i] !== null)
                 element[i] = obj[i];
         }
         return element;
@@ -26,46 +26,172 @@ Util = {
      * the id of the tag you want, in that order. Any cases that break this rule
      * will be noted explicitly.
      */
-    span: function (innerHTML, className, id) {
-        return this.make("span", {
+    span: function(innerHTML, className, id) {
+        return Util.make("span", {
             innerHTML: innerHTML,
             className: className,
             id: id,
         });
     },
 
-    div: function (innerHTML, className, id) {
-        return this.make("div", innerHTML, className, id);
+    div: function(innerHTML, className, id) {
+        return Util.make("div", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
     },
 
-    p: function (innerHTML, className, id) {
-        return this.make("p", innerHTML, className, id);
+    p: function(innerHTML, className, id) {
+        return Util.make("p", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
+
+    pre: function(innerHTML, className, id) {
+        return Util.make("pre", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
+
+    /*
+     * This function takes rows and cols as additional arguments
+     */
+    textarea: function(innerHTML, className, id, rows, cols) {
+        return Util.make("textarea", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+            rows: rows,
+            cols: cols,
+        });
     },
 
     /*
      * This function takes the src as its first argument instead of innerHTML
      */
-    img: function (src, className, id) {
-        result = this.make("img", null, className, id);
-        result.src = src;
-        return result;
+    img: function(src, className, id) {
+        return Util.make("span", {
+            src: src,
+            className: className,
+            id: id,
+        });
     },
 
-    textarea: function (innerHTML, className, id, rows, cols, placeholder) {
-        result = this.make("textarea", innerHTML, className, id);
-        result.rows = rows;
-        result.cols = cols;
-        result.placeholder = placeholder;
+    /*
+     * Does not take any arguments
+     */
+    br: function() {
+        return Util.make("br");
+    },
+
+    tr: function(list) {
+        var tr = Util.make("tr");
+        for (var i = 0; i < list.length; i++) {
+            td = Util.make("td", {
+                innerHTML: list[i],
+            });
+            tr.appendChild(td);
+        }
+        return tr;
+    },
+
+    /*
+     * Takes in a class for the table, a list of elements to be inserted into 
+     * the table, an optional boolean if there's a header in the table, and an
+     * optional function that will accept a list and return a tr element
+     * 
+     * trFunction should be used to modify escape characters that you pass in through
+     * the list. It lets you insert any arbitrary formatting to any tr element based
+     * on whatever escape mechanism you choose.
+     */
+    table: function(tableClass, list, header, trFunction) {
+        header = (typeof header !== "undefined") ? header : false;
+        trFunction = (typeof trFunction !== "undefined") ? trFunction : this.tr;
+        var result = Util.make("table", {
+            className: tableClass,
+        });
+
+        if (header) {
+            var headList = list.shift();
+            var thead = result.createTHead();
+            thead.appendChild(trFunction(headList));
+        }
+
+        tbody = Util.make("tbody");
+        result.appendChild(tbody);
+        for (var i = 0; i < list.length; i++) {
+            var tr = trFunction(list[i]);
+            tbody.appendChild(tr);
+        }
+
         return result;
     },
 
 };
 
-function build() {
-    element = Util.span("Test", "spanny");
+tdCount = 0;
+function modTd (list) {
+    var tr = Util.make("tr", {
+        className: "custom-tr",
+    });
+    for (var i = 0; i < list.length; i++) {
+        var td = Util.make("td", {
+            className: "modded",
+            id: tdCount++,
+            innerHTML: list[i],
+        });
+        tr.appendChild(td);
+    }
+    return tr;
+}
 
+/*
+ * Proof of concept. Not production code!
+ * 
+ * Function that integrates with the new Util.table function
+ * to generate an empty table filled with inputs.
+ */
+function emptyGrid(list) {
+    var obj = list[0];
+    var result = document.createDocumentFragment();
+    for (var i = 0; i < obj.rows; i++) {
+        tr = Util.make("tr");
+        for (var j = 0; j < obj.cols; j++) {
+            input = Util.make("input", {
+                type: "text",
+            });
+            td = Util.make("td", {
+                className: "td-input",
+            });
+            td.appendChild(input);
+            tr.appendChild(td);
+        }
+        result.appendChild(tr);
+    }
+    return result;
+}
+
+function build() {
+    var element = Util.table("table-empty", [
+        [1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10]
+    ], true, modTd);
     console.log(element);
-    document.getElementById("quiz").appendChild(element);    
+    document.getElementById("quiz").appendChild(element);
+
+    element = Util.table("table-input", [
+        [{
+            cols: 3,
+            rows: 3,
+        }]
+    ], false, emptyGrid);
+    console.log(element);
+    document.getElementById("quiz").appendChild(element);
 }
 
 function make(tag, inner, className) {
@@ -551,7 +677,7 @@ function imgClick(e) {
     console.log(e.clientX + "," + e.clientY);	
 };
 
-Quiz.prototype.clickableImage = function (id, src, xs, ys) {
+Quiz.prototype.clickableImage = function(id, src, xs, ys) {
     var img = document.createElement("img");
     img.src = Quiz.mediaLocations.img + src;
     img.onclick = imgClick;
@@ -559,7 +685,7 @@ Quiz.prototype.clickableImage = function (id, src, xs, ys) {
 };
 
 // multiple fill-in-the-blank where [[]] is replaced by inputs
-Quiz.prototype.cloze = function (id, txt) {
+Quiz.prototype.cloze = function(id, txt) {
     var preItems = txt.split("[[]]");
     var pre = document.createElement("pre");
     pre.className = "code";
@@ -622,7 +748,7 @@ function processAJAX() {
     if (exists(typeof(page.css))) {
     	appendCSSLink("assets/css/" + page.css + ".css");	// load the user's css skin
     } else {
-        console.log("custom css didn't load. check css link in page.css");
+        console.error("custom css didn't load. check css link in page.css");
     }
 	if (exists(typeof(thisPage)))
         thisPage();
