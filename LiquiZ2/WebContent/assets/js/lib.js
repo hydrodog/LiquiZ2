@@ -89,6 +89,10 @@ Util = {
         return Util.make("br");
     },
 
+    /*
+     * Generic <tr> generator. For the use of Util.table(). You probably shouldn't
+     * use this.
+     */
     tr: function(list) {
         var tr = Util.make("tr");
         for (var i = 0; i < list.length; i++) {
@@ -111,7 +115,7 @@ Util = {
      */
     table: function(tableClass, list, header, trFunction) {
         header = (typeof header !== "undefined") ? header : false;
-        trFunction = (typeof trFunction !== "undefined") ? trFunction : this.tr;
+        trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
         var result = Util.make("table", {
             className: tableClass,
         });
@@ -134,6 +138,9 @@ Util = {
 
 };
 
+/*
+ * Proof of concept. Not testing code!
+ */
 tdCount = 0;
 function modTd (list) {
     var tr = Util.make("tr", {
@@ -162,7 +169,7 @@ function emptyGrid(list) {
     for (var i = 0; i < obj.rows; i++) {
         tr = Util.make("tr");
         for (var j = 0; j < obj.cols; j++) {
-            input = Util.make("input", {
+            var input = Util.make("input", {
                 type: "text",
             });
             td = Util.make("td", {
@@ -194,14 +201,14 @@ function build() {
     document.getElementById("quiz").appendChild(element);
 }
 
-function make(tag, inner, className) {
-    var t = document.createElement(tag);
-    if (className)
-        t.className = className;
-    // if (inner)
-    t.innerHTML = inner;
-    return t;
-}
+// function make(tag, inner, className) {
+//     var t = document.createElement(tag);
+//     if (className)
+//         t.className = className;
+//     // if (inner)
+//     t.innerHTML = inner;
+//     return t;
+// }
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading
