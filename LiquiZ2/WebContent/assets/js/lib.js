@@ -89,8 +89,32 @@ Util = {
         return Util.make("br");
     },
 
-    video: function(argument) {
-        
+    /*
+     * Takes a src, class, id and a bool for controls.
+     * controls defaults to true.
+     */
+    video: function(src, controls, className, id) {
+        controls = (typeof controls !== "undefined") ? controls : true;
+        return Util.make("video", {
+            src: src,
+            controls: controls,
+            className: className,
+            id: id,
+        });
+    },
+
+    /*
+     * Takes a src, class, id and a bool for controls.
+     * controls defaults to true.
+     */
+    audio: function(src, controls, className, id) {
+        controls = (typeof controls !== "undefined") ? controls : true;
+        return Util.make("audio", {
+            src: src,
+            controls: controls,
+            className: className,
+            id: id,
+        });
     },
 
     /*
@@ -188,12 +212,13 @@ function emptyGrid(list) {
 }
 
 function build() {
+    var quiz = document.getElementById("quiz");
     var element = Util.table("table-empty", [
         [1, 2, 3, 4, 5],
         [6, 7, 8, 9, 10]
     ], true, modTd);
     console.log(element);
-    document.getElementById("quiz").appendChild(element);
+    quiz.appendChild(element);
 
     element = Util.table("table-input", [
         [{
@@ -202,7 +227,15 @@ function build() {
         }]
     ], false, emptyGrid);
     console.log(element);
-    document.getElementById("quiz").appendChild(element);
+    quiz.appendChild(element);
+
+    var video = Util.video("assets/vid/Tacoma Narrows Bridge Collapse.mp4");
+    console.log(video);
+    quiz.appendChild(video);
+
+    var audio = Util.audio("assets/aud/clip1.mp3", true, "pianos", "the-only-one");
+    console.log(audio);
+    quiz.appendChild(audio);
 }
 
 // function make(tag, inner, className) {
