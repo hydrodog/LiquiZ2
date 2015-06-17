@@ -4,7 +4,7 @@ Util = {
      * Second arg is an object filled with key, value pairs
      * Returns undefined if no valid tag was passed.
      */
-    make: function(tag, obj) {
+    make: function(tag, obj, children) {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.log("Util.make failed with \ntag: " + tag +
@@ -17,6 +17,10 @@ Util = {
         for (var i in obj) {
             if (typeof obj[i] !== "undefined" && obj[i] !== null)
                 element[i] = obj[i];
+        }
+
+        if (children) {
+            element.appendChild(children);
         }
         return element;
     },
@@ -202,8 +206,7 @@ function emptyGrid(list) {
             });
             var td = Util.make("td", {
                 className: "td-input",
-            });
-            td.appendChild(input);
+            }, input);
             tr.appendChild(td);
         }
         result.appendChild(tr);
