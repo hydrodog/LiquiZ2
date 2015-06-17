@@ -125,13 +125,21 @@ Util = {
      * Generic <tr> generator. For the use of Util.table(). You probably shouldn't
      * use this.
      */
-    tr: function(list) {
+    tr: function(list, th) {
         var tr = Util.make("tr");
         for (var i = 0; i < list.length; i++) {
-            var td = Util.make("td", {
-                innerHTML: list[i],
-            });
-            tr.appendChild(td);
+            var tElement;
+            if (th) {
+                tElement = Util.make("th", {
+                    innerHTML: list[i],
+                    scope: "",
+                });
+            } else {
+                tElement = Util.make("td", {
+                    innerHTML: list[i],
+                });
+            }
+            tr.appendChild(tElement);
         }
         return tr;
     },
@@ -139,7 +147,8 @@ Util = {
     /*
      * Takes in a class for the table, a list of elements to be inserted into 
      * the table, an optional boolean if there's a header in the table, and an
-     * optional function that will accept a list and return a tr element
+     * optional function that will accept a list and a bool if the list passed
+     * in is the header and return a tr element
      * 
      * trFunction should be used to modify escape characters that you pass in through
      * the list. It lets you insert any arbitrary formatting to any tr element based
@@ -155,13 +164,13 @@ Util = {
         if (header) {
             var headList = list.shift();
             var thead = result.createTHead();
-            thead.appendChild(trFunction(headList));
+            thead.appendChild(trFunction(headList, true));
         }
 
         var tbody = Util.make("tbody");
         result.appendChild(tbody);
         for (var i = 0; i < list.length; i++) {
-            var tr = trFunction(list[i]);
+            var tr = trFunction(list[i], false);
             tbody.appendChild(tr);
         }
 
@@ -174,17 +183,27 @@ Util = {
  * Proof of concept. Not testing code!
  */
 tdCount = 0;
-function modTd (list) {
+function modTd (list, th) {
     var tr = Util.make("tr", {
         className: "custom-tr",
     });
     for (var i = 0; i < list.length; i++) {
-        var td = Util.make("td", {
-            className: "modded",
-            id: tdCount++,
-            innerHTML: list[i],
-        });
-        tr.appendChild(td);
+        var tElement;
+        if (th) {
+            tElement = Util.make("th", {
+                className: "modded-header",
+                id: tdCount++,
+                innerHTML: list[i],
+                scope: "col",
+            });
+        } else {
+            tElement = Util.make("td", {
+                className: "modded",
+                id: tdCount++,
+                innerHTML: list[i],
+            });
+        }
+        tr.appendChild(tElement);
     }
     return tr;
 }
@@ -195,7 +214,7 @@ function modTd (list) {
  * Function that integrates with the new Util.table function
  * to generate an empty table filled with inputs.
  */
-function emptyGrid(list) {
+function emptyGrid(list, th) {
     var obj = list[0];
     var result = document.createDocumentFragment();
     for (var i = 0; i < obj.rows; i++) {
