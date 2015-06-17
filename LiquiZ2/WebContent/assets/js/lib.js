@@ -129,13 +129,22 @@ Util = {
         return Util.make("input", obj);
     },
 
-    button: function(value, className, id, obj) {
-        obj = (typeof obj !== "undefined") ? obj : {};
-        obj.type = "button";
-        obj.value = value;
-        obj.className = className;
-        obj.id = id;
-        return Util.make("input", obj);
+    button: function(value, className, id) {
+        return Util.make("input", {
+            type: "button",
+            value: value,
+            className: className,
+            id: id,
+        });
+    },
+
+    file: function(accept, className, id) {
+        return Util.make("input", {
+            type: "file",
+            accept: accept,
+            className: className,
+            id: id,
+        });
     },
 
     /*
@@ -283,6 +292,10 @@ function build() {
     var genInput = Util.button("submit", "generic-input");
     console.log(genInput);
     quiz.appendChild(genInput);
+
+    var file = Util.file(".java");
+    console.log(file);
+    quiz.appendChild(file);
 }
 
 // function make(tag, inner, className) {
