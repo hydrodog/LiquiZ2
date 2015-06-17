@@ -326,15 +326,12 @@ function build() {
     labels = [];
     for (var i = 0; i < 5; i++) {
         var radio = Util.radio(i, "radio-group", null, "radio-" + i);
-        var label = Util.label("radio-" + i, i);
+        var label = Util.label("radio-" + i, " " + i + ". Click me!");
         label.insertBefore(radio, label.firstChild);
-        console.log(radio);
-        console.log(label);
-        // quiz.appendChild(label);
         labels.push([label]);
     }
-    console.log(labels);
     labelTable = Util.table(labels, false, null, labelGrid);
+    console.log(labelTable);
     quiz.appendChild(labelTable);
 }
 
