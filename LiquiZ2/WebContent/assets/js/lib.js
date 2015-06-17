@@ -30,28 +30,28 @@ Util = {
      * the id of the tag you want, in that order. Any cases that break this rule
      * will be noted explicitly.
      */
-    span: function(innerHTML, className, id) {
+    span: function(innerHTML, className, id, children) {
         return Util.make("span", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        });
+        }, children);
     },
 
-    div: function(innerHTML, className, id) {
+    div: function(innerHTML, className, id, children) {
         return Util.make("div", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        });
+        }, children);
     },
 
-    p: function(innerHTML, className, id) {
+    p: function(innerHTML, className, id, children) {
         return Util.make("p", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        });
+        }, children);
     },
 
     pre: function(innerHTML, className, id) {
@@ -119,6 +119,23 @@ Util = {
             className: className,
             id: id,
         });
+    },
+
+    input: function(type, className, id, obj) {
+        obj = (typeof obj !== "undefined") ? obj : {};
+        obj.type = type;
+        obj.className = className;
+        obj.id = id;
+        return Util.make("input", obj);
+    },
+
+    button: function(value, className, id, obj) {
+        obj = (typeof obj !== "undefined") ? obj : {};
+        obj.type = "button";
+        obj.value = value;
+        obj.className = className;
+        obj.id = id;
+        return Util.make("input", obj);
     },
 
     /*
@@ -242,6 +259,10 @@ function build() {
     console.log(element);
     quiz.appendChild(element);
 
+    var br = Util.br();
+    console.log(br);
+    quiz.appendChild(br);
+
     element = Util.table("table-input", [
         [{
             cols: 3,
@@ -258,6 +279,10 @@ function build() {
     var audio = Util.audio("assets/aud/clip1.mp3", true, "pianos", "the-only-one");
     console.log(audio);
     quiz.appendChild(audio);
+
+    var genInput = Util.button("submit", "generic-input");
+    console.log(genInput);
+    quiz.appendChild(genInput);
 }
 
 // function make(tag, inner, className) {
