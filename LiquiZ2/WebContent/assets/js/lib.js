@@ -89,6 +89,10 @@ Util = {
         return Util.make("br");
     },
 
+    video: function(argument) {
+        
+    },
+
     /*
      * Generic <tr> generator. For the use of Util.table(). You probably shouldn't
      * use this.
@@ -96,7 +100,7 @@ Util = {
     tr: function(list) {
         var tr = Util.make("tr");
         for (var i = 0; i < list.length; i++) {
-            td = Util.make("td", {
+            var td = Util.make("td", {
                 innerHTML: list[i],
             });
             tr.appendChild(td);
@@ -126,7 +130,7 @@ Util = {
             thead.appendChild(trFunction(headList));
         }
 
-        tbody = Util.make("tbody");
+        var tbody = Util.make("tbody");
         result.appendChild(tbody);
         for (var i = 0; i < list.length; i++) {
             var tr = trFunction(list[i]);
@@ -167,12 +171,12 @@ function emptyGrid(list) {
     var obj = list[0];
     var result = document.createDocumentFragment();
     for (var i = 0; i < obj.rows; i++) {
-        tr = Util.make("tr");
+        var tr = Util.make("tr");
         for (var j = 0; j < obj.cols; j++) {
             var input = Util.make("input", {
                 type: "text",
             });
-            td = Util.make("td", {
+            var td = Util.make("td", {
                 className: "td-input",
             });
             td.appendChild(input);
@@ -194,7 +198,7 @@ function build() {
     element = Util.table("table-input", [
         [{
             cols: 3,
-            rows: 3,
+            rows: 6,
         }]
     ], false, emptyGrid);
     console.log(element);
