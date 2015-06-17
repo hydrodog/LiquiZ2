@@ -138,13 +138,33 @@ Util = {
         });
     },
 
-    file: function(accept, className, id) {
+    file: function(accept, value, className, id) {
         return Util.make("input", {
             type: "file",
             accept: accept,
+            value: value,
             className: className,
             id: id,
         });
+    },
+
+    radio: function(value, name, className, id) {
+        return Util.make("input", {
+            type: "radio",
+            value: value,
+            name: name,
+            className: className,
+            id: id,
+        });
+    },
+
+    label: function(htmlFor, innerHTML, className, id, children) {
+        return Util.make("label", {
+            htmlFor: htmlFor,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
     },
 
     /*
@@ -157,8 +177,8 @@ Util = {
             var tElement;
             if (th) {
                 tElement = Util.make("th", {
+                    scope: "col",
                     innerHTML: list[i],
-                    scope: "",
                 });
             } else {
                 tElement = Util.make("td", {
@@ -180,11 +200,11 @@ Util = {
      * the list. It lets you insert any arbitrary formatting to any tr element based
      * on whatever escape mechanism you choose.
      */
-    table: function(tableClass, list, header, trFunction) {
+    table: function(list, header, className, trFunction) {
         header = (typeof header !== "undefined") ? header : false;
         trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
         var result = Util.make("table", {
-            className: tableClass,
+            className: className,
         });
 
         if (header) {
@@ -209,7 +229,7 @@ Util = {
  * Proof of concept. Not testing code!
  */
 tdCount = 0;
-function modTd (list, th) {
+function modTd(list, th) {
     var tr = Util.make("tr", {
         className: "custom-tr",
     });
@@ -259,12 +279,18 @@ function emptyGrid(list, th) {
     return result;
 }
 
+function labelGrid(list, th) {
+    var td = Util.make("td", null, list[0]);
+    var tr = Util.make("tr", null, td);
+    return tr;
+}
+
 function build() {
     var quiz = document.getElementById("quiz");
-    var element = Util.table("table-empty", [
+    var element = Util.table([
         [1, 2, 3, 4, 5],
         [6, 7, 8, 9, 10]
-    ], true, modTd);
+    ], true, "table-empty");
     console.log(element);
     quiz.appendChild(element);
 
@@ -272,12 +298,12 @@ function build() {
     console.log(br);
     quiz.appendChild(br);
 
-    element = Util.table("table-input", [
+    element = Util.table([
         [{
             cols: 3,
             rows: 6,
         }]
-    ], false, emptyGrid);
+    ], false, "table-input", emptyGrid);
     console.log(element);
     quiz.appendChild(element);
 
@@ -296,6 +322,20 @@ function build() {
     var file = Util.file(".java");
     console.log(file);
     quiz.appendChild(file);
+
+    labels = [];
+    for (var i = 0; i < 5; i++) {
+        var radio = Util.radio(i, "radio-group", null, "radio-" + i);
+        var label = Util.label("radio-" + i, i);
+        label.insertBefore(radio, label.firstChild);
+        console.log(radio);
+        console.log(label);
+        // quiz.appendChild(label);
+        labels.push([label]);
+    }
+    console.log(labels);
+    labelTable = Util.table(labels, false, null, labelGrid);
+    quiz.appendChild(labelTable);
 }
 
 // function make(tag, inner, className) {
