@@ -4,7 +4,7 @@ Util = {
      * Second arg is an object filled with key, value pairs
      * Returns undefined if no valid tag was passed.
      */
-    make: function(tag, obj, children) {
+    make: function(tag, obj) {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.log("Util.make failed with \ntag: " + tag +
@@ -17,11 +17,13 @@ Util = {
         for (var i in obj) {
             // TODO(asher): perhaps check for innerHTML. If it's an object, append it later
             if (typeof obj[i] !== "undefined" && obj[i] !== null)
-                element[i] = obj[i];
-        }
-
-        if (children) {
-            element.appendChild(children);
+                if (i === "innerHTML" && obj[i].nodeName) {
+                    element.appendChild(obj[i]);
+                    // console.log("innerHTML");
+                    // console.log(obj[i].nodeName ? true:false);
+                } else {
+                    element[i] = obj[i];
+                }
         }
         return element;
     },
@@ -356,12 +358,15 @@ function emptyGrid(list, th) {
     for (var i = 0; i < obj.rows; i++) {
         var tr = Util.make("tr");
         for (var j = 0; j < obj.cols; j++) {
-            var input = Util.make("input", {
-                type: "text",
-            });
+            // var input = Util.make("input", {
+            //     type: "text",
+            // });
             var td = Util.make("td", {
                 className: "td-input",
-            }, input);
+                innerHTML: Util.make("input", {
+                    type: "text",
+                }),
+            });
             tr.appendChild(td);
         }
         result.appendChild(tr);
