@@ -53,7 +53,7 @@ public class Graph {
 		this(v);
 		// allConnect contains every possible edge
 		// expressed as from->to where from < to
-		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v-1)*v/2);
+		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v-1)*v/2-1);
 		for (int i = 0; i < r; i++) {
 			// select a random edge
 			int fromto = RandomUtil.removeRandomFromSet(chooseVertices);

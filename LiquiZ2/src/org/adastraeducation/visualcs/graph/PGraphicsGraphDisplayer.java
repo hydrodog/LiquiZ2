@@ -60,7 +60,9 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    g.fill(fgColor);
 	    drawEdges(); 	// draw edges first 
 	    drawVertices();	// then draw vertices on top
-
+	    g.endDraw();
+	    if (true)
+	    	return;
 	    if (Visualize.start) {
 	    	Visualize.start = false;
 	    	g.endDraw();
