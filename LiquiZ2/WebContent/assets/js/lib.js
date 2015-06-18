@@ -4,7 +4,7 @@ Util = {
      * Second arg is an object filled with key, value pairs
      * Returns undefined if no valid tag was passed.
      */
-    make: function(tag, obj, children) {
+    make: function(tag, obj) {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.log("Util.make failed with \ntag: " + tag +
@@ -17,11 +17,13 @@ Util = {
         for (var i in obj) {
             // TODO(asher): perhaps check for innerHTML. If it's an object, append it later
             if (typeof obj[i] !== "undefined" && obj[i] !== null)
-                element[i] = obj[i];
-        }
-
-        if (children) {
-            element.appendChild(children);
+                if (i === "innerHTML" && obj[i].nodeName) {
+                    element.appendChild(obj[i]);
+                    // console.log("innerHTML");
+                    // console.log(obj[i].nodeName ? true:false);
+                } else {
+                    element[i] = obj[i];
+                }
         }
         return element;
     },
@@ -31,85 +33,85 @@ Util = {
      * the id of the tag you want, in that order. Any cases that break this rule
      * will be noted explicitly.
      */
-    span: function(innerHTML, className, id, children) {
+    span: function(innerHTML, className, id) {
         return Util.make("span", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    div: function(innerHTML, className, id, children) {
+    div: function(innerHTML, className, id) {
         return Util.make("div", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    p: function(innerHTML, className, id, children) {
+    p: function(innerHTML, className, id) {
         return Util.make("p", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    a: function(href, innerHTML, className, id, children) {
+    a: function(href, innerHTML, className, id) {
         return Util.make("a", {
             href: href,
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    h1: function(innerHTML, className, id, children) {
+    h1: function(innerHTML, className, id) {
         return Util.make("h1", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    h2: function(innerHTML, className, id, children) {
+    h2: function(innerHTML, className, id) {
         return Util.make("h2", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    h3: function(innerHTML, className, id, children) {
+    h3: function(innerHTML, className, id) {
         return Util.make("h3", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    h4: function(innerHTML, className, id, children) {
+    h4: function(innerHTML, className, id) {
         return Util.make("h4", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    h5: function(innerHTML, className, id, children) {
+    h5: function(innerHTML, className, id) {
         return Util.make("h5", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    h6: function(innerHTML, className, id, children) {
+    h6: function(innerHTML, className, id) {
         return Util.make("h6", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
     pre: function(innerHTML, className, id) {
@@ -133,26 +135,28 @@ Util = {
         });
     },
 
-    ul: function(children, className, id) {
+    ul: function(innerHTML, className, id) {
         return Util.make("ul", {
+            innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    ol: function(children, className, id) {
+    ol: function(innerHTML, className, id) {
         return Util.make("ol", {
+            innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
-    li: function(innerHTML, className, id, children) {
+    li: function(innerHTML, className, id) {
         return Util.make("li", {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
     /*
@@ -248,13 +252,13 @@ Util = {
         });
     },
 
-    label: function(htmlFor, innerHTML, className, id, children) {
+    label: function(htmlFor, innerHTML, className, id) {
         return Util.make("label", {
             htmlFor: htmlFor,
             innerHTML: innerHTML,
             className: className,
             id: id,
-        }, children);
+        });
     },
 
     /*
@@ -356,12 +360,15 @@ function emptyGrid(list, th) {
     for (var i = 0; i < obj.rows; i++) {
         var tr = Util.make("tr");
         for (var j = 0; j < obj.cols; j++) {
-            var input = Util.make("input", {
-                type: "text",
-            });
+            // var input = Util.make("input", {
+            //     type: "text",
+            // });
             var td = Util.make("td", {
                 className: "td-input",
-            }, input);
+                innerHTML: Util.make("input", {
+                    type: "text",
+                }),
+            });
             tr.appendChild(td);
         }
         result.appendChild(tr);
