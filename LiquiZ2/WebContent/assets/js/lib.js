@@ -115,10 +115,15 @@ function mkinput(id, type, className) {
     return inp;
 }
 
-function mkbutton(val, id) {
+function mkbutton(val, id, clickFunc) {
     var b = mkinput(id, 'button', 'submit');
+    b.onclick = clickFunc;
     b.value = val;
     return b;
+}
+
+function mkpbutton(parent, val, id, clickFunc) {
+  parent.appendChild(mkbutton(val, id, clickFunc));
 }
 
 function make(tag, inner, className) {
@@ -170,20 +175,18 @@ Quiz.prototype.displayHeader = function() {
 
 var clicks = 0;
 Quiz.prototype.end = function(id) {
-	var parent = this;
-    	if(this.editMode){
-        var newB = mkbutton("New Question", "new-question");
-        newB.onclick = function() { if(clicks == 0){ parent.editQuestion(); checkIfInView("editor");}
-        clicks++; };
-        }
-//            var element = document.getElementById("quizType");
-//            checkIfInView(element);
-          
-        
-    
+    var parent = this;
     qc = mkdivid(this.div, "qc" + id, "qc");
-    qc.appendChild(newB);
-  
+    if (this.editMode){
+        mkpbutton(qc, "New Question", "new-question",
+		  function() {
+		      if (clicks == 0){
+			  parent.editQuestion();
+			  checkIfInView("editor");
+		      }
+		      clicks++;
+		  } );
+    }
     this.createSubmit(2);
 };
 
@@ -195,24 +198,18 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     var editBox = document.createElement("div");
     editBox.className = "edit";
     if (this.editMode) {
-    	var edit = mkbutton("Edit", id+"-edit");
-        var del = mkbutton("Delete", id+"-delete");
-        var copy = mkbutton("Copy", id+"-copy");
-        edit.onclick = function() {
+    	mkpbutton(editBox, "Edit", id+"-edit", function() {
             innerHTML = "";
             console.log(edit.id);
-        };
-        del.onclick = function() {
+        });
+        mkpbutton(editBox, "Delete", id+"-delete",  function() {
             innerHTML = "";
             console.log(del.id);
-        };
-        copy.onclick = function() {
+        });
+        mkbutton(editBox, "Copy", id+"-copy", function() {
             innerHTML = "";
             console.log(copy.id);
-        };
-    	editBox.appendChild(edit);
-    	editBox.appendChild(del);
-    	editBox.appendChild(copy);
+        });
     }
 
     header = document.createElement("div");
@@ -248,7 +245,7 @@ Quiz.prototype.setDataDir = function(path) {
 }
 Quiz.prototype.createSubmit = function(id) {
     var div = mkdiv(this.div, "submit");
-    div.appendChild(mkbutton("Submit The Quiz", "submit-"+id));
+    mkpbutton(div, "Submit The Quiz", "submit-"+id, null);
     this.div.appendChild(div);
 };
 
@@ -507,28 +504,85 @@ function imageAudioVideo(){
 	var r0 = t.insertRow(0);
 	var image = mktext("Image");
 	var image_src = mkinput("image_src", "file", "image_src");
-	var load_image = mkbutton("Load Selected Image", "image_src");
+	var load_image = mkbutton("Load Selected Image", "image_src", null);
 	fillRow(r0, [image, image_src, load_image]);
 	
 	var r1 = t.insertRow(1);
 	var audio = mktext("Audio");
 	var audio_src = mkinput("audio_src", "file", "audio_src");
-	var load_audio = mkbutton("Load Selected Audio", "audio_src");
+	var load_audio = mkbutton("Load Selected Audio", "audio_src", null);
 	fillRow(r1, [audio, audio_src, load_audio]);
 	
 	var r2 = t.insertRow(2);
 	var video = mktext("Video");
 	var video_src = mkinput("video_src", "file", "video_src");
-	var load_video = mkbutton("Load Selected Video", "video_src");
+	var load_video = mkbutton("Load Selected Video", "video_src", null);
 	fillRow(r2, [video, video_src, load_video]);
 	
 	return editor;
 	
 }
 
+
+function fillRowText(row, list) {
+    for (var i = 0; i < list.length; i++) {
+	var c = row.insertCell(i);
+	c.innerHTML = list[i];
+    }
+}
+
+function Calendar(startDate, days) {
+    this.startDate = startDate;
+    var s = '';
+    for (var i = 0; i < days; i++)
+	s += '0';
+    this.holidays = s;
+}
+
+Calendar.prototype.shift = function(days) {
+    this.startDate.setDate(this.startDate.getDate() + days);
+}
+
+Calendar.prototype.week = function(parent) {
+    
+}
+
+Calendar.prototype.month = function(parent, d) {
+    d = (typeof d !== "undefined") ? d : this.startDate;
+    var t = document.createElement("table");
+    t.className = "cal";
+    var h = t.insertRow(0);
+    d.setDate(1);
+    // fillRow(h, [
+    // button("<<"), button("<"), document.createTextNode(d.getMonth()), button(">"), button(">>")
+    // ]);
+    h = t.insertRow(1);
+    fillRowText(h, ["S", "M", "T", "W", "T", "F", "S"]);
+    var dayOfWeek = d.getDay();
+    d.setDate(d.getDate() - dayOfWeek); // get back to Sunday
+    for (var i = 2; i <= 5; i++) {
+        var r = t.insertRow(i);
+        var d2 = d;
+        for (var j = 0; j < 7; j++) {
+            var c = r.insertCell(j);
+            c.innerHTML = d.getDate();
+            d.setDate(d.getDate() + 1);
+        }
+    }
+    parent.appendChild(t);
+}
+
+Calendar.prototype.year = function(parent) {
+    var div = document.createElement("div");
+    var d = this.startDate;
+    for (var month = 0; month < 12; month++)
+        this.month(div, d);
+        
+    parent.appendChild(div);
+}
+
 function imgClick(e) {
     console.log(e.clientX + "," + e.clientY);
-    
 };
 
 Quiz.prototype.clickableImage = function (id, src, xs, ys) {
@@ -736,16 +790,11 @@ Quiz.prototype.editCloze = function () {
 //	  ta.onkeyup = function(){ ta.style.height = "1px";
 //	  ta.style.height = (25+ta.scrollHeight)+"px";}
 	  
-	  var Button = mkbutton("SquareBracket It!", function(){});
-	  div.appendChild(Button);
-	  Button.onclick = function(){addBrackets(ta);};
-	  
-	  var Button1 = mkbutton("Submit", function(){});
-	  div.appendChild(Button1);
-	  Button1.onclick = function(){
-		  $("#y").remove();
-		  buildCloze('title',ta.value);
-		  }; 
+          mkpbutton(div, "SquareBracket It!", null, function(){addBrackets(ta);} );
+	  mkpbutton(div, "Submit", null, function(){
+	      $("#y").remove();
+	      buildCloze('title',ta.value);
+	  });
 	  document.body.appendChild(div);
 	  
 	}
@@ -762,68 +811,56 @@ Quiz.prototype.editFillin = function() {
       div.appendChild(ans);
       
     
-      var Button1 = mkbutton("Submit", function(){});
-	  div.appendChild(Button1);
-	  
-	  Button1.onclick = function(){
+    mkpbutton(div, "Submit", null,  function(){
           $("#y").remove();
-	      buildFillin('title', ta.value, ans.value );
-	      }; 
-	  document.body.appendChild(div);
+	  buildFillin('title', ta.value, ans.value );
+      });
+    document.body.appendChild(div);
 }
 
 Quiz.prototype.editNumber = function (){
-	  var div = document.createElement("div");
-	  div.id = "Number";
-	  div.className = "Number"; // style of the editor box
-	  
-	  var min = mktext("Min: ");
-      var Min = mkinput("min", "text", "min");
-      var max = mktext("Max: ");
-      var Max = mkinput("max", "text", "max");
-      div.appendChild(min);
-      div.appendChild(Min);
-      div.appendChild(max);
-      div.appendChild(Max);
-      
-      var Button1 = mkbutton("Submit", function(){});
-	  div.appendChild(Button1);
-	  
-	  Button1.onclick = function(){
-		  $("#y").remove(); 
-		  buildnumber('title', ta.value);
-		  }; //TODO: delete return
-	  document.body.appendChild(div);
+    var div = document.createElement("div");
+    div.id = "Number";
+    div.className = "Number"; // style of the editor box
+    
+    var min = mktext("Min: ");
+    var Min = mkinput("min", "text", "min");
+    var max = mktext("Max: ");
+    var Max = mkinput("max", "text", "max");
+    div.appendChild(min);
+    div.appendChild(Min);
+    div.appendChild(max);
+    div.appendChild(Max);
+    
+    mkpbutton(div, "Submit", null,  function(){
+	$("#y").remove(); 
+	buildnumber('title', ta.value);
+    });
+    document.body.appendChild(div);
 }
 
 Quiz.prototype.editEssay = function(){
-	  var div = document.createElement("div");
-	  div.id = "Essay";
-	  div.className = "Essay"; // style of the editor box
+    var div = document.createElement("div");
+    div.id = "Essay";
+    div.className = "Essay"; // style of the editor box
 	  
-	  var Button1 = mkbutton("Submit", function(){});
-	  div.appendChild(Button1);
-	  
-	  Button1.onclick = function(){
-		  $("#y").remove();
-		  buildessay('title', ta.value);
-		  }; 
-	  document.body.appendChild(div);
+    mkpbutton(div, "Submit", null,  function(){
+	      $("#y").remove();
+	      buildessay('title', ta.value);
+	  });
+    document.body.appendChild(div);
 }
 
 Quiz.prototype.editCode = function() {
-	var div = document.createElement("div");
-	  div.id = "Code";
-	  div.className = "Code"; // style of the editor box
+    var div = document.createElement("div");
+    div.id = "Code";
+    div.className = "Code"; // style of the editor box
 	 
-	  var Button1 = mkbutton("Submit", function(){});
-	  div.appendChild(Button1);
-	  
-	  Button1.onclick = function(){
-		  $("#y").remove();
-		  buildcode('title', ta.value);
-		  }; //TODO: delete return
-	  document.body.appendChild(div);
+    mkpbutton(div, "Submit",  function(){
+	$("#y").remove();
+	buildcode('title', ta.value);
+    });
+    document.body.appendChild(div);
 }
 
 
@@ -848,7 +885,7 @@ Quiz.prototype.editMultiChoiceDropdown = function() {
 	var description = document.createTextNode("Multiple choice - Dropdown :"
 			+"Correct Answer" + "Add more options");
 	var numberBox = mkinput("numberinput", "text", "numberinput"); 
-	var addOptionButton = mkbutton("Add Option", function(){});
+	var addOptionButton = mkbutton("Add Option", null, function(){});
 	fillRow(r, [description, numberBox, addOptionButton]);
 	
 	//addOptionButton.onclick = div.appendChild(extraOption);
@@ -856,14 +893,10 @@ Quiz.prototype.editMultiChoiceDropdown = function() {
 	var MCDDform = editMCDDform(4,["A: ", "B: ", "C: ", "D: "], ["","","",""]);
 	div.appendChild(MCDDform);
 	
-	var Button1 = mkbutton("Submit", function(){});
-	div.appendChild(Button1);
-	
-	Button1.onclick = function(){
-		$("#y").remove();
-		builddpd(ta.value);
-	    }; 
-	
+        mkpbutton(div, "Submit", null, function(){
+	    $("#y").remove();
+	    builddpd(ta.value);
+	});
 	document.body.appendChild(div);
 }
 
@@ -878,7 +911,7 @@ Quiz.prototype.editSurvey = function() {
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Add more options");
 	var numberBox = mkinput("numberinput", "text", "numberinput"); 
-	var addOptionButton = mkbutton("Add Option", function(){});
+	var addOptionButton = mkbutton("Add Option", null, function(){});
 	fillRow(r, [description, numberBox, addOptionButton]);
 	
 	//addOptionButton.onclick = div.appendChild(extraOption);
@@ -886,13 +919,10 @@ Quiz.prototype.editSurvey = function() {
 	var surveyform= editSurveyform(4,["Choice 1: ", "Choice 2: ", "Choice 3: ", "Choice 4: "], ["","","",""]);
 	div.appendChild(surveyform);
 	
-	var Button1 = mkbutton("Submit", function(){});
-	div.appendChild(Button1);
-	
-	Button1.onclick = function(){
-		$("#y").remove();
-		builddpd(ta.value);
-	}; 
+    mkpbutton(div, "Submit", null, function(){
+	$("#y").remove();
+	builddpd(ta.value);
+    });
 	
 	document.body.appendChild(div);
 }
@@ -909,7 +939,7 @@ Quiz.prototype.editMultiChoiceRadio = function() {
 	var description = document.createTextNode("Multiple choice - Radio:"
 			+"Correct Answer" + "Add more options");
 	var numberBox = mkinput("numberinput", "text", "numberinput"); 
-	var addOptionButton = mkbutton("Add Option", function(){});
+	var addOptionButton = mkbutton("Add Option", null, function(){});
 	fillRow(r, [description, numberBox, addOptionButton]);
 	
 	//addOptionButton.onclick = div.appendChild(extraOption);
@@ -917,14 +947,10 @@ Quiz.prototype.editMultiChoiceRadio = function() {
 	var MCRform= editMCRform(4,["Choice 1: ", "Choice 2: ", "Choice 3: ", "Choice 4: "], ["","","",""]);
 	div.appendChild(MCRform);
 	
-	var Button1 = mkbutton("Submit", function(){});
-	div.appendChild(Button1);
-	
-	Button1.onclick = function(){
+	mkpbutton(div, "Submit", null,  function(){
 		$("#y").remove();
 		builddpd(ta.value);
-	}; 
-	
+	});
 	document.body.appendChild(div);
 }
 
@@ -940,7 +966,7 @@ Quiz.prototype.editMultiAnswer = function() {
 	var description = document.createTextNode("Multiple Answer Choices: "
 			+"Correct Answer" + "Add more options");
 	var numberBox = mkinput("numberinput", "text", "numberinput"); 
-	var addOptionButton = mkbutton("Add Option", function(){});
+	var addOptionButton = mkbutton("Add Option", null, function(){});
 	fillRow(r, [description, numberBox, addOptionButton]);
 	
 	//addOptionButton.onclick = div.appendChild(extraOption);
@@ -948,14 +974,10 @@ Quiz.prototype.editMultiAnswer = function() {
 	var MAform = editMAform(4,["Option 1: ", "Option 2: ", "Option 3: ", "Option 4: "], ["","","",""]);
 	div.appendChild(MAform);
 	
-	var Button1 = mkbutton("Submit", function(){});
-	div.appendChild(Button1);
-	
-	Button1.onclick = function(){
-		$("#y").remove();
-		builddpd(ta.value);
-	}; 
-	
+	mkpbutton(div, "Submit", null,  function(){
+	    $("#y").remove();
+	    builddpd(ta.value);
+	});
 	document.body.appendChild(div);
 }
 
@@ -1109,8 +1131,8 @@ Quiz.prototype.editQuestion = function() {
 	var inp = document.createElement("input");
 	var questionType = document.createTextNode("Question Type: ");
     var selectBox = select("quizType",list);
-	var addQuestion = mkbutton("Add Question", function(){});
-	var cancel = mkbutton("Cancel", function(){});
+	var addQuestion = mkbutton("Add Question", null, function(){});
+	var cancel = mkbutton("Cancel", null, function(){});
 	fillRow(r0, [title, inp, questionType, selectBox, addQuestion, cancel]);
 	
 	var r1 = t0.insertRow(1);
