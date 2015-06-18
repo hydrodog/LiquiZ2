@@ -1,187 +1,199 @@
 package org.adastraeducation.visualcs.graph;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.text.DecimalFormat;
 import java.util.*;
 
-import org.adastraeducation.visualcs.util.Generate_random_number;
+import org.adastraeducation.visualcs.Visualize;
+import org.adastraeducation.visualcs.util.*;
 
-/*   
-1.  randomly generate n nodes
-2.  generate n*n matrix assign the infinity into it
-
-3.  from each node(start from node:0 ), randomly generate n1 (n-1,max;1,min) nodes to be connected. when determine which 
-	 	   to be connected using for loop n1 times to select the index. Assign random weight number into each string
-    and update the matrix. iterate all the rest of nodes. but before generate new connection we should check up matrix
-    delete the previous connected node from random generation pool in each line(just extract none connected potential node into new
-    array), caz we do not wanna to duplicate the line.
-	 
-4.  combine the blleman ford function to work out the answer. 
-function:  an specific array  pick up certain number(node)    
-*/
-
+/*  
+ * @author: Shawn Xie 
+ * Represent a graph using matrix of weights
+ */
 public class Graph {
-	private double[] w; //  weights from each vertex to every other, to represent a matrix n*n.
-	private int v; // number of vertices, how many
+	GraphObserver go;
+	private double[] w; // weights from each vertex to every other, to represent a matrix n*n.
+	private int v; 		// number of vertices, how many
 	
-	public Graph(int v) {   //random number transfer inside
-		
+	/**
+	 * Create a graph with v vertices, initially all disconnected
+	 * @param v
+	 */
+	public Graph(int v) {	
 		this.v = v;
 		w = new double[v*v];
 		for (int i = 0; i < v*v; i++)
 			w[i] = Double.POSITIVE_INFINITY;
-		
-		ArrayList<Integer> checkrow=new ArrayList<Integer>();
-		
-		int m;         
-       	
-        for (int i = 0; i <v; i++) {    				  //draw the line     both direction have some vlaue
-        	
-    		for(int j=0; j<v; j++){
-    		   if(w[i*v+j]==Double.POSITIVE_INFINITY){
-    			   if(i!=j)
-    			     checkrow.add(j);   
-    		   }
-    		 }  
-    		
-		    if(checkrow.size()!=0){
-			  
-			   if(checkrow.size()>=2)
-				   m=2;        //determine the maximum lines need to be drawn
-	    	   else
-	    		   m=1;
-				   
-    		   int connection_num= Generate_random_number.RandomInteger(1,m);      // how many lines need to be connected from certain node
-    		  
-    		   
-    		   while(connection_num!=0){
-    		   
-    			 int index=Generate_random_number.RandomInteger(0,checkrow.size()-1);
-    			   
-    			 w[i*v+checkrow.get(index)]= Generate_random_number.RandomDouble(0.1 , 3 , 1);   //set the weight for each line
-    			 w[checkrow.get(index)*v+i]=w[i*v+checkrow.get(index)];
-    			 
-    			 checkrow.remove(index);   
-    			   connection_num--;
-    		   }
-			}
-		   checkrow.clear();
-        }
-		
+		go = null;
 	}
+
+	/**
+	 * Create a graph and read in from a Scanner.
+	 * The first input is an integer number of vertices
+	 * The next v*v numbers are the weights which are double precision
+	 * @param s
+	 */
 	public Graph(Scanner s) {
 		v = s.nextInt();
 		w = new double[v*v];
 		for (int i = 0; i < v*v; i++)
 			w[i] = s.nextDouble();
+		go = null;
 	}
-	
-	
-/*	
-	public static int[] solution(Graph g){
-		
-		g.printweight(); //for the weight for each edge
-		
-		System.out.println();
 
-		return g.BellmanFord(4);// from 0.....v-1
-		
+	/**
+	 * Create a graph with v vertices and
+	 * r random weights on random edges
+	 *
+	 *	@param v
+	 */
+	public Graph(int v, int r, double minWeight, double maxWeight, int precision) {
+		this(v);
+		// allConnect contains every possible edge
+		// expressed as from->to where from < to
+		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v-1)*v/2);
+		for (int i = 0; i < r; i++) {
+			// select a random edge
+			int from = RandomUtil.removeRandomFromSet(chooseVertices);
+			int to = RandomUtil.removeRandomFromSet(chooseVertices);
+  
+    		// set the weight according to our parameters
+			setW(from, to, RandomUtil.RandomDouble(minWeight, maxWeight, precision));
+        }		
 	}
-*/	
-	
-	
-	
-	
-	/*
-	
-	public void printweight(){
-		for(int i=0;i<v*v;i++){
-			System.out.print(w[i]+" ");
-			if((i+1)%v==0){
-				System.out.println();
+	public void addGraphObserver(GraphObserver go) {
+		this.go = go;
+		go.display();
+	}
+	private static DecimalFormat df = new DecimalFormat("##.#");
+	public String toString() {
+		StringBuilder b = new StringBuilder(v*v*5);
+		for (int i = 0, c = 0; i < v; i++){
+			for (int j = 0; j < v; j++, c++){
+				b.append(df.format(w[c])).append(' ');
 			}
-			
-		}	
-		
+			b.append('\n');
+		}
+		return b.toString();
 	}
-	*/
 	
 	public int getV() { return v; }
 	
-	private int index(int i, int j) { return i * v + j; }  //index in the array, representing in the matrix
-	void setCost(int from, int to, double cost) {
-		w[index(from,to)] = cost;
+	// return the position of the weight from vertex i to j
+	private int getIndex(int i, int j) { return i * v + j; }  //index in the array, representing in the matrix
+
+	void setW(int from, int to, double cost) {
+		w[getIndex(from,to)] = cost;
 	}
+	// return the weight between vertex from and to
 	public double getW(int from, int to) {
-		return w[index(from,to)];
+		return w[getIndex(from,to)];
 	}
+	// return the ith weight in sequence
 	public double getw(int i){
-		
 		return w[i];
 	}
 
-	
-	
-	
-	
-	
-	
-	/*  public static void main(String[] a){
-		
-		File file=new File("case.txt");
-		//System.out.println(file.getAbsolutePath());
-		try{
-		Scanner s=new Scanner(file);
-		Graph c=new Graph(s);
-		c.printweight();
-		
-		System.out.println();
-		c.BellmanFord(0);// from 0.....v-1
-		
-		
-		
-		s.close();   // could I construct a reverse data array  then link to each other
+	public void BellmanFord(int vStart, int vEnd) {
+		double[] cost = new double[v];	//track cost to get to vertex v from vertex "from"
+		int[] pred=new int[v];			// track how to get to each vertex from the preceding one
+
+		// in the beginning..
+		for (int i = 0; i < cost.length; i++) {
+			cost[i] = Double.POSITIVE_INFINITY; // can't get anywhere
+			pred[i] = -1;						// came from nowhere
 		}
-		catch(FileNotFoundException e){
-			
-			e.printStackTrace();
+		cost[vStart] = 0;	// costs nothing to get here, we start here.
+
+		// for v vertices, do v-1 passes
+		for (int passes = 0; passes < v-1; passes++){
+			// start with vStart, going v times to visit every vertex
+			// note, it would be much simpler to visit: j = 0; j < v; j++
+			// but this would not animate as well as starting with the start vertex.
+			boolean changed = false; // so far, no better path found
+			for (int count = 1, j = vStart; count <= v; count++, j = j == v ? 0 : j+1) {
+				if(Visualize.visualize){ 
+					go.setVertexStyle(j, 1);
+				} 
+				for (int k = 0; k < v; k++){
+					if (j != k){
+						if (Visualize.visualize){
+							go.setVertexStyle(k, 1);
+						}
+						// if the cost through new vertex is lower
+						if (cost[j] + getW(j,k) < cost[k]) {
+							cost[k] = cost[j] + getW(j,k);	// compute new cost
+							int prevPred = pred[k];				// save predecessor for graphics only
+							pred[k] = j;						// store new predecessor
+							changed = true;						// found better path, keep going
+							if (Visualize.visualize){
+								go.setEdgeStyle(prevPred, k, 0);	// erase previous highlighted edge
+								go.setEdgeStyle(j, k, 1);			// highlight new best path (so far)
+							}
+						}
+						if (Visualize.visualize) {
+							go.setVertexStyle(k, 0);	// turn off the vertex just considered
+						}
+					}
+					if(Visualize.visualize){
+						go.setVertexStyle(j, 0);	// turn off the from vertex, get ready to consider the next
+					}
+				}
+				if (!changed)
+					break; // no new paths found, so any further iterations will do nothing
+			}
+			for (int j = 0; j < v; j++) {
+				for (int k = 0; k < v; k++) {
+					if (cost[j] + getW(j,k) < cost[k]) {
+						System.out.println("Graph contains a negative-weight cycle");
+						return;	
+					}
+				}
+				Visualize.terminate = true;
+			}
 		}
 	}
-	
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	/* public boolean Prim(int[] edges) {
+	public boolean Prim(int[] edges) {
 		double[] connected = new double[v];
 		int[] edgeTo = new int[v];
-		connected[0] = 0; // no cost for first vertex
 		for (int i = 0; i < v; i++) {
 			connected[i] = Double.POSITIVE_INFINITY;
 			edgeTo[i] = -1;
 		}
+		connected[0] = 0; // no cost for first vertex
+		edgeTo[0] = 0;
 		for (int i = 0; i < v; i++) {
+			double minCost = Double.POSITIVE_INFINITY;
+			int minCostVertex = -1;
 			for (int j = 0; j < v; j++) {
-				if (i != j)
+				if (i == j)
 					continue;
-				if (getCost(i,j) < connected[j]) {
-					connected[j] = getCost(i,j);
-					edgeTo[j] = i;
+				if (Double.isInfinite(connected[j]) && getW(i,j) < minCost) {
+					minCost = getW(i,j);
+					minCostVertex = j;
+					if (Visualize.visualize) {
+						go.setEdgeStyle(i, j, 1);
+						go.setEdgeStyle(i, j-1, 0);
+					}
 				}
+			}
+			if (minCostVertex >= 0) {
+				connected[minCostVertex] = minCost;
+				go.setEdgeStyle(i,minCostVertex, 2);
 			}
 		}
 		return true;
 	}
+	
 	private boolean nextPerm(int[] order) {
-		
 		return true;
 	}
 	public final double computeCost(int[] order) {
-		double tourCost = getCost(order[0], order[1]);
+		double tourCost = getW(order[0], order[1]);
 		for (int i = 1; i < v-1; i++) {
-			double cost = getCost(order[i], order[i+1]);
+			double cost = getW(order[i], order[i+1]);
 			if (Double.isInfinite(cost))
 				return Double.POSITIVE_INFINITY;
 			tourCost += cost;
@@ -202,7 +214,5 @@ public class Graph {
 				System.arraycopy(order, 0, bestOrder, 0, order.length);
 			}
 		} while (nextPerm(order));	
-	}
-	*/
-	
+	}	
 }    

@@ -5,8 +5,8 @@ package org.adastraeducation.visualcs.graph;
 //3  what's next step?  build on the web server? save png     graph1 png  sloution1 txt  batch
 
 import org.adastraeducation.visualcs.Visualize;
-import org.adastraeducation.visualcs.util.Generate_random_number;
-import org.adastraeducation.visualcs.util.Serial_number;
+import org.adastraeducation.visualcs.util.RandomUtil;
+import org.adastraeducation.visualcs.util.SerialNumber;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -55,7 +55,7 @@ public class PAppletGraphDisplayer extends PApplet {
 	
 	public void setGraph(Graph g){
 		displayer=new GraphDisplayer(g){								    //how to repaint();	
-			public void setHighlightVertex(int v,int highlight){            //how to improve these to combine together
+			public void setVertexStyle(int v,int highlight){            //how to improve these to combine together
 				highlightvertex[v]=highlight;
 				highlight_num_v1=highlight;
 				
@@ -72,7 +72,7 @@ public class PAppletGraphDisplayer extends PApplet {
 				//delay(1000);
 			}
 			
-			public void setHighlightEdge(int From, int To, int highlight){
+			public void setEdgeStyle(int From, int To, int highlight){
 				highlightedge[From*g.getV()+To]=highlight;
 				interact();
 				//delay(1000);
@@ -87,7 +87,7 @@ public class PAppletGraphDisplayer extends PApplet {
     	genImage = createGraphics(600,600);    	
     	//highlight_num_e=
     	highlight_num_v1=highlight_num_v2=-1;
-    	g=new Graph(Generate_random_number.RandomInteger(5,7));
+    	g=new Graph(RandomUtil.integerRange(5,7));
     	setGraph(g);
     	
     	v=g.getV();
@@ -131,7 +131,7 @@ public class PAppletGraphDisplayer extends PApplet {
        	}
         for(int i=0;i<v;i++){
        		for(int j=0;j<v;j++){
-       			if(displayer.getHighlightEdge(i, j)!=0){
+       			if(displayer.getEdgeStyle(i, j)!=0){
        				genImage.stroke(255,0,0);
 	        		genImage.line(x[i],y[i],x[j],y[j]);
 		        }
@@ -167,7 +167,7 @@ public class PAppletGraphDisplayer extends PApplet {
         	Visualize.start=false;
         	genImage.endDraw();
         	
-        	genImage.save(dir+"Bellmanford_imagequestion_"+Serial_number.serialno()+".png");
+        	genImage.save(dir+"Bellmanford_imagequestion_"+SerialNumber.serialno()+".png");
     		
     		Thread t = new Thread() {
     			public void run() {
@@ -182,10 +182,10 @@ public class PAppletGraphDisplayer extends PApplet {
         
         if(Visualize.terminate){
         	genImage.endDraw();
-        	genImage.save(dir+"Bellmanford_imagesolution_"+Serial_number.serialno()+".png" );
+        	genImage.save(dir+"Bellmanford_imagesolution_"+SerialNumber.serialno()+".png" );
 	        Visualize.terminate=false;
 	       
-	        if(Serial_number.increment()>=required_num){
+	        if(SerialNumber.increment()>=required_num){
 	        	exit();
 	        }
 	        else

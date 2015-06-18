@@ -1,22 +1,14 @@
 package org.adastraeducation.visualcs.graph;
-
-
-
-public interface GraphObserver{
-	
-	public void display();   //once loaded it would graphically show the image
-		
-	public void setHighlightVertex(int v,int highlight);
-	public int getHighlightVertex(int v);
-	 
-	 
-	public void setHighlightVertex2(int v,int highlight);    // show the square bracket in column do not overlap in the same row 
-	public int getHighlightVertex2(int v);					 // same as the image show
-   
-    
-    
-	
-	
-	public void setHighlightEdge(int From, int To, int hightlight);
-	public int getHighlightEdge(int From, int To);
+/**
+ * Base Interface containing all necessary methods to animate a graph algorithm 
+ * 
+ * @author dkruger
+ */
+//TODO: Currently only one observer is supported.  Really should be a list of observers?
+public interface GraphObserver {
+	public void display();   // when the entire graph changes and must be displayed		
+	public void setVertexStyle(int v, int style);	// visiting a vertex that should be highlighted
+	public int getVertexStyle(int v);	 				// get the current status of a particular vertex   
+	public void setEdgeStyle(int from, int to, int style);
+	public int getEdgeStyle(int from, int to);
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import org.adastraeducation.visualcs.util.Generate_random_number;
+import org.adastraeducation.visualcs.util.RandomUtil;
 
 public class Matrix {
 	private int rows;
@@ -25,7 +25,7 @@ public class Matrix {
 		int size = rows * columns;
 		m = new double[size];
 		for(int i = 0 ; i < size ; i++)
-			this.m[i] = Generate_random_number.RandomDouble(min, max, digits);
+			this.m[i] = RandomUtil.RandomDouble(min, max, digits);
 	}
 	public Matrix(Scanner s){
 		rows = s.nextInt();

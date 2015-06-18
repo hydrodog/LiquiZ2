@@ -40,13 +40,13 @@ public class TextgraphDisplayer extends GraphDisplayer {
 					
 					double w=g.getW(i,j);
 					if(w==Double.POSITIVE_INFINITY)
-						if(getHighlightEdge(i,j)==0){
+						if(getEdgeStyle(i,j)==0){
 							b.append("\tI");  
 						}
 						else
 							b.append("\t[I]");
 					else
-						if(getHighlightEdge(i,j)==0){
+						if(getEdgeStyle(i,j)==0){
 							b.append('\t').append(w);
 						}
 						else
@@ -61,7 +61,7 @@ public class TextgraphDisplayer extends GraphDisplayer {
 		
 		
 		
-		public void setHighlightVertex(int v,int highlight){            //how to improve these to combine together
+		public void setVertexStyle(int v,int highlight){            //how to improve these to combine together
 			highlightvertex[v]=highlight;
 		}
 		
@@ -70,7 +70,7 @@ public class TextgraphDisplayer extends GraphDisplayer {
 			highlightvertex2[v]=highlight;
 		}
 		
-		public void setHighlightEdge(int From, int To, int highlight){
+		public void setEdgeStyle(int From, int To, int highlight){
 			highlightedge[From*g.getV()+To]=highlight;
 		}
 		
