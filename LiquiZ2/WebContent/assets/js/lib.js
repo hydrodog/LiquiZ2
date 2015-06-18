@@ -15,6 +15,7 @@ Util = {
         }
         var element = document.createElement(tag);
         for (var i in obj) {
+            // TODO(asher): perhaps check for innerHTML. If it's an object, append it later
             if (typeof obj[i] !== "undefined" && obj[i] !== null)
                 element[i] = obj[i];
         }
@@ -54,6 +55,63 @@ Util = {
         }, children);
     },
 
+    a: function(href, innerHTML, className, id, children) {
+        return Util.make("a", {
+            href: href,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    h1: function(innerHTML, className, id, children) {
+        return Util.make("h1", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    h2: function(innerHTML, className, id, children) {
+        return Util.make("h2", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    h3: function(innerHTML, className, id, children) {
+        return Util.make("h3", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    h4: function(innerHTML, className, id, children) {
+        return Util.make("h4", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    h5: function(innerHTML, className, id, children) {
+        return Util.make("h5", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    h6: function(innerHTML, className, id, children) {
+        return Util.make("h6", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
+    },
+
     pre: function(innerHTML, className, id) {
         return Util.make("pre", {
             innerHTML: innerHTML,
@@ -73,6 +131,28 @@ Util = {
             rows: rows,
             cols: cols,
         });
+    },
+
+    ul: function(children, className, id) {
+        return Util.make("ul", {
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    ol: function(children, className, id) {
+        return Util.make("ol", {
+            className: className,
+            id: id,
+        }, children);
+    },
+
+    li: function(innerHTML, className, id, children) {
+        return Util.make("li", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        }, children);
     },
 
     /*
@@ -333,7 +413,7 @@ function build() {
     console.log(file);
     quiz.appendChild(file);
 
-    labelsRadio = [];
+    var labelsRadio = [];
     var label;
     for (var i = 0; i < 5; i++) {
         var radio = Util.radio(i, "radio-group", null, "radio-" + i);
@@ -341,11 +421,11 @@ function build() {
         label.insertBefore(radio, label.firstChild);
         labelsRadio.push([label]);
     }
-    labelTable = Util.table(labelsRadio, false, null, labelGrid);
+    var labelTable = Util.table(labelsRadio, false, null, labelGrid);
     console.log(labelTable);
     quiz.appendChild(labelTable);
 
-    labelsCheckbox = [];
+    var labelsCheckbox = [];
     for (i = 0; i < 5; i++) {
         var checkbox = Util.checkbox(i, "checkbox-group", null, "checkbox-" + i);
         label = Util.label("checkbox-" + i, " " + i + ". Click me!");
@@ -356,6 +436,21 @@ function build() {
     console.log(labelTable);
     quiz.appendChild(labelTable);
 
+    var h1 = Util.h1("I'm an h1 tag!", "special-h1");
+    console.log(h1);
+    quiz.appendChild(h1);
+
+    var liFragment = document.createDocumentFragment();
+    for (i = 0; i < 10; i++) {
+        liFragment.appendChild(Util.li(i));
+    }
+    var ul = Util.ul(liFragment, "lists-are-cool");
+    console.log(ul);
+    quiz.appendChild(ul);
+
+    var a = Util.a("assets/img/einstein.jpg", "I'm a link!");
+    console.log(a);
+    quiz.appendChild(a);
 }
 
 // function make(tag, inner, className) {
