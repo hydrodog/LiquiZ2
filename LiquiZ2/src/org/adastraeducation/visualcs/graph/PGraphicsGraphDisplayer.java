@@ -82,6 +82,7 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    			g.stroke(displayer.getEdgeStyle(i,j));
 	    			g.fill(displayer.getEdgeStyle(i,j));
 	    			g.line(x[i],y[i],x[j],y[j]);
+	    			g.fill(255,0,0);
 	    			g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
 	    		}
 	    	}
@@ -93,6 +94,7 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    	g.fill(displayer.getVertexStyle(i));
 	    	g.ellipse(x[i], y[i], vSize,vSize);
 	    	g.fill(displayer.getVertexStyle(i));
+	    	g.fill(255,255,0);
 	    	g.text(i+1, x[i]-txtHeight/3, y[i]+txtHeight/3);
 	    }
 	}

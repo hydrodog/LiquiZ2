@@ -56,9 +56,9 @@ public class Graph {
 		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v-1)*v/2);
 		for (int i = 0; i < r; i++) {
 			// select a random edge
-			int from = RandomUtil.removeRandomFromSet(chooseVertices);
-			int to = RandomUtil.removeRandomFromSet(chooseVertices);
-  
+			int fromto = RandomUtil.removeRandomFromSet(chooseVertices);
+			int from = fromto / v;
+			int to = fromto % v;
     		// set the weight according to our parameters
 			setW(from, to, RandomUtil.RandomDouble(minWeight, maxWeight, precision));
         }		
