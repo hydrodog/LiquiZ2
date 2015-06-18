@@ -13,7 +13,7 @@ public class BasePApplet extends PApplet {
 		drawer = d;
 	}*/
 	public void setup() {
-		size(1000,1000);
+		size(600,600);
 		delayTime = 500;
 	}
 	public void draw() {
