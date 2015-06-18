@@ -158,6 +158,16 @@ Util = {
         });
     },
 
+    checkbox: function(value, name, className, id) {
+        return Util.make("input", {
+            type: "checkbox",
+            value: value,
+            name: name,
+            className: className,
+            id: id,            
+        });
+    },
+
     label: function(htmlFor, innerHTML, className, id, children) {
         return Util.make("label", {
             htmlFor: htmlFor,
@@ -323,16 +333,29 @@ function build() {
     console.log(file);
     quiz.appendChild(file);
 
-    labels = [];
+    labelsRadio = [];
+    var label;
     for (var i = 0; i < 5; i++) {
         var radio = Util.radio(i, "radio-group", null, "radio-" + i);
-        var label = Util.label("radio-" + i, " " + i + ". Click me!");
+        label = Util.label("radio-" + i, " " + i + ". Click me!");
         label.insertBefore(radio, label.firstChild);
-        labels.push([label]);
+        labelsRadio.push([label]);
     }
-    labelTable = Util.table(labels, false, null, labelGrid);
+    labelTable = Util.table(labelsRadio, false, null, labelGrid);
     console.log(labelTable);
     quiz.appendChild(labelTable);
+
+    labelsCheckbox = [];
+    for (i = 0; i < 5; i++) {
+        var checkbox = Util.checkbox(i, "checkbox-group", null, "checkbox-" + i);
+        label = Util.label("checkbox-" + i, " " + i + ". Click me!");
+        label.insertBefore(checkbox, label.firstChild);
+        labelsCheckbox.push([label]);
+    }
+    labelTable = Util.table(labelsCheckbox, false, null, labelGrid);
+    console.log(labelTable);
+    quiz.appendChild(labelTable);
+
 }
 
 // function make(tag, inner, className) {
