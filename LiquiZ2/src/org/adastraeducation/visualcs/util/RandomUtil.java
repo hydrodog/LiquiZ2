@@ -15,7 +15,7 @@ public class RandomUtil {
 		return start+(int)(range*random.nextDouble());
 	}
 
-	public static ArrayList generateRandomSet(int start, int end) {
+	public static ArrayList<Integer> generateRandomSet(int start, int end) {
 		ArrayList<Integer> list = new ArrayList<Integer>(end - start + 1);
 		for (int i = start; i <= end; i++)
 			list.add(i);

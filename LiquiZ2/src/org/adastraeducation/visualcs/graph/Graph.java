@@ -181,7 +181,8 @@ public class Graph {
 			}
 			if (minCostVertex >= 0) {
 				connected[minCostVertex] = minCost;
-				go.setEdgeStyle(i,minCostVertex, 2);
+				if (Visualize.visualize)
+					go.setEdgeStyle(i,minCostVertex, 2);
 			}
 		}
 		return true;
