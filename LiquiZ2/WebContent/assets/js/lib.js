@@ -320,7 +320,7 @@ Util = {
 };
 
 /*
- * Proof of concept. Not testing code!
+ * Proof of concept. Not production code!
  */
 tdCount = 0;
 function modTd(list, th) {
@@ -458,6 +458,10 @@ function build() {
     var a = Util.a("assets/img/einstein.jpg", "I'm a link!");
     console.log(a);
     quiz.appendChild(a);
+
+    var nested = Util.h1(Util.a("assets/img/einstein.jpg", "I'm a big h1 link!"));
+    console.log(nested);
+    quiz.appendChild(nested);
 }
 
 // function make(tag, inner, className) {
