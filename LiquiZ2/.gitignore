@@ -1,6 +1,7 @@
 /build/
 /.settings/
 /bin/
+/output/
 *~
 .DS_STORE
 

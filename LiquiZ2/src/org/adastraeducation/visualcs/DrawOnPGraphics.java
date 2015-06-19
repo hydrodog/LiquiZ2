@@ -1,4 +1,4 @@
-package org.adastraeducation.visualcs.graph;
+package org.adastraeducation.visualcs;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -23,4 +23,7 @@ public abstract class DrawOnPGraphics {
 		this.txtHeight = txtHeight;
 	}
 	public abstract void draw();
+	public void setPGraphics(PGraphics g) {
+		this.g = g;
+	}
 }

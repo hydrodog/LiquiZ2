@@ -35,5 +35,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jogl-all.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/pdf.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itext.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

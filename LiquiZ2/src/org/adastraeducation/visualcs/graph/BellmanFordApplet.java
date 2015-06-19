@@ -1,5 +1,7 @@
 package org.adastraeducation.visualcs.graph;
 
+import org.adastraeducation.visualcs.BasePApplet;
+
 import jogamp.graph.curve.tess.GraphOutline;
 
 @SuppressWarnings("serial")

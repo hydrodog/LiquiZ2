@@ -1,4 +1,4 @@
-package org.adastraeducation.visualcs.graph;
+package org.adastraeducation.visualcs;
 
 import org.adastraeducation.visualcs.util.RandomUtil;
 

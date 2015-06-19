@@ -4,6 +4,7 @@ package org.adastraeducation.visualcs.graph;
 //2  how to output solution in txt file the, name
 //3  what's next step?  build on the web server? save png     graph1 png  sloution1 txt  batch
 
+import org.adastraeducation.visualcs.DrawOnPGraphics;
 import org.adastraeducation.visualcs.Visualize;
 import org.adastraeducation.visualcs.util.*;
 
@@ -12,7 +13,6 @@ import processing.core.PGraphics;
 
 public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private static final long serialVersionUID = 1L;
-	private final String problem = "BellmanFord";
 	private GraphDisplayer displayer; // has the graph
 	private float[] x, y;	// location of each vertex
 	private float vSize;	// size of each vertex in pixels
@@ -38,8 +38,7 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 		
     	x = new float[v];    //series x location of in a circle(vertex.x )
     	y = new float[v];    //series y location of in a circle(vertex.y)
-    	setVertexPositions();    	
-	}
+   	}
 	private void setVertexPositions() {
     	float r = Math.min(g.width, g.height)/2 - vSize;
     	for (int i = 0; i < v; i++) {
@@ -49,6 +48,8 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	}
 	
 	public void draw() {
+		if (g == null)
+			return;
 	    g.beginDraw();
 		g.background(bgColor);
 
@@ -65,16 +66,21 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    	return;
 	    if (Visualize.start) {
 	    	Visualize.start = false;
-	    	g.endDraw();
-	    	g.save(dir + problem + "_q_" + SerialNumber.serialno() + ".png");
+	    	//g.save(dir + problem + "_q_" + SerialNumber.serialno() + ".png");
 	    }
 
 	    if (Visualize.terminate) {
-	    	g.endDraw();
-	    	g.save(dir + problem + "_sol_" + SerialNumber.serialno() + ".png" );
+	    	//g.save(dir + problem + "_sol_" + SerialNumber.serialno() + ".png" );
 	    	Visualize.terminate = false;
 	    	Visualize.start = true;
 	    }
+	    if (g != null)
+	    	setPGraphics(g);
+	}
+	
+	public void setPGraphics(PGraphics g) {
+		super.setPGraphics(g);
+		setVertexPositions();    	
 	}
 	
 	private void drawEdges() {
