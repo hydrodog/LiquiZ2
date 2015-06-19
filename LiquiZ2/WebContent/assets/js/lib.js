@@ -1,4 +1,12 @@
-Util = {
+Util = {    
+    dump: function(obj) {
+        var s = "";
+        for (var k in obj) {
+            s += k + "-->" + obj[k] + '\n';
+        }
+        console.log(s);
+    },
+
     /*
      * Returns an html tag filled with the keys and values you pass in
      * Second arg is an object filled with key, value pairs
@@ -15,12 +23,9 @@ Util = {
         }
         var element = document.createElement(tag);
         for (var i in obj) {
-            // TODO(asher): perhaps check for innerHTML. If it's an object, append it later
             if (typeof obj[i] !== "undefined" && obj[i] !== null)
                 if (i === "innerHTML" && obj[i].nodeName) {
                     element.appendChild(obj[i]);
-                    // console.log("innerHTML");
-                    // console.log(obj[i].nodeName ? true:false);
                 } else {
                     element[i] = obj[i];
                 }
@@ -114,6 +119,22 @@ Util = {
         });
     },
 
+    strong: function(innerHTML, className, id) {
+        return Util.make("strong", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });        
+    },
+
+    em: function(innerHTML, className, id) {
+        return Util.make("em", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });        
+    },
+
     pre: function(innerHTML, className, id) {
         return Util.make("pre", {
             innerHTML: innerHTML,
@@ -205,6 +226,21 @@ Util = {
         });
     },
 
+    canvas: function(height, width) {
+        return Util.make("canvas", {
+            height: height,
+            width: width,
+        });
+    },
+
+    form: function(innerHTML, className, id) {
+        return Util.make("form", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
+
     input: function(type, className, id, obj) {
         obj = (typeof obj !== "undefined") ? obj : {};
         obj.type = type;
@@ -227,6 +263,34 @@ Util = {
             type: "file",
             accept: accept,
             value: value,
+            className: className,
+            id: id,
+        });
+    },
+
+    select: function(name, multiple, innerHTML, className, id) {
+        return Util.make("select", {
+            name: name,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+            multiple: multiple,
+        });
+    },
+
+    option: function(value, innerHTML, className, id) {
+        return Util.make("option", {
+                    value: value,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
+
+    optgroup: function(label, innerHTML, className, id) {
+        return Util.make("optgroup", {
+            label: label,
+            innerHTML: innerHTML,
             className: className,
             id: id,
         });
@@ -255,6 +319,14 @@ Util = {
     label: function(htmlFor, innerHTML, className, id) {
         return Util.make("label", {
             htmlFor: htmlFor,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
+
+    code: function(innerHTML, className, id) {
+        return Util.make("code", {
             innerHTML: innerHTML,
             className: className,
             id: id,
@@ -459,9 +531,44 @@ function build() {
     console.log(a);
     quiz.appendChild(a);
 
-    var nested = Util.h1(Util.a("assets/img/einstein.jpg", "I'm a big h1 link!"));
+    var nested = Util.h1(Util.a("assets/img/einstein.jpg", Util.em("I'm a big h1 link!")));
     console.log(nested);
     quiz.appendChild(nested);
+
+    var code = Util.p(Util.code("print \"Hello World!\""));
+    console.log(code);
+    quiz.appendChild(code);
+
+    var j, optgroup;
+    var options = document.createDocumentFragment();
+    for (i = 0; i < 3; i++) {
+        optgroup = Util.optgroup("Group " + i);
+        for (j = 0; j < 5; j++) {
+            optgroup.appendChild(Util.option(j+"-"+i, "The value is: "+j+"-"+i, "options-are-cool", "option-" +j + "-" + i));
+        }
+        options.appendChild(optgroup);
+    }
+
+    var select = Util.select("test-select", true, options, "options-list", "totally-unique-option");
+    console.log(select);
+    quiz.appendChild(select);
+
+    options = document.createDocumentFragment();
+    for (i = 0; i < 3; i++) {
+        optgroup = Util.optgroup("Group " + i);
+        for (j = 0; j < 5; j++) {
+            optgroup.appendChild(Util.option(j+"-"+i, "The value is: "+j+"-"+i, "options-are-cool", "option-" +j + "-" + i));
+        }
+        options.appendChild(optgroup);
+    }
+
+    select = Util.select("test-select", false, options, "options-list", "totally-unique-option");
+    console.log(select);
+    quiz.appendChild(select);
+
+    var canvas = Util.canvas(400, 400);
+    console.log(canvas);
+    quiz.appendChild(canvas);
 }
 
 // function make(tag, inner, className) {
@@ -521,13 +628,13 @@ function insertRow(t) {
   r.appendChild(td);
 }
 
-function dump(obj) {
-    var s = "";
-    for (var k in obj) {
-    s += k + "-->" + obj[k] + '\n';
-    }
-    console.log(s);
-}
+// function dump(obj) {
+//     var s = "";
+//     for (var k in obj) {
+//     s += k + "-->" + obj[k] + '\n';
+//     }
+//     console.log(s);
+// }
 
 function select(list) {
   var s = document.createElement("select");
@@ -1023,3 +1130,5 @@ function processAJAX() {
 	if (exists(typeof(thisPage)))
         thisPage();
 }
+
+window.onload  = build;
