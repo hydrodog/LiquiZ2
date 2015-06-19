@@ -22,7 +22,14 @@ public abstract class DrawOnPGraphics {
 		this.fgColor = fgColor;
 		this.txtHeight = txtHeight;
 	}
-	public abstract void draw();
+	public abstract void thisDraw();
+	public void draw() {
+		if (g == null)
+			return;
+	    g.beginDraw();
+	    thisDraw();
+	    g.endDraw();
+	}
 	public void setPGraphics(PGraphics g) {
 		this.g = g;
 	}

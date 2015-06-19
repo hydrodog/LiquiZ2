@@ -7,6 +7,7 @@ package org.adastraeducation.visualcs.graph;
 import org.adastraeducation.visualcs.DrawOnPGraphics;
 import org.adastraeducation.visualcs.Visualize;
 import org.adastraeducation.visualcs.util.*;
+import java.io.*;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -19,15 +20,16 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private int[] colors;	// colors for different types of vertices
 	private int v;   		// number of vertices
 	private Graph graph;
-	public PGraphicsGraphDisplayer(PApplet parent, PGraphics g, 
-			Graph graph) {
+	public PGraphicsGraphDisplayer(PApplet parent, PGraphics g, String answerFile, 
+			Graph graph) throws IOException {
 		super(parent, g, 0xFFFFFF, 0x000000, 30);
 		this.graph = graph;
-		displayer = new GraphDisplayer(graph) {			
+		displayer = new GraphDisplayer(graph, answerFile) {			
 			public void display() {
 				draw();	
 			}
 		};
+		graph.addGraphObserver(displayer);
 		this.v = displayer.getGraph().getV();
 		colors = new int[] {
 			fgColor,
@@ -47,21 +49,17 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
     	}
 	}
 	
-	public void draw() {
-		if (g == null)
-			return;
-	    g.beginDraw();
+	public void thisDraw() {
+//	    if (displayer == null)
+//	    	return;
 		g.background(bgColor);
-
-	    if (displayer == null)
-	    	return;
 	    g.translate(g.width/2, g.height/2);
 	    g.textSize(txtHeight);
 	    g.stroke(fgColor);
 	    g.fill(fgColor);
 	    drawEdges(); 	// draw edges first 
 	    drawVertices();	// then draw vertices on top
-	    g.endDraw();
+	    displayer.end();
 	    if (true)
 	    	return;
 	    if (Visualize.start) {
@@ -74,8 +72,8 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    	Visualize.terminate = false;
 	    	Visualize.start = true;
 	    }
-	    if (g != null)
-	    	setPGraphics(g);
+//	    if (g != null)
+//	    	setPGraphics(g);
 	}
 	
 	public void setPGraphics(PGraphics g) {
