@@ -80,7 +80,36 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 		super.setPGraphics(g);
 		setVertexPositions();    	
 	}
-	
+	// Try all positions for a label and pick the one that is the farthest from collision
+	private void labelWeight(double w, int i, int j) {
+		double bestDistance = 0;
+		double bestX, bestY;
+		for (double t = 1.0/16; t <= 1-1.0/16; t += 1.0/16) {
+			double candidateX = t * x[i] + (1-t) * x[j];
+			double candidateY = t * y[i] + (1-t) * y[j];
+			
+			double minDistance = g.width;
+			for (int i2 = 0; i2 < v-1; i2++)
+				for (int j2 = i2+1; j2 < v; j2++) {
+					if (i2 == i && j2 == j)
+						continue;
+					double denom = (y[j2] - y[i2]) * (x[j] - x[i]) - (x[j2] - x[i2]) * (y[j] - y[i]);
+					double ua = ((x[j2] - x[i2]) * (y[i] - y[i2]) - (y[j2] - y[i2]) * (x[i] - x[i2]))/denom;
+					double ub = ((x[j] - x[i]) * (y[i] - y[i2]) - (y[j] - y[i]) * (x[i] - x[i2]))/denom;
+					double xIntersect = x[i] + ua * (x[j]-x[i]);
+					double yIntersect = y[i] + ub * (y[j]-y[i]);
+					double dist = Math.hypot(xIntersect - candidateX, yIntersect - candidateY);
+					if (dist < minDistance)
+						minDistance = dist;
+				}
+			if (minDistance > bestDistance) {
+				bestX = candidateX;
+				bestY = candidateY;
+			}
+		}
+		g.fill(255,0,0);
+		g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
+	}
 	private void drawEdges() {
 	    for (int i = 0; i < v; i++) {
 	    	for(int j = i; j < v; j++) {
@@ -88,8 +117,9 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    			g.stroke(displayer.getEdgeStyle(i,j));
 	    			g.fill(displayer.getEdgeStyle(i,j));
 	    			g.line(x[i],y[i],x[j],y[j]);
-	    			g.fill(255,0,0);
-	    			g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
+	    			labelWeight(graph.getW(i,j), i, j); 
+//	    			g.fill(255,0,0);
+//	    			g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
 	    		}
 	    	}
 	    }
