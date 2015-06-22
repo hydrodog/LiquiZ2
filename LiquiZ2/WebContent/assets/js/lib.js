@@ -184,7 +184,7 @@ Util = {
      * This function takes the src as its first argument instead of innerHTML
      */
     img: function(src, className, id) {
-        return Util.make("span", {
+        return Util.make("img", {
             src: src,
             className: className,
             id: id,
@@ -241,12 +241,12 @@ Util = {
         });
     },
 
-    input: function(type, className, id, obj) {
-        obj = (typeof obj !== "undefined") ? obj : {};
-        obj.type = type;
-        obj.className = className;
-        obj.id = id;
-        return Util.make("input", obj);
+    input: function(type, className, id) {
+        return Util.make("input", {
+            type: type,
+            className: className,
+            id: id,
+        });
     },
 
     button: function(value, className, id) {
@@ -569,6 +569,10 @@ function build() {
     var canvas = Util.canvas(400, 400);
     console.log(canvas);
     quiz.appendChild(canvas);
+
+    var img = Util.img("assets/img/einstein.jpg");
+    console.log(img);
+    quiz.appendChild(img);
 }
 
 // function make(tag, inner, className) {
