@@ -10,16 +10,16 @@ page = new Quiz( {
 page.addQuestion(1, "Mergesort", "grid", 0);
 page.instructions("Show the first pass of Mergesort below");
 page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]);
-page.br();
+Util.br();
 page.emptyGrid("1_2", 1, 8);
 
 // question 2
 page.addQuestion(2, "Matrix Multiplication", 'matrix', 2); // 2 point question
 page.instructions("Show the result of matrix A * B");
 page.grid("2_1", [[1, 0, 2],[1, 1, -2],[2, 1, 0]]);
-page.span("*");
+Util.span("*");
 page.grid("2_2", [[1, 1, -1],[-2, 1, 0],[1, 1, 3]]);
-page.span("=");
+Util.span("=");
 page.emptyGrid("2_3", 3, 3);
 
 // question 3
@@ -57,37 +57,37 @@ page.fileUpload(7, ".java");
 // question 8
 page.addQuestion(8, "Graph Theory", "matrix");
 page.instructions("Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable.");
-page.img("Bellmanford_3.png");
-page.br();
+Util.img("Bellmanford_3.png");
+Util.br();
 page.emptyGrid("8_1", 6, 6, [1, 2, 3, 4, 5, 6]);
 
 // question 9
 
 // question 10
 page.addQuestion(10, "Arithmetic", "fillin");
-page.span("What is 2 + 2?");
+Util.span("What is 2 + 2?");
 page.fillin(10);
 
 // question 11
 page.addQuestion(11, 'Dinosaur', "mcRadioImg");
-page.p("Which one is the dinosaur?");
+Util.p("Which one is the dinosaur?");
 page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]);
 
 // question 12
 page.addQuestion(12, 'Dinosaur', "selectImg");
-page.p("Which one is the dinosaur?");
+Util.p("Which one is the dinosaur?");
 page.selectImg(12, ["cat2.jpg", "fish2.png", "trex.jpg"]);
 
 // question 13
 page.addQuestion(13, 'Multimedia', "audio");
 page.instructions('listen to the following audio file and pick the name of the main character.');
-page.aud("clip1.mp3");
+Util.audio("clip1.mp3");
 page.selectText(13, ['Yijin', 'Asher', 'Ying', 'Xuefan', 'Bob']);
 
 // question 14
 page.addQuestion(14, 'Tacoma Narrows', "video");
 page.instructions('Watch the following video, then explain what caused the bridge to fail.');
-page.vid("Tacoma Narrows Bridge Collapse.mp4");
+Util.video("Tacoma Narrows Bridge Collapse.mp4");
 page.essay(14, 10, 80, 200);
 
 // question 15
@@ -106,6 +106,8 @@ page.instructions("Fill in the grid");
 page.grid("17_1", [["headers 1", "header 2", "header 3"],
 				   ["euler.jpg", "hello", 4],
 				   ["later", "einstein.jpg", "%%input%%"]], true);
+var calendar = new Calendar(new Date(), 365);
+calendar.year(page.q);
 
 // question 18
 page.end(18);
