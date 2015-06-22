@@ -190,27 +190,21 @@ Quiz.prototype.end = function(id) {
     this.createSubmit(2);
 };
 
+function makeEditBox(parent, editFunc, deleteFunc, copyFunc) {
+    var editBox = document.createElement("div");
+    editBox.className = "edit";
+    mkpbutton(editBox, "Edit", id+"-edit", editFunc);
+    mkpbutton(editBox, "Delete", id+"-delete", deleteFunc); 
+    mkpbutton(editBox, "Copy", id+"-copy", copyFunc);
+    parent.appendChild(editBox);
+}   
+
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
     this.q = document.getElementById("qc" + id);
     points = (!exists(typeof(points))) ? 1 : points;
     level =  (!exists(typeof(level))) ? 1 : level;
-    var editBox = document.createElement("div");
-    editBox.className = "edit";
-    if (this.editMode) {
-    	mkpbutton(editBox, "Edit", id+"-edit", function() {
-            innerHTML = "";
-            console.log(edit.id);
-        });
-        mkpbutton(editBox, "Delete", id+"-delete",  function() {
-            innerHTML = "";
-            console.log(del.id);
-        });
-        mkbutton(editBox, "Copy", id+"-copy", function() {
-            innerHTML = "";
-            console.log(copy.id);
-        });
-    }
+
 
     header = document.createElement("div");
     header.className = "qheader";
@@ -220,7 +214,20 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     floatRight.className = "float-right";
     floatRight.appendChild(mk("span", "points:" + points, "qpoints"));
     floatRight.appendChild(mk("span", "level:" + level, "level"));
-    floatRight.appendChild(editBox);
+    if (this.editMode) {
+        makeEditBox(floatRight, function() {
+        	innerHTML = "";
+        	console.log(edit.id);
+        },
+         function() {
+        	innerHTML = "";
+        	console.log(del.id);
+        },
+        function() {
+        	innerHTML = "";
+        	console.log(copy.id);
+        } );
+    }
 
     header.appendChild(floatRight);
 
@@ -1164,3 +1171,15 @@ Quiz.prototype.editQuestion = function() {
 	});
 	
 }
+
+
+// List/Edit Quizzes Page
+
+
+
+
+
+
+
+// List/Edit Grades Page
+
