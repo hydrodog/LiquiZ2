@@ -143,11 +143,11 @@ public class Graph {
 				}
 				if (Visualize.storeAnswer){
 					for (int i = 0; i < v; i++)
-						go.print(cost[i] + " ");
+						go.print(String.format("%4.1f ", cost[i]));
 					go.print('\n');
 					for (int i = 0; i < v; i++)
 						go.print(pred[i] + " ");
-					go.print('\n');
+					go.print("\n\n");
 				}
 				if (!changed)
 					break; // no new paths found, so any further iterations will do nothing
@@ -159,8 +159,8 @@ public class Graph {
 						return;	
 					}
 				}
-				Visualize.terminate = true;
 			}
+			Visualize.terminate = true;
 		}
 	}
 	public boolean Prim(int[] edges) {

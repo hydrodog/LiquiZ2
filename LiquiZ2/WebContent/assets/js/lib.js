@@ -190,7 +190,7 @@ Quiz.prototype.end = function(id) {
     this.createSubmit(2);
 };
 
-function makeEditBox(parent, editFunc, deleteFunc, copyFunc) {
+function makeEditBox(parent, id, editFunc, deleteFunc, copyFunc) {
     var editBox = document.createElement("div");
     editBox.className = "edit";
     mkpbutton(editBox, "Edit", id+"-edit", editFunc);
@@ -582,8 +582,10 @@ Calendar.prototype.month = function(parent, d) {
 Calendar.prototype.year = function(parent) {
     var div = document.createElement("div");
     var d = this.startDate;
-    for (var month = 0; month < 12; month++)
+    for (var month = 0; month < 12; month++) {
         this.month(div, d);
+        d.setMonth(d.getMonth() + 1);
+	}
         
     parent.appendChild(div);
 }

@@ -96,13 +96,15 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 					double denom = (y[j2] - y[i2]) * (x[j] - x[i]) - (x[j2] - x[i2]) * (y[j] - y[i]);
 					double ua = ((x[j2] - x[i2]) * (y[i] - y[i2]) - (y[j2] - y[i2]) * (x[i] - x[i2]))/denom;
 					double ub = ((x[j] - x[i]) * (y[i] - y[i2]) - (y[j] - y[i]) * (x[i] - x[i2]))/denom;
-					double xIntersect = x[i] + ua * (x[j]-x[i]);
-					double yIntersect = y[i] + ub * (y[j]-y[i]);
-					double dist = Math.hypot(xIntersect - candidateX, yIntersect - candidateY);
-					if (dist < minDistance)
-						minDistance = dist;
+					if (ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
+						double xIntersect = x[i] + ua * (x[j]-x[i]);
+						double yIntersect = y[i] + ub * (y[j]-y[i]);
+						double dist = Math.hypot(xIntersect - candidateX, yIntersect - candidateY);
+						if (dist < minDistance)
+							minDistance = dist;
+					}
 				}
-			if (minDistance < bestDistance) {
+			if (minDistance > bestDistance) {
 				bestX = candidateX;
 				bestY = candidateY;
 			}

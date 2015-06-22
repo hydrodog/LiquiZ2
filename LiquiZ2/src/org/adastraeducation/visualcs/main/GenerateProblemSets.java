@@ -1,12 +1,15 @@
 package org.adastraeducation.visualcs.main;
 
 import org.adastraeducation.visualcs.DrawOnPGraphics;
+import org.adastraeducation.visualcs.Visualize;
 import org.adastraeducation.visualcs.graph.Graph;
 import org.adastraeducation.visualcs.graph.PGraphicsGraphDisplayer;
+
 import processing.pdf.PGraphicsPDF;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+
 import java.io.*;
 
 public class GenerateProblemSets {
@@ -18,9 +21,10 @@ public class GenerateProblemSets {
 		String answerFile = dir + problem + n + ".txt";
 		PGraphicsGraphDisplayer graphDisp = 
 			new PGraphicsGraphDisplayer(null, null, answerFile, graph);
-		writeProblem(graphDisp, problem, n);
+		writeProblem(graphDisp, problem, n, false);
+		Visualize.storeAnswer = true;
 		graph.BellmanFord(0, 6);
-		writeProblem(graphDisp, problem + "_sol", n);
+		writeProblem(graphDisp, problem + "_sol", n, true);
 	}
 	private static class BogusPApplet extends PApplet {
 		public void setup() {
@@ -36,10 +40,12 @@ public class GenerateProblemSets {
 		g.setSize(w,h);
 		return g;
 	}
-	public static void writeProblem(DrawOnPGraphics d, String problem, int n) {
+	public static void writeProblem(DrawOnPGraphics d, String problem, int n,
+			boolean writeTextAnswer) {
 		PGraphics g = makePGraphics(w1,h1);
 		d.setPGraphics(g);
 		d.draw(); // draw on image
+		Visualize.storeAnswer = false;
 		g.save(dir + problem + n + ".png");
 		g = makePGraphics(w2,h2); // create the small image
 		d.setPGraphics(g);
