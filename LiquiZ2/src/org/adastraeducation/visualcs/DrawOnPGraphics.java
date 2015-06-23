@@ -11,21 +11,31 @@ public abstract class DrawOnPGraphics {
 	protected PApplet parent;	// if not null, wait interactively
 							// this can be a delay or wait for keyboard
 	public final static String dir = "data/img/";
+	private AnswerStore prob;
 
-	public DrawOnPGraphics(PApplet parent, PGraphics g, int bgColor, int fgColor, int txtHeight) {
+	public DrawOnPGraphics(PApplet parent, PGraphics g, 
+			int bgColor, int fgColor, int txtHeight,
+			AnswerStore prob) {
 		this.parent = parent;
 		if (parent == null)
 			this.g = g;
-		else
-			this.g = parent.g;
+		else {
+			setPGraphics(parent.g);
+		}
 		this.bgColor = bgColor;
 		this.fgColor = fgColor;
 		this.txtHeight = txtHeight;
+		this.prob = prob;
+	}
+	public DrawOnPGraphics(PApplet parent, PGraphics g, AnswerStore prob) {
+		this(parent, g, 0xFFFFFF, 0x000000, 30, prob);
 	}
 	public abstract void thisDraw();
 	public void draw() {
-		if (g == null)
-			return;
+		if (parent != null) {
+			g = parent.g;
+			setPGraphics(g);	
+		}
 	    g.beginDraw();
 	    thisDraw();
 	    g.endDraw();
@@ -33,4 +43,5 @@ public abstract class DrawOnPGraphics {
 	public void setPGraphics(PGraphics g) {
 		this.g = g;
 	}
+	public AnswerStore getAnswerStore() { return prob; }
 }

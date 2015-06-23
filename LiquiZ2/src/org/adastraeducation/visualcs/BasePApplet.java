@@ -4,8 +4,8 @@ import org.adastraeducation.visualcs.util.RandomUtil;
 
 import processing.core.PApplet;
 
-public class BasePApplet extends PApplet {
-	private DrawOnPGraphics drawer;
+public abstract class BasePApplet extends PApplet implements Runnable {
+	protected DrawOnPGraphics drawer;
 	private int delayTime;
 	private int keyWait;
 	private int mouseWait;
@@ -13,9 +13,20 @@ public class BasePApplet extends PApplet {
 		drawer = d;
 	}*/
 	public void setup() {
-		size(600,600);
+		size(900,600);
+		background(0,200,0);
 		delayTime = 500;
+		Visualize.storeAnswer = false;
+		Thread t = new Thread(this) {
+			public void run(){
+				for (;;)
+					algorithm();
+
+			}			
+		};
+		t.start();
 	}
+	public abstract void algorithm();
 	public void draw() {
 		getDrawer().draw();
 	}
