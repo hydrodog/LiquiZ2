@@ -667,40 +667,42 @@ Quiz.prototype.end = function(id) {
     this.createSubmit(2);
 };
 
+function makeEditBox(parent, editFunc, deleteFunc, copyFunc) {
+    var editBox = Util.div("edit");
+    editBox.appendChild(Util.button("Edit", null, id+"-edit", editFunc));
+    editBox.appendChild(Util.button("Delete", null, id+"-delete", deleteFunc)); 
+    editBox.appendChild(Util.button("Copy", null, id+"-copy", copyFunc));
+    parent.appendChild(editBox);
+}   
+
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     this.div.appendChild(Util.div("qc " + className + "-qc", "qc" + id));
     this.q = document.getElementById("qc" + id);
     points = (typeof points === "undefined") ? 1 : points;
     level =  (typeof level === "undefined") ? 1 : level;
-    var editBox = document.createElement("div");
-    editBox.className = "edit";
-    if (this.editMode) {
-        editBox.appendChild(Util.button("Edit", null, id+"-edit", function(e) {
-            innerHTML = "";
-            console.log(e.currentTarget.id);
-        }));
-        editBox.appendChild(Util.button("Delete", null, id+"-delete", function(e) {
-            innerHTML = "";
-            console.log(e.currentTarget.id);
-        }));
-        editBox.appendChild(Util.button("Copy", null, id+"-copy", function(e) {
-            innerHTML = "";
-            console.log(e.currentTarget.id);
-        }));
-    }
 
-    header = document.createElement("div");
-    header.className = "qheader";
+    header = Util.div("qheader");
     header.appendChild(Util.h2(title));
     
-    floatRight = document.createElement("div");
-    floatRight.className = "float-right";
+    floatRight = Util.div("float-right");
+
     floatRight.appendChild(Util.span("points:" + points, "qpoints"));
     floatRight.appendChild(Util.span("level:" + level, "level"));
-    floatRight.appendChild(editBox);
-
+    if (this.editMode) {
+        makeEditBox(floatRight, function() {
+                innerHTML = "";
+                console.log(edit.id);
+            },
+            function() {
+                innerHTML = "";
+                console.log(del.id);
+            },
+            function() {
+                innerHTML = "";
+                console.log(copy.id);
+            });
+    }
     header.appendChild(floatRight);
-
     this.q.appendChild(header);
 };
 
@@ -1584,5 +1586,9 @@ function processAJAX() {
         console.error("thisPage() never ran!!");
     }
 }
+
+// List/Edit Quizzes Page
+
+// List/Edit Grades Page
 
 window.onload  = build;

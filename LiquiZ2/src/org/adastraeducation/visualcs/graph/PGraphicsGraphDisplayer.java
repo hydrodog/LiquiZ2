@@ -102,7 +102,7 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 					if (dist < minDistance)
 						minDistance = dist;
 				}
-			if (minDistance > bestDistance) {
+			if (minDistance < bestDistance) {
 				bestX = candidateX;
 				bestY = candidateY;
 			}
