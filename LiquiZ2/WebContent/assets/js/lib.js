@@ -261,11 +261,10 @@ Util = {
         });
     },
 
-    file: function(accept, value, className, id) {
+    file: function(accept, className, id) {
         return Util.make("input", {
             type: "file",
             accept: accept,
-            value: value,
             className: className,
             id: id,
         });
@@ -532,9 +531,11 @@ function Quiz(quizinfo) {
 }
 
 Quiz.prototype.displayHeader = function() {
-    this.container.appendChild(Util.h1(this.title));
-    this.container.appendChild(Util.span(" Points: " + this.points, "points"));
-    this.container.appendChild(Util.p("timer"));
+    var header = Util.div("header");
+    header.appendChild(Util.h1(this.title));
+    header.appendChild(Util.span(" Points: " + this.points, "points"));
+    header.appendChild(Util.p("timer"));
+    this.container.appendChild(header);
     //TODO: add time and countdown
     //TODO: add remaining tries
 }
@@ -542,8 +543,7 @@ Quiz.prototype.displayHeader = function() {
 var clicks = 0;
 Quiz.prototype.end = function(id) {
     var parent = this;
-    qc = Util.div("qc", "qc" + id);
-    page.q.appendChild(qc);
+    var qc = Util.div("qc", "qc" + id);
     if (this.editMode) {
         qc.appendChild(Util.button("New Question", "new-question", null,
             function() {
@@ -554,6 +554,7 @@ Quiz.prototype.end = function(id) {
                 clicks++;
             }));
     }
+    this.container.appendChild(qc);
     this.createSubmit(2);
 };
 
@@ -566,34 +567,31 @@ function makeEditBox(parent, id, editFunc, deleteFunc, copyFunc) {
 }   
 
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
-    this.container.appendChild(Util.div("qc " + className + "-qc", "qc" + id));
-    this.q = document.getElementById("qc" + id);
     points = (typeof points === "undefined") ? 1 : points;
     level =  (typeof level === "undefined") ? 1 : level;
 
-    header = Util.div("qheader");
+    var qc = Util.div("qc " + className + "-qc", "qc" + id);
+
+    var header = Util.div("qheader");
     header.appendChild(Util.h2(title));
     
-    floatRight = Util.div("float-right");
-
+    var floatRight = Util.div("float-right");
     floatRight.appendChild(Util.span("points:" + points, "qpoints"));
     floatRight.appendChild(Util.span("level:" + level, "level"));
     if (this.editMode) {
         makeEditBox(floatRight, id, function(e) {
-                innerHTML = "";
                 console.log(e.target.id);
             },
             function(e) {
-                innerHTML = "";
                 console.log(e.target.id);
             },
             function(e) {
-                innerHTML = "";
                 console.log(e.target.id);
             });
     }
     header.appendChild(floatRight);
-    this.q.appendChild(header);
+    qc.appendChild(header);
+    return qc;
 };
 
 Quiz.prototype.createSubmit = function(id) {
@@ -603,31 +601,23 @@ Quiz.prototype.createSubmit = function(id) {
 };
 
 Quiz.prototype.instructions = function(txt) {
-    this.q.appendChild(Util.p(txt, 'instructions'));
+    return Util.p(txt, 'instructions');
 }
 
-Quiz.prototype.box = function(txt) {
-    var div = Util.div("box");
-    div.innerHTML = txt;
-    this.q.appendChild(newChild);
-}
-
-Quiz.prototype.fillin = function(id, sendBack) {
+Quiz.prototype.fillin = function(id) {
     var input = Util.input('text', 'fillin', id);
-    if (sendBack)
-        return input;
-    this.q.appendChild(input);
+    return input;
 }
 
 Quiz.prototype.numeric = function(id) {
-    this.q.appendChild(Util.input('text', 'number', id));
+    return Util.input('text', 'number', id);
 }
 
 Quiz.prototype.numid = function(id, v) {
     var inp = Util.input('text', 'cell', id);
     inp.size = 3;
     inp.value = v;
-    this.q.appendChild(inp);
+    return inp;
 }
 
 Quiz.prototype.add = function(parent, spec) {
@@ -635,7 +625,7 @@ Quiz.prototype.add = function(parent, spec) {
 }
 
 Quiz.prototype.mcRadioText = function(id, txt) {
-    this.q.appendChild(Util.input('radio', 'multichoiceradio', id));
+    return Util.input('radio', 'multichoiceradio', id);
     this.add(this.q, document.createTextNode(txt));
 }
 
@@ -647,7 +637,7 @@ Quiz.prototype.mcRadioImg = function(id, src) {
         group = [radio, label];
         l.push(group);
     }
-    this.q.appendChild(Util.table(l));
+    return Util.table(l);
 }
 
 /*
@@ -667,9 +657,7 @@ Quiz.prototype.selectText = function(id, list, sendBack) {
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
 	}
-    if (sendBack)
-        return s;
-	this.q.appendChild(s);
+    return s;
 }
 
 /*
@@ -687,7 +675,7 @@ Quiz.prototype.selectImg = function(id, list) {
 		opt.appendChild(img);
 		s.appendChild(opt);
 	}
-	this.q.appendChild(s);
+	return s;
 }
 
 Quiz.prototype.match = function(id, questions, answers) {
@@ -699,7 +687,7 @@ Quiz.prototype.match = function(id, questions, answers) {
     	q = r.insertCell(1);
     	q.appendChild(this.selectText(id + "_" + i, answers, true));
     }
-    this.q.appendChild(t);
+    return t;
 }
 
 Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
@@ -721,7 +709,7 @@ Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
             l[i][j] = "%%input%%";
         }
     }
-    this.grid(id, l, returnHeader);
+    return this.grid(id, l, returnHeader);
 };
 
 Quiz.prototype.grid = function(id, list, header) {
@@ -751,7 +739,7 @@ Quiz.prototype.grid = function(id, list, header) {
         }
     }        
     d.appendChild(t);
-    this.q.appendChild(d);
+    return d;
 };
 
 Quiz.prototype.suffixMap = {
@@ -762,7 +750,7 @@ Quiz.prototype.suffixMap = {
 };
 
 Quiz.prototype.tableInput = function(s, returnValue, id) {
-    input = Util.input("text", id + "_" + this.inputCount, "grid-input");
+    input = Util.input("text", "grid-input", id + "_" + this.inputCount);
     this.inputCount++;
     return input;
 };
@@ -780,9 +768,9 @@ Quiz.prototype.suffix = function(s, id) {
 Quiz.prototype.fileUpload = function(id, accept) {
     var up = document.createElement("input");
     up.id = id;
-    up.type = "file";	
+    up.type = "file";
     up.accept = accept;
-    this.q.appendChild(up);
+    return up;
 };
 
 //function imageAudioVideo() {
@@ -884,7 +872,7 @@ Quiz.prototype.clickableImage = function(id, src, xs, ys) {
     var img = document.createElement("img");
     img.src = mediaLocations.img + src;
     img.onclick = imgClick;
-    this.q.appendChild(img);
+    return img;
 };
 
 // multiple fill-in-the-blank where [[]] is replaced by inputs
@@ -898,7 +886,7 @@ Quiz.prototype.cloze = function(id, txt) {
         if (i != preItems.length-1)
         	pre.appendChild(this.fillin(id + "_" + i, true));
     }
-    this.q.appendChild(pre);
+    return pre;    
 };
 
 // enter code to be compiled, run, spindled, mutilated
@@ -908,7 +896,7 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
     ta.rows = rows;
     ta.cols = cols;
     ta.value = txt;
-    this.q.appendChild(ta);
+    return ta;
 };
 
 Quiz.prototype.essay = function(id, rows, cols, maxwords) {
@@ -917,7 +905,7 @@ Quiz.prototype.essay = function(id, rows, cols, maxwords) {
     ta.rows = rows;
     ta.cols = cols;
     //ta.value = essay.text;
-    this.q.appendChild(ta);
+    return ta;
 };
 
 //////////////////////////////////////////////////////////////////////
