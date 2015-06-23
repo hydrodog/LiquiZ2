@@ -482,12 +482,13 @@ mediaLocations = {
  * the css file depending on the user's preferences.
  */
 function appendCSSLink(src) {
-	var head = document.getElementsByTagName('head')[0];
-	var link = document.createElement('LINK');
-	link.rel="stylesheet";
-	link.type="text/css";
-	link.href=src;
-	head.appendChild(link);
+    var head = document.getElementsByTagName('head')[0];
+    var link = Util.make("link", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: src,
+    });
+    head.appendChild(link);
 }
 
 /*
@@ -524,9 +525,9 @@ function Quiz(quizinfo) {
 	for (var k in quizinfo) {
 		this[k] = quizinfo[k];
 	}
-    this.div = document.getElementById("container");
-    this.div.className = "quiz";
-    //this.displayHeader(this.div);
+    this.container = document.getElementById("container");
+    this.container.className = "quiz";
+    //this.displayHeader(this.container);
     this.displayHeader();
     this.editMode = true;
     console.log(this);
@@ -534,9 +535,9 @@ function Quiz(quizinfo) {
 }
 
 Quiz.prototype.displayHeader = function() {
-    this.div.appendChild(Util.h1(this.title));
-    this.div.appendChild(Util.span(" Points: " + this.points, "points"));
-    this.div.appendChild(Util.p("timer"));
+    this.container.appendChild(Util.h1(this.title));
+    this.container.appendChild(Util.span(" Points: " + this.points, "points"));
+    this.container.appendChild(Util.p("timer"));
     //TODO: add time and countdown
     //TODO: add remaining tries
 }
@@ -568,7 +569,7 @@ function makeEditBox(parent, id, editFunc, deleteFunc, copyFunc) {
 }   
 
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
-    this.div.appendChild(Util.div("qc " + className + "-qc", "qc" + id));
+    this.container.appendChild(Util.div("qc " + className + "-qc", "qc" + id));
     this.q = document.getElementById("qc" + id);
     points = (typeof points === "undefined") ? 1 : points;
     level =  (typeof level === "undefined") ? 1 : level;
@@ -581,17 +582,17 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     floatRight.appendChild(Util.span("points:" + points, "qpoints"));
     floatRight.appendChild(Util.span("level:" + level, "level"));
     if (this.editMode) {
-        makeEditBox(floatRight, id, function() {
+        makeEditBox(floatRight, id, function(e) {
                 innerHTML = "";
-                console.log(edit.id);
+                console.log(e.target.id);
             },
-            function() {
+            function(e) {
                 innerHTML = "";
-                console.log(del.id);
+                console.log(e.target.id);
             },
-            function() {
+            function(e) {
                 innerHTML = "";
-                console.log(copy.id);
+                console.log(e.target.id);
             });
     }
     header.appendChild(floatRight);
@@ -601,7 +602,7 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit");
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
-    this.div.appendChild(div);
+    this.container.appendChild(div);
 };
 
 Quiz.prototype.instructions = function(txt) {
@@ -1341,7 +1342,7 @@ var list = [
             "Cloze"];
 
 //Quiz.prototype.editMode = function(){
-//	var c = mkdivid(this.div, "new-question-button", "qc new-question-button"); // TODO(asher): Fix mkdiv
+//	var c = mkdivid(this.container, "new-question-button", "qc new-question-button"); // TODO(asher): Fix mkdiv
 //    var newB = mkbutton("New Question"); // TODO(asher): Fix mkbutton
 //    newB.onclick = function() { this.editQuestion; }
 //    c.appendChild(newB);
@@ -1387,7 +1388,7 @@ function editTextBox(val){
 Quiz.prototype.editQuestion = function() {
     var parent = this;
     var editor = Util.div("editor", "editor");
-    this.div.appendChild(editor);
+    this.container.appendChild(editor);
     var t0 = document.createElement("table");
     editor.appendChild(t0);
     var r0 = t0.insertRow(0);
