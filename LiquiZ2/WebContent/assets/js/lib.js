@@ -7,10 +7,6 @@ Util = {
         console.log(s);
     },
 
-    render: function(parent, child) {
-        parent.appendChild(child);
-    },
-
     /*
      * Returns an html tag filled with the keys and values you pass in
      * Second arg is an object filled with key, value pairs
@@ -496,8 +492,9 @@ function appendCSSLink(src) {
  */
 function appendCSSText(css) {
     var head = document.getElementsByTagName('head')[0];
-    var s = document.createElement('style');
-    s.setAttribute('type', 'text/css');
+    var s = Util.make("style", {
+        type: "text/css"
+    });
     if (s.styleSheet) {   // IE
         s.styleSheet.cssText = css;
     } else {                // the world
