@@ -530,7 +530,7 @@ function Quiz(quizinfo) {
 	for (var k in quizinfo) {
 		this[k] = quizinfo[k];
 	}
-    this.div = document.getElementById("quiz");
+    this.div = document.getElementById("container");
     this.div.className = "quiz";
     //this.displayHeader(this.div);
     this.displayHeader();
