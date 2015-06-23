@@ -3,7 +3,7 @@ package org.adastraeducation.visualcs;
 public class Visualize {
 
 	public static final boolean visualize = false;
-	public static final boolean storeAnswer = true;
+	public static boolean storeAnswer = true;
 	
 	public static boolean start=true;  //to get the problem
 	

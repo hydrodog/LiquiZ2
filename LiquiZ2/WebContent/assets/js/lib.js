@@ -1,10 +1,14 @@
-Util = {    
+Util = {
     dump: function(obj) {
         var s = "";
         for (var k in obj) {
             s += k + "-->" + obj[k] + '\n';
         }
         console.log(s);
+    },
+
+    render: function(parent, child) {
+        parent.appendChild(child);
     },
 
     /*
@@ -181,10 +185,11 @@ Util = {
 
     /*
      * This function takes the src as its first argument instead of innerHTML
+     * src is relative to the dir you defined in mediaLocations
      */
     img: function(src, className, id) {
         return Util.make("img", {
-            src: src,
+            src: mediaLocations.img + src,
             className: className,
             id: id,
         });
@@ -200,11 +205,12 @@ Util = {
     /*
      * Takes a src, class, id and a bool for controls.
      * controls defaults to true.
+     * src is relative to the dir you defined in mediaLocations
      */
     video: function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
         return Util.make("video", {
-            src: src,
+            src: mediaLocations.video + src,
             controls: controls,
             className: className,
             id: id,
@@ -214,11 +220,12 @@ Util = {
     /*
      * Takes a src, class, id and a bool for controls.
      * controls defaults to true.
+     * src is relative to the dir you defined in mediaLocations
      */
     audio: function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
         return Util.make("audio", {
-            src: src,
+            src: mediaLocations.audio + src,
             controls: controls,
             className: className,
             id: id,
@@ -397,6 +404,17 @@ Util = {
     },
 
 };
+
+mediaLocations = {
+    img: "assets/img/",
+    audio: "assets/aud/",
+    video: "assets/vid/",
+    png: this.img,
+    jpg: this.img,
+    mp3: this.audio,
+    wav: this.audio,
+    mp4: this.video,
+},
 
 // /*
 //  * Proof of concept. Not production code!
@@ -632,7 +650,6 @@ function Quiz(quizinfo) {
 		this[k] = quizinfo[k];
 	}
     this.div = document.getElementById("quiz");
-    // this.setDataDir(this.datadir);
     this.div.className = "quiz";
     //this.displayHeader(this.div);
     this.displayHeader();
@@ -667,7 +684,7 @@ Quiz.prototype.end = function(id) {
     this.createSubmit(2);
 };
 
-function makeEditBox(parent, editFunc, deleteFunc, copyFunc) {
+function makeEditBox(parent, id, editFunc, deleteFunc, copyFunc) {
     var editBox = Util.div("edit");
     editBox.appendChild(Util.button("Edit", null, id+"-edit", editFunc));
     editBox.appendChild(Util.button("Delete", null, id+"-delete", deleteFunc)); 
@@ -689,7 +706,7 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     floatRight.appendChild(Util.span("points:" + points, "qpoints"));
     floatRight.appendChild(Util.span("level:" + level, "level"));
     if (this.editMode) {
-        makeEditBox(floatRight, function() {
+        makeEditBox(floatRight, id, function() {
                 innerHTML = "";
                 console.log(edit.id);
             },
@@ -706,22 +723,6 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     this.q.appendChild(header);
 };
 
-Quiz.mediaLocations = { // map where each kind of file is under assets
-    png: "img/",         //TODO: map by class, like maps to map directory (harder)
-    jpg: "img/",
-    mp3: "aud/",
-    wav: "aid/",
-    mp4: "vid/",
-    img: "assets/img/",  // map the javascript object type to the directory?
-    aud: "assets/aud/",
-    vid: "assets/vid/"
-}
-
-Quiz.prototype.setDataDir = function(path) {
-    Quiz.mediaLocations.img = path + "/img/";
-    Quiz.mediaLocations.aud = path + "/aud/";
-    Quiz.mediaLocations.vid = path + "/vid/";
-}
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit");
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
@@ -769,7 +770,7 @@ Quiz.prototype.mcRadioImg = function(id, src) {
     l = [];
     for (var i = 0; i < src.length; i++) {
         radio = Util.radio(id+"-"+i, id, 'multichoiceradio', id+"-"+i);
-        label = Util.label(id+"-"+i, Util.img(Quiz.mediaLocations.img + src[i]));
+        label = Util.label(id+"-"+i, Util.img(src[i]));
         group = [radio, label];
         l.push(group);
     }
@@ -809,7 +810,7 @@ Quiz.prototype.selectImg = function(id, list) {
 		var opt = document.createElement("option");
 		opt.value = i;
 		var img = document.createElement("img");
-		img.src = Quiz.mediaLocations.img + list[i];
+		img.src = mediaLocations.img + list[i];
 		opt.appendChild(img);
 		s.appendChild(opt);
 	}
@@ -994,8 +995,10 @@ Calendar.prototype.month = function(parent, d) {
 Calendar.prototype.year = function(parent) {
     var div = document.createElement("div");
     var d = this.startDate;
-    for (var month = 0; month < 12; month++)
+    for (var month = 0; month < 12; month++) {
         this.month(div, d);
+        d.setMonth(d.getMonth() + 1);
+	}
         
     parent.appendChild(div);
 }
@@ -1006,7 +1009,7 @@ function imgClick(e) {
 
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
     var img = document.createElement("img");
-    img.src = Quiz.mediaLocations.img + src;
+    img.src = mediaLocations.img + src;
     img.onclick = imgClick;
     this.q.appendChild(img);
 };

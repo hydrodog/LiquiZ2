@@ -12,6 +12,7 @@ public class AnswerStore {
 	}
 	public void print(Object obj) {
 		pw.print(obj);
+		System.out.print(obj);
 	}
 	public void end() {
 		pw.close();

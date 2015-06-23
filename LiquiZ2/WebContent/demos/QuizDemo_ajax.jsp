@@ -10,16 +10,16 @@ page = new Quiz( {
 page.addQuestion(1, "Mergesort", "grid", 0);
 page.instructions("Show the first pass of Mergesort below");
 page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]);
-Util.br();
+Util.render(page.q, Util.br());
 page.emptyGrid("1_2", 1, 8);
 
 // question 2
 page.addQuestion(2, "Matrix Multiplication", 'matrix', 2); // 2 point question
 page.instructions("Show the result of matrix A * B");
 page.grid("2_1", [[1, 0, 2],[1, 1, -2],[2, 1, 0]]);
-Util.span("*");
+Util.render(page.q, Util.span("*"));
 page.grid("2_2", [[1, 1, -1],[-2, 1, 0],[1, 1, 3]]);
-Util.span("=");
+Util.render(page.q, Util.span("="));
 page.emptyGrid("2_3", 3, 3);
 
 // question 3
@@ -57,37 +57,37 @@ page.fileUpload(7, ".java");
 // question 8
 page.addQuestion(8, "Graph Theory", "matrix");
 page.instructions("Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable.");
-Util.img("Bellmanford_3.png");
-Util.br();
+Util.render(page.q, Util.img("Bellmanford_3.png"));
+Util.render(page.q, Util.br());
 page.emptyGrid("8_1", 6, 6, [1, 2, 3, 4, 5, 6]);
 
 // question 9
 
 // question 10
 page.addQuestion(10, "Arithmetic", "fillin");
-Util.span("What is 2 + 2?");
+Util.render(page.q, Util.span("What is 2 + 2?"));
 page.fillin(10);
 
 // question 11
 page.addQuestion(11, 'Dinosaur', "mcRadioImg");
-Util.p("Which one is the dinosaur?");
+Util.render(page.q, Util.p("Which one is the dinosaur?"));
 page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]);
 
 // question 12
 page.addQuestion(12, 'Dinosaur', "selectImg");
-Util.p("Which one is the dinosaur?");
+Util.render(page.q, Util.p("Which one is the dinosaur?"));
 page.selectImg(12, ["cat2.jpg", "fish2.png", "trex.jpg"]);
 
 // question 13
 page.addQuestion(13, 'Multimedia', "audio");
 page.instructions('listen to the following audio file and pick the name of the main character.');
-Util.audio("clip1.mp3");
+Util.render(page.q, Util.audio("clip1.mp3"));
 page.selectText(13, ['Yijin', 'Asher', 'Ying', 'Xuefan', 'Bob']);
 
 // question 14
 page.addQuestion(14, 'Tacoma Narrows', "video");
 page.instructions('Watch the following video, then explain what caused the bridge to fail.');
-Util.video("Tacoma Narrows Bridge Collapse.mp4");
+Util.render(page.q, Util.video("Tacoma Narrows Bridge Collapse.mp4"));
 page.essay(14, 10, 80, 200);
 
 // question 15
