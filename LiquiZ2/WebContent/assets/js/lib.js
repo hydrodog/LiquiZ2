@@ -477,12 +477,6 @@ mediaLocations = {
 //     return result;
 // }
 
-// function labelGrid(list, th) {
-//     var td = Util.make("td", null, list[0]);
-//     var tr = Util.make("tr", null, td);
-//     return tr;
-// }
-
 /*
  * Add a css file to the header section. This is useful for dynamically loading
  * the css file depending on the user's preferences.
