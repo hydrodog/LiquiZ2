@@ -11,4 +11,5 @@ public interface GraphObserver {
 	public int getVertexStyle(int v);	 				// get the current status of a particular vertex   
 	public void setEdgeStyle(int from, int to, int style);
 	public int getEdgeStyle(int from, int to);
+	public void print(Object obj);
 }

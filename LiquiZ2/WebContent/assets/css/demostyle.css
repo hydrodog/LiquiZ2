@@ -113,12 +113,19 @@ h2 {
     border: 1 solid #000;
 }
 
-.matrix {
+.matrix,
+table {
     font: 10pt Courier, fixed;
-    background-color: #40c0f0;
-    display: inline-block;
+    background-color: #DEE4E6;
+    /*display: inline-block;*/
     border: 1px solid black;
     border-collapse: collapse;
+    width: 700px;
+}
+
+td,
+th {
+    border: 1px solid black;
 }
 
 .matrix td {

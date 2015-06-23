@@ -1,13 +1,482 @@
+Util = {
+	dump : function(obj) {
+		var s = "";
+		for ( var k in obj) {
+			s += k + "-->" + obj[k] + '\n';
+		}
+		console.log(s);
+	},
+
+	/*
+	 * Returns an html tag filled with the keys and values you pass in Second
+	 * arg is an object filled with key, value pairs Returns undefined if no
+	 * valid tag was passed.
+	 */
+	make : function(tag, obj) {
+		// without a valid tag we can't continue
+		if (typeof tag === "undefined" || !tag) {
+			console.log("Util.make failed with \ntag: " + tag + "\ninnerHTML: "
+					+ innerHTML + "\nclassName: " + className + "\nid: " + id);
+			return;
+		}
+		var element = document.createElement(tag);
+		for ( var i in obj) {
+			if (typeof obj[i] !== "undefined" && obj[i] !== null)
+				if (i === "innerHTML" && obj[i].nodeName) {
+					element.appendChild(obj[i]);
+				} else {
+					element[i] = obj[i];
+				}
+		}
+		return element;
+	},
+
+	/*
+	 * Most of the following functions only take the innerHTML, the className,
+	 * and the id of the tag you want, in that order. Any cases that break this
+	 * rule will be noted explicitly.
+	 */
+	span : function(innerHTML, className, id) {
+		return Util.make("span", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	div : function(className, id) {
+		return Util.make("div", {
+			className : className,
+			id : id,
+		});
+	},
+
+	p : function(innerHTML, className, id) {
+		return Util.make("p", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	a : function(href, innerHTML, className, id) {
+		return Util.make("a", {
+			href : href,
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	h1 : function(innerHTML, className, id) {
+		return Util.make("h1", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	h2 : function(innerHTML, className, id) {
+		return Util.make("h2", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	h3 : function(innerHTML, className, id) {
+		return Util.make("h3", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	h4 : function(innerHTML, className, id) {
+		return Util.make("h4", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	h5 : function(innerHTML, className, id) {
+		return Util.make("h5", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	h6 : function(innerHTML, className, id) {
+		return Util.make("h6", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	strong : function(innerHTML, className, id) {
+		return Util.make("strong", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	em : function(innerHTML, className, id) {
+		return Util.make("em", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	pre : function(innerHTML, className, id) {
+		return Util.make("pre", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	/*
+	 * This function takes rows and cols as additional arguments
+	 */
+	textarea : function(innerHTML, className, id, rows, cols) {
+		return Util.make("textarea", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+			rows : rows,
+			cols : cols,
+		});
+	},
+
+	ul : function(innerHTML, className, id) {
+		return Util.make("ul", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	ol : function(innerHTML, className, id) {
+		return Util.make("ol", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	li : function(innerHTML, className, id) {
+		return Util.make("li", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	/*
+	 * This function takes the src as its first argument instead of innerHTML
+	 * src is relative to the dir you defined in mediaLocations
+	 */
+	img : function(src, className, id) {
+		return Util.make("img", {
+			src : mediaLocations.img + src,
+			className : className,
+			id : id,
+		});
+	},
+
+	/*
+	 * Does not take any arguments
+	 */
+	br : function() {
+		return Util.make("br");
+	},
+
+	/*
+	 * Takes a src, class, id and a bool for controls. controls defaults to
+	 * true. src is relative to the dir you defined in mediaLocations
+	 */
+	video : function(src, controls, className, id) {
+		controls = (typeof controls !== "undefined") ? controls : true;
+		return Util.make("video", {
+			src : mediaLocations.video + src,
+			controls : controls,
+			className : className,
+			id : id,
+		});
+	},
+
+	/*
+	 * Takes a src, class, id and a bool for controls. controls defaults to
+	 * true. src is relative to the dir you defined in mediaLocations
+	 */
+	audio : function(src, controls, className, id) {
+		controls = (typeof controls !== "undefined") ? controls : true;
+		return Util.make("audio", {
+			src : mediaLocations.audio + src,
+			controls : controls,
+			className : className,
+			id : id,
+		});
+	},
+
+	canvas : function(height, width) {
+		return Util.make("canvas", {
+			height : height,
+			width : width,
+		});
+	},
+
+	form : function(innerHTML, className, id) {
+		return Util.make("form", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	input : function(type, className, id) {
+		return Util.make("input", {
+			type : type,
+			className : className,
+			id : id,
+		});
+	},
+
+	button : function(value, className, id, onClick) {
+		return Util.make("input", {
+			type : "button",
+			value : value,
+			className : className,
+			id : id,
+			onclick : onClick,
+		});
+	},
+
+	file : function(accept, className, id) {
+		return Util.make("input", {
+			type : "file",
+			accept : accept,
+			className : className,
+			id : id,
+		});
+	},
+
+	select : function(name, multiple, innerHTML, className, id) {
+		if (innerHTML.constructor === Array) {
+			var options = document.createDocumentFragment();
+			for (var i = 0; i < innerHTML.length; i++) {
+				options.appendChild(Util.option(innerHTML[i], innerHTML[i]));
+			}
+			innerHTML = options;
+		}
+		return Util.make("select", {
+			name : name,
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+			multiple : multiple,
+		});
+	},
+
+	option : function(value, innerHTML, className, id) {
+		return Util.make("option", {
+			value : value,
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	optgroup : function(label, innerHTML, className, id) {
+		return Util.make("optgroup", {
+			label : label,
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	radio : function(value, name, className, id) {
+		return Util.make("input", {
+			type : "radio",
+			value : value,
+			name : name,
+			className : className,
+			id : id,
+		});
+	},
+
+	checkbox : function(value, name, className, id) {
+		return Util.make("input", {
+			type : "checkbox",
+			value : value,
+			name : name,
+			className : className,
+			id : id,
+		});
+	},
+
+	label : function(htmlFor, innerHTML, className, id) {
+		return Util.make("label", {
+			htmlFor : htmlFor,
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	code : function(innerHTML, className, id) {
+		return Util.make("code", {
+			innerHTML : innerHTML,
+			className : className,
+			id : id,
+		});
+	},
+
+	/*
+	 * Generic <tr> generator. For the use of Util.table(). You probably
+	 * shouldn't use this.
+	 */
+	tr : function(list, th) {
+		var tr = Util.make("tr");
+		for (var i = 0; i < list.length; i++) {
+			var tElement;
+			if (th) {
+				tElement = Util.make("th", {
+					scope : "col",
+					innerHTML : list[i],
+				});
+			} else {
+				tElement = Util.make("td", {
+					innerHTML : list[i],
+				});
+			}
+			tr.appendChild(tElement);
+		}
+		return tr;
+	},
+
+	/*
+	 * Takes in a class for the table, a list of elements to be inserted into
+	 * the table, an optional boolean if there's a header in the table, and an
+	 * optional function that will accept a list and a bool if the list passed
+	 * in is the header and return a tr element
+	 * 
+	 * trFunction should be used to modify escape characters that you pass in
+	 * through the list. It lets you insert any arbitrary formatting to any tr
+	 * element based on whatever escape mechanism you choose.
+	 */
+	table : function(list, header, className, trFunction) {
+		header = (typeof header !== "undefined") ? header : false;
+		trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
+		var result = Util.make("table", {
+			className : className,
+		});
+
+		if (header) {
+			var headList = list.shift();
+			var thead = result.createTHead();
+			thead.appendChild(trFunction(headList, true));
+		}
+
+		var tbody = Util.make("tbody");
+		result.appendChild(tbody);
+		for (var i = 0; i < list.length; i++) {
+			var tr = trFunction(list[i], false);
+			tbody.appendChild(tr);
+		}
+
+		return result;
+	},
+
+};
+
+mediaLocations = {
+	img : "assets/img/",
+	audio : "assets/aud/",
+	video : "assets/vid/",
+	png : this.img,
+	jpg : this.img,
+	mp3 : this.audio,
+	wav : this.audio,
+	mp4 : this.video,
+},
+
+/*
+ * Table generator samples.
+ */
+
+// /*
+// * Proof of concept. Not production code!
+// */
+// tdCount = 0;
+// function modTd(list, th) {
+// var tr = Util.make("tr", {
+// className: "custom-tr",
+// });
+// for (var i = 0; i < list.length; i++) {
+// var tElement;
+// if (th) {
+// tElement = Util.make("th", {
+// className: "modded-header",
+// id: tdCount++,
+// innerHTML: list[i],
+// scope: "col",
+// });
+// } else {
+// tElement = Util.make("td", {
+// className: "modded",
+// id: tdCount++,
+// innerHTML: list[i],
+// });
+// }
+// tr.appendChild(tElement);
+// }
+// return tr;
+// }
+// /*
+// * Proof of concept. Not production code!
+// *
+// * Function that integrates with the new Util.table function
+// * to generate an empty table filled with inputs.
+// */
+// function emptyGrid(list, th) {
+// var obj = list[0];
+// var result = document.createDocumentFragment();
+// for (var i = 0; i < obj.rows; i++) {
+// var tr = Util.make("tr");
+// for (var j = 0; j < obj.cols; j++) {
+// // var input = Util.make("input", {
+// // type: "text",
+// // });
+// var td = Util.make("td", {
+// className: "td-input",
+// innerHTML: Util.make("input", {
+// type: "text",
+// }),
+// });
+// tr.appendChild(td);
+// }
+// result.appendChild(tr);
+// }
+// return result;
+// }
 /*
  * Add a css file to the header section. This is useful for dynamically loading
  * the css file depending on the user's preferences.
  */
 function appendCSSLink(src) {
 	var head = document.getElementsByTagName('head')[0];
-	var link = document.createElement('LINK');
-	link.rel = "stylesheet";
-	link.type = "text/css";
-	link.href = src;
+	var link = Util.make("link", {
+		rel : "stylesheet",
+		type : "text/css",
+		href : src,
+	});
 	head.appendChild(link);
 }
 
@@ -16,8 +485,9 @@ function appendCSSLink(src) {
  */
 function appendCSSText(css) {
 	var head = document.getElementsByTagName('head')[0];
-	var s = document.createElement('style');
-	s.setAttribute('type', 'text/css');
+	var s = Util.make("style", {
+		type : "text/css"
+	});
 	if (s.styleSheet) { // IE
 		s.styleSheet.cssText = css;
 	} else { // the world
@@ -26,117 +496,10 @@ function appendCSSText(css) {
 	head.appendChild(s);
 }
 
-/*
- * Test if an object exists
- */
-function exists(type) {
-	if (type == "undefined")
-		return false;
-	return true;
-}
-
-var count = -5;
-function insertRow(t) {
-	var r = t.insertRow(0);
-	var td = document.createElement("td");
-	td.innerHTML = "stuff";
-	r.appendChild(td);
-	td = document.createElement("td");
-	td.innerHTML = count++;
-	r.appendChild(td);
-}
-
-function select(id, list) {
-
-	var s = document.createElement("select");
-	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("option");
-		opt.value = list[i];
-		opt.innerHTML = list[i];
-		s.appendChild(opt);
-	}
-	s.id = id;
-	return s;
-}
-
-function dump(obj) {
-	var s = "";
-	for ( var k in obj) {
-		s += k + "-->" + obj[k] + '\n';
-	}
-	console.log(s);
-}
-
-function mktext(val) {
-	var text = document.createTextNode(val);
-	return text;
-}
-
-function mkdiv(parent, className) {
-	var div = document.createElement("div");
-	div.className = className;
-	parent.appendChild(div);
-	return div;
-}
-
-function mkdivid(parent, id, className) {
-	var div = mkdiv(parent, className);
-	div.id = id;
-	return div;
-}
-
-function mktable(className, arr) {
-	var t = document.createElement("table");
-	t.className = className;
-	for (var i = 0; i < arr.length; i++) {
-		var tr = t.insertRow(i);
-		for (var j = 0; j < arr[i].length; ++j) {
-			var c = tr.insertCell(j);
-			c.appendChild(arr[i][j]);
-		}
-	}
-	return t;
-}
-
-function mk(tag, value, className) {
-	var t = document.createElement(tag);
-	t.innerHTML = value;
-	t.className = className;
-	return t;
-}
-
-function mkinput(id, type, className) {
-	var inp = document.createElement("input");
-	inp.id = id;
-	inp.type = type;
-	inp.className = className;
-	return inp;
-}
-
-function mkbutton(val, id, clickFunc) {
-	var b = mkinput(id, 'button', 'submit');
-	b.onclick = clickFunc;
-	b.value = val;
-	return b;
-}
-
-function mkpbutton(parent, val, id, clickFunc) {
-	parent.appendChild(mkbutton(val, id, clickFunc));
-}
-
-function make(tag, inner, className) {
-	var t = document.createElement(tag);
-	if (className)
-		t.className = className;
-	// if (inner)
-	t.innerHTML = inner;
-	return t;
-}
-
 var clozeTarget = /[[]]/;
 
 /*
- *  // Information about quiz required for display on client side. // Much more
+ * // Information about quiz required for display on client side. // Much more
  * data on server side in Policy.java function QuizInfo(title, points,
  * timelimit, remainingTries, datadir) { this.title = title; this.points =
  * points; this.timelimit = timelimit; this.remaining = remainingTries;
@@ -147,10 +510,9 @@ function Quiz(quizinfo) {
 	for ( var k in quizinfo) {
 		this[k] = quizinfo[k];
 	}
-	this.div = document.getElementById("quiz");
-	// this.setDataDir(this.datadir);
-	this.div.className = "quiz";
-	// this.displayHeader(this.div);
+	this.container = document.getElementById("container");
+	this.container.className = "quiz";
+	// this.displayHeader(this.container);
 	this.displayHeader();
 	this.editMode = true;
 	console.log(this);
@@ -158,10 +520,11 @@ function Quiz(quizinfo) {
 }
 
 Quiz.prototype.displayHeader = function() {
-	this.div.appendChild(make("h1", this.title));
-	this.div.appendChild(make("span", " Points: " + this.points, "points"));
-	this.timer = mkdiv(this.div, "timer");
-	this.div.appendChild(this.timer);
+	var header = Util.div("header");
+	header.appendChild(Util.h1(this.title));
+	header.appendChild(Util.span(" Points: " + this.points, "points"));
+	header.appendChild(Util.p("timer"));
+	this.container.appendChild(header);
 	// TODO: add time and countdown
 	// TODO: add remaining tries
 }
@@ -169,146 +532,82 @@ Quiz.prototype.displayHeader = function() {
 var clicks = 0;
 Quiz.prototype.end = function(id) {
 	var parent = this;
-	qc = mkdivid(this.div, "qc" + id, "qc");
+	var qc = Util.div("qc", "qc" + id);
 	if (this.editMode) {
-		mkpbutton(qc, "New Question", "new-question", function() {
-			if (clicks == 0) {
-				parent.editQuestion();
-				checkIfInView("editor");
-			}
-			clicks++;
-		});
+		qc.appendChild(Util.button("New Question", "new-question", null,
+				function() {
+					if (clicks === 0) {
+						parent.editQuestion();
+						checkIfInView("editor");
+					}
+					clicks++;
+				}));
 	}
+	this.container.appendChild(qc);
 	this.createSubmit(2);
 };
 
+function makeEditBox(parent, id, editFunc, deleteFunc, copyFunc) {
+	var editBox = Util.div("edit");
+	editBox.appendChild(Util.button("Edit", null, id + "-edit", editFunc));
+	editBox
+			.appendChild(Util
+					.button("Delete", null, id + "-delete", deleteFunc));
+	editBox.appendChild(Util.button("Copy", null, id + "-copy", copyFunc));
+	parent.appendChild(editBox);
+}
+
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
-	mkdivid(this.div, "qc" + id, "qc " + className + "-qc");
-	this.q = document.getElementById("qc" + id);
-	points = (!exists(typeof (points))) ? 1 : points;
-	level = (!exists(typeof (level))) ? 1 : level;
-	var editBox = document.createElement("div");
-	editBox.className = "edit";
+	points = (typeof points === "undefined") ? 1 : points;
+	level = (typeof level === "undefined") ? 1 : level;
+
+	var qc = Util.div("qc " + className + "-qc", "qc" + id);
+
+	var header = Util.div("qheader");
+	header.appendChild(Util.h2(title));
+
+	var floatRight = Util.div("float-right");
+	floatRight.appendChild(Util.span("points:" + points, "qpoints"));
+	floatRight.appendChild(Util.span("level:" + level, "level"));
 	if (this.editMode) {
-		mkpbutton(editBox, "Edit", id + "-edit", function() {
-			innerHTML = "";
-			console.log(edit.id);
-		});
-		mkpbutton(editBox, "Delete", id + "-delete", function() {
-			innerHTML = "";
-			console.log(del.id);
-		});
-		mkbutton(editBox, "Copy", id + "-copy", function() {
-			innerHTML = "";
-			console.log(copy.id);
+		makeEditBox(floatRight, id, function(e) {
+			console.log(e.target.id);
+		}, function(e) {
+			console.log(e.target.id);
+		}, function(e) {
+			console.log(e.target.id);
 		});
 	}
-
-	header = document.createElement("div");
-	header.className = "qheader";
-	header.appendChild(mk("h2", title, ''));
-
-	floatRight = document.createElement("div");
-	floatRight.className = "float-right";
-	floatRight.appendChild(mk("span", "points:" + points, "qpoints"));
-	floatRight.appendChild(mk("span", "level:" + level, "level"));
-	floatRight.appendChild(editBox);
-
 	header.appendChild(floatRight);
-
-	this.q.appendChild(header);
+	qc.appendChild(header);
+	return qc;
 };
 
-Quiz.mediaLocations = { // map where each kind of file is under assets
-	png : "img/", // TODO: map by class, like maps to map directory (harder)
-	jpg : "img/",
-	mp3 : "aud/",
-	wav : "aid/",
-	mp4 : "vid/",
-	img : "assets/img/", // map the javascript object type to the directory?
-	aud : "assets/aud/",
-	vid : "assets/vid/"
-}
-
-Quiz.prototype.setDataDir = function(path) {
-	Quiz.mediaLocations.img = path + "/img/";
-	Quiz.mediaLocations.aud = path + "/aud/";
-	Quiz.mediaLocations.vid = path + "/vid/";
-}
 Quiz.prototype.createSubmit = function(id) {
-	var div = mkdiv(this.div, "submit");
-	mkpbutton(div, "Submit The Quiz", "submit-" + id, null);
-	this.div.appendChild(div);
+	var div = Util.div("submit");
+	div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"
+			+ id));
+	this.container.appendChild(div);
 };
-
-Quiz.prototype.img = function(src, returnValue) {
-	var im = document.createElement("img");
-	im.src = Quiz.mediaLocations.img + src;
-	if (returnValue)
-		return im;
-	this.q.appendChild(im);
-};
-
-Quiz.prototype.aud = function(src) {
-	var au = document.createElement("audio");
-	au.controls = true;
-	// var s = document.createElement("source");
-	au.src = Quiz.mediaLocations.aud + src;
-	// var suffix = aud.file.search(/\.\w+$/);
-	// var mediaType = audioTypeMap[aud.file.substr(suffix+1)]; //TODO: Fix
-	// this!
-	// s.type = mediaType;
-	// au.appendChild(s);
-	this.q.appendChild(au);
-}
-
-Quiz.prototype.vid = function(src) {
-	var vi = document.createElement("video");
-	vi.src = Quiz.mediaLocations.vid + src;
-	vi.controls = true;
-	this.q.appendChild(vi);
-}
-
-Quiz.prototype.span = function(txt, returnValue) {
-	span = make('span', txt, '');
-	if (returnValue)
-		return span;
-	this.q.appendChild(span);
-}
-
-Quiz.prototype.br = function() {
-	this.q.appendChild(document.createElement('br'));
-}
 
 Quiz.prototype.instructions = function(txt) {
-	this.q.appendChild(make('p', txt, 'instructions'));
+	return Util.p(txt, 'instructions');
 }
 
-Quiz.prototype.p = function(txt) {
-	this.q.appendChild(make('p', txt));
-}
-
-Quiz.prototype.box = function(txt) {
-	var div = mkdiv(this, "div", "box");
-	div.innerHTML = txt;
-	this.q.appendChild(newChild);
-}
-
-Quiz.prototype.fillin = function(id, sendBack) {
-	if (sendBack)
-		return mkinput(id, 'text', 'fillin');
-	this.q.appendChild(mkinput(id, 'text', 'fillin'));
+Quiz.prototype.fillin = function(id) {
+	var input = Util.input('text', 'fillin', id);
+	return input;
 }
 
 Quiz.prototype.numeric = function(id) {
-	this.q.appendChild(mkinput(id, 'text', 'number'));
+	return Util.input('text', 'number', id);
 }
 
 Quiz.prototype.numid = function(id, v) {
-	var inp = mkinput(id, 'text', 'cell');
+	var inp = Util.input('text', 'cell', id);
 	inp.size = 3;
 	inp.value = v;
-	this.q.appendChild(inp);
+	return inp;
 }
 
 Quiz.prototype.add = function(parent, spec) {
@@ -316,36 +615,19 @@ Quiz.prototype.add = function(parent, spec) {
 }
 
 Quiz.prototype.mcRadioText = function(id, txt) {
-	this.q.appendChild(mkinput(id, 'radio', 'multichoiceradio'));
+	return Util.input('radio', 'multichoiceradio', id);
 	this.add(this.q, document.createTextNode(txt));
 }
 
 Quiz.prototype.mcRadioImg = function(id, src) {
-	if (src.constructor === Array) {
-		l = [];
-		for (var i = 0; i < src.length; i++) {
-			radio = mkinput(id + "-" + i, 'radio', 'multichoiceradio');
-			radio.name = id;
-			label = document.createElement("label");
-			label.htmlFor = id + "-" + i;
-			label.appendChild(this.img(src[i], true));
-			group = [ radio, label ];
-			l.push(group);
-		}
-		this.q.appendChild(mktable("", l));
-	} else {
-		div = make("div", "", "radio-container");
-		label = document.createElement("label");
-		label.htmlFor = id;
-		radio = mkinput(id, 'radio', 'multichoiceradio');
-		radio.name = id;
-		div.appendChild(radio);
-		var img = document.createElement("img");
-		img.src = src;
-		label.appendChild(img);
-		div.appendChild(label);
-		this.q.appendChild(div);
+	l = [];
+	for (var i = 0; i < src.length; i++) {
+		radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
+		label = Util.label(id + "-" + i, Util.img(src[i]));
+		group = [ radio, label ];
+		l.push(group);
 	}
+	return Util.table(l);
 }
 
 /*
@@ -365,9 +647,7 @@ Quiz.prototype.selectText = function(id, list, sendBack) {
 		opt.appendChild(document.createTextNode(list[i]));
 		s.appendChild(opt);
 	}
-	if (sendBack)
-		return s;
-	this.q.appendChild(s);
+	return s;
 }
 
 /*
@@ -381,11 +661,11 @@ Quiz.prototype.selectImg = function(id, list) {
 		var opt = document.createElement("option");
 		opt.value = i;
 		var img = document.createElement("img");
-		img.src = Quiz.mediaLocations.img + list[i];
+		img.src = mediaLocations.img + list[i];
 		opt.appendChild(img);
 		s.appendChild(opt);
 	}
-	this.q.appendChild(s);
+	return s;
 }
 
 Quiz.prototype.match = function(id, questions, answers) {
@@ -397,7 +677,7 @@ Quiz.prototype.match = function(id, questions, answers) {
 		q = r.insertCell(1);
 		q.appendChild(this.selectText(id + "_" + i, answers, true));
 	}
-	this.q.appendChild(t);
+	return t;
 }
 
 Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
@@ -419,7 +699,7 @@ Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
 			l[i][j] = "%%input%%";
 		}
 	}
-	this.grid(id, l, returnHeader);
+	return this.grid(id, l, returnHeader);
 };
 
 Quiz.prototype.grid = function(id, list, header) {
@@ -449,7 +729,7 @@ Quiz.prototype.grid = function(id, list, header) {
 		}
 	}
 	d.appendChild(t);
-	this.q.appendChild(d);
+	return d;
 };
 
 Quiz.prototype.suffixMap = {
@@ -460,7 +740,7 @@ Quiz.prototype.suffixMap = {
 };
 
 Quiz.prototype.tableInput = function(s, returnValue, id) {
-	input = mkinput(id + "_" + this.inputCount, "text", "grid-input");
+	input = Util.input("text", "grid-input", id + "_" + this.inputCount);
 	this.inputCount++;
 	return input;
 };
@@ -471,7 +751,7 @@ Quiz.prototype.suffix = function(s, id) {
 	var suf = s.split('.').pop();
 	if (this.suffixMap[suf])
 		return this.suffixMap[suf](s, true, id);
-	return this.span(s, true);
+	return Util.span(s, true);
 };
 
 // accept is a string: ".java,.txt"
@@ -480,7 +760,7 @@ Quiz.prototype.fileUpload = function(id, accept) {
 	up.id = id;
 	up.type = "file";
 	up.accept = accept;
-	this.q.appendChild(up);
+	return up;
 };
 
 // function imageAudioVideo() {
@@ -493,21 +773,21 @@ function imageAudioVideo() {
 	editor.appendChild(t);
 
 	var r0 = t.insertRow(0);
-	var image = mktext("Image");
-	var image_src = mkinput("image_src", "file", "image_src");
-	var load_image = mkbutton("Load Selected Image", "image_src", null);
+	var image = Util.p("Image");
+	var image_src = Util.file(null, null, "image_src");
+	var load_image = Util.button("Load Selected Image", "image_src");
 	fillRow(r0, [ image, image_src, load_image ]);
 
 	var r1 = t.insertRow(1);
-	var audio = mktext("Audio");
-	var audio_src = mkinput("audio_src", "file", "audio_src");
-	var load_audio = mkbutton("Load Selected Audio", "audio_src", null);
+	var audio = Util.p("Audio");
+	var audio_src = Util.file(null, null, "audio_src");
+	var load_audio = Util.button("Load Selected Audio", "audio_src");
 	fillRow(r1, [ audio, audio_src, load_audio ]);
 
 	var r2 = t.insertRow(2);
-	var video = mktext("Video");
-	var video_src = mkinput("video_src", "file", "video_src");
-	var load_video = mkbutton("Load Selected Video", "video_src", null);
+	var video = Util.p("Video");
+	var video_src = Util.file(null, null, "video_src");
+	var load_video = Util.button("Load Selected Video", "video_src");
 	fillRow(r2, [ video, video_src, load_video ]);
 
 	return editor;
@@ -566,8 +846,10 @@ Calendar.prototype.month = function(parent, d) {
 Calendar.prototype.year = function(parent) {
 	var div = document.createElement("div");
 	var d = this.startDate;
-	for (var month = 0; month < 12; month++)
+	for (var month = 0; month < 12; month++) {
 		this.month(div, d);
+		d.setMonth(d.getMonth() + 1);
+	}
 
 	parent.appendChild(div);
 }
@@ -578,9 +860,9 @@ function imgClick(e) {
 
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
 	var img = document.createElement("img");
-	img.src = Quiz.mediaLocations.img + src;
+	img.src = mediaLocations.img + src;
 	img.onclick = imgClick;
-	this.q.appendChild(img);
+	return img;
 };
 
 // multiple fill-in-the-blank where [[]] is replaced by inputs
@@ -590,11 +872,11 @@ Quiz.prototype.cloze = function(id, txt) {
 	pre.className = "code";
 
 	for (var i = 0; i < preItems.length; ++i) {
-		pre.appendChild(make('span', preItems[i], ''));
+		pre.appendChild(Util.span(preItems[i]));
 		if (i != preItems.length - 1)
 			pre.appendChild(this.fillin(id + "_" + i, true));
 	}
-	this.q.appendChild(pre);
+	return pre;
 };
 
 // enter code to be compiled, run, spindled, mutilated
@@ -604,7 +886,7 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
 	ta.rows = rows;
 	ta.cols = cols;
 	ta.value = txt;
-	this.q.appendChild(ta);
+	return ta;
 };
 
 Quiz.prototype.essay = function(id, rows, cols, maxwords) {
@@ -613,51 +895,14 @@ Quiz.prototype.essay = function(id, rows, cols, maxwords) {
 	ta.rows = rows;
 	ta.cols = cols;
 	// ta.value = essay.text;
-	this.q.appendChild(ta);
+	return ta;
 };
-
-var page;
-
-/*
- * Run a serverside script (the parameter) which prints a JSON string. load the
- * JSON, evaluate it and call initPage() to update the page
- */
-function build() {
-	// your page: test.html
-	// ajax url: test_ajax.jsp
-	var thisURL = window.location.href;
-	var last = thisURL.split("/");
-	last = last[last.length - 1];
-	var baseFilename = last.split('.').slice(0, -1).join('');
-	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
-
-	var json = new XMLHttpRequest();
-	json.onreadystatechange = function() {
-		if (json.readyState != 4 || json.status != 200)
-			return;// TODO: Handle error if it doesn't come back
-		eval("page=" + json.responseText);
-		processAJAX();
-	}
-	json.open("GET", ajax, true);
-	json.send();
-}
-
-function processAJAX() {
-	if (exists(typeof (page.css))) {
-		appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
-															// css skin
-	} else {
-		console.log("custom css didn't load. check css link in page.css");
-	}
-	if (exists(typeof (thisPage)))
-		thisPage();
-}
 
 // ////////////////////////////////////////////////////////////////////
 // Editor //
 // Ying //
 function turnalloff(elem) { // TODO: turn off all the other selections when one
-							// of them is selected
+	// of them is selected
 	var elems = elem.form.elements;
 	var currentState = elems.checked;
 
@@ -775,24 +1020,23 @@ Quiz.prototype.editCloze = function() {
 	ta.value = exampleClozeTest;
 	ta.ondblclick = function() {
 		addBrackets(ta);
-	}
+	};
 	ta.onmouseup = function() {
 		selStart = ta.selectionStart;
 		selEnd = ta.selectionEnd;
 		console.log(ta.selectionStart + "," + ta.selectionEnd);
-	}
+	};
 	// ta.onkeyup = function(){ ta.style.height = "1px";
 	// ta.style.height = (25+ta.scrollHeight)+"px";}
 
-	mkpbutton(div, "SquareBracket It!", null, function() {
+	div.appendChild(Util.button("SquareBracket It!", null, null, function() {
 		addBrackets(ta);
-	});
-	mkpbutton(div, "Submit", null, function() {
+	}));
+	div.appendChild(Util.button("Submit", null, null, function() {
 		$("#y").remove();
 		buildCloze('title', ta.value);
-	});
+	}));
 	document.body.appendChild(div);
-
 }
 
 Quiz.prototype.editFillin = function() {
@@ -800,16 +1044,16 @@ Quiz.prototype.editFillin = function() {
 	div.id = "Fillin";
 	div.className = "Fillin"; // style of the editor box
 
-	var Ans = mktext("Answer: ");
-	var ans = mkinput("ans", "text", "ans");
+	var Ans = Util.span("Answer: ");
+	var ans = Util.input("text", "ans");
 	ans.value = "";
 	div.appendChild(Ans);
 	div.appendChild(ans);
 
-	mkpbutton(div, "Submit", null, function() {
+	div.appendChild(Util.button("Submit", null, null, function() {
 		$("#y").remove();
 		buildFillin('title', ta.value, ans.value);
-	});
+	}));
 	document.body.appendChild(div);
 }
 
@@ -818,19 +1062,41 @@ Quiz.prototype.editNumber = function() {
 	div.id = "Number";
 	div.className = "Number"; // style of the editor box
 
-	var min = mktext("Min: ");
-	var Min = mkinput("min", "text", "min");
-	var max = mktext("Max: ");
-	var Max = mkinput("max", "text", "max");
+	var min = Util.span("Min: ");
+	var Min = Util.input("text", "min");
+	var max = Util.span("Max: ");
+	var Max = Util.input("text", "max");
 	div.appendChild(min);
 	div.appendChild(Min);
 	div.appendChild(max);
 	div.appendChild(Max);
 
-	mkpbutton(div, "Submit", null, function() {
+	div.appendChild(Util.button("Submit", null, null, function() {
 		$("#y").remove();
 		buildnumber('title', ta.value);
-	});
+	}));
+	document.body.appendChild(div);
+}
+
+Quiz.prototype.editEssay = function() {
+	var div = Util.div("Essay", "Essay");
+
+	div.appendChild(Util.button("Submit", null, null, function() {
+		$("#y").remove();
+		buildessay('title', ta.value);
+	}));
+	document.body.appendChild(div);
+}
+
+Quiz.prototype.editCode = function() {
+	var div = document.createElement("div");
+	div.id = "Code";
+	div.className = "Code"; // style of the editor box
+
+	div.appendChild(Util.button("Submit", function() {
+		$("#y").remove();
+		buildcode('title', ta.value);
+	}));
 	document.body.appendChild(div);
 }
 
@@ -871,14 +1137,15 @@ Quiz.prototype.editMultiChoiceDropdown = function() {
 	div.id = "MultiChoiceDropdown";
 	div.className = "MultiChoiceDropdown"; // style of the editor box
 
-	var editor = mkdivid(div, "MCeditor", "MCeditor");
+	var editor = Util.div("MCeditor", "MCeditor");
+	div.appendChild(editor);
 	var t = document.createElement("table");
 	editor.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Multiple choice - Dropdown :"
 			+ "Correct Answer" + "Add more options");
-	var numberBox = mkinput("numberinput", "text", "numberinput");
-	var addOptionButton = mkbutton("Add Option", null, function() {
+	var numberBox = Util.input("text", "numberinput", "numberinput");
+	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
 	fillRow(r, [ description, numberBox, addOptionButton ]);
 
@@ -888,10 +1155,10 @@ Quiz.prototype.editMultiChoiceDropdown = function() {
 			"", "" ]);
 	div.appendChild(MCDDform);
 
-	mkpbutton(div, "Submit", null, function() {
+	div.appendChild(Util.button("Submit", null, null, function() {
 		$("#y").remove();
 		builddpd(ta.value);
-	});
+	}));
 	document.body.appendChild(div);
 }
 
@@ -900,13 +1167,14 @@ Quiz.prototype.editSurvey = function() {
 	div.id = "Survey";
 	div.className = "Survey"; // style of the editor box
 
-	var editor = mkdivid(div, "surveyEditor", "surveyEditor");
+	var editor = Util.div("surveyEditor", "surveyEditor");
+	div.appendChild(editor);
 	var t = document.createElement("table");
 	editor.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Add more options");
-	var numberBox = mkinput("numberinput", "text", "numberinput");
-	var addOptionButton = mkbutton("Add Option", null, function() {
+	var numberBox = Util.input("text", "numberinput", "numberinput");
+	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
 	fillRow(r, [ description, numberBox, addOptionButton ]);
 
@@ -916,10 +1184,10 @@ Quiz.prototype.editSurvey = function() {
 			"Choice 3: ", "Choice 4: " ], [ "", "", "", "" ]);
 	div.appendChild(surveyform);
 
-	mkpbutton(div, "Submit", null, function() {
+	div.appendChild(Util.input("Submit", null, null, function() {
 		$("#y").remove();
 		builddpd(ta.value);
-	});
+	}));
 
 	document.body.appendChild(div);
 }
@@ -929,14 +1197,15 @@ Quiz.prototype.editMultiChoiceRadio = function() {
 	div.id = "MultiChoiceRadio";
 	div.className = "MultiChoiceRadio"; // style of the editor box
 
-	var editor = mkdivid(div, "MCReditor", "MCReditor");
+	var editor = Util.div("MCReditor", "MCReditor");
+	div.appendChild(editor);
 	var t = document.createElement("table");
 	editor.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Multiple choice - Radio:"
 			+ "Correct Answer" + "Add more options");
-	var numberBox = mkinput("numberinput", "text", "numberinput");
-	var addOptionButton = mkbutton("Add Option", null, function() {
+	var numberBox = Util.input("text", "numberinput", "numberinput");
+	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
 	fillRow(r, [ description, numberBox, addOptionButton ]);
 
@@ -946,10 +1215,10 @@ Quiz.prototype.editMultiChoiceRadio = function() {
 			"Choice 4: " ], [ "", "", "", "" ]);
 	div.appendChild(MCRform);
 
-	mkpbutton(div, "Submit", null, function() {
+	div.appendChild(Util.button("Submit", null, null, function() {
 		$("#y").remove();
 		builddpd(ta.value);
-	});
+	}));
 	document.body.appendChild(div);
 }
 
@@ -958,14 +1227,15 @@ Quiz.prototype.editMultiAnswer = function() {
 	div.id = "MultiAnswer";
 	div.className = "MultiAnswer"; // style of the editor box
 
-	var editor = mkdivid(div, "MAeditor", "MAeditor");
+	var editor = Util.div("MAeditor", "MAeditor");
+	div.appendChild(editor);
 	var t = document.createElement("table");
 	editor.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Multiple Answer Choices: "
 			+ "Correct Answer" + "Add more options");
-	var numberBox = mkinput("numberinput", "text", "numberinput");
-	var addOptionButton = mkbutton("Add Option", null, function() {
+	var numberBox = Util.input("text", "numberinput", "numberinput");
+	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
 	fillRow(r, [ description, numberBox, addOptionButton ]);
 
@@ -975,10 +1245,10 @@ Quiz.prototype.editMultiAnswer = function() {
 			"Option 4: " ], [ "", "", "", "" ]);
 	div.appendChild(MAform);
 
-	mkpbutton(div, "Submit", null, function() {
+	div.appendChild(Util.button("Submit", null, null, function() {
 		$("#y").remove();
 		builddpd(ta.value);
-	});
+	}));
 	document.body.appendChild(div);
 }
 
@@ -1052,6 +1322,19 @@ var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
 		"Regex", "Matrix", "Cloze" ];
 
 // Quiz.prototype.editMode = function(){
+// var c = mkdivid(this.container, "new-question-button", "qc
+// new-question-button"); // TODO(asher): Fix mkdiv
+// var newB = mkbutton("New Question"); // TODO(asher): Fix mkbutton
+// newB.onclick = function() { this.editQuestion; }
+// c.appendChild(newB);
+// this.add(c);
+// }
+
+var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
+		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
+		"Regex", "Matrix", "Cloze" ];
+
+// Quiz.prototype.editMode = function(){
 // var c = mkdivid(this.div, "new-question-button", "qc new-question-button");
 // var newB = mkbutton("New Question");
 // newB.onclick = function() { this.editQuestion; }
@@ -1098,7 +1381,8 @@ function editTextBox(val) {
 
 Quiz.prototype.editQuestion = function() {
 	var parent = this;
-	var editor = mkdivid(this.div, "editor", "editor");
+	var editor = Util.div("editor", "editor");
+	this.container.appendChild(editor);
 	var t0 = document.createElement("table");
 	editor.appendChild(t0);
 	var r0 = t0.insertRow(0);
@@ -1106,10 +1390,10 @@ Quiz.prototype.editQuestion = function() {
 	var title = document.createTextNode("Title: ");
 	var inp = document.createElement("input");
 	var questionType = document.createTextNode("Question Type: ");
-	var selectBox = select("quizType", list);
-	var addQuestion = mkbutton("Add Question", null, function() {
+	var selectBox = Util.select("quizType", false, list, null, "quizType");
+	var addQuestion = Util.button("Add Question", null, null, function() {
 	});
-	var cancel = mkbutton("Cancel", null, function() {
+	var cancel = Util.button("Cancel", null, null, function() {
 	});
 	fillRow(r0, [ title, inp, questionType, selectBox, addQuestion, cancel ]);
 
@@ -1135,10 +1419,49 @@ Quiz.prototype.editQuestion = function() {
 		}
 		parent["edit" + val]();
 		checkIfInView(val);
-
 	});
-
 }
+
+var page;
+
+/*
+ * Run a serverside script (the parameter) which prints a JSON string. load the
+ * JSON, evaluate it and call initPage() to update the page
+ */
+function build() {
+	// your page: test.html
+	// ajax url: test_ajax.jsp
+	var thisURL = window.location.href;
+	var last = thisURL.split("/");
+	last = last[last.length - 1];
+	var baseFilename = last.split('.').slice(0, -1).join('');
+	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
+
+	var json = new XMLHttpRequest();
+	json.onreadystatechange = function() {
+		if (json.readyState != 4 || json.status != 200)
+			return;// TODO: Handle error if it doesn't come back
+		eval("page=" + json.responseText);
+		processAJAX();
+	}
+	json.open("GET", ajax, true);
+	json.send();
+}
+
+function processAJAX() {
+	if (typeof page.css !== "undefined") {
+		appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
+															// css skin
+	} else {
+		console.error("custom css didn't load. check css link in page.css");
+	}
+	if (typeof thisPage !== "undefined") {
+		thisPage();
+	} else {
+		console.error("thisPage() never ran!!");
+	}
+}
+
 /** ******************** View Quizzes Part ******************** * */
 /** Jack Tan * */
 function loadViewQuizzes() {
@@ -1329,3 +1652,6 @@ function qtable(input) {
 	return t;
 }
 /** ******************** View Quizzes Part ******************** * */
+
+// List/Edit Grades Page
+window.onload = build;

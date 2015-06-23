@@ -1,13 +1,17 @@
 package org.adastraeducation.visualcs.graph;
 
-public abstract class GraphDisplayer implements GraphObserver {
+import java.io.IOException;
+
+import org.adastraeducation.visualcs.AnswerStore;
+
+public abstract class GraphDisplayer extends AnswerStore implements GraphObserver {
 	protected Graph graph;
 	// each style 0 = default, 1 and beyond can look different
 	// typically 1= candidate, 2 = found
 	protected int[] vertexStyle;// each number corresponds to a different look
 	protected int[] edgeStyle;  // edge look
-	
-	public GraphDisplayer(Graph graph){
+	public GraphDisplayer(Graph graph, String answerFile) throws IOException {
+		super(answerFile);
 		this.graph = graph;
 		int v = graph.getV();
 			
@@ -21,6 +25,7 @@ public abstract class GraphDisplayer implements GraphObserver {
 		}
 		display();
 	}
+
 	public Graph getGraph() { return graph; }
 	public void setVertexStyle(int v, int style){
 		vertexStyle[v] = style;

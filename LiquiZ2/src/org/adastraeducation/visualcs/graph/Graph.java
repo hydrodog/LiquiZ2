@@ -53,12 +53,12 @@ public class Graph {
 		this(v);
 		// allConnect contains every possible edge
 		// expressed as from->to where from < to
-		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v-1)*v/2);
+		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v - 1) * v / 2 - 1, v);
 		for (int i = 0; i < r; i++) {
 			// select a random edge
-			int from = RandomUtil.removeRandomFromSet(chooseVertices);
-			int to = RandomUtil.removeRandomFromSet(chooseVertices);
-  
+			int fromto = RandomUtil.removeRandomFromSet(chooseVertices);
+			int from = fromto / v;
+			int to = fromto % v;
     		// set the weight according to our parameters
 			setW(from, to, RandomUtil.RandomDouble(minWeight, maxWeight, precision));
         }		
@@ -114,7 +114,7 @@ public class Graph {
 			// but this would not animate as well as starting with the start vertex.
 			boolean changed = false; // so far, no better path found
 			for (int count = 1, j = vStart; count <= v; count++, j = j == v ? 0 : j+1) {
-				if(Visualize.visualize){ 
+				if (Visualize.visualize){ 
 					go.setVertexStyle(j, 1);
 				} 
 				for (int k = 0; k < v; k++){
@@ -141,6 +141,14 @@ public class Graph {
 						go.setVertexStyle(j, 0);	// turn off the from vertex, get ready to consider the next
 					}
 				}
+				if (Visualize.storeAnswer){
+					for (int i = 0; i < v; i++)
+						go.print(String.format("%4.1f ", cost[i]));
+					go.print('\n');
+					for (int i = 0; i < v; i++)
+						go.print(pred[i] + " ");
+					go.print("\n\n");
+				}
 				if (!changed)
 					break; // no new paths found, so any further iterations will do nothing
 			}
@@ -151,8 +159,8 @@ public class Graph {
 						return;	
 					}
 				}
-				Visualize.terminate = true;
 			}
+			Visualize.terminate = true;
 		}
 	}
 	public boolean Prim(int[] edges) {
@@ -181,7 +189,8 @@ public class Graph {
 			}
 			if (minCostVertex >= 0) {
 				connected[minCostVertex] = minCost;
-				go.setEdgeStyle(i,minCostVertex, 2);
+				if (Visualize.visualize)
+					go.setEdgeStyle(i,minCostVertex, 2);
 			}
 		}
 		return true;
