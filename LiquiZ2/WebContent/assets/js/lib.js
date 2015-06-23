@@ -416,6 +416,10 @@ mediaLocations = {
     mp4: this.video,
 },
 
+/*
+ * Table generator samples.
+ */
+
 // /*
 //  * Proof of concept. Not production code!
 //  */
@@ -478,129 +482,6 @@ mediaLocations = {
 //     var tr = Util.make("tr", null, td);
 //     return tr;
 // }
-
-/*
-function build() {
-    var quiz = document.getElementById("quiz");
-    var element = Util.table([
-        [1, 2, 3, 4, 5],
-        [6, 7, 8, 9, 10]
-    ], true, "table-empty");
-    console.log(element);
-    quiz.appendChild(element);
-
-    var br = Util.br();
-    console.log(br);
-    quiz.appendChild(br);
-
-    element = Util.table([
-        [{
-            cols: 3,
-            rows: 6,
-        }]
-    ], false, "table-input", emptyGrid);
-    console.log(element);
-    quiz.appendChild(element);
-
-    var video = Util.video("assets/vid/Tacoma Narrows Bridge Collapse.mp4");
-    console.log(video);
-    quiz.appendChild(video);
-
-    var audio = Util.audio("assets/aud/clip1.mp3", true, "pianos", "the-only-one");
-    console.log(audio);
-    quiz.appendChild(audio);
-
-    var genInput = Util.button("submit", "generic-input");
-    console.log(genInput);
-    quiz.appendChild(genInput);
-
-    var file = Util.file(".java");
-    console.log(file);
-    quiz.appendChild(file);
-
-    var labelsRadio = [];
-    var label;
-    for (var i = 0; i < 5; i++) {
-        var radio = Util.radio(i, "radio-group", null, "radio-" + i);
-        label = Util.label("radio-" + i, " " + i + ". Click me!");
-        label.insertBefore(radio, label.firstChild);
-        labelsRadio.push([label]);
-    }
-    var labelTable = Util.table(labelsRadio, false, null, labelGrid);
-    console.log(labelTable);
-    quiz.appendChild(labelTable);
-
-    var labelsCheckbox = [];
-    for (i = 0; i < 5; i++) {
-        var checkbox = Util.checkbox(i, "checkbox-group", null, "checkbox-" + i);
-        label = Util.label("checkbox-" + i, " " + i + ". Click me!");
-        label.insertBefore(checkbox, label.firstChild);
-        labelsCheckbox.push([label]);
-    }
-    labelTable = Util.table(labelsCheckbox, false, null, labelGrid);
-    console.log(labelTable);
-    quiz.appendChild(labelTable);
-
-    var h1 = Util.h1("I'm an h1 tag!", "special-h1");
-    console.log(h1);
-    quiz.appendChild(h1);
-
-    var liFragment = document.createDocumentFragment();
-    for (i = 0; i < 10; i++) {
-        liFragment.appendChild(Util.li(i));
-    }
-    var ul = Util.ul(liFragment, "lists-are-cool");
-    console.log(ul);
-    quiz.appendChild(ul);
-
-    var a = Util.a("assets/img/einstein.jpg", "I'm a link!");
-    console.log(a);
-    quiz.appendChild(a);
-
-    var nested = Util.h1(Util.a("assets/img/einstein.jpg", Util.em("I'm a big h1 link!")));
-    console.log(nested);
-    quiz.appendChild(nested);
-
-    var code = Util.p(Util.code("print \"Hello World!\""));
-    console.log(code);
-    quiz.appendChild(code);
-
-    var j, optgroup;
-    var options = document.createDocumentFragment();
-    for (i = 0; i < 3; i++) {
-        optgroup = Util.optgroup("Group " + i);
-        for (j = 0; j < 5; j++) {
-            optgroup.appendChild(Util.option(j+"-"+i, "The value is: "+j+"-"+i, "options-are-cool", "option-" +j + "-" + i));
-        }
-        options.appendChild(optgroup);
-    }
-
-    var select = Util.select("test-select", true, options, "options-list", "totally-unique-option");
-    console.log(select);
-    quiz.appendChild(select);
-
-    options = document.createDocumentFragment();
-    for (i = 0; i < 3; i++) {
-        optgroup = Util.optgroup("Group " + i);
-        for (j = 0; j < 5; j++) {
-            optgroup.appendChild(Util.option(j+"-"+i, "The value is: "+j+"-"+i, "options-are-cool", "option-" +j + "-" + i));
-        }
-        options.appendChild(optgroup);
-    }
-
-    select = Util.select("test-select", false, options, "options-list", "totally-unique-option");
-    console.log(select);
-    quiz.appendChild(select);
-
-    var canvas = Util.canvas(400, 400);
-    console.log(canvas);
-    quiz.appendChild(canvas);
-
-    var img = Util.img("assets/img/einstein.jpg");
-    console.log(img);
-    quiz.appendChild(img);
-}
-*/
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading
