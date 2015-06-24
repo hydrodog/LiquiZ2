@@ -19,9 +19,10 @@ public abstract class BasePApplet extends PApplet implements Runnable {
 		Visualize.storeAnswer = false;
 		Thread t = new Thread(this) {
 			public void run(){
-				for (;;)
+				for (;;) {
 					algorithm();
-
+					interactive();
+				}
 			}			
 		};
 		t.start();
