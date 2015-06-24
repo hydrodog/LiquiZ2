@@ -311,13 +311,14 @@ Util = {
 		});
 	},
 
-	checkbox : function(value, name, className, id) {
+	checkbox : function(value, name, className, id, checked) {
 		return Util.make("input", {
 			type : "checkbox",
 			value : value,
 			name : name,
 			className : className,
 			id : id,
+			checked : checked,
 		});
 	},
 
@@ -1451,7 +1452,7 @@ function build() {
 function processAJAX() {
 	if (typeof page.css !== "undefined") {
 		appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
-															// css skin
+		// css skin
 	} else {
 		console.error("custom css didn't load. check css link in page.css");
 	}
@@ -1531,29 +1532,19 @@ function condDayShift(rowID, rowNum, NOD) {
 // make day shift buttons i.e. (-7, -1, +1, +7)
 function mkDSButtons(rowID, rowNum) {
 	var d = document.createElement("div");
-	mkpbutton(d, "-7", null, function() {
+	d.appendChild(Util.button("-7", null, null, function() {
 		condDayShift(rowID, rowNum, -7)
-	});
-	mkpbutton(d, "-1", null, function() {
+	}));
+	d.appendChild(Util.button("-1", null, null, function() {
 		condDayShift(rowID, rowNum, -1)
-	});
-	mkpbutton(d, "+1", null, function() {
+	}));
+	d.appendChild(Util.button("+1", null, null, function() {
 		condDayShift(rowID, rowNum, +1)
-	});
-	mkpbutton(d, "+7", null, function() {
+	}));
+	d.appendChild(Util.button("+7", null, null, function() {
 		condDayShift(rowID, rowNum, +7)
-	});
+	}));
 	return d;
-}
-function mkPInput(parent, id, type, className) {
-	var inp = mkinput(id, type, className);
-	parent.appendChild(inp);
-	return inp;
-}
-function mkChkbx(parent, id, className, check) { // make check box
-	var chkbx = mkPInput(parent, id, "checkbox", className);
-	chkbx.checked = check;
-	return chkbx;
 }
 
 function mkth(parent, txt, colspan) { // make table head cell
@@ -1563,32 +1554,38 @@ function mkth(parent, txt, colspan) { // make table head cell
 	parent.appendChild(th);
 	return th;
 }
-
+// TODO START HERE
 function qtoolbar(editMode) {
-	var qtoolbar = document.createElement("div");
+	var qtoolbar = Util.div();
 	/* **************** search div **************** */
-	var srch_div = mkdiv(qtoolbar, null);
-	var srch_box = mkPInput(srch_div, null, "search", null);
-	srch_box.placeholder = "Search for Quiz";
-	srch_box.style = "width: 40%";
-	mkpbutton(srch_div, "Search", null, null);
+	var srch_div = Util.div();
+	qtoolbar.appendChild(srch_div);
+	srch_div.appendChild(Util.make("input", {
+		type : "search",
+		placeholder : "Search for Quiz"
+	}));
+
+	srch_div.appendChild(Util.button("Search"));
 	/* **************** search div **************** */
 	/* **************** buttons div **************** */
 	if (editMode) {
-		var btns_div = mkdiv(qtoolbar, null);
-		mkpbutton(btns_div, "all", null, null);
-		mkpbutton(btns_div, "invert", null, null);
-		mkpbutton(btns_div, "none", null, null);
-		var dtentr = mkPInput(btns_div, null, "text", null); // enter a date
-		// for date
-		// shift
-		dtentr.placeholder = "Enter a date point";
-		var dsNum = mkPInput(btns_div, null, "text", null); // enter the number
-		// of days for date
-		// shift
-		dsNum.placeholder = "Number of days";
-		mkpbutton(btns_div, "Advance", null, null); // advance button
-		mkpbutton(btns_div, "Postpone", null, null); // postpone button
+		var btns_div = Util.div();
+		qtoolbar.appendChild(btns_div);
+		btns_div.appendChild(Util.button("all"));
+		btns_div.appendChild(Util.button("invert"));
+		btns_div.appendChild(Util.button("none"));
+		btns_div.appendChild(Util.make("input", { // enter a date for date
+			// shift
+			type : "text",
+			placeholder : "Enter a date point"
+		}));
+		btns_div.appendChild(Util.make("input", { // enter the number of days
+			// for date shift
+			type : "text",
+			placeholder : "Number of days"
+		}));
+		btns_div.appendChild(Util.button("Advance"));
+		btns_div.appendChild(Util.button("Postpone"));
 	}
 	/* **************** buttons div **************** */
 	return qtoolbar;
@@ -1635,17 +1632,21 @@ function qtable(input) {
 	/* **************** table body **************** */
 	/* **************** edit functions for edit mode **************** */
 	if (input.editMode) {
-		mkChkbx(h1.cells[1], "selectOpenDate", null, false);
-		mkChkbx(h1.cells[2], "selectCloseDate", null, true);
-		mkChkbx(h1.cells[3], "selectDueDate", null, true);
+		h1.cells[1].appendChild(Util.checkbox(null, null, null,
+				"selectOpenDate", false));
+		h1.cells[2].appendChild(Util.checkbox(null, null, null,
+				"selectCloseDate", true));
+		h1.cells[3].appendChild(Util.checkbox(null, null, null,
+				"selectDueDate", true));
 		for (var i = 1; i < arr_temp.length; i++) {
-			mkChkbx(t.rows[i].cells[0], null, null, false);
-			t.rows[i].cells[1].appendChild(document.createElement("br"));
+			t.rows[i].cells[0].appendChild(Util.checkbox(null, null, null,
+					null, false));
+			t.rows[i].cells[1].appendChild(Util.br());
 			t.rows[i].cells[1].appendChild(mkDSButtons(t.rows[i].id, i));
 			t.rows[i].insertCell(-1);
-			mkpbutton(t.rows[i].cells[7], "edit", null, null);
-			mkpbutton(t.rows[i].cells[7], "delete", null, null);
-			mkpbutton(t.rows[i].cells[7], "copy", null, null);
+			t.rows[i].cells[7].appendChild(Util.button("edit"));
+			t.rows[i].cells[7].appendChild(Util.button("delete"));
+			t.rows[i].cells[7].appendChild(Util.button("copy"));
 		}
 	}
 	/* **************** edit functions for edit mode **************** */
