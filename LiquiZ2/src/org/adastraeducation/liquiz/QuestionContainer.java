@@ -5,6 +5,7 @@ public class QuestionContainer implements Displayable {
 	private int id;
 	private String name;
 	private ArrayList<Displayable> displayables;
+	private String cssClass; // the display for this container
 
 	public QuestionContainer() {
 		displayables = new ArrayList<Displayable>();
@@ -84,10 +85,27 @@ public class QuestionContainer implements Displayable {
 	}
 
 	public void writeJS (DisplayContext dc) {
-		dc.append("{title: 'foo', className: 'claz' , content:[");
-		for (int i = 0; i < displayables.size(); i++) {
-			displayables.get(i).writeJS(dc);
+		/*
+		
+
+		// question 1
+		q = page.addQuestion(1, "Mergesort", "grid", 0);
+		q.appendChild(page.instructions("Show the first pass of Mergesort below"));
+		q.appendChild(page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]));
+		q.appendChild(Util.br());
+		q.appendChild(page.emptyGrid("1_2", 1, 8));
+		page.container.appendChild(q);
+		*/
+		dc.append("");
+		for (Displayable d : displayables) {
+			d.writeJS(dc);
 			dc.append(",\n");
 		}
+	}
+	public String getCssClass() {
+		return cssClass;
+	}
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
 	}
 }

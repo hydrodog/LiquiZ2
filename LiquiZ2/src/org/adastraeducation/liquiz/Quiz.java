@@ -191,16 +191,21 @@ public class Quiz implements Displayable {
 		}
 		b.append("</quiz>");
 	}
-	
-	public void writeJS (StringBuilder b) {
+
+	public void writeJS (DisplayContext dc) {
 		//TODO: add data for point values, calculate remaining tries
 		//TODO: do something about directory
-		b.append("var quizinfo  = new QuizInfo(name, 100, 0, 1, 'assets/');";
-		b.append("var qlist = [\n");
+		int points = 100; //TODO: add points to quiz?
+		dc.append
+		("page  = new Quiz( {\n" +
+		"title: '").append(getName()).
+			append("points:").append(points).
+			append("timeLimit:").append(0).
+			append("remainingTries:").append(1).
+			append("dataDir:").append("'assets/'\n} );").
+			append("var q;");
 		for(QuestionContainer qc: this.qContainers) {
-			qc.writeJS(b);
+			qc.writeJS(dc);
 		}
-		b.append("];\n");
-		b.append("var q = new Quiz(quizinfo, qlist)");
 	}
 }

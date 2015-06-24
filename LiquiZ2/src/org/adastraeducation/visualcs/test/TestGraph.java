@@ -5,13 +5,14 @@ import org.adastraeducation.visualcs.graph.*;
 
 public class TestGraph {
 	public static void main(String[] a) throws Exception {	
+		File file = new File("data/graphtests.inp");
 		System.out.println(file.getAbsolutePath());
-		System.exit(0);
-		Scanner s = new Scanner(new File("../data/graphtests.inp"));
+		Scanner s = new Scanner(file);
 		Graph g = new Graph(s);
 		System.out.println(g); // test toString() method
 		g.BellmanFord(0, g.getV()-1);
-		//g.prim();
+		int[] edges = new int[g.getV()];
+		g.Prim(edges);
 		//g.TSP();
 		s.close();
 	}

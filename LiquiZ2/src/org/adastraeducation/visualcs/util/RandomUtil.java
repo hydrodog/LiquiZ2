@@ -15,10 +15,11 @@ public class RandomUtil {
 		return start+(int)(range*random.nextDouble());
 	}
 
-	public static ArrayList generateRandomSet(int start, int end) {
+	public static ArrayList<Integer> generateRandomSet(int start, int end, int v) {  // avoid to set weight for vertex itself
 		ArrayList<Integer> list = new ArrayList<Integer>(end - start + 1);
-		for (int i = start; i <= end; i++)
-			list.add(i);
+		for (int i = start; i <= end; i++){
+			if(i % v != i / v)  list.add(i);			
+		}
 		return list;
 	}
 	public static int removeRandomFromSet(ArrayList<Integer> set) {

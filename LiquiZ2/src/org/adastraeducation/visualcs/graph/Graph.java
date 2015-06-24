@@ -1,4 +1,5 @@
 package org.adastraeducation.visualcs.graph;
+import org.adastraeducation.visualcs.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -12,8 +13,7 @@ import org.adastraeducation.visualcs.util.*;
  * @author: Shawn Xie 
  * Represent a graph using matrix of weights
  */
-public class Graph {
-	GraphObserver go;
+public class Graph extends GraphData {
 	private double[] w; // weights from each vertex to every other, to represent a matrix n*n.
 	private int v; 		// number of vertices, how many
 	
@@ -21,12 +21,12 @@ public class Graph {
 	 * Create a graph with v vertices, initially all disconnected
 	 * @param v
 	 */
-	public Graph(int v) {	
+	public Graph(String answerFile, int v) {
+		super(answerFile);
 		this.v = v;
 		w = new double[v*v];
 		for (int i = 0; i < v*v; i++)
 			w[i] = Double.POSITIVE_INFINITY;
-		go = null;
 	}
 
 	/**
@@ -35,12 +35,12 @@ public class Graph {
 	 * The next v*v numbers are the weights which are double precision
 	 * @param s
 	 */
-	public Graph(Scanner s) {
+	public Graph(String answerFile, Scanner s) {
+		super(answerFile);
 		v = s.nextInt();
 		w = new double[v*v];
 		for (int i = 0; i < v*v; i++)
 			w[i] = s.nextDouble();
-		go = null;
 	}
 
 	/**
@@ -49,24 +49,22 @@ public class Graph {
 	 *
 	 *	@param v
 	 */
-	public Graph(int v, int r, double minWeight, double maxWeight, int precision) {
-		this(v);
+	public Graph(String answerFile, int v, int r,
+				double minWeight, double maxWeight, int precision) {
+		this(answerFile, v);
 		// allConnect contains every possible edge
 		// expressed as from->to where from < to
-		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v-1)*v/2);
+		ArrayList<Integer> chooseVertices = RandomUtil.generateRandomSet(0, (v - 1) * v / 2 - 1, v);
 		for (int i = 0; i < r; i++) {
 			// select a random edge
-			int from = RandomUtil.removeRandomFromSet(chooseVertices);
-			int to = RandomUtil.removeRandomFromSet(chooseVertices);
-  
+			int fromto = RandomUtil.removeRandomFromSet(chooseVertices);
+			int from = fromto / v;
+			int to = fromto % v;
     		// set the weight according to our parameters
 			setW(from, to, RandomUtil.RandomDouble(minWeight, maxWeight, precision));
         }		
 	}
-	public void addGraphObserver(GraphObserver go) {
-		this.go = go;
-		go.display();
-	}
+
 	private static DecimalFormat df = new DecimalFormat("##.#");
 	public String toString() {
 		StringBuilder b = new StringBuilder(v*v*5);
@@ -114,13 +112,13 @@ public class Graph {
 			// but this would not animate as well as starting with the start vertex.
 			boolean changed = false; // so far, no better path found
 			for (int count = 1, j = vStart; count <= v; count++, j = j == v ? 0 : j+1) {
-				if(Visualize.visualize){ 
-					go.setVertexStyle(j, 1);
+				if (Visualize.visualize){ 
+					setVertexStyle(j, 1);
 				} 
 				for (int k = 0; k < v; k++){
 					if (j != k){
 						if (Visualize.visualize){
-							go.setVertexStyle(k, 1);
+							setVertexStyle(k, 1);
 						}
 						// if the cost through new vertex is lower
 						if (cost[j] + getW(j,k) < cost[k]) {
@@ -129,17 +127,26 @@ public class Graph {
 							pred[k] = j;						// store new predecessor
 							changed = true;						// found better path, keep going
 							if (Visualize.visualize){
-								go.setEdgeStyle(prevPred, k, 0);	// erase previous highlighted edge
-								go.setEdgeStyle(j, k, 1);			// highlight new best path (so far)
+								if (prevPred >= 0)
+									setEdgeStyle(prevPred, k, 0);	// erase previous highlighted edge
+								setEdgeStyle(j, k, 1);			// highlight new best path (so far)
 							}
 						}
 						if (Visualize.visualize) {
-							go.setVertexStyle(k, 0);	// turn off the vertex just considered
+							setVertexStyle(k, 0);	// turn off the vertex just considered
 						}
 					}
 					if(Visualize.visualize){
-						go.setVertexStyle(j, 0);	// turn off the from vertex, get ready to consider the next
+						setVertexStyle(j, 0);	// turn off the from vertex, get ready to consider the next
 					}
+				}
+				if (Visualize.storeAnswer){
+					for (int i = 0; i < v; i++)
+						print(cost[i]);
+					print('\n');
+					for (int i = 0; i < v; i++)
+						print(pred[i]);
+					print("\n\n");
 				}
 				if (!changed)
 					break; // no new paths found, so any further iterations will do nothing
@@ -151,8 +158,8 @@ public class Graph {
 						return;	
 					}
 				}
-				Visualize.terminate = true;
 			}
+			Visualize.terminate = true;
 		}
 	}
 	public boolean Prim(int[] edges) {
@@ -174,14 +181,15 @@ public class Graph {
 					minCost = getW(i,j);
 					minCostVertex = j;
 					if (Visualize.visualize) {
-						go.setEdgeStyle(i, j, 1);
-						go.setEdgeStyle(i, j-1, 0);
+						setEdgeStyle(i, j, 1);
+						setEdgeStyle(i, j-1, 0);
 					}
 				}
 			}
 			if (minCostVertex >= 0) {
 				connected[minCostVertex] = minCost;
-				go.setEdgeStyle(i,minCostVertex, 2);
+				if (Visualize.visualize)
+					setEdgeStyle(i,minCostVertex, 2);
 			}
 		}
 		return true;
