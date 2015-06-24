@@ -20,16 +20,16 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private int[] colors;	// colors for different types of vertices
 	private int v;   		// number of vertices
 	private Graph graph;
-	public PGraphicsGraphDisplayer(PApplet parent, PGraphics g, String answerFile, 
-			Graph graph) throws IOException {
-		super(parent, g, 0xFFFFFF, 0x000000, 30);
+	public PGraphicsGraphDisplayer(PApplet parent, PGraphics g, 
+			Graph graph) {
+		super(parent, g, graph);
 		this.graph = graph;
-		displayer = new GraphDisplayer(graph, answerFile) {			
+		displayer = new GraphDisplayer(graph) {			
 			public void display() {
 				draw();	
 			}
 		};
-		graph.addGraphObserver(displayer);
+		graph.addObserver(displayer);
 		this.v = displayer.getGraph().getV();
 		colors = new int[] {
 			fgColor,
@@ -50,8 +50,6 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	}
 	
 	public void thisDraw() {
-//	    if (displayer == null)
-//	    	return;
 		g.background(bgColor);
 	    g.translate(g.width/2, g.height/2);
 	    g.textSize(txtHeight);
@@ -59,7 +57,6 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    g.fill(fgColor);
 	    drawEdges(); 	// draw edges first 
 	    drawVertices();	// then draw vertices on top
-	    displayer.end();
 	    if (true)
 	    	return;
 	    if (Visualize.start) {
@@ -72,8 +69,6 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    	Visualize.terminate = false;
 	    	Visualize.start = true;
 	    }
-//	    if (g != null)
-//	    	setPGraphics(g);
 	}
 	
 	public void setPGraphics(PGraphics g) {
