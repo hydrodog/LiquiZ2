@@ -5,6 +5,7 @@ public class QuestionContainer implements Displayable {
 	private int id;
 	private String name;
 	private ArrayList<Displayable> displayables;
+	private String cssClass; // the display for this container
 
 	public QuestionContainer() {
 		displayables = new ArrayList<Displayable>();
@@ -100,5 +101,11 @@ public class QuestionContainer implements Displayable {
 			d.writeJS(dc);
 			dc.append(",\n");
 		}
+	}
+	public String getCssClass() {
+		return cssClass;
+	}
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
 	}
 }
