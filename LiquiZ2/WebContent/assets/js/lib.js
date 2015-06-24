@@ -1,399 +1,411 @@
 Util = {
-	dump : function(obj) {
-		var s = "";
-		for ( var k in obj) {
-			s += k + "-->" + obj[k] + '\n';
-		}
-		console.log(s);
-	},
+    dump: function(obj) {
+        var s = "";
+        for (var k in obj) {
+            s += k + "-->" + obj[k] + '\n';
+        }
+        console.log(s);
+    },
 
-	/*
-	 * Returns an html tag filled with the keys and values you pass in Second
-	 * arg is an object filled with key, value pairs Returns undefined if no
-	 * valid tag was passed.
-	 */
-	make : function(tag, obj) {
-		// without a valid tag we can't continue
-		if (typeof tag === "undefined" || !tag) {
-			console.log("Util.make failed with \ntag: " + tag + "\ninnerHTML: "
-					+ innerHTML + "\nclassName: " + className + "\nid: " + id);
-			return;
-		}
-		var element = document.createElement(tag);
-		for ( var i in obj) {
-			if (typeof obj[i] !== "undefined" && obj[i] !== null)
-				if (i === "innerHTML" && obj[i].nodeName) {
-					element.appendChild(obj[i]);
-				} else {
-					element[i] = obj[i];
-				}
-		}
-		return element;
-	},
+    goToId: function(id) {
+    //     if (typeof id === "undefined") {
+    //         id = window.location.hash.substr(1);
+    //     }
+    //     window.location.hash = "";
+    //     window.location.hash = id;
+    },
 
-	/*
-	 * Most of the following functions only take the innerHTML, the className,
-	 * and the id of the tag you want, in that order. Any cases that break this
-	 * rule will be noted explicitly.
-	 */
-	span : function(innerHTML, className, id) {
-		return Util.make("span", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    /*
+     * Returns an html tag filled with the keys and values you pass in
+     * Second arg is an object filled with key, value pairs
+     * Returns undefined if no valid tag was passed.
+     */
+    make: function(tag, obj) {
+        // without a valid tag we can't continue
+        if (typeof tag === "undefined" || !tag) {
+            console.log("Util.make failed with \ntag: " + tag +
+                                              "\ninnerHTML: " + innerHTML +
+                                              "\nclassName: " + className +
+                                              "\nid: " + id);
+            return;
+        }
+        var element = document.createElement(tag);
+        for (var i in obj) {
+            if (typeof obj[i] !== "undefined" && obj[i] !== null)
+                if (i === "innerHTML" && obj[i].nodeName) {
+                    element.appendChild(obj[i]);
+                } else {
+                    element[i] = obj[i];
+                }
+        }
+        return element;
+    },
 
-	div : function(className, id) {
-		return Util.make("div", {
-			className : className,
-			id : id,
-		});
-	},
+    /*
+     * Most of the following functions only take the innerHTML, the className, and 
+     * the id of the tag you want, in that order. Any cases that break this rule
+     * will be noted explicitly.
+     */
+    span: function(innerHTML, className, id) {
+        return Util.make("span", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	p : function(innerHTML, className, id) {
-		return Util.make("p", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    div: function(className, id) {
+        return Util.make("div", {
+            className: className,
+            id: id,
+        });
+    },
 
-	a : function(href, innerHTML, className, id) {
-		return Util.make("a", {
-			href : href,
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    p: function(innerHTML, className, id) {
+        return Util.make("p", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	h1 : function(innerHTML, className, id) {
-		return Util.make("h1", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    a: function(href, innerHTML, className, id) {
+        return Util.make("a", {
+            href: href,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	h2 : function(innerHTML, className, id) {
-		return Util.make("h2", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    h1: function(innerHTML, className, id) {
+        return Util.make("h1", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	h3 : function(innerHTML, className, id) {
-		return Util.make("h3", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    h2: function(innerHTML, className, id) {
+        return Util.make("h2", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	h4 : function(innerHTML, className, id) {
-		return Util.make("h4", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    h3: function(innerHTML, className, id) {
+        return Util.make("h3", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	h5 : function(innerHTML, className, id) {
-		return Util.make("h5", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    h4: function(innerHTML, className, id) {
+        return Util.make("h4", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	h6 : function(innerHTML, className, id) {
-		return Util.make("h6", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    h5: function(innerHTML, className, id) {
+        return Util.make("h5", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	strong : function(innerHTML, className, id) {
-		return Util.make("strong", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    h6: function(innerHTML, className, id) {
+        return Util.make("h6", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	em : function(innerHTML, className, id) {
-		return Util.make("em", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    strong: function(innerHTML, className, id) {
+        return Util.make("strong", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });        
+    },
 
-	pre : function(innerHTML, className, id) {
-		return Util.make("pre", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    em: function(innerHTML, className, id) {
+        return Util.make("em", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });        
+    },
 
-	/*
-	 * This function takes rows and cols as additional arguments
-	 */
-	textarea : function(innerHTML, className, id, rows, cols) {
-		return Util.make("textarea", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-			rows : rows,
-			cols : cols,
-		});
-	},
+    pre: function(innerHTML, className, id) {
+        return Util.make("pre", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	ul : function(innerHTML, className, id) {
-		return Util.make("ul", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    /*
+     * This function takes rows and cols as additional arguments
+     */
+    textarea: function(innerHTML, className, id, rows, cols) {
+        return Util.make("textarea", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+            rows: rows,
+            cols: cols,
+        });
+    },
 
-	ol : function(innerHTML, className, id) {
-		return Util.make("ol", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    ul: function(innerHTML, className, id) {
+        return Util.make("ul", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	li : function(innerHTML, className, id) {
-		return Util.make("li", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    ol: function(innerHTML, className, id) {
+        return Util.make("ol", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	/*
-	 * This function takes the src as its first argument instead of innerHTML
-	 * src is relative to the dir you defined in mediaLocations
-	 */
-	img : function(src, className, id) {
-		return Util.make("img", {
-			src : mediaLocations.img + src,
-			className : className,
-			id : id,
-		});
-	},
+    li: function(innerHTML, className, id) {
+        return Util.make("li", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	/*
-	 * Does not take any arguments
-	 */
-	br : function() {
-		return Util.make("br");
-	},
+    /*
+     * This function takes the src as its first argument instead of innerHTML
+     * src is relative to the dir you defined in mediaLocations
+     */
+    img: function(src, className, id) {
+        return Util.make("img", {
+            src: mediaLocations.img + src,
+            className: className,
+            id: id,
+        });
+    },
 
-	/*
-	 * Takes a src, class, id and a bool for controls. controls defaults to
-	 * true. src is relative to the dir you defined in mediaLocations
-	 */
-	video : function(src, controls, className, id) {
-		controls = (typeof controls !== "undefined") ? controls : true;
-		return Util.make("video", {
-			src : mediaLocations.video + src,
-			controls : controls,
-			className : className,
-			id : id,
-		});
-	},
+    /*
+     * Does not take any arguments
+     */
+    br: function() {
+        return Util.make("br");
+    },
 
-	/*
-	 * Takes a src, class, id and a bool for controls. controls defaults to
-	 * true. src is relative to the dir you defined in mediaLocations
-	 */
-	audio : function(src, controls, className, id) {
-		controls = (typeof controls !== "undefined") ? controls : true;
-		return Util.make("audio", {
-			src : mediaLocations.audio + src,
-			controls : controls,
-			className : className,
-			id : id,
-		});
-	},
+    /*
+     * Takes a src, class, id and a bool for controls.
+     * controls defaults to true.
+     * src is relative to the dir you defined in mediaLocations
+     */
+    video: function(src, controls, className, id) {
+        controls = (typeof controls !== "undefined") ? controls : true;
+        return Util.make("video", {
+            src: mediaLocations.video + src,
+            controls: controls,
+            className: className,
+            id: id,
+        });
+    },
 
-	canvas : function(height, width) {
-		return Util.make("canvas", {
-			height : height,
-			width : width,
-		});
-	},
+    /*
+     * Takes a src, class, id and a bool for controls.
+     * controls defaults to true.
+     * src is relative to the dir you defined in mediaLocations
+     */
+    audio: function(src, controls, className, id) {
+        controls = (typeof controls !== "undefined") ? controls : true;
+        return Util.make("audio", {
+            src: mediaLocations.audio + src,
+            controls: controls,
+            className: className,
+            id: id,
+        });
+    },
 
-	form : function(innerHTML, className, id) {
-		return Util.make("form", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    canvas: function(height, width) {
+        return Util.make("canvas", {
+            height: height,
+            width: width,
+        });
+    },
 
-	input : function(type, className, id) {
-		return Util.make("input", {
-			type : type,
-			className : className,
-			id : id,
-		});
-	},
+    form: function(innerHTML, className, id) {
+        return Util.make("form", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	button : function(value, className, id, onClick) {
-		return Util.make("input", {
-			type : "button",
-			value : value,
-			className : className,
-			id : id,
-			onclick : onClick,
-		});
-	},
+    input: function(type, className, id) {
+        return Util.make("input", {
+            type: type,
+            className: className,
+            id: id,
+        });
+    },
 
-	file : function(accept, className, id) {
-		return Util.make("input", {
-			type : "file",
-			accept : accept,
-			className : className,
-			id : id,
-		});
-	},
+    button: function(value, className, id, onClick) {
+        return Util.make("input", {
+            type: "button",
+            value: value,
+            className: className,
+            id: id,
+            onclick: onClick,
+        });
+    },
 
-	select : function(name, multiple, innerHTML, className, id) {
-		if (innerHTML.constructor === Array) {
-			var options = document.createDocumentFragment();
-			for (var i = 0; i < innerHTML.length; i++) {
-				options.appendChild(Util.option(innerHTML[i], innerHTML[i]));
-			}
-			innerHTML = options;
-		}
-		return Util.make("select", {
-			name : name,
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-			multiple : multiple,
-		});
-	},
+    file: function(accept, className, id) {
+        return Util.make("input", {
+            type: "file",
+            accept: accept,
+            className: className,
+            id: id,
+        });
+    },
 
-	option : function(value, innerHTML, className, id) {
-		return Util.make("option", {
-			value : value,
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    select: function(name, multiple, innerHTML, className, id) {
+        if (innerHTML.constructor === Array) {
+            var options = document.createDocumentFragment();
+            for (var i = 0; i < innerHTML.length; i++) {
+                options.appendChild(Util.option(innerHTML[i], innerHTML[i]));
+            }
+            innerHTML = options;
+        }
+        return Util.make("select", {
+            name: name,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+            multiple: multiple,
+        });
+    },
 
-	optgroup : function(label, innerHTML, className, id) {
-		return Util.make("optgroup", {
-			label : label,
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    option: function(value, innerHTML, className, id) {
+        return Util.make("option", {
+                    value: value,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	radio : function(value, name, className, id) {
-		return Util.make("input", {
-			type : "radio",
-			value : value,
-			name : name,
-			className : className,
-			id : id,
-		});
-	},
+    optgroup: function(label, innerHTML, className, id) {
+        return Util.make("optgroup", {
+            label: label,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	checkbox : function(value, name, className, id, checked) {
-		return Util.make("input", {
-			type : "checkbox",
-			value : value,
-			name : name,
-			className : className,
-			id : id,
-			checked : checked,
-		});
-	},
+    radio: function(value, name, className, id) {
+        return Util.make("input", {
+            type: "radio",
+            value: value,
+            name: name,
+            className: className,
+            id: id,
+        });
+    },
 
-	label : function(htmlFor, innerHTML, className, id) {
-		return Util.make("label", {
-			htmlFor : htmlFor,
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    checkbox: function(value, name, className, id, checked) {
+        return Util.make("input", {
+            type: "checkbox",
+            value: value,
+            name: name,
+            className: className,
+            id: id,
+            checked: checked,
+        });
+    },
 
-	code : function(innerHTML, className, id) {
-		return Util.make("code", {
-			innerHTML : innerHTML,
-			className : className,
-			id : id,
-		});
-	},
+    label: function(htmlFor, innerHTML, className, id) {
+        return Util.make("label", {
+            htmlFor: htmlFor,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	/*
-	 * Generic <tr> generator. For the use of Util.table(). You probably
-	 * shouldn't use this.
-	 */
-	tr : function(list, th) {
-		var tr = Util.make("tr");
-		for (var i = 0; i < list.length; i++) {
-			var tElement;
-			if (th) {
-				tElement = Util.make("th", {
-					scope : "col",
-					innerHTML : list[i],
-				});
-			} else {
-				tElement = Util.make("td", {
-					innerHTML : list[i],
-				});
-			}
-			tr.appendChild(tElement);
-		}
-		return tr;
-	},
+    code: function(innerHTML, className, id) {
+        return Util.make("code", {
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+        });
+    },
 
-	/*
-	 * Takes in a class for the table, a list of elements to be inserted into
-	 * the table, an optional boolean if there's a header in the table, and an
-	 * optional function that will accept a list and a bool if the list passed
-	 * in is the header and return a tr element
-	 * 
-	 * trFunction should be used to modify escape characters that you pass in
-	 * through the list. It lets you insert any arbitrary formatting to any tr
-	 * element based on whatever escape mechanism you choose.
-	 */
-	table : function(list, header, className, trFunction) {
-		header = (typeof header !== "undefined") ? header : false;
-		trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
-		var result = Util.make("table", {
-			className : className,
-		});
+    /*
+     * Generic <tr> generator. For the use of Util.table(). You probably shouldn't
+     * use this.
+     */
+    tr: function(list, th) {
+        var tr = Util.make("tr");
+        for (var i = 0; i < list.length; i++) {
+            var tElement;
+            if (th) {
+                tElement = Util.make("th", {
+                    scope: "col",
+                    innerHTML: list[i],
+                });
+            } else {
+                tElement = Util.make("td", {
+                    innerHTML: list[i],
+                });
+            }
+            tr.appendChild(tElement);
+        }
+        return tr;
+    },
 
-		if (header) {
-			var headList = list.shift();
-			var thead = result.createTHead();
-			thead.appendChild(trFunction(headList, true));
-		}
+    /*
+     * Takes in a class for the table, a list of elements to be inserted into 
+     * the table, an optional boolean if there's a header in the table, and an
+     * optional function that will accept a list and a bool if the list passed
+     * in is the header and return a tr element
+     * 
+     * trFunction should be used to modify escape characters that you pass in through
+     * the list. It lets you insert any arbitrary formatting to any tr element based
+     * on whatever escape mechanism you choose.
+     */
+    table: function(list, header, className, trFunction) {
+        header = (typeof header !== "undefined") ? header : false;
+        trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
+        var result = Util.make("table", {
+            className: className,
+        });
 
-		var tbody = Util.make("tbody");
-		result.appendChild(tbody);
-		for (var i = 0; i < list.length; i++) {
-			var tr = trFunction(list[i], false);
-			tbody.appendChild(tr);
-		}
+        if (header) {
+            var headList = list.shift();
+            var thead = result.createTHead();
+            thead.appendChild(trFunction(headList, true));
+        }
 
-		return result;
-	},
+        var tbody = Util.make("tbody");
+        result.appendChild(tbody);
+        for (var i = 0; i < list.length; i++) {
+            var tr = trFunction(list[i], false);
+            tbody.appendChild(tr);
+        }
+
+        return result;
+    },
 
 };
 
@@ -408,65 +420,6 @@ mediaLocations = {
 	mp4 : this.video,
 },
 
-/*
- * Table generator samples.
- */
-
-// /*
-// * Proof of concept. Not production code!
-// */
-// tdCount = 0;
-// function modTd(list, th) {
-// var tr = Util.make("tr", {
-// className: "custom-tr",
-// });
-// for (var i = 0; i < list.length; i++) {
-// var tElement;
-// if (th) {
-// tElement = Util.make("th", {
-// className: "modded-header",
-// id: tdCount++,
-// innerHTML: list[i],
-// scope: "col",
-// });
-// } else {
-// tElement = Util.make("td", {
-// className: "modded",
-// id: tdCount++,
-// innerHTML: list[i],
-// });
-// }
-// tr.appendChild(tElement);
-// }
-// return tr;
-// }
-// /*
-// * Proof of concept. Not production code!
-// *
-// * Function that integrates with the new Util.table function
-// * to generate an empty table filled with inputs.
-// */
-// function emptyGrid(list, th) {
-// var obj = list[0];
-// var result = document.createDocumentFragment();
-// for (var i = 0; i < obj.rows; i++) {
-// var tr = Util.make("tr");
-// for (var j = 0; j < obj.cols; j++) {
-// // var input = Util.make("input", {
-// // type: "text",
-// // });
-// var td = Util.make("td", {
-// className: "td-input",
-// innerHTML: Util.make("input", {
-// type: "text",
-// }),
-// });
-// tr.appendChild(td);
-// }
-// result.appendChild(tr);
-// }
-// return result;
-// }
 /*
  * Add a css file to the header section. This is useful for dynamically loading
  * the css file depending on the user's preferences.
@@ -511,84 +464,88 @@ function Quiz(quizinfo) {
 	for ( var k in quizinfo) {
 		this[k] = quizinfo[k];
 	}
-	this.container = document.getElementById("container");
-	this.container.className = "quiz";
-	// this.displayHeader(this.container);
-	this.displayHeader();
-	this.editMode = true;
-	console.log(this);
-	this.createSubmit(1);
+    this.body = document.getElementById("container");
+    this.body.className = "quiz";
+    //this.displayHeader(this.body);
+    this.render(this.displayHeader());
+    this.editMode = true;
+    console.log(this);
+    this.render(this.createSubmit(1));
+}
+
+Quiz.prototype.render = function(child) {
+    this.body.appendChild(child);
 }
 
 Quiz.prototype.displayHeader = function() {
-	var header = Util.div("header");
-	header.appendChild(Util.h1(this.title));
-	header.appendChild(Util.span(" Points: " + this.points, "points"));
-	header.appendChild(Util.p("timer"));
-	this.container.appendChild(header);
-	// TODO: add time and countdown
-	// TODO: add remaining tries
+    var header = Util.div("header");
+    header.appendChild(Util.h1(this.title));
+    header.appendChild(Util.span(" Points: " + this.points, "points"));
+    header.appendChild(Util.p("timer"));
+    return header;
+    //TODO: add time and countdown
+    //TODO: add remaining tries
 }
 
 var clicks = 0;
 Quiz.prototype.end = function(id) {
-	var parent = this;
-	var qc = Util.div("qc", "qc" + id);
-	if (this.editMode) {
-		qc.appendChild(Util.button("New Question", "new-question", null,
-				function() {
-					if (clicks === 0) {
-						parent.editQuestion();
-						checkIfInView("editor");
-					}
-					clicks++;
-				}));
-	}
-	this.container.appendChild(qc);
-	this.createSubmit(2);
+    var parent = this;
+    var qc = Util.div("qc", "qc"+id);
+    if (this.editMode) {
+        qc.appendChild(Util.button("New Question", "new-question", null,
+            function() {
+                if (clicks === 0) {
+                    parent.editQuestion();
+                    // Util.goToId("editor");
+                }
+                clicks++;
+            }));
+    }
+    this.render(qc);
+    this.render(this.createSubmit(2));
 };
 
-function makeEditBox(parent, id, editFunc, deleteFunc, copyFunc) {
-	var editBox = Util.div("edit");
-	editBox.appendChild(Util.button("Edit", null, id + "-edit", editFunc));
-	editBox
-			.appendChild(Util
-					.button("Delete", null, id + "-delete", deleteFunc));
-	editBox.appendChild(Util.button("Copy", null, id + "-copy", copyFunc));
-	parent.appendChild(editBox);
-}
+function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
+    var editBox = Util.div("edit");
+    editBox.appendChild(Util.button("Edit", null, id+"-edit", editFunc));
+    editBox.appendChild(Util.button("Delete", null, id+"-delete", deleteFunc)); 
+    editBox.appendChild(Util.button("Copy", null, id+"-copy", copyFunc));
+    return editBox;
+}   
 
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
-	points = (typeof points === "undefined") ? 1 : points;
-	level = (typeof level === "undefined") ? 1 : level;
+    points = (typeof points === "undefined") ? 1 : points;
+    level =  (typeof level === "undefined") ? 1 : level;
 
-	var qc = Util.div("qc " + className + "-qc", "qc" + id);
+    var qc = Util.div("qc " + className + "-qc", "qc" + id);
 
-	var header = Util.div("qheader");
-	header.appendChild(Util.h2(title));
-
-	var floatRight = Util.div("float-right");
-	floatRight.appendChild(Util.span("points:" + points, "qpoints"));
-	floatRight.appendChild(Util.span("level:" + level, "level"));
-	if (this.editMode) {
-		makeEditBox(floatRight, id, function(e) {
-			console.log(e.target.id);
-		}, function(e) {
-			console.log(e.target.id);
-		}, function(e) {
-			console.log(e.target.id);
-		});
-	}
-	header.appendChild(floatRight);
-	qc.appendChild(header);
-	return qc;
+    var header = Util.div("qheader");
+    header.appendChild(Util.h2(title));
+    
+    var floatRight = Util.div("float-right");
+    floatRight.appendChild(Util.span("points:" + points, "qpoints"));
+    floatRight.appendChild(Util.span("level:" + level, "level"));
+    if (this.editMode) {
+        floatRight.appendChild(makeEditBox(id,
+            function(e) {
+                console.log(e.target.id);
+            },
+            function(e) {
+                console.log(e.target.id);
+            },
+            function(e) {
+                console.log(e.target.id);
+            }));
+    }
+    header.appendChild(floatRight);
+    qc.appendChild(header);
+    return qc;
 };
 
 Quiz.prototype.createSubmit = function(id) {
-	var div = Util.div("submit");
-	div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"
-			+ id));
-	this.container.appendChild(div);
+    var div = Util.div("submit");
+    div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
+    return div;
 };
 
 Quiz.prototype.instructions = function(txt) {
@@ -1318,18 +1275,27 @@ function builddpd() {
 	var q_cloze = new Quiz(quizinfo, qlist);
 }
 
-var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
-		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
-		"Regex", "Matrix", "Cloze" ];
+var list = [
+            "Choose QuestionType",
+            "Fillin",
+            "Number",
+            "Essay",
+            "Code",
+            "MultiChoiceDropdown",
+            "Survey",
+            "MultiChoiceRadio",
+            "MultiAnswer",
+            "Regex",
+            "Matrix",
+            "Cloze"];
 
-// Quiz.prototype.editMode = function(){
-// var c = mkdivid(this.container, "new-question-button", "qc
-// new-question-button"); // TODO(asher): Fix mkdiv
-// var newB = mkbutton("New Question"); // TODO(asher): Fix mkbutton
-// newB.onclick = function() { this.editQuestion; }
-// c.appendChild(newB);
-// this.add(c);
-// }
+//Quiz.prototype.editMode = function(){
+//	var c = mkdivid(this.body, "new-question-button", "qc new-question-button"); // TODO(asher): Fix mkdiv
+//    var newB = mkbutton("New Question"); // TODO(asher): Fix mkbutton
+//    newB.onclick = function() { this.editQuestion; }
+//    c.appendChild(newB);
+//    this.add(c);
+//}
 
 var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
 		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
@@ -1421,46 +1387,6 @@ Quiz.prototype.editQuestion = function() {
 		parent["edit" + val]();
 		checkIfInView(val);
 	});
-}
-
-var page;
-
-/*
- * Run a serverside script (the parameter) which prints a JSON string. load the
- * JSON, evaluate it and call initPage() to update the page
- */
-function build() {
-	// your page: test.html
-	// ajax url: test_ajax.jsp
-	var thisURL = window.location.href;
-	var last = thisURL.split("/");
-	last = last[last.length - 1];
-	var baseFilename = last.split('.').slice(0, -1).join('');
-	var ajax = baseFilename + "_ajax.jsp"; // name of dynamic file to run
-
-	var json = new XMLHttpRequest();
-	json.onreadystatechange = function() {
-		if (json.readyState != 4 || json.status != 200)
-			return;// TODO: Handle error if it doesn't come back
-		eval("page=" + json.responseText);
-		processAJAX();
-	}
-	json.open("GET", ajax, true);
-	json.send();
-}
-
-function processAJAX() {
-	if (typeof page.css !== "undefined") {
-		appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
-		// css skin
-	} else {
-		console.error("custom css didn't load. check css link in page.css");
-	}
-	if (typeof thisPage !== "undefined") {
-		thisPage();
-	} else {
-		console.error("thisPage() never ran!!");
-	}
 }
 
 /** ******************** View Quizzes Part ******************** * */
@@ -1654,5 +1580,52 @@ function qtable(input) {
 }
 /** ******************** View Quizzes Part ******************** * */
 
-// List/Edit Grades Page
-window.onload = build;
+var page;
+
+/*
+ * Run a serverside script (the parameter) which prints a JSON string. load the
+ * JSON, evaluate it and call initPage() to update the page
+ */
+function build() {
+    // your page: test.html
+    // ajax url: test_ajax.jsp
+    loadPage();
+
+    
+}
+
+function processAJAX() {
+    if (typeof page.css !== "undefined") {
+        appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
+        // css skin
+    } else {
+        console.error("custom css didn't load. check css link in page.css");
+    }
+    if (typeof thisPage !== "undefined") {
+        thisPage();
+    } else {
+        console.error("thisPage() never ran!!");
+    }
+}
+
+function loadPage(e) {
+    document.getElementById("container").innerHTML = "";
+    var baseFilename = location.hash.substr(1);
+    var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
+    console.log(ajax);
+    console.log("hash change to: " + location.hash);
+
+    var json = new XMLHttpRequest();
+    json.onreadystatechange=function() {
+      if (json.readyState!==4 || json.status!==200)
+          return;// TODO: Handle error if it doesn't come back
+      eval("page="+json.responseText);
+      processAJAX();
+      // Util.goToId();
+    }
+    json.open("GET", ajax, true);
+    json.send();
+}
+
+window.onload = loadPage;
+window.onhashchange = loadPage;
