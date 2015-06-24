@@ -122,7 +122,7 @@ public class Quiz implements Displayable {
 	}
 	
 	public Quiz(int id, String name, String desc, Policy plc) {
-		this.id=id;
+		this.id = id;
 		this.name = name;
 		this.desc = desc;
 		this.qContainers = new ArrayList<QuestionContainer>();
@@ -144,6 +144,9 @@ public class Quiz implements Displayable {
 		qContainers.remove(Index);
 	}
 	
+	public void addQuestion(QuestionContainer qc) {
+		qContainers.add(qc);
+	}
 	public void addQuestion(HttpServletRequest req) {
 		String questionType = req.getParameter("question_type");
 		if (questionType.equals("fillin")) {
