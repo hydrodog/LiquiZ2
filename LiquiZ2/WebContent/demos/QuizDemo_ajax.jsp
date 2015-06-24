@@ -107,7 +107,8 @@ page.grid("17_1", [["headers 1", "header 2", "header 3"],
 				   ["euler.jpg", "hello", 4],
 				   ["later", "einstein.jpg", "%%input%%"]], true);
 var calendar = new Calendar(new Date(), 365);
-calendar.year(page.q);
+//calendar.year(page.q);
+calendar.month(page.q, new Date(),calendar);
 
 // question 18
 page.end(18);
