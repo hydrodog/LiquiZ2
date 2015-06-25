@@ -864,46 +864,56 @@ Calendar.prototype.setEvent = function(d){
     this.events = s;
 }
 
-Calendar.prototype.markCell = function(date, d, parent){
+Calendar.prototype.markCell = function(date, d){
 	var dd = new Date();
 	dd.setDate(date);
 	dd.setMonth(d.getMonth());
 	this.setEvent(dd);
-	this.month(parent, d, this);// refresh
-}
-
-Calendar.prototype.month = function(parent, d, calendar) {
-    //d = (typeof d !== "undefined") ? d : this.startDate;
 	var t = document.getElementById("cal");
 	if(t != null){
-		parent.removeChild(t);
+		t.parentNode.replaceChild(this.month(d, this), t);
 	}
+}
+
+Calendar.prototype.month = function(d, calendar) {
+    //d = (typeof d !== "undefined") ? d : this.startDate;
     var t = document.createElement("table");
     t.className = "cal";
     t.id = "cal";
     var h = t.insertRow(0);
-    var b1 = mkbutton("<<", null, function(){});
+    var b1 = Util.button("<<", null, null, function(){});
     b1.onclick = function(){
     	d.setFullYear(d.getFullYear() - 1);
-    	calendar.month(parent, d, calendar);
+    	var t = document.getElementById("cal");
+    	if(t != null){
+    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	}
     };
-    var b2 = mkbutton("<", null, function(){});
+    var b2 = Util.button("<", null, null, function(){});
     b2.onclick = function(){
     	d.setMonth(d.getMonth() - 1);
-    	calendar.month(parent, d, calendar);
+    	var t = document.getElementById("cal");
+    	if(t != null){
+    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	}
     };
-    var b3 = mkbutton(">", null, function(){});
+    var b3 = Util.button(">", null, null, function(){});
     b3.onclick = function(){
     	d.setMonth(d.getMonth() + 1);
-    	calendar.month(parent, d, calendar);
+    	var t = document.getElementById("cal");
+    	if(t != null){
+    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	}
     };
-    var b4 = mkbutton(">>", null, function(){});
+    var b4 = Util.button(">>", null, null, function(){});
     b4.onclick = function(){
     	d.setFullYear(d.getFullYear() + 1);
-    	calendar.month(parent, d, calendar);
-    };
-    
-    var b5 = mkbutton("shift", null, function(){});
+    	var t = document.getElementById("cal");
+    	if(t != null){
+    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	}
+    }; 
+    var b5 = Util.button("shift", null, null, function(){});
     b5.onclick = function(){
     	var s = "";
     	for(var i=0; i<365; i++){
@@ -911,9 +921,12 @@ Calendar.prototype.month = function(parent, d, calendar) {
     		s += flag;
     	}
     	calendar.events = s;
-    	calendar.month(parent, d, calendar);// refresh
+    	var t = document.getElementById("cal");
+    	if(t != null){
+    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	}
     }
-    var b6 = mkbutton("mark holiday", null, function(){});
+    var b6 = Util.button("mark holiday", null, null, function(){});
     b6.onclick = function(){
     	var dd = new Date(); //dd is the first day of the year
     	dd.setDate(1);
@@ -924,70 +937,71 @@ Calendar.prototype.month = function(parent, d, calendar) {
     			calendar.setHoliday(dd);
     		dd.setDate(dd.getDate() + 1);
     	}
-    	calendar.month(parent, d, calendar);// refresh
+    	var t = document.getElementById("cal");
+    	if(t != null){
+    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	}
     }
+    
     fillRow(h, [
      b1, b2, document.createTextNode(d.getFullYear()), document.createTextNode(" "), document.createTextNode(d.getMonth()+1), b3, b4, b5, b6
     ]);
     h = t.insertRow(1);
-    fillRowText(h, ["S", "M", "T", "W", "T", "F", "S"]);
-    
+    fillRowText(h, ["S", "M", "T", "W", "T", "F", "S"]);   
     d.setDate(1);
     var monthId = d.getMonth();
     var dayOfWeek = d.getDay();
     d.setDate(d.getDate() - dayOfWeek); // get back to Sunday
-    month:
-    {
-    	for (var i = 2; i <= 7; i++) {
-	        var r = t.insertRow(i);
-	        for (var j = 0; j < 7; j++) {
-	            var c = r.insertCell(j);
-	            if(d.getMonth() == (monthId-1+12)%12){
-	            	c.innerHTML = " ";
-	                d.setDate(d.getDate() + 1);
-	            }
-	            else if(d.getMonth() == monthId){
-	            	var holidayFlag = this.holidays.charAt(this.getDateOfYear(d) - 1);
-	            	var eventFlag = this.events.charAt(this.getDateOfYear(d) - 1);
-	            	if(holidayFlag == '1'){
-	            		c.innerHTML = d.getDate();
-	            		c.ondblclick = function(){calendar.markCell(this.innerHTML, d, parent);};
-	            		if(eventFlag == '1'){
-	            			c.style.color = "yellow";
-	            		}
-	            		else{
-	            			c.style.color = "red";
-	            		}
-	            	}
-	            	else if(eventFlag == '1'){
-	            		c.innerHTML = d.getDate();
-	            		c.style.color = "green";
-	            		c.ondblclick = function(){calendar.markCell(this.innerHTML, d, parent);};
-	            	}
-	            	else{
-	            		c.innerHTML = d.getDate();
-	            		c.style.color = "black";
-	            		c.ondblclick = function(){calendar.markCell(this.innerHTML, d, parent);};
-	            	}
-	                d.setDate(d.getDate() + 1);
-	            }
-	            else{
-	                d.setMonth(d.getMonth() - 1);//go back to current month
-	                break month;
-	            }
-	        }
-    	}
-    }
-    parent.appendChild(t);
+	for (var i = 2; i <= 7; i++) {
+        var r = t.insertRow(i);
+        var rowFlag = false;
+        for (var j = 0; j < 7; j++) {
+            var c = r.insertCell(j);
+            if(d.getMonth() == (monthId-1+12)%12){
+                d.setDate(d.getDate() + 1);
+            }
+            else if(d.getMonth() == monthId){
+            	c.innerHTML = d.getDate();
+            	c.ondblclick = function(){calendar.markCell(this.innerHTML, d);};
+            	
+            	var holidayFlag = this.holidays.charAt(this.getDateOfYear(d) - 1);
+            	var eventFlag = this.events.charAt(this.getDateOfYear(d) - 1);
+            	if(holidayFlag == '1'){
+            		if(eventFlag == '1'){
+            			c.style.color = "blue";
+            		}
+            		else{
+            			c.style.color = "red";
+            		}
+            	}
+            	else if(eventFlag == '1'){
+            		c.style.color = "green";
+            	}
+            	else{
+            		c.style.color = "black";
+            	}
+                d.setDate(d.getDate() + 1);
+            }
+            else{
+                rowFlag = true;
+            }
+        }
+        if(rowFlag){
+        	d.setMonth(d.getMonth() - 1);//go back to current month
+        	break;
+        }
+	}
+    return t;
 }
 
-Calendar.prototype.year = function(parent, calendar) {
+Calendar.prototype.year = function(calendar) {
     var div = document.createElement("div");
     var d = this.startDate;
     for (var month = 0; month < 12; month++){
-    	this.month(div, d, calendar);
+    	div.appendChild(this.month(d, calendar));
+    	d.setMonth(d.getMonth() + 1);
     }      
-    parent.appendChild(div);
+    return div;
 }
 
 function imgClick(e) {

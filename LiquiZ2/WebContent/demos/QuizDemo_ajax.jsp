@@ -127,7 +127,8 @@ page.container.appendChild(q);
 
 var calendar = new Calendar(new Date(), 365);
 //calendar.year(page.q);
-page.container.appendChild(calendar.month(page.q, new Date(),calendar));
+page.container.appendChild(calendar.month(new Date(),calendar));
+//page.container.appendChild(calendar.year(calendar));
 
 // question 18
 page.end(18);
