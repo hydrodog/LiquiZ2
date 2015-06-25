@@ -1,4 +1,7 @@
 package org.adastraeducation.liquiz;
+
+import java.util.ArrayList;
+
 /**
  * Contains flags and information that writeHTML will need
  * @author yijinkang
@@ -94,6 +97,19 @@ public class DisplayContext {
 		}
 		return this;
 	}
-
-	
+	public final DisplayContext append(ArrayList<Displayable> list) {
+		append("[");
+		for (Displayable d : list) {
+			d.writeJS(this);
+		}
+		append("]");
+		return this;
+	}	
+	public final DisplayContext append2D(ArrayList< ArrayList<Displayable> > list) {
+		append("[");
+		for (int i = 0; i < list.size(); i++)
+			append(list.get(i)).append(",\n");
+		append("]");
+		return this;
+	}	
 }

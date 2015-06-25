@@ -54,11 +54,10 @@ public class MatrixQuestion extends Question {
 		dc.append("</table>");
 	}
 
-	//TODO: Fix the commas after each row, they aren't there!
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("page.grid(").appendQuotedJS("x").
-		append(',').append(rows)
+		dc.append("page.grid(").appendQuotedJS(id).
+		append(',').appendList(rows)
 			.append(',').append(cols).append(");\n");
 	}
 
