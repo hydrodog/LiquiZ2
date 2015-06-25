@@ -9,7 +9,7 @@ public class TestQuizJavascript {
 		Policy p = new Policy();
 		Quiz quiz = new Quiz(1, "Java1", "Java Quiz 1", p);
 		QuestionContainer qc = 
-				new QuestionContainer(1000, "Operators", new ArrayList<Displayable>());
+				new QuestionContainer(1000, "Operators", "fillin", new ArrayList<Displayable>());
 		qc.add(new Text("What is 2+2?"));
 		qc.add(new Image("dinosaur.jpg", 100, 100));
 		ArrayList<Answer> answers = new ArrayList<Answer>();
@@ -18,6 +18,7 @@ public class TestQuizJavascript {
 		DisplayContext dc = new DisplayContext();
 		quiz.addQuestion(qc);
 		quiz.writeJS(dc);
+		System.out.println(dc.toString());
 	}
 	
 }
