@@ -56,9 +56,7 @@ public class MatrixQuestion extends Question {
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("page.grid(").appendQuotedJS(id).
-		append(',').appendList(rows)
-			.append(',').append(cols).append(");\n");
+		dc.append("page.emptyGrid(").append(super.getId()).append(",").append(rows).append(",").append(cols).append(",null);");
 	}
 
 	@Override
