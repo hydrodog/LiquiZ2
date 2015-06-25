@@ -35,6 +35,12 @@ public class Quiz implements Displayable {
 		int n = (int)((b-a)/step) + 1;
 		return a + r.nextInt(n) * step;
 	}
+	public static void random(double[] arr, double a, double b, double step) {
+		for (int i = 0; i < arr.length; i++) {
+			int n = (int)((b-a)/step) + 1;
+			arr[i] = a + r.nextInt(n) * step;	
+		}
+	}
 
 	private int id; // unique id for db and XML
 	private String name, desc; // display name & description, TODO possibly per Course? or copy renamed quiz
