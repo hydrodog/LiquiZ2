@@ -1,5 +1,7 @@
 package org.adastraeducation.visualcs;
 
+import org.adastraeducation.visualcs.algorithms.Array;
+import org.adastraeducation.visualcs.algorithms.PGraphicsArrayDisplayer;
 import org.adastraeducation.visualcs.graph.Graph;
 import org.adastraeducation.visualcs.graph.PGraphicsGraphDisplayer;
 
@@ -37,17 +39,30 @@ public class GenerateProblemSets {
 		};		
 	}
 
+	public static void MergeSort(int n) {
+		new ProblemSet("MergeSort", n) {
+			public void construct() throws java.io.IOException {
+				Array arr = new Array(answerFile, 10, 0, 99);
+				d = new PGraphicsArrayDisplayer(null, null, arr);
+			}
+			public void algorithm() {
+				((Array)answerStore).MergeSort();
+			}
+		};		
+	}
+	
 	public static void main(String[] args) throws IOException {
 //		ProblemSet.setDefaultSizes(2000,2000,1000,1000);
-		for (int i = 0; i < 2; i++) {
+
+		for (int i = 0; i < 10; i++) {
 			BellmanFord(i);
 		}
 		for (int i = 0; i < 10; i++) {
 			Prim(i);
 		}
-		/*
-		 for (int i = 0; i < 10; i++)
-		   Quicksort(i);
-		 */
+		
+		for (int i = 0; i < 10; i++) {
+			MergeSort(i);
+		}
 	}
 }
