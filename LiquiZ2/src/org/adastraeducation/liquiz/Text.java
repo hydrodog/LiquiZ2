@@ -1,5 +1,7 @@
 package org.adastraeducation.liquiz;
 
+import org.adastraeducation.liquiz.util.*;
+
 public class Text extends DisplayElement {
 	private String text;
 	
@@ -29,8 +31,9 @@ public class Text extends DisplayElement {
 	}
 	@Override
 	public void writeJS(DisplayContext dc) {
-		writeJS("txt", dc);
-		Util.   dc.append('\'').append(text).append('\'');
+		dc.append("q.instructions(");
+		Util.escapeQuotedJS(text, dc);
+		dc.append(");");
 	}
 	@Override
 	public void writeXML(StringBuilder b) {
