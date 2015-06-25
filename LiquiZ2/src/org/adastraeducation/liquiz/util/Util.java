@@ -41,7 +41,7 @@ public class Util {
 	// TODO: make this escape strings in single quotes
 	public static void escape(String s, DisplayContext b) {
 		for (int i = 0; i < s.length(); i++) {
-			int c = s.charAt(i);
+			char c = s.charAt(i);
 			if (c >= mlEscapeMap.length) {
 				b.append(c);
 			} else {

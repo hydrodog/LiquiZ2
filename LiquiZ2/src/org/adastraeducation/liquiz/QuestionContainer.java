@@ -2,6 +2,8 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
+import org.adastraeducation.liquiz.util.Util;
+
 public class QuestionContainer implements Displayable {
 	private int id;
 	private String name;
@@ -21,9 +23,11 @@ public class QuestionContainer implements Displayable {
 		displayables = new ArrayList<Displayable>(list);
 	}
 
-	public QuestionContainer(int id, String name, ArrayList<Displayable> list) {
+	public QuestionContainer(int id, String name, String cssClass,
+			ArrayList<Displayable> list) {
 		this.id = id;
 		this.name = name;
+		this.cssClass = cssClass;
 		displayables = list;
 	}
 
@@ -90,27 +94,26 @@ public class QuestionContainer implements Displayable {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("q = page.addQuestion(").append(id).append(", '")
-				.append(name).append("','").append(cssClass);
-		int points = getTotalPoints();
-		if (points != 1)
-			dc.append("',").append(getTotalPoints());
-		dc.append(");\n");
-
 		/*
-		 * 
-		 * 
-		 * // question 1 q = page.addQuestion(1, "Mergesort", "grid", 0);
-		 * q.appendChild
-		 * (page.instructions("Show the first pass of Mergesort below"));
+		 * q = page.addQuestion(1, 'Mergesort', "grid", 0);
+		 * q.appendChild(page.instructions
+		 * ("Show the first pass of Mergesort below"));
 		 * q.appendChild(page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]));
 		 * q.appendChild(Util.br()); q.appendChild(page.emptyGrid("1_2", 1, 8));
 		 * page.container.appendChild(q);
 		 */
-		dc.append("");
+		dc.append("q=page.addQuestion(").append(id).append(",");
+		Util.escapeQuotedJS(name, dc);
+		dc.append(',');
+		Util.escapeQuotedJS(cssClass, dc);
+		int points = getTotalPoints();
+		if (points != 1) {
+			dc.append(',').append(points);
+		}
+		dc.append(");\n");
 		for (Displayable d : displayables) {
 			d.writeJS(dc);
-			dc.append(",\n");
+			dc.append("\n");
 		}
 	}
 
