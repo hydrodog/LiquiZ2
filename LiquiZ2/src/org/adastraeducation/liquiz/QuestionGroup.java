@@ -81,15 +81,15 @@ public class QuestionGroup implements Displayable {
 	}
 
 	@Override
-	public void writeJS(StringBuilder b) {
+	public void writeXML(StringBuilder b) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void writeXML(StringBuilder b) {
+	public void writeJS(DisplayContext dc) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

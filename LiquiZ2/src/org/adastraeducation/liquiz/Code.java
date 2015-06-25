@@ -78,10 +78,4 @@ public class Code extends Question {
 		return 0;
 	}
 	
-	public static void main(String[] args) {
-		Code q = new Code();
-		DisplayContext d= new DisplayContext();
-		q.writeJS(d);
-		System.out.println(d);
-	}
 }

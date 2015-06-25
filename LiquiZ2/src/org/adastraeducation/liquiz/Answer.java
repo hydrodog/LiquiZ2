@@ -83,7 +83,7 @@ public class Answer implements Displayable, Cloneable {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append('\'').append(ans).append('\'');
+		dc.append('\'').append(ans.getName()).append('\'');
 	}
 	public void writeXML(StringBuilder b) {
 		if (correct) {
