@@ -1,4 +1,5 @@
 package org.adastraeducation.liquiz;
+
 import java.util.ArrayList;
 
 public class QuestionContainer implements Displayable {
@@ -10,27 +11,30 @@ public class QuestionContainer implements Displayable {
 	public QuestionContainer() {
 		displayables = new ArrayList<Displayable>();
 	}
+
 	public QuestionContainer(ArrayList<Displayable> list) {
 		displayables = list;
 	}
+
 	public QuestionContainer(String name, ArrayList<Displayable> list) {
 		this.name = name;
 		displayables = new ArrayList<Displayable>(list);
 	}
+
 	public QuestionContainer(int id, String name, ArrayList<Displayable> list) {
 		this.id = id;
 		this.name = name;
 		displayables = list;
 	}
-	
+
 	public ArrayList<Displayable> getDisplayables() {
 		return displayables;
 	}
-	
-	public void setDisplayables(ArrayList<Displayable> d){
+
+	public void setDisplayables(ArrayList<Displayable> d) {
 		displayables = d;
 	}
-	
+
 	public int getQuestionCount() {
 		int count = 0;
 		for (Displayable d : displayables) {
@@ -41,14 +45,14 @@ public class QuestionContainer implements Displayable {
 		return count;
 	}
 
-	public void add(Displayable d){
+	public void add(Displayable d) {
 		displayables.add(d);
 	}
 
-	public void delete(Displayable d){
+	public void delete(Displayable d) {
 		displayables.remove(d);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -63,20 +67,21 @@ public class QuestionContainer implements Displayable {
 		}
 		return totalPoints;
 	}
-	
-	public void writeHTML (DisplayContext dc) {
-		dc.append("<div class='quesHeader'>").append(getName()).append(": ").append(getTotalPoints()).append(" points</div>");
+
+	public void writeHTML(DisplayContext dc) {
+		dc.append("<div class='quesHeader'>").append(getName()).append(": ")
+				.append(getTotalPoints()).append(" points</div>");
 		dc.append("<div class='question'>\n");
 		for (Displayable d : displayables) {
 			d.writeHTML(dc);
 			dc.append("\n");
-			// TODO: should there be a new line or a space separating each? 
+			// TODO: should there be a new line or a space separating each?
 			// should we create objects to represent spaces & newlines?
 		}
 		dc.append("</div>\n\n");
 	}
 
-	public void writeXML (StringBuilder b) {
+	public void writeXML(StringBuilder b) {
 		b.append("<Q>");
 		for (Displayable d : displayables) {
 			d.writeXML(b);
@@ -84,27 +89,35 @@ public class QuestionContainer implements Displayable {
 		b.append("</Q>");
 	}
 
-	public void writeJS (DisplayContext dc) {
-		/*
-		
+	public void writeJS(DisplayContext dc) {
+		dc.append("q = page.addQuestion(").append(id).append(", '")
+				.append(name).append("','").append(cssClass);
+		int points = getTotalPoints();
+		if (points != 1)
+			dc.append("',").append(getTotalPoints());
+		dc.append(");\n");
 
-		// question 1
-		q = page.addQuestion(1, "Mergesort", "grid", 0);
-		q.appendChild(page.instructions("Show the first pass of Mergesort below"));
-		q.appendChild(page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]));
-		q.appendChild(Util.br());
-		q.appendChild(page.emptyGrid("1_2", 1, 8));
-		page.container.appendChild(q);
-		*/
+		/*
+		 * 
+		 * 
+		 * // question 1 q = page.addQuestion(1, "Mergesort", "grid", 0);
+		 * q.appendChild
+		 * (page.instructions("Show the first pass of Mergesort below"));
+		 * q.appendChild(page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]));
+		 * q.appendChild(Util.br()); q.appendChild(page.emptyGrid("1_2", 1, 8));
+		 * page.container.appendChild(q);
+		 */
 		dc.append("");
 		for (Displayable d : displayables) {
 			d.writeJS(dc);
 			dc.append(",\n");
 		}
 	}
+
 	public String getCssClass() {
 		return cssClass;
 	}
+
 	public void setCssClass(String cssClass) {
 		this.cssClass = cssClass;
 	}
