@@ -88,7 +88,7 @@ page.container.appendChild(q);
 // question 12
 q = page.addQuestion(12, 'Dinosaur', "selectImg");
 q.appendChild(Util.p("Which one is the dinosaur?"));
-q.appendChild(page.selectImg(12, ["cat2.jpg", "fish2.png", "trex.jpg"]));
+q.appendChild(Util.select("which", false, ["stegosaurus", "dimetrodon", "plesiosaurus"], 'mcdropdown'));
 page.container.appendChild(q);
 
 // question 13
