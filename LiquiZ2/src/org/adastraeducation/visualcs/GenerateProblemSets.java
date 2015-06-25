@@ -39,7 +39,7 @@ public class GenerateProblemSets {
 
 	public static void main(String[] args) throws IOException {
 //		ProblemSet.setDefaultSizes(2000,2000,1000,1000);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			BellmanFord(i);
 		}
 		for (int i = 0; i < 10; i++) {

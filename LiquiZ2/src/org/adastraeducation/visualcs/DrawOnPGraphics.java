@@ -8,12 +8,12 @@ public abstract class DrawOnPGraphics {
 	protected int bgColor; 	// background color
 	protected int fgColor;	// default foreground color
 	protected int txtHeight;	// text size?
-	protected PApplet parent;	// if not null, wait interactively
+	protected BasePApplet parent;	// if not null, wait interactively
 							// this can be a delay or wait for keyboard
 	public final static String dir = "data/img/";
 	private AnswerStore prob;
 
-	public DrawOnPGraphics(PApplet parent, PGraphics g, 
+	public DrawOnPGraphics(BasePApplet parent, PGraphics g, 
 			int bgColor, int fgColor, int txtHeight,
 			AnswerStore prob) {
 		this.parent = parent;
@@ -27,13 +27,12 @@ public abstract class DrawOnPGraphics {
 		this.txtHeight = txtHeight;
 		this.prob = prob;
 	}
-	public DrawOnPGraphics(PApplet parent, PGraphics g, AnswerStore prob) {
+	public DrawOnPGraphics(BasePApplet parent, PGraphics g, AnswerStore prob) {
 		this(parent, g, 0xFFFFFF, 0x000000, 30, prob);
 	}
 	public abstract void thisDraw();
 	public void draw() {
 		if (parent != null) {
-			g = parent.g;
 			setPGraphics(g);	
 		}
 	    g.beginDraw();

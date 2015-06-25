@@ -4,8 +4,7 @@ package org.adastraeducation.visualcs.graph;
 //2  how to output solution in txt file the, name
 //3  what's next step?  build on the web server? save png     graph1 png  sloution1 txt  batch
 
-import org.adastraeducation.visualcs.DrawOnPGraphics;
-import org.adastraeducation.visualcs.Visualize;
+import org.adastraeducation.visualcs.*;
 import org.adastraeducation.visualcs.util.*;
 import java.io.*;
 
@@ -20,12 +19,14 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private int[] colors;	// colors for different types of vertices
 	private int v;   		// number of vertices
 	private Graph graph;
-	public PGraphicsGraphDisplayer(PApplet parent, PGraphics g, 
+	public PGraphicsGraphDisplayer(BasePApplet parent, PGraphics g, 
 			Graph graph) {
 		super(parent, g, graph);
 		this.graph = graph;
 		displayer = new GraphDisplayer(graph) {			
 			public void display() {
+				if (PGraphicsGraphDisplayer.this.parent != null)
+					PGraphicsGraphDisplayer.this.parent.interactive();
 				draw();	
 			}
 		};
