@@ -5,6 +5,7 @@ import java.util.ArrayList;
 /**
  * Contains flags and information that writeHTML will need
  * @author yijinkang
+ * Also adds convenience functions for output
  *
  */
 public class DisplayContext {
@@ -67,6 +68,7 @@ public class DisplayContext {
 	static {
 		mlEscapeMap = new String[256];
 		quotedEscapeMap = new String[256];
+		mlEscapeMap['\n'] = "\\n";
 		mlEscapeMap['\\'] = "\\\\";
 		mlEscapeMap['&'] = "&amp;";
 		mlEscapeMap['<'] = "&lt;";

@@ -85,6 +85,12 @@ q.appendChild(Util.p("Which one is the dinosaur?"));
 q.appendChild(page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]));
 page.container.appendChild(q);
 
+// question 11b
+q = page.addQuestion(111, 'Dinosaur', "mcRadioImg");
+q.appendChild(Util.p("Which one is the dinosaur?"));
+q.appendChild(page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]));
+page.container.appendChild(q);
+
 // question 12
 q = page.addQuestion(12, 'Dinosaur', "selectImg");
 q.appendChild(Util.p("Which one is the dinosaur?"));
