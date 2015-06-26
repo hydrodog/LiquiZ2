@@ -321,28 +321,29 @@ public class Load {
 					"ORDER BY QuesCon.QuesConID, QuesConElements.Sequence ASC ");
 
 /*
- * SELECT QuesCon.QuesConID, QuesCon.QuesConName, QuesConElements.Type, QuesConElements.DispElID, QuesConElements.QuesID
+ * SELECT QuesCon.QuesConID, QuesCon.QuesConName, QuesCon.CssClass, QuesConElements.Type, QuesConElements.DispElID, QuesConElements.QuesID
  * FROM QuesCon
  * LEFT JOIN QuesConElements 
  * ON QuesCon.QuesConID = QuesConElements.QuesConID
  * ORDER BY QuesCon.QuesConID, QuesConElements.Sequence ASC;
  * 
- * QuesConID | QuesConName | Type | DispElID | QuesID
+ * QuesConID | QuesConName | CssClass | Type | DispElID | QuesID
  * 	
  */
 			int QCID;
-			String quesConName;
+			String quesConName, cssClass;
 			ArrayList<Displayable> disps = new ArrayList<Displayable>();
 			QuestionContainer qc = null;
 			
 			if (rs.next()) {
 				QCID = rs.getInt("QuesConID");
 				quesConName = rs.getString("QuesConName");
+				cssClass = rs.getString("CssClass");
 				
 				do {
 					if (rs.getInt("QuesConID") != QCID) {
 						// copy disps into another ArrayList and create QuesCon 
-						qc = new QuestionContainer(QCID, quesConName, new ArrayList(disps));
+						qc = new QuestionContainer(QCID, quesConName, cssClass, new ArrayList<Displayable>(disps));
 						Database.addQuesCon(qc); 
 						QCID = rs.getInt("QuesConID");
 						quesConName = rs.getString("QuesConName");
@@ -356,7 +357,7 @@ public class Load {
 					}
 				} while (rs.next());
 				//put last QuesCon in Database ArrayList
-				qc = new QuestionContainer(QCID, quesConName, new ArrayList(disps));
+				qc = new QuestionContainer(QCID, quesConName, cssClass, new ArrayList<Displayable>(disps));
 				Database.addQuesCon(qc);
 			}
 		} catch(SQLException e) {
