@@ -224,7 +224,6 @@ Util = {
             controls: controls,
             className: className,
             id: id,
-            preload: false,
         });
         media.push(result);
         return result;
@@ -1813,7 +1812,7 @@ function loadPage(e) {
     // console.log("hash change to: " + location.hash);
 
     for (var i = 0; i < media.length; i++) {
-        media[i].src = "";
+        media[i].removeAttribute("src");
         media[i].load();
     }
     media = [];
