@@ -14,7 +14,7 @@ public abstract class BasePApplet extends PApplet implements Runnable {
 	}*/
 	public void setup() {	
 		size(900,600);
-		background(0,200,0);
+		background(255);
 		delayTime = 1000;
 		Visualize.storeAnswer = false;
 		Thread t = new Thread(this) {
