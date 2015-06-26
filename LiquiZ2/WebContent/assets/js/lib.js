@@ -577,12 +577,8 @@ function createAndAddNewOpenFileDialog(name) {
 }
 
 Quiz.prototype.saveLocal = function(id) {
-	if (!localStorage.quiz) {
-		localStorage.quiz = {};
-	} 
 	var saveVal = JSON.stringify(this);
-	console.log(saveVal);
-	localStorage.quiz.x = saveVal;
+    localStorage.quiz = saveVal;
 }
 
 Quiz.prototype.createSubmit = function(id) {
