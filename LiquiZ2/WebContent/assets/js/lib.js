@@ -1764,7 +1764,7 @@ function loadPage(e) {
         if (json.status === 404) {
             document.getElementById("container").innerHTML = "";
             document.getElementById("currentStatus").innerHTML = "";
-            document.getElementById("container").appendChild(status404());
+            document.getElementById("currentStatus").appendChild(status404());
         }
         if (json.readyState !== 4 || json.status !== 200)
             return; // TODO: Handle error if it doesn't come back
