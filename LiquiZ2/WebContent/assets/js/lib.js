@@ -1609,19 +1609,21 @@ function processAJAX() {
 }
 
 function loadPage(e) {
-    document.getElementById("container").innerHTML = "";
     var baseFilename = location.hash.substr(1);
     var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
-    console.log(ajax);
-    console.log("hash change to: " + location.hash);
+    // console.log(ajax);
+    // console.log("hash change to: " + location.hash);
+    document.getElementById("currentStatus").innerHTML = "If you see this message, please press f12 twice.";
 
     var json = new XMLHttpRequest();
-    json.onreadystatechange=function() {
-      if (json.readyState!==4 || json.status!==200)
-          return;// TODO: Handle error if it doesn't come back
-      eval("page="+json.responseText);
-      processAJAX();
-      // Util.goToId();
+    json.onreadystatechange = function() {
+        if (json.readyState !== 4 || json.status !== 200)
+            return; // TODO: Handle error if it doesn't come back
+        document.getElementById("currentStatus").innerHTML = "";
+        document.getElementById("container").innerHTML = "";
+        eval("page=" + json.responseText);
+        processAJAX();
+        // Util.goToId();
     }
     json.open("GET", ajax, true);
     json.send();
