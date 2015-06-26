@@ -111,6 +111,7 @@ public class QuestionContainer implements Displayable {
 			d.writeJS(dc);
 			dc.append("\n");
 		}
+		dc.append("page.body.appendChild(q);\n");
 	}
 
 	public String getCssClass() {
