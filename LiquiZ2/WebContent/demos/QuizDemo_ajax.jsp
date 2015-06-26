@@ -4,27 +4,37 @@ page = new Quiz( {
 	timeLimit: 0,
 	remainingTries: 1,
 	dataDir: "assets/"
-} );
+},
+[
 
-var q;
+[1, "Mergesort", "grid",
+  ['instructions', 'Show the first pass of Mergesort below'],
+  ['grid' ,'1_1', [[9, 8, 7, 6, 5, 4, 3, 1]] ],
+  ['Util.br'],
+  ['emptyGrid', '1_2', 1, 8],
+],
+[2, 'Matrix Multiplication', 'matrix',
+  ['instructions', 'Show the result of matrix A * B'],
+  ['grid', '2_1', [[1, 0, 2],[1, 1, -2],[2, 1, 0]]],
+  ['Util.span', '*'],
+  ['grid', '2_2', [[1, 1, -1],[-2, 1, 0],[1, 1, 3]] ],
+  ['Util.span', '='],
+  ['emptyGrid', '2_3', 3, 3],
+],
 
-// question 1
-q = page.addQuestion(1, "Mergesort", "grid", 0);
-q.appendChild(page.instructions("Show the first pass of Mergesort below"));
-q.appendChild(page.grid("1_1", [[9, 8, 7, 6, 5, 4, 3, 1]]));
-q.appendChild(Util.br());
-q.appendChild(page.emptyGrid("1_2", 1, 8));
-page.container.appendChild(q);
 
-// question 2
-q = page.addQuestion(2, "Matrix Multiplication", 'matrix', 2); // 2 point question
-q.appendChild(page.instructions("Show the result of matrix A * B"));
-q.appendChild(page.grid("2_1", [[1, 0, 2],[1, 1, -2],[2, 1, 0]]));
-q.appendChild(Util.span("*"));
-q.appendChild(page.grid("2_2", [[1, 1, -1],[-2, 1, 0],[1, 1, 3]]));
-q.appendChild(Util.span("="));
-q.appendChild(page.emptyGrid("2_3", 3, 3));
-page.container.appendChild(q);
+
+
+
+
+
+
+
+
+
+]);
+
+
 
 // question 3
 q = page.addQuestion(3, 'Java', 'code');
