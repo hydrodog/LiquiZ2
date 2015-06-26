@@ -1731,16 +1731,11 @@ function qtable(input) {
 
 var page;
 
-/*
- * Run a serverside script (the parameter) which prints a JSON string. load the
- * JSON, evaluate it and call initPage() to update the page
- */
-function build() {
-    // your page: test.html
-    // ajax url: test_ajax.jsp
-    loadPage();
-
-    
+function status404() {
+    fragment = document.createDocumentFragment();
+    fragment.appendChild(Util.h1("Error: 404"));
+    fragment.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
+    return fragment;
 }
 
 function processAJAX() {
@@ -1766,6 +1761,11 @@ function loadPage(e) {
 
     var json = new XMLHttpRequest();
     json.onreadystatechange = function() {
+        if (json.status === 404) {
+            document.getElementById("container").innerHTML = "";
+            document.getElementById("currentStatus").innerHTML = "";
+            document.getElementById("container").appendChild(status404());
+        }
         if (json.readyState !== 4 || json.status !== 200)
             return; // TODO: Handle error if it doesn't come back
         document.getElementById("currentStatus").innerHTML = "";
