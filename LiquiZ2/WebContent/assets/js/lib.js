@@ -7,6 +7,11 @@ Util = {
         console.log(s);
     },
 
+    add: function(parent, children) {
+    	for (var i = 0; i < children.length; i++)
+    		parent.appendChild(children[i]);
+    },
+    
     goToId: function(id) {
     //     if (typeof id === "undefined") {
     //         id = window.location.hash.substr(1);
@@ -521,11 +526,14 @@ Quiz.prototype.end = function() {
 
 function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
     var editBox = Util.div("edit");
-    editBox.appendChild(Util.button("Edit", null, id+"-edit", editFunc));
-    editBox.appendChild(Util.button("Delete", null, id+"-delete", deleteFunc)); 
-    editBox.appendChild(Util.button("Copy", null, id+"-copy", copyFunc));
+    Util.add(editBox,
+    	[
+    	 	Util.button("Edit", null, id+"-edit", editFunc),
+    		Util.button("Delete", null, id+"-delete", deleteFunc), 
+    		Util.button("Copy", null, id+"-copy", copyFunc)
+    	]);
     return editBox;
-}   
+}
 
 Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     points = (typeof points === "undefined") ? 1 : points;
@@ -559,6 +567,17 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit");
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
+    if (this.editMode) {
+        qc.appendChild(Util.button("New Question", "new-question", null,
+            function() {
+                if (clicks === 0) {
+                    parent.editQuestion();
+                    // Util.goToId("editor");
+                }
+                clicks++;
+            }));
+    }
+
     return div;
 };
 
@@ -1452,25 +1471,9 @@ var list = [
             "Matrix",
             "Cloze"];
 
-//Quiz.prototype.editMode = function(){
-//	var c = mkdivid(this.body, "new-question-button", "qc new-question-button"); // TODO(asher): Fix mkdiv
-//    var newB = mkbutton("New Question"); // TODO(asher): Fix mkbutton
-//    newB.onclick = function() { this.editQuestion; }
-//    c.appendChild(newB);
-//    this.add(c);
-//}
-
 var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
 		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
 		"Regex", "Matrix", "Cloze" ];
-
-// Quiz.prototype.editMode = function(){
-// var c = mkdivid(this.div, "new-question-button", "qc new-question-button");
-// var newB = mkbutton("New Question");
-// newB.onclick = function() { this.editQuestion; }
-// c.appendChild(newB);
-// this.add(c);
-// }
 
 function fillRow(row, list) {
 	for (var i = 0; i < list.length; i++) {
@@ -1512,7 +1515,7 @@ function editTextBox(val) {
 Quiz.prototype.editQuestion = function() {
 	var parent = this;
 	var editor = Util.div("editor", "editor");
-	this.container.appendChild(editor);
+	this.body.appendChild(editor);
 	var t0 = document.createElement("table");
 	editor.appendChild(t0);
 	var r0 = t0.insertRow(0);
@@ -1621,18 +1624,20 @@ function condDayShift(rowID, rowNum, NOD) {
 // make day shift buttons i.e. (-7, -1, +1, +7)
 function mkDSButtons(rowID, rowNum) {
 	var d = document.createElement("div");
-	d.appendChild(Util.button("-7", null, null, function() {
+	Util.add(d, [
+	    Util.button("-7", null, null, function() {
 		condDayShift(rowID, rowNum, -7)
-	}));
-	d.appendChild(Util.button("-1", null, null, function() {
+	}),
+		Util.button("-1", null, null, function() {
 		condDayShift(rowID, rowNum, -1)
-	}));
-	d.appendChild(Util.button("+1", null, null, function() {
+	}),
+		Util.button("+1", null, null, function() {
 		condDayShift(rowID, rowNum, +1)
-	}));
-	d.appendChild(Util.button("+7", null, null, function() {
-		condDayShift(rowID, rowNum, +7)
-	}));
+	}),
+		Util.button("+7", null, null, function() {
+			condDayShift(rowID, rowNum, +7)
+	}) 
+	]);
 	return d;
 }
 
