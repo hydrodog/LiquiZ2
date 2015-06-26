@@ -137,16 +137,16 @@ public class Matrix implements Displayable {
 
 	//TODO: Fix the commas after each row, they aren't there!
 	@Override
-	public void writeJS(StringBuilder b) {
-		b.append('[');
+	public void writeJS(DisplayContext dc) {
+		dc.append("page.grid(null, [");
 		for (int i = 0; i < row; i++) {
-			b.append('[').append(data[i][0]);
+			dc.append('[').append(data[i][0]);
 			for (int j = 1; j < col; j++) {
-				b.append(',').append(data[i][j]);
+				dc.append(',').append(data[i][j]);
 			}
-			b.append(']');
+			dc.append(']');
 		}		
-		b.append(']');
+		dc.append("]);\n");
 	}
 
 	@Override
