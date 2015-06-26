@@ -51,31 +51,38 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	}
 	
 	public void thisDraw() {
-		g.background(bgColor);
-	    g.translate(g.width/2, g.height/2);
-	    g.textSize(txtHeight);
-	    g.stroke(fgColor);
-	    g.fill(fgColor);
-	    drawEdges(); 	// draw edges first 
-	    drawVertices();	// then draw vertices on top
-	    if (true)
-	    	return;
-	    if (Visualize.start) {
-	    	Visualize.start = false;
-	    	//g.save(dir + problem + "_q_" + SerialNumber.serialno() + ".png");
-	    }
-
-	    if (Visualize.terminate) {
-	    	//g.save(dir + problem + "_sol_" + SerialNumber.serialno() + ".png" );
-	    	Visualize.terminate = false;
-	    	Visualize.start = true;
-	    }
+		//if(displayer.firstDraw){
+			g.background(bgColor);
+			g.textSize(txtHeight);
+		    g.stroke(fgColor);
+		    g.fill(fgColor);
+		//	displayer.firstDraw = false;
+		
+		    g.translate(g.width/2, g.height/2);
+		    		    
+		    setVertexPositions();
+		 //  
+		   
+		drawEdges(); 	// draw edges first 
+		drawVertices();	// then draw vertices on top    
+//	    if (true)
+//	    	return;
+//	    if (Visualize.start) {
+//	    	Visualize.start = false;
+//	    	//g.save(dir + problem + "_q_" + SerialNumber.serialno() + ".png");
+//	    }
+//
+//	    if (Visualize.terminate) {
+//	    	//g.save(dir + problem + "_sol_" + SerialNumber.serialno() + ".png" );
+//	    	Visualize.terminate = false;
+//	    	Visualize.start = true;
+//	    }
 	}
 	
-	public void setPGraphics(PGraphics g) {
-		super.setPGraphics(g);
-		setVertexPositions();    	
-	}
+//	public void setPGraphics(PGraphics g) {
+//		super.setPGraphics(g);
+//		setVertexPositions();    	// why define setVertex here?
+//	}
 	// Try all positions for a label and pick the one that is the farthest from collision
 	private void labelWeight(double w, int i, int j) {
 		double bestDistance = 0;
@@ -112,9 +119,17 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    for (int i = 0; i < v; i++) {
 	    	for(int j = i; j < v; j++) {
 	    		if(graph.getW(i,j) != Double.POSITIVE_INFINITY) {
-	    			g.stroke(displayer.getEdgeStyle(i,j));
-	    			g.fill(displayer.getEdgeStyle(i,j));
+	    			
+	    			if(displayer.getEdgeStyle(i, j) != 0)
+	    				g.stroke(255, 20, 0);
+	    			else g.stroke(displayer.getEdgeStyle(i,j));
 	    			g.line(x[i],y[i],x[j],y[j]);
+	    			
+	    			
+	    			
+	    			g.fill(displayer.getEdgeStyle(i,j));
+	    			
+	    			
 	    			labelWeight(graph.getW(i,j), i, j); 
 //	    			g.fill(255,0,0);
 //	    			g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
@@ -125,7 +140,9 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private void drawVertices() {
     	g.noStroke();	
 	    for (int i = 0; i < v; i++) {
-	    	g.fill(displayer.getVertexStyle(i));
+	    	if(displayer.getVertexStyle(i) != 0) g.fill(255, 0, 0); 
+	    	else g.fill(displayer.getVertexStyle(i));	
+	   	
 	    	g.ellipse(x[i], y[i], vSize,vSize);
 	    	g.fill(displayer.getVertexStyle(i));
 	    	g.fill(255,255,0);

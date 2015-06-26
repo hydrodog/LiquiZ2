@@ -10,10 +10,13 @@ public abstract class GraphDisplayer implements GraphObserver {
 	// typically 1= candidate, 2 = found
 	protected int[] vertexStyle;// each number corresponds to a different look
 	protected int[] edgeStyle;  // edge look
+	protected boolean firstDraw;
+	
 	public GraphDisplayer(Graph graph) {
 		this.graph = graph;
 		int v = graph.getV();
-			
+		firstDraw = true;
+		
 		vertexStyle = new int[v];
 		edgeStyle = new int[v*v];
 		for (int i = 0; i < vertexStyle.length; i++) {
