@@ -45,17 +45,17 @@ public class Response implements Displayable {
 		b.append("</R>");
 	}
 
-	public void writeJS (StringBuilder b) {
-		b.append("{title: 'Response', content:[");
+	public void writeJS (DisplayContext dc) {
+		dc.append("{title: 'Response', content:[");
 		if (displayEls.size() > 0) {
-			displayEls.get(0).writeJS(b);
+			displayEls.get(0).writeJS(dc);
 			if (displayEls.size() > 1) {
 				for (int i = 1; i < displayEls.size(); i++) {
-					b.append(',');
+					dc.append(',');
 					displayEls.get(i);
 				}
 			}
 		}
-		b.append("] };");
+		dc.append("] };");
 	}
 }

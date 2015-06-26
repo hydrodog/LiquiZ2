@@ -75,7 +75,7 @@ public class DisplayContext {
 		mlEscapeMap['>'] = "&gt;";
 		System.arraycopy(mlEscapeMap, 0, quotedEscapeMap, 0, mlEscapeMap.length);
 		quotedEscapeMap['\''] = "\\'";  // this is the preferred quote to use in our javascript since we use " in java
-		quotedEscapeMap['"'] = "\\\""; // escape quoted strings, we prefer single quotes ' but just in case...
+		quotedEscapeMap['"'] = "\""; // escape quoted strings, we prefer single quotes ' but just in case...
 	}
 	public final DisplayContext appendQuotedJS(String s) {
 		append('\'');
@@ -87,10 +87,10 @@ public class DisplayContext {
 	public final DisplayContext appendEscaped(String s) {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			if (c >= mlEscapeMap.length) {
+			if (c >= quotedEscapeMap.length) {
 				append(c);
 			} else {
-				String esc = mlEscapeMap[s.charAt(i)];
+				String esc = quotedEscapeMap[s.charAt(i)];
 				if (esc == null)
 					append(c);
 				else
