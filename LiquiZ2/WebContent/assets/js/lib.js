@@ -1,3 +1,4 @@
+media = [];
 Util = {
     dump: function(obj) {
         var s = "";
@@ -213,13 +214,15 @@ Util = {
      */
     video: function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
-        return Util.make("video", {
+        result = Util.make("video", {
             src: mediaLocations.video + src,
             controls: controls,
             className: className,
             id: id,
             preload: false,
         });
+        media.push(result);
+        return result;
     },
 
     /*
@@ -229,12 +232,14 @@ Util = {
      */
     audio: function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
-        return Util.make("audio", {
+        result = Util.make("audio", {
             src: mediaLocations.audio + src,
             controls: controls,
             className: className,
             id: id,
         });
+        media.push(result);
+        return result;
     },
 
     canvas: function(height, width) {
@@ -1746,9 +1751,9 @@ function qtable(input) {
 var page;
 
 // This should just become a generic handler for any error that's not 200.
-function status404() {
+function errorStatus(errorCode) {
     fragment = document.createDocumentFragment();
-    fragment.appendChild(Util.h1("Error: 404"));
+    fragment.appendChild(Util.h1("Error: " + errorCode));
     fragment.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
     return fragment;
 }
@@ -1772,14 +1777,19 @@ function loadPage(e) {
     var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
     // console.log(ajax);
     // console.log("hash change to: " + location.hash);
-    document.getElementById("currentStatus").innerHTML = "If you see this message, please press f12 twice and then reload the page.";
+
+    for (var i = 0; i < media.length; i++) {
+        media[i].src = "";
+        media[i].load();
+    }
+    media = [];
 
     var json = new XMLHttpRequest();
     json.onreadystatechange = function() {
-        if (json.status === 404) {
+        if (json.status !== 200) {
             document.getElementById("container").innerHTML = "";
             document.getElementById("currentStatus").innerHTML = "";
-            document.getElementById("currentStatus").appendChild(status404());
+            document.getElementById("currentStatus").appendChild(errorStatus(json.status));
         }
         if (json.readyState !== 4 || json.status !== 200)
             return; // TODO: Handle error if it doesn't come back
