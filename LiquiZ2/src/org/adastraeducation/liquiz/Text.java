@@ -2,6 +2,13 @@ package org.adastraeducation.liquiz;
 
 import org.adastraeducation.liquiz.util.*;
 
+/**
+ * DisplayElement representing Text
+ * Will be turned into an abstract class
+ * Use the children (InstructionText, QuestionText, AnswerText)
+ * @author yijinkang
+ *
+ */
 public class Text extends DisplayElement {
 	private String text;
 	
