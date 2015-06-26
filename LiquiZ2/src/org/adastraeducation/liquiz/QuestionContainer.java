@@ -106,10 +106,6 @@ public class QuestionContainer implements Displayable {
 		Util.escapeQuotedJS(name, dc);
 		dc.append(',');
 		Util.escapeQuotedJS(cssClass, dc);
-		int points = getTotalPoints();
-		if (points != 1) {
-			dc.append(',').append(points);
-		}
 		dc.append(");\n");
 		for (Displayable d : displayables) {
 			d.writeJS(dc);

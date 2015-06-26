@@ -87,10 +87,10 @@ public class DisplayContext {
 	public final DisplayContext appendEscaped(String s) {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			if (c >= mlEscapeMap.length) {
+			if (c >= quotedEscapeMap.length) {
 				append(c);
 			} else {
-				String esc = mlEscapeMap[s.charAt(i)];
+				String esc = quotedEscapeMap[s.charAt(i)];
 				if (esc == null)
 					append(c);
 				else

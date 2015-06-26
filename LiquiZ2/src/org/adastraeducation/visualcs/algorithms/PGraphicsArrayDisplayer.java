@@ -10,19 +10,20 @@ import java.io.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
+public class PGraphicsArrayDisplayer extends DrawOnPGraphics {
 	private static final long serialVersionUID = 1L;
 	private ArrayDisplayer displayer; // has the array
 	private int n;   		// number of elements
 	private int[] colors;
 	private Array arr;
-	public PGraphicsGraphDisplayer(BasePApplet parent, PGraphics g, Array arr) {
+	public PGraphicsArrayDisplayer(BasePApplet parent, PGraphics g, Array arr) {
 		super(parent, g, arr);
 		this.arr = arr;
 		displayer = new ArrayDisplayer(arr) {			
 			public void display() {
-				draw();	
-				PGraphicsGraphDisplayer.this.parent.interactive();
+				if (PGraphicsArrayDisplayer.this.parent != null)
+					PGraphicsArrayDisplayer.this.parent.interactive();
+				draw();
 			}
 		};
 		arr.addObserver(displayer);
