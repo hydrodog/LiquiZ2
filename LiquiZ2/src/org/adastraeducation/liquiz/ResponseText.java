@@ -10,9 +10,7 @@ public class ResponseText extends Text {
 	}
 	
 	public void writeHTML(DisplayContext dc) {
-		dc.append("<div class='response'");
 		dc.append(getText()); 
-		dc.append("</div>");
 	}
 	
 	public void writeJS(DisplayContext dc) {

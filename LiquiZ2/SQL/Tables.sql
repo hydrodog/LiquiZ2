@@ -101,8 +101,11 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `PatternName` VARCHAR(255) NULL, -- to use stored regex
   `Warning` VARCHAR(255) NULL, -- for regex warnings
   `DefaultText` VARCHAR(255) NULL, -- for code/essay questions
+  `Rows` INT NULL, -- for code/essay questions
+  `Cols` INT NULL, -- for code/essay questions
+  `MaxWords` INT NULL, -- for essay questions
   `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
-  `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
+  `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)'
   PRIMARY KEY (`QuesID`),
   UNIQUE INDEX `QuesID_UNIQUE` (`QuesID` ASC));
 
