@@ -85,10 +85,16 @@ q.appendChild(Util.p("Which one is the dinosaur?"));
 q.appendChild(page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]));
 page.body.appendChild(q);
 
+// question 11b
+q = page.addQuestion(111, 'Dinosaur', "mcRadioImg");
+q.appendChild(Util.p("Which one is the dinosaur?"));
+q.appendChild(page.mcRadioImg(11, ["cat2.jpg", "fish2.png", "trex.jpg"]));
+page.body.appendChild(q);
+
 // question 12
 q = page.addQuestion(12, 'Dinosaur', "selectImg");
 q.appendChild(Util.p("Which one is the dinosaur?"));
-q.appendChild(page.selectImg(12, ["cat2.jpg", "fish2.png", "trex.jpg"]));
+q.appendChild(Util.select("which", false, ["stegosaurus", "dimetrodon", "plesiosaurus"], 'mcdropdown'));
 page.body.appendChild(q);
 
 // question 13
@@ -124,8 +130,10 @@ q.appendChild(page.grid("17_1", [["headers 1", "header 2", "header 3"],
 				   ["euler.jpg", "hello", 4],
 				   ["later", "einstein.jpg", "%%input%%"]], true));
 page.body.appendChild(q);
-// var calendar = new Calendar(new Date(), 365);
-// calendar.year(page.q);
+
+var calendar = new Calendar(new Date(), 365);
+page.body.appendChild(calendar.month(new Date(),calendar));
+//page.body.appendChild(calendar.year(calendar));
 
 // question 18
 page.end(18);

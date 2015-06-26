@@ -3,7 +3,17 @@ package org.adastraeducation.liquiz;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
-
+import org.adastraeducation.liquiz.util.*;
+/**
+ * 
+ * Represent a quiz on the server
+ * Every quiz is displayable, and can therefore 
+ * write itself as HTML, Javascript or XML
+ * We are currently working only on Javascript,
+ * we may ditch the other two
+ * @author yijkang
+ *
+ */
 public class Quiz implements Displayable {
 	public static Random r;
 	
@@ -24,6 +34,12 @@ public class Quiz implements Displayable {
 	public static double random(double a, double b, double step) {
 		int n = (int)((b-a)/step) + 1;
 		return a + r.nextInt(n) * step;
+	}
+	public static void random(double[] arr, double a, double b, double step) {
+		for (int i = 0; i < arr.length; i++) {
+			int n = (int)((b-a)/step) + 1;
+			arr[i] = a + r.nextInt(n) * step;	
+		}
 	}
 
 	private int id; // unique id for db and XML
@@ -201,12 +217,13 @@ public class Quiz implements Displayable {
 		int points = 100; //TODO: add points to quiz?
 		dc.append
 		("page  = new Quiz( {\n" +
-		"title: '").append(getName()).
-			append("points:").append(points).
-			append("timeLimit:").append(0).
-			append("remainingTries:").append(1).
-			append("dataDir:").append("'assets/'\n} );").
-			append("var q;");
+		"title: ");
+		Util.escapeQuotedJS(name, dc);
+		dc.append(",points:").append(points).
+			append(",timeLimit:").append(policy.getDuration()).
+			append(",remainingTries:").append(1). //TODO: need count of user's tries
+			append(",dataDir:").append("'assets/'\n} );").
+			append("\nvar q;\n");
 		for(QuestionContainer qc: this.qContainers) {
 			qc.writeJS(dc);
 		}

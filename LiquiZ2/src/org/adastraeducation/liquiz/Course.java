@@ -90,15 +90,15 @@ public class Course implements Displayable {
 	 * TODO: or {title: name, content: []}
 	 */
 	
-	public void writeJS(StringBuilder b) {
-		b.append("quizList([");
+	public void writeJS(DisplayContext dc) {
+		dc.append("quizList([");
 		for (Quiz q : quizzes) {
-			b.append("quizref('" + q.getName() + "'");
-			b.append(',').append(q.getId()).append(")");
+			dc.append("quizref('" + q.getName() + "'");
+			dc.append(',').append(q.getId()).append(")");
 			if (quizzes.indexOf(q)+1 < quizzes.size()) {
-				b.append(',');
+				dc.append(',');
 			}
 		}
-		b.append("])");
+		dc.append("])");
 	}
 }
