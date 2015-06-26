@@ -136,10 +136,11 @@ public class Graph extends GraphData {
 							setVertexStyle(k, 0);	// turn off the vertex just considered
 						}
 					}
-					if(Visualize.visualize){
-						setVertexStyle(j, 0);	// turn off the from vertex, get ready to consider the next
-					}
 				}
+				if(Visualize.visualize){
+					setVertexStyle(j, 0);	// turn off the from vertex, get ready to consider the next
+				}
+				
 				if (Visualize.storeAnswer){
 					for (int i = 0; i < v; i++)
 						print(cost[i]);
@@ -147,20 +148,20 @@ public class Graph extends GraphData {
 					for (int i = 0; i < v; i++)
 						print(pred[i]);
 					print("\n\n");
-				}
-				if (!changed)
-					break; // no new paths found, so any further iterations will do nothing
+				}				
 			}
-			for (int j = 0; j < v; j++) {
-				for (int k = 0; k < v; k++) {
-					if (cost[j] + getW(j,k) < cost[k]) {
-						System.out.println("Graph contains a negative-weight cycle");
-						return;	
-					}
-				}
-			}
-			Visualize.terminate = true;
+			if (!changed)
+				break; // no new paths found, so any further iterations will do nothing
 		}
+		for (int j = 0; j < v; j++) {
+			for (int k = 0; k < v; k++) {
+				if (cost[j] + getW(j,k) < cost[k]) {
+					System.out.println("Graph contains a negative-weight cycle");
+					return;	
+				}
+			}
+		}
+		Visualize.terminate = true;		
 	}
 	public boolean Prim(int[] edges) {
 		double[] connected = new double[v];
@@ -191,6 +192,7 @@ public class Graph extends GraphData {
 				if (Visualize.visualize)
 					setEdgeStyle(i,minCostVertex, 2);
 			}
+			print(i); print(minCostVertex); print('\n');			
 		}
 		return true;
 	}

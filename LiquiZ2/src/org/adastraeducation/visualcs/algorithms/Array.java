@@ -50,6 +50,11 @@ public class Array extends ArrayData{
 				System.out.print(arr[i1] + " ");
 			System.out.println();
 		}
+		if (Visualize.storeAnswer) {
+			for (int i = 0; i < n; i++)
+				print(arr[i]);
+			print('\n');
+		}
 	}
 	
 	public void merge(int left, int center, int right) {	//center means left end

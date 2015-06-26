@@ -125,8 +125,7 @@ public class FillIn extends Question {
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		writeJS("fillin", dc);
-		dc.append(")");
+		dc.append("q.appendChild(page.fillin(").append(super.getId()).append("));");
 	}
 
 	@Override

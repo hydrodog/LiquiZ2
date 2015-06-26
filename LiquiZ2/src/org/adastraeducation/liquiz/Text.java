@@ -31,7 +31,7 @@ public class Text extends DisplayElement {
 	}
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("q.instructions(").appendQuotedJS(text).append(");\n");
+		dc.append("q.appendChild(page.instructions(").appendQuotedJS(text).append(");");
 	}
 	@Override
 	public void writeXML(StringBuilder b) {

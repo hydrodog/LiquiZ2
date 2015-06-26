@@ -11,7 +11,7 @@ public class MergeSortApplet extends BasePApplet {
 		super.setup();
 		arr = new Array(null, 10, 0, 99);
 		System.out.println(arr);
-		setDrawer(new PGraphicsGraphDisplayer(this, null, arr));		
+		setDrawer(new PGraphicsArrayDisplayer(this, null, arr));		
 	}
 	public void algorithm() {
 		if (arr == null)

@@ -12,16 +12,17 @@ public abstract class BasePApplet extends PApplet implements Runnable {
 	/*public BasePApplet(DrawOnPGraphics d) {
 		drawer = d;
 	}*/
-	public void setup() {
+	public void setup() {	
 		size(900,600);
 		background(0,200,0);
-		delayTime = 500;
+		delayTime = 1000;
 		Visualize.storeAnswer = false;
 		Thread t = new Thread(this) {
 			public void run(){
 				for (;;) {
 					algorithm();
 					interactive();
+					if(Visualize.terminate == true) exit();
 				}
 			}			
 		};

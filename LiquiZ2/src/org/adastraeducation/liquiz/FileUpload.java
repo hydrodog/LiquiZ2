@@ -40,8 +40,7 @@ public class FileUpload extends Question {
  	}
 	
 	public void writeJS(DisplayContext dc) {
-		writeJS("fileUpload", dc);
-		dc.append(')');	
+		dc.append("q.appendChild(Util.file(").appendQuotedJS(label).append(", ").appendQuotedJS("file-input").append(", ").append(super.getId()).append("));");	
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<fileUpload/>");
