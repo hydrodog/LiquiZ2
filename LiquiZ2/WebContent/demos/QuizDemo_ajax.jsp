@@ -1,9 +1,10 @@
-page = new Quiz( {
+new Quiz( {
     title: "Quiz Demo #1",
     points: 100,
     timeLimit: 0,
     remainingTries: 1,
-    dataDir: "assets/"
+    dataDir: "assets/",
+    editMode: true,
 },
 [
 
@@ -74,19 +75,13 @@ page = new Quiz( {
 ],
 
 [
-    10, "Arithmetic", "fillin",
+    9, "Arithmetic", "fillin",
     ['Util.span', "What is 2 + 2?"],
-    ['fillin', 10],
+    ['fillin', 9],
 ],
 
 [
     11, 'Dinosaur', "mcRadioImg",
-    ['Util.p', "Which one is the dinosaur?"],
-    ['mcRadioImg', 11, ["cat2.jpg", "fish2.png", "trex.jpg"]],
-],
-
-[
-    111, 'Dinosaur', "mcRadioImg",
     ['Util.p', "Which one is the dinosaur?"],
     ['mcRadioImg', 11, ["cat2.jpg", "fish2.png", "trex.jpg"]],
 ],
@@ -99,35 +94,37 @@ page = new Quiz( {
 
 [
     13, 'Multimedia', "audio",
-    ['page.instructions', 'listen to the following audio file and pick the name of the main character.'],
+    ['instructions', 'listen to the following audio file and pick the name of the main character.'],
     ['Util.audio', "clip1.mp3"],
-    ['page.selectText', 13, ['Yijin', 'Asher', 'Ying', 'Xuefan', 'Bob']],
+    ['selectText', 13, ['Yijin', 'Asher', 'Ying', 'Xuefan', 'Bob']],
 ],
 
 [
     14, 'Tacoma Narrows', "video",
-    ['page.instructions', 'Watch the following video, then explain what caused the bridge to fail.'],
+    ['instructions', 'Watch the following video, then explain what caused the bridge to fail.'],
     ['Util.video', "Tacoma Narrows Bridge Collapse.mp4"],
-    ['page.essay', 14, 10, 80, 200],
+    ['essay', 14, 10, 80, 200],
 ],
 
 [
     15, 'Arithmetic', "numeric",
-    ['page.instructions', "What is the square root of 2 (four digits is fine)?"],
-    ['page.numeric', 15],
+    ['instructions', "What is the square root of 2 (four digits is fine)?"],
+    ['numeric', 15],
 ],
 
 [
     16, "Geography", "clickableImage",
-    ['page.instructions', "Click on Texas"],
-    ['page.clickableImage', 16,"usmap.png"],
+    ['instructions', "Click on Texas"],
+    ['clickableImage', 16,"usmap.png"],
 ],
 
 [
     17, "Matrix with images", "matrix",
-    ['page.instructions', "Fill in the grid"],
-    ['page.grid', "17_1", [["headers 1", "header 2", "header 3"],
+    ['instructions', "Fill in the grid"],
+    ['grid', "17_1", [["headers 1", "header 2", "header 3"],
                            ["euler.jpg", "hello", 4],
                            ["later", "einstein.jpg", "%%input%%"]
                           ], true],
 ],
+
+]);

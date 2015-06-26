@@ -218,6 +218,7 @@ Util = {
             controls: controls,
             className: className,
             id: id,
+            preload: false,
         });
     },
 
@@ -460,17 +461,30 @@ var clozeTarget = /[[]]/;
  * this.datadir = datadir; this.editMode = 1; }
  */
 
-function Quiz(quizinfo) {
+function Quiz(quizinfo, questions) {
 	for ( var k in quizinfo) {
 		this[k] = quizinfo[k];
 	}
     this.body = document.getElementById("container");
     this.body.className = "quiz";
-    //this.displayHeader(this.body);
+    this.questions = questions;
     this.render(this.displayHeader());
-    this.editMode = true;
     console.log(this);
     this.render(this.createSubmit(1));
+
+    for (var i = 0; i < questions.length; i++) {
+        var q = questions[i];
+        var qc = this.addQuestion(q[0], q[1], q[2]);
+        for (var j = 3; j < q.length; j++) {
+            if (q[j][0].substring(0, 5) === "Util.") {
+                qc.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].splice(1)));
+            } else {
+                qc.appendChild(this[q[j][0]].apply(this||window, q[j].splice(1)));
+            }
+        }
+        this.render(qc);
+    }
+    this.end();
 }
 
 Quiz.prototype.render = function(child) {
@@ -488,9 +502,9 @@ Quiz.prototype.displayHeader = function() {
 }
 
 var clicks = 0;
-Quiz.prototype.end = function(id) {
+Quiz.prototype.end = function() {
     var parent = this;
-    var qc = Util.div("qc", "qc"+id);
+    var qc = Util.div("qc", "end-quiz");
     if (this.editMode) {
         qc.appendChild(Util.button("New Question", "new-question", null,
             function() {
@@ -1731,6 +1745,7 @@ function qtable(input) {
 
 var page;
 
+// This should just become a generic handler for any error that's not 200.
 function status404() {
     fragment = document.createDocumentFragment();
     fragment.appendChild(Util.h1("Error: 404"));
@@ -1757,7 +1772,7 @@ function loadPage(e) {
     var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
     // console.log(ajax);
     // console.log("hash change to: " + location.hash);
-    document.getElementById("currentStatus").innerHTML = "If you see this message, please press f12 twice.";
+    document.getElementById("currentStatus").innerHTML = "If you see this message, please press f12 twice and then reload the page.";
 
     var json = new XMLHttpRequest();
     json.onreadystatechange = function() {
@@ -1780,3 +1795,9 @@ function loadPage(e) {
 
 window.onload = loadPage;
 window.onhashchange = loadPage;
+
+// TODO(asher): Here we're not reloading the whole page, just calling a method on page (page.summary).
+// If the first part (/demos/QuizDemo) is the same, just execute the summary method
+// otherwise load the page via ajax and execute the summary method
+// If there's no !, we just call the exec method
+// http://localhost:8080/LiquiZ2/demos/QuizDemo.html#/demos/QuizDemo!summary
