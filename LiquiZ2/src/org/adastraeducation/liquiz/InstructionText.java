@@ -16,6 +16,7 @@ public class InstructionText extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
+		//q.appendChild(page.instructions("[text]"));
 		dc.append("q.appendChild(page.instructions(").appendQuotedJS(getText()).append(");");
 		//TODO because this will change
 	}

@@ -235,9 +235,9 @@ public class SerializeTest {
 	}
 	public static void writeJS(String filename, Displayable d) throws IOException {
 		FileWriter fw = new FileWriter(filename);
-		StringBuilder b = new StringBuilder(65536);
-		d.writeJS(b);
-		fw.write(b.toString());
+		DisplayContext dc = new DisplayContext();
+		d.writeJS(dc);
+		fw.write(dc.toString());
 		fw.close();		
 	}
 

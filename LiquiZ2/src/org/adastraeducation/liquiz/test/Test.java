@@ -261,9 +261,9 @@ public class Test {
 	}
 	public static void writeJS(String filename, Displayable d) throws IOException {
 		FileWriter fw = new FileWriter(filename);
-		StringBuilder b = new StringBuilder(65536);
-		d.writeJS(b);
-		fw.write(b.toString());
+		DisplayContext dc = new DisplayContext();
+		d.writeJS(dc);
+		fw.write(dc.toString());
 		fw.close();		
 	}
 
@@ -282,8 +282,8 @@ public class Test {
 	public static void testOutput(String baseName, Displayable d) throws IOException {
 		writeHTML(baseName + ".html", d); 
 		writeJS(baseName + ".js", d);
-		if (d instanceof Quiz)
-			writeXML(baseName + ".xml", (Quiz)d); 
+//		if (d instanceof Quiz)
+//			writeXML(baseName + ".xml", (Quiz)d); 
 	}
 	
 	public static void main(String[] args) throws IOException {

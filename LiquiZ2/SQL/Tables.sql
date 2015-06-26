@@ -39,11 +39,21 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Policies` (
 DROP TABLE IF EXISTS `LiquiZ`.`DisplayElements` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
-  `DispElID` INT NOT NULL AUTO_INCREMENT,
-  `TextElement` VARCHAR(21000) NULL, -- text or source (name)
-  `MediaID` INT NULL, 
+  `DispElID` INT NOT NULL AUTO_INCREMENT, -- corresponds to TextID or MediaID
   `DispType` CHAR(3) NOT NULL, -- txt or med
   PRIMARY KEY (`DispElID`));
+
+-- -----------------------------------------------------
+-- Table `LiquiZ`.`Text`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Liquiz`.`Text` ;
+
+CREATE TABLE IF NOT EXISTS `LiquiZ`.`Text` (
+  `TextID` INT NOT NULL, 
+  `TextType` CHAR(4) NOT NULL, -- itxt, qtxt, atxt, rtxt
+  `TextElement` VARCHAR(21000) NOT NULL,
+  PRIMARY KEY (`TextID`)
+);
 
 -- -----------------------------------------------------
 -- Table `LiquiZ`.`Media`
@@ -51,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`DisplayElements` (
 DROP TABLE IF EXISTS `Liquiz`.`Media` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`Media` (
-  `MediaID` INT NOT NULL AUTO_INCREMENT, 
+  `MediaID` INT NOT NULL, 
   `OrigName` VARCHAR(255) NOT NULL,
   `Path` VARCHAR(21000) NOT NULL,
   `MediaType` CHAR(3) NOT NULL, -- img, aud, vid
