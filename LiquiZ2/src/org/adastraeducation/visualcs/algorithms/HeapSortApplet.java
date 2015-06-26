@@ -5,7 +5,7 @@ import org.adastraeducation.visualcs.BasePApplet;
 import jogamp.graph.curve.tess.GraphOutline;
 
 @SuppressWarnings("serial")
-public class MergeSortApplet extends BasePApplet {
+public class HeapSortApplet extends BasePApplet {
 	private Array arr = null;
 	public void setup() {
 		super.setup();
@@ -16,7 +16,6 @@ public class MergeSortApplet extends BasePApplet {
 	public void algorithm() {
 		if (arr == null)
 			return;
-		arr.MergeSort();		
+		arr.HeapSort();		
 	}
 }
-
