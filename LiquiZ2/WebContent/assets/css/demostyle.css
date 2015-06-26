@@ -130,7 +130,7 @@ th {
 
 .matrix td {
     border: 1px solid black;
-    width: 70px;
+    width: 50px;
     margin: 1px;
     /*padding: 2px;*/
     background-color: #aaa;
@@ -229,4 +229,11 @@ img {
 img.logo {
 	 width: 141px;
 	 height: 32px;
+}
+
+.edit-quiz {
+  //width: 200px;
+  height: 50px;
+	float: right;
+	
 }

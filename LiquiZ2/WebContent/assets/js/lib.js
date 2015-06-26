@@ -508,20 +508,7 @@ Quiz.prototype.displayHeader = function() {
 
 var clicks = 0;
 Quiz.prototype.end = function() {
-    var parent = this;
-    var qc = Util.div("qc", "end-quiz");
-    if (this.editMode) {
-        qc.appendChild(Util.button("New Question", "new-question", null,
-            function() {
-                if (clicks === 0) {
-                    parent.editQuestion();
-                    // Util.goToId("editor");
-                }
-                clicks++;
-            }));
-    }
-    this.render(qc);
-    this.render(this.createSubmit(2));
+	this.render(this.createSubmit(2));
 };
 
 function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
@@ -564,11 +551,43 @@ Quiz.prototype.addQuestion = function(id, title, className, points, level) {
     return qc;
 };
 
+function showDialog(openFileDialog) {
+    document.getElementById(openFileDialog).click();
+}
+function fileName(openFileDialog) {
+    return document.getElementById(openFileDialog).value;
+}
+function hasFile(openFileDialog) {
+    return document.getElementById(openFileDialog).value != "";
+}
+function fileNameWithoutFakePath(openFileDialog) {
+    var fileName = document.getElementById(openFileDialog).value;
+    return fileName.substr(fileName.lastIndexOf('\\') + 1);
+}
+function fakePathWithoutFileName(openFileDialog) {
+    var fileName = document.getElementById(openFileDialog).value;
+    return fileName.substr(0, fileName.lastIndexOf('\\'));
+}
+function createAndAddNewOpenFileDialog(name) {
+    document.getElementById("filebrowse").innerHtml += "<input type='file' style='display:none' id='" + name + "'/>"
+}
+
+Quiz.prototype.saveLocal = function(id) {
+	if (!localStorage.quiz) {
+		localStorage.quiz = {};
+	} 
+	var saveVal = JSON.stringify(this);
+	console.log(saveVal);
+	localStorage.quiz.x = saveVal;
+}
+
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit");
+    var parent = this;
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
     if (this.editMode) {
-        qc.appendChild(Util.button("New Question", "new-question", null,
+    	var editBox = Util.div("edit-quiz", id + "-edit-quiz");
+        editBox.appendChild(Util.button("New Question", id + "-new-question", null,
             function() {
                 if (clicks === 0) {
                     parent.editQuestion();
@@ -576,6 +595,16 @@ Quiz.prototype.createSubmit = function(id) {
                 }
                 clicks++;
             }));
+        editBox.appendChild(Util.div("filebrowse"));
+        editBox.appendChild(Util.button("Save Local", id + "-edit-buttons", null, 
+        		function () {
+        		parent.saveLocal();
+        }));
+        editBox.appendChild(Util.button("Load From Local", id + "-edit-buttons", null, 
+        		function () {
+        		parent.loadLocal();
+        } ));
+        div.appendChild(editBox);
     }
 
     return div;
