@@ -1024,7 +1024,11 @@ Calendar.prototype.year = function(calendar) {
 }
 
 function imgClick(e) {
-	console.log(e.clientX + "," + e.clientY);
+    // getBoundingClientRect()
+    var boundRect = e.target.getBoundingClientRect();
+    // console.log(boundRect);
+    // console.log(e);
+	console.log((e.clientX - boundRect.x).toFixed(0) + ", " + (e.clientY - boundRect.y).toFixed(0));
 };
 
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
