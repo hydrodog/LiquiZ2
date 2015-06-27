@@ -111,8 +111,7 @@ public class Graph extends GraphData {
 			// note, it would be much simpler to visit: j = 0; j < v; j++
 			// but this would not animate as well as starting with the start vertex.
 			boolean changed = false; // so far, no better path found
-			int prevj = -1;
-			for (int count = 1, j = vStart; count <= v; count++, j = j == v ? 0 : j+1, prevj = j) {
+			for (int count = 1, j = vStart; count <= v; count++, j = j == v ? 0 : j+1) {
 				if (Visualize.visualize){ 
 					setVertexStyle(j, 1);
 				} 
@@ -124,19 +123,27 @@ public class Graph extends GraphData {
 						}
 						// if the cost through new vertex is lower
 						if (cost[j] + getW(j,k) < cost[k]) {
-							cost[k] = cost[j] + getW(j,k);		// compute new cost
+							int erase = pred[k];				// k's predecessor
+							cost[k] = cost[j] + getW(j,k);		// compute new cost							
 							pred[k] = j;						// store new predecessor
 							changed = true;						// found better path, keep going
+														
 							if (Visualize.visualize) {
 								setEdgeStyle(j, k, 2);			// highlight new best path (so far)
-								if (prevj != -1)
-									setEdgeStyle(prevj, k, 0);
+								if (erase != -1)
+									setEdgeStyle(erase, k, 0);
 							}
-						} else {
+						} else if(cost[j] + getW(j,k) > cost[k] && cost[k] + getW(k,j) > cost[j]) // for single direction, bi-direction just cost[j] + getW(j,k) > cost[k]
+						{
 							if (Visualize.visualize) {
 								setEdgeStyle(j, k, 0);			// back to normal display
 							}
+						} else{
+							if (Visualize.visualize) {
+								setEdgeStyle(j, k, 2);			// the candidate path still best one
+							}
 						}
+										
 						if (Visualize.visualize) {
 							setVertexStyle(k, 0);	// turn off the vertex just considered
 						}

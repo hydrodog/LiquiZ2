@@ -4,11 +4,9 @@ package org.adastraeducation.visualcs.graph;
 //2  how to output solution in txt file the, name
 //3  what's next step?  build on the web server? save png     graph1 png  sloution1 txt  batch
 
-import org.adastraeducation.visualcs.*;
-import org.adastraeducation.visualcs.util.*;
-import java.io.*;
+import org.adastraeducation.visualcs.BasePApplet;
+import org.adastraeducation.visualcs.DrawOnPGraphics;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 
 public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
@@ -32,11 +30,9 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 		};
 		graph.addObserver(displayer);
 		this.v = displayer.getGraph().getV();
-		colors = new int[] {
-			fgColor,
-			0x00D000, // green for visited vert/edges
-			0xFF0000
-		};
+				
+		colors = new int[]{0, 0, 0, 205, 190, 112, 255, 0, 0};
+					
 		vSize = 50;     //each vertex is a circle, vsize is a radius   
 		
     	x = new float[v];    //series x location of in a circle(vertex.x )
@@ -119,7 +115,8 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	    for (int i = 0; i < v; i++) {
 	    	for(int j = i; j < v; j++) {
 	    		if(graph.getW(i,j) != Double.POSITIVE_INFINITY) {
-	    			g.stroke(colors[displayer.getEdgeStyle(i, j)]);
+	    			int styleIndex = displayer.getEdgeStyle(i, j) * 3;  			
+	    			g.stroke(colors[styleIndex], colors[styleIndex + 1], colors[styleIndex + 2]); 			
 	    			g.line(x[i],y[i],x[j],y[j]);	    			
 	    			g.fill(colors[displayer.getEdgeStyle(i,j)]);	    			
 	    			labelWeight(graph.getW(i,j), i, j); 
@@ -132,7 +129,8 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private void drawVertices() {
     	g.noStroke();	
 	    for (int i = 0; i < v; i++) {
-	    	g.fill(colors[displayer.getVertexStyle(i)]);
+	    	int styleIndex = displayer.getVertexStyle(i) * 3;
+	    	g.fill(  colors[styleIndex], colors[styleIndex + 1], colors[styleIndex + 2]);    		    	
 	    	g.ellipse(x[i], y[i], vSize,vSize);
 	    	g.fill(255);
 	    	g.text(i+1, x[i]-txtHeight/3, y[i]+txtHeight/3);
