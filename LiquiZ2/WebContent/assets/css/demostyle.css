@@ -183,7 +183,7 @@ input[disabled] {
 }
 
 img {
-    width: 700px;
+    width: 300px;
     height: auto;
 }
 
@@ -233,7 +233,7 @@ img.logo {
 
 .edit-quiz {
   //width: 200px;
-  height: 50px;
+  height: 32x;
 	float: right;
 	
 }
