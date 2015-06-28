@@ -470,19 +470,19 @@ var clozeTarget = /[[]]/;
  * this.datadir = datadir; this.editMode = 1; }
  */
 
-function Quiz(quizinfo, questions) {
-	for ( var k in quizinfo) {
-		this[k] = quizinfo[k];
+function Quiz(payload) {
+    console.log("new json");
+	for ( var k in payload) {
+		this[k] = payload[k];
 	}
     this.body = document.getElementById("container");
     this.body.className = "quiz";
-    this.questions = questions;
     this.render(this.displayHeader());
     console.log(this);
     this.render(this.createSubmit(1));
 
-    for (var i = 0; i < questions.length; i++) {
-        var q = questions[i];
+    for (var i = 0; i < payload.data.length; i++) {
+        var q = payload.data[i];
         var qc = this.addQuestion(q[0], q[1], q[2]);
         for (var j = 3; j < q.length; j++) {
             if (q[j][0].substring(0, 5) === "Util.") {
@@ -1781,6 +1781,10 @@ function qtable(input) {
 }
 /** ******************** View Quizzes Part ******************** * */
 
+lookup = {
+    "Quiz": Quiz,
+}
+
 var page;
 
 // This should just become a generic handler for any error that's not 200.
@@ -1805,9 +1809,11 @@ function processAJAX() {
     }
 }
 
+var page;
+
 function loadPage(e) {
     var baseFilename = location.hash.substr(1);
-    var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
+    var url = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
     // console.log(ajax);
     // console.log("hash change to: " + location.hash);
 
@@ -1817,27 +1823,31 @@ function loadPage(e) {
     }
     media = [];
 
-    var json = new XMLHttpRequest();
-    json.onreadystatechange = function() {
-        if (json.status !== 200) {
+    var ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = function() {
+        if (ajax.status !== 200) {
             document.getElementById("container").innerHTML = "";
             document.getElementById("currentStatus").innerHTML = "";
-            document.getElementById("currentStatus").appendChild(errorStatus(json.status));
+            document.getElementById("currentStatus").appendChild(errorStatus(ajax.status));
         }
-        if (json.readyState !== 4 || json.status !== 200)
+        if (ajax.readyState !== 4 || ajax.status !== 200)
             return; // TODO: Handle error if it doesn't come back
         document.getElementById("currentStatus").innerHTML = "";
         document.getElementById("container").innerHTML = "";
-        eval("page=" + json.responseText);
+        // eval("page=" + ajax.responseText);
+        var json = JSON.parse(ajax.responseText);
+        page = json // Global
+        new lookup[json.type](json.payload);
         processAJAX();
         // Util.goToId();
     }
-    json.open("GET", ajax, true);
-    json.send();
+    ajax.open("GET", url, true);
+    ajax.send();
 }
 
 window.onload = loadPage;
 window.onhashchange = loadPage;
+// loadPage();
 
 // TODO(asher): Here we're not reloading the whole page, just calling a method on page (page.summary).
 // If the first part (/demos/QuizDemo) is the same, just execute the summary method
