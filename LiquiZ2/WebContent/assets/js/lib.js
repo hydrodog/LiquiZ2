@@ -547,6 +547,7 @@ function loadPage(e) {
         document.getElementById("currentStatus").innerHTML = "";
         document.getElementById("container").innerHTML = "";
         eval("page=" + json.responseText);
+        page.exec();
         processAJAX();
         // Util.goToId();
     }

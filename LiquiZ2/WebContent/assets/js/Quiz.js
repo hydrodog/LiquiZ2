@@ -22,8 +22,8 @@ Quiz.prototype.exec = function() {
     console.log(this);
     this.render(this.createSubmit(1));
 
-    for (var i = 0; i < questions.length; i++) {
-        var q = questions[i];
+    for (var i = 0; i < this.questions.length; i++) {
+        var q = this.questions[i];
         var qc = this.addQuestion(q[0], q[1], q[2]);
         for (var j = 3; j < q.length; j++) {
             if (q[j][0].substring(0, 5) === "Util.") {

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'/>
-    <title>LiquiZ Home</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/normalize.css">
-    <link rel="stylesheet" href="assets/css/demostyle.css"/>
-	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="assets/js/lib.js"></script>
-    <script src="assets/js/Quiz.js"></script>
-    <script src="assets/js/QuizEdit.js"></script>
-    <script src="assets/js/QuizList.js"></script>
-    <script src="assets/js/Calendar.js"></script>
-    <script src="assets/js/Grades.js"></script>
-    <script src="assets/js/Graph.js"></script>
-    <script src="assets/js/Equation.js"></script>
-  </head>
-  <body>
-    <div id="menu">
+<head>
+  <meta charset='utf-8'/>
+  <title>LiquiZ Home</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/normalize.css">
+  <link rel="stylesheet" href="assets/css/demostyle.css"/>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="assets/js/lib.js"></script>
+  <script src="assets/js/Quiz.js"></script>
+  <script src="assets/js/QuizEdit.js"></script>
+  <script src="assets/js/QuizList.js"></script>
+  <script src="assets/js/Calendar.js"></script>
+  <script src="assets/js/Grades.js"></script>
+  <script src="assets/js/Graph.js"></script>
+  <script src="assets/js/Equation.js"></script>
+</head>
+<body>
+  <div id="menu">
     <img class="logo" src="assets/img/title_logo.png"/>
     <a class="mi" href="#/courses">Courses</a>
     <a class="mi" href="#/demos/ListQuizzes">Quizzes</a>
@@ -31,18 +31,15 @@
     <a class="mi" href="#/about">About</a>
     <a class="mi" oncick="localStorage.dir = {}">Local</a>
     <div>
-    <form method="GET" action="Login.jsp">
-      ID:
-      <input name="userid"/>
-      <input type="password" name="passwd"/>
-      <input id="login" type="submit" value="Login"/>
-    </form>
+      <form method="GET" action="Login.jsp">
+        ID:
+        <input name="userid"/>
+        <input type="password" name="passwd"/>
+        <input id="login" type="submit" value="Login"/>
+      </form>
     </div>
-    </div>
-    <div id="currentStatus">
-    </div>
-    </div>
-<div id="container">
-</div>
-  </body>
+  </div>
+  <div id="currentStatus"></div>
+  <div id="container"></div>
+</body>
 </html>
