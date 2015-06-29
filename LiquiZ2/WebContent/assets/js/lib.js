@@ -467,7 +467,7 @@ mediaLocations = {
 	img : "assets/img/",
 	audio : "assets/audio/",
 	video : "assets/video/",
-},
+}
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading

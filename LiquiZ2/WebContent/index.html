@@ -19,21 +19,22 @@
   <body>
     <div id="menu">
     <img class="logo" src="assets/img/title_logo.png"/>
-    <a class="mi" href="#/courses">My Courses</a>
-    <a class="mi" href="#/ListQuizzes">My Quizzes</a>
+    <a class="mi" href="#/courses">Courses</a>
+    <a class="mi" href="#/demos/ListQuizzes">Quizzes</a>
     <a class="mi" href="#/demos/grades">Grades</a>
     <a class="mi" href="#/holidays">Holidays</a>
     <a class="mi" href="#/schedule">Schedule</a>
-    <a class="mi" href="#/holidays">Holidays</a>
-    <a class="mi" href="#/demos/QuizDemo">Kid Quiz Demo</a>
+    <a class="mi" href="#/demos/ArithQuizDemo">Arithmetic</a>
+    <a class="mi" href="#/demos/QuizDemo">Quiz Demo</a>
     <a class="mi" href="#/demos/csdemo">CS Demo</a>
     <a class="mi" href="#/about">About</a>
-    <a class="mi" oncick="localStorage.dir = {}">Clear Local</a>
+    <a class="mi" oncick="localStorage.dir = {}">Local</a>
     <div>
     <form method="GET" action="Login.jsp">
+      ID:
       <input name="userid"/>
       <input type="password" name="passwd"/>
-      <input type="submit" value="Login"/>
+      <input id="login" type="submit" value="Login"/>
     </form>
     </div>
     </div>

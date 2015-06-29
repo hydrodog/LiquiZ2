@@ -1,10 +1,54 @@
 page = {
-css: red,
+  teacher: {
+    favoriteqt: "mcRadioText",
+    defaultGradingScheme: 'grad',
+    regex: []
+  },
+ 
+//css: 'red',
+
+categories: {
+  homework: {
+  	percent: 5,
+  	contents: [
+  		["id", "name", "long name", "points"],
+  		[1, "HW1a", "", 100],
+  		[2, "HW1b", "", 100],
+  		[3, "HW1c", "", 100],
+  		[4, "HW2a", "", 100],
+  		[5, "HW2b", "", 100],
+  		[6, "HW4b", "", 100],
+  		[7, "HW5a", "", 100],
+  		[8, "HW6a", "", 100],
+  		[9, "HW6b", "", 100],
+  		[10, "HW6c", "", 100],
+  		[11, "HW7a", "", 100],
+  		[12, "HW7b", "", 100],
+  		[13, "HW11a", "", 100],
+  		[14, "HW11b", "", 100],  		
+  },
+  quizzes: {
+  	percent: 5,
+  	contents: [
+  		[id', 'name', 'long name', 'points'],
+  		[15, "Q1", "Intro to Processing", 100],
+  		[16, "Q2", "Java Integer Data Types", 100],
+  		[17, "Q3", "Java Integer Data Types", 100],
+  	},
+  tests: {
+  	percent: 5,
+  	contents: [
+  		[id', 'name', 'long name', 'points'],
+  		[15, "midterm", "midterm exam", 45],
+  		[16, "final", "final exam", 55],
+  	}
+}, // end categories
+
 grades: [
-['FirstName','LastName','ID','Section','HW1','HW1c','HW1b','HW2a','HW2b','HW4b',
+['FirstName','LastName','ID','Section','HW1a','HW1b','HW1c','HW2a','HW2b','HW4b',
 'HW5a', 'HW6A', 'HW6b', 'HW6c', 'HW7a', 'HW7b', 'HW5b', 'HW11a','HW11b','Midterm','Final','Letter Grade'],
-['Points Possible', 100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],
-['Elvin','Abreu Jr.,100,'C',100,100,100,100,95,100,90,90,100,100,100,100,100,100,100,92,85],
+['Points Possible', '', 100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],
+['Elvin','Abreu Jr.',100,'C',100,100,100,100,95,100,90,90,100,100,100,100,100,100,100,92,85],
 ['Ghalib','Alshammri',101,'C',100,100,100,100,100,100,100,90,100,100,100,100,100,100,100,92,85],
 ['Yifei','Cai ',102,'J',100,100,100,100,100,100,100,90,100,100,100,100,100,90,100,92,85],
 ['Feng','Chen',103,'J',100,100,90,100,100,100,100,90,100,100,100,100,100,100,100,92,85],
