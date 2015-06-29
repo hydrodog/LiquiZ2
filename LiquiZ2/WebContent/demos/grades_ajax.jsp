@@ -1,7 +1,7 @@
 page = {
 css: red,
 grades: [
-['FirstName','LastName','ID','Section','HW1','HW1c','HW1b','HW2a','HW2b','HW4b'
+['FirstName','LastName','ID','Section','HW1','HW1c','HW1b','HW2a','HW2b','HW4b',
 'HW5a', 'HW6A', 'HW6b', 'HW6c', 'HW7a', 'HW7b', 'HW5b', 'HW11a','HW11b','Midterm','Final','Letter Grade'],
 ['Points Possible', 100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],
 ['Elvin','Abreu Jr.,100,'C',100,100,100,100,95,100,90,90,100,100,100,100,100,100,100,92,85],
