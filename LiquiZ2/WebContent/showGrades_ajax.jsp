@@ -1,5 +1,4 @@
-
-  <%= org.adastraeducation.liquiz.util.Util.standardAJAXHeader(session) %>
+<%= org.adastraeducation.liquiz.util.Util.standardAJAXHeader(session) %>
   "userName": {
 		"firstName" : "John",
 		"lastName" : " Metos"

@@ -1,3 +1,20 @@
+/**
+ * Lib.js author: Asher Davidson
+ * 
+ * This library supports a lightweight one-page html framework The initial page
+ * loads in and should contain div boxes with id="container" and id=" Each page
+ * calls loadPage and loads ajax code in JSON format. To do so, it reads the
+ * page URL after the hash # For example, for the url
+ * localhost/LiquiZ2/index.html#demos/QuizDemo the framework will load ajax from
+ * the file: QuizDemo_ajax.jsp. If the URL has an exclamation after that hash #!
+ * then the framework will run the next javascript without loading ajax for even
+ * faster response.
+ * 
+ * In this way, we can load data and share it among several pages. Each can
+ * display a subcomponent of the data in different ways See the full
+ * documentation for more details.
+ */
+
 Util = {
 	dump : function(obj) {
 		var s = "";
@@ -5,6 +22,40 @@ Util = {
 			s += k + "-->" + obj[k] + '\n';
 		}
 		console.log(s);
+	},
+
+	popup : function(x, y, w, h, bg) {
+		var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width='
+				+ w + ',height=' + h);
+		var pbody = p.document.body;
+		pbody.style.backgroundColor = bg;
+		pbody.style.border = "solid black 1px";
+		var d = p.document.createElement("div");
+		d.style.backgroundColor = '#f00';
+		d.innerHTML = JSON.stringify(files);
+		pbody.appendChild(d);
+		return d;
+	},
+
+	popupLocalStoreBrowser : function(dir) {
+		dir = localStorage[dir];
+		console.log('dir=' + dir);
+		var files;
+		if (typeof (dir) == 'undefined') {
+			localStorage.dir = {}; // create empty directory
+			files = [];
+		} else {
+			files = dir.keys().sort();
+		}
+		var d = Util.popup(100, 100, 500, 500, '0c0');
+		d.innerHTML = "Foo!" + files;
+	},
+
+	add : function(parent, children) {
+		fragment = document.createDocumentFragment();
+		for (var i = 0; i < children.length; i++)
+			fragment.appendChild(children[i]);
+		parent.appendChild(fragment);
 	},
 
 	goToId : function(id) {
@@ -210,12 +261,14 @@ Util = {
 	 */
 	video : function(src, controls, className, id) {
 		controls = (typeof controls !== "undefined") ? controls : true;
-		return Util.make("video", {
+		result = Util.make("video", {
 			src : mediaLocations.video + src,
 			controls : controls,
 			className : className,
 			id : id,
 		});
+		media.push(result);
+		return result;
 	},
 
 	/*
@@ -224,12 +277,14 @@ Util = {
 	 */
 	audio : function(src, controls, className, id) {
 		controls = (typeof controls !== "undefined") ? controls : true;
-		return Util.make("audio", {
+		result = Util.make("audio", {
 			src : mediaLocations.audio + src,
 			controls : controls,
 			className : className,
 			id : id,
 		});
+		media.push(result);
+		return result;
 	},
 
 	canvas : function(height, width) {
@@ -405,16 +460,12 @@ Util = {
 
 };
 
+media = [];
 mediaLocations = {
 	img : "assets/img/",
-	audio : "assets/aud/",
-	video : "assets/vid/",
-	png : this.img,
-	jpg : this.img,
-	mp3 : this.audio,
-	wav : this.audio,
-	mp4 : this.video,
-},
+	audio : "assets/audio/",
+	video : "assets/video/",
+}
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading
@@ -446,1305 +497,12 @@ function appendCSSText(css) {
 	head.appendChild(s);
 }
 
-var clozeTarget = /[[]]/;
-
-/*
- * // Information about quiz required for display on client side. // Much more
- * data on server side in Policy.java function QuizInfo(title, points,
- * timelimit, remainingTries, datadir) { this.title = title; this.points =
- * points; this.timelimit = timelimit; this.remaining = remainingTries;
- * this.datadir = datadir; this.editMode = 1; }
- */
-
-function Quiz(quizinfo) {
-	for ( var k in quizinfo) {
-		this[k] = quizinfo[k];
-	}
-	this.body = document.getElementById("container");
-	this.body.className = "quiz";
-	// this.displayHeader(this.body);
-	this.render(this.displayHeader());
-	this.editMode = true;
-	console.log(this);
-	this.render(this.createSubmit(1));
-}
-
-Quiz.prototype.render = function(child) {
-	this.body.appendChild(child);
-}
-
-Quiz.prototype.displayHeader = function() {
-	var header = Util.div("header");
-	header.appendChild(Util.h1(this.title));
-	header.appendChild(Util.span(" Points: " + this.points, "points"));
-	header.appendChild(Util.p("timer"));
-	return header;
-	// TODO: add time and countdown
-	// TODO: add remaining tries
-}
-
-var clicks = 0;
-Quiz.prototype.end = function(id) {
-	var parent = this;
-	var qc = Util.div("qc", "qc" + id);
-	if (this.editMode) {
-		qc.appendChild(Util.button("New Question", "new-question", null,
-				function() {
-					if (clicks === 0) {
-						parent.editQuestion();
-						// Util.goToId("editor");
-					}
-					clicks++;
-				}));
-	}
-	this.render(qc);
-	this.render(this.createSubmit(2));
-};
-
-function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
-	var editBox = Util.div("edit");
-	editBox.appendChild(Util.button("Edit", null, id + "-edit", editFunc));
-	editBox
-			.appendChild(Util
-					.button("Delete", null, id + "-delete", deleteFunc));
-	editBox.appendChild(Util.button("Copy", null, id + "-copy", copyFunc));
-	return editBox;
-}
-
-Quiz.prototype.addQuestion = function(id, title, className, points, level) {
-	points = (typeof points === "undefined") ? 1 : points;
-	level = (typeof level === "undefined") ? 1 : level;
-
-	var qc = Util.div("qc " + className + "-qc", "qc" + id);
-
-	var header = Util.div("qheader");
-	header.appendChild(Util.h2(title));
-
-	var floatRight = Util.div("float-right");
-	floatRight.appendChild(Util.span("points:" + points, "qpoints"));
-	floatRight.appendChild(Util.span("level:" + level, "level"));
-	if (this.editMode) {
-		floatRight.appendChild(makeEditBox(id, function(e) {
-			console.log(e.target.id);
-		}, function(e) {
-			console.log(e.target.id);
-		}, function(e) {
-			console.log(e.target.id);
-		}));
-	}
-	header.appendChild(floatRight);
-	qc.appendChild(header);
-	return qc;
-};
-
-Quiz.prototype.createSubmit = function(id) {
-	var div = Util.div("submit");
-	div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"
-			+ id));
-	return div;
-};
-
-Quiz.prototype.instructions = function(txt) {
-	return Util.p(txt, 'instructions');
-}
-
-Quiz.prototype.fillin = function(id) {
-	var input = Util.input('text', 'fillin', id);
-	return input;
-}
-
-Quiz.prototype.numeric = function(id) {
-	return Util.input('text', 'number', id);
-}
-
-Quiz.prototype.numid = function(id, v) {
-	var inp = Util.input('text', 'cell', id);
-	inp.size = 3;
-	inp.value = v;
-	return inp;
-}
-
-Quiz.prototype.add = function(parent, spec) {
-	parent.appendChild(this[spec.type](spec));
-}
-
-Quiz.prototype.mcRadioText = function(id, txt, xlabels) {
-	var list = [];
-	for (var i = 0; i < txt.length; i++) {
-		var radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-"
-				+ i);
-		var label = Util.label(id + "-" + i, txt[i]);
-		var group = [ radio, label ];
-		list.push(group);
-	}
-	return Util.table(list);
-}
-
-Quiz.prototype.mcRadioImg = function(id, src, xlabels) {
-	var list = [];
-	for (var i = 0; i < src.length; i++) {
-		var radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-"
-				+ i);
-		var label = Util.label(id + "-" + i, Util.img(src[i]));
-		var group = [ radio, label ];
-		list.push(group);
-	}
-	return Util.table(list);
-}
-
-/*
- * Build dropdown list of text
- */
-Quiz.prototype.selectText = function(id, list, sendBack) {
-	var s = document.createElement("select");
-	s.id = id;
-	s.className = "multichoicedropdown";
-	var opt = document.createElement("option");
-	opt.value = -1;
-	opt.appendChild(document.createTextNode("Select one"));
-	s.appendChild(opt);
-	for (var i = 0; i < list.length; i++) {
-		opt = document.createElement("option");
-		opt.value = i;
-		opt.appendChild(document.createTextNode(list[i]));
-		s.appendChild(opt);
-	}
-	return s;
-}
-
-/*
- * Build dropdown list of images
- */
-Quiz.prototype.selectImg = function(id, list) {
-	var s = document.createElement("select");
-	s.id = id;
-	s.className = "multichoicedropdown";
-	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("option");
-		opt.value = i;
-		var img = document.createElement("img");
-		img.src = mediaLocations.img + list[i];
-		opt.appendChild(img);
-		s.appendChild(opt);
-	}
-	return s;
-}
-
-Quiz.prototype.match = function(id, questions, answers) {
-	var t = document.createElement("table");
-	for (var i = 0; i < questions.length; ++i) {
-		var r = t.insertRow(i);
-		var q = r.insertCell(0);
-		q.appendChild(document.createTextNode(questions[i]));
-		q = r.insertCell(1);
-		q.appendChild(this.selectText(id + "_" + i, answers, true));
-	}
-	return t;
-}
-
-Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
-	var l;
-	var returnHeader = false;
-	i = 0;
-	if (header) {
-		l = new Array(rows + 1);
-		l[0] = header;
-		i = 1;
-		returnHeader = true;
-	} else {
-		l = new Array(rows);
-	}
-
-	for (i; i < l.length; i++) {
-		l[i] = new Array(cols);
-		for (j = 0; j < l[i].length; j++) {
-			l[i][j] = "%%input%%";
-		}
-	}
-	return this.grid(id, l, returnHeader);
-};
-
-Quiz.prototype.grid = function(id, list, header) {
-	var d = document.createElement("div");
-	var t = document.createElement("table");
-	t.className = "matrix";
-	this.suffixMap.inputCount = 0;
-	if (header) {
-		headList = list.shift();
-		thead = t.createTHead();
-		for (i = 0; i < headList.length; i++) {
-			td = document.createElement("td");
-			td.className = "cell";
-			x = this.suffix(headList[i], id);
-			td.appendChild(x);
-			thead.appendChild(td);
-		}
-	}
-
-	for (i = 0; i < list.length; i++) {
-		r = t.insertRow(-1);
-		for (j = 0; j < list[i].length; j++) {
-			td = r.insertCell(-1);
-			td.className = "cell";
-			x = this.suffix(list[i][j], id);
-			td.appendChild(x);
-		}
-	}
-	d.appendChild(t);
-	return d;
-};
-
-Quiz.prototype.suffixMap = {
-	inputCount : 0,
-	jpg : Quiz.prototype.img,
-	png : Quiz.prototype.img,
-	gif : Quiz.prototype.img,
-};
-
-Quiz.prototype.tableInput = function(s, returnValue, id) {
-	input = Util.input("text", "grid-input", id + "_" + this.inputCount);
-	this.inputCount++;
-	return input;
-};
-Quiz.prototype.suffixMap["%%input%%"] = Quiz.prototype.tableInput;
-
-Quiz.prototype.suffix = function(s, id) {
-	s += "";
-	var suf = s.split('.').pop();
-	if (this.suffixMap[suf])
-		return this.suffixMap[suf](s, true, id);
-	return Util.span(s, true);
-};
-
-// accept is a string: ".java,.txt"
-Quiz.prototype.fileUpload = function(id, accept) {
-	var up = document.createElement("input");
-	up.id = id;
-	up.type = "file";
-	up.accept = accept;
-	return up;
-};
-
-// function imageAudioVideo() {
-// var
-// }
-
-function imageAudioVideo() {
-	var editor = document.createElement("div");
-	var t = document.createElement("table");
-	editor.appendChild(t);
-
-	var r0 = t.insertRow(0);
-	var image = Util.p("Image");
-	var image_src = Util.file(null, null, "image_src");
-	var load_image = Util.button("Load Selected Image", "image_src");
-	fillRow(r0, [ image, image_src, load_image ]);
-
-	var r1 = t.insertRow(1);
-	var audio = Util.p("Audio");
-	var audio_src = Util.file(null, null, "audio_src");
-	var load_audio = Util.button("Load Selected Audio", "audio_src");
-	fillRow(r1, [ audio, audio_src, load_audio ]);
-
-	var r2 = t.insertRow(2);
-	var video = Util.p("Video");
-	var video_src = Util.file(null, null, "video_src");
-	var load_video = Util.button("Load Selected Video", "video_src");
-	fillRow(r2, [ video, video_src, load_video ]);
-
-	return editor;
-
-}
-
-function fillRowText(row, list) {
-	for (var i = 0; i < list.length; i++) {
-		var c = row.insertCell(i);
-		c.innerHTML = list[i];
-	}
-}
-
-// calendar//
-// yue//
-function Calendar(startDate, days) {
-	this.startDate = startDate;
-	var s = "";
-	for (var i = 0; i < days; i++) {
-		s += '0';
-	}
-	this.holidays = s;
-	this.events = s;
-}
-
-Calendar.prototype.shift = function(days) {
-	this.startDate.setDate(this.startDate.getDate() + days);
-}
-
-Calendar.prototype.week = function(parent) {
-
-}
-
-Calendar.prototype.getDateOfYear = function(d) {
-	var endDateOfMonth = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30,
-			31);
-	var dateOfYear = 0;
-	var month = d.getMonth();
-	for (var i = 0; i < month; i++) {
-		dateOfYear += endDateOfMonth[i];
-	}
-	dateOfYear += d.getDate();
-	return dateOfYear;
-}
-
-Calendar.prototype.setHoliday = function(d) {
-	var date = this.getDateOfYear(d) - 1;
-	var s = "";
-	for (var i = 0; i < 365; i++) {
-		if (i == date) {
-			s += '1';
-		} else {
-			s += this.holidays.charAt(i);
-		}
-	}
-	this.holidays = s;
-}
-
-Calendar.prototype.setEvent = function(d) {
-	var date = this.getDateOfYear(d) - 1;
-	var s = "";
-	for (var i = 0; i < 365; i++) {
-		if (i == date) {
-			if (this.events.charAt(i) == '1')
-				s += '0';
-			else
-				s += '1';
-		} else {
-			s += this.events.charAt(i);
-		}
-	}
-	this.events = s;
-}
-
-Calendar.prototype.markCell = function(date, d) {
-	var dd = new Date();
-	dd.setDate(date);
-	dd.setMonth(d.getMonth());
-	this.setEvent(dd);
-	var t = document.getElementById("cal");
-	if (t != null) {
-		t.parentNode.replaceChild(this.month(d, this), t);
-	}
-}
-
-Calendar.prototype.month = function(d, calendar) {
-	// d = (typeof d !== "undefined") ? d : this.startDate;
-	var t = document.createElement("table");
-	t.className = "cal";
-	t.id = "cal";
-	var h = t.insertRow(0);
-	var b1 = Util.button("<<", null, null, function() {
-	});
-	b1.onclick = function() {
-		d.setFullYear(d.getFullYear() - 1);
-		var t = document.getElementById("cal");
-		if (t != null) {
-			t.parentNode.replaceChild(calendar.month(d, calendar), t);
-		}
-	};
-	var b2 = Util.button("<", null, null, function() {
-	});
-	b2.onclick = function() {
-		d.setMonth(d.getMonth() - 1);
-		var t = document.getElementById("cal");
-		if (t != null) {
-			t.parentNode.replaceChild(calendar.month(d, calendar), t);
-		}
-	};
-	var b3 = Util.button(">", null, null, function() {
-	});
-	b3.onclick = function() {
-		d.setMonth(d.getMonth() + 1);
-		var t = document.getElementById("cal");
-		if (t != null) {
-			t.parentNode.replaceChild(calendar.month(d, calendar), t);
-		}
-	};
-	var b4 = Util.button(">>", null, null, function() {
-	});
-	b4.onclick = function() {
-		d.setFullYear(d.getFullYear() + 1);
-		var t = document.getElementById("cal");
-		if (t != null) {
-			t.parentNode.replaceChild(calendar.month(d, calendar), t);
-		}
-	};
-	var b5 = Util.button("shift", null, null, function() {
-	});
-	b5.onclick = function() {
-		var s = "";
-		for (var i = 0; i < 365; i++) {
-			var flag = calendar.events.charAt((i - 7 + 365) % 365);
-			s += flag;
-		}
-		calendar.events = s;
-		var t = document.getElementById("cal");
-		if (t != null) {
-			t.parentNode.replaceChild(calendar.month(d, calendar), t);
-		}
-	}
-	var b6 = Util.button("mark holiday", null, null, function() {
-	});
-	b6.onclick = function() {
-		var dd = new Date(); // dd is the first day of the year
-		dd.setDate(1);
-		dd.setMonth(0);
-		dd.setFullYear(d.getFullYear());
-		for (var i = 0; i < 365; i++) {
-			if (dd.getDay() == 0 || dd.getDay() == 6)
-				calendar.setHoliday(dd);
-			dd.setDate(dd.getDate() + 1);
-		}
-		var t = document.getElementById("cal");
-		if (t != null) {
-			t.parentNode.replaceChild(calendar.month(d, calendar), t);
-		}
-	}
-
-	fillRow(h, [ b1, b2, document.createTextNode(d.getFullYear()),
-			document.createTextNode(" "),
-			document.createTextNode(d.getMonth() + 1), b3, b4, b5, b6 ]);
-	h = t.insertRow(1);
-	fillRowText(h, [ "S", "M", "T", "W", "T", "F", "S" ]);
-	d.setDate(1);
-	var monthId = d.getMonth();
-	var dayOfWeek = d.getDay();
-	d.setDate(d.getDate() - dayOfWeek); // get back to Sunday
-	for (var i = 2; i <= 7; i++) {
-		var r = t.insertRow(i);
-		var rowFlag = false;
-		for (var j = 0; j < 7; j++) {
-			var c = r.insertCell(j);
-			if (d.getMonth() == (monthId - 1 + 12) % 12) {
-				d.setDate(d.getDate() + 1);
-			} else if (d.getMonth() == monthId) {
-				c.innerHTML = d.getDate();
-				c.ondblclick = function() {
-					calendar.markCell(this.innerHTML, d);
-				};
-
-				var holidayFlag = this.holidays
-						.charAt(this.getDateOfYear(d) - 1);
-				var eventFlag = this.events.charAt(this.getDateOfYear(d) - 1);
-				if (holidayFlag == '1') {
-					if (eventFlag == '1') {
-						c.style.color = "blue";
-					} else {
-						c.style.color = "red";
-					}
-				} else if (eventFlag == '1') {
-					c.style.color = "green";
-				} else {
-					c.style.color = "black";
-				}
-				d.setDate(d.getDate() + 1);
-			} else {
-				rowFlag = true;
-			}
-		}
-		if (rowFlag) {
-			d.setMonth(d.getMonth() - 1);// go back to current month
-			break;
-		}
-	}
-	return t;
-}
-
-Calendar.prototype.year = function(calendar) {
-	var div = document.createElement("div");
-	var d = this.startDate;
-	for (var month = 0; month < 12; month++) {
-		div.appendChild(this.month(d, calendar));
-		d.setMonth(d.getMonth() + 1);
-	}
-	return div;
-}
-
-function imgClick(e) {
-	console.log(e.clientX + "," + e.clientY);
-};
-
-Quiz.prototype.clickableImage = function(id, src, xs, ys) {
-	var img = document.createElement("img");
-	img.src = mediaLocations.img + src;
-	img.onclick = imgClick;
-	return img;
-};
-
-// multiple fill-in-the-blank where [[]] is replaced by inputs
-Quiz.prototype.cloze = function(id, txt) {
-	var preItems = txt.split("[[]]");
-	var pre = document.createElement("pre");
-	pre.className = "code";
-
-	for (var i = 0; i < preItems.length; ++i) {
-		pre.appendChild(Util.span(preItems[i]));
-		if (i != preItems.length - 1)
-			pre.appendChild(this.fillin(id + "_" + i, true));
-	}
-	return pre;
-};
-
-// enter code to be compiled, run, spindled, mutilated
-Quiz.prototype.code = function(id, txt, rows, cols) {
-	var ta = document.createElement("textarea");
-	ta.className = "code";
-	ta.rows = rows;
-	ta.cols = cols;
-	ta.value = txt;
-	return ta;
-};
-
-Quiz.prototype.essay = function(id, rows, cols, maxwords) {
-	var ta = document.createElement("textarea");
-	ta.className = "essay";
-	ta.rows = rows;
-	ta.cols = cols;
-	// ta.value = essay.text;
-	return ta;
-};
-
-// ////////////////////////////////////////////////////////////////////
-// Editor //
-// Ying //
-function turnalloff(elem) { // TODO: turn off all the other selections when one
-	// of them is selected
-	var elems = elem.form.elements;
-	var currentState = elems.checked;
-
-	for (var i = 0; i < elems.length; i++) {
-		if (elems[i].type === "checkbox") {
-			elems[i].checked = false;
-		}
-	}
-
-	elem.checked = currentState;
-}
-
-function editMCDDform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
-
-	for (var i = 0; i < list.length; i++) {
-		var t = document.createTextNode(labels[i]);
-		var opt = document.createElement("input");
-		var checkbox = document.createElement("input");
-		var linebreak = document.createElement("br");
-		checkbox.type = "checkbox";
-
-		// checkbox.onclick = turnalloff(this);
-		opt.value = list[i];
-		form.appendChild(t);
-		form.appendChild(opt);
-		form.appendChild(checkbox);
-		form.appendChild(linebreak);
-	}
-
-	return form;
-}
-function editMAform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
-
-	for (var i = 0; i < list.length; i++) {
-		var t = document.createTextNode(labels[i]);
-		var opt = document.createElement("input");
-		var checkbox = document.createElement("input");
-		var linebreak = document.createElement("br");
-		checkbox.type = "checkbox";
-
-		// checkbox.onclick = turnalloff(this);
-		opt.value = list[i];
-		form.appendChild(t);
-		form.appendChild(opt);
-		form.appendChild(checkbox);
-		form.appendChild(linebreak);
-	}
-
-	return form;
-}
-function editSurveyform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
-
-	for (var i = 0; i < list.length; i++) {
-		var t = document.createTextNode(labels[i]);
-		var opt = document.createElement("input");
-		var linebreak = document.createElement("br");
-
-		// checkbox.onclick = turnalloff(this);
-		opt.value = list[i];
-		form.appendChild(t);
-		form.appendChild(opt);
-		form.appendChild(linebreak);
-	}
-
-	return form;
-}
-
-function editMCRform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
-
-	for (var i = 0; i < list.length; i++) {
-		var t = document.createTextNode(labels[i]);
-		var opt = document.createElement("input");
-		var radio = document.createElement("input");
-		var linebreak = document.createElement("br");
-		radio.type = "radio";
-
-		// checkbox.onclick = turnalloff(this);
-		opt.value = list[i];
-		form.appendChild(t);
-		form.appendChild(opt);
-		form.appendChild(radio);
-		form.appendChild(linebreak);
-	}
-
-	return form;
-}
-var selStart, selEnd;
-
-function addBrackets(ta) {
-
-	var v = ta.value;
-	ta.value = v.substring(0, selStart) + " [[" + v.substring(selStart, selEnd)
-			+ "]] " + v.substring(selEnd);
-}
-
-var exampleClozeTest = 'public class A {\n [[]]  public [[]] void main(strings [] args) {\n  System.println.out("hello");\n  }\n}';
-Quiz.prototype.editCloze = function() {
-	var div = document.createElement("div");
-	div.id = "Cloze";
-	div.className = "cloze"; // style of the editor box
-	var ta = document.createElement("textarea");
-	div.appendChild(ta);
-	ta.className = "cloze";
-	ta.id = "x";
-	ta.rows = 10;
-	ta.cols = 80;
-	ta.value = exampleClozeTest;
-	ta.ondblclick = function() {
-		addBrackets(ta);
-	};
-	ta.onmouseup = function() {
-		selStart = ta.selectionStart;
-		selEnd = ta.selectionEnd;
-		console.log(ta.selectionStart + "," + ta.selectionEnd);
-	};
-	// ta.onkeyup = function(){ ta.style.height = "1px";
-	// ta.style.height = (25+ta.scrollHeight)+"px";}
-
-	div.appendChild(Util.button("SquareBracket It!", null, null, function() {
-		addBrackets(ta);
-	}));
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildCloze('title', ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editFillin = function() {
-	var div = document.createElement("div");
-	div.id = "Fillin";
-	div.className = "Fillin"; // style of the editor box
-
-	var Ans = Util.span("Answer: ");
-	var ans = Util.input("text", "ans");
-	ans.value = "";
-	div.appendChild(Ans);
-	div.appendChild(ans);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildFillin('title', ta.value, ans.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editNumber = function() {
-	var div = document.createElement("div");
-	div.id = "Number";
-	div.className = "Number"; // style of the editor box
-
-	var min = Util.span("Min: ");
-	var Min = Util.input("text", "min");
-	var max = Util.span("Max: ");
-	var Max = Util.input("text", "max");
-	div.appendChild(min);
-	div.appendChild(Min);
-	div.appendChild(max);
-	div.appendChild(Max);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildnumber('title', ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editEssay = function() {
-	var div = Util.div("Essay", "Essay");
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildessay('title', ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editCode = function() {
-	var div = document.createElement("div");
-	div.id = "Code";
-	div.className = "Code"; // style of the editor box
-
-	div.appendChild(Util.button("Submit", function() {
-		$("#y").remove();
-		buildcode('title', ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editEssay = function() {
-	var div = document.createElement("div");
-	div.id = "Essay";
-	div.className = "Essay"; // style of the editor box
-
-	mkpbutton(div, "Submit", null, function() {
-		$("#y").remove();
-		buildessay('title', ta.value);
-	});
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editCode = function() {
-	var div = document.createElement("div");
-	div.id = "Code";
-	div.className = "Code"; // style of the editor box
-
-	mkpbutton(div, "Submit", function() {
-		$("#y").remove();
-		buildcode('title', ta.value);
-	});
-	document.body.appendChild(div);
-}
-
-// function addOption(parent){
-// var extraOpteditMCform= form(4, [optionChar], [""]);
-// div.appendChild(extraOption)
-// }
-//
-// var optionCharUni = 68; // the Dec Unicode of 'D'
-// var optionChar = String.fromCharCode(optionCharUni);
-
-Quiz.prototype.editMultiChoiceDropdown = function() {
-	var div = document.createElement("div");
-	div.id = "MultiChoiceDropdown";
-	div.className = "MultiChoiceDropdown"; // style of the editor box
-
-	var editor = Util.div("MCeditor", "MCeditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
-	var r = t.insertRow(0);
-	var description = document.createTextNode("Multiple choice - Dropdown :"
-			+ "Correct Answer" + "Add more options");
-	var numberBox = Util.input("text", "numberinput", "numberinput");
-	var addOptionButton = Util.button("Add Option", null, null, function() {
-	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
-
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var MCDDform = editMCDDform(4, [ "A: ", "B: ", "C: ", "D: " ], [ "", "",
-			"", "" ]);
-	div.appendChild(MCDDform);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editSurvey = function() {
-	var div = document.createElement("div");
-	div.id = "Survey";
-	div.className = "Survey"; // style of the editor box
-
-	var editor = Util.div("surveyEditor", "surveyEditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
-	var r = t.insertRow(0);
-	var description = document.createTextNode("Add more options");
-	var numberBox = Util.input("text", "numberinput", "numberinput");
-	var addOptionButton = Util.button("Add Option", null, null, function() {
-	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
-
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var surveyform = editSurveyform(4, [ "Choice 1: ", "Choice 2: ",
-			"Choice 3: ", "Choice 4: " ], [ "", "", "", "" ]);
-	div.appendChild(surveyform);
-
-	div.appendChild(Util.input("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
-	}));
-
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editMultiChoiceRadio = function() {
-	var div = document.createElement("div");
-	div.id = "MultiChoiceRadio";
-	div.className = "MultiChoiceRadio"; // style of the editor box
-
-	var editor = Util.div("MCReditor", "MCReditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
-	var r = t.insertRow(0);
-	var description = document.createTextNode("Multiple choice - Radio:"
-			+ "Correct Answer" + "Add more options");
-	var numberBox = Util.input("text", "numberinput", "numberinput");
-	var addOptionButton = Util.button("Add Option", null, null, function() {
-	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
-
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var MCRform = editMCRform(4, [ "Choice 1: ", "Choice 2: ", "Choice 3: ",
-			"Choice 4: " ], [ "", "", "", "" ]);
-	div.appendChild(MCRform);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editMultiAnswer = function() {
-	var div = document.createElement("div");
-	div.id = "MultiAnswer";
-	div.className = "MultiAnswer"; // style of the editor box
-
-	var editor = Util.div("MAeditor", "MAeditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
-	var r = t.insertRow(0);
-	var description = document.createTextNode("Multiple Answer Choices: "
-			+ "Correct Answer" + "Add more options");
-	var numberBox = Util.input("text", "numberinput", "numberinput");
-	var addOptionButton = Util.button("Add Option", null, null, function() {
-	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
-
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var MAform = editMAform(4, [ "Option 1: ", "Option 2: ", "Option 3: ",
-			"Option 4: " ], [ "", "", "", "" ]);
-	div.appendChild(MAform);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-var newid = -1;
-function buildCloze(title, text) {
-
-	page.addQuestion(newid--, title, "cloze");
-	page.instructions("Fill in the blanks to make the code correct");
-	page.cloze(newid--, text);
-}
-
-function buildFillin(title, text, answer) {
-
-	page.addQuestion(newid--, title, "fillin");
-	page.span(text);
-	page.fillin(newid--);
-	// TODO: store answer
-
-	// var quizinfo = new QuizInfo("New Fill-In Question", 10, 0, 1, "assets/");
-	// var qlist = [[
-	// qhead('Java'),
-	// lin('Complete the code below'),
-	// cod(3, txt3, 10, 80)
-	// ]]
-	// var q_cloze = new Quiz(quizinfo, qlist);
-}
-function buildnumber(title, text) {
-	var quizinfo = new QuizInfo("New Number Question", 10, 0, 1, "assets/");
-	var qlist = [
-			[ qhead('Java'), lin('Complete number text below'),
-					cod(3, txt4, 10, 80) ],
-			[ lin('Type your Answer'), cod(3, "", 2, 80) ] ]
-	var q_cloze = new Quiz(quizinfo, qlist);
-}
-function buildessay(txt5) {
-	var quizinfo = new QuizInfo("New Essay Question", 10, 0, 1, "assets/");
-	var qlist = [
-			[ qhead('Java'), lin('Question Text'), cod(3, txt5, 10, 80) ],
-			[ lin('Type your Essay'), cod(3, "", 12, 100) ], ]
-	var q_cloze = new Quiz(quizinfo, qlist);
-}
-function buildcode() {
-	var quizinfo = new QuizInfo("New Code Question", 10, 0, 1, "assets/");
-	var qlist = [
-			[
-					qhead('Java'),
-					lin('Question Text'),
-					cod(3, txt6, 10, 80),
-					match(1, [ txt("Programming Language: ") ], [ txt("C++"),
-							txt("Java"), txt("Python"), ]) ],
-			[ lin('Type your code'), cod(3, "", 12, 100), button("Run") ]
-
-	]
-	var q_cloze = new Quiz(quizinfo, qlist);
-}
-
-function builddpd() {
-	var quizinfo = new QuizInfo("New DropDownList Question", 10, 0, 1,
-			"assets/");
-	var qlist = [
-			[ qhead('Java'), lin('Question Text'), cod(3, txt6, 10, 80), ],
-
-			[ lin('Type your code'), cod(3, "", 12, 100), ]
-
-	]
-	var q_cloze = new Quiz(quizinfo, qlist);
-}
-
-var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
-		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
-		"Regex", "Matrix", "Cloze" ];
-
-// Quiz.prototype.editMode = function(){
-// var c = mkdivid(this.body, "new-question-button", "qc new-question-button");
-// // TODO(asher): Fix mkdiv
-// var newB = mkbutton("New Question"); // TODO(asher): Fix mkbutton
-// newB.onclick = function() { this.editQuestion; }
-// c.appendChild(newB);
-// this.add(c);
-// }
-
-var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
-		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
-		"Regex", "Matrix", "Cloze" ];
-
-// Quiz.prototype.editMode = function(){
-// var c = mkdivid(this.div, "new-question-button", "qc new-question-button");
-// var newB = mkbutton("New Question");
-// newB.onclick = function() { this.editQuestion; }
-// c.appendChild(newB);
-// this.add(c);
-// }
-
-function fillRow(row, list) {
-	for (var i = 0; i < list.length; i++) {
-		var c = row.insertCell(i);
-		c.appendChild(list[i]);
-	}
-}
-
-function checkIfInView(id) {
-
-	var element = $("#" + id);
-	var offset = element.offset().top;
-
-	if (offset > window.innerHeight) {
-		// Not in view so scroll to it
-		$('html,body').animate({
-			scrollTop : offset
-		}, 1000);
-		return false;
-	}
-	return true;
-}
-
-function editTextBox(val) {
-	var div = document.createElement("div");
-	div.id = "textBoxDiv";
-	div.className = "textBoxDiv"; // style of the editor box
-	var ta = document.createElement("textarea");
-	div.appendChild(ta);
-	ta.className = "textArea";
-	ta.id = "textArea";
-	ta.rows = 5;
-	ta.cols = 50;
-	ta.value = val;
-	return div;
-
-}
-
-Quiz.prototype.editQuestion = function() {
-	var parent = this;
-	var editor = Util.div("editor", "editor");
-	this.container.appendChild(editor);
-	var t0 = document.createElement("table");
-	editor.appendChild(t0);
-	var r0 = t0.insertRow(0);
-
-	var title = document.createTextNode("Title: ");
-	var inp = document.createElement("input");
-	var questionType = document.createTextNode("Question Type: ");
-	var selectBox = Util.select("quizType", false, list, null, "quizType");
-	var addQuestion = Util.button("Add Question", null, null, function() {
-	});
-	var cancel = Util.button("Cancel", null, null, function() {
-	});
-	fillRow(r0, [ title, inp, questionType, selectBox, addQuestion, cancel ]);
-
-	var r1 = t0.insertRow(1);
-	var level = document.createTextNode("Level: ");
-	var inpl = document.createElement("input");
-	var points = document.createTextNode("Points: ");
-	var inpp = document.createElement("input");
-	fillRow(r1, [ level, inpl, points, inpp ]);
-
-	var t1 = document.createElement("table");
-	editor.appendChild(t1);
-	var r2 = t1.insertRow(0);
-	fillRow(r2, [ editTextBox(""), imageAudioVideo() ]);
-
-	$('#quizType').change(function() {
-		for (var i = 0; i < list.length; i++) {
-			$("#" + list[i]).hide();
-		}
-		var val = $("#quizType option:selected").text();
-		if (val === "Choose QuestionType") {
-			return;
-		}
-		parent["edit" + val]();
-		checkIfInView(val);
-	});
-}
-
-/** ******************** View Quizzes Part ******************** * */
-/** Jack Tan * */
-function loadViewQuizzes() {
-	var input;
-	var xmlhttp = new XMLHttpRequest();
-	var url = "../demos/assets/json/quizzes.json";
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			input = JSON.parse(xmlhttp.responseText);
-			var c = document.getElementById("container");
-			c.appendChild(qtoolbar(input.editMode));
-			c.appendChild(qtable(input));
-		}
-	}
-	xmlhttp.open("GET", url, true);
-	xmlhttp.send();
-}
-var arr_temp; // This is for the memory where we save the data temporarily.
-var months = [ "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ",
-		"Sep ", "Oct ", "Nov ", "Dec " ];
-function dayshift(datetype, rowID, rowNum, NOD) {
-	var cell = document.getElementById(rowID).cells[datetype];
-	var date = new Date(arr_temp[rowNum][datetype]);
-	date.setDate(date.getDate() + NOD);
-	arr_temp[rowNum][datetype] = date.toString();
-	cell.innerHTML = months[date.getMonth()] + date.getDate() + " at "
-			+ date.getHours() + ":" + date.getMinutes();
-	if (checkDates(rowNum)) {
-		dayshift(datetype, rowID, rowNum, -NOD);
-	}
-}
-/*
- * Check the dates before each time you change them. Open date must be earlier
- * than due date and close date; Due date must later than open date but no later
- * than close date; Close date must be later than open date and no earlier than
- * due date. Return ture if an error happens
- */
-function checkDates(rowNum) {
-	var opendate = new Date(arr_temp[rowNum][2]);
-	var closedate = new Date(arr_temp[rowNum][3]);
-	var duedate = new Date(arr_temp[rowNum][4]);
-	if (closedate.getTime() <= opendate.getTime()) {
-		alert("Open date must be earlier than close date.");
-		return true;
-	}
-	if (closedate.getTime() < duedate.getTime()) {
-		alert("Close date must be no earlier than due date.");
-		return true;
-	}
-	if (opendate.getTime() >= duedate.getTime()) {
-		alert("Open date must be earlier than due date.");
-		return true;
-	}
-}
-// Conditional day shift.
-function condDayShift(rowID, rowNum, NOD) {
-	if (document.getElementById("selectOpenDate").checked == true) {
-		dayshift(2, rowID, rowNum, NOD);
-	}
-	if (document.getElementById("selectCloseDate").checked == true) {
-		dayshift(3, rowID, rowNum, NOD);
-	}
-	if (document.getElementById("selectDueDate").checked == true) {
-		dayshift(4, rowID, rowNum, NOD);
-	}
-}
-// make day shift buttons i.e. (-7, -1, +1, +7)
-function mkDSButtons(rowID, rowNum) {
-	var d = document.createElement("div");
-	d.appendChild(Util.button("-7", null, null, function() {
-		condDayShift(rowID, rowNum, -7)
-	}));
-	d.appendChild(Util.button("-1", null, null, function() {
-		condDayShift(rowID, rowNum, -1)
-	}));
-	d.appendChild(Util.button("+1", null, null, function() {
-		condDayShift(rowID, rowNum, +1)
-	}));
-	d.appendChild(Util.button("+7", null, null, function() {
-		condDayShift(rowID, rowNum, +7)
-	}));
-	return d;
-}
-
-function mkth(parent, txt, colspan) { // make table head cell
-	var th = document.createElement("th");
-	th.innerHTML = txt;
-	th.colSpan = colspan;
-	parent.appendChild(th);
-	return th;
-}
-function qtoolbar(editMode) {
-	var qtoolbar = Util.div();
-	/* **************** search div **************** */
-	var srch_div = Util.div();
-	qtoolbar.appendChild(srch_div);
-	srch_div.appendChild(Util.make("input", {
-		type : "search",
-		placeholder : "Search for Quiz"
-	}));
-
-	srch_div.appendChild(Util.button("Search"));
-	/* **************** search div **************** */
-	/* **************** buttons div **************** */
-	if (editMode) {
-		var btns_div = Util.div();
-		qtoolbar.appendChild(btns_div);
-		btns_div.appendChild(Util.button("all"));
-		btns_div.appendChild(Util.button("invert"));
-		btns_div.appendChild(Util.button("none"));
-		btns_div.appendChild(Util.make("input", { // enter a date for date
-			// shift
-			type : "text",
-			placeholder : "Enter a date point"
-		}));
-		btns_div.appendChild(Util.make("input", { // enter the number of days
-			// for date shift
-			type : "text",
-			placeholder : "Number of days"
-		}));
-		btns_div.appendChild(Util.button("Advance"));
-		btns_div.appendChild(Util.button("Postpone"));
-	}
-	/* **************** buttons div **************** */
-	return qtoolbar;
-}
-
-function qtable(input) {
-	arr_temp = input.quizzes;
-	var t = document.createElement("table");
-	t.border = "1";
-	/* **************** table head for current quizzes **************** */
-	var h1 = t.insertRow(0);
-	mkth(h1, "Current Quizzes", 2);
-	mkth(h1, "Open", "1");
-	mkth(h1, "Close", "1");
-	mkth(h1, "Due", "1");
-	mkth(h1, "Points", "1");
-	mkth(h1, "Questions", "1");
-	/* **************** table head for current quizzes **************** */
-	/* **************** table head for closed quizzes **************** */
-	var h2 = t.insertRow(1);
-	mkth(h2, "Closed Quizzes", 8);
-	/* **************** table head for closed quizzes **************** */
-	/* **************** table body **************** */
-	for (var i = 1; i < arr_temp.length; i++) {
-		var tr = t.insertRow(i);
-		tr.id = arr_temp[i][0];
-		var cell0 = tr.insertCell(0);
-		for (var j = 1; j < arr_temp[i].length; j++) {
-			var c = tr.insertCell(-1);
-			c.innerHTML = arr_temp[i][j];
-		}
-		var opendate = new Date(arr_temp[i][2]);
-		tr.cells[2].innerHTML = months[opendate.getMonth()]
-				+ opendate.getDate() + " at " + opendate.getHours() + ":"
-				+ opendate.getMinutes();
-		var closedate = new Date(arr_temp[i][3]);
-		tr.cells[3].innerHTML = months[closedate.getMonth()]
-				+ closedate.getDate() + " at " + closedate.getHours() + ":"
-				+ closedate.getMinutes();
-		var duedate = new Date(arr_temp[i][4]);
-		tr.cells[4].innerHTML = months[duedate.getMonth()] + duedate.getDate()
-				+ " at " + duedate.getHours() + ":" + duedate.getMinutes();
-	}
-	/* **************** table body **************** */
-	/* **************** edit functions for edit mode **************** */
-	if (input.editMode) {
-		h1.cells[1].appendChild(Util.checkbox(null, null, null,
-				"selectOpenDate", false));
-		h1.cells[2].appendChild(Util.checkbox(null, null, null,
-				"selectCloseDate", true));
-		h1.cells[3].appendChild(Util.checkbox(null, null, null,
-				"selectDueDate", true));
-		for (var i = 1; i < arr_temp.length; i++) {
-			t.rows[i].cells[0].appendChild(Util.checkbox(null, null, null,
-					null, false));
-			t.rows[i].cells[1].appendChild(Util.br());
-			t.rows[i].cells[1].appendChild(mkDSButtons(t.rows[i].id, i));
-			t.rows[i].insertCell(-1);
-			t.rows[i].cells[7].appendChild(Util.button("edit"));
-			t.rows[i].cells[7].appendChild(Util.button("delete"));
-			t.rows[i].cells[7].appendChild(Util.button("copy"));
-		}
-	}
-	/* **************** edit functions for edit mode **************** */
-	return t;
-}
-/** ******************** View Quizzes Part ******************** * */
-/** ******************** Jack starts here******************** * */
-/* function transpose(arr): input an array and return a new transposed array. */
-/*
- * function transpose(arr) { return Object.keys(arr[0]).map(function(c) { return
- * arr.map(function(r) { return r[c]; }); }); }
- */
-function transpose(arr) {
-	return arr[0].map(function(_, c) {
-		return arr.map(function(r) {
-			return r[c];
-		});
-	});
-}
-/** ******************** Jack ends here******************** * */
-
 var page;
 
-function status404() {
+// This should just become a generic handler for any error that's not 200.
+function errorStatus(errorCode) {
 	fragment = document.createDocumentFragment();
-	fragment.appendChild(Util.h1("Error: 404"));
+	fragment.appendChild(Util.h1("Error: " + errorCode));
 	fragment
 			.appendChild(Util
 					.p("Please make sure the url you entered in the address bar is correct."));
@@ -1767,30 +525,76 @@ function processAJAX() {
 
 function loadPage(e) {
 	var baseFilename = location.hash.substr(1);
-	var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file
-	// to run
-	// console.log(ajax);
+	var url = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file
+														// to run
+	// console.log(url);
 	// console.log("hash change to: " + location.hash);
-	document.getElementById("currentStatus").innerHTML = "If you see this message, please press f12 twice.";
 
-	var json = new XMLHttpRequest();
-	json.onreadystatechange = function() {
-		if (json.status === 404) {
+	for (var i = 0; i < media.length; i++) {
+		media[i].removeAttribute("src");
+		media[i].load();
+	}
+	media = [];
+
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function() {
+		if (ajax.readyState === 4 && ajax.status !== 200) {
 			document.getElementById("container").innerHTML = "";
 			document.getElementById("currentStatus").innerHTML = "";
-			document.getElementById("currentStatus").appendChild(status404());
+			document.getElementById("currentStatus").appendChild(
+					errorStatus(ajax.status));
 		}
-		if (json.readyState !== 4 || json.status !== 200)
+		if (ajax.readyState !== 4 || ajax.status !== 200)
 			return; // TODO: Handle error if it doesn't come back
 		document.getElementById("currentStatus").innerHTML = "";
 		document.getElementById("container").innerHTML = "";
-		eval("page=" + json.responseText);
+		eval("page=" + ajax.responseText);
+		page.exec();
 		processAJAX();
 		// Util.goToId();
 	}
-	json.open("GET", ajax, true);
-	json.send();
+	ajax.open("GET", url, true);
+	ajax.send();
 }
 
-window.onload = loadPage;
+// If the link clicked is the current page, reload the page.
+// This is the expected behavior, but because we're using hashes,
+// we can't register these clicks any other way
+var lastClicked;
+function setLastClicked(e) {
+	if (lastClicked === e.target) {
+		loadPage();
+	} else {
+		lastClicked = e.target;
+		console.log(lastClicked);
+	}
+}
+
+// Adds an onclick function to all <a> tags.
+function loadOnce(e) {
+	var aList = document.links;
+	for (var i = 0; i < aList.length; i++) {
+		if (aList[i].hostname === document.domain) { // Same domain links
+														// only
+			aList[i].onclick = setLastClicked;
+			if (aList[i].hash === location.hash) { // Our current page
+				lastClicked = aList[i];
+			}
+		}
+	}
+
+	// resume regular loading
+	loadPage(e);
+}
+
+// loadOnce();
+window.onload = loadOnce;
 window.onhashchange = loadPage;
+
+// TODO(asher): Here we're not reloading the whole page, just calling a method
+// on page (page.summary).
+// If the first part (/demos/QuizDemo) is the same, just execute the summary
+// method
+// otherwise load the page via ajax and execute the summary method
+// If there's no !, we just call the exec method
+// http://localhost:8080/LiquiZ2/demos/QuizDemo.html#/demos/QuizDemo!summary
