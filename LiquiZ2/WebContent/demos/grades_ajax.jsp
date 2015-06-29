@@ -25,23 +25,26 @@ categories: {
   		[11, "HW7a", "", 100],
   		[12, "HW7b", "", 100],
   		[13, "HW11a", "", 100],
-  		[14, "HW11b", "", 100],  		
+  		[14, "HW11b", "", 100],
+  	]
   },
   quizzes: {
   	percent: 5,
   	contents: [
-  		[id', 'name', 'long name', 'points'],
-  		[15, "Q1", "Intro to Processing", 100],
-  		[16, "Q2", "Java Integer Data Types", 100],
-  		[17, "Q3", "Java Integer Data Types", 100],
-  	},
+  		['id', 'name', 'long name', 'points'],
+  		[15, 'Q1', 'Intro to Processing', 100],
+  		[16, 'Q2', 'Java Integer Data Types', 100],
+  		[17, 'Q3', 'Java Integer Data Types', 100],
+  	]
+  },
   tests: {
   	percent: 5,
   	contents: [
-  		[id', 'name', 'long name', 'points'],
+  		['id', 'name', 'long name', 'points'],
   		[15, "midterm", "midterm exam", 45],
   		[16, "final", "final exam", 55],
-  	}
+  	]
+  }
 }, // end categories
 
 grades: [
