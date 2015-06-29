@@ -249,8 +249,8 @@ VALUES (26, "qtxt", "Was this question hard?");
 -- Question and answers
 INSERT INTO Questions (QuesID, Points, Level, QuesType)
 VALUES (4, 10, 5, "Code");
-INSERT INTO Questions (QuesID, Points, Level, QuesType)
-VALUES (5, 0, 0, "Essa");
+INSERT INTO Questions (QuesID, Points, Level, QuesType, Rows, Cols, MaxWords)
+VALUES (5, 0, 0, "Essa", 2, 50, 250);
 
 -- Add DispEls and Questions to qc
 
