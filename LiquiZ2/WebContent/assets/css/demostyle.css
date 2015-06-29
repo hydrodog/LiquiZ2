@@ -229,3 +229,7 @@ img {
 img.logo {
 	 width: 141px;
 }
+
+.response { /*teacher feedback when showing the graded quiz*/
+	/*placeholder to specify response classname*/
+}
