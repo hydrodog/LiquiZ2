@@ -14,7 +14,6 @@
  * See the full documentation for more details.
  */
 
-media = [];
 Util = {
     dump: function(obj) {
         var s = "";
@@ -23,6 +22,7 @@ Util = {
         }
         console.log(s);
     },
+
     popup: function(x,y,w,h,bg) {
 		var p = window.open('', '_blank', 'top='+y+',left='+x+',width='+w+',height='+h);
 		var pbody = p.document.body;
@@ -34,6 +34,7 @@ Util = {
 		pbody.appendChild(d);
 		return d;
     },
+
     popupLocalStoreBrowser: function(dir) {
     	dir = localStorage[dir];
     	console.log('dir='+dir);
@@ -47,9 +48,12 @@ Util = {
     	var d = Util.popup(100,100, 500, 500, '0c0');
     	d.innerHTML = "Foo!" + files;
     },
+
     add: function(parent, children) {
+        fragment = document.createDocumentFragment();
     	for (var i = 0; i < children.length; i++)
-    		parent.appendChild(children[i]);
+    		fragment.appendChild(children[i]);
+        parent.appendChild(fragment);
     },
     
     goToId: function(id) {
@@ -458,6 +462,7 @@ Util = {
 
 };
 
+media = [];
 mediaLocations = {
 	img : "assets/img/",
 	audio : "assets/audio/",
@@ -532,7 +537,7 @@ function loadPage(e) {
 
     var json = new XMLHttpRequest();
     json.onreadystatechange = function() {
-        if (json.status !== 200) {
+        if (json.readyState === 4 && json.status !== 200) {
             document.getElementById("container").innerHTML = "";
             document.getElementById("currentStatus").innerHTML = "";
             document.getElementById("currentStatus").appendChild(errorStatus(json.status));
@@ -549,7 +554,37 @@ function loadPage(e) {
     json.send();
 }
 
-window.onload = loadPage;
+// If the link clicked is the current page, reload the page.
+// This is the expected behavior, but because we're using hashes,
+// we can't register these clicks any other way
+var lastClicked;
+function setLastClicked(e) {
+    if (lastClicked === e.target) {
+        loadPage();
+    } else {
+        lastClicked = e.target;
+        console.log(lastClicked);
+    }
+}
+
+// Adds an onclick function to all <a> tags.
+function loadOnce() {
+    var aList = document.links;
+    for (var i = 0; i < aList.length; i++) {
+        if (aList[i].hostname === document.domain) { // Same domain links only
+            aList[i].onclick = setLastClicked;
+            if (aList[i].hash === location.hash) { // Our current page
+                lastClicked = aList[i];
+            }
+        }
+    }
+
+    // resume regular loading
+    loadPage();
+}
+
+// loadOnce();
+window.onload = loadOnce;
 window.onhashchange = loadPage;
 
 // TODO(asher): Here we're not reloading the whole page, just calling a method on page (page.summary).
