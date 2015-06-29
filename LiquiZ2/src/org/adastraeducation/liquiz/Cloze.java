@@ -30,7 +30,7 @@ public class Cloze extends Question {
 	}
 	
 	/**
-	 * wAns includes answers in brackets and is what get stored in the database (Ex: public [[class]] A{ })
+	 * wAns includes answers in brackets and is what gets stored in the database (Ex: "public [[class]] A{ }")
 	 * noAns just has brackets (Ex: public [[]] A{ })
 	 */
 	private String noAns, wAns;
@@ -81,7 +81,13 @@ public class Cloze extends Question {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("q.appendChild(page.cloze(").append(getId()).append(", ").appendQuotedJS(noAns).append("));\n");
+		if (dc.isDisplayResponses()) {
+			if (dc.isDisplayAnswers()) {
+				
+			}
+		} else {
+			dc.append("q.appendChild(page.cloze(").append(getId()).append(", ").appendQuotedJS(noAns).append("));\n");
+		}
 	}
 
 	public void writeXML(StringBuilder b) {
