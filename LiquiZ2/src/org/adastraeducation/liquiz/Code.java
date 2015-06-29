@@ -61,7 +61,7 @@ public class Code extends Question {
  	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("q.appendChild(page.code(").append(super.getId()).append(",").appendQuotedJS(defaultText).append(",10,80)");
+		dc.append("q.appendChild(page.code(").append(super.getId()).append(",").appendQuotedJS(defaultText).append(",10,80));");
 	}
 	public void writeXML(StringBuilder b) {
 		b.append("<code>").append(Util.escapeXML(defaultText))

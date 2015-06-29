@@ -198,14 +198,14 @@ public class Load {
 			DatabaseMgr.printRemainingConns();
 			String sql = 
 				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, Ques_Ans.AnsID, Ques_Ans.Correct, " + 
-				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.CaseSensitive, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.Rows, Questions.Cols, Questions.MaxWords, Questions.LowBound, Questions.HighBound " +
+				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.CaseSensitive, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.Rows, Questions.Cols, Questions.MaxWords, Questions.LowBound, Questions.HighBound, Questions.ClozeString " +
 				"FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID " +
 				"ORDER BY Questions.QuesID, Ques_Ans.Sequence ASC";
 			DatabaseMgr.printRemainingConns();
 			rs = DatabaseMgr.execQuery(sql);
 			
 			/*
-			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | CaseSensitive | Pattern | Warning | DefaultText | Rows | Cols | MaxWords | LowBound | HighBound
+			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | CaseSensitive | Pattern | Warning | DefaultText | Rows | Cols | MaxWords | LowBound | HighBound | ClozeString
 			 */
             
 			if (rs.next()) {
@@ -253,7 +253,10 @@ public class Load {
 							if (rs.wasNull()) {
 								defaultText = "";
 							}
-							q = new Essay(quesID, points, level, defaultText); //TODO 
+							q = new Essay(quesID, points, level, rows, cols, maxWords, defaultText);
+						} else if (type.equals("Cloz")) {
+							String clozeString = rs.getString("ClozeString");
+							q = new Cloze(quesID, points, level, clozeString);
 						}
 						
 						Database.addQues(q); // add question to database

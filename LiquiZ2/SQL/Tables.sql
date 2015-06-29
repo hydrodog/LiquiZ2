@@ -93,8 +93,8 @@ DROP TABLE IF EXISTS `LiquiZ`.`Questions` ;
 
 CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `QuesID` INT NOT NULL AUTO_INCREMENT,
-  `Points` INT NOT NULL,
-  `Level` INT NULL,
+  `Points` INT NOT NULL DEFAULT 1,
+  `Level` INT NULL DEFAULT 1,
   `QuesType` CHAR(4) NOT NULL,
   `CaseSensitive` BIT(1) NULL, -- for fillin
   `Pattern` VARCHAR(255) NULL, -- for regex
@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `LiquiZ`.`Questions` (
   `MaxWords` INT NULL, -- for essay questions
   `LowBound` DOUBLE NULL COMMENT 'to accept a range of numbers (lower bound)',
   `HighBound` DOUBLE NULL COMMENT 'to accept a range of numbers (upper bound)',
+  `ClozeString` VARCHAR(20000) NULL, 
   PRIMARY KEY (`QuesID`),
   UNIQUE INDEX `QuesID_UNIQUE` (`QuesID` ASC));
 
