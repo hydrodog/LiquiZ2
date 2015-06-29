@@ -15,6 +15,9 @@ function Quiz(quizinfo, questions) {
     this.body = document.getElementById("container");
     this.body.className = "quiz";
     this.questions = questions;
+}
+
+Quiz.prototype.exec = function() {
     this.render(this.displayHeader());
     console.log(this);
     this.render(this.createSubmit(1));
