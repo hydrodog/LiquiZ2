@@ -1,4 +1,4 @@
-page = {
+{
   teacher: {
     favoriteqt: "mcRadioText",
     defaultGradingScheme: 'grad',
@@ -7,6 +7,8 @@ page = {
  
 //css: 'red',
 
+  main:
+    new Grades( {
 categories: {
   homework: {
   	percent: 5,
@@ -38,7 +40,7 @@ categories: {
   	]
   },
   tests: {
-  	percent: 5,
+  	percent: 90,
   	contents: [
   		['id', 'name', 'long name', 'points'],
   		[15, "midterm", "midterm exam", 45],
@@ -113,4 +115,6 @@ grades: [
 ['Liou','Zhou',159,'C',100,100,100,100,100,100,100,90,100,100,100,100,0,100,100,92,85],
 ['Longxiang','Zhou',160,'J',100,100,100,100,100,100,100,90,100,90,100,100,100,100,95,92,85]
 ]
+}
+)
 }

@@ -9,7 +9,7 @@
  */
 
 function Spreadsheet(parent, g) {
-	this.table = Util.table("spread");
+	this.table = Util.make("table", {className: "spread"});
 	this.primaryIndex = 0;
 	this.secondIndex = 1;
 	this.compare = this.ascend;
@@ -65,4 +65,14 @@ Spreadsheet.clickColumn = function(e) {
 			c.innerHTML = g[i][j];
 		}
 	}
+}
+
+function Grades(categories, grades) {
+	this.categories = categories;
+	this.grades = grades;
+}
+
+Grades.prototype.exec = function() {
+	var div = document.getElementById("container");
+	
 }

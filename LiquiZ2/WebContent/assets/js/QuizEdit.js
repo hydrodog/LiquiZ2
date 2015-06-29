@@ -72,20 +72,13 @@ function editMCRform(id, labels, list) {
 	form.id = id;
 
 	for (var i = 0; i < list.length; i++) {
-		var t = document.createTextNode(labels[i]);
 		var opt = document.createElement("input");
-		var radio = document.createElement("input");
-		var linebreak = document.createElement("br");
-		radio.type = "radio";
+		opt.value = list[i];
 
 		// checkbox.onclick = turnalloff(this);
-		opt.value = list[i];
-		form.appendChild(t);
-		form.appendChild(opt);
-		form.appendChild(radio);
-		form.appendChild(linebreak);
+		Util.add(form, [document.createTextNode(labels[i]),
+		                opt, Util.input('radio'), Util.br()]);
 	}
-
 	return form;
 }
 var selStart, selEnd;
