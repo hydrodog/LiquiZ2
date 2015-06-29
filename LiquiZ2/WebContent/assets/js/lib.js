@@ -460,13 +460,8 @@ Util = {
 
 mediaLocations = {
 	img : "assets/img/",
-	audio : "assets/aud/",
-	video : "assets/vid/",
-	png : this.img,
-	jpg : this.img,
-	mp3 : this.audio,
-	wav : this.audio,
-	mp4 : this.video,
+	audio : "assets/audio/",
+	video : "assets/video/",
 },
 
 /*
