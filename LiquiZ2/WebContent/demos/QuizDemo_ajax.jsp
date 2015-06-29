@@ -132,8 +132,8 @@ q.appendChild(page.grid("17_1", [["headers 1", "header 2", "header 3"],
 page.body.appendChild(q);
 
 var calendar = new Calendar(new Date(), 365);
-page.body.appendChild(calendar.month(new Date(),calendar));
-//page.body.appendChild(calendar.year(calendar));
+//page.body.appendChild(calendar.month(new Date(),calendar));
+page.body.appendChild(calendar.year(calendar));
 
 // question 18
 page.end(18);

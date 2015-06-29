@@ -761,6 +761,10 @@ function fillRowText(row, list) {
 
 //calendar//
 //yue//
+function getWorkingId(button){
+	return button.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+}
+
 function Calendar(startDate, days) {
     this.startDate = startDate;
     var s = "";
@@ -826,65 +830,71 @@ Calendar.prototype.markCell = function(date, d){
 	dd.setDate(date);
 	dd.setMonth(d.getMonth());
 	this.setEvent(dd);
-	var t = document.getElementById("cal");
-	if(t != null){
-		t.parentNode.replaceChild(this.month(d, this), t);
+	var div = document.getElementById("cal");
+	if(div != null){
+		div.parentNode.replaceChild(calendar.month(d, calendar), div);
 	}
 }
 
-Calendar.prototype.month = function(d, calendar) {
+/**
+ * d is the date in which month you want to draw an month calendar;
+ * calendar is the object you currently working with;
+ * monthView is a boolean to show whether month view or year view;
+ * id indicates which month you may want to change if you have a year view of the calendar;
+ */
+Calendar.prototype.month = function(d, calendar, monthView, id) {
     //d = (typeof d !== "undefined") ? d : this.startDate;
+	monthView = (typeof monthView !== "undefined") ? monthView : true;
+	id = (typeof id !== "undefined") ? id : "0";
+	var div = Util.div("calMonth", id);
     var t = document.createElement("table");
-    t.className = "cal";
-    t.id = "cal";
-    var h = t.insertRow(0);
-    var b1 = Util.button("<<", null, null, function(){});
-    b1.onclick = function(){
+    t.className = "calendar";
+    t.id = "calendar";
+    div.appendChild(t);
+    
+    var b1 = Util.button("<<", null, null, function(){
     	d.setFullYear(d.getFullYear() - 1);
-    	var t = document.getElementById("cal");
-    	if(t != null){
-    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	var div = document.getElementById("cal");
+    	if(div != null){
+    		div.parentNode.replaceChild(calendar.month(d, calendar), div);
     	}
-    };
-    var b2 = Util.button("<", null, null, function(){});
-    b2.onclick = function(){
+    });
+    var b2 = Util.button("<", null, null, function(){
+    	var id = getWorkingId(this);
+    	console.log(d);
     	d.setMonth(d.getMonth() - 1);
-    	var t = document.getElementById("cal");
-    	if(t != null){
-    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	var div = document.getElementById(id);
+    	if(div != null){
+    		div.parentNode.replaceChild(calendar.month(d, calendar, id), div);
     	}
-    };
-    var b3 = Util.button(">", null, null, function(){});
-    b3.onclick = function(){
+    });
+    var b3 = Util.button(">", null, null, function(){
     	d.setMonth(d.getMonth() + 1);
-    	var t = document.getElementById("cal");
-    	if(t != null){
-    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	var div = document.getElementById("cal");
+    	if(div != null){
+    		div.parentNode.replaceChild(calendar.month(d, calendar), div);
     	}
-    };
-    var b4 = Util.button(">>", null, null, function(){});
-    b4.onclick = function(){
+    });
+    var b4 = Util.button(">>", null, null, function(){
     	d.setFullYear(d.getFullYear() + 1);
-    	var t = document.getElementById("cal");
-    	if(t != null){
-    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	var div = document.getElementById("cal");
+    	if(div != null){
+    		div.parentNode.replaceChild(calendar.month(d, calendar), div);
     	}
-    }; 
-    var b5 = Util.button("shift", null, null, function(){});
-    b5.onclick = function(){
+    });
+    var b5 = Util.button("shift", null, null, function(){
     	var s = "";
     	for(var i=0; i<365; i++){
     		var flag = calendar.events.charAt((i-7+365)%365);
     		s += flag;
     	}
     	calendar.events = s;
-    	var t = document.getElementById("cal");
-    	if(t != null){
-    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	var div = document.getElementById("cal");
+    	if(div != null){
+    		div.parentNode.replaceChild(calendar.month(d, calendar), div);
     	}
-    }
-    var b6 = Util.button("mark holiday", null, null, function(){});
-    b6.onclick = function(){
+    });
+    var b6 = Util.button("mark holiday", null, null, function(){
     	var dd = new Date(); //dd is the first day of the year
     	dd.setDate(1);
     	dd.setMonth(0);
@@ -894,12 +904,13 @@ Calendar.prototype.month = function(d, calendar) {
     			calendar.setHoliday(dd);
     		dd.setDate(dd.getDate() + 1);
     	}
-    	var t = document.getElementById("cal");
-    	if(t != null){
-    		t.parentNode.replaceChild(calendar.month(d, calendar), t);
+    	var div = document.getElementById("cal");
+    	if(div != null){
+    		div.parentNode.replaceChild(calendar.month(d, calendar), div);
     	}
-    }
+    });
     
+    var h = t.insertRow(0);
     fillRow(h, [
      b1, b2, document.createTextNode(d.getFullYear()), document.createTextNode(" "), document.createTextNode(d.getMonth()+1), b3, b4, b5, b6
     ]);
@@ -948,16 +959,17 @@ Calendar.prototype.month = function(d, calendar) {
         	break;
         }
 	}
-    return t;
+    return div;
 }
 
 Calendar.prototype.year = function(calendar) {
-    var div = document.createElement("div");
+    var div = Util.div("calYear", "calYear");
     var d = this.startDate;
     for (var month = 0; month < 12; month++){
-    	div.appendChild(this.month(d, calendar));
+    	div.appendChild(this.month(d, calendar, month));
     	d.setMonth(d.getMonth() + 1);
-    }      
+    }
+    d.setMonth(d.getMonth() - 1);//back to the last year of the working calendar
     return div;
 }
 
