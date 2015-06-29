@@ -76,3 +76,11 @@ Grades.prototype.exec = function() {
 	var div = document.getElementById("container");
 	
 }
+
+
+Grades.prototype.summary = function() {
+	
+	
+	
+}
+}
