@@ -19,7 +19,6 @@ function Quiz(quizinfo, questions) {
 
 Quiz.prototype.exec = function() {
     this.render(this.displayHeader());
-    console.log(this);
     this.render(this.createSubmit(1));
 
     for (var i = 0; i < this.questions.length; i++) {
@@ -27,11 +26,23 @@ Quiz.prototype.exec = function() {
         var qc = this.addQuestion(q[0], q[1], q[2]);
         for (var j = 3; j < q.length; j++) {
             if (q[j][0].substring(0, 5) === "Util.") {
-                qc.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].splice(1)));
+                qc.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
             } else {
-                qc.appendChild(this[q[j][0]].apply(this||window, q[j].splice(1)));
+                qc.appendChild(this[q[j][0]].apply(this||window, q[j].slice(1)));
             }
         }
+        this.render(qc);
+    }
+    this.end();
+}
+
+Quiz.prototype.collapsed = function() {
+    this.render(this.displayHeader());
+    this.render(this.createSubmit(1));
+
+    for (var i = 0; i < this.questions.length; i++) {
+        var q = this.questions[i];
+        var qc = this.addQuestion(q[0], q[1], q[2]);
         this.render(qc);
     }
     this.end();
@@ -266,6 +277,7 @@ Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
 };
 
 Quiz.prototype.grid = function(id, list, header) {
+    list = JSON.parse(JSON.stringify(list));
 	var d = document.createElement("div");
 	var t = document.createElement("table");
 	t.className = "matrix";

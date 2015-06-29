@@ -501,14 +501,6 @@ function appendCSSText(css) {
 
 var page;
 
-// This should just become a generic handler for any error that's not 200.
-function errorStatus(errorCode) {
-    fragment = document.createDocumentFragment();
-    fragment.appendChild(Util.h1("Error: " + errorCode));
-    fragment.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
-    return fragment;
-}
-
 function processAJAX() {
     if (typeof page.css !== "undefined") {
         appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
@@ -523,36 +515,90 @@ function processAJAX() {
     }
 }
 
-function loadPage(e) {
-    var baseFilename = location.hash.substr(1);
-    var url = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
-    // console.log(url);
-    // console.log("hash change to: " + location.hash);
-
+function resetMedia() {
     for (var i = 0; i < media.length; i++) {
         media[i].removeAttribute("src");
         media[i].load();
     }
     media = [];
+}
 
+function parseHash(hash) {
+    var result = {};
+    result.hash = location.hash.substr(1);
+    hashArray = result.hash.split("!");
+    result.url = hashArray[0];
+    result.view = (hashArray.length === 2) ? hashArray[1] : null;
+    return result;
+}
+
+function clearPage() {
+    document.getElementById("container").innerHTML = "";
+    document.getElementById("currentStatus").innerHTML = "";
+}
+
+function errorStatus(errorCode) {
+    fragment = document.createDocumentFragment();
+    fragment.appendChild(Util.h1("Error: " + errorCode));
+    fragment.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
+    document.getElementById("currentStatus").appendChild(fragment);
+}
+
+function handlePage(text, view) {
+    eval("page=" + text);
+    if (view) {
+        if (page[view])
+            page[view]();
+        else
+            errorStatus(view + " view doesn't exist!");
+    } else {
+        page.exec();        
+    }
+    processAJAX();
+}
+
+function requestAjax(url, handler, error, view) {
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
         if (ajax.readyState === 4 && ajax.status !== 200) {
-            document.getElementById("container").innerHTML = "";
-            document.getElementById("currentStatus").innerHTML = "";
-            document.getElementById("currentStatus").appendChild(errorStatus(ajax.status));
+            error(ajax.status);
         }
-        if (ajax.readyState !== 4 || ajax.status !== 200)
-            return; // TODO: Handle error if it doesn't come back
-        document.getElementById("currentStatus").innerHTML = "";
-        document.getElementById("container").innerHTML = "";
-        eval("page=" + ajax.responseText);
-        page.exec();
-        processAJAX();
-        // Util.goToId();
-    }
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            handler(ajax.responseText, view);
+        }
+        return;
+    };
     ajax.open("GET", url, true);
     ajax.send();
+
+}
+
+var lastHash; // = parseHash(location.hash);
+function loadPage(e) {
+    var hash = parseHash(location.hash);
+    var url = "/LiquiZ2" + hash.url + "_ajax.jsp"; // name of dynamic file to run
+
+    if (lastHash && hash.url === lastHash.url) {
+        if (hash.view && hash.view !== lastHash.view) {
+            clearPage();
+            if (page[hash.view])
+                page[hash.view]();
+            else
+                errorStatus(hash.view + " view doesn't exist!");
+        } else if (lastHash.view && !hash.view) {
+            clearPage();
+            page.exec();
+        } else {
+            clearPage();
+            requestAjax(url, handlePage, errorStatus, hash.view);
+        }
+    } else {
+        clearPage();
+        requestAjax(url, handlePage, errorStatus, hash.view);
+    }
+
+    resetMedia();
+    lastHash = hash;
 }
 
 // If the link clicked is the current page, reload the page.
@@ -561,10 +607,9 @@ function loadPage(e) {
 var lastClicked;
 function setLastClicked(e) {
     if (lastClicked === e.target) {
-        loadPage();
+        loadPage(e);
     } else {
         lastClicked = e.target;
-        console.log(lastClicked);
     }
 }
 
