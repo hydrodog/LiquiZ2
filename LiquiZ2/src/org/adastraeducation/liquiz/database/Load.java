@@ -236,7 +236,7 @@ public class Load {
 							if (rs.wasNull()) {
 								defaultText = "";
 							}
-							q = new Code(quesID, points, level, defaultText); //TODO
+							q = new Code(quesID, points, level, rows, cols, defaultText); 
 						} else if (type.equals("NumR")) {
 							q = new NumberRange(quesID, points, level);
 						} else if (type.equals("RegX")) { //int id, int points, int level, String regex, String warning
@@ -276,7 +276,7 @@ public class Load {
 							q.getAns().get(rs.getInt("StdCorrectIndex")).setCorrect(true);
 						}
 					} else { 
-						if (q instanceof NumberRange) {
+						if (q instanceof NumberRange) { // TODO put LowBound/HighBound, Pattern, (case sensitive?) in answer
 							// for Number Range Questions
 							((NumberRange) q).setMin(rs.getDouble("LowBound"));
 							((NumberRange) q).setMax(rs.getDouble("Highbound"));
