@@ -525,8 +525,8 @@ function processAJAX() {
 
 function loadPage(e) {
     var baseFilename = location.hash.substr(1);
-    var ajax = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
-    // console.log(ajax);
+    var url = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file to run
+    // console.log(url);
     // console.log("hash change to: " + location.hash);
 
     for (var i = 0; i < media.length; i++) {
@@ -535,24 +535,24 @@ function loadPage(e) {
     }
     media = [];
 
-    var json = new XMLHttpRequest();
-    json.onreadystatechange = function() {
-        if (json.readyState === 4 && json.status !== 200) {
+    var ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = function() {
+        if (ajax.readyState === 4 && ajax.status !== 200) {
             document.getElementById("container").innerHTML = "";
             document.getElementById("currentStatus").innerHTML = "";
-            document.getElementById("currentStatus").appendChild(errorStatus(json.status));
+            document.getElementById("currentStatus").appendChild(errorStatus(ajax.status));
         }
-        if (json.readyState !== 4 || json.status !== 200)
+        if (ajax.readyState !== 4 || ajax.status !== 200)
             return; // TODO: Handle error if it doesn't come back
         document.getElementById("currentStatus").innerHTML = "";
         document.getElementById("container").innerHTML = "";
-        eval("page=" + json.responseText);
+        eval("page=" + ajax.responseText);
         page.exec();
         processAJAX();
         // Util.goToId();
     }
-    json.open("GET", ajax, true);
-    json.send();
+    ajax.open("GET", url, true);
+    ajax.send();
 }
 
 // If the link clicked is the current page, reload the page.
@@ -569,7 +569,7 @@ function setLastClicked(e) {
 }
 
 // Adds an onclick function to all <a> tags.
-function loadOnce() {
+function loadOnce(e) {
     var aList = document.links;
     for (var i = 0; i < aList.length; i++) {
         if (aList[i].hostname === document.domain) { // Same domain links only
@@ -581,7 +581,7 @@ function loadOnce() {
     }
 
     // resume regular loading
-    loadPage();
+    loadPage(e);
 }
 
 // loadOnce();
