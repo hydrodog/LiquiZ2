@@ -81,7 +81,7 @@ public class Cloze extends Question {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		if (dc.isDisplayResponses()) {
+		if (dc.isDisplayResponses()) { // TODO how to store responses?
 			if (dc.isDisplayAnswers()) {
 				
 			}

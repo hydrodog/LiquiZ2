@@ -139,7 +139,7 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		}
 	}
 	public void writeJS(DisplayContext b){
-		//TODO specify multianswer
+		//TODO specify multianswer js
 		Util.writeAnsListAsJS(getAns(), b);
 	}	
 }

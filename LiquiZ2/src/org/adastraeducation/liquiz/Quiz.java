@@ -215,6 +215,7 @@ public class Quiz implements Displayable {
 		//TODO: add data for point values, calculate remaining tries
 		//TODO: do something about directory
 		int points = 100; //TODO: add points to quiz?
+		//yijinkang: getTotalPoints() will return the total number of points of the questions in the quiz
 		dc.append
 		("new Quiz( {\n" +
 		"title:");
