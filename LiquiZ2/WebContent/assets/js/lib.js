@@ -649,9 +649,3 @@ function loadOnce(e) {
 // loadOnce();
 window.onload = loadOnce;
 window.onhashchange = loadPage;
-
-// TODO(asher): Here we're not reloading the whole page, just calling a method on page (page.summary).
-// If the first part (/demos/QuizDemo) is the same, just execute the summary method
-// otherwise load the page via ajax and execute the summary method
-// If there's no !, we just call the exec method
-// http://localhost:8080/LiquiZ2/demos/QuizDemo.html#/demos/QuizDemo!summary
