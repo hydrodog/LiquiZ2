@@ -268,3 +268,7 @@ img.logo {
 	float: right;
 	
 }
+
+.response { /*teacher feedback when showing the graded quiz*/
+	/*placeholder to specify response classname*/
+}

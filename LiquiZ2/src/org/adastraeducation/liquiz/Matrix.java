@@ -138,7 +138,7 @@ public class Matrix implements Displayable {
 	//TODO: Fix the commas after each row, they aren't there!
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append('[');
+		dc.append("page.grid(null, [");
 		for (int i = 0; i < row; i++) {
 			dc.append('[').append(data[i][0]);
 			for (int j = 1; j < col; j++) {
@@ -146,7 +146,7 @@ public class Matrix implements Displayable {
 			}
 			dc.append(']');
 		}		
-		dc.append(']');
+		dc.append("]);\n");
 	}
 
 	@Override

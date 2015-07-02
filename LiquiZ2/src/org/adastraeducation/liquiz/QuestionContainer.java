@@ -103,7 +103,7 @@ public class QuestionContainer implements Displayable {
 		 * page.container.appendChild(q);
 		 */
 		dc.append("q=page.addQuestion(").append(id).append(",");
-		Util.escapeQuotedJS(name, dc);
+		Util.escapeQuotedJS(name, dc); // dc.appendQuotedJS also does the same thing...keep both methods? 
 		dc.append(',');
 		Util.escapeQuotedJS(cssClass, dc);
 		dc.append(");\n");
@@ -111,6 +111,7 @@ public class QuestionContainer implements Displayable {
 			d.writeJS(dc);
 			dc.append("\n");
 		}
+		dc.append("page.body.appendChild(q);\n");
 	}
 
 	public String getCssClass() {
