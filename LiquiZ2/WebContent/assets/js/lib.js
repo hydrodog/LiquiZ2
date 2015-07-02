@@ -262,7 +262,7 @@ Util = {
      */
     video: function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
-        result = Util.make("video", {
+        var result = Util.make("video", {
             src: mediaLocations.video + src,
             controls: controls,
             className: className,
@@ -279,7 +279,7 @@ Util = {
      */
     audio: function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
-        result = Util.make("audio", {
+        var result = Util.make("audio", {
             src: mediaLocations.audio + src,
             controls: controls,
             className: className,
@@ -506,12 +506,7 @@ function processAJAX() {
         appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
         // css skin
     } else {
-        console.error("custom css didn't load. check css link in page.css");
-    }
-    if (typeof thisPage !== "undefined") {
-        thisPage();
-    } else {
-        console.error("thisPage() never ran!!");
+        console.warn("custom css didn't load. check css link in page.css");
     }
 }
 
@@ -523,12 +518,33 @@ function resetMedia() {
     media = [];
 }
 
-function parseHash(hash) {
+function parseParams(params) {
+    if (typeof params === "undefined") {
+        return {};
+    }
     var result = {};
-    result.hash = location.hash.substr(1);
-    hashArray = result.hash.split("!");
-    result.url = hashArray[0];
-    result.view = (hashArray.length === 2) ? hashArray[1] : null;
+    paramArray = params.split("&");
+    for (var i = 0; i < paramArray.length; i++) {
+        var temp = paramArray[i].split("=");
+        if (temp[0] && temp[1]) {
+            result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+        } else if (temp[0] && !temp[1]) {
+            result[decodeURIComponent(temp[0])] = true;
+        }
+    }
+    return result;
+}
+
+function parseHash(hash) {
+    var re = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
+    var reMatch = re.exec(hash);
+    var result = {};
+    
+    result.hash = hash;
+    result.url = reMatch[1] ? reMatch[1] : null;
+    result.view = reMatch[2] ? reMatch[2] : null;
+    result.params = parseParams(reMatch[3]);
+
     return result;
 }
 
@@ -538,33 +554,26 @@ function clearPage() {
 }
 
 function errorStatus(errorCode) {
-    fragment = document.createDocumentFragment();
-    fragment.appendChild(Util.h1("Error: " + errorCode));
-    fragment.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
-    document.getElementById("currentStatus").appendChild(fragment);
+    var frag = document.createDocumentFragment();
+    frag.appendChild(Util.h1("Error: " + errorCode));
+    frag.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
+    document.getElementById("currentStatus").appendChild(frag);
 }
 
-function handlePage(text, view) {
+function handlePage(text, hash) {
     eval("page=" + text);
-    if (view) {
-        if (page[view])
-            page[view]();
-        else
-            errorStatus(view + " view doesn't exist!");
-    } else {
-        page.exec();        
-    }
+    loadView(hash);
     processAJAX();
 }
 
-function requestAjax(url, handler, error, view) {
+function requestAjax(url, handler, error, hash) {
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
         if (ajax.readyState === 4 && ajax.status !== 200) {
             error(ajax.status);
         }
-        if (ajax.readyState === 4 && ajax.status === 200) {
-            handler(ajax.responseText, view);
+        else if (ajax.readyState === 4 && ajax.status === 200) {
+            handler(ajax.responseText, hash);
         }
         return;
     };
@@ -573,32 +582,40 @@ function requestAjax(url, handler, error, view) {
 
 }
 
-var lastHash; // = parseHash(location.hash);
-function loadPage(e) {
-    var hash = parseHash(location.hash);
-    var url = "/LiquiZ2" + hash.url + "_ajax.jsp"; // name of dynamic file to run
-
-    if (lastHash && hash.url === lastHash.url) {
-        if (hash.view && hash.view !== lastHash.view) {
-            clearPage();
-            if (page[hash.view])
-                page[hash.view]();
-            else
-                errorStatus(hash.view + " view doesn't exist!");
-        } else if (lastHash.view && !hash.view) {
-            clearPage();
-            page.exec();
-        } else {
-            clearPage();
-            requestAjax(url, handlePage, errorStatus, hash.view);
-        }
+function loadView(hash) {
+    if (hash.view) {
+        if (page[hash.view])
+            page[hash.view](hash.params);
+        else
+            errorStatus(hash.view + " view doesn't exist!");
     } else {
-        clearPage();
-        requestAjax(url, handlePage, errorStatus, hash.view);
+        page.exec(hash.params);
+    }
+}
+
+var oldHash; // = parseHash(location.hash);
+function loadPage(e) {
+    var newHash = parseHash(location.hash);
+    var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file to run
+
+    clearPage();
+    if ((!oldHash) ||
+        (oldHash.hash === newHash.hash) ||
+        (oldHash.url !== newHash.url)) {
+
+        requestAjax(url, handlePage, errorStatus, newHash);
+
+    } else if ((oldHash.view !== newHash.view) ||
+               (oldHash.params || newHash.params)) {
+
+        loadView(newHash);
+    } else {
+        console.error("Unhandled url action!");
+        console.error(newHash);
     }
 
     resetMedia();
-    lastHash = hash;
+    oldHash = newHash;
 }
 
 // If the link clicked is the current page, reload the page.

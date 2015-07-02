@@ -17,35 +17,61 @@ function Quiz(quizinfo, questions) {
     this.questions = questions;
 }
 
-Quiz.prototype.exec = function() {
+Quiz.prototype.exec = function(params) {
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
 
     for (var i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
         var qc = this.addQuestion(q[0], q[1], q[2]);
-        for (var j = 3; j < q.length; j++) {
-            if (q[j][0].substring(0, 5) === "Util.") {
-                qc.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
-            } else {
-                qc.appendChild(this[q[j][0]].apply(this||window, q[j].slice(1)));
-            }
+        qc.appendChild(this.processQuestion(q));
+        this.render(qc);
+    }
+    this.end();
+}
+
+/*
+ * Demo!!
+ * Should be removed before production
+ */
+Quiz.prototype.color = function(params) {
+    this.body.style.background = params["color"] ? params["color"] : null;
+    this.exec(params);
+}
+
+Quiz.prototype.collapsed = function(params) {
+    var not = {};
+    if (params.not) {
+        var notArray = params.not.split(",");
+        for (var i = 0; i < notArray.length; i++) {
+            not[parseInt(notArray[i]) - 1] = true;
+        }
+    }
+
+    this.render(this.displayHeader());
+    this.render(this.createSubmit(1));
+
+    for (i = 0; i < this.questions.length; i++) {
+        var q = this.questions[i];
+        var qc = this.addQuestion(q[0], q[1], q[2]);
+        if (not[i]) {
+            qc.appendChild(this.processQuestion(q));
         }
         this.render(qc);
     }
     this.end();
 }
 
-Quiz.prototype.collapsed = function() {
-    this.render(this.displayHeader());
-    this.render(this.createSubmit(1));
-
-    for (var i = 0; i < this.questions.length; i++) {
-        var q = this.questions[i];
-        var qc = this.addQuestion(q[0], q[1], q[2]);
-        this.render(qc);
+Quiz.prototype.processQuestion = function(q) {
+    var frag = document.createDocumentFragment();
+    for (var j = 3; j < q.length; j++) {
+        if (q[j][0].substring(0, 5) === "Util.") {
+            frag.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
+        } else {
+            frag.appendChild(this[q[j][0]].apply(this||window, q[j].slice(1)));
+        }
     }
-    this.end();
+    return frag;
 }
 
 Quiz.prototype.render = function(child) {
