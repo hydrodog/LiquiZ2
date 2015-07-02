@@ -598,6 +598,7 @@ function loadPage(e) {
     var newHash = parseHash(location.hash);
     var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file to run
 
+    resetMedia();
     clearPage();
     if ((!oldHash) ||
         (oldHash.hash === newHash.hash) ||
@@ -614,7 +615,6 @@ function loadPage(e) {
         console.error(newHash);
     }
 
-    resetMedia();
     oldHash = newHash;
 }
 
