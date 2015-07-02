@@ -175,7 +175,7 @@ Quiz.prototype.createSubmit = function(id) {
                 }
                 clicks++;
             }));
-        editBox.appendChild(Util.div("filebrowse"));
+        // editBox.appendChild(Util.div("filebrowse"));
         editBox.appendChild(Util.button("Save Local", id + "-edit-buttons", null, 
         		function () {
         		parent.saveLocal();
