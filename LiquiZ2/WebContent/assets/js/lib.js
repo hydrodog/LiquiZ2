@@ -73,9 +73,9 @@ Util = {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.log("Util.make failed with \ntag: " + tag +
-                                              "\ninnerHTML: " + innerHTML +
-                                              "\nclassName: " + className +
-                                              "\nid: " + id);
+                                              "\ninnerHTML: " + obj[innerHTML] +
+                                              "\nclassName: " + obj[className] +
+                                              "\nid: " + obj[id]);
             return;
         }
         var element = document.createElement(tag);
