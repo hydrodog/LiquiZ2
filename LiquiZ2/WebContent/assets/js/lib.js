@@ -23,45 +23,45 @@ Util = {
         console.log(s);
     },
 
-    popup: function(x,y,w,h,bg) {
-		var p = window.open('', '_blank', 'top='+y+',left='+x+',width='+w+',height='+h);
-		var pbody = p.document.body;
-		pbody.style.backgroundColor = bg;
-		pbody.style.border = "solid black 1px";
-		var d = p.document.createElement("div");
-		d.style.backgroundColor = '#f00';
-		d.innerHTML = JSON.stringify(files);
-		pbody.appendChild(d);
-		return d;
+    popup: function(x, y, w, h, bg) {
+        var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width=' + w + ',height=' + h);
+        var pbody = p.document.body;
+        pbody.style.backgroundColor = bg;
+        pbody.style.border = "solid black 1px";
+        var d = p.document.createElement("div");
+        d.style.backgroundColor = '#f00';
+        d.innerHTML = JSON.stringify(files);
+        pbody.appendChild(d);
+        return d;
     },
 
     popupLocalStoreBrowser: function(dir) {
-    	dir = localStorage[dir];
-    	console.log('dir='+dir);
-    	var files;
-    	if (typeof(dir) == 'undefined') {
-    		localStorage.dir = {}; // create empty directory
-    		files = [];
-    	} else {
-    		files = dir.keys().sort();
-    	}
-    	var d = Util.popup(100,100, 500, 500, '0c0');
-    	d.innerHTML = "Foo!" + files;
+        dir = localStorage[dir];
+        console.log('dir=' + dir);
+        var files;
+        if (typeof(dir) == 'undefined') {
+            localStorage.dir = {}; // create empty directory
+            files = [];
+        } else {
+            files = dir.keys().sort();
+        }
+        var d = Util.popup(100, 100, 500, 500, '0c0');
+        d.innerHTML = "Foo!" + files;
     },
 
     add: function(parent, children) {
         fragment = document.createDocumentFragment();
-    	for (var i = 0; i < children.length; i++)
-    		fragment.appendChild(children[i]);
+        for (var i = 0; i < children.length; i++)
+            fragment.appendChild(children[i]);
         parent.appendChild(fragment);
     },
-    
+
     goToId: function(id) {
-    //     if (typeof id === "undefined") {
-    //         id = window.location.hash.substr(1);
-    //     }
-    //     window.location.hash = "";
-    //     window.location.hash = id;
+        //     if (typeof id === "undefined") {
+        //         id = window.location.hash.substr(1);
+        //     }
+        //     window.location.hash = "";
+        //     window.location.hash = id;
     },
 
     /*
@@ -73,9 +73,9 @@ Util = {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.log("Util.make failed with \ntag: " + tag +
-                                              "\ninnerHTML: " + obj[innerHTML] +
-                                              "\nclassName: " + obj[className] +
-                                              "\nid: " + obj[id]);
+                "\ninnerHTML: " + obj[innerHTML] +
+                "\nclassName: " + obj[className] +
+                "\nid: " + obj[id]);
             return;
         }
         var element = document.createElement(tag);
@@ -180,7 +180,7 @@ Util = {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        });        
+        });
     },
 
     em: function(innerHTML, className, id) {
@@ -188,7 +188,7 @@ Util = {
             innerHTML: innerHTML,
             className: className,
             id: id,
-        });        
+        });
     },
 
     pre: function(innerHTML, className, id) {
@@ -350,7 +350,7 @@ Util = {
 
     option: function(value, innerHTML, className, id) {
         return Util.make("option", {
-                    value: value,
+            value: value,
             innerHTML: innerHTML,
             className: className,
             id: id,
@@ -464,9 +464,9 @@ Util = {
 
 media = [];
 mediaLocations = {
-	img : "assets/img/",
-	audio : "assets/audio/",
-	video : "assets/video/",
+    img: "assets/img/",
+    audio: "assets/audio/",
+    video: "assets/video/",
 }
 
 /*
@@ -474,29 +474,29 @@ mediaLocations = {
  * the css file depending on the user's preferences.
  */
 function appendCSSLink(src) {
-	var head = document.getElementsByTagName('head')[0];
-	var link = Util.make("link", {
-		rel : "stylesheet",
-		type : "text/css",
-		href : src,
-	});
-	head.appendChild(link);
+    var head = document.getElementsByTagName('head')[0];
+    var link = Util.make("link", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: src,
+    });
+    head.appendChild(link);
 }
 
 /*
  * Add a css stylesheet to the current page
  */
 function appendCSSText(css) {
-	var head = document.getElementsByTagName('head')[0];
-	var s = Util.make("style", {
-		type : "text/css"
-	});
-	if (s.styleSheet) { // IE
-		s.styleSheet.cssText = css;
-	} else { // the world
-		s.appendChild(document.createTextNode(css));
-	}
-	head.appendChild(s);
+    var head = document.getElementsByTagName('head')[0];
+    var s = Util.make("style", {
+        type: "text/css"
+    });
+    if (s.styleSheet) { // IE
+        s.styleSheet.cssText = css;
+    } else { // the world
+        s.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(s);
 }
 
 var page;
@@ -536,10 +536,18 @@ function parseParams(params) {
 }
 
 function parseHash(hash) {
+    if (hash === "") {
+        return {
+            hash: "",
+            url: "/",
+            view: null,
+            params: null,
+        };
+    }
     var re = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
     var reMatch = re.exec(hash);
     var result = {};
-    
+
     result.hash = hash;
     result.url = reMatch[1] ? reMatch[1] : null;
     result.view = reMatch[2] ? reMatch[2] : null;
@@ -571,8 +579,7 @@ function requestAjax(url, handler, error, hash) {
     ajax.onreadystatechange = function() {
         if (ajax.readyState === 4 && ajax.status !== 200) {
             error(ajax.status);
-        }
-        else if (ajax.readyState === 4 && ajax.status === 200) {
+        } else if (ajax.readyState === 4 && ajax.status === 200) {
             handler(ajax.responseText, hash);
         }
         return;
@@ -596,6 +603,10 @@ function loadView(hash) {
 var oldHash; // = parseHash(location.hash);
 function loadPage(e) {
     var newHash = parseHash(location.hash);
+    if (newHash.url === "/") {
+        newHash.url = "/index";
+    }
+    console.log(newHash);
     var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file to run
 
     resetMedia();
@@ -607,7 +618,7 @@ function loadPage(e) {
         requestAjax(url, handlePage, errorStatus, newHash);
 
     } else if ((oldHash.view !== newHash.view) ||
-               (oldHash.params || newHash.params)) {
+        (oldHash.params || newHash.params)) {
 
         loadView(newHash);
     } else {
@@ -622,6 +633,7 @@ function loadPage(e) {
 // This is the expected behavior, but because we're using hashes,
 // we can't register these clicks any other way
 var lastClicked;
+
 function setLastClicked(e) {
     if (lastClicked === e.target) {
         loadPage(e);
