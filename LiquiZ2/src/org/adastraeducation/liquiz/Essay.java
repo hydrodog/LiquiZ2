@@ -83,6 +83,7 @@ public class Essay extends Question {
 	
 	public void writeJS(DisplayContext dc) {
 		dc.append("q.appendChild(page.essay(").append(getId()).append(", ").append(rows).append(", ").append(cols).append(", ").append(maxWords).append("));\n");
+		//TODO default text?
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<essay>").append(Util.escapeXML(defaultText))

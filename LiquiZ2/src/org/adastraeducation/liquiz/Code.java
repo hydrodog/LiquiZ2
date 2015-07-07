@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.adastraeducation.liquiz.util.Util;
 
 public class Code extends Question {
+	private int rows, cols;
 	private String defaultText;
 	public Code() {
 		defaultText = "";
@@ -18,9 +19,14 @@ public class Code extends Question {
 		this.defaultText=defaultText;
 	}
 
-	public Code(int id, int points, int level, 
-				String defaultText) {
+	public Code(int id, int points, int level, String defaultText) {
+		this(id, points, level, 10, 50, defaultText);
+	}
+	
+	public Code(int id, int points, int level, int rows, int cols, String defaultText) {
 		super(id, points, level, (ArrayList<Answer>) null);
+		this.rows = rows;
+		this.cols = cols;
 		this.defaultText = defaultText;
 	}
 	
@@ -61,7 +67,8 @@ public class Code extends Question {
  	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("q.appendChild(page.code(").append(super.getId()).append(",").appendQuotedJS(defaultText).append(",10,80));");
+		dc.append("q.appendChild(page.code(").append(getId()).append(", ").append(rows).append(", ").append(cols).append("));\n");
+		//TODO default text?
 	}
 	public void writeXML(StringBuilder b) {
 		b.append("<code>").append(Util.escapeXML(defaultText))

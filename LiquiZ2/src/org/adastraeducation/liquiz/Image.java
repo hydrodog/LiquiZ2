@@ -18,10 +18,8 @@ public class Image extends RectangularMedia {
 		dc.append("<img src='" + getSource() + "' style = width:"+ getWidth() + "px;height:"+ getHeight() + "px>");
 	}
 
-	//TODO: how to represent image in JavaScript
-	//TODO: image id should not be hardcoded to 1!!!
 	public void writeJS(DisplayContext dc){
-		dc.append("q.appendChild(Util.img('" + getSource() + "'));");
+		dc.append("q.appendChild(Util.img(").appendQuotedJS(getSource()).append("));");
 	}
 	
 	public void writeXML(StringBuilder b) {

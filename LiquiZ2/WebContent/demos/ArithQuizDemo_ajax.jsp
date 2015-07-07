@@ -17,7 +17,7 @@ new Quiz( {
 [
     2, 'Multiplication', 'mcRadioTxt',
     ['Util.p', '7 * 8 ='],
-    ['mcRadioTxt', 101, [46, 56, 63, 49, 64]],
+    ['mcRadioText', 101, [46, 56, 63, 49, 64]],
 ],
 
 [
@@ -45,13 +45,14 @@ new Quiz( {
 [
     6, 'Match terms', 'match',
     ['instructions', 'Match the terms to the appropriate description.'],
-    ['match', 104],
+    ['match', 104,
         ["integer", "whole", "rational"],
         ["The ratio of two whole numbers",
             "The product of two whole numbers",
             "A counting number, greater than 0 with no fraction",
             "A number with no fraction that is either positive, negative or zero",
         ],
+    ]
 ],
 
 ]);

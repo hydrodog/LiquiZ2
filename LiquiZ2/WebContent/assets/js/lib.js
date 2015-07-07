@@ -261,7 +261,7 @@ Util = {
 	 */
 	video : function(src, controls, className, id) {
 		controls = (typeof controls !== "undefined") ? controls : true;
-		result = Util.make("video", {
+		var result = Util.make("video", {
 			src : mediaLocations.video + src,
 			controls : controls,
 			className : className,
@@ -277,7 +277,7 @@ Util = {
 	 */
 	audio : function(src, controls, className, id) {
 		controls = (typeof controls !== "undefined") ? controls : true;
-		result = Util.make("audio", {
+		var result = Util.make("audio", {
 			src : mediaLocations.audio + src,
 			controls : controls,
 			className : className,
@@ -499,62 +499,122 @@ function appendCSSText(css) {
 
 var page;
 
-// This should just become a generic handler for any error that's not 200.
-function errorStatus(errorCode) {
-	fragment = document.createDocumentFragment();
-	fragment.appendChild(Util.h1("Error: " + errorCode));
-	fragment
-			.appendChild(Util
-					.p("Please make sure the url you entered in the address bar is correct."));
-	return fragment;
-}
-
 function processAJAX() {
 	if (typeof page.css !== "undefined") {
 		appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
 		// css skin
 	} else {
-		console.error("custom css didn't load. check css link in page.css");
-	}
-	if (typeof thisPage !== "undefined") {
-		thisPage();
-	} else {
-		console.error("thisPage() never ran!!");
+		console.warn("custom css didn't load. check css link in page.css");
 	}
 }
 
-function loadPage(e) {
-	var baseFilename = location.hash.substr(1);
-	var url = "/LiquiZ2" + baseFilename + "_ajax.jsp"; // name of dynamic file
-														// to run
-	// console.log(url);
-	// console.log("hash change to: " + location.hash);
-
+function resetMedia() {
 	for (var i = 0; i < media.length; i++) {
 		media[i].removeAttribute("src");
 		media[i].load();
 	}
 	media = [];
+}
 
+function parseParams(params) {
+	if (typeof params === "undefined") {
+		return {};
+	}
+	var result = {};
+	paramArray = params.split("&");
+	for (var i = 0; i < paramArray.length; i++) {
+		var temp = paramArray[i].split("=");
+		if (temp[0] && temp[1]) {
+			result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+		} else if (temp[0] && !temp[1]) {
+			result[decodeURIComponent(temp[0])] = true;
+		}
+	}
+	return result;
+}
+
+function parseHash(hash) {
+	var re = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
+	var reMatch = re.exec(hash);
+	var result = {};
+
+	result.hash = hash;
+	result.url = reMatch[1] ? reMatch[1] : null;
+	result.view = reMatch[2] ? reMatch[2] : null;
+	result.params = parseParams(reMatch[3]);
+
+	return result;
+}
+
+function clearPage() {
+	document.getElementById("container").innerHTML = "";
+	document.getElementById("currentStatus").innerHTML = "";
+}
+
+function errorStatus(errorCode) {
+	var frag = document.createDocumentFragment();
+	frag.appendChild(Util.h1("Error: " + errorCode));
+	frag
+			.appendChild(Util
+					.p("Please make sure the url you entered in the address bar is correct."));
+	document.getElementById("currentStatus").appendChild(frag);
+}
+
+function handlePage(text, hash) {
+	eval("page=" + text);
+	loadView(hash);
+	processAJAX();
+}
+
+function requestAjax(url, handler, error, hash) {
 	var ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function() {
 		if (ajax.readyState === 4 && ajax.status !== 200) {
-			document.getElementById("container").innerHTML = "";
-			document.getElementById("currentStatus").innerHTML = "";
-			document.getElementById("currentStatus").appendChild(
-					errorStatus(ajax.status));
+			error(ajax.status);
+		} else if (ajax.readyState === 4 && ajax.status === 200) {
+			handler(ajax.responseText, hash);
 		}
-		if (ajax.readyState !== 4 || ajax.status !== 200)
-			return; // TODO: Handle error if it doesn't come back
-		document.getElementById("currentStatus").innerHTML = "";
-		document.getElementById("container").innerHTML = "";
-		eval("page=" + ajax.responseText);
-		page.exec();
-		processAJAX();
-		// Util.goToId();
-	}
+		return;
+	};
 	ajax.open("GET", url, true);
 	ajax.send();
+
+}
+
+function loadView(hash) {
+	if (hash.view) {
+		if (page[hash.view])
+			page[hash.view](hash.params);
+		else
+			errorStatus(hash.view + " view doesn't exist!");
+	} else {
+		page.exec(hash.params);
+	}
+}
+
+var oldHash; // = parseHash(location.hash);
+function loadPage(e) {
+	var newHash = parseHash(location.hash);
+	var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file
+														// to run
+
+	clearPage();
+	if ((!oldHash) || (oldHash.hash === newHash.hash)
+			|| (oldHash.url !== newHash.url)) {
+
+		requestAjax(url, handlePage, errorStatus, newHash);
+
+	} else if ((oldHash.view !== newHash.view)
+			|| (oldHash.params || newHash.params)) {
+
+		loadView(newHash);
+	} else {
+		console.error("Unhandled url action!");
+		console.error(newHash);
+	}
+
+	resetMedia();
+	oldHash = newHash;
 }
 
 // If the link clicked is the current page, reload the page.
@@ -563,10 +623,9 @@ function loadPage(e) {
 var lastClicked;
 function setLastClicked(e) {
 	if (lastClicked === e.target) {
-		loadPage();
+		loadPage(e);
 	} else {
 		lastClicked = e.target;
-		console.log(lastClicked);
 	}
 }
 
@@ -575,7 +634,7 @@ function loadOnce(e) {
 	var aList = document.links;
 	for (var i = 0; i < aList.length; i++) {
 		if (aList[i].hostname === document.domain) { // Same domain links
-														// only
+			// only
 			aList[i].onclick = setLastClicked;
 			if (aList[i].hash === location.hash) { // Our current page
 				lastClicked = aList[i];
@@ -590,11 +649,3 @@ function loadOnce(e) {
 // loadOnce();
 window.onload = loadOnce;
 window.onhashchange = loadPage;
-
-// TODO(asher): Here we're not reloading the whole page, just calling a method
-// on page (page.summary).
-// If the first part (/demos/QuizDemo) is the same, just execute the summary
-// method
-// otherwise load the page via ajax and execute the summary method
-// If there's no !, we just call the exec method
-// http://localhost:8080/LiquiZ2/demos/QuizDemo.html#/demos/QuizDemo!summary
