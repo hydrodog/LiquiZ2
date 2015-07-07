@@ -45,10 +45,11 @@ public abstract class ProblemSet {
 		public void draw(){}
 	}
 	
-	private static BogusPApplet bogus = new BogusPApplet();
+	//private static BogusPApplet bogus = new BogusPApplet();
 	private static PGraphics makePGraphics(int w, int h) {
-		bogus.init();
-		PGraphics g = bogus.createGraphics(w,h);
+		//bogus.init();
+		//PGraphics g = bogus.createGraphics(w,h);
+		PGraphics g = new Layer(500,500, null, "test");
 		g.setPrimary(true);
 		g.setSize(w,h);
 		return g;
@@ -66,4 +67,31 @@ public abstract class ProblemSet {
 	}
 	public abstract void construct() throws IOException;
 	public abstract void algorithm();
+
+	private static class Layer extends PGraphicsJava2D {
+	  public Layer(int w, int h, PApplet p, String s) {
+	    initialize(w, h, p, s);
+	    ignite();
+	  }
+	 
+	  public void initialize(int w, int h, PApplet p, String s) {
+	    setParent(p);
+	    setPrimary(false);
+	    setPath(s);
+	    setSize(w, h);
+	  }
+	 
+	  public void ignite() {
+	    beginDraw();
+	    smooth(4);
+	    fill(-1);
+	    stroke(0);
+	    endDraw();
+	  }
+	 
+	  @ Override public String toString() {
+	    return "Width: " + width + "\t Height: " + height
+	      + "\nPath:  " + path;
+	  }
+	}
 }

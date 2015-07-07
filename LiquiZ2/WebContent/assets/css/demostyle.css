@@ -130,7 +130,7 @@ th {
 
 .matrix td {
     border: 1px solid black;
-    width: 70px;
+    width: 50px;
     margin: 1px;
     /*padding: 2px;*/
     background-color: #aaa;
@@ -159,11 +159,11 @@ th {
 }
 
 .submit {
-    font-family: Arial;
+/*    font-family: Arial;
     font-size: 16pt;
-    font-weight: bold;
+    font-weight: bold;*/
     background-color: #00e;
-    color: white;
+    /*color: white;*/
 }
 
 .new-question-button {
@@ -183,22 +183,53 @@ input[disabled] {
 }
 
 img {
-    width: 700px;
+    width: 300px;
     height: auto;
 }
 
 #menu {
+	font-family: Arial, sanserif;
+	font-size: 12pt;
 	width: 100%;
 	background-color: #def;
 }
 #menu div {
   float: right;
 }
-.mi {
+#menu a, #menu a:link{
+	background: #8f8;
+	border-radius: 5px;
+    padding: 2px; 
+    width: 70px;
+    height: 30px; 
+    font-weight: bold;
+    text-decoration: none;
+}
+#menu a:hover {
+	background: #8d0;
+	border-radius: 5px;
+    padding: 2px; 
+    width: 65px;
+}
+
+/*.mi {
   background-color: #04c;
   color: #fff;
 }
-.hvr-float {
+*/
+#menu input {
+	width: 120px;
+}
+
+#login {
+	width: 100px;
+	background: #0B5;
+	foreground: #fff;
+	font-family: Arial;
+	font-weight: bold;
+	border-radius: 5px;
+}
+/*.hvr-float {
   display: inline-block;
   vertical-align: middle;
   transform: translateZ(0);
@@ -224,10 +255,18 @@ img {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -moz-osx-font-smoothing: grayscale;
-}
+}*/
 
 img.logo {
-	 width: 141px;
+    width: 141px;
+    height: 32px;
+}
+
+.edit-quiz {
+    /*width: 200px;*/
+    height: 32px;
+	float: right;
+    font-size: 16px;
 }
 
 .response { /*teacher feedback when showing the graded quiz*/
