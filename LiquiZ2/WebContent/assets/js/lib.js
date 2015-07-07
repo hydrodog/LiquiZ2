@@ -75,7 +75,8 @@ Util = {
 		// without a valid tag we can't continue
 		if (typeof tag === "undefined" || !tag) {
 			console.log("Util.make failed with \ntag: " + tag + "\ninnerHTML: "
-					+ innerHTML + "\nclassName: " + className + "\nid: " + id);
+					+ obj[innerHTML] + "\nclassName: " + obj[className]
+					+ "\nid: " + obj[id]);
 			return;
 		}
 		var element = document.createElement(tag);
@@ -534,6 +535,14 @@ function parseParams(params) {
 }
 
 function parseHash(hash) {
+	if (hash === "") {
+		return {
+			hash : "",
+			url : "/",
+			view : null,
+			params : null,
+		};
+	}
 	var re = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 	var reMatch = re.exec(hash);
 	var result = {};
@@ -595,9 +604,14 @@ function loadView(hash) {
 var oldHash; // = parseHash(location.hash);
 function loadPage(e) {
 	var newHash = parseHash(location.hash);
+	if (newHash.url === "/") {
+		newHash.url = "/index";
+	}
+	console.log(newHash);
 	var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file
 														// to run
 
+	resetMedia();
 	clearPage();
 	if ((!oldHash) || (oldHash.hash === newHash.hash)
 			|| (oldHash.url !== newHash.url)) {
@@ -613,7 +627,6 @@ function loadPage(e) {
 		console.error(newHash);
 	}
 
-	resetMedia();
 	oldHash = newHash;
 }
 
@@ -621,6 +634,7 @@ function loadPage(e) {
 // This is the expected behavior, but because we're using hashes,
 // we can't register these clicks any other way
 var lastClicked;
+
 function setLastClicked(e) {
 	if (lastClicked === e.target) {
 		loadPage(e);

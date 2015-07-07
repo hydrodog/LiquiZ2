@@ -159,11 +159,11 @@ th {
 }
 
 .submit {
-    font-family: Arial;
+/*    font-family: Arial;
     font-size: 16pt;
-    font-weight: bold;
+    font-weight: bold;*/
     background-color: #00e;
-    color: white;
+    /*color: white;*/
 }
 
 .new-question-button {
@@ -258,15 +258,15 @@ img {
 }*/
 
 img.logo {
-	 width: 141px;
-	 height: 32px;
+    width: 141px;
+    height: 32px;
 }
 
 .edit-quiz {
-  //width: 200px;
-  height: 32x;
+    /*width: 200px;*/
+    height: 32px;
 	float: right;
-	
+    font-size: 16px;
 }
 
 .response { /*teacher feedback when showing the graded quiz*/

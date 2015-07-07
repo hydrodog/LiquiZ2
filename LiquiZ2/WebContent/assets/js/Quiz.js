@@ -18,13 +18,22 @@ function Quiz(quizinfo, questions) {
 }
 
 Quiz.prototype.exec = function(params) {
+    var collapse = {};
+    if (params.collapse) {
+        var collapseArray = params.collapse.split(",");
+        for (var i = 0; i < collapseArray.length; i++) {
+            collapse[parseInt(collapseArray[i]) - 1] = true;
+        }
+    }
+
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
 
     for (var i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
         var qc = this.addQuestion(q[0], q[1], q[2]);
-        qc.appendChild(this.processQuestion(q));
+        if (!collapse[i])
+            qc.appendChild(this.processQuestion(q));
         this.render(qc);
     }
     this.end();
@@ -175,7 +184,7 @@ Quiz.prototype.createSubmit = function(id) {
                 }
                 clicks++;
             }));
-        editBox.appendChild(Util.div("filebrowse"));
+        // editBox.appendChild(Util.div("filebrowse"));
         editBox.appendChild(Util.button("Save Local", id + "-edit-buttons", null, 
         		function () {
         		parent.saveLocal();
