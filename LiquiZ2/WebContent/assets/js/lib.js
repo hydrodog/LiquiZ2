@@ -609,7 +609,7 @@ function loadPage(e) {
 	}
 	console.log(newHash);
 	var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file
-														// to run
+	// to run
 
 	resetMedia();
 	clearPage();
