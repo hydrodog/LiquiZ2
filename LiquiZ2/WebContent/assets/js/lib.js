@@ -580,7 +580,6 @@ function requestAjax(url, handler, error, hash) {
     };
     ajax.open("GET", url, true);
     ajax.send();
-
 }
 
 function loadView(hash) {
@@ -592,6 +591,7 @@ function loadView(hash) {
     } else {
         page.exec(hash.params);
     }
+    GoToOldScrollPosition();
 }
 
 var oldHash; // = parseHash(location.hash);
@@ -620,6 +620,26 @@ function loadPage(e) {
     }
 
     oldHash = newHash;
+}
+
+function captureScroll(e) {
+    var doc = document.documentElement;
+    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+    var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+    window.sessionStorage.scrollLocation = JSON.stringify({
+        top: top,
+        left: left,
+    });
+}
+
+SCROLL_SECONDS_AFTER_RELOAD = 200;
+function GoToOldScrollPosition() {
+    setTimeout(function() {
+        var scrollLocation = JSON.parse(sessionStorage.scrollLocation);
+        var top = scrollLocation.top;
+        var left = scrollLocation.left;
+        window.scroll(left, top);        
+    }, SCROLL_SECONDS_AFTER_RELOAD);
 }
 
 // If the link clicked is the current page, reload the page.
@@ -654,3 +674,4 @@ function loadOnce(e) {
 // loadOnce();
 window.onload = loadOnce;
 window.onhashchange = loadPage;
+window.onscroll = captureScroll;
