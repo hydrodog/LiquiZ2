@@ -188,7 +188,7 @@ Calendar.prototype.initialButtons = function(d, calendar){
 Calendar.prototype.month = function(d, calendar, id) {
     //d = (typeof d !== "undefined") ? d : this.startDate;
 	//monthView = (typeof monthView !== "undefined") ? monthView : true;
-	
+	id = (typeof id !== "undefined") ? id : "cal0";
 	var div = Util.div("calMonth", id);
     
 	if(this.monthView)
@@ -281,4 +281,8 @@ Calendar.prototype.showCalendar = function(id){
 	if(this.monthView)
 		return this.month(d, this, id);
 	return this.year(d);
+}
+
+Calendar.prototype.exec = function() {
+	document.getElementById("container").appendChild(this.month(new Date(), this));
 }
