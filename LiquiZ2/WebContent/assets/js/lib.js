@@ -17,11 +17,7 @@
 
 Util = {
 	dump : function(obj) {
-		var s = "";
-		for ( var k in obj) {
-			s += k + "-->" + obj[k] + '\n';
-		}
-		console.log(s);
+		console.warn(JSON.stringify(obj, null, 3));
 	},
 
 	popup : function(x, y, w, h, bg) {
@@ -74,9 +70,8 @@ Util = {
 	make : function(tag, obj) {
 		// without a valid tag we can't continue
 		if (typeof tag === "undefined" || !tag) {
-			console.log("Util.make failed with \ntag: " + tag + "\ninnerHTML: "
-					+ obj[innerHTML] + "\nclassName: " + obj[className]
-					+ "\nid: " + obj[id]);
+			console.error("Util.make failed with tag: " + tag);
+			Util.dump(obj);
 			return;
 		}
 		var element = document.createElement(tag);
@@ -607,9 +602,8 @@ function loadPage(e) {
 	if (newHash.url === "/") {
 		newHash.url = "/index";
 	}
-	console.log(newHash);
 	var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file
-	// to run
+														// to run
 
 	resetMedia();
 	clearPage();
