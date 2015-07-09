@@ -179,7 +179,9 @@ Quiz.prototype.createSubmit = function(id) {
         editBox.appendChild(Util.button("New Question", id + "-new-question", null,
             function() {
                 if (clicks === 0) {
-                    parent.editQuestion();
+                	var editor = new QuizEdit();
+                	editor.editQuestion();
+                	checkIfInView("editor");
                     // Util.goToId("editor");
                 }
                 clicks++;
