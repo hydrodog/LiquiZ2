@@ -31,9 +31,8 @@ function QuizList(listinfo, list) {
 }
 
 QuizList.prototype.exec = function() {
-	var c = document.getElementById("container");
-	c.appendChild(this.qtoolbar());
-	c.appendChild(this.qtable());
+	this.body.appendChild(this.qtoolbar());
+	this.body.appendChild(this.qtable());
 }
 
 QuizList.prototype.dayshift = function(datetype, rowID, rowNum, NOD) {
