@@ -6,8 +6,7 @@
 //TODO: Move everything INTO YOUR CLASS. These should not be global variables.
 var clozeTarget = /[[]]/;
 
-function turnalloff(elem) { // TODO: turn off all the other selections when one
-	// of them is selected
+function turnalloff(elem) { // TODO: turn off all the other selections when one of them is selected
 	var elems = elem.form.elements;
 	var currentState = elems.checked;
 
@@ -20,68 +19,234 @@ function turnalloff(elem) { // TODO: turn off all the other selections when one
 	elem.checked = currentState;
 }
 
-function editMCDDform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
+function QuizEdit() {
+    this.body = document.getElementById("container");
+    this.body.className = "quizEditor";
+}
 
-	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("input");
-		opt.value = list[i];
-		// checkbox.onclick = turnalloff(this);
-		Util.add(form,
-				[document.createTextNode(labels[i]),
-				 opt,
-				 Util.input('checkbox'), Util.br()]);
-	}
+function oneMCDDOption(parent, id){
+	 var t = document.createTextNode("Possible Answer: ");
+	 var opt = Util.input("text", null,  id + 't');
+	 var checkbox = Util.input("checkbox", null, id + 'c');
+	 var linebreak = Util.br();
+	 checkbox.onclick = function(){addClassCheck(this, checkbox.id)};
+	 parent.appendChild(t);
+	 parent.appendChild(opt);
+	 parent.appendChild(checkbox);
+	 parent.appendChild(linebreak);
+}
 
+function addClassCheck(element, id){
+
+	if(element.checked){
+        element.classList.add("marked");
+    }
+    else{
+        element.classList.remove("marked");
+    }
+
+    if(document.getElementsByClassName("marked").length>1){
+    	
+	  	if(document.getElementsByClassName("marked")[0].id != id){
+	  		document.getElementsByClassName("marked")[0].checked = false;
+	  	    document.getElementsByClassName("marked")[0].classList.remove("marked");
+	  	}
+	  	
+	  	else if(document.getElementsByClassName("marked")[1].id != id){
+	  		document.getElementsByClassName("marked")[1].checked = false;
+	  		document.getElementsByClassName("marked")[1].classList.remove("marked");
+	  	}
+    }
+
+}
+
+
+function editMCDDform(parent, id, numberBox, addOptionButton) {
+	var id_o = 1;
+	var optionClicks = 0;
+	var form = Util.form(null, null, "optionForm");
+	parent.appendChild(form);
+		oneMCDDOption(form, "o" + id_o++);
+		oneMCDDOption(form, "o" + id_o++);
+		oneMCDDOption(form, "o" + id_o++);
+		oneMCDDOption(form, "o" + id_o++);
+    optionClicks += 4;		
+		
+	addOptionButton.onclick = function(){
+		
+		if(1 <= numberBox.value && numberBox.value <= 10){
+			optionClicks += numberBox.value;
+			for(var i = 0; i < numberBox.value; i++){
+				oneMCDDOption(form, "o" + id_o++);
+				}
+	    	}
+		else {
+			optionClicks++;
+			oneMCDDOption(form, "o" + id_o++);
+			}
+		checkIfInView("optionForm");
+		};
+		
 	return form;
 }
-function editMAform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
 
-	for (var i = 0; i < list.length; i++) {
+
+function editMAform(parent, id, labels, list){
+	var form = Util.form(null, null, id);
+	
+	for(var i = 0; i<list.length; i++){
 		var t = document.createTextNode(labels[i]);
 		var opt = document.createElement("input");
-		opt.value = list[i];
-		// checkbox.onclick = turnalloff(this);
-		Util.add(form, [t, opt, Util.input('checkbox'), Util.br()])
-	}
-
-	return form;
-}
-function editSurveyform(id, labels, list) {
-	var form = document.createElement("form");
-	form.id = id;
-
-	for (var i = 0; i < list.length; i++) {
-		var t = document.createTextNode(labels[i]);
-		var opt = document.createElement("input");
+		var checkbox = document.createElement("input");
 		var linebreak = document.createElement("br");
-
-		// checkbox.onclick = turnalloff(this);
+		checkbox.type = "checkbox";
 		opt.value = list[i];
-		Util.add(form, [t, opt, Util.br()]);
+		form.appendChild(t);
+		form.appendChild(opt);
+		form.appendChild(checkbox);
+		form.appendChild(linebreak);
 	}
-
+	parent.appendChild(form);
 	return form;
 }
 
-function editMCRform(id, labels, list) {
+var Likert5 = ["Strongly Agree",
+               "Agree",
+               "Neutral",
+               "Disagree",
+               "Strongly Disagree"];
+
+var Likert7 = ["Exceptional",
+               "Excellent",
+               "Very Good",
+               "Good",
+               "Fair",
+               "Poor",
+               "Very Poor"];
+
+function mklist(id, list){  // TODO : can be transfered to Util.table
+	var table = document.createElement("table");
+	table.id = id;
+	
+	for(var i = 0; i<list.length; i++){
+		var tr = document.createElement("tr");
+		var td1 = document.createElement("td");
+		var td2 = document.createElement("td");
+		var td3 = document.createElement("td");
+		var td4 = document.createElement("td");
+		td1.innerHTML = "Choice " + i +":";
+		var inp = Util.input("text", null, null);//mkinput(function(){}, "text", function(){});
+		var addChoiceButton = Util.button("Add new choice below", null, null, null);
+			//mkbutton("Add new choice below", function(){});
+//		addChoiceButton.onclick = function(){
+//			var td5 = document.createElement("td");
+//			td5.appendChild(inp);
+//			if(this.parentNode.parentNode.nextSibling != null)
+//				this.parentNode.parentNode.parentNode.insertBefore(td5,this.parentNode.parentNode.nextSibling);
+//			else
+//				this.parentNode.parentNode.parentNode.appendChild(td5);
+//			while(this.parentNode.parentNode.nextSibling != null){
+//				this.parentNode.parentNode.firstChild.innerHTML = "Choice " +;
+//					
+//			}
+//			//document.getElementById("Likert5").insertBefore(td5,this.parentNode.parentNode);
+//			console.log(this.parentNode);
+//			console.log(this.parentNode.parentNode);
+//		}
+//		
+		
+		var deleteButton = Util.button("Delete this choice", function(){}, null, null, null);
+		
+		
+		
+		inp.value = list[i];
+		td2.appendChild(inp);
+		td3.appendChild(addChoiceButton);
+		td4.appendChild(deleteButton);
+		
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+		tr.appendChild(td3);
+		tr.appendChild(td4);
+		table.appendChild(tr);
+	
+	}
+	
+	return table;
+}
+
+function editSurveyform(parent, id, list){
+	var form = document.createElement("form");
+	form.id = id;
+    
+	var table1 = document.createElement("table");
+	
+	var datalist = document.createElement("DATALIST");
+	datalist.setAttribute("id", "Likert");
+	var option1 = Util.option("Likert5", null, "Likert5", "Likert5");
+	datalist.appendChild(option1);
+	var option2 = Util.option("Likert7", null, "Likert7", "Likert7");
+	datalist.appendChild(option2);
+	var tr = document.createElement("tr");
+	var td1 = document.createElement("td");
+	var td2 = document.createElement("td");
+	td1.innerHTML = "Name:"+ "&nbsp&nbsp&nbsp&nbsp&nbsp";
+	var inp = Util.input("text", datalist.id, datalist.id);
+	inp.setAttribute("list", "Likert");
+	inp.oninput= function(){
+	switch(inp.value){
+	case "Likert5":
+	{$("#" + form.id).empty();form.appendChild(table1);form.appendChild(table3);}
+	break;
+    
+	case "Likert7":
+	{$("#" + form.id).empty();form.appendChild(table1);form.appendChild(table4);}
+	break;
+	
+	default:
+	{$("#" + form.id).empty();form.appendChild(table1);form.appendChild(table2);}
+	}};
+	inp.onkeydown = function(e){var keynumber = window.event ? e.keyCode: e.which; 
+	if(keynumber == 8){e.preventDefault();this.value = this.value.slice(0,-1);}};
+	
+	table1.appendChild(datalist);
+	td2.appendChild(inp);
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	table1.appendChild(tr);
+	
+	var table2 = mklist("blank", list);
+	var table3 = mklist("Likert5", Likert5);
+	var table4 = mklist("Likert7", Likert7);
+	
+	form.appendChild(table1);
+	form.appendChild(table2);
+	
+	parent.appendChild(form);
+	return form;
+}
+
+function editMCRform(parent, id, labels, list){
 	var form = document.createElement("form");
 	form.id = id;
 
-	for (var i = 0; i < list.length; i++) {
-		var opt = document.createElement("input");
+	for(var i = 0; i<list.length; i++){
+		 var t = document.createTextNode(labels[i]);
+		 var opt = document.createElement("input");
+		 var radio = document.createElement("input");
+		 var linebreak = document.createElement("br");
+		 radio.type = "radio";
+		
+		//checkbox.onclick = turnalloff(this);
 		opt.value = list[i];
-
-		// checkbox.onclick = turnalloff(this);
-		Util.add(form, [document.createTextNode(labels[i]),
-		                opt, Util.input('radio'), Util.br()]);
+		form.appendChild(t);
+		form.appendChild(opt);
+		form.appendChild(radio);
+		form.appendChild(linebreak);
 	}
+	parent.appendChild(form);
 	return form;
 }
-var selStart, selEnd;
 
 function addBrackets(ta) {
 
@@ -90,135 +255,81 @@ function addBrackets(ta) {
 			+ "]] " + v.substring(selEnd);
 }
 
-//TODO: Make one, parameterized function that does this (without jquery)
-//then call this from each edit function
-Quiz.prototype.addCommitQuestion = function(parent, func) {
-		parent.appendChild(Util.button("Add Question", null, null, function() {
-			$("#y").remove();
-			this[func]('title', ta.value);
-		}));
+////TODO: Make one, parameterized function that does this (without jquery)
+////then call this from each edit function
+//Quiz.prototype.addCommitQuestion = function(parent, func) {
+//		parent.appendChild(Util.button("Add Question", null, null, function() {
+//			$("#y").remove();
+//			this[func]('title', ta.value);
+//		}));
+//}
+
+//////////////07/07/////////////////////////////////////
+
+
+QuizEdit.prototype.editFillin = function(qc) {
+	  var fillinForm = Util.form(null, "fillinForm", "Fillin");
+		  //mktag(qc, "form", "Fillin", null, "fillinForm");
+	  qc.appendChild(fillinForm);
+	  var Ans = Util.span("Answer: ");
+		  //mkptext(fillinForm, "Answer: ");
+	  var ans = Util.input("text", "ans", "ans");
+	  fillinForm.appendChild(ans);
+		  //mkpinput(fillinForm, "ans", "text", "ans");
+      fillinForm.appendChild(Util.button("Add Question", null, null, function() {
+    	  $("#" + editor.id).remove();
+          $("#" + qc.id).remove();
+          $("#" + fillinForm.id).remove();
+          buildFillin(titleInp.value, textBox.value, ans.value);
+      }));
 }
 
-//TODO: GET RID OF GLOBAL VARIABLES! This should be in the class (and really, it should not exist)
-var exampleClozeTest = 'public class A {\n [[]]  public [[]] void main(strings [] args) {\n  System.println.out("hello");\n  }\n}';
-Quiz.prototype.editCloze = function() {
-	var div = document.createElement("div");
-	div.id = "Cloze";
-	div.className = "cloze"; // style of the editor box
-	var ta = document.createElement("textarea");
-	div.appendChild(ta);
-	ta.className = "cloze";
-	ta.id = "x";
-	ta.rows = 10;
-	ta.cols = 80;
-	ta.value = exampleClozeTest;
-	ta.ondblclick = function() {
-		addBrackets(ta);
-	};
-	ta.onmouseup = function() {
-		selStart = ta.selectionStart;
-		selEnd = ta.selectionEnd;
-		console.log(ta.selectionStart + "," + ta.selectionEnd);
-	};
-	// ta.onkeyup = function(){ ta.style.height = "1px";
-	// ta.style.height = (25+ta.scrollHeight)+"px";}
-
-	div.appendChild(Util.button("SquareBracket It!", null, null, function() {
-		addBrackets(ta);
-	}));
-//	this.addCommitQuestion(div, 'buildCloze')
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildCloze('title', ta.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editFillin = function() {
-	var div = document.createElement("div");
-	div.id = "Fillin";
-	div.className = "Fillin"; // style of the editor box
-
-	var Ans = Util.span("Answer: ");
-	var ans = Util.input("text", "ans");
-	ans.value = "";
-	div.appendChild(Ans);
-	div.appendChild(ans);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		div.innerHTML = '';
-//		$("#y").remove();
-		//buildFillin('title', ta.value, ans.value);
-	}));
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editNumber = function() {
-	var div = document.createElement("div");
-	div.id = "Number";
-	div.className = "Number"; // style of the editor box
-
+QuizEdit.prototype.editNumber = function(qc) {
+	
+	var numberForm = Util.form(null, "numberForm", "Number");
+	qc.appendChild(numberForm);
 	var min = Util.span("Min: ");
 	var Min = Util.input("text", "min");
 	var max = Util.span("Max: ");
 	var Max = Util.input("text", "max");
-	div.appendChild(min);
-	div.appendChild(Min);
-	div.appendChild(max);
-	div.appendChild(Max);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildnumber('title', ta.value);
+	numberForm.appendChild(min);
+	numberForm.appendChild(Min);
+	numberForm.appendChild(max);
+	numberForm.appendChild(Max);
+	numberForm.appendChild(Util.button("Add Question", null, null, function() {
+		$("#" + editor.id).remove();
+        $("#" + qc.id).remove();
+        $("#" + numberForm.id).remove();
+    	buildnumber(titleInp.value, textBox.value, Min.value, Max.value);
 	}));
-	document.body.appendChild(div);
 }
 
-Quiz.prototype.editEssay = function() {
-	var div = Util.div("Essay", "Essay");
+QuizEdit.prototype.editEssay = function(qc) {
 
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		buildessay('title', ta.value);
+	var essayForm = Util.form(null, "essayForm", "Essay");
+	qc.appendChild(essayForm);
+	essayForm.appendChild(Util.button("Add Question", null, null, function() {
+		$("#" + editor.id).remove();
+	    $("#" + qc.id).remove();
+	    $("#" + essayForm.id).remove();
+		buildessay(titleInp.value, textBox.value);
 	}));
-	document.body.appendChild(div);
 }
 
-Quiz.prototype.editCode = function() {
-	var div = document.createElement("div");
-	div.id = "Code";
-	div.className = "Code"; // style of the editor box
-
-	div.appendChild(Util.button("Submit", function() {
-		$("#y").remove();
-		buildcode('title', ta.value);
+QuizEdit.prototype.editCode = function(qc) {
+	
+	var codeForm = Util.form(null, "codeForm", "Code");
+	var langSelect = Util.select(null, null, ["C++", "Java", "Python", "Perl", "Processing"], null, "langSelect");
+	qc.appendChild(codeForm);
+	codeForm.appendChild(langSelect);
+	codeForm.appendChild(Util.button("Add Question", null, null, function() {
+		 $("#" + editor.id).remove();
+	     $("#" + qc.id).remove();
+	     $("#" + codeForm.id).remove();
+		 buildcode(titleInp.value, textBox.value);
 	}));
-	document.body.appendChild(div);
 }
 
-Quiz.prototype.editEssay = function() {
-	var div = document.createElement("div");
-	div.id = "Essay";
-	div.className = "Essay"; // style of the editor box
-
-	mkpbutton(div, "Submit", null, function() {
-		$("#y").remove();
-		buildessay('title', ta.value);
-	});
-	document.body.appendChild(div);
-}
-
-Quiz.prototype.editCode = function() {
-	var div = document.createElement("div");
-	div.id = "Code";
-	div.className = "Code"; // style of the editor box
-
-	mkpbutton(div, "Submit", function() {
-		$("#y").remove();
-		buildcode('title', ta.value);
-	});
-	document.body.appendChild(div);
-}
 
 // function addOption(parent){
 // var extraOpteditMCform= form(4, [optionChar], [""]);
@@ -228,15 +339,12 @@ Quiz.prototype.editCode = function() {
 // var optionCharUni = 68; // the Dec Unicode of 'D'
 // var optionChar = String.fromCharCode(optionCharUni);
 
-Quiz.prototype.editMultiChoiceDropdown = function() {
-	var div = document.createElement("div");
-	div.id = "MultiChoiceDropdown";
-	div.className = "MultiChoiceDropdown"; // style of the editor box
-
-	var editor = Util.div("MCeditor", "MCeditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
+QuizEdit.prototype.editMultiChoiceDropdown = function(qc) {
+	var mCDDForm = Util.form(null, "mCDDForm", "MultiChoiceDropdown");
+	qc.appendChild(mCDDForm);
+	var t = Util.table(0, null, null, null);
+	//document.createElement("table");
+	mCDDForm.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Multiple choice - Dropdown :"
 			+ "Correct Answer" + "Add more options");
@@ -244,111 +352,123 @@ Quiz.prototype.editMultiChoiceDropdown = function() {
 	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
 	fillRow(r, [ description, numberBox, addOptionButton ]);
-
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var MCDDform = editMCDDform(4, [ "A: ", "B: ", "C: ", "D: " ], [ "", "",
-			"", "" ]);
-	div.appendChild(MCDDform);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
+	
+	var MCDDform = editMCDDform(mCDDForm, "MCDDform", numberBox, addOptionButton);
+	mCDDForm.appendChild(Util.button("Add Question", null, null, function() {
+		 $("#" + editor.id).remove();
+	     $("#" + qc.id).remove();
+	     $("#" + mCDDForm.id).remove();
+		 builddpd(titleInp.value, textBox.value);
 	}));
-	document.body.appendChild(div);
+	
+
+	
 }
 
-Quiz.prototype.editSurvey = function() {
-	var div = document.createElement("div");
-	div.id = "Survey";
-	div.className = "Survey"; // style of the editor box
-
-	var editor = Util.div("surveyEditor", "surveyEditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
+QuizEdit.prototype.editSurvey = function(qc) {
+	var surveyForm = Util.form(null, "surveyForm", "Survey");
+	qc.appendChild(surveyForm);
+	var t = Util.table(0, null, null, null);
+	surveyForm.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Add more options");
 	var numberBox = Util.input("text", "numberinput", "numberinput");
 	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
-
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var surveyform = editSurveyform(4, [ "Choice 1: ", "Choice 2: ",
-			"Choice 3: ", "Choice 4: " ], [ "", "", "", "" ]);
-	div.appendChild(surveyform);
-
-	div.appendChild(Util.input("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
+	var createStdChoice = Util.button("Create Standard Choice", null, null, function(){});
+	fillRow(r, [ description, numberBox, addOptionButton, createStdChoice]);
+	var surveyform = editSurveyform(qc, 4, [ "", "", "", "" ]);
+	qc.appendChild(Util.button("Add Question", null, null, function() {
+		 $("#" + editor.id).remove();
+	     $("#" + qc.id).remove();
+	     $("#" + surveyForm.id).remove();
+		 builddpd(titleInp.value, textBox.value);
 	}));
-
-	document.body.appendChild(div);
+	
 }
 
-Quiz.prototype.editMultiChoiceRadio = function() {
-	var div = document.createElement("div");
-	div.id = "MultiChoiceRadio";
-	div.className = "MultiChoiceRadio"; // style of the editor box
-
-	var editor = Util.div("MCReditor", "MCReditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
+QuizEdit.prototype.editMultiChoiceRadio = function(qc) {
+	var mCRForm = Util.form(null, "mCRForm", "MultiChoiceRadio");
+	qc.appendChild(mCRForm);
+	var t = Util.table(0, null, null, null);
+	mCRForm.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Multiple choice - Radio:"
 			+ "Correct Answer" + "Add more options");
 	var numberBox = Util.input("text", "numberinput", "numberinput");
 	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
+	fillRow(r, [ description, numberBox, addOptionButton]);
+	
+	var MCRform = editMCRform(qc, 4, [ "Choice 1: ", "Choice 2: ", "Choice 3: ",
+	                   			"Choice 4: " ], [ "", "", "", "" ]);
 
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var MCRform = editMCRform(4, [ "Choice 1: ", "Choice 2: ", "Choice 3: ",
-			"Choice 4: " ], [ "", "", "", "" ]);
-	div.appendChild(MCRform);
-
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
+	qc.appendChild(Util.button("Add Question", null, null, function() {
+		 $("#" + editor.id).remove();
+	     $("#" + qc.id).remove();
+	     $("#" + mCRForm.id).remove();
+		 builddpd(titleInp.value, textBox.value);
 	}));
-	document.body.appendChild(div);
 }
 
-Quiz.prototype.editMultiAnswer = function() {
-	var div = document.createElement("div");
-	div.id = "MultiAnswer";
-	div.className = "MultiAnswer"; // style of the editor box
-
-	var editor = Util.div("MAeditor", "MAeditor");
-	div.appendChild(editor);
-	var t = document.createElement("table");
-	editor.appendChild(t);
+QuizEdit.prototype.editMultiAnswer = function(qc) {
+	var mAForm = Util.form(null, "mAForm", "MultiAnswer");
+	qc.appendChild(mAForm);
+	var t = Util.table(0, null, null, null);
+	mAForm.appendChild(t);
 	var r = t.insertRow(0);
 	var description = document.createTextNode("Multiple Answer Choices: "
 			+ "Correct Answer" + "Add more options");
 	var numberBox = Util.input("text", "numberinput", "numberinput");
 	var addOptionButton = Util.button("Add Option", null, null, function() {
 	});
-	fillRow(r, [ description, numberBox, addOptionButton ]);
+	fillRow(r, [ description, numberBox, addOptionButton]);
 
-	// addOptionButton.onclick = div.appendChild(extraOption);
-
-	var MAform = editMAform(4, [ "Option 1: ", "Option 2: ", "Option 3: ",
+	var MAform = editMAform(qc, 4, [ "Option 1: ", "Option 2: ", "Option 3: ",
 			"Option 4: " ], [ "", "", "", "" ]);
-	div.appendChild(MAform);
 
-	div.appendChild(Util.button("Submit", null, null, function() {
-		$("#y").remove();
-		builddpd(ta.value);
+	qc.appendChild(Util.button("Add Question", null, null, function() {
+		 $("#" + editor.id).remove();
+	     $("#" + qc.id).remove();
+	     $("#" + mAForm.id).remove();
+		 builddpd(titleInp.value, textBox.value);
 	}));
-	document.body.appendChild(div);
 }
 
+var selStart, selEnd;
+QuizEdit.prototype.editCloze = function(qc) {
+	
+	var exampleClozeTest = 'public class A {\n [[]]  public [[]] '+
+		'void main(strings [] args) {\n  System.println.out("hello");\n  }\n}';
+	
+	var clozeForm = Util.form(null, "clozeForm", "Cloze");
+	qc.appendChild(clozeForm);
+	var ta = Util.textarea(exampleClozeTest, "cloze", "x", 10, 80);
+	clozeForm.appendChild(ta);
+	ta.ondblclick = function(){addBrackets(ta)};
+	ta.onmouseup = function(){ selStart = ta.selectionStart; 
+	selEnd = ta.selectionEnd; 
+	console.log(ta.selectionStart + "," + ta.selectionEnd); }
+	clozeForm.appendChild(Util.button("SquareBracket It!", null, null, function(){addBrackets(ta);}));
+	clozeForm.appendChild(Util.button("Add Question", null, null, function() {
+		 $("#" + editor.id).remove();
+	     $("#" + qc.id).remove();
+	     $("#" + clozeForm.id).remove();
+		 builddpd(titleInp.value, textBox.value);
+	}));
+	
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+/// save for 07/08 ////////////////////////
+
 var newid = -1;
+function removeOldButtons(){
+	$("#qc18").remove();
+	var button1 = document.getElementById("submit-2");
+	button1.parentNode.parentNode.removeChild(button1.parentNode);
+}
+
 function buildCloze(title, text) {
 
 	page.addQuestion(newid--, title, "cloze");
@@ -468,7 +588,7 @@ function editTextBox(val) {
 
 }
 
-Quiz.prototype.editQuestion = function() {
+QuizEdit.prototype.editQuestion = function() {
 	var parent = this;
 	var editor = Util.div("editor", "editor");
 	this.body.appendChild(editor);
@@ -477,6 +597,9 @@ Quiz.prototype.editQuestion = function() {
 	var r0 = t0.insertRow(0);
 
 	var title = document.createTextNode("Title: ");
+	/*
+	 * inp is a global variable in former version
+	 */
 	var inp = document.createElement("input");
 	var questionType = document.createTextNode("Question Type: ");
 	var selectBox = Util.select("quizType", false, list, null, "quizType");
@@ -489,24 +612,36 @@ Quiz.prototype.editQuestion = function() {
 	var r1 = t0.insertRow(1);
 	var level = document.createTextNode("Level: ");
 	var inpl = document.createElement("input");
+	inpl.placeholder = "1";
 	var points = document.createTextNode("Points: ");
 	var inpp = document.createElement("input");
+	inpp.placeholder = "1";
 	fillRow(r1, [ level, inpl, points, inpp ]);
 
 	var t1 = document.createElement("table");
 	editor.appendChild(t1);
 	var r2 = t1.insertRow(0);
-	fillRow(r2, [ editTextBox(""), imageAudioVideo() ]);
+	/*
+	 * textBox is a global variable in former version
+	 */
+	var textBox = Util.textarea(null, "textArea", "blankbox", 5, 40);
+	r2.appendChild(textBox);
+	fillRow(r2, [textBox, imageAudioVideo()]);
+	
+	var questionContainer = document.createElement("div");
+	questionContainer.id = "qC";
+	this.body.appendChild(questionContainer);
 
 	$('#quizType').change(function() {
-		for (var i = 0; i < list.length; i++) {
-			$("#" + list[i]).hide();
-		}
+//		for (var i = 0; i < list.length; i++) {
+//			$("#" + list[i]).hide();
+//		}
+		$("#" + questionContainer.id).empty();
 		var val = $("#quizType option:selected").text();
 		if (val === "Choose QuestionType") {
 			return;
 		}
-		parent["edit" + val]();
+		parent["edit" + val](questionContainer);
 		checkIfInView(val);
 	});
 }

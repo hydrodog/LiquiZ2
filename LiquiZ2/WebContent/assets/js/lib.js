@@ -14,7 +14,7 @@
  * See the full documentation for more details.
  */
 
-Util = {
+var Util = {
     dump: function(obj) {
         var s = "";
         for (var k in obj) {
@@ -202,9 +202,9 @@ Util = {
     /*
      * This function takes rows and cols as additional arguments
      */
-    textarea: function(innerHTML, className, id, rows, cols) {
+    textarea: function(value, className, id, rows, cols) {
         return Util.make("textarea", {
-            innerHTML: innerHTML,
+            value: value,         // has changed innerHTML to value
             className: className,
             id: id,
             rows: rows,
