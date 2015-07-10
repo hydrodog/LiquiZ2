@@ -97,7 +97,7 @@ Quiz.prototype.displayHeader = function() {
     //TODO: add remaining tries
 }
 
-var clicks = 0;
+
 Quiz.prototype.end = function() {
 	this.render(this.createSubmit(2));
 };
@@ -171,8 +171,9 @@ Quiz.prototype.saveLocal = function(id) {
 }
 
 Quiz.prototype.createSubmit = function(id) {
-    var div = Util.div("submit");
+    var div = Util.div("submit", "submitDiv-" + id);
     var parent = this;
+    var clicks = 0;
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
     if (this.editMode) {
     	var editBox = Util.div("edit-quiz", id + "-edit-quiz");
@@ -429,20 +430,19 @@ Quiz.prototype.clickableImage = function(id, src, xs, ys) {
 	return img;
 };
 
-// multiple fill-in-the-blank where [[]] is replaced by inputs
-Quiz.prototype.cloze = function(id, txt) {
-	var preItems = txt.split("[[]]");
-	var pre = document.createElement("pre");
-	pre.className = "code";
-
-	for (var i = 0; i < preItems.length; ++i) {
-		pre.appendChild(Util.span(preItems[i]));
-		if (i != preItems.length - 1)
-			pre.appendChild(this.fillin(id + "_" + i, true));
-	}
-	return pre;
-};
-
+Quiz.prototype.cloze = function (id, txt) {
+    var patt1 = /\[\[.*?\]\]/g;  // when using the shortest match, give a ? mark. 
+    var preItems = txt.split(patt1);
+    var pre = document.createElement("pre");
+    pre.className = "code";
+    
+    for (var i = 0; i < preItems.length; i++) {
+        pre.appendChild(Util.span(preItems[i]));
+        if (i != preItems.length-1)
+            pre.appendChild(this.fillin(id + "_" + i, true));
+    }
+    return pre;
+}
 // enter code to be compiled, run, spindled, mutilated
 Quiz.prototype.code = function(id, txt, rows, cols) {
 	var ta = document.createElement("textarea");

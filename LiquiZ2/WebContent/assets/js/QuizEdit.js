@@ -36,6 +36,15 @@ function oneMCDDOption(parent, id){
 	 parent.appendChild(linebreak);
 }
 
+function abstractOptionContext(number){
+	var text = [];
+	for(var i = 1; i <= number; i++){
+		text.push(document.getElementById('o' + i +'t').value);
+		//text[i-1] = document.getElementById('o' + i +'t').value;
+	}
+	return text;
+}
+
 function addClassCheck(element, id){
 
 	if(element.checked){
@@ -60,8 +69,12 @@ function addClassCheck(element, id){
 
 }
 
+//function returnClicks(number){
+//	//return number;
+//	abstractOptionContext(number);
+//}
 
-function editMCDDform(parent, id, numberBox, addOptionButton) {
+function editMCDDform(parent, id, numberBox, addOptionButton, addQuestionButton) {
 	var id_o = 1;
 	var optionClicks = 0;
 	var form = Util.form(null, null, "optionForm");
@@ -75,17 +88,25 @@ function editMCDDform(parent, id, numberBox, addOptionButton) {
 	addOptionButton.onclick = function(){
 		
 		if(1 <= numberBox.value && numberBox.value <= 10){
-			optionClicks += numberBox.value;
+			optionClicks += parseInt(numberBox.value,10); 
+			console.log(optionClicks);
 			for(var i = 0; i < numberBox.value; i++){
 				oneMCDDOption(form, "o" + id_o++);
 				}
 	    	}
-		else {
+		else if (numberBox.value = ""){
 			optionClicks++;
 			oneMCDDOption(form, "o" + id_o++);
 			}
 		checkIfInView("optionForm");
 		};
+		
+		
+		addQuestionButton.onclick = function() { 
+		 console.log(optionClicks);
+	     buildDpd(abstractOptionContext(optionClicks));
+	     $("#editor").remove();
+	     $("#qC").remove();};
 		
 	return form;
 }
@@ -264,27 +285,22 @@ function addBrackets(ta) {
 //		}));
 //}
 
-//////////////07/07/////////////////////////////////////
 
 
-QuizEdit.prototype.editFillin = function(qc) {
+QuizEdit.prototype.editFillin = function(qc, title, text) {
 	  var fillinForm = Util.form(null, "fillinForm", "Fillin");
-		  //mktag(qc, "form", "Fillin", null, "fillinForm");
 	  qc.appendChild(fillinForm);
 	  var Ans = Util.span("Answer: ");
-		  //mkptext(fillinForm, "Answer: ");
 	  var ans = Util.input("text", "ans", "ans");
 	  fillinForm.appendChild(ans);
-		  //mkpinput(fillinForm, "ans", "text", "ans");
       fillinForm.appendChild(Util.button("Add Question", null, null, function() {
-    	  $("#" + editor.id).remove();
-          $("#" + qc.id).remove();
-          $("#" + fillinForm.id).remove();
+    	  $("#editor").remove();
+          $("#qC" ).remove();
           buildFillin(titleInp.value, textBox.value, ans.value);
       }));
 }
 
-QuizEdit.prototype.editNumber = function(qc) {
+QuizEdit.prototype.editNumber = function(qc, title, text) {
 	
 	var numberForm = Util.form(null, "numberForm", "Number");
 	qc.appendChild(numberForm);
@@ -297,49 +313,42 @@ QuizEdit.prototype.editNumber = function(qc) {
 	numberForm.appendChild(max);
 	numberForm.appendChild(Max);
 	numberForm.appendChild(Util.button("Add Question", null, null, function() {
-		$("#" + editor.id).remove();
-        $("#" + qc.id).remove();
-        $("#" + numberForm.id).remove();
-    	buildnumber(titleInp.value, textBox.value, Min.value, Max.value);
+		$("#editor" ).remove();
+        $("#qC").remove();
+    	buildNumber(title, text, Min.value, Max.value);
 	}));
 }
 
-QuizEdit.prototype.editEssay = function(qc) {
+QuizEdit.prototype.editEssay = function(qc, title, text) {
 
 	var essayForm = Util.form(null, "essayForm", "Essay");
 	qc.appendChild(essayForm);
 	essayForm.appendChild(Util.button("Add Question", null, null, function() {
-		$("#" + editor.id).remove();
-	    $("#" + qc.id).remove();
-	    $("#" + essayForm.id).remove();
-		buildessay(titleInp.value, textBox.value);
+		$("#editor").remove();
+	    $("#qC").remove();
+		buildEssay();
 	}));
 }
 
-QuizEdit.prototype.editCode = function(qc) {
+QuizEdit.prototype.editCode = function(qc, title, text) {
 	
 	var codeForm = Util.form(null, "codeForm", "Code");
-	var langSelect = Util.select(null, null, ["C++", "Java", "Python", "Perl", "Processing"], null, "langSelect");
+	var langSelect = Util.select(null, null, ["Please select the language here", "C++", "Java", "Python", "Perl", "Processing"], null, "langSelect");
 	qc.appendChild(codeForm);
 	codeForm.appendChild(langSelect);
+	var e = document.getElementById("langSelect");
+	   
+	
 	codeForm.appendChild(Util.button("Add Question", null, null, function() {
-		 $("#" + editor.id).remove();
-	     $("#" + qc.id).remove();
-	     $("#" + codeForm.id).remove();
-		 buildcode(titleInp.value, textBox.value);
+		var strUser = e.options[e.selectedIndex].text;
+		 $("#editor").remove();
+	     $("#qC").remove();
+		 buildCode(strUser);
 	}));
 }
 
 
-// function addOption(parent){
-// var extraOpteditMCform= form(4, [optionChar], [""]);
-// div.appendChild(extraOption)
-// }
-//
-// var optionCharUni = 68; // the Dec Unicode of 'D'
-// var optionChar = String.fromCharCode(optionCharUni);
-
-QuizEdit.prototype.editMultiChoiceDropdown = function(qc) {
+QuizEdit.prototype.editMultiChoiceDropdown = function(qc, title, text) {
 	var mCDDForm = Util.form(null, "mCDDForm", "MultiChoiceDropdown");
 	qc.appendChild(mCDDForm);
 	var t = Util.table(0, null, null, null);
@@ -353,19 +362,12 @@ QuizEdit.prototype.editMultiChoiceDropdown = function(qc) {
 	});
 	fillRow(r, [ description, numberBox, addOptionButton ]);
 	
-	var MCDDform = editMCDDform(mCDDForm, "MCDDform", numberBox, addOptionButton);
-	mCDDForm.appendChild(Util.button("Add Question", null, null, function() {
-		 $("#" + editor.id).remove();
-	     $("#" + qc.id).remove();
-	     $("#" + mCDDForm.id).remove();
-		 builddpd(titleInp.value, textBox.value);
-	}));
-	
-
-	
+	var addQuestion = Util.button("Add Question", null, "mcdpButton", function() {});
+	var MCDDform = editMCDDform(mCDDForm, "MCDDform", numberBox, addOptionButton, addQuestion);
+	mCDDForm.appendChild(addQuestion);
 }
 
-QuizEdit.prototype.editSurvey = function(qc) {
+QuizEdit.prototype.editSurvey = function(qc, title, text) {
 	var surveyForm = Util.form(null, "surveyForm", "Survey");
 	qc.appendChild(surveyForm);
 	var t = Util.table(0, null, null, null);
@@ -382,12 +384,12 @@ QuizEdit.prototype.editSurvey = function(qc) {
 		 $("#" + editor.id).remove();
 	     $("#" + qc.id).remove();
 	     $("#" + surveyForm.id).remove();
-		 builddpd(titleInp.value, textBox.value);
+		 builddpd(title, text);
 	}));
 	
 }
 
-QuizEdit.prototype.editMultiChoiceRadio = function(qc) {
+QuizEdit.prototype.editMultiChoiceRadio = function(qc, title, text) {
 	var mCRForm = Util.form(null, "mCRForm", "MultiChoiceRadio");
 	qc.appendChild(mCRForm);
 	var t = Util.table(0, null, null, null);
@@ -411,7 +413,7 @@ QuizEdit.prototype.editMultiChoiceRadio = function(qc) {
 	}));
 }
 
-QuizEdit.prototype.editMultiAnswer = function(qc) {
+QuizEdit.prototype.editMultiAnswer = function(qc, title, text) {
 	var mAForm = Util.form(null, "mAForm", "MultiAnswer");
 	qc.appendChild(mAForm);
 	var t = Util.table(0, null, null, null);
@@ -436,7 +438,7 @@ QuizEdit.prototype.editMultiAnswer = function(qc) {
 }
 
 var selStart, selEnd;
-QuizEdit.prototype.editCloze = function(qc) {
+QuizEdit.prototype.editCloze = function(qc, title, text) {
 	
 	var exampleClozeTest = 'public class A {\n [[]]  public [[]] '+
 		'void main(strings [] args) {\n  System.println.out("hello");\n  }\n}';
@@ -453,103 +455,106 @@ QuizEdit.prototype.editCloze = function(qc) {
 	clozeForm.appendChild(Util.button("Add Question", null, null, function() {
 		 $("#" + editor.id).remove();
 	     $("#" + qc.id).remove();
-	     $("#" + clozeForm.id).remove();
-		 builddpd(titleInp.value, textBox.value);
+		 buildCloze(ta.value);
 	}));
 	
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-/// save for 07/08 ////////////////////////
 
 var newid = -1;
 function removeOldButtons(){
-	$("#qc18").remove();
-	var button1 = document.getElementById("submit-2");
-	button1.parentNode.parentNode.removeChild(button1.parentNode);
+	$("#submitDiv-2").remove();
+	$("#editor").remove();
 }
 
-function buildCloze(title, text) {
 
-	page.addQuestion(newid--, title, "cloze");
-	page.instructions("Fill in the blanks to make the code correct");
-	page.cloze(newid--, text);
+function buildFillin(answer) {
+	removeOldButtons();
+	var q = [
+	         newid--, titleInp.value, "fillin",
+	         ['Util.span', textBox.value],
+	         ['fillin', newid],
+	     ];
+	 var qc = page.addQuestion(q[0], q[1], q[2]);
+         qc.appendChild(page.processQuestion(q));
+	page.render(qc);
+	page.end();
+	checkIfInView('qc' + (newid + 1));
+	console.log('qc' + (newid + 1));
+	
 }
 
-function buildFillin(title, text, answer) {
-
-	page.addQuestion(newid--, title, "fillin");
-	page.span(text);
-	page.fillin(newid--);
-	// TODO: store answer
-
-	// var quizinfo = new QuizInfo("New Fill-In Question", 10, 0, 1, "assets/");
-	// var qlist = [[
-	// qhead('Java'),
-	// lin('Complete the code below'),
-	// cod(3, txt3, 10, 80)
-	// ]]
-	// var q_cloze = new Quiz(quizinfo, qlist);
-}
-function buildnumber(title, text) {
-	var quizinfo = new QuizInfo("New Number Question", 10, 0, 1, "assets/");
-	var qlist = [
-			[ qhead('Java'), lin('Complete number text below'),
-					cod(3, txt4, 10, 80) ],
-			[ lin('Type your Answer'), cod(3, "", 2, 80) ] ]
-	var q_cloze = new Quiz(quizinfo, qlist);
-}
-function buildessay(txt5) {
-	var quizinfo = new QuizInfo("New Essay Question", 10, 0, 1, "assets/");
-	var qlist = [
-			[ qhead('Java'), lin('Question Text'), cod(3, txt5, 10, 80) ],
-			[ lin('Type your Essay'), cod(3, "", 12, 100) ], ]
-	var q_cloze = new Quiz(quizinfo, qlist);
-}
-function buildcode() {
-	var quizinfo = new QuizInfo("New Code Question", 10, 0, 1, "assets/");
-	var qlist = [
-			[
-					qhead('Java'),
-					lin('Question Text'),
-					cod(3, txt6, 10, 80),
-					match(1, [ txt("Programming Language: ") ], [ txt("C++"),
-							txt("Java"), txt("Python"), ]) ],
-			[ lin('Type your code'), cod(3, "", 12, 100), button("Run") ]
-
-	]
-	var q_cloze = new Quiz(quizinfo, qlist);
+function buildNumber(Min, Max) {
+	removeOldButtons();
+	var q = [
+	         newid--, titleInp.value, "numeric",
+	         ['instructions', textBox.value],
+	         ['numeric', newid],
+	     ];
+	 var qc = page.addQuestion(q[0], q[1], q[2]);
+         qc.appendChild(page.processQuestion(q));
+	page.render(qc);
+	checkIfInView('qc' + (newid + 1));
+	page.end();
 }
 
-function builddpd() {
-	var quizinfo = new QuizInfo("New DropDownList Question", 10, 0, 1,
-			"assets/");
-	var qlist = [
-			[ qhead('Java'), lin('Question Text'), cod(3, txt6, 10, 80), ],
-
-			[ lin('Type your code'), cod(3, "", 12, 100), ]
-
-	]
-	var q_cloze = new Quiz(quizinfo, qlist);
+function buildEssay() {
+	removeOldButtons();
+	var q = [
+	         newid--, titleInp.value, "essay",
+	         ['instructions', textBox.value],
+	         ['essay', 14, 10, 80, 200],
+	     ];
+	 var qc = page.addQuestion(q[0], q[1], q[2]);
+         qc.appendChild(page.processQuestion(q));
+	page.render(qc);
+	page.end();
+	checkIfInView('qc' + (newid + 1));
 }
 
-var list = [
-            "Choose QuestionType",
-            "Fillin",
-            "Number",
-            "Essay",
-            "Code",
-            "MultiChoiceDropdown",
-            "Survey",
-            "MultiChoiceRadio",
-            "MultiAnswer",
-            "Regex",
-            "Matrix",
-            "Cloze"];
+function buildCode(selectedLanguage) {
+	removeOldButtons();
+	var q = [
+	         newid--, titleInp.value, "code",
+	         ['instructions', textBox.value],
+	         ['instructions', "Please use " + selectedLanguage + " to code"],
+	         ['code', newid, "", 10, 80],
+	     ];
+	 var qc = page.addQuestion(q[0], q[1], q[2]);
+         qc.appendChild(page.processQuestion(q));
+	page.render(qc);
+	checkIfInView('qc' + (newid + 1));
+	page.end();
+}
 
-var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
-		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
-		"Regex", "Matrix", "Cloze" ];
+function buildDpd(options) {
+	removeOldButtons();
+	var q = [
+	         newid--, titleInp.value, "multiple_dropdown",
+	         ['instructions', textBox.value],
+	         ['Util.select', "which", false, options, 'mcdropdown', newid],
+	     ];
+	 var qc = page.addQuestion(q[0], q[1], q[2]);
+         qc.appendChild(page.processQuestion(q));
+	page.render(qc);
+	checkIfInView('qc' + (newid + 1));
+	page.end();
+}
+
+function buildCloze(text){
+	removeOldButtons();
+	var q = [
+	         newid--, titleInp.value, "cloze",
+	         ['instructions', textBox.value],
+	         ['cloze', newid, text],
+	     ];
+	 var qc = page.addQuestion(q[0], q[1], q[2]);
+         qc.appendChild(page.processQuestion(q));
+	page.render(qc);
+	checkIfInView('qc' + (newid + 1));
+	page.end();
+}
+
 
 function fillRow(row, list) {
 	for (var i = 0; i < list.length; i++) {
@@ -596,18 +601,24 @@ QuizEdit.prototype.editQuestion = function() {
 	editor.appendChild(t0);
 	var r0 = t0.insertRow(0);
 
-	var title = document.createTextNode("Title: ");
+	var list = [ "Choose QuestionType", "Fillin", "Number", "Essay", "Code",
+	     		"MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
+	     		"Regex", "Matrix", "Cloze" ];
+	var titleText = document.createTextNode("Title: ");
 	/*
-	 * inp is a global variable in former version
+	 * titleInp is a glable variable right now, since the real-time value of it should be passed
+	 * to the function of build~() in the edit~() functions instead of the initial value.
+	 * 
+	 * the same as textBox
 	 */
-	var inp = document.createElement("input");
+	titleInp = document.createElement("input");
 	var questionType = document.createTextNode("Question Type: ");
 	var selectBox = Util.select("quizType", false, list, null, "quizType");
 	var addQuestion = Util.button("Add Question", null, null, function() {
 	});
 	var cancel = Util.button("Cancel", null, null, function() {
 	});
-	fillRow(r0, [ title, inp, questionType, selectBox, addQuestion, cancel ]);
+	fillRow(r0, [ titleText, titleInp, questionType, selectBox, addQuestion, cancel ]);
 
 	var r1 = t0.insertRow(1);
 	var level = document.createTextNode("Level: ");
@@ -621,10 +632,7 @@ QuizEdit.prototype.editQuestion = function() {
 	var t1 = document.createElement("table");
 	editor.appendChild(t1);
 	var r2 = t1.insertRow(0);
-	/*
-	 * textBox is a global variable in former version
-	 */
-	var textBox = Util.textarea(null, "textArea", "blankbox", 5, 40);
+	    textBox = Util.textarea(null, "textArea", "blankbox", 5, 40);
 	r2.appendChild(textBox);
 	fillRow(r2, [textBox, imageAudioVideo()]);
 	
@@ -633,15 +641,12 @@ QuizEdit.prototype.editQuestion = function() {
 	this.body.appendChild(questionContainer);
 
 	$('#quizType').change(function() {
-//		for (var i = 0; i < list.length; i++) {
-//			$("#" + list[i]).hide();
-//		}
 		$("#" + questionContainer.id).empty();
 		var val = $("#quizType option:selected").text();
 		if (val === "Choose QuestionType") {
 			return;
 		}
-		parent["edit" + val](questionContainer);
+		parent["edit" + val](questionContainer, titleInp.value, textBox.value);
 		checkIfInView(val);
 	});
 }
