@@ -19,7 +19,7 @@ public class FormInput {
 			if(choice==null||choice.equals("")){
 				break;
 			}
-			StdChoices.add(new Answer(new Text(choice)));
+			StdChoices.add(new Answer(new AnswerText(choice)));
 		}
 		for(int i=0;i<StdChoices.size();i++){
 			System.out.println(StdChoices.get(i));

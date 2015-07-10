@@ -215,14 +215,15 @@ public class Quiz implements Displayable {
 		//TODO: add data for point values, calculate remaining tries
 		//TODO: do something about directory
 		int points = 100; //TODO: add points to quiz?
+		//yijinkang: getTotalPoints() will return the total number of points of the questions in the quiz
 		dc.append
-		("page  = new Quiz( {\n" +
-		"title: ");
+		("new Quiz( {\n" +
+		"title:");
 		Util.escapeQuotedJS(name, dc);
-		dc.append(",points:").append(points).
-			append(",timeLimit:").append(policy.getDuration()).
-			append(",remainingTries:").append(1). //TODO: need count of user's tries
-			append(",dataDir:").append("'assets/'\n} );").
+		dc.append(",\npoints:").append(points).
+			append(",\ntimeLimit:").append(policy.getDuration()).
+			append(",\nremainingTries:").append(1). //TODO: need count of user's tries
+			append(",\ndataDir:").append("'assets/'\n} );").
 			append("\nvar q;\n");
 		for(QuestionContainer qc: this.qContainers) {
 			qc.writeJS(dc);

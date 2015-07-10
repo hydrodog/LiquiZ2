@@ -14,10 +14,10 @@ public class TestQuizJavascript {
 		
 		QuestionContainer qc = 
 				new QuestionContainer(qcid++, "Operators", "fillin", new ArrayList<Displayable>());
-		qc.add(new Text("What is 2+2?"));
+		qc.add(new QuestionText("What is 2+2?"));
 		qc.add(new Image("dinosaur.jpg", 100, 100));
 		ArrayList<Answer> answers = new ArrayList<Answer>();
-		answers.add(new Answer(new Text("4"), true));
+		answers.add(new Answer(new AnswerText("4"), true));
 		qc.add(new FillIn(qid++, 1, 1, answers));
 		quiz.addQuestion(qc);
 		

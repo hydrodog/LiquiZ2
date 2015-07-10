@@ -4,8 +4,7 @@ import org.adastraeducation.liquiz.util.*;
 
 /**
  * DisplayElement representing Text
- * Will be turned into an abstract class
- * Use the children (InstructionText, QuestionText, AnswerText)
+ * Children: InstructionText, QuestionText, AnswerText, ResponseText
  * @author yijinkang
  *
  */
