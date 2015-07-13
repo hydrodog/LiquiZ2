@@ -6,7 +6,7 @@ function Index (indexData) {
 
 Index.prototype.exec = function(params) {
     for (var i = 0; i < this.data.length; i++) {
-        this.body.appendChild(this.processItem(this.data[i]));
+        this.render(this.processItem(this.data[i]));
     }
 };
 
@@ -18,3 +18,6 @@ Index.prototype.processItem = function(item) {
     }
 };
 
+Index.prototype.render = function(element) {
+    this.body.appendChild(element);
+};

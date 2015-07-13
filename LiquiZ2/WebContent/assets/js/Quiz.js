@@ -28,7 +28,8 @@ Quiz.prototype.exec = function(params) {
 
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
-
+    this.render(this.headerButtons());
+    
     for (var i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
         var qc = this.addQuestion(q[0], q[1], q[2]);
@@ -59,6 +60,7 @@ Quiz.prototype.collapsed = function(params) {
 
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
+    this.render(this.headerButtons());
 
     for (i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
@@ -69,6 +71,66 @@ Quiz.prototype.collapsed = function(params) {
         this.render(qc);
     }
     this.end();
+}
+
+Quiz.prototype.headerButtons = function() {
+    var fragment = document.createDocumentFragment();
+    var button, input;
+
+    button = Util.button("Collapse All", null, null,
+        function(e) {
+            Util.url.changeView("collapsed");
+            Util.url.removeAllArgs();
+        });
+    fragment.appendChild(button);
+
+    button = Util.button("Uncollapse All", null, null,
+        function(e) {
+            Util.url.changeView("");
+            Util.url.removeAllArgs();
+        });
+    fragment.appendChild(button);
+
+    onkeydown = function(e) {
+        if (e.keyCode == 13) {
+            if (hash.view === null) {
+                collapse(e);                
+            } else if (hash.view === "collapsed") {
+                expand(e);
+            }
+        }
+    };
+
+    collapse = function(e) {
+        var data = document.getElementById("collapse-input");
+        var regex = /(\d+)/g;
+        var collapse_vals = data.value.match(regex);
+        if (collapse_vals !== null) {
+            Util.url.removeArg("not");
+            Util.url.addArg("collapse", collapse_vals.join(","));
+        }
+    };
+
+    expand = function(e) {
+        var data = document.getElementById("collapse-input");
+        var regex = /(\d+)/g;
+        var expand_vals = data.value.match(regex);
+        if (expand_vals !== null) {
+            Util.url.removeArg("collapse");
+            Util.url.addArg("not", expand_vals.join(","));
+        }
+    };
+
+    if (hash.view === null) {
+        input = Util.input("text", null, "collapse-input", hash.params.collapse, onkeydown);
+        button = Util.button("Collapse", null, null, collapse);
+    } else if (hash.view === "collapsed") {
+        input = Util.input("text", null, "collapse-input", hash.params.not, onkeydown);
+        button = Util.button("Expand", null, null, expand);
+    }
+    fragment.appendChild(input);
+    fragment.appendChild(button);
+    return fragment;
 }
 
 Quiz.prototype.processQuestion = function(q) {
