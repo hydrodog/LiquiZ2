@@ -37,7 +37,7 @@ function gtable(g) {
 	});
 	this.primaryIndex = null;
 	this.secondIndex = 1;
-	this.compare = this.ascend;
+	this.order = -1; // Order: "1" for ascending, "-1" for descending.
 	if (temp.length > 0) {
 		var h = table.insertRow(0);
 		for (var i = 0; i < temp[0].length; i++) {
@@ -57,22 +57,50 @@ function gtable(g) {
 	}
 	return (this.table);
 }
+// A dictionary for comparing letter grades
+gtable.compareLetterGrade = function(a, b) {
+	var scale = {
+		'A+' : 10,
+		'A' : 9,
+		'A-' : 8,
+		'B+' : 7,
+		'B' : 6,
+		'B-' : 5,
+		'C+' : 4,
+		'C' : 3,
+		'C-' : 2,
+		'F' : 1,
+	};
+	if (scale[a] < scale[b])
+		return -1;
+	else if (scale[a] > scale[b])
+		return 1;
+	return 0;
+}
 
-gtable.ascend = function(a, b) {
+gtable.compare = function(a, b) {
+	// For comparing letter grades:
+	if (primaryIndex == temp[0].indexOf('Letter Grade')) {
+		if (gtable.compareLetterGrade(a[primaryIndex], b[primaryIndex]) != 0)
+			return order
+					* gtable.compareLetterGrade(a[primaryIndex],
+							b[primaryIndex]);
+	}
 	// For comparing numbers:
-	if (!isNaN(a[primaryIndex] - b[primaryIndex])) {
+	else if (!isNaN(a[primaryIndex] - b[primaryIndex])) {
 		if (a[primaryIndex] - b[primaryIndex] != 0)
-			return a[primaryIndex] - b[primaryIndex];
+			return order * (a[primaryIndex] - b[primaryIndex]);
 	}
 	// For comparing strings:
 	else {
 		if (a[primaryIndex].toUpperCase() < b[primaryIndex].toUpperCase())
-			return -1;
+			return -order;
 		if (a[primaryIndex].toUpperCase() > b[primaryIndex].toUpperCase())
-			return 1;
+			return order;
 	}
 	// In case the primary index elements are equal(no matter numbers or
-	// strings), use second index:
+	// strings), use second index, note that the second index always sorts in
+	// ascending order:
 	if (a[secondIndex].toUpperCase() < b[secondIndex].toUpperCase())
 		return -1;
 	else if (a[secondIndex].toUpperCase() == b[secondIndex].toUpperCase())
@@ -80,21 +108,17 @@ gtable.ascend = function(a, b) {
 	return 1;
 }
 
-gtable.descend = function(a, b) {
-	return -gtable.ascend(a, b);
-}
-
 gtable.clickColumn = function(e) {
 	var td = e.currentTarget;
+	// Order: "1" for ascending, "-1" for descending.
 	if (td.cellIndex == primaryIndex)
-		this.compare = this.compare == this.ascend ? this.descend : this.ascend;
+		order = order == 1 ? -1 : 1;
 	else {
-		this.compare = this.ascend;
+		order = -1;
 		primaryIndex = td.cellIndex;
 	}
 	temp = temp.slice(0, 1).concat(
-			temp.slice(1, temp.length).sort(this.compare));
-	// temp = temp.shift().concat(temp.sort(compare));
+			temp.slice(1, temp.length).sort(gtable.compare));
 	for (var i = 0; i < temp.length; i++) {
 		var r = table.rows[i];
 		for (var j = 0; j < temp[i].length; j++) {
