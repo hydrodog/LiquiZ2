@@ -104,7 +104,10 @@ Quiz.prototype.headerButtons = function() {
     collapse = function(e) {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
-        var collapse_vals = data.value.match(regex);
+        var collapse_vals = data.value.match(regex).sort().filter(
+            function(element, index, array) {
+                return !index || element != array[index - 1];
+            });
         if (collapse_vals !== null) {
             Util.url.removeArg("not");
             Util.url.addArg("collapse", collapse_vals.join(","));
@@ -114,7 +117,10 @@ Quiz.prototype.headerButtons = function() {
     expand = function(e) {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
-        var expand_vals = data.value.match(regex);
+        var expand_vals = data.value.match(regex).sort().filter(
+            function(element, index, array) {
+                return !index || element != array[index - 1];
+            });
         if (expand_vals !== null) {
             Util.url.removeArg("collapse");
             Util.url.addArg("not", expand_vals.join(","));
