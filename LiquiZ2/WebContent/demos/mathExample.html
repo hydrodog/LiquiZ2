@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+/*button*/
+.math-button {
+    padding: 8px 6px;
+    height: 79px;
+    font-size: 12px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: default;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    vertical-align: top;
+    margin-right: 1px;
+    outline: 0;
+}
+
+.math-button-icon {
+    width: 32px;
+    height: 32px;
+    margin: 2px auto;
+}
+
+.math-button-label {
+    color: #666;
+    text-align: center;
+    display: block;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.math-button-sign {
+    border: 4px solid transparent;
+    border-top-color: #2d2d2d;
+    width: 0;
+    height: 0;
+    display: inline-block;
+    margin: 8px auto;
+    vertical-align: top;
+}
+
+.math-button-mount-point {
+    display: none;
+    position: absolute;
+    bottom: -2px;
+    left: -1px;
+}
+
+ .math-button-in {
+    border-color: #bdb429!important;
+    background: #fff5e1!important;
+}
+
+.math-button:HOVER {
+    border: 1px solid #a9d9ab;
+    background: #ebf7e6;
+}
+
+/* box */
+.math-box {
+    border: 1px solid #b3aead;
+    border-radius: 3px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.11);
+    background: white;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.math-box-container {
+    font-size: 12px;
+}
+
+.math-box-group-title {
+    background-color: #f7f6f0;
+    height: 23px;
+    line-height: 23px;
+    font-size: 12px;
+    border: 1px solid #ebeae4;
+    border-width: 1px 0;
+    padding-left: 12px;
+}
+
+.math-box-item {
+    display: inline-block;
+    margin: 4px;
+    border: 1px solid #808080;
+}
+
+.math-box-item:HOVER {
+    border-color: #bdb429;
+}
+
+.math-box-item-label {
+    margin-bottom: 5px;
+}
+
+/* scrollbar */
+.math-box::-webkit-scrollbar {
+    width: 10px;
+}
+
+.math-box::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #666666;
+}
+ 
+.math-box::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.8); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9); 
+}
+.math-box::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0,0,0,0.9); 
+}
+
+.div2
+{
+text-align: center;
+display: block;
+font-size: 80%!important;
+}
+.div6
+{
+text-align: left;
+display: block;
+font-size: 80%!important;
+}
+.div5
+{
+float: right;
+width: 100%;
+text-align: left;
+display: block;
+font-size: 80%!important;
+}
+.div8
+{
+text-align: right;
+display: block;
+font-size: 80%!important;
+}
+.div7
+{
+float: right;
+width: 100%;
+text-align: right;
+display: block;
+font-size: 80%!important;
+}
+.div4
+{
+float: right;
+width: 100%;
+text-align: center;
+display: block;
+font-size: 80%!important;
+}
+.div3
+{
+text-align: center;
+display: inline-block;
+}
+.math-editable {
+  display: -moz-inline-box;
+  display: inline-block;
+  border: 1px solid gray;
+  padding: 2px;
+}
+.math-editable .cursor {
+  border-left: 1px solid black;
+  margin-right: -1px;
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  display: -moz-inline-box;
+  display: inline-block;
+}
+.math-editable .cursor.blink {
+  visibility: hidden;
+}
+.math-editable .hasCursor {
+  -webkit-box-shadow: #68b4df 0 0 3px 2px;
+  -moz-box-shadow: #68b4df 0 0 3px 2px;
+  box-shadow: #68b4df 0 0 3px 2px;
+}
+.math-editable.empty:after,
+.math-expr .empty:after {
+  visibility: hidden;
+  content: 'c';
+}
+
+.math-expr {
+  font-variant: normal;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 115%;
+  line-height: 1;
+  display: -moz-inline-box;
+  display: inline-block;
+}
+.math-expr .non-leaf,
+.math-expr .scaled {
+  display: -moz-inline-box;
+  display: inline-block;
+}
+.math-expr var {
+  font-family: "Times New Roman", Symbola, serif;
+  line-height: .9;
+}
+.math-expr * {
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  border-color: black;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  white-space: pre-wrap;
+}
+.math-expr .empty {
+  background: #ccc;
+}
+.math-expr.empty {
+  background: transparent;
+}
+.math-expr .font {
+  font: 1em "Times New Roman", Symbola, serif;
+}
+.math-expr .font * {
+  font-family: inherit;
+  font-style: inherit;
+}
+.math-expr var {
+  font-syle: italic;
+}
+.math-expr big {
+  font-size: 125%;
+}
+.math-expr sup,
+.math-expr sub {
+  position: relative;
+  font-size: 90%;
+}
+.math-expr sup.limit,
+.math-expr sub.limit,
+.math-expr sup.nthroot,
+.math-expr sub.nthroot {
+  font-size: 80%;
+}
+.math-expr sup .fraction,
+.math-expr sub .fraction {
+  font-size: 70%;
+  vertical-align: -0.4em;
+}
+.math-expr sup .numerator,
+.math-expr sub .numerator {
+  padding-bottom: 0;
+}
+.math-expr sup .denominator,
+.math-expr sub .denominator {
+  padding-top: 0;
+}
+.math-expr sup {
+  vertical-align: .5em;
+}
+.math-expr sup.limit,
+.math-expr sup.nthroot {
+  vertical-align: 0.8em;
+}
+.math-expr sup.nthroot {
+  margin-right: -0.6em;
+  margin-left: .2em;
+  min-width: .5em;
+}
+.math-expr sub {
+  vertical-align: -0.4em;
+}
+.math-expr sub.limit {
+  vertical-align: -0.6em;
+}
+.math-expr .fraction {
+  font-size: 90%;
+  text-align: center;
+  vertical-align: -0.5em;
+  padding: 0 .2em;
+  display: -moz-groupbox;
+  display: inline-block;
+}
+.math-expr .numerator,
+.math-expr .denominator {
+  display: block;
+}
+.math-expr .numerator {
+  padding: 0 0.1em;
+  margin-bottom: -0.1em;
+}
+.math-expr .denominator {
+  border-top: 1px solid;
+  float: right;
+  width: 100%;
+  padding: .1em .1em 0 .1em;
+  margin-right: -0.1em;
+  margin-left: -0.1em;
+}
+.divsub {
+  float: right;
+  width: 100%;
+  padding: .1em .1em 0 .1em;
+  margin-right: -0.1em;
+  margin-left: -0.1em;
+}
+
+.math-expr .sqrt-prefix {
+  padding-top: 0;
+  position: relative;
+  top: .1em;
+  vertical-align: top;
+  -webkit-transform-origin: top;
+  -moz-transform-origin: top;
+  -ms-transform-origin: top;
+  -o-transform-origin: top;
+  transform-origin: top;
+}
+.math-expr .sqrt-stem {
+  border-top: 1px solid;
+  margin-top: 1px;
+  padding-left: .15em;
+  padding-right: .2em;
+  margin-right: .1em;
+}
+.math-expr,
+.math-expr .math-editable {
+  cursor: text;
+  font-family: Symbola, "Times New Roman", serif;
+}
+
+</style>
+<title>MathJax AsciiMath Test Page</title>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [["$","$"],["\\(","\\)"]]
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<body>
+<!--
+<p>When $\frac{111}{1}$, there are two solutions to $\sum_{k=1}^N k^2$ and $\bigcap_{i=_1}^n E_i$
+they are</p>
+<p style="text-align:center">
+  $$x = \frac{{-b}\pm\sqrt{b^2-4ac}}{2a}$$
+</p>
+
+<table border="1">
+<tr>
+<td>#$\int_0^1 x^2dx$#</td>
+<td>Row 1, cell 2</td>
+</tr>
+</table>
+<br>
+
+<input id="int" type="submit" value="¡Ò">
+<input id="log" type="submit" value="log">
+<input id="ln" type="submit" value="ln">
+<input id="sum" type="submit" value="¡Æ">
+<input id="oint" type="submit" value="¡Ó">
+<input id="subb" type="submit" value="^">
+<input id="supp" type="submit" value="_">
+<input id="subp" type="submit" value="^&_">
+<input id="sqrt" type="submit" value="¡Ì">
+
+<div id="math_box"></div>
+-->
+
+
+<script>
+document.body.onclick = function() {
+	//console.log(22);	
+	if (document.activeElement.getAttribute("math_id") == null) {
+		var cursor = document.getElementById("cursor");
+		if (cursor != null) {
+			var parent = cursor.parentNode;
+			removeElement(cursor);
+			checkClassName(parent);
+			//parent.blur();
+		}
+	}
+}
+
+function make(tag, obj) {
+    // without a valid tag we can't continue
+    if (typeof tag === "undefined" || !tag) {
+        console.log("Util.make failed with \ntag: " + tag +
+            "\ninnerHTML: " + obj[innerHTML] +
+            "\nclassName: " + obj[className] +
+            "\nid: " + obj[id]);
+        return;
+    }
+    var element = document.createElement(tag);
+    for (var i in obj) {
+        if (typeof obj[i] !== "undefined" && obj[i] !== null)
+            if (i === "innerHTML" && obj[i].nodeName) {
+                element.appendChild(obj[i]);
+            } else if (i === "style") {
+            	for (var j in obj[i]) 
+            		element.style[j] = obj[i][j];
+            } else {
+                element[i] = obj[i];
+            }
+    }
+    return element;
+}
+
+function div(className, style) {
+    return make("div", {
+        className: className,
+        style: style
+    });
+}
+
+function btn1(e) {
+	var bot = this.getElementsByClassName("math-button-mount-point")[0];
+	console.log(bot);
+	if (bot.style.display == "block") {
+		bot.style.display = "none";
+		this.className = "math-button";
+	} else {
+		bot.style.display = "block";
+		this.className = "math-button math-button-in";
+	}
+	e.stopPropagation();	
+}
+function btn2(e) {	//blur has no bubble event catch
+	var bot = this.getElementsByClassName("math-button-mount-point")[0];
+	//console.log(bot);
+	bot.style.display = "none";
+	this.className = "math-button";
+}
+
+function mkToolBtnTop(iconLoc, label) {	//make tool button top part, always visiable
+	var btn = insertInto(div("math-button"), [
+		 		div("math-button-icon", {background: "url(assets/img/toolbar/" + iconLoc + ")"}),
+				insertInto(div("math-button-label"), [
+					document.createTextNode(label),
+					make("br"),
+					div("math-button-sign")
+				])		
+         	]);
+	btn.setAttribute("tabindex","0");
+	btn.addEventListener('click', btn1, false);
+	btn.addEventListener('blur', btn2, false);
+	return btn;
+}
+
+function mkToolBtnBot(group_set) {	//make tool button bottom part, visiable when top part is clicked
+	var btn = insertInto(div("math-button-mount-point", {display: "none"}), [
+		insertInto(div("math-box", {width: "300px", height: "200px"}), [
+			insertInto(div("math-box-container"), group_set)
+		])
+	]);
+	return btn;
+}
+
+function mkGroup(title, smallBtn_set) {	//make group part in tool button bottom
+	var btn = insertInto(div("math-box-group"), [
+		insertInto(div("math-box-group-title"), [
+			document.createTextNode(title)
+		]),
+		insertInto(div("math-box-group-container"), smallBtn_set)
+	])
+	
+	btn.onclick = function(e){e.stopPropagation();};
+	return btn;
+}
+
+function mkSmallBtn(loc, botton_id) {
+	var btn = make("div", {className: "math-box-item", style: {background: "url(assets/img/toolbar/" + loc + ")", width: "56px", height: "75px"}});
+	btn.setAttribute("btn_id", botton_id);
+	btn.addEventListener('click', btn3, false);
+	return btn;
+}
+
+function mkSmallBtnLong(loc, botton_id, w, h) {
+	var btn = make("div", {className: "math-box-item", style: {background: "url(assets/img/toolbar/" + loc + ")", width: w+"px", height: h+"px"}});
+	btn.setAttribute("btn_id", botton_id);
+	btn.addEventListener('click', btn3, false);
+	return btn;
+}
+
+function createVar(string) {
+	var frag = document.createDocumentFragment();
+	for (var i in string) {
+		var tag = document.createElement("var");
+		tag.setAttribute("id", "char");
+		tag.setAttribute("math_id", math_id++);
+		tag.innerHTML = string[i];
+		frag.appendChild(tag);
+	}
+	return frag;
+
+}
+
+function b() {
+	if (this.nextSibling && this.nextSibling.tagName == "SUP")
+		this.nextSibling.setAttribute("style", supPosition(this, this.nextSibling));
+	console.log(1);
+}
+
+function btn3(e) {
+	var expr = document.createDocumentFragment();
+	var btn_id = this.getAttribute("btn_id");
+	switch (btn_id) {
+	//fraction
+	case 'frac/1':
+		expr.appendChild(createExpr("fraction"));
+		break;
+	case 'frac/2':
+		insertInto(expr, [createExpr("span"), createExpr("/"), createExpr("span")], false);
+		break;
+	case 'frac/c1':
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "numerator";
+		frac.childNodes[0].appendChild(createVar("dy"));
+		frac.childNodes[1].className = "denominator";
+		frac.childNodes[1].appendChild(createVar("dx"));
+		expr.appendChild(frac);
+		break;
+	case 'frac/c2':
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "numerator";
+		frac.childNodes[0].appendChild(createVar("¦¤y"));
+		frac.childNodes[1].className = "denominator";
+		frac.childNodes[1].appendChild(createVar("¦¤x"));
+		expr.appendChild(frac);
+		break;
+	case 'frac/c4':
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "numerator";
+		frac.childNodes[0].appendChild(createVar("¦Äy"));
+		frac.childNodes[1].className = "denominator";
+		frac.childNodes[1].appendChild(createVar("¦Äx"));
+		expr.appendChild(frac);
+		break;
+	case 'frac/c5':
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "numerator";
+		frac.childNodes[0].appendChild(createVar("¦Ð"));
+		frac.childNodes[1].className = "denominator";
+		frac.childNodes[1].appendChild(createVar("2"));
+		expr.appendChild(frac);
+		break;
+	//script
+	case 'script/1':
+		expr.appendChild(createExpr("sup"));
+		break;
+	case 'script/2':
+		expr.appendChild(createExpr("sub"));
+		break;	
+	case 'script/3':	//TODO: distance
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "div6";
+		frac.childNodes[0].appendChild(createExpr("span"));
+		frac.childNodes[1].className = "div5";
+		frac.childNodes[1].appendChild(createExpr("span"));
+		expr.appendChild(frac);
+		break;
+	case 'script/4':	//TODO: distance
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "div8";
+		frac.childNodes[0].appendChild(createExpr("span"));
+		frac.childNodes[1].className = "div7";
+		frac.childNodes[1].appendChild(createExpr("span"));
+		expr.appendChild(frac);
+		break;
+	case 'script/c1':
+		var sup = createExpr("sup");
+		sup.className = "non-leaf limit";
+		sup.appendChild(createVar("-i¦Øt"))
+		insertInto(expr, [ createVar("e"), sup ], false);
+		break;
+	case 'script/c2':
+		var sup = createExpr("sup");
+		sup.className = "non-leaf limit";
+		sup.appendChild(createVar("2"))
+		insertInto(expr, [ createVar("x"), sup ], false);
+		break;
+	case 'script/c3':
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "div8";
+		frac.childNodes[0].appendChild(insertInto(createExpr("span"), [createVar("n")], false));
+		frac.childNodes[0].firstChild.className = "non-leaf";
+		frac.childNodes[1].className = "div7";
+		frac.childNodes[1].appendChild(insertInto(createExpr("span"), [createVar("1")], false));
+		frac.childNodes[1].firstChild.className = "non-leaf";
+		expr.appendChild(frac);
+		insertInto(expr, [ frac, createVar("Y") ], false);
+		break;
+	//radical
+	case "sqrt/1":	//TODO: change the height
+		expr.appendChild(createExpr("sqrt"));
+		break;
+	case "sqrt/2":
+		insertInto(expr, [createExpr("sup"), createExpr("sqrt")], false);
+		expr.firstChild.className = "nthroot non-leaf empty";
+		break;
+	case "sqrt/3":
+		insertInto(expr, [createExpr("sup"), createExpr("sqrt")], false);
+		expr.firstChild.className = "nthroot non-leaf";
+		expr.firstChild.appendChild(createVar("2"));
+		break;
+	case "sqrt/4":
+		insertInto(expr, [createExpr("sup"), createExpr("sqrt")], false);
+		expr.firstChild.className = "nthroot non-leaf";
+		expr.firstChild.appendChild(createVar("3"));
+		break;
+	//integral
+	case "int/1":
+		expr.appendChild(createExpr("¡Ò"));
+		break;
+	case "int/2":
+		insertInto(expr, [createExpr("¡Ò"), createExpr("subp")], false);
+		break;
+	case "int/3":
+		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò")], false);;
+		break;
+	case "int/4":
+		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò"), createExpr("subp")], false);
+		break;
+	case "int/5":
+		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò"), createExpr("¡Ò")], false);
+		break;
+	case "int/6":
+		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò"), createExpr("¡Ò"), createExpr("subp")], false);
+		break;
+	// large operator
+	case 'large/1':
+		expr.appendChild(createExpr("¡Æ"));
+		break;
+	case 'large/2':
+		expr.appendChild(createExpr("sum"));
+		break;
+	case 'large/3':
+		var sum = createExpr("sum");
+		removeElement(sum.firstChild);
+		expr.appendChild(sum);
+		break;
+	// brackets
+	case "brackets/1":
+		insertInto(expr, [createExpr("("), createExpr(")")], false);
+		break;
+	case "brackets/2":
+		insertInto(expr, [createExpr("["), createExpr("]")], false);
+		break;
+	case "brackets/3":
+		insertInto(expr, [createExpr("{"), createExpr("}")], false);
+		break;
+	case "brackets/4":
+		insertInto(expr, [createExpr("|"), createExpr("|")], false);
+		break;
+	// function
+	case "func/1":
+		insertInto(expr, [createVar("sin")], false);
+		break;
+	case "func/2":
+		insertInto(expr, [createVar("cos")], false);
+		break;
+	case "func/3":
+		insertInto(expr, [createVar("tan")], false);
+		break;
+	case "func/4":
+		insertInto(expr, [createVar("cot")], false);
+		break;
+	case "func/5":
+		insertInto(expr, [createVar("sec")], false);
+		break;
+	case "func/6":
+		insertInto(expr, [createVar("csc")], false);
+		break;
+	case "func/c1":
+		insertInto(expr, [createVar("sin¦È")], false);
+		break;
+	case "func/c2":
+		insertInto(expr, [createVar("cos2x")], false);
+		break;
+	case "func/c3":
+		var frac = createExpr("fraction");
+		frac.childNodes[0].className = "numerator";
+		insertInto(frac.childNodes[0], [createVar("sin¦È")], false);
+		frac.childNodes[1].className = "denominator";
+		insertInto(frac.childNodes[1], [createVar("cos¦È")], false);
+		expr.appendChild(frac);
+		insertInto(expr, [createVar("tan¦È"), createExpr("="), frac], false);
+		break;
+	/*	
+	case '12':
+		//sup
+		var tnode = document.createElement("sup");
+		tnode.setAttribute("tabindex", "0");
+		tnode.setAttribute("class", "nthroot non-leaf empty");
+		//tnode.setAttribute("style","left: 0.05em; margin-right: -0.4em;");
+		tnode.setAttribute("math_id", math_id++);
+		tnode.addEventListener('click', clicked, false);
+		tnode.addEventListener('keyup', keyOn, false);
+		tnode.addEventListener('keydown', keyDown, false);
+		expr.appendChild(tnode);
+
+		//the special math character
+		tnode = document.createElement("span");
+		var text = document.createTextNode("¡Ì");
+		tnode.appendChild(text);
+		tnode.setAttribute("class", "scaled");
+		tnode.setAttribute("style", "transform: scale(1, 0.93);");
+		tnode.setAttribute("math_id", math_id++);
+		tnode.addEventListener('click', c_spec1, false);
+		expr.appendChild(tnode);
+
+		tnode = document.createElement("span");
+		tnode.setAttribute("class", "sqrt-stem non-leaf empty");
+		tnode.setAttribute("tabindex", "0");
+		tnode.setAttribute("math_id", math_id++);
+		tnode.addEventListener('click', clicked, false);
+		tnode.addEventListener('keyup', keyOn, false);
+		tnode.addEventListener('keydown', keyDown, false);
+		expr.appendChild(tnode);
+		break;
+		*/
+	default:
+		break;
+	}
+
+	var box = document.getElementById("main-math-box");
+	var cursor = document.getElementById("cursor");
+	if (cursor != null) {
+		insertBefore(expr, cursor);
+		cursor.parentNode.setAttribute("hasChild", "true");
+		cursor.parentNode.focus();
+	} else {
+		insertInto(box, [ expr, createCursor() ]);
+		box.focus();
+	}
+		
+
+	e.stopPropagation();
+}
+
+	/*
+	 insertInto(document.body, [
+	 insertInto(div("math-button math-enabled math-button-in"), [
+	 div("math-button-icon", {background: "url(btn.png) -45px 0px no-repeat"}),
+	 insertInto(div("math-button-label"), [
+	 document.createTextNode("Fraction"),
+	 make("br"),
+	 div("math-button-sign")
+	 ]),
+	 insertInto(div("math-button-mount-point", {display: "block"}), [
+	 insertInto(div("math-box", {width: "300px", height: "200px"}), [
+	 insertInto(div("math-box-container"), [
+	 insertInto(div("math-box-group"), [
+	 insertInto(div("math-box-group-title"), [
+	 document.createTextNode("Fraction")
+	 ]),
+	 insertInto(div("math-box-group-container"), [
+	 make("div", {className: "math-box-item", style: {background: "url( other.png ) no-repeat -376px 0px", width: "56px", height: "75px"}, button_id: 1}),
+	 make("div", {className: "math-box-item", style: {background: "url( other.png ) no-repeat -315px 0px", width: "56px", height: "75px"}, button_id: 2})
+	 ])
+	 ]),
+	 insertInto(div("math-box-group"), [
+	 insertInto(div("math-box-group-title"), [
+	 document.createTextNode("Common Fraction")
+	 ]),
+	 insertInto(div("math-box-group-container"), [
+	 make("div", {className: "math-box-item", style: {background: "url( other.png ) no-repeat -1067px 0px", width: "56px", height: "75px"}, button_id: 3}),
+	 make("div", {className: "math-box-item", style: {background: "url( other.png ) no-repeat -1128px 0px", width: "56px", height: "75px"}, button_id: 4}),
+	 make("div", {className: "math-box-item", style: {background: "url( other.png ) no-repeat -1189px 0px", width: "56px", height: "75px"}, button_id: 5}),
+	 make("div", {className: "math-box-item", style: {background: "url( other.png ) no-repeat -1250px 0px", width: "56px", height: "75px"}, button_id: 6}),
+	 ])
+	 ])
+	 ])
+	 ])
+	 ])
+	 ])
+	 ]);
+	 {"btn": ["button/frac.png", "Fraction"],
+	 "smallBtn": [{"Location": "frac/"},
+	 {"Fragment": ["1.png", "2.png"]},
+	 {"Common Fragment": ["c1.png", "c2.png", "c4.png", "c5.png"]}]},
+	 */
+
+	function mkToolBtn(parent, btn_set) { //make the whole btn and append to parent
+		for ( var i in btn_set) {
+			var group_set = [];
+			for ( var j in btn_set[i]["smallBtn"]) {
+				var smallBtn_set = [];
+				for ( var k in btn_set[i]["smallBtn"][j]) {
+					for ( var l in btn_set[i]["smallBtn"][j][k]) {
+						if (typeof btn_set[i]["smallBtn"][j][k][l] == "object")
+							smallBtn_set.push(mkSmallBtnLong(
+									btn_set[i]["smallBtnLoc"] + btn_set[i]["smallBtn"][j][k][l][0],
+									btn_set[i]["smallBtnLoc"] + btn_set[i]["smallBtn"][j][k][l][0].split('.')[0],
+									btn_set[i]["smallBtn"][j][k][l][1],
+									btn_set[i]["smallBtn"][j][k][l][2]));
+						else
+							smallBtn_set.push(mkSmallBtn(
+									btn_set[i]["smallBtnLoc"]+ btn_set[i]["smallBtn"][j][k][l],
+									btn_set[i]["smallBtnLoc"]+ btn_set[i]["smallBtn"][j][k][l].split('.')[0]));
+
+					}
+				}
+				group_set.push(mkGroup(k, smallBtn_set));
+				//console.log(group_set);
+			}
+			insertInto(parent, [ 
+                    insertInto(mkToolBtnTop(btn_set[i]["btnLoc"] + btn_set[i]["btn"][0], 
+                   	btn_set[i]["btn"][1]),
+					[ mkToolBtnBot(group_set) ]) ]);
+		}
+	}
+
+	var btn_set = [
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "frac.png", "Fraction" ],
+				"smallBtnLoc" : "frac/",
+				"smallBtn" : [
+						{"Fragment" : [ "1.png", "2.png" ]},
+						{"Common Fragment" : [ "c1.png", "c2.png", "c4.png", "c5.png" ]} 
+						]
+			},
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "script.png", "Script" ],
+				"smallBtnLoc" : "script/",
+				"smallBtn" : [ 
+						{"Script" : [ "1.png", "2.png", "3.png", "4.png" ]},
+						{"Common Script" : [ "c1.png", "c2.png", "c3.png" ]} 
+						]
+			},
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "sqrt.png", "Radical" ],
+				"smallBtnLoc" : "sqrt/",
+				"smallBtn" : [
+						{"Script" : [ "1.png", "2.png", "3.png", "4.png" ]},
+						{"Common Script" : [ [ "c1.png", 137, 75 ], [ "c2.png", 137, 75 ] ]} 
+						]
+			},
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "int.png", "Integral" ],
+				"smallBtnLoc" : "int/",
+				"smallBtn" : [ 
+						{"Script" : [ "1.png", "2.png", "3.png", "4.png", "5.png", "6.png" ]}
+						]
+			},
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "sum.png", "Large Operator" ],
+				"smallBtnLoc" : "large/",
+				"smallBtn" : [ 
+						{"Script" : [ "1.png", "2.png", "3.png" ]} 
+						]
+			},
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "brackets.png", "Brackets" ],
+				"smallBtnLoc" : "brackets/",
+				"smallBtn" : [ 
+						{"Brackets" : [ "1.png", "2.png", "3.png", "4.png" ]}
+						]
+			},
+			{
+				"btnLoc" : "button/",
+				"btn" : [ "sin.png", "Function" ],
+				"smallBtnLoc" : "func/",
+				"smallBtn" : [
+						{"Function" : [ "1.png", "2.png", "3.png", "4.png", "5.png", "6.png" ]},
+						{"Common Function" : [ "c1.png", "c2.png", [ "c3.png", 137, 75 ] ]} 
+						]
+			} ];
+	mkToolBtn(document.body, btn_set);
+
+	/*
+	 var id_count = 1;
+	 insertInto(document.body, [
+	 insertInto(mkToolBtnTop("button/frac.png", "Fraction"),[ 
+	 mkToolBtnBot([
+	 mkGroup("Fragment", [
+	 mkSmallBtn("frac/1.png", id_count++),
+	 mkSmallBtn("frac/2.png", id_count++)
+	 ]),
+	 mkGroup("Common Fragment", [
+	 mkSmallBtn("frac/c1.png", id_count++),
+	 mkSmallBtn("frac/c2.png", id_count++),
+	 mkSmallBtn("frac/c4.png", id_count++),
+	 mkSmallBtn("frac/c5.png", id_count++)
+	 ])
+	 ])
+	 ])
+	 ]);
+	 insertInto(document.body, [
+	 insertInto(mkToolBtnTop("button/script.png", "Script"),[ 
+	 mkToolBtnBot([
+	 mkGroup("Script", [
+	 mkSmallBtn("script/1.png", id_count++),
+	 mkSmallBtn("script/2.png", id_count++),
+	 mkSmallBtn("script/3.png", id_count++),
+	 mkSmallBtn("script/4.png", id_count++)
+	 ]),
+	 mkGroup("Script", [
+	 mkSmallBtn("script/c1.png", id_count++),
+	 mkSmallBtn("script/c2.png", id_count++),
+	 mkSmallBtn("script/c3.png", id_count++)
+	 ])
+	 ])
+	 ])
+	 ]);
+	 insertInto(document.body, [
+	 insertInto(mkToolBtnTop("button/sqrt.png", "Radical"),[ 
+	 mkToolBtnBot([
+	 mkGroup("Radical", [
+	 mkSmallBtn("sqrt/1.png", id_count++),
+	 mkSmallBtn("sqrt/2.png", id_count++),
+	 mkSmallBtn("sqrt/3.png", id_count++),
+	 mkSmallBtn("sqrt/4.png", id_count++)
+	 ]),
+	 mkGroup("Common Radical", [
+	 mkSmallBtnLong("sqrt/c1.png", id_count++, "137px", "75px"),
+	 mkSmallBtnLong("sqrt/c2.png", id_count++, "137px", "75px")
+	 ])
+	 ])
+	 ])
+	 ]);
+	 insertInto(document.body, [
+	 insertInto(mkToolBtnTop("button/int.png", "Integral"),[ 
+	 mkToolBtnBot([
+	 mkGroup("Integral", [
+	 mkSmallBtn("int/1.png", id_count++),
+	 mkSmallBtn("int/2.png", id_count++),
+	 mkSmallBtn("int/3.png", id_count++),
+	 mkSmallBtn("int/4.png", id_count++),
+	 mkSmallBtn("int/5.png", id_count++),
+	 mkSmallBtn("int/6.png", id_count++)
+	 ])
+	 ])
+	 ])
+	 ]);
+	 insertInto(document.body, [
+	 insertInto(mkToolBtnTop("button/sum.png", "Large Operator"),[ 
+	 mkToolBtnBot([
+	 mkGroup("Large Operator", [
+	 mkSmallBtn("large/1.png", id_count++),
+	 mkSmallBtn("large/2.png", id_count++),
+	 mkSmallBtn("large/3.png", id_count++)
+	 ])
+	 ])
+	 ])
+	 ]);
+	 */
+
+	//initialize the math-edit box
+	var box = document.createElement("div");
+	box.setAttribute("id", "math-box");
+	document.body.appendChild(box);
+	var math_id = 1; //to state this element is a part of math expression
+	var tag = document.createElement("span");
+	tag.setAttribute("id", "main-math-box");
+	tag.setAttribute("tabindex", "0"); //solve the problem <div>, <span> can't use onkeydown
+	tag.setAttribute("class",
+			"math-expr math-editable empty");
+	tag.setAttribute("style", "font-size: 20px;");
+	tag.setAttribute("math_id", math_id++);
+	tag.addEventListener('click', clicked, false);
+	tag.addEventListener('keyup', keyOn, false);
+	tag.addEventListener('keydown', keyDown, false);
+	box.appendChild(tag);
+
+	function insertInto(parent, elem_set, flag) { //append child into parent, if flag exists, then no need to check class name
+		for ( var i in elem_set)
+			parent.appendChild(elem_set[i]);
+		//console.log(parent.nodeType);	//11 = documentfragment
+		if (parent.nodeType != 11 && parent.getAttribute("math_id")) {
+			if (flag != false)
+				checkClassName(parent);
+			console.log(parent);
+			parent.focus();
+			parent.setAttribute("hasChild", "true");
+		}
+		return parent;
+	}
+
+	/*
+	 var button = document.getElementById('int');
+	 button.onclick = function (e) {
+	 var expr = document.createDocumentFragment();	//save appendChild times
+	 //console.log(oFragment);
+	 var sub = createExpr("sub");
+	 //sub.setAttribute("style","left: -0.25em;");
+	 var sup = createExpr("sup");
+	 sup.setAttribute("style","left: -0.25em; margin-right: -0.34em;");
+	 insertInto(expr, [createExpr("¡Ò"), sub, sup], false);
+
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();	
+	 };
+
+	 button = document.getElementById('log');
+	 button.onclick = function (e) {
+	 //the special math character
+	 var expr = document.createDocumentFragment(); 
+	 expr.appendChild(createExpr("log"));
+	 expr.appendChild(createExpr("sub"));
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();
+	 };
+
+	 button = document.getElementById('ln');
+	 button.onclick = function (e) {
+	 //the special math character
+	 var expr = createExpr("ln");
+	 var cursor = document.getElementById("cursor");
+	 console.log(cursor);
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();
+	 };
+
+	 button = document.getElementById('sum');
+	 button.onclick = function (e) {
+	 //the special math character
+	 var expr = createExpr("sum");
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();
+	 };
+
+	 button = document.getElementById('oint');
+	 button.onclick = function () {
+	 var expr = document.createDocumentFragment();	//save appendChild times
+	 //console.log(oFragment);
+	 var sub = createExpr("sub");
+	 //sub.setAttribute("style","left: -0.25em;");
+	 var sup = createExpr("sup");
+	 sup.setAttribute("style","left: -0.25em; margin-right: -0.34em;");
+	 insertInto(expr, [createExpr("¡Ó"), sub, sup], false);
+
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();	
+	 };
+
+	 button = document.getElementById('subb');
+	 button.onclick = function () {
+	 //the special math character
+	 var expr = createExpr("sub");
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();
+	 };
+
+	 button = document.getElementById('supp');
+	 button.onclick = function () {
+	 var expr = createExpr("sup");
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();
+	 };
+
+	 button = document.getElementById('subp');
+	 button.onclick = function () {
+	 var expr = document.createDocumentFragment();	//save appendChild times
+	 //console.log(oFragment);
+	 var sub = createExpr("sub");
+	 //sub.setAttribute("style","left: -0.25em;");
+	 var sup = createExpr("sup");
+	 sup.setAttribute("style","left: -0.25em; margin-right: -0.34em;");
+	 insertInto(expr, [sub, sup], false);
+
+	 var cursor = document.getElementById("cursor");
+	 if (cursor != null) {
+	 insertBefore(expr, cursor);
+	 cursor.parentNode.setAttribute("hasChild","true");
+	 } else 
+	 insertInto(document.getElementById("main-math-box"), [expr, createCursor()]);
+	 e.stopPropagation();	
+	 };
+
+	 button = document.getElementById('sqrt');
+	 button.onclick = function () {
+	 var oFragment = document.createDocumentFragment();	//save appendChild times
+	 //sup
+	 var tnode = document.createElement("sup");
+	 tnode.setAttribute("tabindex","0");
+	 tnode.setAttribute("class","nthroot non-leaf empty");
+	 //tnode.setAttribute("style","left: 0.05em; margin-right: -0.4em;");
+	 tnode.setAttribute("math_id",math_id++);
+	 tnode.addEventListener('click',clicked,false);
+	 tnode.addEventListener('keyup',keyOn,false);
+	 tnode.addEventListener('keydown',keyDown,false);
+	 oFragment.appendChild(tnode);
+
+	 //the special math character
+	 tnode = document.createElement("span");
+	 var text = document.createTextNode("¡Ì");
+	 tnode.appendChild(text);
+	 tnode.setAttribute("class", "scaled");
+	 tnode.setAttribute("style", "transform: scale(1, 0.93);");
+	 tnode.setAttribute("math_id",math_id++);
+	 tnode.addEventListener('click',c_spec1,false);
+	 oFragment.appendChild(tnode);
+	
+	 tnode = document.createElement("span");
+	 tnode.setAttribute("class", "sqrt-stem non-leaf hasCursor");
+	 tnode.setAttribute("tabindex","0");
+	 tnode.setAttribute("math_id",math_id++);
+	 tnode.addEventListener('click',clicked,false);
+	 tnode.addEventListener('keyup',keyOn,false);
+	 tnode.addEventListener('keydown',keyDown,false);
+	 insertCursor(tnode);
+	 oFragment.appendChild(tnode);
+	
+	 var cursor = document.getElementById("cursor");
+	 console.log(cursor);
+	 if (cursor != null)
+	 insertBefore(oFragment, cursor);
+	 else {
+	 var main_box = document.getElementById("main-math-box");
+	 main_box.appendChild(oFragment);
+	 } 
+	 tnode.focus();
+	 e.stopPropagation();
+	 //console.log(tag.parentNode);
+	 };
+	 
+	function createExpr1(mark, type, spec, sub, sup) { //kind of expression to be created, char, string, int, bool, bool, bool
+		var oFragment = document.createDocumentFragment(); //save appendChild times
+		//the special math character
+		var tnode, text;
+		if (type != null) {
+			tnode = document.createElement(type);
+			text = document.createTextNode(mark);
+			tnode.appendChild(text);
+			tnode.setAttribute("style", "margin-right:1px;");
+			//tnode.setAttribute("font-style", "italic");
+			tnode.setAttribute("math_id", math_id++);
+			if (spec == 1) //just define two kind, if more, will add here
+				tnode.addEventListener('click', c_spec1, false);
+			else
+				tnode.addEventListener('click', c_spec2, false);
+			oFragment.appendChild(tnode);
+		}
+
+		//sub element
+		if (sub == true) {
+			tnode = document.createElement("span");
+			tnode.setAttribute("tabindex", "0");
+			tnode.setAttribute("class", "non-leaf limit empty");
+
+			tnode.setAttribute("math_id", math_id++);
+			tnode.addEventListener('click', clicked, false);
+			tnode.addEventListener('keyup', keyOn, false);
+			tnode.addEventListener('keydown', keyDown, false);
+			oFragment.appendChild(tnode);
+		}
+
+		//sup element
+		if (sup == true) {
+			tnode = document.createElement("sup");
+			tnode.setAttribute("tabindex", "0");
+			tnode.setAttribute("class", "non-leaf limit empty");
+			tnode
+					.setAttribute("style",
+							"left: -0.44em; margin-right: -0.34em;");
+			tnode.setAttribute("math_id", math_id++);
+			tnode.addEventListener('click', clicked, false);
+			tnode.addEventListener('keyup', keyOn, false);
+			tnode.addEventListener('keydown', keyDown, false);
+			oFragment.appendChild(tnode);
+		}
+
+		return oFragment;
+	}*/
+	function addListener(node, type) {
+		if (type == 1) {
+			node.addEventListener('click', clicked, false);
+			node.addEventListener('keyup', keyOn, false);
+			node.addEventListener('keydown', keyDown, false);
+		}
+	}
+
+	function createExpr(type) {
+		var tnode;
+		switch (type) {
+		case "sub":
+			tnode = document.createElement("sub");
+			tnode.setAttribute("tabindex", "0");
+			tnode.setAttribute("class", "non-leaf limit empty");
+			tnode.setAttribute("math_id", math_id++);
+			addListener(tnode, 1);
+			break;
+		case "sup":
+			tnode = document.createElement("sup");
+			tnode.setAttribute("tabindex", "0");
+			tnode.setAttribute("class", "non-leaf limit empty");
+			tnode.setAttribute("math_id", math_id++);
+			addListener(tnode, 1);
+			break;
+		case "span":
+			tnode = document.createElement("span");
+			tnode.setAttribute("tabindex", "0");
+			tnode.setAttribute("class", "non-leaf empty");
+			tnode.setAttribute("math_id", math_id++);
+			addListener(tnode, 1);
+			break;
+		case "sum":
+			tnode = document.createElement("span");
+			tnode.setAttribute("class", "div3");
+			tnode.setAttribute("math_id", math_id++);
+
+			var top = createExpr("span");
+			//console.log(top);
+			top.setAttribute("class", "div2");
+			insertInto(top, [ createExpr("span") ], false);
+			top.setAttribute("edit", "false");
+			top.setAttribute("hasChild", "true");
+
+			var mid = createExpr("¡Æ");
+			mid.setAttribute("class", "div2");
+
+			var bottom = createExpr("span");
+			bottom.setAttribute("class", "div4");
+			insertInto(bottom, [ createExpr("span") ], false);
+			bottom.setAttribute("edit", "false");
+			bottom.setAttribute("hasChild", "true");
+
+			insertInto(tnode, [ top, mid, bottom ], false);
+			break;
+		case "fraction":
+			tnode = document.createElement("span");
+			tnode.setAttribute("class", "fraction non-leaf");
+			tnode.setAttribute("math_id", math_id++);
+
+			var top = document.createElement("span");
+			top.setAttribute("class", "numerator empty");
+			top.setAttribute("math_id", math_id++);
+			addListener(top, 1);
+
+			var bottom = document.createElement("span");
+			bottom.setAttribute("class", "denominator empty");
+			bottom.setAttribute("math_id", math_id++);
+			addListener(bottom, 1);
+
+			var space = document.createElement("span");
+			space.style.display = "inline-block";
+			space.style.width = 0;
+			//<span style="display:inline-block;width:0">&#8203;</span>
+			insertInto(tnode, [ top, bottom, space ], false);
+			break;
+		case "subp":	//sub and sup for int
+			tnode = document.createElement("span");
+			tnode.setAttribute("class", "fraction non-leaf");
+			tnode.setAttribute("math_id", math_id++);
+			tnode.setAttribute("style", "margin-left: -0.25em;");
+			
+			var top = document.createElement("span");
+			top.setAttribute("class", "div6");
+			top.setAttribute("math_id", math_id++);
+			addListener(top, 1);
+			insertInto(top, [createVar(" "), createExpr("span")], false);
+			
+			var mid = document.createElement("span");	//adjust the top location
+			mid.setAttribute("class", "div6");
+			mid.setAttribute("math_id", math_id++);
+			mid.style.height = "7px";
+			
+			var bottom = document.createElement("span");
+			bottom.setAttribute("class", "div5");
+			bottom.setAttribute("math_id", math_id++);
+			addListener(bottom, 1);
+			insertInto(bottom, [createExpr("span")], false);
+
+			var space = document.createElement("span");
+			space.style.display = "inline-block";
+			space.style.width = 0;
+			
+			//<span style="display:inline-block;width:0">&#8203;</span>
+			insertInto(tnode, [ top, mid, bottom, space ], false);
+			break;
+		case "sqrt":
+			tnode = document.createElement("span");
+			var l = document.createElement("span");
+			l.innerHTML = "¡Ì";
+			l.setAttribute("class", "scaled");
+			l.setAttribute("style", "transform: scale(1, 0.93);");
+			l.setAttribute("math_id", math_id++);
+			l.addEventListener('click', c_spec1, false);
+
+			var r = document.createElement("span");
+			r.setAttribute("class", "sqrt-stem non-leaf empty");
+			r.setAttribute("tabindex", "0");
+			r.setAttribute("math_id", math_id++);
+			addListener(r, 1);
+			insertInto(tnode, [l, r], false);
+			break;
+		default:
+			tnode = document.createElement("big");
+			text = document.createTextNode(type);
+			tnode.appendChild(text);
+			tnode.setAttribute("math_id", math_id++);
+			tnode.setAttribute("edit", "false");
+			addListener(tnode, 1);
+			break;
+		}
+		return tnode;
+	}
+
+	function createElem(type) {
+		var tnode = document.createElement("span"); //save appendChild times
+		tnode.setAttribute("class", "div3");
+
+		var tnode1 = document.createElement("span");
+		tnode1.setAttribute("tabindex", "0");
+		//tnode.setAttribute("style", "margin-left:10px;");
+		tnode1.setAttribute("class", "div2");
+
+		var tnode2 = document.createElement("span");
+		tnode2.setAttribute("tabindex", "0");
+		//tnode.setAttribute("style", "margin-left:10px;");
+		tnode2.setAttribute("class", "non-leaf empty");
+
+		tnode1.appendChild(tnode2);
+
+		var tnode3 = document.createElement("span");
+		tnode3.setAttribute("tabindex", "0");
+		//tnode.setAttribute("style", "margin-left:10px;");
+		tnode3.setAttribute("class", "div4");
+
+		var tnode4 = document.createElement("span");
+		tnode4.setAttribute("tabindex", "0");
+		//tnode.setAttribute("style", "margin-left:10px;");
+		tnode4.setAttribute("class", "non-leaf empty");
+		tnode3.appendChild(tnode4);
+
+		var tnode5 = document.createElement("span");
+		var text = document.createTextNode("¡Æ");
+		tnode5.appendChild(text);
+		tnode5.setAttribute("class", "div2");
+
+		tnode.appendChild(tnode1);
+		tnode.appendChild(tnode5);
+		tnode.appendChild(tnode3);
+		return tnode;
+	}
+	function clicked(e) { //bind with sub/sup
+		var x = this;
+		var idObject = document.getElementById("cursor");
+		//console.log(idObject);
+
+		//if you transfer from other box to this one, delete cursor first to avoid logic problem
+		//if cursor in the same box, for prognent catching, should be judged
+		if (idObject != null) {
+			console.log(idObject.parentNode.getAttribute("math_id"));
+			console.log(x);
+			if (idObject.parentNode.getAttribute("math_id") == x
+					.getAttribute("math_id")) //use math_id to judge if they are same
+				return;
+
+			// if not the same parent, change the className for the original one with cursor 
+			// Note: delete cursor first, or there is no way to judge
+			var parent = idObject.parentNode;
+			removeElement(idObject);
+			checkClassName(parent);
+		}
+		checkClassName(x);
+		x.appendChild(createCursor());
+		e.stopPropagation();
+		//console.log(1);
+	}
+	function keyDown(e) {
+		var keynum = window.event ? e.keyCode : e.which;
+		var keychar = String.fromCharCode(keynum);
+		var tag = document.createElement("var");
+		tag.setAttribute("id", "char");
+		tag.setAttribute("math_id", math_id++);
+		//tag.setAttribute("tabindex","0");
+		var cursor = document.getElementById('cursor');
+		switch (keynum) {
+		case 46: //delete
+			if (cursor.nextSibling != null) {
+				removeElement(cursor.nextSibling);
+				if (cursor.parentNode.tagName == "SUP") {
+					if (cursor.parentNode.previousSibling
+							&& cursor.parentNode.previousSibling.tagName == "SUB")
+						cursor.parentNode
+								.setAttribute(
+										"style",
+										"left: "
+												+ (0.05 - cursor.parentNode.previousSibling.offsetWidth / 16)
+												+ "em; "
+												+ "margin-right: "
+												+ (-0.4 - (cursor.parentNode.previousSibling.offsetWidth > cursor.parentNode.offsetWidth ? cursor.parentNode.offsetWidth / 16
+														: cursor.parentNode.previousSibling.offsetWidth / 16))
+												+ "em;");
+				} else if (cursor.parentNode.tagName == "SUB") {
+					if (cursor.parentNode.nextSibling
+							&& cursor.parentNode.nextSibling.tagName == "SUP")
+						cursor.parentNode.nextSibling
+								.setAttribute(
+										"style",
+										"left: "
+												+ (0.05 - cursor.parentNode.offsetWidth / 16)
+												+ "em; "
+												+ "margin-right: "
+												+ (-0.4 - (cursor.parentNode.offsetWidth > cursor.parentNode.nextSibling.offsetWidth ? cursor.parentNode.nextSibling.offsetWidth / 16
+														: cursor.parentNode.offsetWidth / 16))
+												+ "em;");
+				}
+			}
+			break;
+		case 8: //backspace
+			e.preventDefault(); // or the brower will back 	
+			if (cursor.previousSibling != null) {
+				removeElement(cursor.previousSibling);
+				if (cursor.parentNode.tagName == "SUP") {
+					if (cursor.parentNode.previousSibling
+							&& cursor.parentNode.previousSibling.tagName == "SUB")
+						cursor.parentNode
+								.setAttribute(
+										"style",
+										"left: "
+												+ (0.05 - cursor.parentNode.previousSibling.offsetWidth / 16)
+												+ "em; "
+												+ "margin-right: "
+												+ (-0.4 - (cursor.parentNode.previousSibling.offsetWidth > cursor.parentNode.offsetWidth ? cursor.parentNode.offsetWidth / 16
+														: cursor.parentNode.previousSibling.offsetWidth / 16))
+												+ "em;");
+				} else if (cursor.parentNode.tagName == "SUB") {
+					if (cursor.parentNode.nextSibling
+							&& cursor.parentNode.nextSibling.tagName == "SUP")
+						cursor.parentNode.nextSibling
+								.setAttribute(
+										"style",
+										"left: "
+												+ (0.05 - cursor.parentNode.offsetWidth / 16)
+												+ "em; "
+												+ "margin-right: "
+												+ (-0.4 - (cursor.parentNode.offsetWidth > cursor.parentNode.nextSibling.offsetWidth ? cursor.parentNode.nextSibling.offsetWidth / 16
+														: cursor.parentNode.offsetWidth / 16))
+												+ "em;");
+				}
+			}
+			break;
+		case 37: //left arrow
+			if (cursor.previousSibling != null) {
+				if (cursor.previousSibling.tagName == "VAR") {
+					insertBefore(cursor, cursor.previousSibling);
+					cursor.previousSibling.focus();
+				} else if (cursor.previousSibling.tagName == "BIG") { //this situation won't exist, so no consideration
+					removeElement(cursor);
+					cursor = cursor.previousSibling;
+					insertCursor(cursor.previousSibling);
+					checkClassName(cursor.previousSibling);
+					cursor.previousSibling.focus();
+				} else { //sub or sup, just appendChild
+					checkClassName(cursor.parentNode);
+					checkClassName(cursor.previousSibling);
+					cursor.previousSibling.appendChild(createCursor());
+					cursor.previousSibling.focus();
+					removeElement(cursor);
+				}
+			} else {
+				var iter = cursor.parentNode;
+				console.log(iter);
+				//check sibling first, than parent ... iterative search until the first layer
+				if (iter.previousSibling != null) {
+					if (iter.previousSibling.getAttribute("math_id") != null) {
+						if (iter.previousSibling.tagName == "VAR"
+								|| iter.previousSibling.tagName == "BIG"
+								|| iter.previousSibling.innerHTML == "¡Ì") {
+							removeElement(cursor);
+							checkClassName(iter);
+							insertBefore(createCursor(), iter.previousSibling);
+							checkClassName(iter.previousSibling.parentNode);
+							iter.previousSibling.parentNode.focus();
+						} else {
+							removeElement(cursor);
+							checkClassName(iter);
+							checkClassName(iter.previousSibling);
+							iter.previousSibling.focus();
+							iter.previousSibling.appendChild(createCursor());
+						}
+					}
+				} else if (iter.parentNode.getAttribute("math_id") != null) {
+					removeElement(cursor);
+					checkClassName(iter);
+					checkClassName(iter.parentNode);
+					iter.parentNode.focus();
+					insertBefore(createCursor(), iter);
+				}
+			}
+			e.preventDefault();
+			break;
+		case 39: //right arrow
+			if (cursor.nextSibling != null) {
+				if (cursor.nextSibling.tagName == "VAR") {
+					checkClassName(cursor.nextSibling.parentNode);
+					cursor.nextSibling.focus();
+					insertAfter(cursor, cursor.nextSibling);
+					checkClassName(cursor.parentNode);
+				} else if (cursor.nextSibling.tagName == "BIG"
+						|| cursor.nextSibling.innerHTML == "¡Ì") {
+					var tmp = cursor;
+					cursor = cursor.nextSibling;
+					insertCursor(cursor.nextSibling);
+					checkClassName(cursor.nextSibling);
+					checkClassName(tmp.parentNode);
+					cursor.nextSibling.focus();
+					removeElement(tmp);
+				} else { //sub or sup
+					checkClassName(cursor.parentNode);
+					insertCursor(cursor.nextSibling);
+					checkClassName(cursor.nextSibling);
+					removeElement(cursor);
+				}
+			} else {
+				var iter = cursor.parentNode;
+				//console.log(iter);
+				//check sibling first, than parent ... iterative search until the first layer
+				if (iter.nextSibling != null) {
+					//console.log(iter.nextSibling);
+					if (iter.nextSibling.getAttribute("math_id") != null) {
+						removeElement(cursor);
+						checkClassName(iter);
+						if (iter.nextSibling.tagName == "BIG"
+								|| iter.nextSibling.tagName == "VAR"
+								|| iter.nextSibling.innerHTML == "¡Ì") {
+							insertBefore(createCursor(), iter.nextSibling);
+							checkClassName(iter.parentNode);
+							iter.parentNode.focus();
+						} else {
+							checkClassName(iter.nextSibling);
+							iter.nextSibling.focus();
+							insertCursor(iter.nextSibling);
+						}
+					}
+				} else if (iter.parentNode.getAttribute("math_id") != null) {
+					removeElement(cursor);
+					checkClassName(iter);
+					checkClassName(iter.parentNode);
+					iter.parentNode.focus();
+					insertAfter(createCursor(), iter);
+				}
+			}
+			e.preventDefault();
+			break;
+		}
+		e.stopPropagation();
+	}
+	function keyOn(e) {
+		var keynum = window.event ? e.keyCode : e.which;
+		var keychar = String.fromCharCode(keynum);
+		var tag = document.createElement("var");
+		tag.setAttribute("id", "char");
+		tag.setAttribute("math_id", math_id++);
+		//tag.setAttribute("tabindex","0");
+		var cursor = document.getElementById('cursor');
+		// TODO:add other keyboard control, change the logic of display, deal with shift/ctrl/alt
+		var tnode;
+		if (keynum >= 65 && keynum <= 90) {
+			if (e.shiftKey)
+				tnode = document.createTextNode(keychar);
+			else
+				tnode = document.createTextNode(keychar.toLowerCase());
+		} else if (keynum >= 48 && keynum <= 57) {
+			var signal = [ ")", "!", "@", "#", "$", "%", "^", "&", "¡Á", "(" ];
+			if (e.shiftKey) {
+				if (keynum - 48 == 6) {
+					tnode = document.createElement("sup");
+					tnode.setAttribute("tabindex", "0");
+					tnode.setAttribute("class", "non-leaf limit hasCursor");
+					//tnode.setAttribute("style","left: -0.44em; margin-right: -0.34em;");
+					tnode.setAttribute("math_id", math_id++);
+					tnode.addEventListener('click', clicked, false);
+					tnode.addEventListener('keyup', keyOn, false);
+					tnode.addEventListener('keydown', keyDown, false);
+					//insert a cursor into the node
+					insertBefore(tnode, cursor);
+					removeCursor(); //remove the original cursor since a new one append on tnode
+					tnode.appendChild(createCursor(), tnode);
+					e.stopPropagation();
+					return;
+				} else
+					tnode = document.createTextNode(signal[keynum - 48]);
+			} else
+				tnode = document.createTextNode(keychar);
+		} else if (keynum >= 96 && keynum <= 105) {
+			tnode = document.createTextNode(keynum - 96);
+		} else if (keynum >= 106 && keynum <= 111) {
+			var signal = [ "¡Á", "+", "", "-", ".", "/" ];
+			tnode = document.createTextNode(signal[keynum - 106]);
+		} else if (keynum >= 186 && keynum <= 192) {
+			var signal = [ ":", "+", "<", "_", ">", "?", "~" ];
+			var sign = [ ";", "=", ",", "-", ".", "/", "`" ];
+			if (e.shiftKey) {
+				if (keynum == 189) {
+					tnode = document.createElement("sub");
+					tnode.setAttribute("tabindex", "0");
+					tnode.setAttribute("class", "non-leaf limit hasCursor");
+					//tnode.setAttribute("style","left: -0.44em; margin-right: -0.34em;");
+					tnode.setAttribute("math_id", math_id++);
+					tnode.addEventListener('click', clicked, false);
+					tnode.addEventListener('keyup', keyOn, false);
+					tnode.addEventListener('keydown', keyDown, false);
+					//insert a cursor into the node
+					insertBefore(tnode, cursor);
+					removeCursor(); //remove the original cursor since a new one append on tnode
+					tnode.appendChild(createCursor(), tnode);
+					e.stopPropagation();
+					return;
+				} else
+					tnode = document.createTextNode(signal[keynum - 186]);
+			} else
+				tnode = document.createTextNode(sign[keynum - 186]);
+		} else if (keynum >= 219 && keynum <= 222) {
+			var signal = [ "{", "|", "}", "\"" ];
+			var sign = [ "[", "\\", "]", "\'" ];
+			if (e.shiftKey) {
+				tnode = document.createTextNode(signal[keynum - 219]);
+			} else
+				tnode = document.createTextNode(sign[keynum - 219]);
+		} else {
+			e.stopPropagation();
+			return;
+		}
+
+		tag.appendChild(tnode);
+		tag.addEventListener('click', c, false);
+		insertBefore(tag, cursor);
+		/*
+		//the relative location should be changed with the length of sub & sup
+		//should consider the situation of single one box  
+		if (cursor.parentNode.tagName == "SUP") {
+			if (cursor.parentNode.previousSibling
+					&& cursor.parentNode.previousSibling.tagName == "SUB")
+				cursor.parentNode.setAttribute("style", supPosition(
+						cursor.parentNode.previousSibling, cursor.parentNode));
+		} else if (cursor.parentNode.tagName == "SUB") {
+			if (cursor.parentNode.nextSibling
+					&& cursor.parentNode.nextSibling.tagName == "SUP")
+				cursor.parentNode.nextSibling.setAttribute("style",
+						supPosition(cursor.parentNode,
+								cursor.parentNode.nextSibling));
+		}
+		*/
+		e.stopPropagation();
+	}
+/*
+	function supPosition(sub, sup) { // TODO: fontSize
+		var fontSize = 16;
+		var res = 'left:' + (-sub.offsetWidth / fontSize) + 'em; ';
+		res += 'margin-right:'
+				+ (0.1 - Math.min(sub.offsetWidth, sup.offsetWidth) / fontSize)
+				+ 'em';
+		return res;
+	}
+*/
+	function c(e) { //bind with character in sub/sup
+		//deal with the previous cursor
+		var x = this;
+		var idObject = document.getElementById('cursor');
+		var cursor = idObject;
+		if (idObject != null) {
+			if (idObject.parentNode.getAttribute("math_id") == x
+					.getAttribute("math_id")) { //use math_id to judge if they are same
+				removeElement(idObject);
+				x = null; //flag
+			} else {
+				// if not the same parent, change the className for the original one with cursor 
+				// Note: delete cursor first, or there is no way to judge
+				var parent = idObject.parentNode;
+				console.log(parent);
+				removeElement(idObject);
+				checkClassName(parent);
+			}
+		}
+
+		//define the cursor position
+		var elemLeftSide = elemOffsetLeft(this);
+		var mouseLeftSide = mousePosition(e);
+		var elemWidth = this.offsetWidth;
+		if (mouseLeftSide - elemLeftSide >= elemWidth / 2)
+			insertAfter(createCursor(), this);
+		else
+			insertBefore(createCursor(), this);
+		if (x != null)
+			checkClassName(this.parentNode);
+		e.stopPropagation();
+	}
+	function c_spec1(e) { //c_special kind 1st, bind with math expression with sub/sup
+		//deal with the previous cursor
+		var idObject = document.getElementById('cursor');
+		if (idObject != null) {
+			var parent = idObject.parentNode;
+			removeElement(idObject);
+			checkClassName(parent);
+			checkClassName(this.parentNode);
+		}
+
+		//define the cursor position
+		insertBefore(createCursor(), this); //cursor after this expression is not allowed which should be in <sub>
+		e.stopPropagation();
+	}
+	function c_spec2(e) { //c_special kind 2nd, bind with math expression without sub/sup
+		//deal with the previous cursor
+		var idObject = document.getElementById('cursor');
+		if (idObject != null) {
+			var parent = idObject.parentNode;
+			removeElement(idObject);
+			checkClassName(parent);
+			checkClassName(this.parentNode);
+		}
+		//define the cursor position
+		var elemLeftSide = elemOffsetLeft(this);
+		var mouseLeftSide = mousePosition(e);
+		var elemWidth = this.offsetWidth;
+		if (mouseLeftSide - elemLeftSide >= elemWidth / 2)
+			insertAfter(createCursor(), this);
+		else
+			insertBefore(createCursor(), this);
+
+		e.stopPropagation();
+	}
+	function checkClassName(elem) { //check if the class name should be changed by the cursor position
+		if (elem.className.indexOf(" hasCursor") != -1) {
+			if (elem.firstChild == null)
+				elem.className = elem.className.replace(" hasCursor", " empty");
+			else
+				elem.className = elem.className.replace(" hasCursor", "");
+		} else if (elem.className.indexOf(" empty") != -1) {
+			elem.className = elem.className.replace(" empty", " hasCursor");
+		} else {
+			elem.className = elem.className.concat(" hasCursor");
+		}
+		/*
+		switch (elem.className) {
+		case "denominator hasCursor":
+			if (elem.firstChild == null)
+				elem.className = "denominator empty";
+			else 
+				elem.className = "denominator";
+			break;
+		case "denominator empty":
+			elem.className = "denominator hasCursor";
+			break;
+		case "denominator":
+			elem.className = "denominator hasCursor";
+			break;
+		default:
+			break;
+		}*/
+		//console.log("check"+elem.className);
+	}
+	function elemOffsetLeft(elem) //just need left boundary
+	{
+		//var t = elem.offsetTop;  
+		var l = elem.offsetLeft;
+		elem = elem.offsetParent;
+		while (elem != null) {
+			//t += elem.offsetTop;  
+			l += elem.offsetLeft;
+			elem = elem.offsetParent;
+		} //interative
+		return l;
+	}
+	function mousePosition(e) {
+		if (e.pageX && e.pageY) {
+			return e.pageX;
+		}
+		var scrollElem = (document.compatMode && document.compatMode != "BackCompat") ? document.documentElement
+				: document.body;
+		return e.clientX + scrollElem.scrollLeft;
+	}
+	function createCursor() { //create cursor 
+		var tag = document.createElement("span");
+		tag.setAttribute("id", "cursor");
+		tag.setAttribute("mathcolor", "#00ff00");
+		tag.setAttribute("math_id", math_id++);
+		var tnode = document.createTextNode("|");
+		tag.appendChild(tnode);
+		return tag;
+	}
+	function removeElement(e) {
+		e.parentNode.removeChild(e);
+	}
+	//remove the cursor and change the className of which the cursor belongs to
+	function removeCursor() {
+		var cursor = document.getElementById("cursor");
+		if (cursor != null) {
+			checkClassName(cursor.parentNode);
+			removeElement(cursor);
+		}
+	}
+	function insertBefore(newElement, targetElement) {
+		var parent = targetElement.parentNode;
+		parent.insertBefore(newElement, targetElement);
+	}
+	function insertAfter(newElement, targetElement) {
+		var parent = targetElement.parentNode;
+		if (parent.lastChild == targetElement) {
+			parent.appendChild(newElement, targetElement);
+		} else {
+			parent.insertBefore(newElement, targetElement.nextSibling);
+		}
+	}
+	function insertCursor(elem) { //insert element in sub/sup
+		if (elem.firstChild == null)
+			elem.appendChild(createCursor());
+		else
+			insertBefore(createCursor(), elem.firstChild);
+		//console.log(1);
+	}
+</script>
+
+</body>
+</html>

@@ -299,11 +299,13 @@ Util = {
 		});
 	},
 
-	input : function(type, className, id) {
+	input : function(type, className, id, value, onkeypress) {
 		return Util.make("input", {
 			type : type,
 			className : className,
 			id : id,
+			value: value,
+			onkeypress: onkeypress,
 		});
 	},
 
@@ -455,8 +457,53 @@ Util = {
 		return result;
 	},
 	
+};
 
+Util.url = {
+	load: function() {
+		var url = hash.url;
+		if (hash.view)
+			url += "!" + hash.view;
+		if (hash.params) {
+			pstr = "?";
+			for (var item in hash.params) {
+				pstr += item + "=" + hash.params[item] + "&";
+			}
+			url += pstr.slice(0, -1);
+		}
+		// document.location.hash = document.location.hash + "??"; // forces a refresh
+		if (document.location.hash === "#" + url) {
+			loadPage("view_reload");
+		} else {
+			document.location.hash = url;
+		}
+	},
 
+	addArg: function(key, value) {
+		args = {};
+		args[key] = value;
+		Util.url.addArgs(args);
+	},
+
+	addArgs: function(params) {
+		for (var item in params) {
+			hash.params[item] = params[item];
+		}
+	},
+
+	removeArg: function(arg) {
+		delete hash.params[arg];
+	},
+
+	removeAllArgs: function() {
+		for (var item in hash.params){
+			delete hash.params[item];
+		}
+	},
+
+	changeView: function(view) {
+		hash.view = view;
+	}
 };
 
 media = [];
@@ -599,18 +646,18 @@ function loadView(hash) {
     GoToOldScrollPosition();
 }
 
-var oldHash; // = parseHash(location.hash);
+var oldHash, hash;
 function loadPage(e) {
 	var newHash = parseHash(location.hash);
 	if (newHash.url === "/") {
 		newHash.url = "/index";
 	}
 	var url = "/LiquiZ2" + newHash.url + "_ajax.jsp"; // name of dynamic file
-														// to run
+	hash = newHash;
 
 	resetMedia();
 	clearPage();
-	if ((!oldHash) || (oldHash.hash === newHash.hash)
+	if ((!oldHash) || (oldHash.hash === newHash.hash && e !== "view_reload")
 			|| (oldHash.url !== newHash.url)) {
 
 		requestAjax(url, handlePage, errorStatus, newHash);
