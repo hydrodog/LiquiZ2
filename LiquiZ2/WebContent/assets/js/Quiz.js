@@ -111,6 +111,7 @@ Quiz.prototype.headerButtons = function() {
         if (collapse_vals !== null) {
             Util.url.removeArg("not");
             Util.url.addArg("collapse", collapse_vals.join(","));
+            Util.url.load();
         }
     };
 
@@ -124,6 +125,7 @@ Quiz.prototype.headerButtons = function() {
         if (expand_vals !== null) {
             Util.url.removeArg("collapse");
             Util.url.addArg("not", expand_vals.join(","));
+            Util.url.load();
         }
     };
 

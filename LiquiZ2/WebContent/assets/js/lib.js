@@ -459,7 +459,7 @@ Util = {
 };
 
 Util.url = {
-	makeURL: function() {
+	load: function() {
 		var url = hash.url;
 		if (hash.view)
 			url += "!" + hash.view;
@@ -470,8 +470,12 @@ Util.url = {
 			}
 			url += pstr.slice(0, -1);
 		}
-		document.location.hash = document.location.hash + "??"; // forces a refresh
-		document.location.hash = url;
+		// document.location.hash = document.location.hash + "??"; // forces a refresh
+		if (document.location.hash === "#" + url) {
+			loadPage("view_reload");
+		} else {
+			document.location.hash = url;
+		}
 	},
 
 	addArg: function(key, value) {
@@ -484,24 +488,20 @@ Util.url = {
 		for (var item in params) {
 			hash.params[item] = params[item];
 		}
-		Util.url.makeURL();
 	},
 
 	removeArg: function(arg) {
 		delete hash.params[arg];
-		Util.url.makeURL();
 	},
 
 	removeAllArgs: function() {
 		for (var item in hash.params){
 			delete hash.params[item];
 		}
-		Util.url.makeURL();
 	},
 
 	changeView: function(view) {
 		hash.view = view;
-		Util.url.makeURL();
 	}
 };
 
@@ -656,7 +656,7 @@ function loadPage(e) {
 
 	resetMedia();
 	clearPage();
-	if ((!oldHash) || (oldHash.hash === newHash.hash)
+	if ((!oldHash) || (oldHash.hash === newHash.hash && e !== "view_reload")
 			|| (oldHash.url !== newHash.url)) {
 
 		requestAjax(url, handlePage, errorStatus, newHash);
