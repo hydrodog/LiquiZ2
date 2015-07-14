@@ -470,6 +470,7 @@ Util.url = {
 			}
 			url += pstr.slice(0, -1);
 		}
+		document.location.hash = document.location.hash + "??"; // forces a refresh
 		document.location.hash = url;
 	},
 
