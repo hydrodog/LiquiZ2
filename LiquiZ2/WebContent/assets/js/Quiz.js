@@ -227,8 +227,14 @@ Quiz.prototype.add = function(parent, spec) {
 }
 
 Quiz.prototype.mcRadioText = function(id, txt) {
-	return Util.input('radio', 'multichoiceradio', id);
-	this.add(this.q, document.createTextNode(txt));
+	l = [];
+	for (var i = 0; i < txt.length; i++) {
+		radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
+		label = Util.label(id + "-" + i, Util.span(txt[i]));
+		group = [ radio, label ];
+		l.push(group);
+	}
+	return Util.table(l);
 }
 
 Quiz.prototype.mcRadioImg = function(id, src) {
@@ -461,3 +467,17 @@ Quiz.prototype.essay = function(id, rows, cols, maxwords) {
 	// ta.value = essay.text;
 	return ta;
 };
+
+Quiz.prototype.multiAnswer = function(id, txt) {
+	//var ta = Util.form(null, "multiAnswer", id);
+	l = [];
+	for (var i = 0; i < txt.length; i++) {
+		checkbox = Util.checkbox(id + "-" + i, id, 'multianswer', id + "-" + i, false);
+		label = Util.label(id + "-" + i, Util.span(txt[i]));
+		group = [ checkbox, label ];
+		l.push(group);
+	}
+	return Util.table(l);
+	
+}
+
