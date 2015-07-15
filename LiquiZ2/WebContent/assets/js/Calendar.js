@@ -306,7 +306,7 @@ Calendar.prototype.drawMonth = function(d, calendar, id){
 }
 
 Calendar.prototype.year = function(d) {
-    var div = Util.div("calYear", null);
+    var div = Util.div("calYear", "calYear");
     div.appendChild(this.initialButtons(d, this));
     for (var month = 0; month < 12; month++){
     	var id = "cal" + month;
