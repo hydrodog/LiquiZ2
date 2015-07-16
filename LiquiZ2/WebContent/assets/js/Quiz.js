@@ -79,25 +79,25 @@ Quiz.prototype.headerButtons = function() {
 
     button = Util.button("Collapse All", null, null,
         function(e) {
-            Util.url.changeView("collapsed");
-            Util.url.removeAllArgs();
-            Util.url.load();
+            url.changeView("collapsed");
+            url.removeAllParams();
+            url.load();
         });
     fragment.appendChild(button);
 
     button = Util.button("Uncollapse All", null, null,
         function(e) {
-            Util.url.changeView("");
-            Util.url.removeAllArgs();
-            Util.url.load();
+            url.changeView("");
+            url.removeAllParams();
+            url.load();
         });
     fragment.appendChild(button);
 
     onkeydown = function(e) {
         if (e.keyCode == 13) {
-            if (hash.view === null) {
+            if (url.view === null) {
                 collapse(e);                
-            } else if (hash.view === "collapsed") {
+            } else if (url.view === "collapsed") {
                 expand(e);
             }
         }
@@ -107,36 +107,64 @@ Quiz.prototype.headerButtons = function() {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
         // TODO(asher): Sorts on string not ints. We get 1,2,3,34,4,435,45,5 as sorted.
-        var collapse_vals = data.value.match(regex).sort().filter(
-            function(element, index, array) {
-                return !index || element != array[index - 1];
-            });
+        var collapse_vals = data.value.match(regex);
         if (collapse_vals !== null) {
-            Util.url.removeArg("not");
-            Util.url.addArg("collapse", collapse_vals.join(","));
-            Util.url.load();
+            collapse_vals.sort(function(a, b) {
+                a = parseInt(a);
+                b = parseInt(b);
+                if (a < b) {
+                    return -1;
+                } else if (a > b) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }).filter(
+                function(element, index, array) {
+                    return !index || element != array[index - 1];
+            });
+            url.removeParam("not");
+            url.addParam("collapse", collapse_vals.join(","));
+            url.load();
+        } else {
+            url.removeParam("collapse");
+            url.load();
         }
     };
 
     expand = function(e) {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
-        var expand_vals = data.value.match(regex).sort().filter(
-            function(element, index, array) {
-                return !index || element != array[index - 1];
-            });
+        var expand_vals = data.value.match(regex);
         if (expand_vals !== null) {
-            Util.url.removeArg("collapse");
-            Util.url.addArg("not", expand_vals.join(","));
-            Util.url.load();
+            expand_vals.sort(function(a, b) {
+                a = parseInt(a);
+                b = parseInt(b);
+                if (a < b) {
+                    return -1;
+                } else if (a > b) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }).filter(
+                function(element, index, array) {
+                    return !index || element != array[index - 1];
+            });
+            url.removeParam("collapse");
+            url.addParam("not", expand_vals.join(","));
+            url.load();
+        } else {
+            url.removeParam("not");
+            url.load()
         }
     };
 
-    if (hash.view === null) {
-        input = Util.input("text", null, "collapse-input", hash.params.collapse, onkeydown);
+    if (url.view === "") {
+        input = Util.input("text", null, "collapse-input", url.params.collapse, onkeydown);
         button = Util.button("Collapse", null, null, collapse);
-    } else if (hash.view === "collapsed") {
-        input = Util.input("text", null, "collapse-input", hash.params.not, onkeydown);
+    } else if (url.view === "collapsed") {
+        input = Util.input("text", null, "collapse-input", url.params.not, onkeydown);
         button = Util.button("Expand", null, null, expand);
     }
     fragment.appendChild(input);
