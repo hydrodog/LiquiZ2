@@ -81,6 +81,7 @@ Quiz.prototype.headerButtons = function() {
         function(e) {
             Util.url.changeView("collapsed");
             Util.url.removeAllArgs();
+            Util.url.load();
         });
     fragment.appendChild(button);
 
@@ -88,6 +89,7 @@ Quiz.prototype.headerButtons = function() {
         function(e) {
             Util.url.changeView("");
             Util.url.removeAllArgs();
+            Util.url.load();
         });
     fragment.appendChild(button);
 
@@ -104,6 +106,7 @@ Quiz.prototype.headerButtons = function() {
     collapse = function(e) {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
+        // TODO(asher): Sorts on string not ints. We get 1,2,3,34,4,435,45,5 as sorted.
         var collapse_vals = data.value.match(regex).sort().filter(
             function(element, index, array) {
                 return !index || element != array[index - 1];
