@@ -3,20 +3,7 @@
  * @Author: Jack Ziqi Tan
  * 
  */
-var survey_input = {
-	questions : [ {
-		question : "The liquiz interface is natural to use.",
-		id : "survey001"
-	}, {
-		question : "Liquiz is easier to use than my current LMS",
-		id : "survey002"
-	}, {
-		question : "Liquiz is faster than my current LMS.",
-		id : "survey003"
-	} ],
-	ans : [ "Strongly agree", "Agree", "neutral", "disagree",
-			"strongly disagree" ]
-};
+
 function Survey(input) {
 	this.questions = input.questions;
 	this.ans = input.ans;
@@ -41,9 +28,4 @@ Survey.prototype.display = function() {
 		t.push(r);
 	}
 	return Util.table(t, true);
-}
-
-function myFunc() {
-	var s = new Survey(survey_input);
-	s.exec();
 }
