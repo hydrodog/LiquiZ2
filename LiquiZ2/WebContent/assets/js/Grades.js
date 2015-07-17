@@ -33,23 +33,24 @@ function gtoolbar() {
 function gtable(g) {
 	this.temp = g;
 	this.table = Util.make("table", {
-		className : "spread"
+		className : "spread",
 	});
 	this.primaryIndex = null;
 	this.secondIndex = 1;
-	this.order = -1; // Order: "1" for ascending, "-1" for descending.
+	this.order = 1; // Order: "1" for ascending, "-1" for descending.
 	if (temp.length > 0) {
 		var h = table.insertRow(0);
 		for (var i = 0; i < temp[0].length; i++) {
 			var c = h.insertCell(i);
 			c.innerHTML = temp[0][i];
+			c.className = temp[1][i];
 			c.onclick = function(event) {
 				gtable.clickColumn(event);
 			}
 		}
 	}
-	for (var i = 1; i < temp.length; i++) {
-		var r = table.insertRow(i);
+	for (var i = 2; i < temp.length; i++) {
+		var r = table.insertRow(-1);
 		for (var j = 0; j < temp[i].length; j++) {
 			var c = r.insertCell(j);
 			c.innerHTML = temp[i][j];
@@ -60,16 +61,19 @@ function gtable(g) {
 // A dictionary for comparing letter grades
 gtable.compareLetterGrade = function(a, b) {
 	var scale = {
-		'A+' : 10,
-		'A' : 9,
-		'A-' : 8,
-		'B+' : 7,
-		'B' : 6,
-		'B-' : 5,
-		'C+' : 4,
-		'C' : 3,
-		'C-' : 2,
-		'F' : 1,
+		'A+' : 1.3,
+		'A' : 1.2,
+		'A-' : 1.1,
+		'B+' : 1.0,
+		'B' : 0.9,
+		'B-' : 0.8,
+		'C+' : 0.7,
+		'C' : 0.6,
+		'C-' : 0.5,
+		'D+' : 0.4,
+		'D' : 0.3,
+		'D-' : 0.2,
+		'F' : 0.1,
 	};
 	if (scale[a] < scale[b])
 		return -1;
@@ -80,7 +84,7 @@ gtable.compareLetterGrade = function(a, b) {
 
 gtable.compare = function(a, b) {
 	// For comparing letter grades:
-	if (primaryIndex == temp[0].indexOf('Letter Grade')) {
+	if (table.rows[0].cells[primaryIndex].className == "letterGrade") {
 		if (gtable.compareLetterGrade(a[primaryIndex], b[primaryIndex]) != 0)
 			return order
 					* gtable.compareLetterGrade(a[primaryIndex],
@@ -114,16 +118,21 @@ gtable.clickColumn = function(e) {
 	if (td.cellIndex == primaryIndex)
 		order = order == 1 ? -1 : 1;
 	else {
-		order = -1;
+		if (td.className == "gradeInfo")
+			order = 1;
+		else
+			order = -1;
 		primaryIndex = td.cellIndex;
 	}
-	temp = temp.slice(0, 1).concat(
-			temp.slice(1, temp.length).sort(gtable.compare));
-	for (var i = 0; i < temp.length; i++) {
+	temp = temp.slice(0, 2).concat(
+			temp.slice(2, temp.length).sort(gtable.compare));
+	// the temp has 1 more row than the table, cuz the 2nd row in temp is the
+	// class names of the columns.
+	for (var i = 1; i < temp.length - 1; i++) {
 		var r = table.rows[i];
 		for (var j = 0; j < temp[i].length; j++) {
 			var c = r.cells[j];
-			c.innerHTML = temp[i][j];
+			c.innerHTML = temp[i + 1][j];
 		}
 	}
 }

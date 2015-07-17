@@ -48,6 +48,9 @@ new Grades({
 	[
 		['FirstName','LastName','ID','Section','HW1a','HW1b','HW1c','HW2a','HW2b','HW4b',
 		'HW5a', 'HW6A', 'HW6b', 'HW6c', 'HW7a', 'HW7b', 'HW5b', 'HW11a','HW11b','Midterm','Final','Letter Grade'],
+		//TODO: to be improved.
+		['gradeInfo','gradeInfo','gradeInfo','gradeInfo','numGrade','numGrade','numGrade','numGrade','numGrade','numGrade',
+		'numGrade', 'numGrade', 'numGrade', 'numGrade', 'numGrade', 'numGrade', 'numGrade', 'numGrade','numGrade','numGrade','numGrade','letterGrade'],
 		['Elvin','Abreu Jr.',100,'C',100,100,100,100,95,100,90,90,100,100,100,100,100,100,100,92,85,'A'],
 		['Ghalib','Alshammri',101,'C',100,100,100,100,100,100,100,90,100,100,100,100,100,100,100,92,85,'B'],
 		['Yifei','Cai ',102,'J',100,100,100,100,100,100,100,90,100,100,100,100,100,90,100,92,85,'A'],
