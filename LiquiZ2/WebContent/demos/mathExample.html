@@ -191,7 +191,8 @@ display: inline-block;
 .math-editable .cursor.blink {
   visibility: hidden;
 }
-.math-editable .hasCursor {
+/*.math-editable*/
+.hasCursor {
   -webkit-box-shadow: #68b4df 0 0 3px 2px;
   -moz-box-shadow: #68b4df 0 0 3px 2px;
   box-shadow: #68b4df 0 0 3px 2px;
@@ -210,6 +211,7 @@ display: inline-block;
   line-height: 1;
   display: -moz-inline-box;
   display: inline-block;
+  outline: 0;
 }
 .math-expr .non-leaf,
 .math-expr .scaled {
@@ -325,9 +327,8 @@ display: inline-block;
 }
 
 .math-expr .sqrt-prefix {
-  padding-top: 0;
+  padding-top: 0.1em;
   position: relative;
-  top: .1em;
   vertical-align: top;
   -webkit-transform-origin: top;
   -moz-transform-origin: top;
@@ -399,7 +400,7 @@ function div(className, style) {
 
 function btn1(e) {
 	var bot = this.getElementsByClassName("math-button-mount-point")[0];
-	console.log(bot);
+	//console.log(bot);
 	if (bot.style.display == "block") {
 		bot.style.display = "none";
 		this.className = "math-button";
@@ -533,17 +534,13 @@ function btn3(e) {
 	case 'script/3':	//TODO: distance
 		var frac = createExpr("fraction");
 		frac.childNodes[0].className = "div6";
-		frac.childNodes[0].appendChild(createExpr("span"));
 		frac.childNodes[1].className = "div5";
-		frac.childNodes[1].appendChild(createExpr("span"));
 		expr.appendChild(frac);
 		break;
 	case 'script/4':	
 		var frac = createExpr("fraction");
 		frac.childNodes[0].className = "div8";
-		frac.childNodes[0].appendChild(createExpr("span"));
 		frac.childNodes[1].className = "div7";
-		frac.childNodes[1].appendChild(createExpr("span"));
 		expr.appendChild(frac);
 		break;
 	case 'script/c1':
@@ -797,7 +794,7 @@ function insertInto(parent, elem_set, flag) { //append child into parent, if fla
 	if (parent.nodeType != 11 && parent.getAttribute("math_id")) {
 		if (flag != false)
 			checkClassName(parent);
-		console.log(parent);
+		//console.log(parent);
 		parent.focus();
 		parent.setAttribute("hasChild", "true");
 	}
@@ -862,6 +859,7 @@ function createExpr(type) {
 		
 		var top = createExpr("span");
 		top.setAttribute("class", "align-mid-large-oper");
+		top.setAttribute("math_id", math_id++);
 		removeListener(top, 1);
 		insertInto(top, [ createExpr("span") ], false);
 		top.setAttribute("edit", "false");	//TODO: may be useless
@@ -870,9 +868,11 @@ function createExpr(type) {
 		var mid = createExpr("¡Æ");
 		removeListener(mid, 2);
 		mid.setAttribute("class", "align-mid-large-oper");
+		mid.setAttribute("math_id", math_id++);
 
 		var bottom = createExpr("span");
 		bottom.setAttribute("class", "bot-align-mid-large-oper");
+		bottom.setAttribute("math_id", math_id++);
 		removeListener(bottom, 1);
 		insertInto(bottom, [ createExpr("span") ], false);
 		bottom.setAttribute("edit", "false");
@@ -899,6 +899,7 @@ function createExpr(type) {
 		var space = document.createElement("span");
 		space.style.display = "inline-block";
 		space.style.width = 0;
+		space.setAttribute("math_id", math_id++);
 		//<span style="display:inline-block;width:0">&#8203;</span>
 		insertInto(tnode, [ top, bottom, space ], false);
 		break;
@@ -934,17 +935,22 @@ function createExpr(type) {
 		break;
 	case "sqrt":
 		tnode = document.createElement("span");
+		tnode.setAttribute("class", "non-leaf");
 		tnode.addEventListener('click', c_both, false);
-
+		tnode.setAttribute("math_id", math_id++);
+		//tnode.setAttribute("style", "position:relative;");
+		
 		var sup = document.createElement("sup");
 		sup.setAttribute("class", "nthroot non-leaf empty");
 		sup.setAttribute("math_id", math_id++);
 		addListener(sup, 1);
+		sup.setAttribute("math_id", math_id++);
 		
-		var l = document.createElement("span");
-		l.innerHTML = "¡Ì";
-		l.setAttribute("class", "scaled");
-		l.setAttribute("style", "transform: scale(1, 0.9);");
+		var l = document.createElement("div");
+		text = document.createTextNode("¡Ì");
+		l.appendChild(text);
+		l.setAttribute("class", "scaled non-leaf sqrt-prefix");
+		//l.setAttribute("style", "top:10%; ");
 		l.setAttribute("math_id", math_id++);
 		
 		var r = document.createElement("span");
@@ -952,6 +958,7 @@ function createExpr(type) {
 		r.setAttribute("tabindex", "0");
 		r.setAttribute("math_id", math_id++);
 		addListener(r, 1);
+		r.addEventListener('DOMSubtreeModified',changeHeight,false);
 		insertInto(tnode, [sup, l, r], false);
 		break;
 	default:
@@ -960,7 +967,7 @@ function createExpr(type) {
 		tnode.appendChild(text);
 		tnode.setAttribute("math_id", math_id++);
 		tnode.setAttribute("edit", "false");
-		addListener(tnode, 2);
+		addListener(tnode, 2);	//TODO: if the bind was meaningful
 		break;
 	}
 	return tnode;
@@ -991,6 +998,56 @@ function createExpr(type) {
 		e.stopPropagation();
 		//console.log(1);
 	}
+	function findPrev(cursor) {
+		if (cursor.previousSibling != null) {
+			if (cursor.previousSibling.tagName == "VAR") {
+				insertBefore(cursor, cursor.previousSibling);
+				//cursor.previousSibling.focus();
+			} else if (cursor.previousSibling.tagName == "BIG") { //TODO: rewrite
+				insertBefore(cursor, cursor.previousSibling);
+				cursor.previousSibling.focus();
+			} else if (cursor.previousSibling.tagName == "SUP" || cursor.previousSibling.tagName == "SUB") { //sub or sup, just appendChild
+				checkClassName(cursor.parentNode);
+				checkClassName(cursor.previousSibling);
+				cursor.previousSibling.appendChild(createCursor());
+				cursor.previousSibling.focus();
+				removeElement(cursor);
+			} else if (cursor.previousSibling.tagName == "SPAN") {
+				checkClassName(cursor.parentNode);
+				checkClassName(cursor.previousSibling);
+				cursor.previousSibling.lastChild.appendChild(createCursor());
+				cursor.previousSibling.focus();
+				removeElement(cursor);
+			}
+		} else if (cursor.parentNode.getAttribute("math_id") != null) {
+			insertBefore(cursor, cursor.parentNode);
+		}
+	}
+	function findNext(cursor) {
+		if (cursor.nextSibling != null) {
+			if (cursor.nextSibling.tagName == "VAR") {
+				insertAfter(cursor, cursor.nextSibling);
+				//cursor.nextSibling.focus();
+			} else if (cursor.nextSibling.tagName == "BIG") {
+				insertAfter(cursor, cursor.nextSibling);
+				cursor.nextSibling.focus();
+			} else if (cursor.nextSibling.tagName == "SUP" || cursor.nextSibling.tagName == "SUB") { //sub or sup, just appendChild
+				checkClassName(cursor.parentNode);
+				checkClassName(cursor.nextSibling);
+				cursor.nextSibling.appendChild(createCursor());
+				cursor.nextSibling.focus();
+				removeElement(cursor);
+			} else if (cursor.nextSibling.tagName == "SPAN") {
+				checkClassName(cursor.parentNode);
+				checkClassName(cursor.nextSibling);
+				cursor.nextSibling.firstChild.appendChild(createCursor());
+				cursor.nextSibling.focus();
+				removeElement(cursor);
+			}
+		} else if (cursor.parentNode.getAttribute("math_id") != null) {
+			findNext(cursor.parentNode);
+		}
+	}
 	function keyDown(e) {
 		var keynum = window.event ? e.keyCode : e.which;
 		var keychar = String.fromCharCode(keynum);
@@ -1009,83 +1066,33 @@ function createExpr(type) {
 		case 46: //delete
 			if (cursor.nextSibling != null) {
 				removeElement(cursor.nextSibling);
-				if (cursor.parentNode.tagName == "SUP") {
-					if (cursor.parentNode.previousSibling
-							&& cursor.parentNode.previousSibling.tagName == "SUB")
-						cursor.parentNode
-								.setAttribute(
-										"style",
-										"left: "
-												+ (0.05 - cursor.parentNode.previousSibling.offsetWidth / 16)
-												+ "em; "
-												+ "margin-right: "
-												+ (-0.4 - (cursor.parentNode.previousSibling.offsetWidth > cursor.parentNode.offsetWidth ? cursor.parentNode.offsetWidth / 16
-														: cursor.parentNode.previousSibling.offsetWidth / 16))
-												+ "em;");
-				} else if (cursor.parentNode.tagName == "SUB") {
-					if (cursor.parentNode.nextSibling
-							&& cursor.parentNode.nextSibling.tagName == "SUP")
-						cursor.parentNode.nextSibling
-								.setAttribute(
-										"style",
-										"left: "
-												+ (0.05 - cursor.parentNode.offsetWidth / 16)
-												+ "em; "
-												+ "margin-right: "
-												+ (-0.4 - (cursor.parentNode.offsetWidth > cursor.parentNode.nextSibling.offsetWidth ? cursor.parentNode.nextSibling.offsetWidth / 16
-														: cursor.parentNode.offsetWidth / 16))
-												+ "em;");
-				}
 			}
 			break;
 		case 8: //backspace
 			e.preventDefault(); // or the brower will back 	
 			if (cursor.previousSibling != null) {
 				removeElement(cursor.previousSibling);
-				if (cursor.parentNode.tagName == "SUP") {
-					if (cursor.parentNode.previousSibling
-							&& cursor.parentNode.previousSibling.tagName == "SUB")
-						cursor.parentNode
-								.setAttribute(
-										"style",
-										"left: "
-												+ (0.05 - cursor.parentNode.previousSibling.offsetWidth / 16)
-												+ "em; "
-												+ "margin-right: "
-												+ (-0.4 - (cursor.parentNode.previousSibling.offsetWidth > cursor.parentNode.offsetWidth ? cursor.parentNode.offsetWidth / 16
-														: cursor.parentNode.previousSibling.offsetWidth / 16))
-												+ "em;");
-				} else if (cursor.parentNode.tagName == "SUB") {
-					if (cursor.parentNode.nextSibling
-							&& cursor.parentNode.nextSibling.tagName == "SUP")
-						cursor.parentNode.nextSibling
-								.setAttribute(
-										"style",
-										"left: "
-												+ (0.05 - cursor.parentNode.offsetWidth / 16)
-												+ "em; "
-												+ "margin-right: "
-												+ (-0.4 - (cursor.parentNode.offsetWidth > cursor.parentNode.nextSibling.offsetWidth ? cursor.parentNode.nextSibling.offsetWidth / 16
-														: cursor.parentNode.offsetWidth / 16))
-												+ "em;");
-				}
 			}
 			break;
 		case 37: //left arrow
+			//findPrev(cursor);
 			if (cursor.previousSibling != null) {
 				if (cursor.previousSibling.tagName == "VAR") {
 					insertBefore(cursor, cursor.previousSibling);
+					//cursor.previousSibling.focus();
+				} else if (cursor.previousSibling.tagName == "BIG") { //TODO: rewrite
+					insertBefore(cursor, cursor.previousSibling);
 					cursor.previousSibling.focus();
-				} else if (cursor.previousSibling.tagName == "BIG") { //this situation won't exist, so no consideration
-					removeElement(cursor);
-					cursor = cursor.previousSibling;
-					insertCursor(cursor.previousSibling);
-					checkClassName(cursor.previousSibling);
-					cursor.previousSibling.focus();
-				} else { //sub or sup, just appendChild
+				} else if (cursor.previousSibling.tagName == "SUP" || cursor.previousSibling.tagName == "SUB") { //sub or sup, just appendChild
 					checkClassName(cursor.parentNode);
 					checkClassName(cursor.previousSibling);
 					cursor.previousSibling.appendChild(createCursor());
+					cursor.previousSibling.focus();
+					removeElement(cursor);
+				} else if (cursor.previousSibling.tagName == "SPAN") {
+					checkClassName(cursor.parentNode);
+					checkClassName(cursor.previousSibling);
+					cursor.previousSibling.lastChild.appendChild(createCursor());
 					cursor.previousSibling.focus();
 					removeElement(cursor);
 				}
@@ -1095,9 +1102,13 @@ function createExpr(type) {
 				//check sibling first, than parent ... iterative search until the first layer
 				if (iter.previousSibling != null) {
 					if (iter.previousSibling.getAttribute("math_id") != null) {
-						if (iter.previousSibling.tagName == "VAR"
-								|| iter.previousSibling.tagName == "BIG"
-								|| iter.previousSibling.innerHTML == "¡Ì") {
+						if (iter.previousSibling.tagName == "VAR") {
+							removeElement(cursor);
+							checkClassName(iter);
+							insertBefore(createCursor(), iter);
+							checkClassName(iter.previousSibling.parentNode);
+							iter.previousSibling.parentNode.focus();
+						} else if ( iter.previousSibling.tagName == "BIG" || iter.previousSibling.innerHTML == "¡Ì") {
 							removeElement(cursor);
 							checkClassName(iter);
 							insertBefore(createCursor(), iter.previousSibling);
@@ -1114,7 +1125,7 @@ function createExpr(type) {
 				} else if (iter.parentNode.getAttribute("math_id") != null) {
 					removeElement(cursor);
 					checkClassName(iter);
-					checkClassName(iter.parentNode);
+					checkClassName(iter.parentNode);s
 					iter.parentNode.focus();
 					insertBefore(createCursor(), iter);
 				}
@@ -1125,7 +1136,7 @@ function createExpr(type) {
 			if (cursor.nextSibling != null) {
 				if (cursor.nextSibling.tagName == "VAR") {
 					checkClassName(cursor.nextSibling.parentNode);
-					cursor.nextSibling.focus();
+					//cursor.nextSibling.focus();
 					insertAfter(cursor, cursor.nextSibling);
 					checkClassName(cursor.parentNode);
 				} else if (cursor.nextSibling.tagName == "BIG"
@@ -1240,8 +1251,37 @@ function createExpr(type) {
 					return;
 				} else
 					tnode = document.createTextNode(signal[keynum - 186]);
-			} else
-				tnode = document.createTextNode(sign[keynum - 186]);
+			} else {
+				if (keynum == 191) {
+					tnode = createExpr("fraction");
+					insertBefore(tnode, cursor);
+					var tmp = tnode.previousSibling;
+					if (tmp) {
+						var frag = document.createDocumentFragment();
+						while (tmp && tmp.tagName != "BIG" && tmp.innerHTML != " " && tmp.innerHTML != "+" && tmp.innerHTML != "-" && tmp.innerHTML != "=" && tmp.innerHTML != "¡Á") {
+							if (frag.firstChild)
+								insertBefore(tmp, frag.firstChild);
+							else 
+								frag.appendChild(tmp);
+							tmp = tnode.previousSibling;
+						}
+						tnode.firstChild.firstChild.appendChild(frag);
+						tnode.firstChild.firstChild.className = "non-leaf";
+						removeElement(cursor);
+						checkClassName(tnode.childNodes[1].firstChild);
+						tnode.childNodes[1].firstChild.appendChild(createCursor());
+					} else {
+						removeElement(cursor);
+						checkClassName(tnode.firstChild.firstChild);
+						tnode.firstChild.firstChild.appendChild(createCursor());
+					}
+						
+					e.stopPropagation();
+					return;
+				} else 
+					tnode = document.createTextNode(sign[keynum - 186]);
+			}
+				
 		} else if (keynum >= 219 && keynum <= 222) {
 			var signal = [ "{", "|", "}", "\"" ];
 			var sign = [ "[", "\\", "]", "\'" ];
@@ -1274,7 +1314,7 @@ function createExpr(type) {
 				// if not the same parent, change the className for the original one with cursor 
 				// Note: delete cursor first, or there is no way to judge
 				var parent = idObject.parentNode;
-				console.log(parent);
+				//console.log(parent);
 				removeElement(idObject);
 				checkClassName(parent);
 			}
@@ -1414,7 +1454,6 @@ function createExpr(type) {
 	function createCursor() { //create cursor 
 		var tag = document.createElement("span");
 		tag.setAttribute("id", "cursor");
-		tag.setAttribute("mathcolor", "#00ff00");
 		tag.setAttribute("math_id", math_id++);
 		var tnode = document.createTextNode("|");
 		tag.appendChild(tnode);
@@ -1430,6 +1469,18 @@ function createExpr(type) {
 			checkClassName(cursor.parentNode);
 			removeElement(cursor);
 		}
+	}
+	//deal with the sqrt and bracket scale if the element inside become taller than before
+	//TODO: I can't find better solution, just compare the old and new height to decide if they should be changed
+	function changeHeight() {	
+		//console.log(this);
+		//console.log(this.previousSibling);
+		var ratio = this.parentNode.offsetHeight / this.previousSibling.offsetHeight ;	//20 means original height
+		//var axis_y = -(this.parentNode.offsetHeight - this.previousSibling.offsetHeight) / 8;
+		var axis_y = this.parentNode.offsetTop + this.parentNode.offsetHeight/2 - this.previousSibling.offsetTop - this.previousSibling.offsetHeight/2;
+		this.previousSibling.setAttribute("style", "transform:scale(1,"+ratio+");");//matrix(1, 0, 0, "+ ratio + ", 0,"+ 0.9*axis_y +");");
+		console.log(this.previousSibling.offsetTop);
+		console.log(this.offsetTop);
 	}
 	function insertBefore(newElement, targetElement) {
 		var parent = targetElement.parentNode;
