@@ -256,15 +256,20 @@ Util = {
      * Takes a src, class, id and a bool for controls. controls defaults to
      * true. src is relative to the dir you defined in mediaLocations
      */
-    video : function(src, controls, className, id) {
+    video : function(src, controls, className, id, preload) {
         controls = (typeof controls !== "undefined") ? controls : true;
+        preload = (typeof preload !== "undefined") ? preload : "metadata";
+        if (video[src]) {
+            return video[src];
+        }
         var result = Util.make("video", {
             src : mediaLocations.video + src,
             controls : controls,
             className : className,
             id : id,
+            preload: preload,
         });
-        media.push(result);
+        video[src] = result;
         return result;
     },
 
@@ -274,13 +279,16 @@ Util = {
      */
     audio : function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
+        if (audio[src]) {
+            return audio[src];
+        }
         var result = Util.make("audio", {
             src : mediaLocations.audio + src,
             controls : controls,
             className : className,
             id : id,
         });
-        media.push(result);
+        audio[src] = result;
         return result;
     },
 
@@ -459,9 +467,30 @@ Util = {
     
 };
 
+video = {};
+audio = {};
+mediaLocations = {
+    img : "assets/img/",
+    audio : "assets/audio/",
+    video : "assets/video/",
+};
+
+var page;
 var url;
+
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
-function URL(url_hash) {
+
+
+/*
+ * A Url object that keeps track of the state of the url,
+ * and allows for programmatic modification of the url.
+ * 
+ * The global Url object can be access via window.url (url)
+ *
+ * When making a new Url you can either use the existing url
+ * or make a new one. Either way will work.
+ */
+function Url(url_hash) {
     url_hash = (typeof url_hash === "undefined") ? document.location.hash : url_hash;
 
     if (url_hash === "") {
@@ -486,11 +515,11 @@ function URL(url_hash) {
     this.params = this.parseParams(reMatch[3]);
 }
 
-URL.prototype.copy = function() {
-    return new URL(this.hash);
+Url.prototype.copy = function() {
+    return new Url(this.hash);
 };
 
-URL.prototype.load = function() {
+Url.prototype.load = function() {
     this.buildHash();
     if (document.location.hash === this.hash) {
         loadPage("view_reload");
@@ -500,7 +529,7 @@ URL.prototype.load = function() {
     url = this;
 };
 
-URL.prototype.parseParams = function(params) {
+Url.prototype.parseParams = function(params) {
     if (typeof params === "undefined") {
         return {};
     }
@@ -518,48 +547,46 @@ URL.prototype.parseParams = function(params) {
     return result;
 };
 
-URL.prototype.buildHash = function() {
+Url.prototype.buildHash = function() {
     this.hash = "#" + this.url;
     if (this.view)
         this.hash += "!" + this.view;
     if (this.params) {
         pstr = "?";
         for (var item in this.params) {
-            pstr += item + "=" + this.params[item] + "&";
+            if (typeof this.params[item] !== "boolean") {
+                pstr += item + "=" + this.params[item] + "&";
+            } else if (typeof this.params[item] === "boolean" && this.params[item] === true) {
+                pstr += item + "&";
+            }
         }
         this.hash += pstr.slice(0, -1);
     }
 };
 
-URL.prototype.addParam = function(key, value) {
+Url.prototype.addParam = function(key, value) {
+    value = (typeof value === "undefined") ? true : value;
     this.params[key] = value;
 };
 
-URL.prototype.addParams = function(params) {
+Url.prototype.addParams = function(params) {
     for (var item in params) {
         this.params[item] = params[item];
     }
 };
 
-URL.prototype.removeParam = function(arg) {
+Url.prototype.removeParam = function(arg) {
     delete this.params[arg];
 };
 
-URL.prototype.removeAllParams = function() {
+Url.prototype.removeAllParams = function() {
     this.params = {};
 };
 
-URL.prototype.changeView = function(view) {
+Url.prototype.changeView = function(view) {
     view = (typeof view === "undefined") ? "" : view;
     this.view = view;
 };
-
-media = [];
-mediaLocations = {
-    img : "assets/img/",
-    audio : "assets/audio/",
-    video : "assets/video/",
-}
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading
@@ -591,8 +618,6 @@ function appendCSSText(css) {
     head.appendChild(s);
 }
 
-var page;
-
 function processAJAX() {
     if (typeof page.css !== "undefined") {
         appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
@@ -600,14 +625,6 @@ function processAJAX() {
     } else {
         console.warn("custom css didn't load. check css link in page.css");
     }
-}
-
-function resetMedia() {
-    for (var i = 0; i < media.length; i++) {
-        media[i].removeAttribute("src");
-        media[i].load();
-    }
-    media = [];
 }
 
 function clearPage() {
@@ -658,13 +675,12 @@ function loadView(url) {
 
 var oldUrl;
 function loadPage(e) {
-    url = new URL(location.hash);
+    url = new Url(location.hash);
     if (url.url === "/") {
         url.url = "/index";
     }
     ajax_url = "/LiquiZ2" + url.url + "_ajax.jsp"; // name of dynamic file
 
-    resetMedia();
     clearPage();
     if ((!oldUrl) ||
         (oldUrl.hash === url.hash && e !== "view_reload") ||
