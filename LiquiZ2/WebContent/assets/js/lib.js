@@ -480,6 +480,17 @@ mediaLocations = {
 
 var url;
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
+
+
+/*
+ * A URL object that keeps track of the state of the url,
+ * and allows for programmatic modification of the url.
+ * 
+ * The global URL object can be access via window.url (url)
+ *
+ * When making a new URL you can either use the existing url
+ * or make a new one. Either way will work.
+ */
 function URL(url_hash) {
     url_hash = (typeof url_hash === "undefined") ? document.location.hash : url_hash;
 
