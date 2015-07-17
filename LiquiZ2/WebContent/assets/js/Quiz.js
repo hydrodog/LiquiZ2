@@ -17,35 +17,170 @@ function Quiz(quizinfo, questions) {
     this.questions = questions;
 }
 
-Quiz.prototype.exec = function() {
+Quiz.prototype.exec = function(params) {
+    var collapse = {};
+    if (params.collapse) {
+        var collapseArray = params.collapse.split(",");
+        for (var i = 0; i < collapseArray.length; i++) {
+            collapse[parseInt(collapseArray[i]) - 1] = true;
+        }
+    }
+
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
-
+    this.render(this.headerButtons());
+    
     for (var i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
         var qc = this.addQuestion(q[0], q[1], q[2]);
-        for (var j = 3; j < q.length; j++) {
-            if (q[j][0].substring(0, 5) === "Util.") {
-                qc.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
-            } else {
-                qc.appendChild(this[q[j][0]].apply(this||window, q[j].slice(1)));
-            }
+        if (!collapse[i])
+            qc.appendChild(this.processQuestion(q));
+        this.render(qc);
+    }
+    this.end();
+}
+
+/*
+ * Demo!!
+ * Should be removed before production
+ */
+Quiz.prototype.color = function(params) {
+    this.body.style.background = params["color"] ? params["color"] : null;
+    this.exec(params);
+}
+
+Quiz.prototype.collapsed = function(params) {
+    var not = {};
+    if (params.not) {
+        var notArray = params.not.split(",");
+        for (var i = 0; i < notArray.length; i++) {
+            not[parseInt(notArray[i]) - 1] = true;
+        }
+    }
+
+    this.render(this.displayHeader());
+    this.render(this.createSubmit(1));
+    this.render(this.headerButtons());
+
+    for (i = 0; i < this.questions.length; i++) {
+        var q = this.questions[i];
+        var qc = this.addQuestion(q[0], q[1], q[2]);
+        if (not[i]) {
+            qc.appendChild(this.processQuestion(q));
         }
         this.render(qc);
     }
     this.end();
 }
 
-Quiz.prototype.collapsed = function() {
-    this.render(this.displayHeader());
-    this.render(this.createSubmit(1));
+Quiz.prototype.headerButtons = function() {
+    var fragment = document.createDocumentFragment();
+    var button, input;
 
-    for (var i = 0; i < this.questions.length; i++) {
-        var q = this.questions[i];
-        var qc = this.addQuestion(q[0], q[1], q[2]);
-        this.render(qc);
+    button = Util.button("Collapse All", null, null,
+        function(e) {
+            url.changeView("collapsed");
+            url.removeAllParams();
+            url.load();
+        });
+    fragment.appendChild(button);
+
+    button = Util.button("Uncollapse All", null, null,
+        function(e) {
+            url.changeView("");
+            url.removeAllParams();
+            url.load();
+        });
+    fragment.appendChild(button);
+
+    onkeydown = function(e) {
+        if (e.keyCode == 13) {
+            if (url.view === "") {
+                collapse(e);                
+            } else if (url.view === "collapsed") {
+                expand(e);
+            }
+        }
+    };
+
+    collapse = function(e) {
+        var data = document.getElementById("collapse-input");
+        var regex = /(\d+)/g;
+        var collapse_vals = data.value.match(regex);
+        if (collapse_vals !== null) {
+            collapse_vals.sort(function(a, b) {
+                a = parseInt(a);
+                b = parseInt(b);
+                if (a < b) {
+                    return -1;
+                } else if (a > b) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }).filter(
+                function(element, index, array) {
+                    return !index || element != array[index - 1];
+            });
+            url.removeParam("not");
+            url.addParam("collapse", collapse_vals.join(","));
+            url.load();
+        } else {
+            url.removeParam("collapse");
+            url.load();
+        }
+    };
+
+    expand = function(e) {
+        var data = document.getElementById("collapse-input");
+        var regex = /(\d+)/g;
+        var expand_vals = data.value.match(regex);
+        if (expand_vals !== null) {
+            expand_vals.sort(function(a, b) {
+                a = parseInt(a);
+                b = parseInt(b);
+                if (a < b) {
+                    return -1;
+                } else if (a > b) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }).filter(
+                function(element, index, array) {
+                    return !index || element != array[index - 1];
+            });
+            url.removeParam("collapse");
+            url.addParam("not", expand_vals.join(","));
+            url.load();
+        } else {
+            url.removeParam("not");
+            url.load()
+        }
+    };
+
+    if (url.view === "") {
+        input = Util.input("text", null, "collapse-input", url.params.collapse, onkeydown);
+        button = Util.button("Collapse", null, null, collapse);
+    } else if (url.view === "collapsed") {
+        input = Util.input("text", null, "collapse-input", url.params.not, onkeydown);
+        button = Util.button("Expand", null, null, expand);
     }
-    this.end();
+    fragment.appendChild(input);
+    fragment.appendChild(button);
+    return fragment;
+}
+
+Quiz.prototype.processQuestion = function(q) {
+    var frag = document.createDocumentFragment();
+    for (var j = 3; j < q.length; j++) {
+        if (q[j][0].substring(0, 5) === "Util.") {
+            frag.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
+        } else {
+            frag.appendChild(this[q[j][0]].apply(this||window, q[j].slice(1)));
+        }
+    }
+    return frag;
 }
 
 Quiz.prototype.render = function(child) {
@@ -62,7 +197,7 @@ Quiz.prototype.displayHeader = function() {
     //TODO: add remaining tries
 }
 
-var clicks = 0;
+
 Quiz.prototype.end = function() {
 	this.render(this.createSubmit(2));
 };
@@ -136,20 +271,23 @@ Quiz.prototype.saveLocal = function(id) {
 }
 
 Quiz.prototype.createSubmit = function(id) {
-    var div = Util.div("submit");
+    var div = Util.div("submit", "submitDiv-" + id);
     var parent = this;
+    var clicks = 0;
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
     if (this.editMode) {
     	var editBox = Util.div("edit-quiz", id + "-edit-quiz");
         editBox.appendChild(Util.button("New Question", id + "-new-question", null,
             function() {
                 if (clicks === 0) {
-                    parent.editQuestion();
+                	var editor = new QuizEdit();
+                	editor.editQuestion();
+                	checkIfInView("editor");
                     // Util.goToId("editor");
                 }
                 clicks++;
             }));
-        editBox.appendChild(Util.div("filebrowse"));
+        // editBox.appendChild(Util.div("filebrowse"));
         editBox.appendChild(Util.button("Save Local", id + "-edit-buttons", null, 
         		function () {
         		parent.saveLocal();
@@ -189,8 +327,14 @@ Quiz.prototype.add = function(parent, spec) {
 }
 
 Quiz.prototype.mcRadioText = function(id, txt) {
-	return Util.input('radio', 'multichoiceradio', id);
-	this.add(this.q, document.createTextNode(txt));
+	l = [];
+	for (var i = 0; i < txt.length; i++) {
+		radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
+		label = Util.label(id + "-" + i, Util.span(txt[i]));
+		group = [ radio, label ];
+		l.push(group);
+	}
+	return Util.table(l);
 }
 
 Quiz.prototype.mcRadioImg = function(id, src) {
@@ -392,20 +536,19 @@ Quiz.prototype.clickableImage = function(id, src, xs, ys) {
 	return img;
 };
 
-// multiple fill-in-the-blank where [[]] is replaced by inputs
-Quiz.prototype.cloze = function(id, txt) {
-	var preItems = txt.split("[[]]");
-	var pre = document.createElement("pre");
-	pre.className = "code";
-
-	for (var i = 0; i < preItems.length; ++i) {
-		pre.appendChild(Util.span(preItems[i]));
-		if (i != preItems.length - 1)
-			pre.appendChild(this.fillin(id + "_" + i, true));
-	}
-	return pre;
-};
-
+Quiz.prototype.cloze = function (id, txt) {
+    var patt1 = /\[\[.*?\]\]/g;  // when using the shortest match, give a ? mark. 
+    var preItems = txt.split(patt1);
+    var pre = document.createElement("pre");
+    pre.className = "code";
+    
+    for (var i = 0; i < preItems.length; i++) {
+        pre.appendChild(Util.span(preItems[i]));
+        if (i != preItems.length-1)
+            pre.appendChild(this.fillin(id + "_" + i, true));
+    }
+    return pre;
+}
 // enter code to be compiled, run, spindled, mutilated
 Quiz.prototype.code = function(id, txt, rows, cols) {
 	var ta = document.createElement("textarea");
@@ -424,3 +567,17 @@ Quiz.prototype.essay = function(id, rows, cols, maxwords) {
 	// ta.value = essay.text;
 	return ta;
 };
+
+Quiz.prototype.multiAnswer = function(id, txt) {
+	//var ta = Util.form(null, "multiAnswer", id);
+	l = [];
+	for (var i = 0; i < txt.length; i++) {
+		checkbox = Util.checkbox(id + "-" + i, id, 'multianswer', id + "-" + i, false);
+		label = Util.label(id + "-" + i, Util.span(txt[i]));
+		group = [ checkbox, label ];
+		l.push(group);
+	}
+	return Util.table(l);
+	
+}
+

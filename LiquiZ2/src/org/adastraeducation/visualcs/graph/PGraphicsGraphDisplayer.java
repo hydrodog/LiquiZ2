@@ -4,11 +4,9 @@ package org.adastraeducation.visualcs.graph;
 //2  how to output solution in txt file the, name
 //3  what's next step?  build on the web server? save png     graph1 png  sloution1 txt  batch
 
-import org.adastraeducation.visualcs.*;
-import org.adastraeducation.visualcs.util.*;
-import java.io.*;
+import org.adastraeducation.visualcs.BasePApplet;
+import org.adastraeducation.visualcs.DrawOnPGraphics;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 
 public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
@@ -32,11 +30,9 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 		};
 		graph.addObserver(displayer);
 		this.v = displayer.getGraph().getV();
-		colors = new int[] {
-			fgColor,
-			0xC0D000, // yellow for visited vert/edges
-			0xFF0000
-		};
+				
+		colors = new int[]{0, 0, 0, 205, 190, 112, 255, 0, 0};
+					
 		vSize = 50;     //each vertex is a circle, vsize is a radius   
 		
     	x = new float[v];    //series x location of in a circle(vertex.x )
@@ -52,17 +48,17 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	
 	public void thisDraw() {
 		//if(displayer.firstDraw){
-			g.background(bgColor);
-			g.textSize(txtHeight);
-		    g.stroke(fgColor);
-		    g.fill(fgColor);
+		g.background(bgColor);
+		g.textSize(txtHeight);
+		g.stroke(fgColor);
+		g.fill(fgColor);
 		//	displayer.firstDraw = false;
-		
-		    g.translate(g.width/2, g.height/2);
-		    		    
-		    setVertexPositions();
-		 //  
-		   
+
+		g.translate(g.width/2, g.height/2);
+
+		setVertexPositions();
+		//  
+
 		drawEdges(); 	// draw edges first 
 		drawVertices();	// then draw vertices on top    
 //	    if (true)
@@ -112,24 +108,17 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 				bestY = candidateY;
 			}
 		}
-		g.fill(255,0,0);
 		g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
 	}
+	
 	private void drawEdges() {
 	    for (int i = 0; i < v; i++) {
 	    	for(int j = i; j < v; j++) {
 	    		if(graph.getW(i,j) != Double.POSITIVE_INFINITY) {
-	    			
-	    			if(displayer.getEdgeStyle(i, j) != 0)
-	    				g.stroke(255, 20, 0);
-	    			else g.stroke(displayer.getEdgeStyle(i,j));
-	    			g.line(x[i],y[i],x[j],y[j]);
-	    			
-	    			
-	    			
-	    			g.fill(displayer.getEdgeStyle(i,j));
-	    			
-	    			
+	    			int styleIndex = displayer.getEdgeStyle(i, j) * 3;  			
+	    			g.stroke(colors[styleIndex], colors[styleIndex + 1], colors[styleIndex + 2]); 			
+	    			g.line(x[i],y[i],x[j],y[j]);	    			
+	    			g.fill(colors[displayer.getEdgeStyle(i,j)]);	    			
 	    			labelWeight(graph.getW(i,j), i, j); 
 //	    			g.fill(255,0,0);
 //	    			g.text( Double.toString(graph.getW(i,j)),  (x[i]+x[j])/2,  (y[i]+y[j])/2   ) ;	
@@ -140,12 +129,10 @@ public class PGraphicsGraphDisplayer extends DrawOnPGraphics {
 	private void drawVertices() {
     	g.noStroke();	
 	    for (int i = 0; i < v; i++) {
-	    	if(displayer.getVertexStyle(i) != 0) g.fill(255, 0, 0); 
-	    	else g.fill(displayer.getVertexStyle(i));	
-	   	
+	    	int styleIndex = displayer.getVertexStyle(i) * 3;
+	    	g.fill(  colors[styleIndex], colors[styleIndex + 1], colors[styleIndex + 2]);    		    	
 	    	g.ellipse(x[i], y[i], vSize,vSize);
-	    	g.fill(displayer.getVertexStyle(i));
-	    	g.fill(255,255,0);
+	    	g.fill(255);
 	    	g.text(i+1, x[i]-txtHeight/3, y[i]+txtHeight/3);
 	    }
 	}
