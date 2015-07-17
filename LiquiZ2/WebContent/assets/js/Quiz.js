@@ -106,7 +106,6 @@ Quiz.prototype.headerButtons = function() {
     collapse = function(e) {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
-        // TODO(asher): Sorts on string not ints. We get 1,2,3,34,4,435,45,5 as sorted.
         var collapse_vals = data.value.match(regex);
         if (collapse_vals !== null) {
             collapse_vals.sort(function(a, b) {
