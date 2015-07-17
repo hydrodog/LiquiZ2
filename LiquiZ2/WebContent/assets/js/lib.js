@@ -270,7 +270,6 @@ Util = {
             preload: preload,
         });
         video[src] = result;
-        // media.push(result);
         return result;
     },
 
@@ -290,7 +289,6 @@ Util = {
             id : id,
         });
         audio[src] = result;
-        // media.push(result);
         return result;
     },
 
@@ -469,7 +467,6 @@ Util = {
     
 };
 
-// media = [];
 video = {};
 audio = {};
 mediaLocations = {
@@ -478,20 +475,22 @@ mediaLocations = {
     video : "assets/video/",
 };
 
+var page;
 var url;
+
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 
 
 /*
- * A URL object that keeps track of the state of the url,
+ * A Url object that keeps track of the state of the url,
  * and allows for programmatic modification of the url.
  * 
- * The global URL object can be access via window.url (url)
+ * The global Url object can be access via window.url (url)
  *
- * When making a new URL you can either use the existing url
+ * When making a new Url you can either use the existing url
  * or make a new one. Either way will work.
  */
-function URL(url_hash) {
+function Url(url_hash) {
     url_hash = (typeof url_hash === "undefined") ? document.location.hash : url_hash;
 
     if (url_hash === "") {
@@ -516,11 +515,11 @@ function URL(url_hash) {
     this.params = this.parseParams(reMatch[3]);
 }
 
-URL.prototype.copy = function() {
-    return new URL(this.hash);
+Url.prototype.copy = function() {
+    return new Url(this.hash);
 };
 
-URL.prototype.load = function() {
+Url.prototype.load = function() {
     this.buildHash();
     if (document.location.hash === this.hash) {
         loadPage("view_reload");
@@ -530,7 +529,7 @@ URL.prototype.load = function() {
     url = this;
 };
 
-URL.prototype.parseParams = function(params) {
+Url.prototype.parseParams = function(params) {
     if (typeof params === "undefined") {
         return {};
     }
@@ -548,7 +547,7 @@ URL.prototype.parseParams = function(params) {
     return result;
 };
 
-URL.prototype.buildHash = function() {
+Url.prototype.buildHash = function() {
     this.hash = "#" + this.url;
     if (this.view)
         this.hash += "!" + this.view;
@@ -565,26 +564,26 @@ URL.prototype.buildHash = function() {
     }
 };
 
-URL.prototype.addParam = function(key, value) {
+Url.prototype.addParam = function(key, value) {
     value = (typeof value === "undefined") ? true : value;
     this.params[key] = value;
 };
 
-URL.prototype.addParams = function(params) {
+Url.prototype.addParams = function(params) {
     for (var item in params) {
         this.params[item] = params[item];
     }
 };
 
-URL.prototype.removeParam = function(arg) {
+Url.prototype.removeParam = function(arg) {
     delete this.params[arg];
 };
 
-URL.prototype.removeAllParams = function() {
+Url.prototype.removeAllParams = function() {
     this.params = {};
 };
 
-URL.prototype.changeView = function(view) {
+Url.prototype.changeView = function(view) {
     view = (typeof view === "undefined") ? "" : view;
     this.view = view;
 };
@@ -618,8 +617,6 @@ function appendCSSText(css) {
     }
     head.appendChild(s);
 }
-
-var page;
 
 function processAJAX() {
     if (typeof page.css !== "undefined") {
@@ -678,7 +675,7 @@ function loadView(url) {
 
 var oldUrl;
 function loadPage(e) {
-    url = new URL(location.hash);
+    url = new Url(location.hash);
     if (url.url === "/") {
         url.url = "/index";
     }
