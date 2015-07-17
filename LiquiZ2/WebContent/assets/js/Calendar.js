@@ -15,17 +15,17 @@ function Calendar(startDate, days) {
     for (var i = 0; i < days; i++){
     	this.holidays.push('0');
     }
-    
+    this.monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    this.endDateOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     this.body = document.getElementById("container");
 	this.body.className = "calendar";
 }
 
 Calendar.prototype.getDateOfYear = function(d) {
-	var endDateOfMonth = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 	var dateOfYear = 0;
 	var month = d.getMonth();
 	for(var i=0; i<month; i++){
-		dateOfYear += endDateOfMonth[i];
+		dateOfYear += this.endDateOfMonth[i];
 	}
 	dateOfYear += d.getDate();
 	return dateOfYear;
@@ -147,18 +147,18 @@ Calendar.prototype.month = function(d, id) {
 Calendar.prototype.drawMonth = function(d, id){
 	var calendar = this;
 	
-	// generate header of one month
-	var t = document.createElement("table");
-    t.className = "calendar";
-    t.id = "calendar";
+	// generate header of one month    
+    var t = Util.make("table", {className : "calendar", id : "calendar"});
     var h = t.insertRow(0);
-    //fillRowText(h, ["", "", d.getFullYear(), "", d.getMonth()+1, "", ""]);
-    var c = h.insertCell(0);
-    c.innerHTML = d.getFullYear() + " " + (d.getMonth()+1);
-    c.colSpan = 7;
-    c.align = "center";
+    var th = Util.make("th", {
+        scope : "col",
+        innerHTML : d.getFullYear() + " " + this.monthAbbr[d.getMonth()],
+        colSpan : 7
+    });
+    h.appendChild(th);
+    
     h = t.insertRow(1);
-    fillRowText(h, ["S", "M", "T", "W", "T", "F", "S"]);
+    fillRowText(h, ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
     d.setDate(1);
     var monthId = d.getMonth();
     var dayOfWeek = d.getDay();
