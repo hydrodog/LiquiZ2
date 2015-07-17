@@ -256,15 +256,21 @@ Util = {
      * Takes a src, class, id and a bool for controls. controls defaults to
      * true. src is relative to the dir you defined in mediaLocations
      */
-    video : function(src, controls, className, id) {
+    video : function(src, controls, className, id, preload) {
         controls = (typeof controls !== "undefined") ? controls : true;
+        preload = (typeof preload !== "undefined") ? preload : "metadata";
+        if (video[src]) {
+            return video[src];
+        }
         var result = Util.make("video", {
             src : mediaLocations.video + src,
             controls : controls,
             className : className,
             id : id,
+            preload: preload,
         });
-        media.push(result);
+        video[src] = result;
+        // media.push(result);
         return result;
     },
 
@@ -274,13 +280,17 @@ Util = {
      */
     audio : function(src, controls, className, id) {
         controls = (typeof controls !== "undefined") ? controls : true;
+        if (audio[src]) {
+            return audio[src];
+        }
         var result = Util.make("audio", {
             src : mediaLocations.audio + src,
             controls : controls,
             className : className,
             id : id,
         });
-        media.push(result);
+        audio[src] = result;
+        // media.push(result);
         return result;
     },
 
@@ -459,6 +469,15 @@ Util = {
     
 };
 
+// media = [];
+video = {};
+audio = {};
+mediaLocations = {
+    img : "assets/img/",
+    audio : "assets/audio/",
+    video : "assets/video/",
+};
+
 var url;
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 function URL(url_hash) {
@@ -525,13 +544,18 @@ URL.prototype.buildHash = function() {
     if (this.params) {
         pstr = "?";
         for (var item in this.params) {
-            pstr += item + "=" + this.params[item] + "&";
+            if (typeof this.params[item] !== "boolean") {
+                pstr += item + "=" + this.params[item] + "&";
+            } else if (typeof this.params[item] === "boolean" && this.params[item] === true) {
+                pstr += item + "&";
+            }
         }
         this.hash += pstr.slice(0, -1);
     }
 };
 
 URL.prototype.addParam = function(key, value) {
+    value = (typeof value === "undefined") ? true : value;
     this.params[key] = value;
 };
 
@@ -553,13 +577,6 @@ URL.prototype.changeView = function(view) {
     view = (typeof view === "undefined") ? "" : view;
     this.view = view;
 };
-
-media = [];
-mediaLocations = {
-    img : "assets/img/",
-    audio : "assets/audio/",
-    video : "assets/video/",
-}
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading
@@ -600,14 +617,6 @@ function processAJAX() {
     } else {
         console.warn("custom css didn't load. check css link in page.css");
     }
-}
-
-function resetMedia() {
-    for (var i = 0; i < media.length; i++) {
-        media[i].removeAttribute("src");
-        media[i].load();
-    }
-    media = [];
 }
 
 function clearPage() {
@@ -664,7 +673,6 @@ function loadPage(e) {
     }
     ajax_url = "/LiquiZ2" + url.url + "_ajax.jsp"; // name of dynamic file
 
-    resetMedia();
     clearPage();
     if ((!oldUrl) ||
         (oldUrl.hash === url.hash && e !== "view_reload") ||

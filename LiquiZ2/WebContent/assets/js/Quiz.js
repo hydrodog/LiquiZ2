@@ -95,7 +95,7 @@ Quiz.prototype.headerButtons = function() {
 
     onkeydown = function(e) {
         if (e.keyCode == 13) {
-            if (url.view === null) {
+            if (url.view === "") {
                 collapse(e);                
             } else if (url.view === "collapsed") {
                 expand(e);
