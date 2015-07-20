@@ -10,8 +10,7 @@ public class TestQuizJavascript {
 		int qid=0;
 		int qcid=0;
 		Policy p = new Policy();
-		Quiz quiz = new Quiz(1, "Java1", "Java Quiz 1", p);
-		
+		Quiz quiz = new Quiz(1, "Java1", "Java Quiz 1", p, true);
 		QuestionContainer qc = 
 				new QuestionContainer(qcid++, "Operators", "fillin", new ArrayList<Displayable>());
 		qc.add(new QuestionText("What is 2+2?"));
@@ -28,6 +27,7 @@ public class TestQuizJavascript {
 		Matrix m=new Matrix(1,9);
 		m.setData(new double[][]{new double[]{9,8,7,6,5,4,3,2,1}});
 		qc.add(m);
+		qc.add(new LineBreak());
 		qc.add(new MatrixQuestion(qid++,10,100,1,9));
 		quiz.addQuestion(qc);
 		
@@ -38,13 +38,15 @@ public class TestQuizJavascript {
 		Matrix m1=new Matrix(3,3);
 		m1.setData(new double[][]{{1,0,2},{1,1,-2},{2,1,0}});
 		qc.add(m1);
+		qc.add(new SpanText("*"));
 		Matrix m2=new Matrix(3,3);
 		m2.setData(new double[][]{{1,1,-1},{-2,1,0},{1,1,3}});
 		qc.add(m2);
+		qc.add(new SpanText("="));
 		qc.add(new MatrixQuestion(qid++,10,100,3,3));
 		quiz.addQuestion(qc);
 		
-		
+		/*
 		// test for question 3 in QuizDemo_ajax.jsp, good
 		qc=new QuestionContainer(qcid++,"Java","code",new ArrayList<Displayable>());     
 		qc.add(new InstructionText("Complete the code below so that it prints 'hello'"));
@@ -142,7 +144,7 @@ public class TestQuizJavascript {
 		
 		//test for question 17 in QuizDemo_ajax.jsp
 		//not sure how to set up the test for this one
-		
+		*/
 		
 		
 		

@@ -16,8 +16,7 @@ public class QuestionText extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		//q.appendChild(Util.span("[text]"));
-		dc.append("q.appendChild(Util.span(").appendQuotedJS(getText()).append("));");
+		dc.append("\n\t\t\t['question text', ").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {
