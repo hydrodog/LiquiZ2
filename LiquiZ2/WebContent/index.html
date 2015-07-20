@@ -10,6 +10,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="assets/js/lib.js"></script>
   <script src="assets/js/Index.js"></script>
+  <script src="assets/js/Tests.js"></script>
   <script src="assets/js/Quiz.js"></script>
   <script src="assets/js/QuizEdit.js"></script>
   <script src="assets/js/QuizList.js"></script>
@@ -17,6 +18,8 @@
   <script src="assets/js/Grades.js"></script>
   <script src="assets/js/Graph.js"></script>
   <script src="assets/js/Equation.js"></script>
+  <script src="assets/js/Survey.js"></script>
+  <script src="assets/js/About.js"></script>
 </head>
 <body>
   <div id="menu">
@@ -30,10 +33,11 @@
     <a class="mi" href="#/schedule">Schedule</a>
     <a class="mi" href="#/demos/ArithQuizDemo">Arithmetic</a>
     <a class="mi" href="#/demos/QuizDemo">Quiz Demo</a>
-    <a class="mi" href="#/demos/QuizDemo!collapsed">Quiz Demo Collapsed</a>
     <a class="mi" href="#/demos/csdemo">CS Demo</a>
+    <a class="mi" href="#/demos/Survey">Survey</a>
     <a class="mi" href="#/about">About</a>
-    <a class="mi" oncick="localStorage.dir = {}">Local</a>
+    <a class="mi" href="#/demos/tests">Tests</a>
+    <a class="mi" onclick="localStorage.dir = {}">Local</a>
     <div>
       <form method="GET" action="Login.jsp">
         ID:
@@ -43,7 +47,9 @@
       </form>
     </div>
   </div>
-  <div id="currentStatus"></div>
+  <div id="currentStatus">
+    <noscript>Please enable JavaScript!</noscript>
+  </div>
   <div id="container"></div>
 </body>
 </html>

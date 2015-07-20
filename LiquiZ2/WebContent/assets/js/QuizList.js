@@ -4,7 +4,7 @@
  * 
  * View Quizzes Part
  * 
- * @Author: Jack Tan
+ * @Author: Jack Ziqi Tan
  * 
  * 
  * 
