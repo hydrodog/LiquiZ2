@@ -42,14 +42,14 @@ public class Cloze extends Question {
 		super(points, level, new ArrayList<Answer>());
 		this.wAns = ques;
 		removeAns();
-		printAll();
+		//printAll();
 	}
 	
 	public Cloze(int id, int points, int level, String ques) {
 		super(id, points, level, new ArrayList<Answer>());
 		this.wAns = ques;
 		removeAns();
-		printAll();
+		//printAll();
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class Cloze extends Question {
 			index = begin + 2;
 			int end = string.indexOf("]]", index);
 			String left = string.substring(0, begin+2);
-			addAns(new Answer(new AnswerText(string.substring(begin+2, end))));
+			addAns(new Answer(new TextAnswer(string.substring(begin+2, end))));
 			String right = string.substring(end);
 			
 			string = left + right;
@@ -86,7 +86,7 @@ public class Cloze extends Question {
 				
 			}
 		} else {
-			dc.append("q.appendChild(page.cloze(").append(getId()).append(", ").appendQuotedJS(noAns).append("));\n");
+			dc.append("\n\t\t\t['cloze', ").append(getId()).append(", ").appendQuotedJS(noAns).append("],");
 		}
 	}
 

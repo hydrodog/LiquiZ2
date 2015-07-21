@@ -1,11 +1,11 @@
 package org.adastraeducation.liquiz;
 
-public class InstructionText extends Text {
-	public InstructionText() {
+public class TextInstruction extends Text {
+	public TextInstruction() {
 		super();
 	}
 	
-	public InstructionText(String text) {
+	public TextInstruction(String text) {
 		super(text);
 	}
 	
@@ -16,8 +16,7 @@ public class InstructionText extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		//q.appendChild(page.instructions("[text]"));
-		dc.append("q.appendChild(page.instructions(").appendQuotedJS(getText()).append("));");
+		dc.append("\n\t\t\t['instructions', ").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

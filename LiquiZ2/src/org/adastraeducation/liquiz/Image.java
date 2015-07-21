@@ -19,7 +19,7 @@ public class Image extends RectangularMedia {
 	}
 
 	public void writeJS(DisplayContext dc){
-		dc.append("q.appendChild(Util.img(").appendQuotedJS(getSource()).append("));");
+		dc.append("\n\t\t\t['Util.img', ").appendQuotedJS(getSource()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

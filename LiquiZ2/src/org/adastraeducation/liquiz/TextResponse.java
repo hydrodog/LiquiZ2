@@ -1,23 +1,21 @@
 package org.adastraeducation.liquiz;
 
-public class QuestionText extends Text {
-	public QuestionText() {
+public class TextResponse extends Text {
+	public TextResponse() {
 		super();
 	}
 	
-	public QuestionText(String text) {
+	public TextResponse(String text) {
 		super(text);
 	}
 	
 	public void writeHTML(DisplayContext dc) {
-		dc.append("<span>"); //TODO classname?
-		dc.append(getText());
-		dc.append("</span>");
+		dc.append(getText()); 
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		//q.appendChild(Util.span("[text]"));
-		dc.append("q.appendChild(Util.span(").appendQuotedJS(getText()).append("));");
+		dc.append(getText());
+		//TODO - JS is not written yet
 	}
 	
 	public void writeXML(StringBuilder b) {

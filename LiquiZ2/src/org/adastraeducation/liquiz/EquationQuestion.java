@@ -185,7 +185,7 @@ public class EquationQuestion extends Question {
 			System.out.println(currentCorrectAnswer);
 
 			ArrayList<Answer> ans = new ArrayList<Answer>();
-			ans.add(new Answer(new AnswerText(String.valueOf(currentCorrectAnswer))));
+			ans.add(new Answer(new TextAnswer(String.valueOf(currentCorrectAnswer))));
 			setAns(ans);
 		}
 	}

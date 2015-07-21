@@ -36,6 +36,10 @@ public class DisplayContext {
 		b.append(d);
 		return this;
 	}
+	public DisplayContext append(boolean bool) {
+		b.append(bool);
+		return this;
+	}
 	public String toString() {
 		return b.toString();
 	}
