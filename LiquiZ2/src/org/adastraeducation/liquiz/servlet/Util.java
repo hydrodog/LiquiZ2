@@ -78,7 +78,7 @@ public class Util extends HttpServlet{
 		String title = request.getParameter("title");
 		qc.add(new Text(title));
 	    String questionText = request.getParameter("question_text");
-	    qc.add(new QuestionText(questionText));
+	    qc.add(new TextQuestion(questionText));
 		String image = request.getParameter("image_src");
 		qc.add(new Image(image,0,0));
 		String audio = request.getParameter("audio_src");
@@ -104,7 +104,7 @@ public class Util extends HttpServlet{
 	    warningPattern = request.getParameter("warningPattern");
 	    boolean hasWarning = warningPattern != null;
 	    System.out.println(hasWarning); // TODO: CHECK!
-	  	Answer answer = new Answer(new AnswerText(answerText), true);
+	  	Answer answer = new Answer(new TextAnswer(answerText), true);
 	  	return q;
 	}
 	
@@ -128,7 +128,7 @@ public class Util extends HttpServlet{
 		ArrayList<Answer> answers = new ArrayList<Answer>(numChoices);
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("dropdown_choices" + (i+1));
-		  answers.add(new Answer(new AnswerText(choice), false));
+		  answers.add(new Answer(new TextAnswer(choice), false));
 		}
 		MultiChoiceDropdown q = new MultiChoiceDropdown();
 		q.setAns(answers); 
@@ -140,7 +140,7 @@ public class Util extends HttpServlet{
 		ArrayList<Answer> answers = new ArrayList<Answer>(numChoices);
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("radio_choices" + (i+1));
-		  answers.add(new Answer(new AnswerText(choice), false));
+		  answers.add(new Answer(new TextAnswer(choice), false));
 		}
 		MultiChoiceRadio q = new MultiChoiceRadio();
 		q.setAns(answers); 
@@ -152,7 +152,7 @@ public class Util extends HttpServlet{
 		ArrayList<Answer> answers = new ArrayList<Answer>(numChoices);
 		for (int i = 0; i < numChoices; i++) {
 		  String choice = request.getParameter("multi_choices" + (i+1));
-		  answers.add(new Answer(new AnswerText(choice), false));
+		  answers.add(new Answer(new TextAnswer(choice), false));
 		}
 		MultiAnswer q = new MultiAnswer();
 		q.setAns(answers); 
@@ -166,7 +166,7 @@ public class Util extends HttpServlet{
 	    answerText = request.getParameter("answer");
 	  //  regexPattern = request.getParameter("regexString");
 	  //  q.setPattern(regexPattern);   TODO: Check!
-	  	Answer answer = new Answer(new AnswerText(answerText), true);
+	  	Answer answer = new Answer(new TextAnswer(answerText), true);
 	  	return q;
 	}
 	

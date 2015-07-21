@@ -65,12 +65,12 @@ public class Test {
 		// for multiChoiceDropDown
 		QuestionContainer qc = new QuestionContainer("Dinosaurs",
 			new ArrayList<Displayable> (Arrays.asList(
-				new QuestionText("Which is a dinosaur?"),
+				new TextQuestion("Which is a dinosaur?"),
 				new MultiChoiceDropdown(1, 1,
 						new ArrayList<Answer>(Arrays.asList(
-							new Answer(new AnswerText("T-Rex"), true),
-							new Answer(new AnswerText("Shark")),
-							new Answer(new AnswerText("mouse"))
+							new Answer(new TextAnswer("T-Rex"), true),
+							new Answer(new TextAnswer("Shark")),
+							new Answer(new TextAnswer("mouse"))
 						))
 				)
 			))
@@ -88,9 +88,9 @@ public class Test {
 		
 		qc = new QuestionContainer("Math",
 			new ArrayList<Displayable> (Arrays.asList(
-				new QuestionText("What is "),
+				new TextQuestion("What is "),
 				new EquationQuestion(eq),
-				new QuestionText("?")
+				new TextQuestion("?")
 			))
 		);
 		quiz.addQuestionContainer(qc);
@@ -105,7 +105,7 @@ public class Test {
 		
 		qc = new QuestionContainer("Math",
 			new ArrayList<Displayable> (Arrays.asList(
-				new QuestionText("What is "),
+				new TextQuestion("What is "),
 				new EquationQuestion(eq1)
 			)
 			)
@@ -115,7 +115,7 @@ public class Test {
 		qc = new QuestionContainer("Characterization",
 			new ArrayList<Displayable> (Arrays.asList(
 				new Video("1.mpg",0,0),
-				new InstructionText("Describe the main character in the video in 200 words or less"),
+				new TextInstruction("Describe the main character in the video in 200 words or less"),
 				new Essay()
 			))
 		);
@@ -123,9 +123,9 @@ public class Test {
 		
 		qc = new QuestionContainer("Listening Skills",
 			new ArrayList<Displayable> (Arrays.asList(
-				new InstructionText("Listen to the audio clip and write down the words"),
+				new TextInstruction("Listen to the audio clip and write down the words"),
 				new Audio("1.mp3"),
-				new FillIn(5,1,new Answer(new AnswerText("words, words, words")))
+				new FillIn(5,1,new Answer(new TextAnswer("words, words, words")))
 			))
 		);
 		quiz.addQuestionContainer(qc);
@@ -137,9 +137,9 @@ public class Test {
 		MatrixQuestion mq = new MatrixQuestion(1, 1, 3, 3);
 		quiz.addQuestionContainer(qc = new QuestionContainer("Matrix Math",
 				new ArrayList<Displayable> (Arrays.asList(
-				new InstructionText("Solve the matrix addition"),
+				new TextInstruction("Solve the matrix addition"),
 				m1,
-				new QuestionText("+"),
+				new TextQuestion("+"),
 				m2,
 				mq
 			))
@@ -153,41 +153,41 @@ public class Test {
 		quiz.setName("This has responses");
 		Response r1 = new Response(
 			new ArrayList<DisplayElement>(Arrays.asList(
-				new ResponseText("Great job!"),
+				new TextResponse("Great job!"),
 				new Video("1.mpg",0,0)
 			))
 		);
 		Response r2 = new Response(
 			new ArrayList<DisplayElement>(Arrays.asList(
-				new ResponseText("Not quite right"), 
+				new TextResponse("Not quite right"), 
 				new Video("2.mpg",0,0)
 			))
 		);
 		
 		QuestionContainer qc = new QuestionContainer(
 			new ArrayList<Displayable> (Arrays.asList(
-				new InstructionText("Fill in the following code<br>"),
+				new TextInstruction("Fill in the following code<br>"),
 				new FillIn(1, 1, 1, new ArrayList<Answer>(Arrays.asList(
-						new Answer(new AnswerText("public"), true, r1)
+						new Answer(new TextAnswer("public"), true, r1)
 				))),
-				new QuestionText("class A "),
+				new TextQuestion("class A "),
 				new FillIn(2, 1, 1, new ArrayList<Answer>(Arrays.asList(
-						new Answer(new AnswerText("{"), true, r1)
+						new Answer(new TextAnswer("{"), true, r1)
 				))),
-				new QuestionText("<br>&nbsp;&nbsp;&nbsp;"),
+				new TextQuestion("<br>&nbsp;&nbsp;&nbsp;"),
 				new FillIn(3, 1, 1, new ArrayList<Answer>(Arrays.asList(
-						new Answer(new AnswerText("private"), true, r1),
-						new Answer(new AnswerText("public"), false, r2)
+						new Answer(new TextAnswer("private"), true, r1),
+						new Answer(new TextAnswer("public"), false, r2)
 				))),
-				new QuestionText(" int x;<br>&nbsp;&nbsp;&nbsp;"),
+				new TextQuestion(" int x;<br>&nbsp;&nbsp;&nbsp;"),
 				new FillIn(4, 1, 1, new ArrayList<Answer>(Arrays.asList(
-						new Answer(new AnswerText("public"), true, r1)
+						new Answer(new TextAnswer("public"), true, r1)
 				))),
 				new FillIn(5, 1, 1, new ArrayList<Answer>(Arrays.asList(
-						new Answer(new AnswerText("A"), true, r1)
+						new Answer(new TextAnswer("A"), true, r1)
 				))),
-				new QuestionText("() {<br>&nbsp;&nbsp;&nbsp;"),
-				new QuestionText("x = 2;<br>}")
+				new TextQuestion("() {<br>&nbsp;&nbsp;&nbsp;"),
+				new TextQuestion("x = 2;<br>}")
 			))
 		);
 		quiz.addQuestionContainer(qc);
@@ -204,21 +204,21 @@ public class Test {
 		QuestionContainer qc = new QuestionContainer("Multimedia Questions",
 			new ArrayList<Displayable> (Arrays.asList(
 				new Video("video1.mp4",480, 360),
-				new QuestionText("What is this video about?"),
+				new TextQuestion("What is this video about?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<>(Arrays.asList(
-						new Answer(new AnswerText("Train")),
-						new Answer(new AnswerText("Cable Car")), 
-						new Answer(new AnswerText("Bus"))
+						new Answer(new TextAnswer("Train")),
+						new Answer(new TextAnswer("Cable Car")), 
+						new Answer(new TextAnswer("Bus"))
 					))
 				),
 				new Audio("audio1.mp3"),
-				new QuestionText("What animal sounds like this?"),
+				new TextQuestion("What animal sounds like this?"),
 				new MultiChoiceDropdown(4, 5,
 					new ArrayList<>(Arrays.asList(
-						new Answer(new AnswerText("Cat")),
-						new Answer(new AnswerText("Dog")), 
-						new Answer(new AnswerText("Horse"))
+						new Answer(new TextAnswer("Cat")),
+						new Answer(new TextAnswer("Dog")), 
+						new Answer(new TextAnswer("Horse"))
 					))
 				)
 			))
@@ -234,9 +234,9 @@ public class Test {
 			new ArrayList<Displayable> (Arrays.asList(
 //				new Text("Can all birds fly?"),
 //				new MultiChoiceDropdown(1, 5, "Poll"),
-				new QuestionText("What is the complexity of BubbleSort?"),
+				new TextQuestion("What is the complexity of BubbleSort?"),
 				new MultiChoiceDropdown(1, 5, "Complexity", 2),
-				new QuestionText("<br>What is the complexity of QuickSort?"),
+				new TextQuestion("<br>What is the complexity of QuickSort?"),
 				new MultiChoiceRadio(1, 5, "Complexity") //,
 //				new Text("What are the colors of an apple ?"),
 //				new MultiAnswer(1, 5, "Colors", new int []{2,3}),

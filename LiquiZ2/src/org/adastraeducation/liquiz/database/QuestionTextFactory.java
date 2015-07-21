@@ -7,6 +7,6 @@ import org.adastraeducation.liquiz.*;
 
 public class QuestionTextFactory extends DisplayElementFactory {
 	public Text create(ResultSet rs) throws SQLException {
-		return new QuestionText(rs.getString("TextElement"));
+		return new TextQuestion(rs.getString("TextElement"));
 	}
 }

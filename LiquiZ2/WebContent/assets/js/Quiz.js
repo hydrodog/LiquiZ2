@@ -94,7 +94,7 @@ Quiz.prototype.headerButtons = function() {
     fragment.appendChild(button);
 
     onkeydown = function(e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode == 13 && e.type === "keydown") {
             if (url.view === "") {
                 collapse(e);                
             } else if (url.view === "collapsed") {
@@ -103,22 +103,24 @@ Quiz.prototype.headerButtons = function() {
         }
     };
 
+    sortInt = function(a, b) {
+        a = parseInt(a);
+        b = parseInt(b);
+        if (a < b) {
+            return -1;
+        } else if (a > b) {
+            return 1;
+        } else {
+            return 0;
+        }
+    };
+
     collapse = function(e) {
         var data = document.getElementById("collapse-input");
         var regex = /(\d+)/g;
         var collapse_vals = data.value.match(regex);
         if (collapse_vals !== null) {
-            collapse_vals.sort(function(a, b) {
-                a = parseInt(a);
-                b = parseInt(b);
-                if (a < b) {
-                    return -1;
-                } else if (a > b) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }).filter(
+            collapse_vals.sort(sortInt).filter(
                 function(element, index, array) {
                     return !index || element != array[index - 1];
             });
@@ -136,17 +138,7 @@ Quiz.prototype.headerButtons = function() {
         var regex = /(\d+)/g;
         var expand_vals = data.value.match(regex);
         if (expand_vals !== null) {
-            expand_vals.sort(function(a, b) {
-                a = parseInt(a);
-                b = parseInt(b);
-                if (a < b) {
-                    return -1;
-                } else if (a > b) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }).filter(
+            expand_vals.sort(sortInt).filter(
                 function(element, index, array) {
                     return !index || element != array[index - 1];
             });

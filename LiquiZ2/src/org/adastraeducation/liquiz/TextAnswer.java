@@ -1,11 +1,11 @@
 package org.adastraeducation.liquiz;
 
-public class AnswerText extends Text {
-	public AnswerText() {
+public class TextAnswer extends Text {
+	public TextAnswer() {
 		super();
 	}
 	
-	public AnswerText(String text) {
+	public TextAnswer(String text) {
 		super(text);
 	}
 	

@@ -1,0 +1,354 @@
+.equation * {
+	box-sizing: initial;
+}
+.equation sup {
+	top:0;
+}
+/*button*/
+.math-button {
+    padding: 8px 6px;
+    height: 79px;
+    font-size: 12px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: default;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    vertical-align: top;
+    margin-right: 1px;
+    outline: 0;
+}
+
+.math-button-icon {
+    width: 32px;
+    height: 32px;
+    margin: 2px auto;
+}
+
+.math-button-label {
+    color: #666;
+    text-align: center;
+    display: block;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.math-button-sign {
+    border: 4px solid transparent;
+    border-top-color: #2d2d2d;
+    width: 0;
+    height: 0;
+    display: inline-block;
+    margin: 8px auto;
+    vertical-align: top;
+}
+
+.math-button-mount-point {
+    display: none;
+    position: absolute;
+    bottom: -2px;
+    left: -1px;
+}
+
+ .math-button-in {
+    border-color: #bdb429!important;
+    background: #fff5e1!important;
+}
+
+.math-button:HOVER {
+    border: 1px solid #a9d9ab;
+    background: #ebf7e6;
+}
+
+/* box */
+.math-box {
+    border: 1px solid #b3aead;
+    border-radius: 3px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.11);
+    background: white;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.math-box-container {
+    font-size: 12px;
+}
+
+.math-box-group-title {
+    background-color: #f7f6f0;
+    height: 23px;
+    line-height: 23px;
+    font-size: 12px;
+    border: 1px solid #ebeae4;
+    border-width: 1px 0;
+    padding-left: 12px;
+}
+
+.math-box-item {
+    display: inline-block;
+    margin: 4px;
+    border: 1px solid #808080;
+}
+
+.math-box-item:HOVER {
+    border-color: #bdb429;
+}
+
+.math-box-item-label {
+    margin-bottom: 5px;
+}
+
+/* scrollbar */
+.math-box::-webkit-scrollbar {
+    width: 10px;
+}
+
+.math-box::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #666666;
+}
+ 
+.math-box::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.8); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9); 
+}
+.math-box::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0,0,0,0.9); 
+}
+
+.align-mid-large-oper
+{
+text-align: center;
+display: block;
+font-size: 80%!important;
+outline: 0;
+}
+.div6
+{
+text-align: left;
+display: block;
+font-size: 80%!important;
+}
+.div5
+{
+float: right;
+width: 100%;
+text-align: left;
+display: block;
+font-size: 80%!important;
+}
+.div8
+{
+text-align: right;
+display: block;
+font-size: 80%!important;
+}
+.div7
+{
+float: right;
+width: 100%;
+text-align: right;
+display: block;
+font-size: 80%!important;
+}
+.bot-align-mid-large-oper
+{
+float: right;
+width: 100%;
+text-align: center;
+display: block;
+font-size: 80%!important;
+outline: 0;
+}
+.large-oper
+{
+text-align: center;
+display: inline-block;
+}
+.math-editable {
+  display: -moz-inline-box;
+  display: inline-block;
+  border: 1px solid gray;
+  padding: 2px;
+}
+.math-editable .cursor {
+  border-left: 1px solid black;
+  margin-right: -1px;
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  display: -moz-inline-box;
+  display: inline-block;
+}
+.math-editable .cursor.blink {
+  visibility: hidden;
+}
+/*.math-editable*/
+.hasCursor {
+  -webkit-box-shadow: #68b4df 0 0 3px 2px;
+  -moz-box-shadow: #68b4df 0 0 3px 2px;
+  box-shadow: #68b4df 0 0 3px 2px;
+}
+.math-editable.empty:after,
+.math-expr .empty:after {
+  visibility: hidden;
+  content: 'c';
+}
+
+.math-expr {
+  font-variant: normal;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 115%;
+  line-height: 1;
+  display: -moz-inline-box;
+  display: inline-block;
+  outline: 0;
+}
+.math-expr .non-leaf,
+.math-expr .scaled {
+  display: -moz-inline-box;
+  display: inline-block;
+}
+.math-expr var {
+  font-family: "Times New Roman", Symbola, serif;
+  line-height: .9;
+}
+.math-expr * {
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  border-color: black;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  white-space: pre-wrap;
+  box-sizing: initial;
+}
+.math-expr .empty {
+  background: #ccc;
+}
+.math-expr.empty {
+  background: transparent;
+}
+.math-expr .font {
+  font: 1em "Times New Roman", Symbola, serif;
+}
+.math-expr .font * {
+  font-family: inherit;
+  font-style: inherit;
+}
+.math-expr var {
+  font-syle: italic;
+}
+.math-expr big {
+  font-size: 125%;
+}
+.math-expr sup,
+.math-expr sub {
+  position: relative;
+  font-size: 90%;
+}
+.math-expr sup.limit,
+.math-expr sub.limit,
+.math-expr sup.nthroot,
+.math-expr sub.nthroot {
+  font-size: 80%;
+}
+.math-expr sup .fraction,
+.math-expr sub .fraction {
+  font-size: 70%;
+  vertical-align: -0.4em;
+}
+.math-expr sup .numerator,
+.math-expr sub .numerator {
+  padding-bottom: 0;
+}
+.math-expr sup .denominator,
+.math-expr sub .denominator {
+  padding-top: 0;
+}
+.math-expr sup {
+  vertical-align: .5em;
+}
+.math-expr sup.limit,
+.math-expr sup.nthroot {
+  vertical-align: 0.8em;
+}
+.math-expr sup.nthroot {
+  margin-right: -0.6em;
+  margin-left: .2em;
+  min-width: .5em;
+}
+.math-expr sub {
+  vertical-align: -0.4em;
+}
+.math-expr sub.limit {
+  vertical-align: -0.6em;
+}
+.math-expr .fraction {
+  font-size: 90%;
+  text-align: center;
+  vertical-align: -0.5em;
+  padding: 0 .2em;
+  display: -moz-groupbox;
+  display: inline-block;
+}
+.math-expr .numerator,
+.math-expr .denominator {
+  display: block;
+}
+.math-expr .numerator {
+  padding: 0 0.1em;
+  margin-bottom: 0.1em;
+}
+.math-expr .denominator {
+  border-top: 1px solid;
+  float: right;
+  width: 100%;
+  padding: .1em .1em 0 .1em;
+  margin-right: -0.1em;
+  margin-left: -0.1em;
+}
+.divsub {
+  float: right;
+  width: 100%;
+  padding: .1em .1em 0 .1em;
+  margin-right: -0.1em;
+  margin-left: -0.1em;
+}
+
+.math-expr .sqrt-prefix {
+  padding-top: 0.1em;
+  position: relative;
+  vertical-align: top;
+  -webkit-transform-origin: top;
+  -moz-transform-origin: top;
+  -ms-transform-origin: top;
+  -o-transform-origin: top;
+  transform-origin: top;
+}
+.math-expr .sqrt-stem {
+  border-top: 1px solid;
+  margin-top: 1px;
+  padding-left: .15em;
+  padding-right: .2em;
+  margin-right: .1em;
+}
+.math-expr,
+.math-expr .math-editable {
+  cursor: text;
+  font-family: Symbola, "Times New Roman", serif;
+}
+
