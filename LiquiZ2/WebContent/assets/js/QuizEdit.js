@@ -561,8 +561,40 @@ function buildFillin(answer) {
 	page.render(qc);
 	page.end();
 	checkIfInView('qc' + (newid + 1));
-	console.log('qc' + (newid + 1));
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 	
+	
+}
+
+function parseArray(q){
+	var str = "[";
+	str +=       q[0] + ", ";
+	str += "'" + q[1] + "', ";
+	str += "'" + q[2] + "', ";
+	for(var i = 3; i < q.length; i++){
+		
+			str+= "[";
+			for (var j = 0; j < q[i].length; j++){
+				str += "'" + q[i][j] ;
+				if (j != (q[i].length-1) ){
+					str += "', ";
+				}
+				else{
+					str += "' ";
+				}
+					
+			}
+			if (i != (q.length-1) )
+				str += "], ";
+			else{
+				str += "] ";
+			}
+		}
+		
+	str += "], ";
+	
+	return str;
 }
 
 function buildNumber(Min, Max) {
@@ -577,6 +609,8 @@ function buildNumber(Min, Max) {
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildEssay() {
@@ -591,6 +625,8 @@ function buildEssay() {
 	page.render(qc);
 	page.end();
 	checkIfInView('qc' + (newid + 1));
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildCode(selectedLanguage) {
@@ -606,6 +642,8 @@ function buildCode(selectedLanguage) {
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildDpd(options) {
@@ -620,6 +658,8 @@ function buildDpd(options) {
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildMCR(options) {
@@ -634,6 +674,8 @@ function buildMCR(options) {
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildMA(options) {
@@ -648,6 +690,8 @@ function buildMA(options) {
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildSurvey(options) {
@@ -662,6 +706,8 @@ function buildSurvey(options) {
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 function buildCloze(text){
@@ -676,6 +722,8 @@ function buildCloze(text){
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
 	page.end();
+	console.log(parseArray(q));
+	$.post("QuizEditData.jsp", {"123" : parseArray(q)});
 }
 
 
