@@ -1,11 +1,11 @@
 package org.adastraeducation.liquiz;
 
-public class QuestionText extends Text {
-	public QuestionText() {
+public class TextQuestion extends Text {
+	public TextQuestion() {
 		super();
 	}
 	
-	public QuestionText(String text) {
+	public TextQuestion(String text) {
 		super(text);
 	}
 	
@@ -16,7 +16,7 @@ public class QuestionText extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['question text', ").appendQuotedJS(getText()).append("],");
+		dc.append("\n\t\t\t['Util.span', ").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

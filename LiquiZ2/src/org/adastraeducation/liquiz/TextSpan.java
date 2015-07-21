@@ -1,11 +1,11 @@
 package org.adastraeducation.liquiz;
 
-public class SpanText extends Text {
-	public SpanText() {
+public class TextSpan extends Text {
+	public TextSpan() {
 		super();
 	}
 	
-	public SpanText(String text) {
+	public TextSpan(String text) {
 		super(text);
 	}
 	

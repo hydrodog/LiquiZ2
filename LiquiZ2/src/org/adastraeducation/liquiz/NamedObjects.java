@@ -24,15 +24,15 @@ public class NamedObjects {
 		lookUpStdChoice = new HashMap<String, ArrayList<Answer>>();
 		
 		ArrayList<Answer> comp = new ArrayList<Answer>();
-		comp.add(new Answer(new AnswerText("O(1)")));
-		comp.add(new Answer(new AnswerText("O(n)")));
-		comp.add(new Answer(new AnswerText("O(n^2)")));
-		comp.add(new Answer(new AnswerText("O(n log(n))")));
+		comp.add(new Answer(new TextAnswer("O(1)")));
+		comp.add(new Answer(new TextAnswer("O(n)")));
+		comp.add(new Answer(new TextAnswer("O(n^2)")));
+		comp.add(new Answer(new TextAnswer("O(n log(n))")));
 		lookUpStdChoice.put("Complexity", comp);
 		
 		ArrayList<Answer> yesNo = new ArrayList<Answer>();
-		yesNo.add(new Answer(new AnswerText("Yes")));
-		yesNo.add(new Answer(new AnswerText("No")));
+		yesNo.add(new Answer(new TextAnswer("Yes")));
+		yesNo.add(new Answer(new TextAnswer("No")));
 		lookUpStdChoice.put("Yes/No", yesNo);
 		
 //		lookUpPattern = new HashMap<String, Pattern>();

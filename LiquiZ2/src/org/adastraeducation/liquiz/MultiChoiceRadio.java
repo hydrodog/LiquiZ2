@@ -92,8 +92,22 @@ public class MultiChoiceRadio extends MultiChoiceDropdown {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		writeJS("mcRadio", dc);
-		Util.writeAnsListAsJS(getAns(), dc);
+		ArrayList<Answer> answers=getAns();
+		String mcRadioType="unimplemented";
+		if (answers.get(0).getAnswer() instanceof Image) {
+			mcRadioType="mcRadioImg";
+		}
+		else if (answers.get(0).getAnswer() instanceof TextAnswer) {
+			mcRadioType="selectText";
+		}
+		dc.append("\n\t\t\t[").appendQuotedJS(mcRadioType).append(", ").append(getId()).append(", [");
+		for (int i=0; i<answers.size(); i++) {
+			if (i!=0) {
+				dc.append(", ");
+			}
+			dc.appendQuotedJS(answers.get(i).getName());
+		}
+		dc.append("]],");
 	}
 	
 }
