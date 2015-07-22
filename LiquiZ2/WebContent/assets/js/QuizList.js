@@ -97,14 +97,8 @@ QuizList.prototype.mkDSButtons = function(rowID, rowNum) {
 	return d;
 }
 
-function mkth(parent, txt, colspan) { // make table head cell
-	var th = document.createElement("th");
-	th.innerHTML = txt;
-	th.colSpan = colspan;
-	parent.appendChild(th);
-	return th;
-}
 QuizList.prototype.qtoolbar = function() {
+	var ql = this;
 	var qtoolbar = Util.div();
 	/* **************** search div **************** */
 	var srch_div = Util.div();
@@ -120,9 +114,15 @@ QuizList.prototype.qtoolbar = function() {
 	if (this.editMode) {
 		var btns_div = Util.div();
 		qtoolbar.appendChild(btns_div);
-		btns_div.appendChild(Util.button("all"));
-		btns_div.appendChild(Util.button("invert"));
-		btns_div.appendChild(Util.button("none"));
+		btns_div.appendChild(Util.button("all", null, null, function() {
+			ql.checkAll()
+		}));
+		btns_div.appendChild(Util.button("invert", null, null, function() {
+			ql.invertCheck()
+		}));
+		btns_div.appendChild(Util.button("none", null, null, function() {
+			ql.uncheckAll()
+		}));
 		btns_div.appendChild(Util.make("input", { // enter a date for date
 			// shift
 			type : "text",
@@ -201,7 +201,7 @@ QuizList.prototype.qtable = function() {
 				"selectDueDate", true));
 		for (var i = 1; i < this.list.length; i++) {
 			t.rows[i].cells[0].appendChild(Util.checkbox(null, null, null,
-					null, false));
+					t.rows[i].id + '-check', false));
 			t.rows[i].cells[1].appendChild(Util.br());
 			t.rows[i].cells[1].appendChild(this.mkDSButtons(t.rows[i].id, i));
 			t.rows[i].insertCell(-1);
@@ -212,5 +212,26 @@ QuizList.prototype.qtable = function() {
 	}
 	/* **************** edit functions for edit mode **************** */
 	return t;
+}
+QuizList.prototype.checkAll = function() {
+	for (var i = 1; i < this.list.length; i++)
+		document.getElementById(this.list[i][0] + '-check').checked = true;
+}
+QuizList.prototype.uncheckAll = function() {
+	for (var i = 1; i < this.list.length; i++)
+		document.getElementById(this.list[i][0] + '-check').checked = false;
+}
+QuizList.prototype.invertCheck = function() {
+	for (var i = 1; i < this.list.length; i++) {
+		var cb = document.getElementById(this.list[i][0] + '-check');
+		cb.checked = cb.checked == true ? false : true;
+	}
+}
+function mkth(parent, txt, colspan) { // make table head cell
+	var th = document.createElement("th");
+	th.innerHTML = txt;
+	th.colSpan = colspan;
+	parent.appendChild(th);
+	return th;
 }
 /** ******************** View Quizzes Part ******************** * */
