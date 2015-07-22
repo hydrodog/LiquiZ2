@@ -69,8 +69,7 @@ public class TestQuizJavascript {
 		quiz.addQuestion(qc);
 		
 		
-		//test for question 6 in QuizDemo_ajax.jsp,
-		//not sure how to set up this test
+		//test for question 6 in QuizDemo_ajax.jsp, good as of 7/21/2015
 		qc=new QuestionContainer(qcid++,"Object Oriented Terminology","Match",new ArrayList<Displayable>());
 		qc.add(new TextInstruction("Match the object-oriented terminology to the meaning"));
 		qc.add(new Match(qid++,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("Class")),new Answer(new TextAnswer("Object")),new Answer(new TextAnswer("Method")),new Answer(new TextAnswer("Message")),new Answer(new TextAnswer("Polymorphism")),new Answer(new TextAnswer("Encapsulation")))),new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("A concrete instance of a class")),new Answer(new TextAnswer("A request made to an object")),new Answer(new TextAnswer("Hiding the internal details of a class or object")),new Answer(new TextAnswer("Sending the same message to different objects and getting different results")),new Answer(new TextAnswer("A specification of an object")),new Answer(new TextAnswer("A function that is applied to an object")))),new ArrayList<Integer>(Arrays.asList(1,2,3))));

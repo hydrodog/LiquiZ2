@@ -175,6 +175,7 @@ Quiz.prototype.processQuestion = function(q) {
     return frag;
 }
 
+
 Quiz.prototype.render = function(child) {
     this.body.appendChild(child);
 }

@@ -6,6 +6,7 @@
 //TODO: Move everything INTO YOUR CLASS. These should not be global variables.
 
 var newid = -1;
+
 function QuizEdit() {
     this.body = document.getElementById("container");
     this.body.className = "quizEditor";
@@ -567,12 +568,16 @@ function buildFillin(answer) {
 
 function buildNumber(Min, Max) {
 	removeOldButtons();
+	var textBoxValue=textBox.value;
+	var textPart1=turnPureTextIntoTextWithRandomElementVariableNames(textBoxValue);
+	var textPart2=turnPureTextIntoTextWithExtractedRandomValues(textBoxValue);
+	var text=textPart1+" (possible example: "+textPart2+")";
 	var q = [
 	         newid--, titleInp.value, "numeric",
-	         ['instructions', textBox.value],
+	         ['instructions', text],
 	         ['numeric', newid],
 	     ];
-	 var qc = page.addQuestion(q[0], q[1], q[2]);
+	var qc = page.addQuestion(q[0], q[1], q[2]);
          qc.appendChild(page.processQuestion(q));
 	page.render(qc);
 	checkIfInView('qc' + (newid + 1));
@@ -772,4 +777,23 @@ QuizEdit.prototype.editQuestion = function() {
 		parent["edit" + val](questionContainer, titleInp.value, textBox.value);
 		checkIfInView(val);
 	});
+}
+function turnPureTextIntoTextWithRandomElementVariableNames(text) {
+	while (text.indexOf("{{")!==-1 && text.indexOf("}}")!==-1) {
+		var randomBeginIndex=text.indexOf("{{");
+		var randomEndIndex=text.indexOf("}}");
+		var randomElementVariableName=text.substring(randomBeginIndex+2,randomEndIndex);
+		text=text.replace(text.substring(randomBeginIndex,randomEndIndex+2),randomElementVariableName);
+	}
+	return text;
+}
+function turnPureTextIntoTextWithExtractedRandomValues(text) {
+	while (text.indexOf("{{")!==-1 && text.indexOf("}}")!==-1) {
+		var randomBeginIndex=text.indexOf("{{");
+		var randomEndIndex=text.indexOf("}}");
+		var randomElementVariableName=text.substring(randomBeginIndex+2,randomEndIndex);
+		var randomElementReferenced=window.RandomElementList.getRandomElement(randomElementVariableName);
+		text=text.replace(text.substring(randomBeginIndex,randomEndIndex+2),randomElementReferenced.extractRandomValue());
+	}
+	return text;
 }
