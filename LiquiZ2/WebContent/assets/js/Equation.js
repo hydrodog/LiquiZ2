@@ -178,23 +178,23 @@ function btn3(e) {
 	case 'frac/c2':
 		var frac = createExpr("fraction");
 		frac.childNodes[0].firstChild.className = "non-leaf";
-		frac.childNodes[0].firstChild.appendChild(createVar("¦¤y"));
+		frac.childNodes[0].firstChild.appendChild(createVar("\u0394y"));
 		frac.childNodes[1].firstChild.className = "non-leaf";
-		frac.childNodes[1].firstChild.appendChild(createVar("¦¤x"));
+		frac.childNodes[1].firstChild.appendChild(createVar("\u0394x"));
 		expr.appendChild(frac);
 		break;
 	case 'frac/c4':
 		var frac = createExpr("fraction");
 		frac.childNodes[0].firstChild.className = "non-leaf";
-		frac.childNodes[0].firstChild.appendChild(createVar("¦Äy"));
+		frac.childNodes[0].firstChild.appendChild(createVar("\u2202y"));
 		frac.childNodes[1].firstChild.className = "non-leaf";
-		frac.childNodes[1].firstChild.appendChild(createVar("¦Äx"));
+		frac.childNodes[1].firstChild.appendChild(createVar("\u2202x"));
 		expr.appendChild(frac);
 		break;
 	case 'frac/c5':
 		var frac = createExpr("fraction");
 		frac.childNodes[0].firstChild.className = "non-leaf";
-		frac.childNodes[0].firstChild.appendChild(createVar("¦Ð"));
+		frac.childNodes[0].firstChild.appendChild(createVar("\u03C0"));
 		frac.childNodes[1].firstChild.className = "non-leaf";
 		frac.childNodes[1].firstChild.appendChild(createVar("2"));
 		expr.appendChild(frac);
@@ -221,7 +221,7 @@ function btn3(e) {
 	case 'script/c1':
 		var sup = createExpr("sup");
 		sup.className = "non-leaf limit";
-		sup.appendChild(createVar("-i¦Øt"))
+		sup.appendChild(createVar("-i\u03C9t"))
 		insertInto(expr, [ createVar("e"), sup ], false);
 		break;
 	case 'script/c2':
@@ -261,26 +261,26 @@ function btn3(e) {
 		break;
 	//integral
 	case "int/1":
-		expr.appendChild(createExpr("¡Ò"));
+		expr.appendChild(createExpr('\u222B'));
 		break;
 	case "int/2":
-		insertInto(expr, [createExpr("¡Ò"), createExpr("subp")], false);
+		insertInto(expr, [createExpr('\u222B'), createExpr("subp")], false);
 		break;
 	case "int/3":
-		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò")], false);;
+		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B')], false);;
 		break;
 	case "int/4":
-		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò"), createExpr("subp")], false);
+		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B'), createExpr("subp")], false);
 		break;
 	case "int/5":
-		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò"), createExpr("¡Ò")], false);
+		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B'), createExpr('\u222B')], false);
 		break;
 	case "int/6":
-		insertInto(expr, [createExpr("¡Ò"), createExpr("¡Ò"), createExpr("¡Ò"), createExpr("subp")], false);
+		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B'), createExpr('\u222B'), createExpr("subp")], false);
 		break;
 	// large operator
 	case 'large/1':
-		expr.appendChild(createExpr("¡Æ"));
+		expr.appendChild(createExpr('\u2211'));
 		break;
 	case 'large/2':
 		expr.appendChild(createExpr("sum"));
@@ -323,7 +323,7 @@ function btn3(e) {
 		insertInto(expr, [createVar("csc")], false);
 		break;
 	case "func/c1":
-		insertInto(expr, [createVar("sin¦È")], false);
+		insertInto(expr, [createVar("sin\u03B8")], false);
 		break;
 	case "func/c2":
 		insertInto(expr, [createVar("cos2x")], false);
@@ -331,11 +331,11 @@ function btn3(e) {
 	case "func/c3":
 		var frac = createExpr("fraction");
 		frac.childNodes[0].className = "numerator";
-		insertInto(frac.childNodes[0], [createVar("sin¦È")], false);
+		insertInto(frac.childNodes[0], [createVar("sin\u03B8")], false);
 		frac.childNodes[1].className = "denominator";
-		insertInto(frac.childNodes[1], [createVar("cos¦È")], false);
+		insertInto(frac.childNodes[1], [createVar("cos\u03B8")], false);
 		expr.appendChild(frac);
-		insertInto(expr, [createVar("tan¦È"), createExpr("="), frac], false);
+		insertInto(expr, [createVar("tan\u03B8"), createExpr("="), frac], false);
 		break;
 	default:
 		break;
@@ -525,7 +525,7 @@ function createExpr(type) {
 		top.setAttribute("edit", "false");	//TODO: may be useless
 		top.setAttribute("hasChild", "true");
 
-		var mid = createExpr("¡Æ");
+		var mid = createExpr('\u2211');
 		removeListener(mid, 2);
 		mid.setAttribute("class", "align-mid-large-oper");
 		mid.setAttribute("math_id", math_id++);
