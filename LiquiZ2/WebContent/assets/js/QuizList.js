@@ -96,7 +96,30 @@ QuizList.prototype.mkDSButtons = function(rowID, rowNum) {
 	}) ]);
 	return d;
 }
-
+/*
+ * The following arbiDayShift function is to shift the dates by entering the
+ * date point and the number of days. The parameter, "direction" can be -1 or 1,
+ * which indicates to advance or to postpone the close and due dates whose
+ * original open dates are beyond the date point. -1 for advancing and 1 for
+ * postponing.
+ */
+QuizList.prototype.arbiDayShift = function(direction) {
+	var dp = new Date(document.getElementById("quizlist-datepoint").value);
+	var nod = parseInt(document.getElementById("quizlist-numofdays").value);
+	if (isNaN(dp.getTime()))
+		alert("Please enter a valid date point.");
+	else if (isNaN(nod))
+		alert("Please enter the number of days you want to shift.");
+	else {
+		for (var i = 1; i < this.list.length; i++) {
+			var date = new Date(this.list[i][2]);
+			if (date >= dp) {
+				this.dayshift(3, this.list[i][0], i, nod * direction);
+				this.dayshift(4, this.list[i][0], i, nod * direction);
+			}
+		}
+	}
+}
 QuizList.prototype.qtoolbar = function() {
 	var ql = this;
 	var qtoolbar = Util.div();
@@ -126,15 +149,25 @@ QuizList.prototype.qtoolbar = function() {
 		btns_div.appendChild(Util.make("input", { // enter a date for date
 			// shift
 			type : "text",
+			id : "quizlist-datepoint",
 			placeholder : "Enter a date point"
 		}));
 		btns_div.appendChild(Util.make("input", { // enter the number of days
 			// for date shift
 			type : "text",
+			id : "quizlist-numofdays",
 			placeholder : "Number of days"
 		}));
-		btns_div.appendChild(Util.button("Advance"));
-		btns_div.appendChild(Util.button("Postpone"));
+		btns_div.appendChild(Util.button("Advance", null, null, function() {
+			ql.arbiDayShift(-1)
+		}));
+		btns_div.appendChild(Util.button("Postpone", null, null, function() {
+			ql.arbiDayShift(1)
+		}));
+		btns_div.appendChild(Util.button("test", null, null, function() {
+			var txt = document.getElementById("quizlist-datepoint").value;
+			alert(txt);
+		}));
 	}
 	/* **************** buttons div **************** */
 	return qtoolbar;
