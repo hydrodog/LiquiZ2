@@ -552,9 +552,10 @@ function removeOldButtons(){
 
 function buildFillin(answer) {
 	removeOldButtons();
+	var text=window.RandomElementData.functions.pureTextToQuestionText(textBox.value);
 	var q = [
 	         newid--, titleInp.value, "fillin",
-	         ['Util.span', textBox.value],
+	         ['Util.span', text],
 	         ['fillin', newid],
 	     ];
 	 var qc = page.addQuestion(q[0], q[1], q[2]);
@@ -568,10 +569,7 @@ function buildFillin(answer) {
 
 function buildNumber(Min, Max) {
 	removeOldButtons();
-	var textBoxValue=textBox.value;
-	var textPart1=turnPureTextIntoTextWithRandomElementVariableNames(textBoxValue);
-	var textPart2=turnPureTextIntoTextWithExtractedRandomValues(textBoxValue);
-	var text=textPart1+" (possible example: "+textPart2+")";
+	var text=window.RandomElementData.functions.pureTextToQuestionText(textBox.value);
 	var q = [
 	         newid--, titleInp.value, "numeric",
 	         ['instructions', text],
@@ -777,25 +775,4 @@ QuizEdit.prototype.editQuestion = function() {
 		parent["edit" + val](questionContainer, titleInp.value, textBox.value);
 		checkIfInView(val);
 	});
-}
-function turnPureTextIntoTextWithRandomElementVariableNames(text) {
-	while (text.indexOf("{{")!==-1 && text.indexOf("}}")!==-1) {
-		var randomBeginIndex=text.indexOf("{{");
-		var randomEndIndex=text.indexOf("}}");
-		var randomElementVariableName=text.substring(randomBeginIndex+2,randomEndIndex);
-		text=text.replace(text.substring(randomBeginIndex,randomEndIndex+2),randomElementVariableName);
-	}
-	return text;
-}
-function turnPureTextIntoTextWithExtractedRandomValues(text) {
-	while (text.indexOf("{{")!==-1 && text.indexOf("}}")!==-1) {
-		var randomBeginIndex=text.indexOf("{{");
-		var randomEndIndex=text.indexOf("}}");
-		var randomElementVariableName=text.substring(randomBeginIndex+2,randomEndIndex);
-		alert(randomElementVariableName);
-		var randomElementReferenced=window.RandomElementList.getRandomElement(randomElementVariableName);
-		alert(randomElementReferenced.extractRandomValue());
-		text=text.replace(text.substring(randomBeginIndex,randomEndIndex+2),randomElementReferenced.extractRandomValue());
-	}
-	return text;
 }
