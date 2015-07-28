@@ -185,7 +185,7 @@ var util={															//object with references to some useful functions
 		if (question_type==="arithmetic") {
 			var rrr_instances=[];
 			var question_text_intermediate_no_rrr=question_text_intermediate_to_check;
-			while (question_text_intermediate_no_rrr.indexOf("<RRR>")!==-1&&question_text_intermediate_no_rrr.indexOf("</RRR>")!==-1) {
+			while (question_text_intermediate_no_rrr.search(/<RRR>.+RRR>/)!==-1) {
 				var lo=question_text_intermediate_no_rrr.indexOf("<RRR>");
 				var hi=question_text_intermediate_no_rrr.indexOf("<\/RRR>")+6;
 				if (lo>hi) {
@@ -716,7 +716,7 @@ var quiz_element=function(questionlike) {
 					var message_instruction1=document.createElement("p");
 					message_instruction1.appendChild(document.createTextNode("First, please specify how you would like to edit this quiz_element.  You can either edit it by syncing it to an already existing question/question_family, or you can edit it by editing the components of the question/question_family that this quiz_element is already synced to"));
 					message_instruction1.style.marginLeft="5px";
-					message_instruction1.style,marginRight="10px";
+					message_instruction1.style.marginRight="10px";
 					message.appendChild(message_instruction1);
 					var message_edit_method_dropdown=document.createElement("select");
 					message_edit_method_dropdown.style.marginTop="10px";
