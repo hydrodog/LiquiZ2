@@ -792,7 +792,9 @@ function turnPureTextIntoTextWithExtractedRandomValues(text) {
 		var randomBeginIndex=text.indexOf("{{");
 		var randomEndIndex=text.indexOf("}}");
 		var randomElementVariableName=text.substring(randomBeginIndex+2,randomEndIndex);
+		alert(randomElementVariableName);
 		var randomElementReferenced=window.RandomElementList.getRandomElement(randomElementVariableName);
+		alert(randomElementReferenced.extractRandomValue());
 		text=text.replace(text.substring(randomBeginIndex,randomEndIndex+2),randomElementReferenced.extractRandomValue());
 	}
 	return text;

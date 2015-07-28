@@ -8,7 +8,8 @@ window.RandomElementList={
 		if (this[randomElementVariableName]===undefined) {
 			alert("Error: you tried to acess window.RandomElementList['"+randomElementVariableName+"]', which does not exist."); 
 		}
-		else if (this[randomElementVariableName].constructor.substring(9,22)!=="randomElement") {
+		console.log(this[randomElementVariableName]);
+		if (this[randomElementVariableName].constructor.substring(9,22)!=="randomElement") {
 			alert("Error: you tried to use the following randomElement: "+randomElementVariableName+"  That randomElement does appear to.");
 		}
 		else {
