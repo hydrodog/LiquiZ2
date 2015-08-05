@@ -481,6 +481,25 @@ var url;
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 
 
+function post(url, payload, callback) {
+    var http = new XMLHttpRequest();
+    http.open("POST", url, true);
+
+    http.setRequestHeader("Content-type", "application/json");
+
+    http.onreadystatechange = function() {
+        if (http.readyState === 4 && http.status !== 200) {
+            callback(false, http.response);
+        } else if (http.readyState === 4 && http.status === 200) {
+            callback(true, http.response);
+        }
+        return;
+    };
+
+    http.send(payload);
+}
+
+
 /*
  * A Url object that keeps track of the state of the url,
  * and allows for programmatic modification of the url.
