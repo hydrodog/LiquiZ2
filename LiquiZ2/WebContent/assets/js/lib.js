@@ -618,15 +618,6 @@ function appendCSSText(css) {
     head.appendChild(s);
 }
 
-function processAJAX() {
-    if (typeof page.css !== "undefined") {
-        appendCSSLink("assets/css/" + page.css + ".css"); // load the user's
-        // css skin
-    } else {
-        console.warn("custom css didn't load. check css link in page.css");
-    }
-}
-
 function clearPage() {
     document.getElementById("container").innerHTML = "";
     document.getElementById("currentStatus").innerHTML = "";
@@ -644,7 +635,6 @@ function errorStatus(errorCode) {
 function handlePage(text, url) {
     eval("page=" + text);
     loadView(url);
-    processAJAX();
 }
 
 function requestAjax(ajax_url, handler, error, url) {
@@ -679,7 +669,13 @@ function loadPage(e) {
     if (url.url === "/") {
         url.url = "/index";
     }
-    ajax_url = "/LiquiZ2" + url.url + "_ajax.jsp"; // name of dynamic file
+
+    var ajax_url;
+    if (location.pathname === "/") {
+        ajax_url = url.url + "_ajax.jsp"; // name of dynamic file
+    } else {
+        ajax_url = location.pathname + url.url + "_ajax.jsp"; // name of dynamic file
+    }
 
     clearPage();
     if ((!oldUrl) ||
