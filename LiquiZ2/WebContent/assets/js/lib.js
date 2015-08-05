@@ -482,6 +482,7 @@ var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 
 
 function post(url, payload, callback) {
+    payload = JSON.stringify(payload);
     var http = new XMLHttpRequest();
     http.open("POST", url, true);
 
