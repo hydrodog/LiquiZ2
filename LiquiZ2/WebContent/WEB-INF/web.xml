@@ -6,6 +6,15 @@
 	<display-name></display-name>
 
 	<servlet>
+		<servlet-name>TestPost</servlet-name>
+		<servlet-class>org.adastraeducation.liquiz.servlet.ReadBody</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TestPost</servlet-name>
+		<url-pattern>/GetBody</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<description>Create Questions</description>
 		<display-name>Create Questions</display-name>
 		<servlet-name>Util</servlet-name>

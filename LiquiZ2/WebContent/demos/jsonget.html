@@ -13,8 +13,11 @@ function callmeback(worked, details) {
 }
 
 var json = { id: 1, fname: 'Dov', lName: 'Kruger'};
-post('http://posttestserver.com/post.php', json, callmeback);
+//good test of low-level post
+post('http://posttestserver.com/post.php', json	, callmeback);
 
+
+//post('post.jsp', json	, callmeback);
 
 
 
