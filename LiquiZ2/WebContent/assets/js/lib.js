@@ -467,6 +467,46 @@ Util = {
     
 };
 
+function createXML() {
+    return document.implementation.createDocument("", "");
+}
+
+function writeXML(xmlObj) {
+    xmlParser = new XMLSerializer();
+    return '<?xml version="1.0" encoding="UTF-8"?>' + xmlParser.serializeToString(xmlObj);
+}
+
+function testXML() {
+    var xml = createXML();
+    
+    var quiz = Util.make("quiz");
+    quiz.setAttribute("identifier", "123456");
+    quiz.setAttribute("xmlns", "http://canvas.instructure.com/xsd/cccv1p0");
+    quiz.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    quiz.setAttribute("xsi:schemaLocation", "http://canvas.instructure.com/xsd/cccv1p0 http://canvas.instructure.com/xsd/cccv1p0.xsd");
+    xml.appendChild(quiz);
+
+    var title = Util.make("title", {
+        innerText: "Scope and Lifetime"
+    });
+    quiz.appendChild(title);
+
+    var description = Util.make("description", {
+        // innerText: "<p>Review of the facts about variables, their lifetimes, and where they can be referenced (scope)</p>"
+    });
+    quiz.appendChild(description);
+
+    var desc_sub = Util.make("desc_sub", {
+        innerText: "I'm a sub field!"
+    });
+    description.appendChild(desc_sub);
+
+    console.log(writeXML(xml));
+}
+
+testXML();
+
+
 video = {};
 audio = {};
 mediaLocations = {
