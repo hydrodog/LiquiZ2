@@ -81,7 +81,7 @@ Quiz.prototype.headerButtons = function() {
         function(e) {
             url.changeView("collapsed");
             url.removeAllParams();
-            url.load();
+            url.load(false);
         });
     fragment.appendChild(button);
 
@@ -89,7 +89,7 @@ Quiz.prototype.headerButtons = function() {
         function(e) {
             url.changeView("");
             url.removeAllParams();
-            url.load();
+            url.load(false);
         });
     fragment.appendChild(button);
 
@@ -126,10 +126,10 @@ Quiz.prototype.headerButtons = function() {
             });
             url.removeParam("not");
             url.addParam("collapse", collapse_vals.join(","));
-            url.load();
+            url.load(false);
         } else {
             url.removeParam("collapse");
-            url.load();
+            url.load(false);
         }
     };
 
@@ -144,10 +144,10 @@ Quiz.prototype.headerButtons = function() {
             });
             url.removeParam("collapse");
             url.addParam("not", expand_vals.join(","));
-            url.load();
+            url.load(false);
         } else {
             url.removeParam("not");
-            url.load()
+            url.load(false);
         }
     };
 
@@ -163,6 +163,7 @@ Quiz.prototype.headerButtons = function() {
     return fragment;
 }
 
+// TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
 Quiz.prototype.processQuestion = function(q) {
     var frag = document.createDocumentFragment();
     for (var j = 3; j < q.length; j++) {

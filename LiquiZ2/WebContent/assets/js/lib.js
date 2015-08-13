@@ -483,6 +483,46 @@ console.log(w);
     
 };
 
+function createXML() {
+    return document.implementation.createDocument("", "");
+}
+
+function writeXML(xmlObj) {
+    xmlParser = new XMLSerializer();
+    return '<?xml version="1.0" encoding="UTF-8"?>' + xmlParser.serializeToString(xmlObj);
+}
+
+function testXML() {
+    var xml = createXML();
+    
+    var quiz = Util.make("quiz");
+    xml.appendChild(quiz);
+    quiz.setAttribute("identifier", "123456");
+    quiz.setAttribute("xmlns", "http://canvas.instructure.com/xsd/cccv1p0");
+    quiz.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    quiz.setAttribute("xsi:schemaLocation", "http://canvas.instructure.com/xsd/cccv1p0 http://canvas.instructure.com/xsd/cccv1p0.xsd");
+
+    var title = Util.make("title", {
+        innerText: "Scope and Lifetime"
+    });
+    quiz.appendChild(title);
+
+    var description = Util.make("description", {
+        // innerText: "<p>Review of the facts about variables, their lifetimes, and where they can be referenced (scope)</p>"
+    });
+    quiz.appendChild(description);
+
+    var desc_sub = Util.make("desc_sub", {
+        innerText: "I'm a sub field!"
+    });
+    description.appendChild(desc_sub);
+
+    console.log(writeXML(xml));
+}
+
+testXML();
+
+
 video = {};
 audio = {};
 mediaLocations = {
@@ -549,18 +589,24 @@ function Url(url_hash) {
     this.url = reMatch[1] ? reMatch[1] : "";
     this.view = reMatch[2] ? reMatch[2] : "";
     this.params = this.parseParams(reMatch[3]);
+    this.ajax = true;
 }
 
 Url.prototype.copy = function() {
-    return new Url(this.hash);
+    var u = new Url(this.hash);
+    u.ajax = this.ajax;
+    return u;
 };
 
-Url.prototype.load = function() {
+Url.prototype.load = function(ajax) {
+    this.ajax = (typeof(ajax) === "undefined") ? true : ajax;
+
     this.buildHash();
-    if (document.location.hash === this.hash) {
-        loadPage("view_reload");
-    } else {
+
+    if (document.location.hash !== this.hash) {
         document.location.hash = this.hash;
+    } else {
+        loadPage();
     }
     url = this;
 };
@@ -583,20 +629,24 @@ Url.prototype.parseParams = function(params) {
     return result;
 };
 
+Url.prototype.buildParams = function() {
+    pstr = "?";
+    for (var item in this.params) {
+        if (typeof this.params[item] !== "boolean") {
+            pstr += item + "=" + this.params[item] + "&";
+        } else if (typeof this.params[item] === "boolean" && this.params[item] === true) {
+            pstr += item + "&";
+        }
+    }
+    return pstr.slice(0, -1);
+};
+
 Url.prototype.buildHash = function() {
     this.hash = "#" + this.url;
     if (this.view)
         this.hash += "!" + this.view;
     if (this.params) {
-        pstr = "?";
-        for (var item in this.params) {
-            if (typeof this.params[item] !== "boolean") {
-                pstr += item + "=" + this.params[item] + "&";
-            } else if (typeof this.params[item] === "boolean" && this.params[item] === true) {
-                pstr += item + "&";
-            }
-        }
-        this.hash += pstr.slice(0, -1);
+        this.hash += this.buildParams();
     }
 };
 
@@ -623,6 +673,26 @@ Url.prototype.changeView = function(view) {
     view = (typeof view === "undefined") ? "" : view;
     this.view = view;
 };
+
+
+/*
+ * Returns true if they're the same, false if they're different
+ * Shallow comparison!
+ */
+function compareObjects(o1, o2) {
+    if (typeof(o1) !== typeof(o2))
+        return false;
+
+    for (var key in o1) {
+        if (!(key in o2) || (o1[key] !== o2[key]))
+            return false;
+    }
+    for (key in o2) {
+        if (!(key in o1) || (o2[key] !== o1[key]))
+            return false;
+    }
+    return true;
+}
 
 /*
  * Add a css file to the header section. This is useful for dynamically loading
@@ -699,8 +769,9 @@ function loadView(url) {
     GoToOldScrollPosition();
 }
 
-var oldUrl;
+var url = oldUrl = new Url();
 function loadPage(e) {
+    oldUrl = url.copy();
     url = new Url(location.hash);
     if (url.url === "/") {
         url.url = "/index";
@@ -708,25 +779,16 @@ function loadPage(e) {
 
     var ajax_url;
     if (location.pathname === "/") {
-        ajax_url = url.url + "_ajax.jsp"; // name of dynamic file
+        ajax_url = url.url + "_ajax.jsp" + url.buildParams(); // name of dynamic file
     } else {
-        ajax_url = location.pathname + url.url + "_ajax.jsp"; // name of dynamic file
+        ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
     }
 
     clearPage();
-    if ((!oldUrl) ||
-        (oldUrl.hash === url.hash && e !== "view_reload") ||
-        (oldUrl.url !== url.url)) {
-
+    if (oldUrl.ajax) {
         requestAjax(ajax_url, handlePage, errorStatus, url);
-
-    } else if ((oldUrl.view !== url.view) ||
-               (oldUrl.params || url.params)) {
-
-        loadView(url);
     } else {
-        console.error("Unhandled url action!");
-        console.error(url);
+        loadView(url);
     }
 
     oldUrl = url.copy();
