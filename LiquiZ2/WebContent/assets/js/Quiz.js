@@ -274,7 +274,6 @@ Quiz.prototype.createSubmit = function(id) {
                 if (clicks === 0) {
                 	var editor = new QuizEdit();
                 	editor.editQuestion();
-                	checkIfInView("editor");
                     // Util.goToId("editor");
                 }
                 clicks++;
@@ -343,7 +342,7 @@ Quiz.prototype.mcRadioImg = function(id, src) {
 /*
  * Build dropdown list of text
  */
-Quiz.prototype.selectText = function(id, list, sendBack) {
+Quiz.prototype.selectText = function(id, list) {
 	var s = document.createElement("select");
 	s.id = id;
 	s.className = "multichoicedropdown";

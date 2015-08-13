@@ -17,20 +17,35 @@
 
 
 Util = {
+    popupCancel: function(w) { w.close(); },
+    popupSave: function(w) {
+console.log(w);
+	console.log(w.document.getElementById('filename'));
+    },
+
     dump : function(obj) {
         console.warn(JSON.stringify(obj, null, 3));
     },
 
-    popup : function(x, y, w, h, bg) {
+    popup : function(x, y, w, h, claz, files) {
         var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width='
                 + w + ',height=' + h);
+	p.document.head.title.innerHTML = 'Saving Files';
         var pbody = p.document.body;
-        pbody.style.backgroundColor = bg;
+	pbody.claz = claz;
         pbody.style.border = "solid black 1px";
         var d = p.document.createElement("div");
         d.style.backgroundColor = '#f00';
         d.innerHTML = JSON.stringify(files);
         pbody.appendChild(d);
+
+	var div = Util.div();
+	Util.add(div, [Util.textarea('', 'filename', files),
+		Util.input('text', 'filename', 'filename'),
+		Util.button('Save', 'filebutton', 'save', Util.popupSave(p) ),
+		Util.button('Cancel', 'filebutton', 'cancel', Util.popupCancel(p) )
+		 ]);
+	pbody.appendChild(div);
         return d;
     },
 
@@ -44,8 +59,8 @@ Util = {
         } else {
             files = dir.keys().sort();
         }
-        var d = Util.popup(100, 100, 500, 500, '0c0');
-        d.innerHTML = "Foo!" + files;
+        var d = Util.popup(100, 100, 500, 500, 'localstore', files);
+        d.innerHTML = files;
     },
 
     add : function(parent, children) {
@@ -317,6 +332,7 @@ Util = {
         });
     },
 
+//TODO: move onClick before classname since it's not optional?
     button : function(value, className, id, onClick) {
         return Util.make("input", {
             type : "button",
