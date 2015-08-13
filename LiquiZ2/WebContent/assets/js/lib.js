@@ -753,7 +753,7 @@ function loadView(url) {
     GoToOldScrollPosition();
 }
 
-var url = new Url(), oldUrl = new Url();
+var url = oldUrl = new Url();
 function loadPage(e) {
     oldUrl = url.copy();
     url = new Url(location.hash);
