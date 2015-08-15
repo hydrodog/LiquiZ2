@@ -8,13 +8,15 @@
         "dataDir": "assets/",
         "editMode": true,
         "data": [
-            [
-                1, "Mergesort", "grid",
-                ["instructions", "Show the first pass of Mergesort below"],
-                ["grid" ,"1_1", [[9, 8, 7, 6, 5, 4, 3, 1]] ],
-                ["Util.br"],
-                ["emptyGrid", "1_2", 1, 8]
-            ],
+            {
+                "id": 1,
+                "title": "Mergesort",
+                "type": "grid",
+                "content": [["instructions", "Show the first pass of Mergesort below"],
+                         ["grid" ,"1_1", [[9, 8, 7, 6, 5, 4, 3, 1]] ],
+                         ["Util.br"],
+                         ["emptyGrid", "1_2", 1, 8]]
+            },
 
             [
                 2, "Matrix Multiplication", "matrix",
