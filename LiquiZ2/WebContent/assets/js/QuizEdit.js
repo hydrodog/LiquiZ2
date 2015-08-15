@@ -411,7 +411,7 @@ QuizEdit.prototype.editMC = function(questionType) {
 
  
     var div = Util.div();
-    Util.add(div, [Util.input("number", "editField", "optionAdd"), Util.button("Add Option", "editButton", null,  )]);
+    Util.add(div, [Util.input("number", "editField", "optionAdd"), Util.button("Add Option", "editButton", null)]);
 
     var list = [ ["Answer Id", "Answer", "correct"] ];
     for (var row = 0; row < 4; row++) {
