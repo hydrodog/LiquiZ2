@@ -388,7 +388,20 @@ console.log(w);
             multiple : multiple,
         });
     },
-
+    sel : function (innerHTML, className, id) {
+	return Util.select(null, false, innerHTML, className, id);
+    },
+    yesno : function(className, id, onChange) {
+	var options = document.createDocumentFragment();
+	options.appendChild(Util.option("F", "No"));
+	options.appendChild(Util.option("T", "Yes"));
+	return Util.make("select", {
+            className : className,
+            id : id,
+	    onChange: onChange,
+	    innerHTML: options
+	});
+    },
     option : function(value, innerHTML, className, id) {
         return Util.make("option", {
             value : value,

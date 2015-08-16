@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Quiz Editor
  * author: Ying Zhao
@@ -299,23 +298,23 @@ QuizEdit.questionTypes = [
 ];
 
 QuizEdit.multipleChoiceTypes = [
-    "-Choose Multiple Choice Type-",
+    "-Multiple Choice Type-",
     "MultiChoiceDropdown", "MultiChoiceRadioVert", "MultiChoiceRadioHoriz", "MultiAnswer", "Matching", "Survey", 
 ];
 
 QuizEdit.shortAnswerTypes = [
-    "-Choose Short Answer Type-",
-    "Fillin", "Number", "Regex"
+    "-Short Answer Type-",
+    "Fillin", "Number", "Regex", "Formula", "Equation"
 ];
 
 QuizEdit.otherTypes = [
-    "-Choose Other Question Type-",
+    "-Other Question Type-",
     "Essay", "Code", "Matrix", "Cloze", "ImgClick",
-    "Diagram"
+    "Graph", "Diagram"
 ];
 
 QuizEdit.random = [
-    "-Choose Random Element-",
+    "-Random Element-",
     "Integer", "Decimal", "String", "Name"
 ];
 
@@ -326,6 +325,14 @@ QuizEdit.prototype.insertMultimedia = function() {
 QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
 QuizEdit.videoFileTypes = "mpg,mpeg,mp4";
+
+QuizEdit.prototype.pickDropdown = function(sel) {
+    console.log(sel);
+    if (sel != this.randSelect)	this.randSelect.selectedIndex = 0;
+    if (sel != this.mcSelect)	this.mcSelect.selectedIndex = 0;
+    if (sel != this.saSelect)	this.saSelect.selectedIndex = 0;
+    if (sel != this.otherSelect) this.otherSelect.selectedIndex = 0;
+}
 
 QuizEdit.prototype.editQuestion = function() {
     var editor = Util.div("editor", "editor");
@@ -341,27 +348,97 @@ QuizEdit.prototype.editQuestion = function() {
     
     var list = [	
 	["Question Text:", this.textBox = Util.textarea(null, "textArea", "blankbox", 5, 60),
-	 Util.divadd(null, Util.h2("Insert"), Util.button("Instructions"), Util.button("paragraph"), Util.button("Code"), Util.button("Equation"))
+	 Util.divadd(null, Util.h2("Insert"), Util.button("Instructions"), Util.button("paragraph"), Util.button("Code"), Util.button("Text2Equation"))
 	]
     ];
     editor.appendChild(Util.table(list));
     var imgUpload = Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src");
     var audioUpload = Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src");
     var videoUpload = Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src");
+    var t = this;
+    var handler = {onchange: t.pickDropdown};
     var ins = [
 	[ Util.filebutton("Image", imgUpload, QuizEdit.EDITBUTTON, null),
 	  Util.filebutton("Audio", audioUpload, QuizEdit.EDITBUTTON, null),
 	  Util.filebutton("Video", videoUpload, QuizEdit.EDITBUTTON, null)],
 	[ Util.button("Equation", QuizEdit.EDITBUTTON), Util.button("Matrix", QuizEdit.EDITBUTTON), Util.button("Regex", QuizEdit.EDITBUTTON)         ],
-	[ Util.select("random", false, QuizEdit.random, QuizEdit.EDITCTRL),
+	[ this.randSelect = Util.select("random", false, QuizEdit.random, QuizEdit.EDITCTRL, null, handler),
 	  Util.button("", QuizEdit.EDITBUTTON),
 	  Util.button("", QuizEdit.EDITBUTTON)         ],
-	[ Util.select("multChoice", false, QuizEdit.multipleChoiceTypes, QuizEdit.EDITCTRL),
-	  Util.select("ShortAnswer", false, QuizEdit.shortAnswerTypes, QuizEdit.EDITCTRL),
-	  Util.select("otherQuest", false, QuizEdit.otherTypes, QuizEdit.EDITCTRL)
+	[ this.mcSelect = Util.select("multChoice", false, QuizEdit.multipleChoiceTypes, QuizEdit.EDITCTRL, null, handler),
+	  this.saSelect = Util.select("ShortAnswer", false, QuizEdit.shortAnswerTypes, QuizEdit.EDITCTRL, null, handler),
+	  this.otherSelect = Util.select("otherQuest", false, QuizEdit.otherTypes, QuizEdit.EDITCTRL, null, handler)
 	]
 
     ];
     editor.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
     scrollToId("editor");
+}
+
+/*
+* Edit and store the policies governing a quiz, ie how it may be taken, when to display answers, etc.
+*/
+function Policy() {
+    this.body = document.getElementById("container");
+    this.body.className = "quizEditor";
+}
+
+Policy.names = ["homework1x", "homework4x", "midtermreview"];
+Policy.prototype.edit = function() {
+    var policy = Util.div("policy", "policy");
+    this.body.appendChild(policy);
+
+    policy.appendChild(
+	Util.table([
+	    ["Name", Util.input("text", "name"),
+	     Util.select("existingName", false, Policy.names, QuizEdit.EDITCTRL),
+	     Util.button("Save", QuizEdit.EDITBUTTON), Util.button("Delete", QuizEdit.EDITBUTTON), Util.button("Copy", QuizEdit.EDITBUTTON)
+	    ]
+	]));
+    
+    policy.appendChild(
+	Util.table([
+	    ["Attempts permitted", Util.input("number", QuizEdit.EDITCTRL, "attempts")],
+	    ["Duration (min)", Util.input("number", QuizEdit.EDITCTRL, "duration", 0)],
+	    ["Show Student Answers", Util.yesno(QuizEdit.EDITCTRL, "showStudentAnswers")],
+	    ["Show Correct Answers", Util.yesno(QuizEdit.EDITCTRL, "showCorrectAnswers")],
+	    ["One question per page", Util.yesno(QuizEdit.EDITCTRL, "showCorrectAnswers")],
+	    ["Scored", Util.yesno(QuizEdit.EDITCTRL, "scored")],
+	    ["Shuffle Questions", Util.yesno(QuizEdit.EDITCTRL, "shuffleQuestions")],
+	    ["Shuffle Answers", Util.yesno(QuizEdit.EDITCTRL, "shuffleAnswers")],
+	    ["Access Code", Util.input("text", QuizEdit.EDITCTRL, "accessCode")],
+	    ["Filter IP", Util.yesno(QuizEdit.EDITCTRL, "filterIP")],
+
+ 	    ["Early Bonus", Util.input("number", QuizEdit.EDITCTRL, "earlyBonus", 0)],
+	    ["Early Daily Bonus", Util.input("number", QuizEdit.EDITCTRL, "earlyDailyBonus", 0)],
+ 	    ["Late Penalty", Util.input("number", QuizEdit.EDITCTRL, "latePenalty", 0)],
+	    ["Late Daily Penalty", Util.input("number", QuizEdit.EDITCTRL, "lateDailyPenalty", 0)],
+	    
+	])
+    );
+    scrollToId("policy");
+}
+
+
+/*
+ * Edit and store the parameters of an assignment, including due dates
+ */
+function Assignment() {
+    this.body = document.getElementById("container"); //TODO: figure out a strategy to eliminate this commmon logic between Assignment, Policy, QuizEdit, etc.
+    this.body.className = "quizEditor";
+}
+
+Assignment.prototype.edit = function() {
+    var assign = Util.div("assign", "assign");
+    this.body.appendChild(assign);
+
+    assign.appendChild(
+	Util.table([
+	    ["Open Date", Util.input("text", "openDate")],
+	    ["Due Date", Util.input("text", "dueDate")],
+	    ["Close  Date", Util.input("text", "closeDate")],
+	    ["Points", Util.input("number", "points")],
+	])
+    );
+    scrollToId("policy");
 }

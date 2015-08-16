@@ -283,28 +283,26 @@ Quiz.prototype.saveLocal = function(id) {
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
     var t = this;
-    var clicks = 0;
+    var clickEditQuestion = 0, clickPolicy = 0, clickAssignment = 0;
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
     if (this.editMode) {
     	var editBox = Util.div("edit-quiz", id + "-edit-quiz");
 	Util.add(editBox, [
             Util.button("New Question", null, null,
 			function() {
-			    if (clicks === 0) {
+			    if (clickEditQuestion === 0) {
                 		var editor = new QuizEdit();
                 		editor.editQuestion();
-				// Util.goToId("editor");
 			    }
-			    clicks++;
+			    clickEditQuestion++;
 			}),
             Util.button("Edit Policy", null, null,
 			function() {
-			    if (clicks === 0) {
-                		var editor = new QuizEdit();
-                		editor.editQuestion();
-				// Util.goToId("editor");
+			    if (clickPolicy === 0) {
+                		var policy = new Policy();
+                		policy.edit();
 			    }
-			    clicks++;
+			    clickPolicy++;
 			}),
 	    Util.button("Save Local", null, null, 
         		function () {
