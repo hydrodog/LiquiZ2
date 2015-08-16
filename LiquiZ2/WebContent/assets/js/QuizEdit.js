@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Quiz Editor
  * author: Ying Zhao
