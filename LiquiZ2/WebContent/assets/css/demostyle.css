@@ -272,3 +272,9 @@ img.logo {
 .response { /*teacher feedback when showing the graded quiz*/
 	/*placeholder to specify response classname*/
 }
+
+input#title {
+    font-family: Arial, sanserif;
+    font-size: 14pt;
+    width: 600px;
+}

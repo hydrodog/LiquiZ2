@@ -17,6 +17,23 @@ function Quiz(quizinfo, questions) {
     this.questions = questions;
 }
 
+Quiz.stdChoice = {
+    Likert5: ["Strongly Agree",
+	      "Agree",
+	      "Neutral",
+	      "Disagree",
+	      "Strongly Disagree"],
+    Likert7: ["Exceptional",
+	      "Excellent",
+	      "Very Good",
+	      "Good",
+	      "Fair",
+	      "Poor",
+	      "Very Poor"],
+    Yesno: ["Yes", "No"],
+    Boolean: ["true", "false"]
+};
+
 Quiz.prototype.exec = function(params) {
     var collapse = {};
     if (params.collapse) {
@@ -265,32 +282,41 @@ Quiz.prototype.saveLocal = function(id) {
 
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
-    var parent = this;
+    var t = this;
     var clicks = 0;
     div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
     if (this.editMode) {
     	var editBox = Util.div("edit-quiz", id + "-edit-quiz");
-        editBox.appendChild(Util.button("New Question", id + "-new-question", null,
-            function() {
-                if (clicks === 0) {
-                	var editor = new QuizEdit();
-                	editor.editQuestion();
-                    // Util.goToId("editor");
-                }
-                clicks++;
-            }));
-        // editBox.appendChild(Util.div("filebrowse"));
-        editBox.appendChild(Util.button("Save Local", id + "-edit-buttons", null, 
+	Util.add(editBox, [
+            Util.button("New Question", null, null,
+			function() {
+			    if (clicks === 0) {
+                		var editor = new QuizEdit();
+                		editor.editQuestion();
+				// Util.goToId("editor");
+			    }
+			    clicks++;
+			}),
+            Util.button("Edit Policy", null, null,
+			function() {
+			    if (clicks === 0) {
+                		var editor = new QuizEdit();
+                		editor.editQuestion();
+				// Util.goToId("editor");
+			    }
+			    clicks++;
+			}),
+	    Util.button("Save Local", null, null, 
         		function () {
-        		parent.saveLocal();
-        }));
-        editBox.appendChild(Util.button("Load From Local", id + "-edit-buttons", null, 
+        		    t.saveLocal();
+			}),
+            Util.button("Load From Local", id + "-edit-buttons", null, 
         		function () {
-        		parent.loadLocal();
-        } ));
+        		    t.loadLocal();
+			} )
+	] );
         div.appendChild(editBox);
     }
-
     return div;
 };
 
@@ -318,46 +344,62 @@ Quiz.prototype.add = function(parent, spec) {
 	parent.appendChild(this[spec.type](spec));
 }
 
-Quiz.prototype.mcRadioText = function(id, txt) {
-	l = [];
-	for (var i = 0; i < txt.length; i++) {
-		radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
-		label = Util.label(id + "-" + i, Util.span(txt[i]));
-		group = [ radio, label ];
-		l.push(group);
-	}
-	return Util.table(l);
+/*
+ * Build vertical radio boxes for multiple choice
+ */
+Quiz.prototype.mcRadioTextVert = function(id, txt) {
+    var list = [];
+    for (var i = 0; i < txt.length; i++) {
+	var radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
+	var label = Util.label(id + "-" + i, Util.span(txt[i]));
+	list.push([radio, label]);
+    }
+    return Util.table(list);
 }
 
+/*
+ * Build horizontal radio boxes for multiple choice
+ */
+Quiz.prototype.mcRadioTextHoriz = function(id, txt) {
+    var list = [];
+    for (var i = 0; i < txt.length; i++) {
+	list.push(Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i));
+	list.push(Util.label(id + "-" + i, Util.span(txt[i])));
+    }
+    return Util.divadd(list);
+}
+
+/*
+ * Build vertical list of images for multiple choice using radio buttons
+ */
 Quiz.prototype.mcRadioImg = function(id, src) {
-	l = [];
-	for (var i = 0; i < src.length; i++) {
-		radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
-		label = Util.label(id + "-" + i, Util.img(src[i]));
-		group = [ radio, label ];
-		l.push(group);
-	}
-	return Util.table(l);
+    var list = [];
+    for (var i = 0; i < src.length; i++) {
+	var radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
+	var label = Util.label(id + "-" + i, Util.img(src[i]));
+	list.push([radio, label]);
+    }
+    return Util.table(list);
 }
 
 /*
  * Build dropdown list of text
  */
 Quiz.prototype.selectText = function(id, list) {
-	var s = document.createElement("select");
-	s.id = id;
-	s.className = "multichoicedropdown";
-	var opt = document.createElement("option");
-	opt.value = -1;
-	opt.appendChild(document.createTextNode("Select one"));
+    var s = document.createElement("select");
+    s.id = id;
+    s.className = "multichoicedropdown";
+    var opt = document.createElement("option");
+    opt.value = -1;
+    opt.appendChild(document.createTextNode("Select one"));
+    s.appendChild(opt);
+    for (var i = 0; i < list.length; i++) {
+	opt = document.createElement("option");
+	opt.value = i;
+	opt.appendChild(document.createTextNode(list[i]));
 	s.appendChild(opt);
-	for (var i = 0; i < list.length; i++) {
-		opt = document.createElement("option");
-		opt.value = i;
-		opt.appendChild(document.createTextNode(list[i]));
-		s.appendChild(opt);
-	}
-	return s;
+    }
+    return s;
 }
 
 /*
@@ -473,45 +515,6 @@ Quiz.prototype.fileUpload = function(id, accept) {
 	up.accept = accept;
 	return up;
 };
-
-// function imageAudioVideo() {
-// var
-// }
-
-function imageAudioVideo() {
-	var editor = document.createElement("div");
-	var t = document.createElement("table");
-	editor.appendChild(t);
-
-	var r0 = t.insertRow(0);
-	var image = Util.p("Image");
-	var image_src = Util.file(null, null, "image_src");
-	var load_image = Util.button("Load Selected Image", "image_src");
-	fillRow(r0, [ image, image_src, load_image ]);
-
-	var r1 = t.insertRow(1);
-	var audio = Util.p("Audio");
-	var audio_src = Util.file(null, null, "audio_src");
-	var load_audio = Util.button("Load Selected Audio", "audio_src");
-	fillRow(r1, [ audio, audio_src, load_audio ]);
-
-	var r2 = t.insertRow(2);
-	var video = Util.p("Video");
-	var video_src = Util.file(null, null, "video_src");
-	var load_video = Util.button("Load Selected Video", "video_src");
-	fillRow(r2, [ video, video_src, load_video ]);
-
-	return editor;
-
-}
-
-function fillRowText(row, list) {
-	for (var i = 0; i < list.length; i++) {
-		var c = row.insertCell(i);
-		c.innerHTML = list[i];
-	}
-}
-
 
 function imgClick(e) {
     // getBoundingClientRect()

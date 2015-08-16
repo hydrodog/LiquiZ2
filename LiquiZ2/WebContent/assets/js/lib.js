@@ -27,20 +27,24 @@ console.log(w);
         console.warn(JSON.stringify(obj, null, 3));
     },
 
-    popup : function(x, y, w, h, claz, files) {
+    popup : function(x, y, w, h, claz) {
         var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width='
                 + w + ',height=' + h);
-	p.document.head.title.innerHTML = 'Saving Files';
         var pbody = p.document.body;
 	pbody.claz = claz;
         pbody.style.border = "solid black 1px";
+	return p;
+    },
+    popuplist : function(x, y, w, h, claz, list) {
+	var p = Util.popup(x, y, w, h, claz);
+	p.document.head.title.innerHTML = 'Saving Files';
         var d = p.document.createElement("div");
         d.style.backgroundColor = '#f00';
         d.innerHTML = JSON.stringify(files);
         pbody.appendChild(d);
 
 	var div = Util.div();
-	Util.add(div, [Util.textarea('', 'filename', files),
+	Util.add(div, [Util.textarea('', 'filename', list),
 		Util.input('text', 'filename', 'filename'),
 		Util.button('Save', 'filebutton', 'save', Util.popupSave(p) ),
 		Util.button('Cancel', 'filebutton', 'cancel', Util.popupCancel(p) )
@@ -64,12 +68,19 @@ console.log(w);
     },
 
     add : function(parent, children) {
-        fragment = document.createDocumentFragment();
+        var fragment = document.createDocumentFragment();
         for (var i = 0; i < children.length; i++)
             fragment.appendChild(children[i]);
         parent.appendChild(fragment);
     },
-
+    
+    divadd : function(className) {
+	var div = Util.div(className);
+	for (var i = 1; i < arguments.length; i++)
+            div.appendChild(arguments[i]);
+        return div;
+    },
+    
     goToId : function(id) {
         // if (typeof id === "undefined") {
         // id = window.location.hash.substr(1);
@@ -352,6 +363,15 @@ console.log(w);
         });
     },
 
+    filebutton: function(value, accept, className, onAccept) {
+	var file = Util.file(accept, className);
+	file.onClick = onAccept; //TODO: if the user selects a file, add the name to the JSON.
+	//TODO: This really is not a file browser at all.  Maybe we should just browse a list of strings that are already on the server?
+	return Util.button(value, className, null, function() {
+	    var w = Util.popup(0,0, 600, 500, 'filebrowser', null);
+	    w.document.body.appendChild(file);
+	});
+    },
     select : function(name, multiple, innerHTML, className, id) {
         if (innerHTML.constructor === Array) {
             var options = document.createDocumentFragment();
@@ -849,3 +869,21 @@ function loadOnce(e) {
 window.onload = loadOnce;
 window.onhashchange = loadPage;
 window.onscroll = captureScroll;
+
+/**
+ * find the element with the id and make it visible
+ * currently this function uses jquery but it would be nice to streamline
+ */
+function scrollToId(id) { //TODO: Fix Jquery madness below
+    var element = $('#' + id); //document.getElementById(id);
+    var offset = element.offset().top;
+
+    if (offset > window.innerHeight) {
+	// Not in view so scroll to it
+	$('html,body').animate({
+	    scrollTop : offset
+	}, 1000);
+	return false;
+    }
+    return true;
+}
