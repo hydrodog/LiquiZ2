@@ -119,19 +119,31 @@ public class Graph extends GraphData {
 					if (j != k){
 						if (Visualize.visualize){
 							setVertexStyle(k, 1);
+							setEdgeStyle(j, k, 1);			// consider new path
 						}
 						// if the cost through new vertex is lower
 						if (cost[j] + getW(j,k) < cost[k]) {
-							cost[k] = cost[j] + getW(j,k);	// compute new cost
-							int prevPred = pred[k];				// save predecessor for graphics only
+							int erase = pred[k];				// k's predecessor
+							cost[k] = cost[j] + getW(j,k);		// compute new cost							
 							pred[k] = j;						// store new predecessor
 							changed = true;						// found better path, keep going
-							if (Visualize.visualize){
-								if (prevPred >= 0)
-									setEdgeStyle(prevPred, k, 0);	// erase previous highlighted edge
-								setEdgeStyle(j, k, 1);			// highlight new best path (so far)
+														
+							if (Visualize.visualize) {
+								setEdgeStyle(j, k, 2);			// highlight new best path (so far)
+								if (erase != -1)
+									setEdgeStyle(erase, k, 0);
+							}
+						} else if(cost[j] + getW(j,k) > cost[k] && cost[k] + getW(k,j) > cost[j]) // for single direction, bi-direction just cost[j] + getW(j,k) > cost[k]
+						{
+							if (Visualize.visualize) {
+								setEdgeStyle(j, k, 0);			// back to normal display
+							}
+						} else{
+							if (Visualize.visualize) {
+								setEdgeStyle(j, k, 2);			// the candidate path still best one
 							}
 						}
+										
 						if (Visualize.visualize) {
 							setVertexStyle(k, 0);	// turn off the vertex just considered
 						}

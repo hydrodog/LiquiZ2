@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../assets/js/lib.js"></script>
+</head>
+<body>
+<script>
+function callmeback(worked, details) {
+	console.log('worked: ', worked);
+	console.log(details);
+}
+
+var json = { id: 1, fname: 'Dov', lName: 'Kruger'};
+//good test of low-level post
+post('http://posttestserver.com/post.php', json	, callmeback);
+
+
+//post('post.jsp', json	, callmeback);
+
+
+
+
+</script>
+</body>
+</html>

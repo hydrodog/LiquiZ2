@@ -2,6 +2,12 @@ package org.adastraeducation.liquiz;
 
 import org.adastraeducation.liquiz.util.*;
 
+/**
+ * DisplayElement representing Text
+ * Children: InstructionText, QuestionText, AnswerText, ResponseText
+ * @author yijinkang
+ *
+ */
 public class Text extends DisplayElement {
 	private String text;
 	

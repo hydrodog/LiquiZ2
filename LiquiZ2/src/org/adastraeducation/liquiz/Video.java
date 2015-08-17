@@ -24,10 +24,8 @@ public class Video extends RectangularMedia {
 		dc.append("</video>\n");
 	}
 
-	// to do : how to represent image in JavaScript
 	public void writeJS(DisplayContext dc) {
-		dc.append("q.appendChild(Util.video(").appendQuotedJS(getSource())
-				.append("));");
+		dc.append("\n\t\t\t['Util.video', ").appendQuotedJS(getSource()).append("],");
 	}
 
 	public void writeXML(StringBuilder b) {

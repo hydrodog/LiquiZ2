@@ -63,8 +63,8 @@ public class MultiAnswer extends MultiChoiceDropdown {
 		// Testing the grade method
 		
 		MultiAnswer q = new MultiAnswer(1, 2, 1, new ArrayList<Answer>(Arrays.asList(
-			new Answer(new Text("Choose this"), true),
-			new Answer(new Text("Not this"), false)
+			new Answer(new TextAnswer("Choose this"), true),
+			new Answer(new TextAnswer("Not this"), false)
 		)));
 		String[] s1 = {"Choose this"};
 		System.out.println(q.grade(s1) + " should equal 2");
@@ -138,7 +138,8 @@ public class MultiAnswer extends MultiChoiceDropdown {
 			dc.append("</select>\n");
 		}
 	}
-	public void writeJS(StringBuilder b ){
-		Util.writeAnsListAsJS("multiAnswer", getAns(), b);
+	public void writeJS(DisplayContext b){
+		//TODO specify multianswer js
+		Util.writeAnsListAsJS(getAns(), b);
 	}	
 }

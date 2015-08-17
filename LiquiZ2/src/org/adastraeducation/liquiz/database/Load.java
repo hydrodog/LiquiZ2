@@ -38,7 +38,10 @@ public class Load {
 	static HashMap<String, DisplayElementFactory> displayElementTypeMap;
 	static {
 		displayElementTypeMap = new HashMap<String, DisplayElementFactory>();
-		displayElementTypeMap.put("text", new TextFactory());
+		displayElementTypeMap.put("itxt", new InstructionTextFactory());
+		displayElementTypeMap.put("qtxt", new QuestionTextFactory());
+		displayElementTypeMap.put("atxt", new AnswerTextFactory());
+		displayElementTypeMap.put("rtxt", new ResponseTextFactory());
 		displayElementTypeMap.put("img", new ImageFactory());
 		displayElementTypeMap.put("aud", new AudioFactory());
 		displayElementTypeMap.put("vid", new VideoFactory());
@@ -52,21 +55,32 @@ public class Load {
 		System.out.println("Entered loadDispEl");
 		ResultSet rs = null;
 		try {
-			rs = DatabaseMgr.execQuery("SELECT DisplayElements.DispElID, DisplayElements.TextElement, DisplayElements.DispType, Media.Path, Media.MediaType, Media.Width, Media.Height FROM DisplayElements LEFT JOIN Media ON DisplayElements.MediaID = Media.MediaID ORDER BY DispElID ASC");
+			rs = DatabaseMgr.execQuery("SELECT DisplayElements.DispElID, DisplayElements.DispType, Text.TextType, Text.TextElement, Media.Path, Media.MediaType, Media.Width, Media.Height "+
+							"FROM DisplayElements "+
+							"LEFT JOIN Text ON DisplayElements.DispElID = Text.TextID "+
+							"LEFT JOIN Media ON DisplayElements.DispElID = Media.MediaID "+
+							"ORDER BY DispElID ASC");
+			
+			/*
+			 * DispElID | DispType | TextType | TextElement | Path | MediaType | Width | Height
+			 */
 			
 			while(rs.next()) {
 				String dType = rs.getString("DispType");
+				String type; // the text or media type
+				DisplayElementFactory f;
+				
 				if (dType.equals("txt")) {
-					Database.addDispEl(new Text(rs.getString("TextElement")));
+					type = rs.getString("TextType");
+				} else { //dType is med
+					type = rs.getString("MediaType");
+				}
+				
+				f = displayElementTypeMap.get(type);
+				if (f == null) {
+					System.out.println("Factory not found, type = " + type);
 				} else {
-					String mType = rs.getString("MediaType");
-					//need to figure out what type of Media to load
-					DisplayElementFactory f = displayElementTypeMap.get(mType);
-					if (f == null) {
-						System.out.println("Factory not found, type = " + mType);
-					} else {
-						Database.addDispEl(f.create(rs));
-					}
+					Database.addDispEl(f.create(rs));
 				}
 			}
 		} catch(SQLException e) {
@@ -184,14 +198,14 @@ public class Load {
 			DatabaseMgr.printRemainingConns();
 			String sql = 
 				"SELECT Questions.QuesID, Questions.QuesType, Questions.Points, Questions.Level, Ques_Ans.AnsID, Ques_Ans.Correct, " + 
-				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.CaseSensitive, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.LowBound, Questions.HighBound " +
+				"Ques_Ans.StdSetName, Ques_Ans.StdCorrectIndex, Questions.CaseSensitive, Questions.Pattern, Questions.Warning, Questions.DefaultText, Questions.Rows, Questions.Cols, Questions.MaxWords, Questions.LowBound, Questions.HighBound, Questions.ClozeString " +
 				"FROM Questions LEFT JOIN Ques_Ans ON Questions.QuesID = Ques_Ans.QuesID " +
 				"ORDER BY Questions.QuesID, Ques_Ans.Sequence ASC";
 			DatabaseMgr.printRemainingConns();
 			rs = DatabaseMgr.execQuery(sql);
 			
 			/*
-			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | CaseSensitive | Pattern | Warning | DefaultText | LowBound | HighBound
+			 * QuesID | QuesType | Points | Level | AnsID | Correct | StdSetName | StdCorrectIndex | CaseSensitive | Pattern | Warning | DefaultText | Rows | Cols | MaxWords | LowBound | HighBound | ClozeString
 			 */
             
 			if (rs.next()) {
@@ -216,13 +230,17 @@ public class Load {
 						} else if (type.equals("MCRa")) {
 							q = new MultiChoiceRadio(quesID, points, level);
 						} else if (type.equals("Code")) {
+							int rows = rs.getInt("Rows");
+							int cols = rs.getInt("Cols");
 							String defaultText = rs.getString("DefaultText");
 							if (rs.wasNull()) {
 								defaultText = "";
 							}
-							q = new Code(quesID, points, level, defaultText);
+							q = new Code(quesID, points, level, rows, cols, defaultText); 
 						} else if (type.equals("NumR")) {
-							q = new NumberRange(quesID, points, level);
+							double min = rs.getDouble("LowBound");
+							double max = rs.getDouble("HighBound");
+							q = new NumberRange(quesID, points, level, min, max);
 						} else if (type.equals("RegX")) { //int id, int points, int level, String regex, String warning
 							if(!rs.getString("Pattern").equals(null)) { // Contains the pattern directly
 								q = new RegexQuestion(quesID, points, level, rs.getString("Pattern"), rs.getString("Warning"), false);
@@ -230,11 +248,17 @@ public class Load {
 								q = new RegexQuestion(quesID, points, level, rs.getString("PatternName"), rs.getString("Warning"), true);
 							}
 						} else if (type.equals("Essa")) {
+							int rows = rs.getInt("Rows");
+							int cols = rs.getInt("Cols");
+							int maxWords = rs.getInt("MaxWords");
 							String defaultText = rs.getString("DefaultText");
 							if (rs.wasNull()) {
 								defaultText = "";
 							}
-							q = new Essay(quesID, points, level, defaultText); 
+							q = new Essay(quesID, points, level, rows, cols, maxWords, defaultText);
+						} else if (type.equals("Cloz")) {
+							String clozeString = rs.getString("ClozeString");
+							q = new Cloze(quesID, points, level, clozeString);
 						}
 						
 						Database.addQues(q); // add question to database
@@ -253,13 +277,7 @@ public class Load {
 						if(rs.getInt("StdCorrectIndex") != 0) {
 							q.getAns().get(rs.getInt("StdCorrectIndex")).setCorrect(true);
 						}
-					} else { 
-						if (q instanceof NumberRange) {
-							// for Number Range Questions
-							((NumberRange) q).setMin(rs.getDouble("LowBound"));
-							((NumberRange) q).setMax(rs.getDouble("Highbound"));
-						}
-					}
+					} 
 				} while(rs.next());
 
 			}
@@ -314,7 +332,7 @@ public class Load {
 		ResultSet rs = null;
 
 		try {
-			rs = DatabaseMgr.execQuery("SELECT QuesCon.QuesConID, QuesCon.QuesConName, QuesConElements.Type, QuesConElements.DispElID, QuesConElements.QuesID " +
+			rs = DatabaseMgr.execQuery("SELECT QuesCon.QuesConID, QuesCon.QuesConName, QuesCon.CssClass, QuesConElements.Type, QuesConElements.DispElID, QuesConElements.QuesID " +
 					"FROM QuesCon " +
 					"LEFT JOIN QuesConElements " +
 					"ON QuesCon.QuesConID = QuesConElements.QuesConID " +

@@ -19,10 +19,8 @@ public class Audio extends Media {
 		dc.append("</audio>\n");
 	}
 
-	// to do : how to represent image in JavaScript
 	public void writeJS(DisplayContext dc) {
-		dc.append("q.appendChild(Util.audio(").appendQuotedJS(getSource())
-				.append("));");
+		dc.append("\n\t\t\t['Util.audio', ").appendQuotedJS(getSource()).append("],");
 	}
 
 	public void writeXML(StringBuilder b) {

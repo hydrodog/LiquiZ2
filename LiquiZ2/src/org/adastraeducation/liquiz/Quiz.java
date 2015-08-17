@@ -15,7 +15,13 @@ import org.adastraeducation.liquiz.util.*;
  *
  */
 public class Quiz implements Displayable {
+	private int id; // unique id for db and XML
+	private String name, desc; // display name & description, TODO possibly per Course? or copy renamed quiz
+	private ArrayList<QuestionContainer> qContainers;
+	private Policy policy ; 
+	private boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
 	public static Random r;
+	
 	
 	static {
 		/*
@@ -42,10 +48,7 @@ public class Quiz implements Displayable {
 		}
 	}
 
-	private int id; // unique id for db and XML
-	private String name, desc; // display name & description, TODO possibly per Course? or copy renamed quiz
-	private ArrayList<QuestionContainer> qContainers;
-	private Policy policy ; 
+	
 	
 	public int getId() {
 		return id;
@@ -111,6 +114,14 @@ public class Quiz implements Displayable {
 		this.policy = p;
 	}
 	
+	public boolean getEditMode() {
+		return editMode;
+	}
+	
+	public void setEditMode(boolean editMode) {
+		this.editMode=editMode;
+	}
+	
 	public int getTotalPoints() {
 		int totalPoints = 0;
 		for (QuestionContainer quesCon : qContainers) {
@@ -134,15 +145,26 @@ public class Quiz implements Displayable {
 /*		this.id = 0;
 		this.name = "defaultName";
 		this.qContainers = new ArrayList<QuestionContainer>();
-		this.policy = new Policy();*/
+		this.policy = new Policy();
+		this.editMode=false;*/
 	}
 	
-	public Quiz(int id, String name, String desc, Policy plc) {
+	public Quiz(int id, String name, String desc, ArrayList<QuestionContainer> qContainers, Policy plc, boolean editMode) {
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.qContainers = qContainers;
+		policy = plc;
+		this.editMode=editMode;
+	}
+	
+	public Quiz(int id, String name, String desc, Policy plc, boolean editMode) {
 		this.id = id;
 		this.name = name;
 		this.desc = desc;
 		this.qContainers = new ArrayList<QuestionContainer>();
 		policy = plc;
+		this.editMode=editMode;
 	}
 	
 	public Quiz(Policy plc) {
@@ -215,17 +237,23 @@ public class Quiz implements Displayable {
 		//TODO: add data for point values, calculate remaining tries
 		//TODO: do something about directory
 		int points = 100; //TODO: add points to quiz?
+		//yijinkang: getTotalPoints() will return the total number of points of the questions in the quiz
 		dc.append
-		("page  = new Quiz( {\n" +
-		"title: ");
-		Util.escapeQuotedJS(name, dc);
-		dc.append(",points:").append(points).
-			append(",timeLimit:").append(policy.getDuration()).
-			append(",remainingTries:").append(1). //TODO: need count of user's tries
-			append(",dataDir:").append("'assets/'\n} );").
-			append("\nvar q;\n");
+		("new Quiz(").
+			append("\n\t{"). 
+				append("\n\t\ttitle:").appendQuotedJS(name).
+				append(",\n\t\tpoints:").append(points).
+				append(",\n\t\ttimeLimit:").append(policy.getDuration()).
+				append(",\n\t\tremainingTries:").append(1). //TODO: need count of user's tries
+				append(",\n\t\tdataDir:").append("'assets/'").
+				append(",\n\t\teditMode:").append(editMode).
+			append("\n\t},").
+			append("\n\t[");
 		for(QuestionContainer qc: this.qContainers) {
 			qc.writeJS(dc);
 		}
+		dc.append
+			("\n\t]").
+		append("\n);");
 	}
 }
