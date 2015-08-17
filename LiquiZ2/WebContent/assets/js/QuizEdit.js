@@ -356,7 +356,10 @@ QuizEdit.prototype.editQuestion = function() {
 	[ this.randSelect = Util.select("random", false, QuizEdit.random, QuizEdit.EDITCTRL, null, handler),
 	  Util.button("", QuizEdit.EDITBUTTON),
 	  Util.button("", QuizEdit.EDITBUTTON)         ],
-	[ Util.select("questions", false, QuizEdit.questionTypes, QuizEdit.EDITCTRL, null, handler),
+	[ Util.select("questions", false, QuizEdit.questionTypes, QuizEdit.EDITCTRL, null,
+		     {onClick: function() {
+		     }}
+		     ),
 	]
 
     ];

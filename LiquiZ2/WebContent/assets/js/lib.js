@@ -407,7 +407,7 @@ Util = {
         });
     },
     sel : function (innerHTML, className, id) {
-    return Util.select(null, false, innerHTML, className, id);
+	return Util.select(null, false, innerHTML, className, id);
     },
     yesno : function(className, id, onChange) {
     var options = document.createDocumentFragment();
