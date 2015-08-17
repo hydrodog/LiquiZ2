@@ -292,9 +292,10 @@ QuizEdit.prototype.editMatrix = function() {
 //Complete list of every question type supported by editQuestion
 QuizEdit.questionTypes = [
     "-Choose QuestionType-",
-    "Fillin", "Number", "Essay", "Code",
-    "MultiChoiceDropdown", "Survey", "MultiChoiceRadio", "MultiAnswer",
-    "Regex", "Matrix", "Cloze"
+    "MultiChoiceDropdown", "MultiChoiceRadioVert", "MultiChoiceRadioHoriz", "MultiAnswer", "Matching", "Survey", 
+    "Fillin", "Number", "Regex", "Formula", "Equation",
+    "Essay", "Code", "Matrix", "Cloze", "ImgClick",
+    "Graph", "Diagram"
 ];
 
 QuizEdit.multipleChoiceTypes = [
@@ -326,14 +327,6 @@ QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
 QuizEdit.videoFileTypes = "mpg,mpeg,mp4";
 
-QuizEdit.prototype.pickDropdown = function(sel) {
-    console.log(sel);
-    if (sel != this.randSelect)	this.randSelect.selectedIndex = 0;
-    if (sel != this.mcSelect)	this.mcSelect.selectedIndex = 0;
-    if (sel != this.saSelect)	this.saSelect.selectedIndex = 0;
-    if (sel != this.otherSelect) this.otherSelect.selectedIndex = 0;
-}
-
 QuizEdit.prototype.editQuestion = function() {
     var editor = Util.div("editor", "editor");
     this.body.appendChild(editor);
@@ -352,22 +345,18 @@ QuizEdit.prototype.editQuestion = function() {
 	]
     ];
     editor.appendChild(Util.table(list));
-    var imgUpload = Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src");
-    var audioUpload = Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src");
-    var videoUpload = Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src");
     var t = this;
     var handler = {onchange: t.pickDropdown};
     var ins = [
-	[ Util.filebutton("Image", imgUpload, QuizEdit.EDITBUTTON, null),
-	  Util.filebutton("Audio", audioUpload, QuizEdit.EDITBUTTON, null),
-	  Util.filebutton("Video", videoUpload, QuizEdit.EDITBUTTON, null)],
+	[ Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
+	  Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
+	  Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
+	],
 	[ Util.button("Equation", QuizEdit.EDITBUTTON), Util.button("Matrix", QuizEdit.EDITBUTTON), Util.button("Regex", QuizEdit.EDITBUTTON)         ],
 	[ this.randSelect = Util.select("random", false, QuizEdit.random, QuizEdit.EDITCTRL, null, handler),
 	  Util.button("", QuizEdit.EDITBUTTON),
 	  Util.button("", QuizEdit.EDITBUTTON)         ],
-	[ this.mcSelect = Util.select("multChoice", false, QuizEdit.multipleChoiceTypes, QuizEdit.EDITCTRL, null, handler),
-	  this.saSelect = Util.select("ShortAnswer", false, QuizEdit.shortAnswerTypes, QuizEdit.EDITCTRL, null, handler),
-	  this.otherSelect = Util.select("otherQuest", false, QuizEdit.otherTypes, QuizEdit.EDITCTRL, null, handler)
+	[ Util.select("questions", false, QuizEdit.questionTypes, QuizEdit.EDITCTRL, null, handler),
 	]
 
     ];
