@@ -35,6 +35,14 @@ Quiz.stdChoice = {
     Boolean: ["true", "false"]
 };
 
+Quiz.prototype.refreshQuestion = function(q) {
+
+}
+
+Quiz.prototype.refreshQuestions = function() {
+
+}
+
 Quiz.prototype.exec = function(params) {
     var collapse = {};
     if (params.collapse) {
@@ -95,7 +103,7 @@ Quiz.prototype.headerButtons = function() {
     var fragment = document.createDocumentFragment();
     var button, input;
 
-    button = Util.button("Collapse All", null, null,
+    button = Util.button("Collapse All",
         function(e) {
             url.changeView("collapsed");
             url.removeAllParams();
@@ -103,7 +111,7 @@ Quiz.prototype.headerButtons = function() {
         });
     fragment.appendChild(button);
 
-    button = Util.button("Uncollapse All", null, null,
+    button = Util.button("Uncollapse All", 
         function(e) {
             url.changeView("");
             url.removeAllParams();
@@ -171,10 +179,10 @@ Quiz.prototype.headerButtons = function() {
 
     if (url.view === "") {
         input = Util.input("text", null, "collapse-input", url.params.collapse, onkeydown);
-        button = Util.button("Collapse", null, null, collapse);
+        button = Util.button("Collapse", collapse);
     } else if (url.view === "collapsed") {
         input = Util.input("text", null, "collapse-input", url.params.not, onkeydown);
-        button = Util.button("Expand", null, null, expand);
+        button = Util.button("Expand", expand);
     }
     fragment.appendChild(input);
     fragment.appendChild(button);
@@ -217,9 +225,9 @@ function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
     var editBox = Util.div("edit");
     Util.add(editBox,
     	[
-    	 	Util.button("Edit", null, id+"-edit", editFunc),
-    		Util.button("Delete", null, id+"-delete", deleteFunc), 
-    		Util.button("Copy", null, id+"-copy", copyFunc)
+    	    Util.button("Edit", editFunc, null, id+"-edit"),
+    	    Util.button("Delete", deleteFunc, null, id+"-delete"), 
+    	    Util.button("Copy", copyFunc, null, id+"-copy")
     	]);
     return editBox;
 }
@@ -285,11 +293,11 @@ Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
     var t = this;
     var clickEditQuestion = 0, clickPolicy = 0, clickAssignment = 0;
-    div.appendChild(Util.button("Submit The Quiz", "submit-button", "submit-"+id));
+    div.appendChild(Util.button("Submit The Quiz", null, "submit-button", "submit-"+id));
     if (this.editMode) {
     	var editBox = Util.div("edit-quiz", id + "-edit-quiz");
 	Util.add(editBox, [
-            Util.button("New Question", null, null,
+            Util.button("New Question", 
 			function() {
 			    if (clickEditQuestion === 0) {
                 		var editor = new QuizEdit();
@@ -297,7 +305,7 @@ Quiz.prototype.createSubmit = function(id) {
 			    }
 			    clickEditQuestion++;
 			}),
-            Util.button("Edit Policy", null, null,
+            Util.button("Edit Policy", 
 			function() {
 			    if (clickPolicy === 0) {
                 		var policy = new Policy();
@@ -305,14 +313,14 @@ Quiz.prototype.createSubmit = function(id) {
 			    }
 			    clickPolicy++;
 			}),
-	    Util.button("Save Local", null, null, 
+	    Util.button("Save Local",  
         		function () {
         		    t.saveLocal();
 			}),
-            Util.button("Load From Local", id + "-edit-buttons", null, 
+            Util.button("Load From Local",  
         		function () {
         		    t.loadLocal();
-			} )
+			}, null, id + "-edit-buttons" )
 	] );
         div.appendChild(editBox);
     }
@@ -551,6 +559,10 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
 	ta.cols = cols;
 	ta.value = txt;
 	return ta;
+};
+
+Quiz.prototype.precode = function(txt) {
+    return Util.pre(txt, "precode");
 };
 
 Quiz.prototype.essay = function(id, rows, cols, maxwords) {

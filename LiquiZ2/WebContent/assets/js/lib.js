@@ -63,10 +63,10 @@ Util = {
 
         var div = Util.div();
         Util.add(div, [Util.textarea('', 'filename', list),
-            Util.input('text', 'filename', 'filename'),
-            Util.button('Save', 'filebutton', 'save', Util.popupSave(p) ),
-            Util.button('Cancel', 'filebutton', 'cancel', Util.popupCancel(p) )
-             ]);
+		       Util.input('text', 'filename', 'filename'),
+		       Util.button('Save',  Util.popupSave(p), 'filebutton', 'save' ),
+		       Util.button('Cancel', Util.popupCancel(p), 'filebutton', 'cancel' )
+		      ]);
         pbody.appendChild(div);
         return d;
     },
@@ -362,7 +362,7 @@ Util = {
     },
 
     //TODO: move onClick before classname since it's not optional?
-    button : function(value, className, id, onClick) {
+    button : function(value, onClick, className, id) {
         return Util.make("input", {
             type : "button",
             value : value,

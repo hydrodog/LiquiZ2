@@ -72,13 +72,13 @@ QuizList.prototype.condDayShift = function(rowID, rowNum, NOD) {
 QuizList.prototype.mkDSButtons = function(rowID, rowNum) {
     var d = document.createElement("div");
     var ql = this;
-    Util.add(d, [ Util.button("-7", null, null, function() {
+    Util.add(d, [ Util.button("-7", function() {
 	ql.condDayShift(rowID, rowNum, -7)
-    }), Util.button("-1", null, null, function() {
+    }), Util.button("-1", function() {
 	ql.condDayShift(rowID, rowNum, -1)
-    }), Util.button("+1", null, null, function() {
+    }), Util.button("+1", function() {
 	ql.condDayShift(rowID, rowNum, +1)
-    }), Util.button("+7", null, null, function() {
+    }), Util.button("+7", function() {
 	ql.condDayShift(rowID, rowNum, +7)
     }) ]);
     return d;
@@ -124,13 +124,13 @@ QuizList.prototype.qtoolbar = function() {
     if (this.editMode) {
 	var btns_div = Util.div();
 	qtoolbar.appendChild(btns_div);
-	btns_div.appendChild(Util.button("all", null, null, function() {
+	btns_div.appendChild(Util.button("all", function() {
 	    ql.checkAll()
 	}));
-	btns_div.appendChild(Util.button("invert", null, null, function() {
+	btns_div.appendChild(Util.button("invert", function() {
 	    ql.invertCheck()
 	}));
-	btns_div.appendChild(Util.button("none", null, null, function() {
+	btns_div.appendChild(Util.button("none", function() {
 	    ql.uncheckAll()
 	}));
 	btns_div.appendChild(Util.make("input", { // enter a date for date
@@ -145,13 +145,13 @@ QuizList.prototype.qtoolbar = function() {
 	    id : "quizlist-numofdays",
 	    placeholder : "Number of days"
 	}));
-	btns_div.appendChild(Util.button("Advance", null, null, function() {
+	btns_div.appendChild(Util.button("Advance", function() {
 	    ql.arbiDayShift(-1)
 	}));
-	btns_div.appendChild(Util.button("Postpone", null, null, function() {
+	btns_div.appendChild(Util.button("Postpone", function() {
 	    ql.arbiDayShift(1)
 	}));
-	btns_div.appendChild(Util.button("test", null, null, function() {
+	btns_div.appendChild(Util.button("test", function() {
 	    var txt = document.getElementById("quizlist-datepoint").value;
 	    alert(txt);
 	}));

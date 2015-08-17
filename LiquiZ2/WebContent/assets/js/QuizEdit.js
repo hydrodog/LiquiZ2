@@ -32,7 +32,6 @@ QuizEdit.prototype.currentEdit;
 
 //Perform all actions to complete a question edited and added to the end of the quiz
 QuizEdit.prototype.completeEdit = function(array) {
-    $("#submitDiv-2").remove();
     $("#editor").remove(); // remove from window
     $("#qC").remove();
 //    var array = buildFunc(); //.apply(this||window, Array.prototype.slice.call(arguments, 1));
@@ -75,8 +74,8 @@ QuizEdit.prototype.addFields = function(editorFormId, cbFunc) {
     this.qc.appendChild(c);
     for (var i = 3; i < arguments.length; i++)
 	c.appendChild(arguments[i]);
-    c.appendChild(Util.button("Add Question", null, null, this.addQuestion()));
-    c.appendChild(Util.button("Add Question", null, null, this.addSubQuestion()));
+    c.appendChild(Util.button("Add Question", this.addQuestion()));
+    c.appendChild(Util.button("Add Question", this.addSubQuestion()));
 }
 
 QuizEdit.prototype.buildFillin = function() {
@@ -196,10 +195,10 @@ QuizEdit.prototype.editMC = function(questionType) {
     (Util.divadd
      (null,
       Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
-      Util.button("Add Option", QuizEdit.EDITBUTTON, addOption),
+      Util.button("Add Option", addOption, QuizEdit.EDITBUTTON),
       Util.span("Name"),
       stdChoice = Util.input("text", 'editInput', 'stdChoice'),
-      Util.button("Create Standard Choice", null, null, createStdChoice)
+      Util.button("Create Standard Choice", createStdChoice)
      ));
 
     var list = [ ["Answer Id", "Answer", "correct"] ];
@@ -207,7 +206,7 @@ QuizEdit.prototype.editMC = function(questionType) {
 	list.push([row,
 		   Util.input("text", QuizEdit.EDITCTRL, "a"+row),
 		   Util.checkbox(null, "check"+row, "editCB", "check"+row),
-		   Util.button("delete", null, null, deleteAnswer)]);
+		   Util.button("delete", deleteAnswer)]);
     }
     var ansTable = Util.table(list, true);
 
@@ -251,7 +250,7 @@ QuizEdit.prototype.editCloze = function() {
 		   ta = Util.textarea(null, "cloze", "x", this.textAreaRows, this.textAreaCols),
 		   Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
 		   Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80),
-		   Util.button("SquareBracket It!", null, null, function(){addBrackets(ta, selStart, selEnd) } )
+		   Util.button("SquareBracket It!", function(){addBrackets(ta, selStart, selEnd) } )
   		  );
     var selStart, selEnd;
 //    var exampleClozeTest = 'public class A {\n [[]]  public [[]] '+
@@ -327,32 +326,68 @@ QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
 QuizEdit.videoFileTypes = "mpg,mpeg,mp4";
 
+QuizEdit.prototype.inputBlur = function(type, val) {
+    var t = this;
+    var v = Util.input(type, QuizEdit.EDITCTRL, val, this.q[val]);
+    v.onblur = function() {
+	t.q[val] = v.value;
+	page.refreshQuestion(t.q);
+    };
+    return v;
+}
+
+QuizEdit.prototype.addDispButton = function(title, funcName) {
+    var t = this;
+    return Util.button(title, function() {
+	t.q.content.push([funcName, t.textBox.value])
+    });
+}
+
 QuizEdit.prototype.editQuestion = function() {
+//    var submitbar = document.getElementById("submitDiv-2");
+//    submitbar.parent.removeChild(submitbar);
+    $("#submitDiv-2").remove();
+    this.q = {
+	id: --QuizEdit.newid,
+	title: "",
+	level: 1,
+	points: 1,
+	content:[],
+	answer: []
+    };
+    page.questions.push(this.q);
+    page.refreshQuestions();
+
     var editor = Util.div("editor", "editor");
     this.body.appendChild(editor);
-
     editor.appendChild(Util.h1("Question Editor"));
+    var t = this;
+    
     var meta = [
-	["Title", Util.input("text", QuizEdit.EDITCTRL, "title")],
-	["Level:", Util.input("number", QuizEdit.EDITCTRL, "level", 1)],
-	["Points:", Util.input("number", QuizEdit.EDITCTRL, "points", 1)],
+	["Title", this.inputBlur("text", "title")],
+	["Level:", this.inputBlur("number", "level")],
+	["Points:", this.inputBlur("number", "points")],
     ];
     editor.appendChild(Util.table(meta));
-    
     var list = [	
 	["Question Text:", this.textBox = Util.textarea(null, "textArea", "blankbox", 5, 60),
-	 Util.divadd(null, Util.h2("Insert"), Util.button("Instructions"), Util.button("paragraph"), Util.button("Code"), Util.button("Text2Equation"))
+	 Util.divadd(null, Util.h2("Insert"),
+		     this.addDispButton("Instructions", "instructions"),
+		     this.addDispButton("Paragraph", "Util.p"),
+		     this.addDispButton("Code", "precode"),
+		     Util.button("Text2Equation"))//TODO: need equation feature
 	]
     ];
     editor.appendChild(Util.table(list));
-    var t = this;
     var handler = {onchange: t.pickDropdown};
     var ins = [
 	[ Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
 	  Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
 	  Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
 	],
-	[ Util.button("Equation", QuizEdit.EDITBUTTON), Util.button("Matrix", QuizEdit.EDITBUTTON), Util.button("Regex", QuizEdit.EDITBUTTON)         ],
+	[ Util.button("Equation", null, QuizEdit.EDITBUTTON),
+	  Util.button("Matrix", null, QuizEdit.EDITBUTTON),
+	  Util.button("Regex", null, QuizEdit.EDITBUTTON)         ],
 	[ this.randSelect = Util.select("random", false, QuizEdit.random, QuizEdit.EDITCTRL, null, handler),
 	  Util.button("", QuizEdit.EDITBUTTON),
 	  Util.button("", QuizEdit.EDITBUTTON)         ],
