@@ -8,13 +8,14 @@
  * The question editor is also embedded within the Quiz object.
  */
 
-function Quiz(quizinfo, questions) {
-	for ( var k in quizinfo) {
-		this[k] = quizinfo[k];
+function Quiz(payload) {
+	for ( var k in payload) {
+		this[k] = payload[k];
 	}
+
     this.body = document.getElementById("container");
     this.body.className = "quiz";
-    this.questions = questions;
+    this.questions = this.data;
 }
 
 Quiz.stdChoice = {
@@ -49,9 +50,9 @@ Quiz.prototype.exec = function(params) {
     
     for (var i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
-        var qc = this.addQuestion(q[0], q[1], q[2]);
+        var qc = this.addQuestion(q.id, q.title, q.className, q.points, q.level);
         if (!collapse[i])
-            qc.appendChild(this.processQuestion(q));
+            qc.appendChild(this.processQuestion(q.content));
         this.render(qc);
     }
     this.end();
@@ -81,7 +82,7 @@ Quiz.prototype.collapsed = function(params) {
 
     for (i = 0; i < this.questions.length; i++) {
         var q = this.questions[i];
-        var qc = this.addQuestion(q[0], q[1], q[2]);
+        var qc = this.addQuestion(q.id, q.title, q.className, q.points, q.level);
         if (not[i]) {
             qc.appendChild(this.processQuestion(q));
         }
@@ -183,7 +184,7 @@ Quiz.prototype.headerButtons = function() {
 // TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
 Quiz.prototype.processQuestion = function(q) {
     var frag = document.createDocumentFragment();
-    for (var j = 3; j < q.length; j++) {
+    for (var j = 0; j < q.length; j++) {
         if (q[j][0].substring(0, 5) === "Util.") {
             frag.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
         } else {

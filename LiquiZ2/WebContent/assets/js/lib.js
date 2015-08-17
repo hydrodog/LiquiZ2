@@ -15,41 +15,59 @@
  * documentation for more details.
  */
 
+function initPageLookup() {
+    lookup = {
+        "Quiz": Quiz,
+        "QuizEdit": QuizEdit,
+    };
+}
+
+video = {};
+audio = {};
+mediaLocations = {
+    img : "assets/img/",
+    audio : "assets/audio/",
+    video : "assets/video/",
+};
 
 Util = {
-    popupCancel: function(w) { w.close(); },
-    popupSave: function(w) {
-console.log(w);
-	console.log(w.document.getElementById('filename'));
+    popupCancel: function(w) {
+        w.close();
     },
 
-    dump : function(obj) {
+    popupSave: function(w) {
+        console.log(w);
+        console.log(w.document.getElementById('filename'));
+    },
+
+    dump: function(obj) {
         console.warn(JSON.stringify(obj, null, 3));
     },
 
-    popup : function(x, y, w, h, claz) {
-        var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width='
-                + w + ',height=' + h);
+    popup: function(x, y, w, h, claz) {
+        var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width=' +
+                            w + ',height=' + h);
         var pbody = p.document.body;
-	pbody.claz = claz;
-        pbody.style.border = "solid black 1px";
-	return p;
+        pbody.claz = claz;
+            pbody.style.border = "solid black 1px";
+        return p;
     },
-    popuplist : function(x, y, w, h, claz, list) {
-	var p = Util.popup(x, y, w, h, claz);
-	p.document.head.title.innerHTML = 'Saving Files';
-        var d = p.document.createElement("div");
-        d.style.backgroundColor = '#f00';
-        d.innerHTML = JSON.stringify(files);
-        pbody.appendChild(d);
 
-	var div = Util.div();
-	Util.add(div, [Util.textarea('', 'filename', list),
-		Util.input('text', 'filename', 'filename'),
-		Util.button('Save', 'filebutton', 'save', Util.popupSave(p) ),
-		Util.button('Cancel', 'filebutton', 'cancel', Util.popupCancel(p) )
-		 ]);
-	pbody.appendChild(div);
+    popuplist: function(x, y, w, h, claz, list) {
+        var p = Util.popup(x, y, w, h, claz);
+        p.document.head.title.innerHTML = 'Saving Files';
+            var d = p.document.createElement("div");
+            d.style.backgroundColor = '#f00';
+            d.innerHTML = JSON.stringify(files);
+            pbody.appendChild(d);
+
+        var div = Util.div();
+        Util.add(div, [Util.textarea('', 'filename', list),
+            Util.input('text', 'filename', 'filename'),
+            Util.button('Save', 'filebutton', 'save', Util.popupSave(p) ),
+            Util.button('Cancel', 'filebutton', 'cancel', Util.popupCancel(p) )
+             ]);
+        pbody.appendChild(div);
         return d;
     },
 
@@ -75,8 +93,8 @@ console.log(w);
     },
     
     divadd : function(className) {
-	var div = Util.div(className);
-	for (var i = 1; i < arguments.length; i++)
+    var div = Util.div(className);
+    for (var i = 1; i < arguments.length; i++)
             div.appendChild(arguments[i]);
         return div;
     },
@@ -343,7 +361,7 @@ console.log(w);
         });
     },
 
-//TODO: move onClick before classname since it's not optional?
+    //TODO: move onClick before classname since it's not optional?
     button : function(value, className, id, onClick) {
         return Util.make("input", {
             type : "button",
@@ -364,13 +382,13 @@ console.log(w);
     },
 
     filebutton: function(value, accept, className, onAccept) {
-	var file = Util.file(accept, className);
-	file.onClick = onAccept; //TODO: if the user selects a file, add the name to the JSON.
-	//TODO: This really is not a file browser at all.  Maybe we should just browse a list of strings that are already on the server?
-	return Util.button(value, className, null, function() {
-	    var w = Util.popup(0,0, 600, 500, 'filebrowser', null);
-	    w.document.body.appendChild(file);
-	});
+    var file = Util.file(accept, className);
+    file.onClick = onAccept; //TODO: if the user selects a file, add the name to the JSON.
+    //TODO: This really is not a file browser at all.  Maybe we should just browse a list of strings that are already on the server?
+    return Util.button(value, className, null, function() {
+        var w = Util.popup(0,0, 600, 500, 'filebrowser', null);
+        w.document.body.appendChild(file);
+    });
     },
     select : function(name, multiple, innerHTML, className, id) {
         if (innerHTML.constructor === Array) {
@@ -389,18 +407,18 @@ console.log(w);
         });
     },
     sel : function (innerHTML, className, id) {
-	return Util.select(null, false, innerHTML, className, id);
+    return Util.select(null, false, innerHTML, className, id);
     },
     yesno : function(className, id, onChange) {
-	var options = document.createDocumentFragment();
-	options.appendChild(Util.option("F", "No"));
-	options.appendChild(Util.option("T", "Yes"));
-	return Util.make("select", {
+    var options = document.createDocumentFragment();
+    options.appendChild(Util.option("F", "No"));
+    options.appendChild(Util.option("T", "Yes"));
+    return Util.make("select", {
             className : className,
             id : id,
-	    onChange: onChange,
-	    innerHTML: options
-	});
+        onChange: onChange,
+        innerHTML: options
+    });
     },
     option : function(value, innerHTML, className, id) {
         return Util.make("option", {
@@ -554,18 +572,6 @@ function testXML() {
 }
 
 testXML();
-
-
-video = {};
-audio = {};
-mediaLocations = {
-    img : "assets/img/",
-    audio : "assets/audio/",
-    video : "assets/video/",
-};
-
-var page;
-var url;
 
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 
@@ -725,36 +731,6 @@ function scrollToId(id) { //TODO: Fix Jquery madness below
     return true;
 }
 
-/*
- * Add a css file to the header section. This is useful for dynamically loading
- * the css file depending on the user's preferences.
- */
-function appendCSSLink(src) {
-    var head = document.getElementsByTagName('head')[0];
-    var link = Util.make("link", {
-        rel : "stylesheet",
-        type : "text/css",
-        href : src,
-    });
-    head.appendChild(link);
-}
-
-/*
- * Add a css stylesheet to the current page
- */
-function appendCSSText(css) {
-    var head = document.getElementsByTagName('head')[0];
-    var s = Util.make("style", {
-        type : "text/css"
-    });
-    if (s.styleSheet) { // IE
-        s.styleSheet.cssText = css;
-    } else { // the world
-        s.appendChild(document.createTextNode(css));
-    }
-    head.appendChild(s);
-}
-
 function clearPage() {
     document.getElementById("container").innerHTML = "";
     document.getElementById("currentStatus").innerHTML = "";
@@ -763,14 +739,13 @@ function clearPage() {
 function errorStatus(errorCode) {
     var frag = document.createDocumentFragment();
     frag.appendChild(Util.h1("Error: " + errorCode));
-    frag
-            .appendChild(Util
-                    .p("Please make sure the url you entered in the address bar is correct."));
+    frag.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
     document.getElementById("currentStatus").appendChild(frag);
 }
 
 function handlePage(text, url) {
-    eval("page=" + text);
+    var json = JSON.parse(text);
+    page = new lookup[json.type](json.payload);
     loadView(url);
 }
 
@@ -847,10 +822,6 @@ function GoToOldScrollPosition() {
     }, SCROLL_SECONDS_AFTER_RELOAD);
 }
 
-lookup = {
-    "Quiz": Quiz,
-}
-
 var page;
 
 // If the link clicked is the current page, reload the page.
@@ -868,6 +839,8 @@ function setLastClicked(e) {
 
 // Adds an onclick function to all <a> tags.
 function loadOnce(e) {
+    initPageLookup();
+
     var aList = document.links;
     for (var i = 0; i < aList.length; i++) {
         if (aList[i].hostname === document.domain) { // Same domain links only
