@@ -278,3 +278,8 @@ input#title {
     font-size: 14pt;
     width: 600px;
 }
+
+input[disabled] {
+    background-color: #a22;
+    color: white;
+}
