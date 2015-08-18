@@ -11,7 +11,6 @@ QuizEdit.newid = 0;
 
 function QuizEdit() {
     this.body = document.getElementById("container");
-    this.body.className = "quizEditor";
 }
 
 QuizEdit.CTRL = "editctrl";
@@ -68,14 +67,17 @@ QuizEdit.prototype.cancel = function() {
 
 }
 
-QuizEdit.prototype.addFields = function(editorFormId, cbFunc) {
+QuizEdit.prototype.addFields = function(cbFunc) {
     this.cbFunc = cbFunc;
-    var c = Util.form(null, editorFormId, editorFormId);
-    this.qc.appendChild(c);
-    for (var i = 3; i < arguments.length; i++)
-	c.appendChild(arguments[i]);
-    c.appendChild(Util.button("Add Question", this.addQuestion()));
-    c.appendChild(Util.button("Add Question", this.addSubQuestion()));
+    this.varEdit.innerHTML = ""; // clear all the options before adding the new ones
+    for (var i = 1; i < arguments.length; i++) {
+	if (typeof(arguments[i]) === 'string')
+	    this.varEdit.appendChild(document.createTextNode(arguments[i]));
+	else
+    	    this.varEdit.appendChild(arguments[i]);
+    }
+    this.varEdit.appendChild(Util.button("Add Question", this.addQuestion()));
+    this.varEdit.appendChild(Util.button("Add Question", this.addSubQuestion()));
 }
 
 QuizEdit.prototype.buildFillin = function() {
@@ -85,7 +87,7 @@ QuizEdit.prototype.buildFillin = function() {
 };
 
 QuizEdit.prototype.editFillin = function() {
-    this.addFields('Fillin', this.buildFillin,
+    this.addFields(this.buildFillin,
  		   Util.span("Answer: "),
  		   this.ans = Util.input("text", "ans", "ans")
     );
@@ -98,7 +100,7 @@ QuizEdit.prototype.buildNumber = function() {
 };
 
 QuizEdit.prototype.editNumber = function() {
-    this.addFields('Number', this.buildNumber,
+    this.addFields(this.buildNumber,
 		   Util.span("Min: "), this.min = Util.input("text", "min"), 
 		   Util.span("Max: "), this.max = Util.input("text", "max")
 		  );
@@ -111,7 +113,7 @@ QuizEdit.prototype.buildEssay = function() {
 }
 
 QuizEdit.prototype.editEssay = function() {
-    this.addFields("Essay", this.buildEssay,
+    this.addFields(this.buildEssay,
 		   Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
 		   Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80));
 }
@@ -125,7 +127,7 @@ QuizEdit.prototype.buildCode = function() {
 
 QuizEdit.prototype.editCode = function() {
     this.addFields
-    ("Code", this.buildCode,
+    (this.buildCode,
      Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
      Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80),
      Util.select(null, null,
@@ -157,44 +159,49 @@ QuizEdit.prototype.buildMAnswer = function() {
     ];
 }
 
+QuizEdit.prototype.deleteAnswer = function() {
+    console.log('delete answer');
+}
+
+QuizEdit.prototype.addOption = function(row) {
+    var r = ansTable.insertRow();
+    var td = r.insertCell();
+    td.innerHTML = row;
+    td = r.insertCell();
+    td.appendChild(Util.input("text", QuizEdit.EDITCTRL, "a"+row));
+    this.editButton("delete", this.deleteAnswer);
+}
+
+QuizEdit.prototype.addStdChoice = function(stdChoice) {
+    stdChoice.style.background="#fff";
+    var name = stdChoice.value;
+    if (name === '') {
+	stdChoice.style.background="#f00";
+	return; //TODO: alert? need a name for a standard choice
+    }
+    console.log(this);
+    var answers = [];
+    for (var i = 0; i < ansTable.rows; i++) {
+	answers.push(document.getElementById("a"+i));
+    }
+    Quiz.stdChoice[name] = answers;
+}
+
 QuizEdit.prototype.editMC = function(questionType) {
-    var description = document.createTextNode("Multiple choice - Dropdown :"
-					      + "Correct Answer" + "Add more options");
-    var numberBox = Util.input("text", QuizEdit.EDITCTRL, "optionCount");
+    var numberBox, ansTable, stdChoice;
     var addOption = function() {
 	var count = numberBox.value;
-	if (1 <= count && count <= 100){
-	    optionClicks += parseInt(numberBox.value,10); 
-	    console.log(optionClicks);
-	    for(var i = 0; i < numberBox.value; i++){
-		oneMCDDOption(form, "o" + id_o++);
-	    }
-	} else {
-	    optionClicks++;
-	    oneMCDDOption(form, "o" + id_o++);
+	var row = ansTable.rows.length-1;
+	if (1 < count || count > 100) count = 1;
+	for (var i = 0; i < count; i++) {
+	    this.addOptions(ansTable, i);
 	}
 	scrollToId(id);
     };
-    var deleteAnswer = function() {
-
-
-    };
-    var ansTable, stdChoice;
-    var createStdChoice = function() {
-	var name = stdChoice.value;
-	if (name === '')
-	    return; //TODO: alert? need a name for a standard choice
-	console.log(this);
-	var answers = [];
-	for (var i = 0; i < ansTable.rows; i++) {
-	    answers.push(document.getElementById("a"+i));
-	}
-	Quiz.stdChoice[name] = answers;
-    }
-    this.qc.appendChild
+    this.editor.appendChild
     (Util.divadd
-     (null,
-      Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
+     (QuizEdit.EDITCTRL,
+      numberBox = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
       Util.button("Add Option", addOption, QuizEdit.EDITBUTTON),
       Util.span("Name"),
       stdChoice = Util.input("text", 'editInput', 'stdChoice'),
@@ -206,11 +213,11 @@ QuizEdit.prototype.editMC = function(questionType) {
 	list.push([row,
 		   Util.input("text", QuizEdit.EDITCTRL, "a"+row),
 		   Util.checkbox(null, "check"+row, "editCB", "check"+row),
-		   Util.button("delete", deleteAnswer)]);
+		   this.editButton("delete", this.deleteAnswer)]);
     }
     var ansTable = Util.table(list, true);
 
-    this.addFields("MultiChoiceDropdown", questionType, ansTable, div);
+    this.addFields(questionType, ansTable, div);
     this.answers = [];
 }
 
@@ -246,7 +253,7 @@ QuizEdit.prototype.buildCloze = function(){
 
 QuizEdit.prototype.editCloze = function() {
     var ta;
-    this.addFields('Cloze', this.buildCloze,
+    this.addFields(this.buildCloze,
 		   ta = Util.textarea(null, "cloze", "x", this.textAreaRows, this.textAreaCols),
 		   Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
 		   Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80),
@@ -269,7 +276,7 @@ QuizEdit.prototype.buildMatrix = function() {
 };
 
 QuizEdit.prototype.editMatrix = function() {
-    this.addFields('Matrix', this.buildMatrix,
+    this.addFields(this.buildMatrix,
  		   Util.span("Rows: "), this.matrixRows = Util.input("number", QuizEdit.EDITCTRL, "rows"),
  		   Util.span("Cols: "), this.matrixCols = Util.input("number", QuizEdit.EDITCTRL, "cols")
 		//   this.ans = //TODO: add a matrix to fill in the values
@@ -283,7 +290,7 @@ QuizEdit.prototype.buildRegex = function() {
 };
 
 QuizEdit.prototype.editRegex = function() {
-    this.addFields('Regex', this.buildRegex,
+    this.addFields(this.buildRegex,
  		   Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
  		   Util.span("Regex Pattern: "), Util.input("text", QuizEdit.EDITCTRL, "regex"),
  		   Util.span("Must match:"), this.mustMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40),
@@ -316,10 +323,15 @@ QuizEdit.prototype.inputBlur = function(type, val) {
     var t = this;
     var v = Util.input(type, QuizEdit.EDITCTRL, val, this.q[val]);
     v.onblur = function() {
-	t.q[val] = v.value;
+	t.q[val] = v.value; // change attributes of question like title, points...
 	page.refreshQuestion(t.q);
     };
     return v;
+}
+
+QuizEdit.prototype.editButton = function(label, method) {
+    var b = Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
+    return b;
 }
 
 QuizEdit.prototype.addDispButton = function(title, funcName) {
@@ -344,17 +356,16 @@ QuizEdit.prototype.editQuestion = function() {
     page.questions.push(this.q);
     page.refreshQuestions();
 
-    var editor = Util.div("editor", "editor");
-    this.body.appendChild(editor);
-    editor.appendChild(Util.h1("Question Editor"));
-    var t = this;
+    this.editor = Util.div("editor", "editor");
+    this.body.appendChild(this.editor);
+    this.editor.appendChild(Util.h1("Question Editor"));
     
     var meta = [
 	["Title", this.inputBlur("text", "title")],
 	["Level:", this.inputBlur("number", "level")],
 	["Points:", this.inputBlur("number", "points")],
     ];
-    editor.appendChild(Util.table(meta));
+    this.editor.appendChild(Util.table(meta));
     var list = [	
 	["Question Text:", this.textBox = Util.textarea(null, "textArea", "blankbox", 5, 60),
 	 Util.divadd(null, Util.h2("Insert"),
@@ -364,9 +375,8 @@ QuizEdit.prototype.editQuestion = function() {
 		     Util.button("Text2Equation"))//TODO: need equation feature
 	]
     ];
-    editor.appendChild(Util.table(list));
-    var handler = {onchange: t.pickDropdown};
-    editor.appendChild( Util.table( [
+    this.editor.appendChild(Util.table(list));
+    this.editor.appendChild( Util.table( [
 	[ Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
 	  Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
 	  Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
@@ -374,39 +384,40 @@ QuizEdit.prototype.editQuestion = function() {
     ] ));
 
     var ins = [
-	[ Util.button("Equation", null, QuizEdit.EDITBUTTON),
-	  Util.button("Rnd Int", null, QuizEdit.EDITBUTTON),
-	  Util.button("Rnd Dec", null, QuizEdit.EDITBUTTON),
-	  Util.button("Rnd String", null, QuizEdit.EDITBUTTON),
-	  Util.button("Rnd Name", null, QuizEdit.EDITBUTTON)         ],
-	[ Util.button("MC Dropdown", this.editMultiChoiceDropdown, QuizEdit.EDITBUTTON),
-	  Util.button("MC RadioVert", this.editMultiChoiceRadioVert, QuizEdit.EDITBUTTON),
-	  Util.button("MC RadioHoriz", this.editMultiChoiceRadioHoriz, QuizEdit.EDITBUTTON),
-	  Util.button("MultiAnswer", this.editMultiAnswer, QuizEdit.EDITBUTTON),
-	  Util.button("Matching", null, QuizEdit.EDITBUTTON)         ],
+	[ this.editButton("Equation", null),
+	  this.editButton("Rnd Int", null),
+	  this.editButton("Rnd Dec", null),
+	  this.editButton("Rnd String", null),
+	  this.editButton("Rnd Name", null)         ],
+	[ this.editButton("MC Dropdown", this.editMultiChoiceDropdown),
+	  this.editButton("MC RadioVert", this.editMultiChoiceRadioVert),
+	  this.editButton("MC RadioHoriz", this.editMultiChoiceRadioHoriz),
+	  this.editButton("MultiAnswer", this.editMultiAnswer),
+	  this.editButton("Matching", null)         ],
 	[
-	  Util.button("Survey", this.editSurvey, QuizEdit.EDITBUTTON),
-	  Util.button("Fillin", this.editFillin, QuizEdit.EDITBUTTON),
-	  Util.button("Number", this.editFillin, QuizEdit.EDITBUTTON),
-	  Util.button("Regex", this.editFillin, QuizEdit.EDITBUTTON),
-	  Util.button("Formula", this.editFillin, QuizEdit.EDITBUTTON)
+	  this.editButton("Survey", this.editSurvey),
+	  this.editButton("Fillin", this.editFillin),
+	  this.editButton("Number", this.editFillin),
+	  this.editButton("Regex", this.editFillin),
+	  this.editButton("Formula", this.editFillin)
          ],
 	[
-	  Util.button("Equation", this.editSurvey, QuizEdit.EDITBUTTON),
-	  Util.button("Essay", this.editFillin, QuizEdit.EDITBUTTON),
-	  Util.button("Code", this.editFillin, QuizEdit.EDITBUTTON),
-	  Util.button("Matrix", this.editFillin, QuizEdit.EDITBUTTON),
-	  Util.button("CLOZE", this.editFillin, QuizEdit.EDITBUTTON)
+	  this.editButton("Equation", this.editSurvey),
+	  this.editButton("Essay", this.editFillin),
+	  this.editButton("Code", this.editFillin),
+	  this.editButton("Matrix", this.editFillin),
+	  this.editButton("CLOZE", this.editFillin)
          ],
 	[
-	  Util.button("ImgClick", null, QuizEdit.EDITBUTTON),
-	  Util.button("Graph", null, QuizEdit.EDITBUTTON),
-	  Util.button("Diagram", null, QuizEdit.EDITBUTTON),
-	  Util.button("", null, QuizEdit.EDITBUTTON),
-	  Util.button("", null, QuizEdit.EDITBUTTON)
+	  this.editButton("ImgClick", null),
+	  this.editButton("Graph", null),
+	  this.editButton("Diagram", null),
+	  this.editButton("", null),
+	  this.editButton("", null)
          ]
     ];
-    editor.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
+    this.editor.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
+    this.varEdit = Util.div(QuizEdit.EDITCTRL, "varEdit");
     scrollToId("editor");
 }
 
