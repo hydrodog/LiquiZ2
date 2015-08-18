@@ -262,30 +262,32 @@ QuizEdit.prototype.editCloze = function() {
     ta.ondblclick = function(){this.addBrackets(ta, selStart, selEnd)};
 }
 
-QuizEdit.prototype.buildRegex = function() {
-    return [
-            ['fillin', newid],
-    ];
-};
-
-QuizEdit.prototype.editRegex = function() {
-    this.addFields('Fillin', this.buildFillin,
- 		   Util.span("Answer: "),
- 		   this.ans = Util.input("text", "ans", "ans")
-    );
-};
-
 QuizEdit.prototype.buildMatrix = function() {
     return [
-            ['fillin', newid],
+        ['matrix', this.matrixRows, this.matrixCols],
     ];
 };
 
 QuizEdit.prototype.editMatrix = function() {
-    this.addFields('Fillin', this.buildFillin,
- 		   Util.span("rows: "),
- 		   this.ans = Util.input("number", "", "ans")
+    this.addFields('Matrix', this.buildMatrix,
+ 		   Util.span("Rows: "), this.matrixRows = Util.input("number", QuizEdit.EDITCTRL, "rows"),
+ 		   Util.span("Cols: "), this.matrixCols = Util.input("number", QuizEdit.EDITCTRL, "cols")
+		//   this.ans = //TODO: add a matrix to fill in the values
     );
+};
+
+QuizEdit.prototype.buildRegex = function() {
+    return [
+            ['regex', --QuizEdit.newid],
+    ];
+};
+
+QuizEdit.prototype.editRegex = function() {
+    this.addFields('Regex', this.buildRegex,
+ 		   Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
+ 		   Util.span("Regex Pattern: "), Util.input("text", QuizEdit.EDITCTRL, "regex"),
+ 		   Util.span("Must match:"), this.mustMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40),
+ 		   Util.span("Cannot match:"), this.cannotMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40))
 };
 
 //Complete list of every question type supported by editQuestion
@@ -293,22 +295,6 @@ QuizEdit.questionTypes = [
     "-Choose QuestionType-",
     "MultiChoiceDropdown", "MultiChoiceRadioVert", "MultiChoiceRadioHoriz", "MultiAnswer", "Matching", "Survey", 
     "Fillin", "Number", "Regex", "Formula", "Equation",
-    "Essay", "Code", "Matrix", "Cloze", "ImgClick",
-    "Graph", "Diagram"
-];
-
-QuizEdit.multipleChoiceTypes = [
-    "-Multiple Choice Type-",
-    "MultiChoiceDropdown", "MultiChoiceRadioVert", "MultiChoiceRadioHoriz", "MultiAnswer", "Matching", "Survey", 
-];
-
-QuizEdit.shortAnswerTypes = [
-    "-Short Answer Type-",
-    "Fillin", "Number", "Regex", "Formula", "Equation"
-];
-
-QuizEdit.otherTypes = [
-    "-Other Question Type-",
     "Essay", "Code", "Matrix", "Cloze", "ImgClick",
     "Graph", "Diagram"
 ];
@@ -380,23 +366,45 @@ QuizEdit.prototype.editQuestion = function() {
     ];
     editor.appendChild(Util.table(list));
     var handler = {onchange: t.pickDropdown};
-    var ins = [
+    editor.appendChild( Util.table( [
 	[ Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
 	  Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
 	  Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
-	],
-	[ Util.button("Equation", null, QuizEdit.EDITBUTTON),
-	  Util.button("Matrix", null, QuizEdit.EDITBUTTON),
-	  Util.button("Regex", null, QuizEdit.EDITBUTTON)         ],
-	[ this.randSelect = Util.select("random", false, QuizEdit.random, QuizEdit.EDITCTRL, null, handler),
-	  Util.button("", QuizEdit.EDITBUTTON),
-	  Util.button("", QuizEdit.EDITBUTTON)         ],
-	[ Util.select("questions", false, QuizEdit.questionTypes, QuizEdit.EDITCTRL, null,
-		     {onClick: function() {
-		     }}
-		     ),
 	]
+    ] ));
 
+    var ins = [
+	[ Util.button("Equation", null, QuizEdit.EDITBUTTON),
+	  Util.button("Rnd Int", null, QuizEdit.EDITBUTTON),
+	  Util.button("Rnd Dec", null, QuizEdit.EDITBUTTON),
+	  Util.button("Rnd String", null, QuizEdit.EDITBUTTON),
+	  Util.button("Rnd Name", null, QuizEdit.EDITBUTTON)         ],
+	[ Util.button("MC Dropdown", this.editMultiChoiceDropdown, QuizEdit.EDITBUTTON),
+	  Util.button("MC RadioVert", this.editMultiChoiceRadioVert, QuizEdit.EDITBUTTON),
+	  Util.button("MC RadioHoriz", this.editMultiChoiceRadioHoriz, QuizEdit.EDITBUTTON),
+	  Util.button("MultiAnswer", this.editMultiAnswer, QuizEdit.EDITBUTTON),
+	  Util.button("Matching", null, QuizEdit.EDITBUTTON)         ],
+	[
+	  Util.button("Survey", this.editSurvey, QuizEdit.EDITBUTTON),
+	  Util.button("Fillin", this.editFillin, QuizEdit.EDITBUTTON),
+	  Util.button("Number", this.editFillin, QuizEdit.EDITBUTTON),
+	  Util.button("Regex", this.editFillin, QuizEdit.EDITBUTTON),
+	  Util.button("Formula", this.editFillin, QuizEdit.EDITBUTTON)
+         ],
+	[
+	  Util.button("Equation", this.editSurvey, QuizEdit.EDITBUTTON),
+	  Util.button("Essay", this.editFillin, QuizEdit.EDITBUTTON),
+	  Util.button("Code", this.editFillin, QuizEdit.EDITBUTTON),
+	  Util.button("Matrix", this.editFillin, QuizEdit.EDITBUTTON),
+	  Util.button("CLOZE", this.editFillin, QuizEdit.EDITBUTTON)
+         ],
+	[
+	  Util.button("ImgClick", null, QuizEdit.EDITBUTTON),
+	  Util.button("Graph", null, QuizEdit.EDITBUTTON),
+	  Util.button("Diagram", null, QuizEdit.EDITBUTTON),
+	  Util.button("", null, QuizEdit.EDITBUTTON),
+	  Util.button("", null, QuizEdit.EDITBUTTON)
+         ]
     ];
     editor.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
     scrollToId("editor");
