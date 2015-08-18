@@ -363,13 +363,23 @@ Util = {
 
     //TODO: move onClick before classname since it's not optional?
     button : function(value, onClick, className, id) {
-        return Util.make("input", {
-            type : "button",
-            value : value,
-            className : className,
-            id : id,
-            onclick : onClick,
-        });
+        if (onClick) {
+            return Util.make("input", {
+                type : "button",
+                value : value,
+                className : className,
+                id : id,
+                onclick : onClick,
+            });            
+        } else {
+            return Util.make("input", {
+                type : "button",
+                value : value,
+                className : className,
+                id : id,
+                disabled: true,
+            });                        
+        }
     },
 
     file : function(accept, className, id) {
