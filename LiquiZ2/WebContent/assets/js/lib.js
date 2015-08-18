@@ -362,23 +362,14 @@ Util = {
     },
 
     button: function(value, onClick, className, id) {
-        if (onClick) {
             return Util.make("input", {
                 type: "button",
                 value: value,
                 className: className,
                 id: id,
                 onclick: onClick,
+                disabled: (onClick) ? false: true,
             });            
-        } else {
-            return Util.make("input", {
-                type: "button",
-                value: value,
-                className: className,
-                id: id,
-                disabled: true,
-            });                        
-        }
     },
 
     file: function(accept, className, id) {
