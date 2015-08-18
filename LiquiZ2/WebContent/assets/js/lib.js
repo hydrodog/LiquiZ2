@@ -25,9 +25,9 @@ function initPageLookup() {
 video = {};
 audio = {};
 mediaLocations = {
-    img : "assets/img/",
-    audio : "assets/audio/",
-    video : "assets/video/",
+    img: "assets/img/",
+    audio: "assets/audio/",
+    video: "assets/video/",
 };
 
 Util = {
@@ -71,7 +71,7 @@ Util = {
         return d;
     },
 
-    popupLocalStoreBrowser : function(dir) {
+    popupLocalStoreBrowser: function(dir) {
         dir = localStorage[dir];
         console.log('dir=' + dir);
         var files;
@@ -85,21 +85,21 @@ Util = {
         d.innerHTML = files;
     },
 
-    add : function(parent, children) {
+    add: function(parent, children) {
         var fragment = document.createDocumentFragment();
         for (var i = 0; i < children.length; i++)
             fragment.appendChild(children[i]);
         parent.appendChild(fragment);
     },
     
-    divadd : function(className) {
+    divadd: function(className) {
     var div = Util.div(className);
     for (var i = 1; i < arguments.length; i++)
             div.appendChild(arguments[i]);
         return div;
     },
     
-    goToId : function(id) {
+    goToId: function(id) {
         // if (typeof id === "undefined") {
         // id = window.location.hash.substr(1);
         // }
@@ -112,7 +112,7 @@ Util = {
      * arg is an object filled with key, value pairs Returns undefined if no
      * valid tag was passed.
      */
-    make : function(tag, obj) {
+    make: function(tag, obj) {
         // without a valid tag we can't continue
         if (typeof tag === "undefined" || !tag) {
             console.error("Util.make failed with tag: " + tag);
@@ -136,144 +136,144 @@ Util = {
      * and the id of the tag you want, in that order. Any cases that break this
      * rule will be noted explicitly.
      */
-    span : function(innerHTML, className, id) {
+    span: function(innerHTML, className, id) {
         return Util.make("span", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    div : function(className, id) {
+    div: function(className, id) {
         return Util.make("div", {
-            className : className,
-            id : id,
+            className: className,
+            id: id,
         });
     },
 
-    p : function(innerHTML, className, id) {
+    p: function(innerHTML, className, id) {
         return Util.make("p", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    a : function(href, innerHTML, className, id) {
+    a: function(href, innerHTML, className, id) {
         return Util.make("a", {
-            href : href,
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            href: href,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    h1 : function(innerHTML, className, id) {
+    h1: function(innerHTML, className, id) {
         return Util.make("h1", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    h2 : function(innerHTML, className, id) {
+    h2: function(innerHTML, className, id) {
         return Util.make("h2", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    h3 : function(innerHTML, className, id) {
+    h3: function(innerHTML, className, id) {
         return Util.make("h3", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    h4 : function(innerHTML, className, id) {
+    h4: function(innerHTML, className, id) {
         return Util.make("h4", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    h5 : function(innerHTML, className, id) {
+    h5: function(innerHTML, className, id) {
         return Util.make("h5", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    h6 : function(innerHTML, className, id) {
+    h6: function(innerHTML, className, id) {
         return Util.make("h6", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    strong : function(innerHTML, className, id) {
+    strong: function(innerHTML, className, id) {
         return Util.make("strong", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    em : function(innerHTML, className, id) {
+    em: function(innerHTML, className, id) {
         return Util.make("em", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    pre : function(innerHTML, className, id) {
+    pre: function(innerHTML, className, id) {
         return Util.make("pre", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
     /*
      * This function takes rows and cols as additional arguments
      */
-    textarea : function(innerHTML, className, id, rows, cols) {
+    textarea: function(innerHTML, className, id, rows, cols) {
         return Util.make("textarea", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
-            rows : rows,
-            cols : cols,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+            rows: rows,
+            cols: cols,
         });
     },
 
-    ul : function(innerHTML, className, id) {
+    ul: function(innerHTML, className, id) {
         return Util.make("ul", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    ol : function(innerHTML, className, id) {
+    ol: function(innerHTML, className, id) {
         return Util.make("ol", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    li : function(innerHTML, className, id) {
+    li: function(innerHTML, className, id) {
         return Util.make("li", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
@@ -281,18 +281,18 @@ Util = {
      * This function takes the src as its first argument instead of innerHTML
      * src is relative to the dir you defined in mediaLocations
      */
-    img : function(src, className, id) {
+    img: function(src, className, id) {
         return Util.make("img", {
-            src : mediaLocations.img + src,
-            className : className,
-            id : id,
+            src: mediaLocations.img + src,
+            className: className,
+            id: id,
         });
     },
 
     /*
      * Does not take any arguments
      */
-    br : function() {
+    br: function() {
         return Util.make("br");
     },
 
@@ -300,17 +300,17 @@ Util = {
      * Takes a src, class, id and a bool for controls. controls defaults to
      * true. src is relative to the dir you defined in mediaLocations
      */
-    video : function(src, controls, className, id, preload) {
-        controls = (typeof controls !== "undefined") ? controls : true;
-        preload = (typeof preload !== "undefined") ? preload : "metadata";
+    video: function(src, controls, className, id, preload) {
+        controls = (typeof controls !== "undefined") ? controls: true;
+        preload = (typeof preload !== "undefined") ? preload: "metadata";
         if (video[src]) {
             return video[src];
         }
         var result = Util.make("video", {
-            src : mediaLocations.video + src,
-            controls : controls,
-            className : className,
-            id : id,
+            src: mediaLocations.video + src,
+            controls: controls,
+            className: className,
+            id: id,
             preload: preload,
         });
         video[src] = result;
@@ -321,73 +321,72 @@ Util = {
      * Takes a src, class, id and a bool for controls. controls defaults to
      * true. src is relative to the dir you defined in mediaLocations
      */
-    audio : function(src, controls, className, id) {
-        controls = (typeof controls !== "undefined") ? controls : true;
+    audio: function(src, controls, className, id) {
+        controls = (typeof controls !== "undefined") ? controls: true;
         if (audio[src]) {
             return audio[src];
         }
         var result = Util.make("audio", {
-            src : mediaLocations.audio + src,
-            controls : controls,
-            className : className,
-            id : id,
+            src: mediaLocations.audio + src,
+            controls: controls,
+            className: className,
+            id: id,
         });
         audio[src] = result;
         return result;
     },
 
-    canvas : function(height, width) {
+    canvas: function(height, width) {
         return Util.make("canvas", {
-            height : height,
-            width : width,
+            height: height,
+            width: width,
         });
     },
 
-    form : function(innerHTML, className, id) {
+    form: function(innerHTML, className, id) {
         return Util.make("form", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    input : function(type, className, id, value, onkeypress) {
+    input: function(type, className, id, value, onkeypress) {
         return Util.make("input", {
-            type : type,
-            className : className,
-            id : id,
+            type: type,
+            className: className,
+            id: id,
             value: value,
             onkeypress: onkeypress,
         });
     },
 
-    //TODO: move onClick before classname since it's not optional?
-    button : function(value, onClick, className, id) {
+    button: function(value, onClick, className, id) {
         if (onClick) {
             return Util.make("input", {
-                type : "button",
-                value : value,
-                className : className,
-                id : id,
-                onclick : onClick,
+                type: "button",
+                value: value,
+                className: className,
+                id: id,
+                onclick: onClick,
             });            
         } else {
             return Util.make("input", {
-                type : "button",
-                value : value,
-                className : className,
-                id : id,
+                type: "button",
+                value: value,
+                className: className,
+                id: id,
                 disabled: true,
             });                        
         }
     },
 
-    file : function(accept, className, id) {
+    file: function(accept, className, id) {
         return Util.make("input", {
-            type : "file",
-            accept : accept,
-            className : className,
-            id : id,
+            type: "file",
+            accept: accept,
+            className: className,
+            id: id,
         });
     },
 
@@ -400,7 +399,7 @@ Util = {
         w.document.body.appendChild(file);
     });
     },
-    select : function(name, multiple, innerHTML, className, id) {
+    select: function(name, multiple, innerHTML, className, id) {
         if (innerHTML.constructor === Array) {
             var options = document.createDocumentFragment();
             for (var i = 0; i < innerHTML.length; i++) {
@@ -409,80 +408,80 @@ Util = {
             innerHTML = options;
         }
         return Util.make("select", {
-            name : name,
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
-            multiple : multiple,
+            name: name,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
+            multiple: multiple,
         });
     },
-    sel : function (innerHTML, className, id) {
+    sel: function (innerHTML, className, id) {
 	return Util.select(null, false, innerHTML, className, id);
     },
-    yesno : function(className, id, onChange) {
+    yesno: function(className, id, onChange) {
     var options = document.createDocumentFragment();
     options.appendChild(Util.option("F", "No"));
     options.appendChild(Util.option("T", "Yes"));
     return Util.make("select", {
-            className : className,
-            id : id,
+            className: className,
+            id: id,
         onChange: onChange,
         innerHTML: options
     });
     },
-    option : function(value, innerHTML, className, id) {
+    option: function(value, innerHTML, className, id) {
         return Util.make("option", {
-            value : value,
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            value: value,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    optgroup : function(label, innerHTML, className, id) {
+    optgroup: function(label, innerHTML, className, id) {
         return Util.make("optgroup", {
-            label : label,
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            label: label,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    radio : function(value, name, className, id) {
+    radio: function(value, name, className, id) {
         return Util.make("input", {
-            type : "radio",
-            value : value,
-            name : name,
-            className : className,
-            id : id,
+            type: "radio",
+            value: value,
+            name: name,
+            className: className,
+            id: id,
         });
     },
 
-    checkbox : function(value, name, className, id, checked) {
+    checkbox: function(value, name, className, id, checked) {
         return Util.make("input", {
-            type : "checkbox",
-            value : value,
-            name : name,
-            className : className,
-            id : id,
-            checked : checked,
+            type: "checkbox",
+            value: value,
+            name: name,
+            className: className,
+            id: id,
+            checked: checked,
         });
     },
 
-    label : function(htmlFor, innerHTML, className, id) {
+    label: function(htmlFor, innerHTML, className, id) {
         return Util.make("label", {
-            htmlFor : htmlFor,
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            htmlFor: htmlFor,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
-    code : function(innerHTML, className, id) {
+    code: function(innerHTML, className, id) {
         return Util.make("code", {
-            innerHTML : innerHTML,
-            className : className,
-            id : id,
+            innerHTML: innerHTML,
+            className: className,
+            id: id,
         });
     },
 
@@ -490,18 +489,18 @@ Util = {
      * Generic <tr> generator. For the use of Util.table(). You probably
      * shouldn't use this.
      */
-    tr : function(list, th) {
+    tr: function(list, th) {
         var tr = Util.make("tr");
         for (var i = 0; i < list.length; i++) {
             var tElement;
             if (th) {
                 tElement = Util.make("th", {
-                    scope : "col",
-                    innerHTML : list[i],
+                    scope: "col",
+                    innerHTML: list[i],
                 });
             } else {
                 tElement = Util.make("td", {
-                    innerHTML : list[i],
+                    innerHTML: list[i],
                 });
             }
             tr.appendChild(tElement);
@@ -519,11 +518,11 @@ Util = {
      * through the list. It lets you insert any arbitrary formatting to any tr
      * element based on whatever escape mechanism you choose.
      */
-    table : function(list, header, className, trFunction) {
-        header = (typeof header !== "undefined") ? header : false;
-        trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
+    table: function(list, header, className, trFunction) {
+        header = (typeof header !== "undefined") ? header: false;
+        trFunction = (typeof trFunction !== "undefined") ? trFunction: Util.tr;
         var result = Util.make("table", {
-            className : className,
+            className: className,
         });
 
         if (header) {
@@ -616,7 +615,7 @@ function post(url, payload, callback) {
  * or make a new one. Either way will work.
  */
 function Url(url_hash) {
-    url_hash = (typeof url_hash === "undefined") ? document.location.hash : url_hash;
+    url_hash = (typeof url_hash === "undefined") ? document.location.hash: url_hash;
 
     if (url_hash === "") {
         this.hash = "";
@@ -635,8 +634,8 @@ function Url(url_hash) {
     }
 
     this.hash = url_hash;
-    this.url = reMatch[1] ? reMatch[1] : "";
-    this.view = reMatch[2] ? reMatch[2] : "";
+    this.url = reMatch[1] ? reMatch[1]: "";
+    this.view = reMatch[2] ? reMatch[2]: "";
     this.params = this.parseParams(reMatch[3]);
     this.ajax = true;
 }
@@ -648,7 +647,7 @@ Url.prototype.copy = function() {
 };
 
 Url.prototype.load = function(ajax) {
-    this.ajax = (typeof(ajax) === "undefined") ? true : ajax;
+    this.ajax = (typeof(ajax) === "undefined") ? true: ajax;
 
     this.buildHash();
 
@@ -700,7 +699,7 @@ Url.prototype.buildHash = function() {
 };
 
 Url.prototype.addParam = function(key, value) {
-    value = (typeof value === "undefined") ? true : value;
+    value = (typeof value === "undefined") ? true: value;
     this.params[key] = value;
 };
 
@@ -719,7 +718,7 @@ Url.prototype.removeAllParams = function() {
 };
 
 Url.prototype.changeView = function(view) {
-    view = (typeof view === "undefined") ? "" : view;
+    view = (typeof view === "undefined") ? "": view;
     this.view = view;
 };
 
@@ -734,7 +733,7 @@ function scrollToId(id) { //TODO: Fix Jquery madness below
     if (offset > window.innerHeight) {
     // Not in view so scroll to it
     $('html,body').animate({
-        scrollTop : offset
+        scrollTop: offset
     }, 1000);
     return false;
     }
