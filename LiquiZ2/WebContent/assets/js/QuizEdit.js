@@ -70,14 +70,13 @@ QuizEdit.prototype.cancel = function() {
 QuizEdit.prototype.addFields = function(cbFunc) {
     this.cbFunc = cbFunc;
     this.varEdit.innerHTML = ""; // clear all the options before adding the new ones
+    this.varEdit.innerHTML = "foo!";
     for (var i = 1; i < arguments.length; i++) {
 	if (typeof(arguments[i]) === 'string')
 	    this.varEdit.appendChild(document.createTextNode(arguments[i]));
 	else
     	    this.varEdit.appendChild(arguments[i]);
     }
-    this.varEdit.appendChild(Util.button("Add Question", this.addQuestion()));
-    this.varEdit.appendChild(Util.button("Add Question", this.addSubQuestion()));
 }
 
 QuizEdit.prototype.buildFillin = function() {
@@ -245,15 +244,15 @@ QuizEdit.prototype.editSurvey = function() {
     this.editMC(this.buildSurvey);
 }
 
-QuizEdit.prototype.buildCloze = function(){
+QuizEdit.prototype.buildCLOZE = function(){
     return [
 	['cloze', --QuizEdit.newid, this.text],
     ];
 }
 
-QuizEdit.prototype.editCloze = function() {
+QuizEdit.prototype.editCLOZE = function() {
     var ta;
-    this.addFields(this.buildCloze,
+    this.addFields(this.buildCLOZE,
 		   ta = Util.textarea(null, "cloze", "x", this.textAreaRows, this.textAreaCols),
 		   Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
 		   Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80),
@@ -356,16 +355,16 @@ QuizEdit.prototype.editQuestion = function() {
     page.questions.push(this.q);
     page.refreshQuestions();
 
-    this.editor = Util.div("editor", "editor");
+    var e = this.editor = Util.div("editor", "editor");
     this.body.appendChild(this.editor);
-    this.editor.appendChild(Util.h1("Question Editor"));
+    e.appendChild(Util.h1("Question Editor"));
     
     var meta = [
 	["Title", this.inputBlur("text", "title")],
 	["Level:", this.inputBlur("number", "level")],
 	["Points:", this.inputBlur("number", "points")],
     ];
-    this.editor.appendChild(Util.table(meta));
+    e.appendChild(Util.table(meta));
     var list = [	
 	["Question Text:", this.textBox = Util.textarea(null, "textArea", "blankbox", 5, 60),
 	 Util.divadd(null, Util.h2("Insert"),
@@ -375,14 +374,13 @@ QuizEdit.prototype.editQuestion = function() {
 		     Util.button("Text2Equation"))//TODO: need equation feature
 	]
     ];
-    this.editor.appendChild(Util.table(list));
-    this.editor.appendChild( Util.table( [
+    e.appendChild(Util.table(list));
+    e.appendChild( Util.table( [
 	[ Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
 	  Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
 	  Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
 	]
     ] ));
-
     var ins = [
 	[ this.editButton("Equation", null),
 	  this.editButton("Rnd Int", null),
@@ -397,16 +395,16 @@ QuizEdit.prototype.editQuestion = function() {
 	[
 	  this.editButton("Survey", this.editSurvey),
 	  this.editButton("Fillin", this.editFillin),
-	  this.editButton("Number", this.editFillin),
-	  this.editButton("Regex", this.editFillin),
-	  this.editButton("Formula", this.editFillin)
+	  this.editButton("Number", this.editNumber),
+	  this.editButton("Regex", this.editRegex),
+	  this.editButton("Formula", this.editFormula)
          ],
 	[
-	  this.editButton("Equation", this.editSurvey),
-	  this.editButton("Essay", this.editFillin),
-	  this.editButton("Code", this.editFillin),
-	  this.editButton("Matrix", this.editFillin),
-	  this.editButton("CLOZE", this.editFillin)
+	  this.editButton("Equation", null),
+	  this.editButton("Essay", this.editEssay),
+	  this.editButton("Code", this.editCode),
+	  this.editButton("Matrix", this.editMatrix),
+	  this.editButton("CLOZE", this.editCLOZE)
          ],
 	[
 	  this.editButton("ImgClick", null),
@@ -416,7 +414,9 @@ QuizEdit.prototype.editQuestion = function() {
 	  this.editButton("", null)
          ]
     ];
-    this.editor.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
+    e.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
+    e.appendChild(Util.button("Add Question", this.addQuestion()));
+    e.appendChild(Util.button("Add SubQuestion", this.addSubQuestion());
     this.varEdit = Util.div(QuizEdit.EDITCTRL, "varEdit");
     scrollToId("editor");
 }
