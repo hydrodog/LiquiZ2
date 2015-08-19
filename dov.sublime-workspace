@@ -1,0 +1,424 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"j",
+				"j"
+			],
+			[
+				"create",
+				"createDocumentFragment"
+			],
+			[
+				"refresh",
+				"refreshQuestions"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "LiquiZ2/WebContent/assets/js/QuizEdit.js",
+			"settings":
+			{
+				"buffer_size": 17566,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "LiquiZ2/WebContent/assets/css/demostyle.css",
+			"settings":
+			{
+				"buffer_size": 4303,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "LiquiZ2/WebContent/assets/js/lib.js",
+			"settings":
+			{
+				"buffer_size": 24264,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "LiquiZ2/WebContent/assets/js/Quiz.js",
+			"settings":
+			{
+				"buffer_size": 17094,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/Java/JavaC.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Java/Ant.sublime-build",
+					""
+				],
+				[
+					"Packages/Java/JavaC.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/Java/JavaC.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 231.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 830.0
+	},
+	"console":
+	{
+		"height": 222.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/dkruger/git/LiquiZ2"
+	],
+	"file_history":
+	[
+		"/home/dkruger/git/dov/java/A.java",
+		"/home/dkruger/git/LiquiZ2/dov.sublime-project",
+		"/home/dkruger/git/LiquiZ2/LiquiZ2/output/quizList.js",
+		"/home/dkruger/git/LiquiZ2/LiquiZ2/WebContent/assets/js/QuizList.js"
+	],
+	"find":
+	{
+		"height": 55.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"this.q.answer.",
+			"table",
+			" \n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "LiquiZ2/WebContent/assets/js/QuizEdit.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17566,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4526,
+								4526
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3772.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "LiquiZ2/WebContent/assets/css/demostyle.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4303,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4283,
+								4283
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7224.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "LiquiZ2/WebContent/assets/js/lib.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 24264,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14324,
+								14324
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 13432.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "LiquiZ2/WebContent/assets/js/Quiz.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17094,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10984,
+								10984
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9968.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 0,
+					"file": "LiquiZ2/WebContent/assets/js/QuizEdit.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17566,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12726,
+								12726
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9870.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 36.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 180.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "dov.sublime-project",
+	"replace":
+	{
+		"height": 68.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"demost",
+				"LiquiZ2/WebContent/assets/css/demostyle.css"
+			],
+			[
+				"quizedit",
+				"LiquiZ2/WebContent/assets/js/QuizEdit.js"
+			],
+			[
+				"quizl",
+				"LiquiZ2/WebContent/assets/js/QuizList.js"
+			],
+			[
+				"quizlist",
+				"LiquiZ2/output/quizList.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 1,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 263.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
