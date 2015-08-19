@@ -203,7 +203,7 @@ QuizEdit.prototype.editMC = function(questionType) {
       numberBox = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
       Util.button("Add Option", addOption, QuizEdit.EDITBUTTON),
       Util.span("Name"),
-      stdChoice = Util.input("text", 'editInput', 'stdChoice'),
+      this.stdChoice = Util.input("text", 'editInput', 'stdChoice'),
       Util.button("Create Standard Choice", createStdChoice)
      ));
 
@@ -380,13 +380,17 @@ QuizEdit.prototype.editQuestion = function() {
 		     Util.button("Text2Equation"))//TODO: need equation feature
 	]
     ];
+    var image, audio, video;
     e.appendChild(Util.table(list));
     e.appendChild( Util.table( [
-	[ Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
-	  Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
-	  Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
+	[ image = Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
+	  audio = Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
+	  video = Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
 	]
     ] ));
+    image.onchange = function() {
+	console.log('img');
+    }
     var ins = [
 	[ this.editButton("Equation", null),
 	  this.editButton("Rnd Int", null),
