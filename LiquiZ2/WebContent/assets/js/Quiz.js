@@ -367,13 +367,35 @@ Quiz.prototype.mcRadioTextVert = function(id, txt) {
 /*
  * Build horizontal radio boxes for multiple choice
  */
-Quiz.prototype.mcRadioTextHoriz = function(id, txt) {
-    var list = [];
-    for (var i = 0; i < txt.length; i++) {
-	list.push(Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i));
-	list.push(Util.label(id + "-" + i, Util.span(txt[i])));
+Quiz.prototype.mcRadioTextHoriz = function(id, choices) {
+    var list = [ [],[] ];
+    for (var i = 0; i < choices.length; i++) {
+        list[0].push(Util.label(id + "-" + i, Util.span(choices[i])));
     }
-    return Util.divadd(list);
+    for (var i = 0; i < choices.length; i++) {
+        list[1].push(Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i));
+    }
+
+    return Util.table(list, false);
+}
+
+/*
+ * Build a survey sharing labels with horizontal radio boxes
+ */
+Quiz.prototype.mcSurvey = function(id, questions, choices) {
+    var head = choices;
+    head.unshift();
+    head[0] = "";
+    var list = [ head ];
+    for (var j = 1; j < questions.length; j++) {
+        var row = [questions[j]];
+        for (var i = 0; i < choices.length; i++) {
+            row.push(Util.radio(i, id + "-" + j, 'multichoiceradio', id + "-" + j + "-" + i));
+        }
+        list.push(row);
+    }
+
+    return Util.table(list, true, "survey");
 }
 
 /*

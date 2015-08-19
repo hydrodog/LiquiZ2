@@ -78,7 +78,7 @@ QuizEdit.prototype.addFields = function(cbFunc) {
 }
 
 QuizEdit.prototype.buildFillin = function() {
-    this.q.answer.push([this.ans.value]);
+    this.q.answers.push([this.ans.value]);
     return [
         ['fillin', --QuizEdit.newid],
     ];
@@ -92,7 +92,7 @@ QuizEdit.prototype.editFillin = function() {
 };
 
 QuizEdit.prototype.buildNumber = function() {
-    this.q.answer.push([this.min.value, this.max.value]);
+    this.q.answers.push([this.min.value, this.max.value]);
     return [
     ['numeric', QuizEdit.newid]
     ];
@@ -134,27 +134,39 @@ QuizEdit.prototype.editCode = function() {
     );
 }
 
+QuizEdit.prototype.buildMC = function() {
+    var rows = this.ansTable.rows;
+    var answers = new Array(rows.length-1);
+    var correct = new Array(rows.length-1);
+    for (var i = 1; i < rows.length; i++) {
+        answers[i-1] = rows[i].cells[0].children[0].value
+        correct[i-1] = rows[i].cells[1].children[0].checked;
+    }
+    this.q.answers.push([answers,correct]);
+    return answers;
+}
+
 QuizEdit.prototype.buildMCDropdown = function() {
     return [
-    ['selectText', --QuizEdit.newid, this.mcans]
+    ['selectText', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildMCRadioTextVert = function() {
     return [
-    ['mcRadioTextVert', --QuizEdit.newid, this.mcans]
+    ['mcRadioTextVert', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildMCRadioTextHoriz = function() {
     return [
-    ['mcRadioTextHoriz', --QuizEdit.newid, this.mcans]
+        ['mcRadioTextHoriz', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildMAnswer = function() {
     return [
-    ['multiAnswer', --QuizEdit.newid, this.mcans]
+    ['multiAnswer', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
@@ -163,7 +175,7 @@ QuizEdit.prototype.deleteAnswer = function() {
 }
 
 QuizEdit.prototype.addOption = function(row) {
-    var r = ansTable.insertRow();
+    var r = this.ansTable.insertRow();
     var td = r.insertCell();
     td.innerHTML = row;
     td = r.insertCell();
@@ -175,19 +187,19 @@ QuizEdit.prototype.addStdChoice = function(stdChoice) {
     stdChoice.style.background="#fff";
     var name = stdChoice.value;
     if (name === '') {
-    stdChoice.style.background="#f00";
-    return; //TODO: alert? need a name for a standard choice
+        stdChoice.style.background="#f00";
+        return; //TODO: alert? need a name for a standard choice
     }
     console.log(this);
     var answers = [];
     for (var i = 0; i < ansTable.rows; i++) {
-    answers.push(document.getElementById("a"+i));
+        answers.push(document.getElementById("a"+i));
     }
     Quiz.stdChoice[name] = answers;
 }
 
 QuizEdit.prototype.editMC = function(questionType) {
-    var numberBox, ansTable, stdChoice;
+    var numberBox, stdChoice;
     var addOption = function() {
     var count = numberBox.value;
     var row = ansTable.rows.length-1;
@@ -211,9 +223,9 @@ QuizEdit.prototype.editMC = function(questionType) {
            Util.checkbox(null, "check"+row, "editCB", "check"+row),
            this.editButton("delete", this.deleteAnswer)]);
     }
-    ansTable = Util.table(list, true, QuizEdit.ANSWERS);
+    this.ansTable = Util.table(list, true, QuizEdit.ANSWERS);
 
-    this.addFields(questionType, div, ansTable);
+    this.addFields(questionType, div, this.ansTable);
     this.answers = [];
 }
 
@@ -226,7 +238,7 @@ QuizEdit.prototype.editMultiChoiceRadioVert = function() {
 }
 
 QuizEdit.prototype.editMultiChoiceRadioHoriz = function() {
-    this.editMC(this.buildMCRadioTextVert);
+    this.editMC(this.buildMCRadioTextHoriz);
 }
 
 QuizEdit.prototype.editMultiAnswer = function() {
@@ -358,7 +370,7 @@ QuizEdit.prototype.editQuestion = function() {
         level: 1,
         points: 1,
         content:[],
-        answer: []
+        answers: []
     };
     page.questions.push(this.q);
     page.refreshQuestions();
