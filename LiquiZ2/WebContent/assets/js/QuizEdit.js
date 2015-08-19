@@ -81,7 +81,7 @@ QuizEdit.prototype.addFields = function(cbFunc) {
 
 QuizEdit.prototype.buildFillin = function() {
     return [
-            ['fillin', newid],
+        ['fillin', --QuizEdit.newid],
     ];
 };
 
@@ -296,27 +296,33 @@ QuizEdit.prototype.editRegex = function() {
  		   Util.span("Cannot match:"), this.cannotMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40))
 };
 
-//Complete list of every question type supported by editQuestion
-QuizEdit.questionTypes = [
-    "-Choose QuestionType-",
-    "MultiChoiceDropdown", "MultiChoiceRadioVert", "MultiChoiceRadioHoriz", "MultiAnswer", "Matching", "Survey", 
-    "Fillin", "Number", "Regex", "Formula", "Equation",
-    "Essay", "Code", "Matrix", "Cloze", "ImgClick",
-    "Graph", "Diagram"
-];
-
-QuizEdit.random = [
-    "-Random Element-",
-    "Integer", "Decimal", "String", "Name"
-];
-
-// Support adding images, audio and video into a question.  Any additional multimedia controls belong here
-QuizEdit.prototype.insertMultimedia = function() {
+QuizEdit.prototype.editRandInt = function() {
+    this.addFields(this.buildRandInt, Util.table ( [
+	[ Util.span("min="), this.min = Util.input("number", QuizEdit.EDITCTRL, "min"),
+ 	  Util.span("step="), this.step = Util.input("number", QuizEdit.EDITCTRL, "step"),
+ 	  Util.span("max="), this.max = Util.input("number", QuizEdit.EDITCTRL, "max")]
+    ]));    
 }
+
 
 QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
 QuizEdit.videoFileTypes = "mpg,mpeg,mp4";
+
+QuizEdit.prototype.buildImage = function() {
+    return [
+        ['image', this.src, this.x, this.y, this.w, this.h]
+    ];
+};
+
+QuizEdit.prototype.editImage = function() {
+    this.addFields(this.buildImage, Util.table ( [
+	[ Util.span("x="), this.x = Util.input("number", QuizEdit.EDITCTRL, "x"),
+ 	  Util.span("y="), this.y = Util.input("number", QuizEdit.EDITCTRL, "y") ],
+ 	[ Util.span("w="), this.w = Util.input("number", QuizEdit.EDITCTRL, "w"),
+	  Util.span("h="), this.h = Util.input("number", QuizEdit.EDITCTRL, "h") ]
+    ]));
+}
 
 QuizEdit.prototype.inputBlur = function(type, val) {
     var t = this;
@@ -397,7 +403,7 @@ QuizEdit.prototype.editQuestion = function() {
 	  this.editButton("Fillin", this.editFillin),
 	  this.editButton("Number", this.editNumber),
 	  this.editButton("Regex", this.editRegex),
-	  this.editButton("Formula", this.editFormula)
+	  this.editButton("Formula", null)
          ],
 	[
 	  this.editButton("Equation", null),
@@ -416,7 +422,7 @@ QuizEdit.prototype.editQuestion = function() {
     ];
     e.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
     e.appendChild(Util.button("Add Question", this.addQuestion()));
-    e.appendChild(Util.button("Add SubQuestion", this.addSubQuestion());
+    e.appendChild(Util.button("Add SubQuestion", this.addSubQuestion()));
     this.varEdit = Util.div(QuizEdit.EDITCTRL, "varEdit");
     scrollToId("editor");
 }

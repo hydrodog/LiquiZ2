@@ -523,20 +523,28 @@ Quiz.prototype.fileUpload = function(id, accept) {
 	return up;
 };
 
-function imgClick(e) {
+Quiz.imgClick = function(e) {
     // getBoundingClientRect()
     var boundRect = e.target.getBoundingClientRect();
-    // console.log(boundRect);
-    // console.log(e);
-	console.log((e.clientX - boundRect.x).toFixed(0) + ", " + (e.clientY - boundRect.y).toFixed(0));
+    console.log((e.clientX - boundRect.x).toFixed(0) + ", " + (e.clientY - boundRect.y).toFixed(0));
 };
 
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
-	var img = document.createElement("img");
-	img.src = mediaLocations.img + src;
-	img.onclick = imgClick;
-	return img;
+    var img = document.createElement("img");
+    img.src = mediaLocations.img + src;
+    img.onclick = Quiz.imgClick;
+    return img;
 };
+
+Quiz.prototype.image = function(src, x, y, w, h) {
+    var img = document.createElement("img");
+    img.src = mediaLocations.img + src;
+    img.style.left = x;
+    img.style.top = y;
+    img.width = w;
+    img.height = h;
+    return img;
+}
 
 Quiz.prototype.cloze = function (id, txt) {
     var patt1 = /\[\[.*?\]\]/g;  // when using the shortest match, give a ? mark. 
