@@ -283,3 +283,8 @@ input[disabled] {
     background-color: #a22;
     color: white;
 }
+
+.answers {
+    background: #8dd;
+    width: 300px;
+}
