@@ -13,7 +13,11 @@ function QuizEdit() {
     this.body = document.getElementById("container");
 }
 
-QuizEdit.CTRL = "editctrl";
+QuizEdit.EDITCTRL = "editctrl";
+QuizEdit.INT = "editint";
+QuizEdit.DOUBLE = "editdouble";
+QuizEdit.NAME = "editname";
+
 QuizEdit.BUTTON = "editbutton";
 QuizEdit.ANSWERS = "answers";
 
@@ -285,13 +289,17 @@ QuizEdit.prototype.buildMatrix = function() {
 
 QuizEdit.prototype.editMatrix = function() {
     this.addFields(this.buildMatrix,
-           Util.span("Rows: "), this.matrixRows = Util.input("number", QuizEdit.EDITCTRL, "rows"),
-           Util.span("Cols: "), this.matrixCols = Util.input("number", QuizEdit.EDITCTRL, "cols")
+           Util.span("Rows: "), this.matrixRows = Util.input("number", QuizEdit.INT, "rows"),
+           Util.span("Cols: "), this.matrixCols = Util.input("number", QuizEdit.INT, "cols")
         //   this.ans = //TODO: add a matrix to fill in the values
     );
 };
 
 QuizEdit.prototype.buildRegex = function() {
+    this.q.regexName = this.regexName.value;
+    this.q.regex = this.regex.value;
+    this.q.mustMatch = this.mustMatch.value;
+    this.q.cannotWatch = this.cannotMatch.value
     return [
             ['regex', --QuizEdit.newid],
     ];
@@ -299,17 +307,19 @@ QuizEdit.prototype.buildRegex = function() {
 
 QuizEdit.prototype.editRegex = function() {
     this.addFields(this.buildRegex,
-           Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
-           Util.span("Regex Pattern: "), Util.input("text", QuizEdit.EDITCTRL, "regex"),
-           Util.span("Must match:"), this.mustMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40),
-           Util.span("Cannot match:"), this.cannotMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40))
+        Util.table([
+           [Util.span("Regex Name: "), this.regexName = Util.input("text", QuizEdit.EDITCTRL, "regexName")],
+           [Util.span("Regex Pattern: "), this.regex = Util.input("text", QuizEdit.EDITCTRL, "regex")],
+           [Util.span("Must match:"), this.mustMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40)],
+           [Util.span("Cannot match:"), this.cannotMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40)]
+        ]));
 };
 
 QuizEdit.prototype.editRandInt = function() {
     this.addFields(this.buildRandInt, Util.table ( [
-    [ Util.span("min="), this.min = Util.input("number", QuizEdit.EDITCTRL, "min"),
-      Util.span("step="), this.step = Util.input("number", QuizEdit.EDITCTRL, "step"),
-      Util.span("max="), this.max = Util.input("number", QuizEdit.EDITCTRL, "max")]
+    [ Util.span("min="), this.min = Util.input("number", QuizEdit.DOUBLE, "min"),
+      Util.span("step="), this.step = Util.input("number", QuizEdit.DOUBLE, "step"),
+      Util.span("max="), this.max = Util.input("number", QuizEdit.DOUBLE, "max")]
     ]));    
 }
 
@@ -326,10 +336,10 @@ QuizEdit.prototype.buildImage = function() {
 
 QuizEdit.prototype.editImage = function() {
     this.addFields(this.buildImage, Util.table ( [
-    [ Util.span("x="), this.x = Util.input("number", QuizEdit.EDITCTRL, "x"),
-      Util.span("y="), this.y = Util.input("number", QuizEdit.EDITCTRL, "y") ],
-    [ Util.span("w="), this.w = Util.input("number", QuizEdit.EDITCTRL, "w"),
-      Util.span("h="), this.h = Util.input("number", QuizEdit.EDITCTRL, "h") ]
+    [ Util.span("x="), this.x = Util.input("number", QuizEdit.INT, "x"),
+      Util.span("y="), this.y = Util.input("number", QuizEdit.INT, "y") ],
+    [ Util.span("w="), this.w = Util.input("number", QuizEdit.INT, "w"),
+      Util.span("h="), this.h = Util.input("number", QuizEdit.INT, "h") ]
     ]));
 }
 

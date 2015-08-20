@@ -288,3 +288,18 @@ input[disabled] {
     background: #8d;d
     width: 300px;
 }
+
+.editctrl {
+    background: #bc4;
+}
+
+.editint {
+    background: #00f;
+    size: 4;
+    width:50px;
+}
+.editdouble {
+    background: #00f;
+    size: 6;
+    width:75px;
+}
