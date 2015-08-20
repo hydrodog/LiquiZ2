@@ -24,8 +24,7 @@ QuizEdit.TEXTAREA = "editTA";
 QuizEdit.REGEX = "editPattern";
 
 QuizEdit.prototype.editButton = function(label, method) {
-    var b = Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
-    return b;
+    return Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
 }
 
 QuizEdit.prototype.textArea = function(id, rows, cols) {
@@ -41,13 +40,6 @@ QuizEdit.prototype.addDispButton = function(title, funcName) {
 
 QuizEdit.prototype.openBracket = "[[";
 QuizEdit.prototype.closeBracket = "]]";
-
-QuizEdit.prototype.addBrackets = function(ta, selStart, selEnd) {
-    var v = ta.value;
-    ta.value = v.substring(0, selStart) + ' ' + this.openBracket +
-    v.substring(selStart, selEnd)
-    + this.closeBracket + ' ' + v.substring(selEnd);
-}
 
 //TODO: Remove dependence on JQuery
 QuizEdit.prototype.currentEdit;
@@ -281,21 +273,29 @@ QuizEdit.prototype.buildCLOZE = function(){
     ];
 }
 
+QuizEdit.prototype.addBrackets = function() {
+    var ta = this.CLOZE;
+    var v = ta.value;
+    ta.value = v.substring(0, this.selStart) + ' ' + this.openBracket +
+    v.substring(this.selStart, this.selEnd)
+    + this.closeBracket + ' ' + v.substring(this.selEnd);
+}
+
 QuizEdit.prototype.editCLOZE = function() {
+    var t = this;
     this.addFields(this.buildCLOZE,
         Util.table([
-           [Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
-           Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80)],
-           [Util.button("SquareBracket It!", function(){ addBrackets(this.CLOZE, selStart, selEnd) } )]
+           [Util.span("Rows:"), this.textAreaRows = Util.input("number", QuizEdit.INT, null, 10),
+           Util.span("Cols:"), this.textAreaCols = Util.input("number", QuizEdit.INT, null, 80)],
+           [this.editButton("SquareBracket It!", this.addBrackets)]
         ]), this.CLOZE = Util.textarea(null, "code cloze", "cloze", this.textAreaRows.value, this.textAreaCols.value));
-    var selStart, selEnd;
-//    var exampleClozeTest = 'public class A {\n [[]]  public [[]] '+
-//  'void main(strings [] args) {\n  System.println.out("hello");\n  }\n}';
     
-    this.CLOZE.onmouseup = function(){ selStart = ta.selectionStart; 
-                   selEnd = thisCLOZE.selectionEnd; 
-                   console.log(this.CLOZE.selectionStart + "," + this.CLOZE.selectionEnd); }
-    this.CLOZE.ondblclick = function(){this.addBrackets(this.CLOZE, selStart, selEnd)};
+    this.CLOZE.onmouseup = function(){
+        t.selStart = t.CLOZE.selectionStart; 
+        t.selEnd = t.CLOZE.selectionEnd; 
+        console.log(t.selStart + "," + t.selEnd);
+    };
+    this.CLOZE.ondblclick = function(){ t.addBrackets(); };
 }
 
 QuizEdit.prototype.buildMatrix = function() {
