@@ -9,8 +9,9 @@
 
 QuizEdit.newid = 0;
 
-function QuizEdit() {
-    this.body = document.getElementById("container");
+function QuizEdit(qnum) {
+    qnum = qnum ? "edit-qc" + qnum : "edit-" + page.questions[page.questions.length-1].id
+    this.container = document.getElementById(qnum);
 }
 
 QuizEdit.EDITCTRL = "editctrl";
@@ -34,7 +35,9 @@ QuizEdit.prototype.textArea = function(id, rows, cols) {
 QuizEdit.prototype.addDispButton = function(title, funcName) {
     var t = this;
     return Util.button(title, function() {
-    t.q.content.push([funcName, t.textBox.value])
+        t.q.content.push([funcName, t.textBox.value]);
+        page.partialRefresh();
+        scrollToId("editor");
     });
 }
 
@@ -54,11 +57,12 @@ QuizEdit.prototype.completeEdit = function(array) {
     this.update();
     for (var i = 0; i < array.length; i++)
         this.q.content.push(array[i]);
-    $("#editor").remove(); // remove from window
+
+    //$("#editor").remove(); // remove from window
 //    $("#qC").remove();
 //    var array = buildFunc(); //.apply(this||window, Array.prototype.slice.call(arguments, 1));
+    page.end();
     page.partialRefresh();
-    url.load(false); //TODO: get rid of this once page refresh works
     scrollToId('qc' + Quiz.newid);
 }
 
@@ -379,7 +383,7 @@ QuizEdit.prototype.addEditButtons = function () {
 QuizEdit.prototype.editQuestion = function() {
 //    var submitbar = document.getElementById("submitDiv-2");
 //    submitbar.parent.removeChild(submitbar);
-    $("#submitDiv-2").remove();
+    //$("#submitDiv-2").remove();
     this.q = {
         id: --QuizEdit.newid,
         title: "",
@@ -392,7 +396,7 @@ QuizEdit.prototype.editQuestion = function() {
     page.partialRefresh();
 
     var e = this.editor = Util.div("editor", "editor");
-    this.body.appendChild(this.editor);
+    this.container.appendChild(this.editor);
     e.appendChild(Util.h1("Question Editor"));
     
     var meta = [
@@ -466,14 +470,14 @@ QuizEdit.prototype.editQuestion = function() {
 * Edit and store the policies governing a quiz, ie how it may be taken, when to display answers, etc.
 */
 function Policy() {
-    this.body = document.getElementById("container");
-    this.body.className = "quizEditor";
+    this.container = document.getElementById("container");
+    this.container.className = "quizEditor";
 }
 
 Policy.names = ["homework1x", "homework4x", "midtermreview"];
 Policy.prototype.edit = function() {
     var policy = Util.div("policy", "policy");
-    this.body.appendChild(policy);
+    this.container.appendChild(policy);
 
     policy.appendChild(
     Util.table([
@@ -511,13 +515,13 @@ Policy.prototype.edit = function() {
  * Edit and store the parameters of an assignment, including due dates
  */
 function Assignment() {
-    this.body = document.getElementById("container"); //TODO: figure out a strategy to eliminate this commmon logic between Assignment, Policy, QuizEdit, etc.
-    this.body.className = "quizEditor";
+    this.container = document.getElementById("container"); //TODO: figure out a strategy to eliminate this commmon logic between Assignment, Policy, QuizEdit, etc.
+    this.container.className = "quizEditor";
 }
 
 Assignment.prototype.edit = function() {
     var assign = Util.div("assign", "assign");
-    this.body.appendChild(assign);
+    this.container.appendChild(assign);
 
     assign.appendChild(
     Util.table([
