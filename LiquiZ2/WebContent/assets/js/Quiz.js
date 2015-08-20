@@ -69,6 +69,14 @@ Quiz.prototype.isNotCollapsed = function(i) {
     return (this.params.not[i+1]) ? true : false;
 };
 
+Quiz.prototype.editBox = function(id) {
+    return Util.div("editBox", "edit-qc"+id);
+};
+
+Quiz.prototype.refreshQuestion = function(q) {
+    
+};
+
 Quiz.prototype.partialRefresh = function() {
     this.processParams();
     if (url.view === "collapsed")
