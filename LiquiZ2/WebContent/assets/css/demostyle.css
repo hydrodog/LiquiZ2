@@ -93,6 +93,10 @@ h2 {
     width: 100px;
 }
 
+.varEdit {
+    
+}
+
 .multichoicedropdown {
 
 
@@ -218,16 +222,16 @@ img {
 }
 */
 #menu input {
-	width: 120px;
+	width: 100px;
 }
 
 #login {
-	width: 100px;
-	background: #0B5;
+	width: 60px;
+	background: #0b5;
 	foreground: #fff;
 	font-family: Arial;
 	font-weight: bold;
-	border-radius: 5px;
+	border-radius: 8px;
 }
 /*.hvr-float {
   display: inline-block;
@@ -288,3 +292,10 @@ input[disabled] {
     background: #8d;d
     width: 300px;
 }
+
+input.editpattern {
+    width: 100%;
+    size: 60;
+    background: #f00;
+}
+

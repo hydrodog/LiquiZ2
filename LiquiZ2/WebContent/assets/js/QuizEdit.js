@@ -16,6 +16,24 @@ function QuizEdit() {
 QuizEdit.CTRL = "editctrl";
 QuizEdit.BUTTON = "editbutton";
 QuizEdit.ANSWERS = "answers";
+QuizEdit.TEXTAREA = "editTA";
+QuizEdit.REGEX = "editPattern";
+
+QuizEdit.prototype.editButton = function(label, method) {
+    var b = Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
+    return b;
+}
+
+QuizEdit.prototype.textArea = function(id, rows, cols) {
+    return Util.textarea(null, QuizEdit.TEXTAREA, id, rows, cols);
+}
+
+QuizEdit.prototype.addDispButton = function(title, funcName) {
+    var t = this;
+    return Util.button(title, function() {
+    t.q.content.push([funcName, t.textBox.value])
+    });
+}
 
 QuizEdit.prototype.openBracket = "[[";
 QuizEdit.prototype.closeBracket = "]]";
@@ -255,26 +273,25 @@ QuizEdit.prototype.editSurvey = function() {
 
 QuizEdit.prototype.buildCLOZE = function(){
     return [
-    ['cloze', --QuizEdit.newid, this.text],
+        ['cloze', --QuizEdit.newid, this.CLOZE.value],
     ];
 }
 
 QuizEdit.prototype.editCLOZE = function() {
-    var ta;
     this.addFields(this.buildCLOZE,
-           ta = Util.textarea(null, "cloze", "x", this.textAreaRows, this.textAreaCols),
-           Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
-           Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80),
-           Util.button("SquareBracket It!", function(){addBrackets(ta, selStart, selEnd) } )
-          );
+        Util.table([
+           [Util.span("Rows:"), this.textAreaRows = Util.input("number", "rows", null, 10),
+           Util.span("Cols:"), this.textAreaCols = Util.input("number", "cols", null, 80)],
+           [Util.button("SquareBracket It!", function(){ addBrackets(this.CLOZE, selStart, selEnd) } )]
+        ]), this.CLOZE = Util.textarea(null, "code cloze", "cloze", this.textAreaRows.value, this.textAreaCols.value));
     var selStart, selEnd;
 //    var exampleClozeTest = 'public class A {\n [[]]  public [[]] '+
 //  'void main(strings [] args) {\n  System.println.out("hello");\n  }\n}';
     
-    ta.onmouseup = function(){ selStart = ta.selectionStart; 
-                   selEnd = ta.selectionEnd; 
-                   console.log(ta.selectionStart + "," + ta.selectionEnd); }
-    ta.ondblclick = function(){this.addBrackets(ta, selStart, selEnd)};
+    this.CLOZE.onmouseup = function(){ selStart = ta.selectionStart; 
+                   selEnd = thisCLOZE.selectionEnd; 
+                   console.log(this.CLOZE.selectionStart + "," + this.CLOZE.selectionEnd); }
+    this.CLOZE.ondblclick = function(){this.addBrackets(this.CLOZE, selStart, selEnd)};
 }
 
 QuizEdit.prototype.buildMatrix = function() {
@@ -299,10 +316,12 @@ QuizEdit.prototype.buildRegex = function() {
 
 QuizEdit.prototype.editRegex = function() {
     this.addFields(this.buildRegex,
-           Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
-           Util.span("Regex Pattern: "), Util.input("text", QuizEdit.EDITCTRL, "regex"),
-           Util.span("Must match:"), this.mustMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40),
-           Util.span("Cannot match:"), this.cannotMatch = Util.textarea(null, QuizEdit.EDITCTRL, null, 10, 40))
+        Util.table([
+            [Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName")],
+            ["Pattern:", Util.input("text", QuizEdit.REGEX, "regex")],
+            [Util.span("Must match:"), this.mustMatch = this.textArea(null, 10, 40)],
+            [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
+        ]));
 };
 
 QuizEdit.prototype.editRandInt = function() {
@@ -343,17 +362,6 @@ QuizEdit.prototype.inputBlur = function(type, val) {
     return v;
 }
 
-QuizEdit.prototype.editButton = function(label, method) {
-    var b = Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
-    return b;
-}
-
-QuizEdit.prototype.addDispButton = function(title, funcName) {
-    var t = this;
-    return Util.button(title, function() {
-    t.q.content.push([funcName, t.textBox.value])
-    });
-}
 
 
 QuizEdit.prototype.addEditButtons = function () {
@@ -387,7 +395,7 @@ QuizEdit.prototype.editQuestion = function() {
     this.addEditButtons();
     e.appendChild(Util.table(meta));
     var list = [    
-    ["Question Text:", this.textBox = Util.textarea(null, "textArea", "blankbox", 5, 60),
+    ["Question Text:", this.textBox = this.textArea("blankbox", 5, 60),
      Util.divadd(null, Util.h2("Insert"),
              this.addDispButton("Instructions", "instructions"),
              this.addDispButton("Paragraph", "Util.p"),
@@ -440,7 +448,7 @@ QuizEdit.prototype.editQuestion = function() {
          ]
     ];
     e.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
-    this.varEdit = Util.div(QuizEdit.EDITCTRL, "varEdit");
+    this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     this.addEditButtons();
     scrollToId("editor");
