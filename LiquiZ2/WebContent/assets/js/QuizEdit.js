@@ -57,7 +57,7 @@ QuizEdit.prototype.completeEdit = function(array) {
     $("#editor").remove(); // remove from window
 //    $("#qC").remove();
 //    var array = buildFunc(); //.apply(this||window, Array.prototype.slice.call(arguments, 1));
-    page.renderQuestions();
+    page.partialRefresh();
     url.load(false); //TODO: get rid of this once page refresh works
     scrollToId('qc' + Quiz.newid);
 }
@@ -365,7 +365,7 @@ QuizEdit.prototype.inputBlur = function(type, val) {
     var v = Util.input(type, QuizEdit.EDITCTRL, val, this.q[val]);
     v.onkeyup = v.onkeydown = v.onkeypress = v.onblur = function() {
         t.q[val] = v.value; // change attributes of question like title, points...
-        page.renderQuestions();
+        page.partialRefresh();
     };
     return v;
 }
@@ -389,7 +389,7 @@ QuizEdit.prototype.editQuestion = function() {
         answers: []
     };
     page.questions.push(this.q);
-    page.renderQuestions();
+    page.partialRefresh();
 
     var e = this.editor = Util.div("editor", "editor");
     this.body.appendChild(this.editor);

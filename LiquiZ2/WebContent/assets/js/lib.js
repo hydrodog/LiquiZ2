@@ -15,13 +15,6 @@
  * documentation for more details.
  */
 
-function initPageLookup() {
-    lookup = {
-        "Quiz": Quiz,
-        "QuizEdit": QuizEdit,
-    };
-}
-
 video = {};
 audio = {};
 mediaLocations = {
@@ -745,7 +738,7 @@ function errorStatus(errorCode) {
 
 function handlePage(text, url) {
     var json = JSON.parse(text);
-    page = new lookup[json.type](json.payload);
+    page = new window[json.type](json.payload);
     loadView(url);
 }
 
@@ -764,14 +757,7 @@ function requestAjax(ajax_url, handler, error, url) {
 }
 
 function loadView(url) {
-    if (url.view) {
-        if (page[url.view])
-            page[url.view](url.params);
-        else
-            errorStatus(url.view + " view doesn't exist!");
-    } else {
-        page.exec(url.params);
-    }
+    page.exec();
     GoToOldScrollPosition();
 }
 
@@ -790,11 +776,9 @@ function loadPage(e) {
         ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
     }
 
-    clearPage();
     if (oldUrl.ajax) {
+        clearPage();
         requestAjax(ajax_url, handlePage, errorStatus, url);
-    } else {
-        loadView(url);
     }
 
     oldUrl = url.copy();
@@ -839,8 +823,6 @@ function setLastClicked(e) {
 
 // Adds an onclick function to all <a> tags.
 function loadOnce(e) {
-    initPageLookup();
-
     var aList = document.links;
     for (var i = 0; i < aList.length; i++) {
         if (aList[i].hostname === document.domain) { // Same domain links only

@@ -18,6 +18,23 @@ function Quiz(payload) {
     this.questions = this.data;
 }
 
+Quiz.stdChoice = {
+    Likert5: ["Strongly Agree",
+          "Agree",
+          "Neutral",
+          "Disagree",
+          "Strongly Disagree"],
+    Likert7: ["Exceptional",
+          "Excellent",
+          "Very Good",
+          "Good",
+          "Fair",
+          "Poor",
+          "Very Poor"],
+    Yesno: ["Yes", "No"],
+    Boolean: ["true", "false"]
+};
+
 Quiz.prototype.processParams = function() {
     this.params = {};
     this.params.not = {};
@@ -26,54 +43,38 @@ Quiz.prototype.processParams = function() {
         this.params[i] = {};
         var array = url.params[i].split(",");
         for (var j = 0; j < array.length; j++) {
-            this.params[i][parseInt(array[j])-1] = true;
+            this.params[i][array[j]] = true;
         }
     }
 };
 
-Quiz.stdChoice = {
-    Likert5: ["Strongly Agree",
-	      "Agree",
-	      "Neutral",
-	      "Disagree",
-	      "Strongly Disagree"],
-    Likert7: ["Exceptional",
-	      "Excellent",
-	      "Very Good",
-	      "Good",
-	      "Fair",
-	      "Poor",
-	      "Very Poor"],
-    Yesno: ["Yes", "No"],
-    Boolean: ["true", "false"]
-};
-
 Quiz.prototype.exec = function(params) {
     this.processParams();
-    
-    this.header();
-    this.renderQuestions(this.isCollapsed.bind(this));
-    this.end();
-};
-
-Quiz.prototype.collapsed = function(params) {
-    this.processParams();
-
-    this.header();
-    this.renderQuestions(this.isNotCollapsed.bind(this));
-    this.end();
+    if (this.view !== url.view) {
+        clearPage();
+        this.header();
+        this.partialRefresh();
+        this.end();
+    } else {
+        this.partialRefresh();
+    }
+    this.view = url.view;
 };
 
 Quiz.prototype.isCollapsed = function(i) {
-    return (this.params.collapse[i]) ? false : true;
+    return (this.params.collapse[i+1]) ? false : true;
 };
 
 Quiz.prototype.isNotCollapsed = function(i) {
-    return (this.params.not[i]) ? true : false;
+    return (this.params.not[i+1]) ? true : false;
 };
 
-Quiz.prototype.renderQuestions = function(cb) {
-    cb = (typeof cb === "undefined") ? this.isCollapsed.bind(this) : cb;
+Quiz.prototype.partialRefresh = function() {
+    this.processParams();
+    if (url.view === "collapsed")
+        cb = this.isNotCollapsed.bind(this);
+    else
+        cb = this.isCollapsed.bind(this);
 
     var frag = document.createDocumentFragment();
     for (var i = 0; i < this.questions.length; i++) {
@@ -86,6 +87,7 @@ Quiz.prototype.renderQuestions = function(cb) {
     }
 
 
+    this.headerButtons();
     if (!this.questionsDiv) {
         this.questionsDiv = Util.div("questions", "questions");
         this.questionsDiv.appendChild(frag);
@@ -99,7 +101,6 @@ Quiz.prototype.renderQuestions = function(cb) {
 Quiz.prototype.header = function() {
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
-    this.render(this.headerButtons());    
 };
 
 // TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
@@ -116,9 +117,9 @@ Quiz.prototype.processQuestion = function(q) {
 }
 
 Quiz.prototype.collapse = function(e) {
-    var data = document.getElementById("collapse-input");
+    var data = document.getElementById("collapse-input").value;
     var regex = /(\d+)/g;
-    var collapse_vals = data.value.match(regex);
+    var collapse_vals = data.match(regex);
     if (collapse_vals !== null) {
         collapse_vals.sort(this.sortInt).filter(
             function(element, index, array) {
@@ -131,12 +132,13 @@ Quiz.prototype.collapse = function(e) {
         url.removeParam("collapse");
         url.load(false);
     }
+    this.partialRefresh();
 };
 
 Quiz.prototype.expand = function(e) {
-    var data = document.getElementById("collapse-input");
+    var data = document.getElementById("collapse-input").value;
     var regex = /(\d+)/g;
-    var expand_vals = data.value.match(regex);
+    var expand_vals = data.match(regex);
     if (expand_vals !== null) {
         expand_vals.sort(this.sortInt).filter(
             function(element, index, array) {
@@ -149,6 +151,7 @@ Quiz.prototype.expand = function(e) {
         url.removeParam("not");
         url.load(false);
     }
+    this.partialRefresh();
 };
 
 Quiz.prototype.sortInt = function(a, b) {
@@ -174,35 +177,49 @@ Quiz.prototype.collapseExpandOnkeydown = function(e) {
 };
 
 Quiz.prototype.headerButtons = function() {
-    var fragment = document.createDocumentFragment();
-    var button, input;
+    var button, input, render;
 
+    if (this.headerControl) {
+        this.headerControl.innerHTML = "";
+        render = false;
+    }
+    else {
+        this.headerControl = Util.div("header", "header-control");
+        render = true;
+    }
+
+
+    var t = this;
     button = Util.button("Collapse All",
         function(e) {
             url.changeView("collapsed");
             url.removeAllParams();
             url.load(false);
+            t.partialRefresh();
         });
-    fragment.appendChild(button);
+    this.headerControl.appendChild(button);
 
     button = Util.button("Uncollapse All", 
         function(e) {
             url.changeView("");
             url.removeAllParams();
             url.load(false);
+            t.partialRefresh();
         });
-    fragment.appendChild(button);
+    this.headerControl.appendChild(button);
 
     if (url.view === "") {
         input = Util.input("text", null, "collapse-input", url.params.collapse, this.collapseExpandOnkeydown.bind(this));
-        button = Util.button("Collapse", this.collapse);
+        button = Util.button("Collapse", this.collapse.bind(this));
     } else if (url.view === "collapsed") {
         input = Util.input("text", null, "collapse-input", url.params.not, this.collapseExpandOnkeydown.bind(this));
-        button = Util.button("Expand", this.expand);
+        button = Util.button("Expand", this.expand.bind(this));
     }
-    fragment.appendChild(input);
-    fragment.appendChild(button);
-    return fragment;
+    this.headerControl.appendChild(input);
+    this.headerControl.appendChild(button);
+
+    if (render)
+        this.render(this.headerControl);
 }
 
 Quiz.prototype.render = function(child) {
@@ -223,17 +240,6 @@ Quiz.prototype.displayHeader = function() {
 Quiz.prototype.end = function() {
 	this.render(this.createSubmit(2));
 };
-
-function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
-    var editBox = Util.div("edit");
-    Util.add(editBox,
-    	[
-    	    Util.button("Edit", editFunc, null, id+"-edit"),
-    	    Util.button("Delete", deleteFunc, null, id+"-delete"), 
-    	    Util.button("Copy", copyFunc, null, id+"-copy")
-    	]);
-    return editBox;
-}
 
 Quiz.prototype.addQuestion = function(id, title, type, points, level) {
     points = (typeof points === "undefined") ? 1 : points;
@@ -263,6 +269,17 @@ Quiz.prototype.addQuestion = function(id, title, type, points, level) {
     qc.appendChild(header);
     return qc;
 };
+
+function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
+    var editBox = Util.div("edit");
+    Util.add(editBox,
+    	[
+    	    Util.button("Edit", editFunc, null, id+"-edit"),
+    	    Util.button("Delete", deleteFunc, null, id+"-delete"), 
+    	    Util.button("Copy", copyFunc, null, id+"-copy")
+    	]);
+    return editBox;
+}
 
 function showDialog(openFileDialog) {
     document.getElementById(openFileDialog).click();
