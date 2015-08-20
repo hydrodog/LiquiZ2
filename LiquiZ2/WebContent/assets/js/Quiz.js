@@ -18,6 +18,19 @@ function Quiz(payload) {
     this.questions = this.data;
 }
 
+Quiz.prototype.processParams = function() {
+    this.params = {};
+    this.params.not = {};
+    this.params.collapse = {};
+    for (var i in url.params) {
+        this.params[i] = {};
+        var array = url.params[i].split(",");
+        for (var j = 0; j < array.length; j++) {
+            this.params[i][parseInt(array[j])-1] = true;
+        }
+    }
+};
+
 Quiz.stdChoice = {
     Likert5: ["Strongly Agree",
 	      "Agree",
@@ -35,69 +48,130 @@ Quiz.stdChoice = {
     Boolean: ["true", "false"]
 };
 
-Quiz.prototype.refreshQuestion = function(q) {
-
-}
-
-Quiz.prototype.refreshQuestions = function() {
-
-}
-
 Quiz.prototype.exec = function(params) {
-    var collapse = {};
-    if (params.collapse) {
-        var collapseArray = params.collapse.split(",");
-        for (var i = 0; i < collapseArray.length; i++) {
-            collapse[parseInt(collapseArray[i]) - 1] = true;
-        }
-    }
-
-    this.render(this.displayHeader());
-    this.render(this.createSubmit(1));
-    this.render(this.headerButtons());
+    this.processParams();
     
-    for (var i = 0; i < this.questions.length; i++) {
-        var q = this.questions[i];
-        var qc = this.addQuestion(q.id, q.title, q.className, q.points, q.level);
-        if (!collapse[i])
-            qc.appendChild(this.processQuestion(q.content));
-        this.render(qc);
-    }
+    this.header();
+    this.renderQuestions(this.isCollapsed.bind(this));
     this.end();
-}
-
-/*
- * Demo!!
- * Should be removed before production
- */
-Quiz.prototype.color = function(params) {
-    this.body.style.background = params["color"] ? params["color"] : null;
-    this.exec(params);
-}
+};
 
 Quiz.prototype.collapsed = function(params) {
-    var not = {};
-    if (params.not) {
-        var notArray = params.not.split(",");
-        for (var i = 0; i < notArray.length; i++) {
-            not[parseInt(notArray[i]) - 1] = true;
+    this.processParams();
+
+    this.header();
+    this.renderQuestions(this.isNotCollapsed.bind(this));
+    this.end();
+};
+
+Quiz.prototype.isCollapsed = function(i) {
+    return (this.params.collapse[i]) ? false : true;
+};
+
+Quiz.prototype.isNotCollapsed = function(i) {
+    return (this.params.not[i]) ? true : false;
+};
+
+Quiz.prototype.renderQuestions = function(cb) {
+    cb = (typeof cb === "undefined") ? this.isCollapsed.bind(this) : cb;
+
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < this.questions.length; i++) {
+        var q = this.questions[i];
+        var qc = this.addQuestion(q.id, q.title, q.type, q.points, q.level);
+        if (cb(i)) {
+            qc.appendChild(this.processQuestion(q.content));
         }
+        frag.appendChild(qc);
     }
 
+
+    if (!this.questionsDiv) {
+        this.questionsDiv = Util.div("questions", "questions");
+        this.questionsDiv.appendChild(frag);
+        this.render(this.questionsDiv);
+    } else {
+        this.questionsDiv.innerHTML = "";
+        this.questionsDiv.appendChild(frag);
+    }
+};
+
+Quiz.prototype.header = function() {
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
-    this.render(this.headerButtons());
+    this.render(this.headerButtons());    
+};
 
-    for (i = 0; i < this.questions.length; i++) {
-        var q = this.questions[i];
-        var qc = this.addQuestion(q.id, q.title, q.className, q.points, q.level);
-        if (not[i]) {
-            qc.appendChild(this.processQuestion(q));
+// TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
+Quiz.prototype.processQuestion = function(q) {
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < q.length; i++) {
+        if (q[i][0].substring(0, 5) === "Util.") {
+            frag.appendChild(Util[q[i][0].substring(5)].apply(this||window, q[i].slice(1)));
+        } else {
+            frag.appendChild(this[q[i][0]].apply(this||window, q[i].slice(1)));
         }
-        this.render(qc);
     }
-    this.end();
+    return frag;
 }
+
+Quiz.prototype.collapse = function(e) {
+    var data = document.getElementById("collapse-input");
+    var regex = /(\d+)/g;
+    var collapse_vals = data.value.match(regex);
+    if (collapse_vals !== null) {
+        collapse_vals.sort(this.sortInt).filter(
+            function(element, index, array) {
+                return !index || element != array[index - 1];
+        });
+        url.removeParam("not");
+        url.addParam("collapse", collapse_vals.join(","));
+        url.load(false);
+    } else {
+        url.removeParam("collapse");
+        url.load(false);
+    }
+};
+
+Quiz.prototype.expand = function(e) {
+    var data = document.getElementById("collapse-input");
+    var regex = /(\d+)/g;
+    var expand_vals = data.value.match(regex);
+    if (expand_vals !== null) {
+        expand_vals.sort(this.sortInt).filter(
+            function(element, index, array) {
+                return !index || element != array[index - 1];
+        });
+        url.removeParam("collapse");
+        url.addParam("not", expand_vals.join(","));
+        url.load(false);
+    } else {
+        url.removeParam("not");
+        url.load(false);
+    }
+};
+
+Quiz.prototype.sortInt = function(a, b) {
+    a = parseInt(a);
+    b = parseInt(b);
+    if (a < b) {
+        return -1;
+    } else if (a > b) {
+        return 1;
+    } else {
+        return 0;
+    }
+};
+
+Quiz.prototype.collapseExpandOnkeydown = function(e) {
+    if (e.keyCode == 13 && (e.type === "keydown" || e.type === "keypress")) {
+        if (url.view === "") {
+            this.collapse(e);                
+        } else if (url.view === "collapsed") {
+            this.expand(e);
+        }
+    }
+};
 
 Quiz.prototype.headerButtons = function() {
     var fragment = document.createDocumentFragment();
@@ -119,87 +193,16 @@ Quiz.prototype.headerButtons = function() {
         });
     fragment.appendChild(button);
 
-    onkeydown = function(e) {
-        if (e.keyCode == 13 && e.type === "keydown") {
-            if (url.view === "") {
-                collapse(e);                
-            } else if (url.view === "collapsed") {
-                expand(e);
-            }
-        }
-    };
-
-    sortInt = function(a, b) {
-        a = parseInt(a);
-        b = parseInt(b);
-        if (a < b) {
-            return -1;
-        } else if (a > b) {
-            return 1;
-        } else {
-            return 0;
-        }
-    };
-
-    collapse = function(e) {
-        var data = document.getElementById("collapse-input");
-        var regex = /(\d+)/g;
-        var collapse_vals = data.value.match(regex);
-        if (collapse_vals !== null) {
-            collapse_vals.sort(sortInt).filter(
-                function(element, index, array) {
-                    return !index || element != array[index - 1];
-            });
-            url.removeParam("not");
-            url.addParam("collapse", collapse_vals.join(","));
-            url.load(false);
-        } else {
-            url.removeParam("collapse");
-            url.load(false);
-        }
-    };
-
-    expand = function(e) {
-        var data = document.getElementById("collapse-input");
-        var regex = /(\d+)/g;
-        var expand_vals = data.value.match(regex);
-        if (expand_vals !== null) {
-            expand_vals.sort(sortInt).filter(
-                function(element, index, array) {
-                    return !index || element != array[index - 1];
-            });
-            url.removeParam("collapse");
-            url.addParam("not", expand_vals.join(","));
-            url.load(false);
-        } else {
-            url.removeParam("not");
-            url.load(false);
-        }
-    };
-
     if (url.view === "") {
-        input = Util.input("text", null, "collapse-input", url.params.collapse, onkeydown);
-        button = Util.button("Collapse", collapse);
+        input = Util.input("text", null, "collapse-input", url.params.collapse, this.collapseExpandOnkeydown.bind(this));
+        button = Util.button("Collapse", this.collapse);
     } else if (url.view === "collapsed") {
-        input = Util.input("text", null, "collapse-input", url.params.not, onkeydown);
-        button = Util.button("Expand", expand);
+        input = Util.input("text", null, "collapse-input", url.params.not, this.collapseExpandOnkeydown.bind(this));
+        button = Util.button("Expand", this.expand);
     }
     fragment.appendChild(input);
     fragment.appendChild(button);
     return fragment;
-}
-
-// TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
-Quiz.prototype.processQuestion = function(q) {
-    var frag = document.createDocumentFragment();
-    for (var j = 0; j < q.length; j++) {
-        if (q[j][0].substring(0, 5) === "Util.") {
-            frag.appendChild(Util[q[j][0].substring(5)].apply(this||window, q[j].slice(1)));
-        } else {
-            frag.appendChild(this[q[j][0]].apply(this||window, q[j].slice(1)));
-        }
-    }
-    return frag;
 }
 
 Quiz.prototype.render = function(child) {
@@ -232,11 +235,11 @@ function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
     return editBox;
 }
 
-Quiz.prototype.addQuestion = function(id, title, className, points, level) {
+Quiz.prototype.addQuestion = function(id, title, type, points, level) {
     points = (typeof points === "undefined") ? 1 : points;
     level =  (typeof level === "undefined") ? 1 : level;
 
-    var qc = Util.div("qc " + className + "-qc", "qc" + id);
+    var qc = Util.div("qc " + type + "-qc", "qc" + id);
 
     var header = Util.div("qheader");
     header.appendChild(Util.h2(title));
