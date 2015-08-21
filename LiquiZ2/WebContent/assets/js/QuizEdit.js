@@ -24,7 +24,7 @@ QuizEdit.TEXTAREA = "editTA";
 QuizEdit.REGEX = "editPattern";
 
 QuizEdit.prototype.scrollToEditor = function() {
-    scrollToId("qc" + this.q.id);
+    scrollToId("edit-qc" + this.q.id);
 };
 
 QuizEdit.prototype.renderQuestion = function() {
@@ -399,9 +399,11 @@ QuizEdit.prototype.editQuestion = function() {
     page.questions.push(this.q);
 
     this.id = page.questions.length-1;
+    page.refreshQuestion(this.id);
 
-    var e = this.editor = Util.div("editor", "editor");
-    this.body.appendChild(this.editor);
+    var e = this.editor = document.getElementById("edit-qc"+this.q.id);
+    this.scrollToEditor();
+
     e.appendChild(Util.h1("Question Editor"));
     
     var meta = [
@@ -468,8 +470,6 @@ QuizEdit.prototype.editQuestion = function() {
     this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     this.addEditButtons();
-
-    this.renderQuestion();
 }
 
 /*

@@ -81,7 +81,7 @@ Quiz.prototype.refreshQuestion = function(i) {
     if (!document.getElementById("qc" + q.id))
         this.questionsDiv.appendChild(qc);
 
-    if (this.editMode)
+    if (this.editMode && !document.getElementById("edit-qc" + q.id))
             this.questionsDiv.appendChild(this.editBox(q.id));
 };
 
