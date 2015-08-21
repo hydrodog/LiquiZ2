@@ -387,7 +387,6 @@ QuizEdit.prototype.addEditButtons = function () {
 QuizEdit.prototype.editQuestion = function() {
 //    var submitbar = document.getElementById("submitDiv-2");
 //    submitbar.parent.removeChild(submitbar);
-    $("#submitDiv-2").remove();
     this.q = {
         id: --QuizEdit.newid,
         title: "",
