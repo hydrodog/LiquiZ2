@@ -363,7 +363,7 @@ QuizEdit.prototype.editImage = function() {
 QuizEdit.prototype.inputBlur = function(type, val) {
     var t = this;
     var v = Util.input(type, QuizEdit.EDITCTRL, val, this.q[val]);
-    v.onkeyup = v.onkeydown = v.onkeypress = v.onblur = function() {
+    v.oninput = function() {
         t.q[val] = v.value; // change attributes of question like title, points...
         page.partialRefresh();
     };
