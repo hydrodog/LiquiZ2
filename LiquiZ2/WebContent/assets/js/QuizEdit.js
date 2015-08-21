@@ -394,14 +394,11 @@ QuizEdit.prototype.editQuestion = function() {
     var e = this.editor = Util.div("editor", "editor");
     this.body.appendChild(this.editor);
     e.appendChild(Util.h1("Question Editor"));
-    
-    var meta = [
-        ["Title", this.title = this.inputBlur("text", "title")],
-        ["Level:", this.level = this.inputBlur("number", "level")],
-        ["Points:", this.points = this.inputBlur("number", "points")],
-    ];
     this.addEditButtons();
-    e.appendChild(Util.table(meta));
+    
+    e.appendChild(Util.table([ ["Title", this.title = this.inputBlur("text", "title")] ]));
+    e.appendChild(Util.table([ ["Level:", this.level = this.inputBlur("number", "level"),
+                                "Points:", this.points = this.inputBlur("number", "points")] ]));
     var list = [    
     ["Question Text:", this.textBox = this.textArea("blankbox", 5, 60),
      Util.divadd(null, Util.h2("Insert"),

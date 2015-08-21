@@ -335,6 +335,11 @@ Quiz.prototype.createSubmit = function(id) {
 			    }
 			    clickEditQuestion++;
 			}),
+            Util.button("Edit Assign",
+                function() {
+                    var ass = new Assignment();
+                    ass.edit();
+                } ),
             Util.button("Edit Policy", 
 			function() {
 			    if (clickPolicy === 0) {
