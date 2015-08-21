@@ -405,7 +405,7 @@ Quiz.prototype.add = function(parent, spec) {
 Quiz.prototype.mcRadioTextVert = function(id, txt) {
     var list = [];
     for (var i = 0; i < txt.length; i++) {
-	var radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
+	var radio = Util.radio(id + "-" + i, id, 'mcradio', id + "-" + i);
 	var label = Util.label(id + "-" + i, Util.span(txt[i]));
 	list.push([radio, label]);
     }
@@ -421,7 +421,7 @@ Quiz.prototype.mcRadioTextHoriz = function(id, choices) {
         list[0].push(Util.label(id + "-" + i, Util.span(choices[i])));
     }
     for (var i = 0; i < choices.length; i++) {
-        list[1].push(Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i));
+        list[1].push(Util.radio(id + "-" + i, id, 'mcradio', id + "-" + i));
     }
 
     return Util.table(list, false);
@@ -431,14 +431,13 @@ Quiz.prototype.mcRadioTextHoriz = function(id, choices) {
  * Build a survey sharing labels with horizontal radio boxes
  */
 Quiz.prototype.mcSurvey = function(id, questions, choices) {
-    var head = choices;
-    head.unshift();
-    head[0] = "";
+    var head = choices.slice();
+    head.unshift("");
     var list = [ head ];
-    for (var j = 1; j < questions.length; j++) {
+    for (var j = 0; j < questions.length; j++) {
         var row = [questions[j]];
         for (var i = 0; i < choices.length; i++) {
-            row.push(Util.radio(i, id + "-" + j, 'multichoiceradio', id + "-" + j + "-" + i));
+            row.push(Util.radio(i, id + "-" + j, 'mcradio', id + "-" + j + "-" + i));
         }
         list.push(row);
     }

@@ -17,6 +17,7 @@ QuizEdit.EDITCTRL = "editctrl";
 QuizEdit.INT = "editint";
 QuizEdit.DOUBLE = "editdouble";
 QuizEdit.NAME = "editname";
+QuizEdit.NAME = "question";
 
 QuizEdit.BUTTON = "editbutton";
 QuizEdit.ANSWERS = "answers";
@@ -64,7 +65,7 @@ QuizEdit.prototype.completeEdit = function(array) {
     this.update();
     for (var i = 0; i < array.length; i++)
         this.q.content.push(array[i]);
-    $("#editor").remove(); // remove from window
+//    $("#editor").remove(); // remove from window
 //    $("#qC").remove();
 //    var array = buildFunc(); //.apply(this||window, Array.prototype.slice.call(arguments, 1));
     this.renderQuestion();
@@ -168,6 +169,15 @@ QuizEdit.prototype.buildMC = function() {
     return answers;
 }
 
+QuizEdit.prototype.buildSurveyQuestions = function() {
+    var surveyQuestions = [];
+    var rows = this.surveyQuestions.rows;
+    for (var i = 0; i < rows.length; i++) {
+        surveyQuestions[i] = rows[i].cells[0].children[0].value;
+    }
+    return surveyQuestions;
+}
+
 QuizEdit.prototype.buildMCDropdown = function() {
     return [
     ['selectText', --QuizEdit.newid, this.buildMC()]
@@ -189,6 +199,12 @@ QuizEdit.prototype.buildMCRadioTextHoriz = function() {
 QuizEdit.prototype.buildMAnswer = function() {
     return [
     ['multiAnswer', --QuizEdit.newid, this.buildMC()]
+    ];
+}
+
+QuizEdit.prototype.buildSurvey = function() {
+    return [
+    ['mcSurvey', --QuizEdit.newid, this.buildSurveyQuestions(), this.buildMC()]
     ];
 }
 
@@ -220,7 +236,7 @@ QuizEdit.prototype.addStdChoice = function(stdChoice) {
     Quiz.stdChoice[name] = answers;
 }
 
-QuizEdit.prototype.editMC = function(questionType) {
+QuizEdit.prototype.editMCtop = function() {
     var numberBox, stdChoice;
     var addOption = function() {
     var count = numberBox.value;
@@ -231,7 +247,7 @@ QuizEdit.prototype.editMC = function(questionType) {
     }
     this.scrollToEditor();
     };
-    var div = Util.divadd(QuizEdit.EDITCTRL,
+    this.mcHeader = Util.divadd(QuizEdit.EDITCTRL,
         numberBox = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
         this.editButton("Add Option", this.addOption),
         Util.span("Name"),
@@ -246,8 +262,12 @@ QuizEdit.prototype.editMC = function(questionType) {
            this.editButton("delete", this.deleteAnswer)]);
     }
     this.ansTable = Util.table(list, true, QuizEdit.ANSWERS);
+    return [div, list];
+}
 
-    this.addFields(questionType, div, this.ansTable);
+QuizEdit.prototype.editMC = function(questionType) {
+    this.editMCtop();
+    this.addFields(questionType, this.mcHeader, this.ansTable);
     this.answers = [];
 }
 
@@ -272,7 +292,15 @@ QuizEdit.prototype.addStandardChoice = function(name, choices, nameBlank) {
 }
 
 QuizEdit.prototype.editSurvey = function() {
-    this.editMC(this.buildSurvey);
+    this.editMCtop();
+    var surveyQuestions = [];
+    for (var i = 0; i < 4; i++) {
+        surveyQuestions.push([Util.input("text", QuizEdit.QUESTION, 'surveyQuestion'+i)]);
+    }
+    this.surveyQuestions = Util.table(surveyQuestions, false);
+
+    this.addFields(this.buildSurvey, this.mcHeader, this.ansTable, Util.h2("Survey Questions"),this.surveyQuestions);
+    this.answers = [];
 }
 
 QuizEdit.prototype.buildCLOZE = function(){
