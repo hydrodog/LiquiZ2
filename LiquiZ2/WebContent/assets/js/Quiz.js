@@ -73,6 +73,10 @@ Quiz.prototype.editBox = function(id) {
     return Util.div("editBox", "edit-qc"+id);
 };
 
+Quiz.prototype.refreshQuestion = function() {
+
+};
+
 Quiz.prototype.partialRefresh = function() {
     this.processParams();
     if (url.view === "collapsed")
