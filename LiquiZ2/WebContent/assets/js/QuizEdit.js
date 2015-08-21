@@ -213,16 +213,22 @@ QuizEdit.prototype.deleteAnswer = function() {
 }
 
 QuizEdit.prototype.addOption = function(row) {
-    var r = this.ansTable.insertRow();
-    var td = r.insertCell();
-    td.innerHTML = row;
-    td = r.insertCell();
-    td.appendChild(Util.input("text", QuizEdit.EDITCTRL, "a"+row));
-    this.editButton("delete", this.deleteAnswer);
+    var count = Number(this.optCount.value);
+    if (count < 1 || count > 100) count = 1;
+    for (var i = 0; i < count; i++) {
+        var r = this.ansTable.insertRow();
+        var td = r.insertCell();
+        td.appendChild(Util.input("text", QuizEdit.EDITCTRL, "a"+row));
+        td = r.insertCell();
+        td.appendChild(Util.checkbox(null, "check"+row, "editCB", "check"+row));
+        td = r.insertCell();
+        td.appendChild(this.editButton("delete", this.deleteAnswer));
+    }
+    this.scrollToEditor();
 }
 
 QuizEdit.prototype.addStdChoice = function(stdChoice) {
-    stdChoice.style.background="#fff";
+    //stdChoice.style.background="#fff";
     var name = stdChoice.value;
     if (name === '') {
         stdChoice.style.background="#f00";
@@ -230,25 +236,25 @@ QuizEdit.prototype.addStdChoice = function(stdChoice) {
     }
     console.log(this);
     var answers = [];
-    for (var i = 0; i < ansTable.rows; i++) {
+    for (var i = 0; i < this.ansTable.rows; i++) {
         answers.push(document.getElementById("a"+i));
     }
     Quiz.stdChoice[name] = answers;
 }
 
 QuizEdit.prototype.editMCtop = function() {
-    var numberBox, stdChoice;
+    var stdChoice;
     var addOption = function() {
-    var count = numberBox.value;
-    var row = ansTable.rows.length-1;
-    if (1 < count || count > 100) count = 1;
-    for (var i = 0; i < count; i++) {
-        this.addOptions(ansTable, i);
-    }
-    this.scrollToEditor();
+        var count = numberBox.value;
+        var row = ansTable.rows.length-1;
+        if (1 < count || count > 100) count = 1;
+        for (var i = 0; i < count; i++) {
+            this.addOptions(ansTable, i);
+        }
+        this.scrollToEditor();
     };
     this.mcHeader = Util.divadd(QuizEdit.EDITCTRL,
-        numberBox = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
+        this.optCount = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
         this.editButton("Add Option", this.addOption),
         Util.span("Name"),
         this.stdChoice = Util.input("text", 'editInput', 'stdChoice'),

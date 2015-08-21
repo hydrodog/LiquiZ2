@@ -102,9 +102,8 @@ h2 {
 
 }
 
-.multichoiceradio {
-
-
+.mdradio {
+text-align: center;
 }
 
 .instructions {
@@ -312,4 +311,9 @@ input.editpattern {
     background: #00f;
     size: 6;
     width:75px;
+}
+
+.surveyQuestion {
+    size: 80;
+    width: "100%";
 }
