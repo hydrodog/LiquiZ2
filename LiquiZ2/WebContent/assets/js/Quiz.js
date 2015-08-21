@@ -73,8 +73,16 @@ Quiz.prototype.editBox = function(id) {
     return Util.div("editBox", "edit-qc"+id);
 };
 
-Quiz.prototype.refreshQuestion = function() {
+Quiz.prototype.refreshQuestion = function(i) {
+    var q = this.questions[i];
+    var qc = this.addQuestion(q.id, q.title, q.type, q.points, q.level);
+    qc.appendChild(this.processQuestion(q.content));
 
+    if (!document.getElementById("qc" + q.id))
+        this.questionsDiv.appendChild(qc);
+
+    if (this.editMode && !document.getElementById("edit-qc" + q.id))
+            this.questionsDiv.appendChild(this.editBox(q.id));
 };
 
 Quiz.prototype.partialRefresh = function() {
@@ -111,6 +119,40 @@ Quiz.prototype.partialRefresh = function() {
 Quiz.prototype.header = function() {
     this.render(this.displayHeader());
     this.render(this.createSubmit(1));
+};
+
+Quiz.prototype.addQuestion = function(id, title, type, points, level) {
+    points = (typeof points === "undefined") ? 1 : points;
+    level =  (typeof level === "undefined") ? 1 : level;
+
+    var qc = document.getElementById("qc" + id);
+    if (qc) {
+        qc.innerHTML = "";
+    } else {
+        qc = Util.div("qc " + type + "-qc", "qc" + id);
+    }
+
+    var header = Util.div("qheader");
+    header.appendChild(Util.h2(title));
+    
+    var floatRight = Util.div("float-right");
+    floatRight.appendChild(Util.span("points:" + points, "qpoints"));
+    floatRight.appendChild(Util.span("level:" + level, "level"));
+    if (this.editMode) {
+        floatRight.appendChild(makeEditBox(id,
+            function(e) {
+                console.log(e.target.id);
+            },
+            function(e) {
+                console.log(e.target.id);
+            },
+            function(e) {
+                console.log(e.target.id);
+            }));
+    }
+    header.appendChild(floatRight);
+    qc.appendChild(header);
+    return qc;
 };
 
 // TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
@@ -249,35 +291,6 @@ Quiz.prototype.displayHeader = function() {
 
 Quiz.prototype.end = function() {
 	this.render(this.createSubmit(2));
-};
-
-Quiz.prototype.addQuestion = function(id, title, type, points, level) {
-    points = (typeof points === "undefined") ? 1 : points;
-    level =  (typeof level === "undefined") ? 1 : level;
-
-    var qc = Util.div("qc " + type + "-qc", "qc" + id);
-
-    var header = Util.div("qheader");
-    header.appendChild(Util.h2(title));
-    
-    var floatRight = Util.div("float-right");
-    floatRight.appendChild(Util.span("points:" + points, "qpoints"));
-    floatRight.appendChild(Util.span("level:" + level, "level"));
-    if (this.editMode) {
-        floatRight.appendChild(makeEditBox(id,
-            function(e) {
-                console.log(e.target.id);
-            },
-            function(e) {
-                console.log(e.target.id);
-            },
-            function(e) {
-                console.log(e.target.id);
-            }));
-    }
-    header.appendChild(floatRight);
-    qc.appendChild(header);
-    return qc;
 };
 
 function makeEditBox(id, editFunc, deleteFunc, copyFunc) {

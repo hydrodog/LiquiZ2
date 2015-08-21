@@ -718,7 +718,7 @@ function scrollToId(id) { //TODO: Fix Jquery madness below
     // Not in view so scroll to it
     $('html,body').animate({
         scrollTop: offset
-    }, 1000);
+    }, 10);
     return false;
     }
     return true;
