@@ -23,6 +23,15 @@ QuizEdit.ANSWERS = "answers";
 QuizEdit.TEXTAREA = "editTA";
 QuizEdit.REGEX = "editPattern";
 
+QuizEdit.prototype.scrollToEditor = function() {
+    scrollToId("qc" + this.q.id);
+};
+
+QuizEdit.prototype.renderQuestion = function() {
+    page.refreshQuestion(this.id);
+    this.scrollToEditor();
+}
+
 QuizEdit.prototype.editButton = function(label, method) {
     return Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
 }
@@ -34,7 +43,8 @@ QuizEdit.prototype.textArea = function(id, rows, cols) {
 QuizEdit.prototype.addDispButton = function(title, funcName) {
     var t = this;
     return Util.button(title, function() {
-    t.q.content.push([funcName, t.textBox.value])
+        t.q.content.push([funcName, t.textBox.value]);
+        t.renderQuestion();
     });
 }
 
@@ -57,9 +67,7 @@ QuizEdit.prototype.completeEdit = function(array) {
     $("#editor").remove(); // remove from window
 //    $("#qC").remove();
 //    var array = buildFunc(); //.apply(this||window, Array.prototype.slice.call(arguments, 1));
-    page.partialRefresh();
-    url.load(false); //TODO: get rid of this once page refresh works
-    scrollToId('qc' + Quiz.newid);
+    this.renderQuestion();
 }
 
 // create a question, display it, remove the editor
@@ -88,7 +96,7 @@ QuizEdit.prototype.addFields = function(cbFunc) {
        else
             this.varEdit.appendChild(arguments[i]);
     }
-    scrollToId("editor");
+    this.scrollToEditor();
 }
 
 QuizEdit.prototype.buildFillin = function() {
@@ -221,7 +229,7 @@ QuizEdit.prototype.editMC = function(questionType) {
     for (var i = 0; i < count; i++) {
         this.addOptions(ansTable, i);
     }
-    scrollToId(id);
+    this.scrollToEditor();
     };
     var div = Util.divadd(QuizEdit.EDITCTRL,
         numberBox = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
@@ -365,7 +373,7 @@ QuizEdit.prototype.inputBlur = function(type, val) {
     var v = Util.input(type, QuizEdit.EDITCTRL, val, this.q[val]);
     v.oninput = function() {
         t.q[val] = v.value; // change attributes of question like title, points...
-        page.partialRefresh();
+        t.renderQuestion();
     };
     return v;
 }
@@ -389,7 +397,8 @@ QuizEdit.prototype.editQuestion = function() {
         answers: []
     };
     page.questions.push(this.q);
-    page.partialRefresh();
+
+    this.id = page.questions.length-1;
 
     var e = this.editor = Util.div("editor", "editor");
     this.body.appendChild(this.editor);
@@ -459,7 +468,8 @@ QuizEdit.prototype.editQuestion = function() {
     this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     this.addEditButtons();
-    scrollToId("editor");
+
+    this.renderQuestion();
 }
 
 /*
@@ -503,7 +513,7 @@ Policy.prototype.edit = function() {
         
     ])
     );
-    scrollToId("policy");
+    this.scrollToEditor();
 }
 
 
@@ -527,5 +537,5 @@ Assignment.prototype.edit = function() {
         ["Points", Util.input("number", "points")],
     ])
     );
-    scrollToId("policy");
+    this.scrollToEditor();
 }
