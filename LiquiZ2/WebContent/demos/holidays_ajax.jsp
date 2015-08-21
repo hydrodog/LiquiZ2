@@ -1,1 +1,7 @@
-new Calendar(new Date(), 365);
+{
+    "type": "Calendar",
+    "payload": {
+        "startDate": null,
+        "days": 365
+    }
+}

@@ -8,11 +8,15 @@
  * and compute a fallback if that day falls on a holiday.
  */
 
-function Calendar(startDate, days) {
+function Calendar(payload) {
+    for ( var k in payload) {
+        this[k] = payload[k];
+    }
+    this.startDate = (typeof this.startDate === null) ? new Date() : this.startDate;
+
 	this.monthView = true;
-    this.startDate = startDate;
     this.holidays = [];
-    for (var i = 0; i < days; i++){
+    for (var i = 0; i < this.days; i++){
     	this.holidays.push('0');
     }
     this.monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -158,7 +162,7 @@ Calendar.prototype.drawMonth = function(d, id){
     h.appendChild(th);
     
     h = t.insertRow(1);
-    fillRowText(h, ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+    h.innerHTML = Util.tr(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], true).innerHTML;
     d.setDate(1);
     var monthId = d.getMonth();
     var dayOfWeek = d.getDay();

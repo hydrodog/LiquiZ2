@@ -137,18 +137,17 @@ gtable.clickColumn = function(e) {
 	}
 }
 
-function Grades(gradeinfo, list) {
-	for ( var k in gradeinfo) {
-		this[k] = gradeinfo[k];
+function Grades(payload) {
+	for ( var k in payload) {
+		this[k] = payload[k];
 	}
 	this.body = document.getElementById("container");
 	this.body.className = "grades";
-	this.list = list;
 }
 
 Grades.prototype.exec = function() {
 	this.body.appendChild(gtoolbar());
-	this.body.appendChild(gtable(this.list));
+	this.body.appendChild(gtable(this.data));
 }
 
 /*
