@@ -1,0 +1,15 @@
+{
+    "folders":
+    [
+        {
+            "follow_symlinks": true,
+            "path": "C:/Users/Asher/SkyDrive/Documents/eclipse_workspace/LiquiZ2",
+            "folder_exclude_patterns": [],
+        },
+        {
+            "follow_symlinks": true,
+            "path": "/home/dkruger/git/LiquiZ2/",
+            "folder_exclude_patterns": [],
+        }
+    ]
+}
