@@ -247,6 +247,16 @@ QuizEdit.prototype.addStdChoice = function(stdChoice) {
     Quiz.stdChoice[name] = answers;
 }
 
+QuizEdit.prototype.selectName = function(hash, action) {
+    var sel = document.createElement("select");
+    sel.onchange = action;
+    for (var k in hash) {
+        var opt = Util.option(k,k);
+        sel.appendChild(opt);
+    }
+    return sel;
+}
+
 QuizEdit.prototype.editMCtop = function() {
     var stdChoice;
     var addOption = function() {
@@ -258,12 +268,14 @@ QuizEdit.prototype.editMCtop = function() {
         }
         this.scrollToEditor();
     };
-    this.mcHeader = Util.divadd(QuizEdit.EDITCTRL,
+    this.mcHeader = Util.divadd(QuizEdit.EDITPANE,
         this.optCount = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
-        this.editButton("Add Option", this.addOption),
-        Util.span("Name"),
-        this.stdChoice = Util.input("text", 'editInput', 'stdChoice'),
-        this.editButton("Create Standard Choice", this.addStdChoice)
+        this.editButton("Add Option", this.addOption));
+    this.mcHeader2 = Util.divadd(QuizEdit.EDITPANE,     
+        Util.span("StdChoice Name"),
+        this.stdChoice = Util.input("text", QuizEdit.NAME, 'stdChoice'),
+        this.editButton("Create", this.addStdChoice),
+        this.selectName(Quiz.stdChoice)
     );
 
     var list = [ ["Answer", "correct", ""] ];
@@ -278,7 +290,7 @@ QuizEdit.prototype.editMCtop = function() {
 
 QuizEdit.prototype.editMC = function(questionType) {
     this.editMCtop();
-    this.addFields(questionType, this.mcHeader, this.ansTable);
+    this.addFields(questionType, this.mcHeader, this.mcHeader2, this.ansTable);
     this.answers = [];
 }
 
