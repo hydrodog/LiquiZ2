@@ -75,12 +75,17 @@ QuizEdit.prototype.completeEdit = function(array) {
 //TODO: Have a mode where it automatically keeps the editor open for multiple questions?
 QuizEdit.prototype.addQuestion = function() {
     var t = this;
-    return function() { t.completeEdit(t.cbFunc());};
+    return function() {
+        t.completeEdit(t.cbFunc());
+        t.editor.innerHTML = "";
+    };
 }
 
 QuizEdit.prototype.addSubQuestion = function() {
     var t = this;
-    return function() { t.completeEdit(t.cbFunc());};
+    return function() {
+        t.completeEdit(t.cbFunc());
+    };
 }
 
 // Cancel a question, add nothing and remove the editor
