@@ -232,20 +232,26 @@ QuizEdit.prototype.addOption = function(row) {
     this.scrollToEditor();
 }
 
-QuizEdit.prototype.addStdChoice = function(stdChoice) {
+QuizEdit.prototype.addStdChoice = function() {
     //stdChoice.style.background="#fff";
-    var name = stdChoice.value;
+    var name = this.stdChoice.value;
     if (name === '') {
-        stdChoice.style.background="#f00";
+        this.stdChoice.style.background="#f00";
         return; //TODO: alert? need a name for a standard choice
     }
     console.log(this);
     var answers = [];
-    for (var i = 0; i < this.ansTable.rows; i++) {
-        answers.push(document.getElementById("a"+i));
+    for (var i = 0; i < this.ansTable.rows.length; i++) {
+        var inp =document.getElementById("a"+i);
+        if (inp !== null)
+            answers.push(inp.value);
     }
     Quiz.stdChoice[name] = answers;
+    var tmp = this.selectName(Quiz.stdChoice);
+    this.selStdChoice.parentElement.replaceChild(tmp, this.selStdChoice); 
 }
+
+
 
 QuizEdit.prototype.selectName = function(hash, action) {
     var sel = document.createElement("select");
@@ -275,8 +281,7 @@ QuizEdit.prototype.editMCtop = function() {
         Util.span("StdChoice Name"),
         this.stdChoice = Util.input("text", QuizEdit.NAME, 'stdChoice'),
         this.editButton("Create", this.addStdChoice),
-        this.selectName(Quiz.stdChoice)
-    );
+        this.selStdChoice);
 
     var list = [ ["Answer", "correct", ""] ];
     for (var row = 0; row < 4; row++) {
@@ -285,7 +290,6 @@ QuizEdit.prototype.editMCtop = function() {
            this.editButton("delete", this.deleteAnswer)]);
     }
     this.ansTable = Util.table(list, true, QuizEdit.ANSWERS);
-    return [div, list];
 }
 
 QuizEdit.prototype.editMC = function(questionType) {
@@ -377,7 +381,7 @@ QuizEdit.prototype.buildRegex = function() {
     this.q.mustMatch = this.mustMatch.value;
     this.q.cannotWatch = this.cannotMatch.value
     return [
-            ['regex', --QuizEdit.newid],
+            ['regex', QuizEdit.newid],
     ];
 };
 
@@ -385,7 +389,7 @@ QuizEdit.prototype.editRegex = function() {
     this.addFields(this.buildRegex,
         Util.table([
             [Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName")],
-            ["Pattern:", Util.input("text", QuizEdit.REGEX, "regex")],
+            ["Pattern:", Util.input("text", QuizEdit.REGEX, "regex"), this.selRegex],
             [Util.span("Must match:"), this.mustMatch = this.textArea(null, 10, 40)],
             [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
         ]));
@@ -429,7 +433,11 @@ QuizEdit.prototype.inputBlur = function(type, val) {
     return v;
 }
 
-
+QuizEdit.regex = {
+    mass: "kg|KG|kilo|kilogram",
+    length: "m|meter",
+    time: "sec|s|second"
+};
 
 QuizEdit.prototype.addEditButtons = function () {
     this.editor.appendChild(Util.button("Add Question", this.addQuestion()));
@@ -517,6 +525,8 @@ QuizEdit.prototype.editQuestion = function() {
     this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     this.addEditButtons();
+    this.selRegex = this.selectName(QuizEdit.regex, 'selRegex');
+    this.selStdChoice = this.selectName(Quiz.stdChoice, 'selStdChoice');
 }
 
 /*
