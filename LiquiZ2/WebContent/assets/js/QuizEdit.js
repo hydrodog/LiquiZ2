@@ -25,6 +25,7 @@ QuizEdit.TEXTAREA = "editTA";
 QuizEdit.REGEX = "editPattern";
 
 QuizEdit.prototype.scrollToEditor = function() {
+//    location= location.href.split("#")[0]+'#'+this.q.id;
     scrollToId("edit-qc" + this.q.id);
 };
 
@@ -239,7 +240,6 @@ QuizEdit.prototype.addStdChoice = function() {
         this.stdChoice.style.background="#f00";
         return; //TODO: alert? need a name for a standard choice
     }
-    console.log(this);
     var answers = [];
     for (var i = 0; i < this.ansTable.rows.length; i++) {
         var inp =document.getElementById("a"+i);
@@ -247,11 +247,20 @@ QuizEdit.prototype.addStdChoice = function() {
             answers.push(inp.value);
     }
     Quiz.stdChoice[name] = answers;
-    var tmp = this.selectName(Quiz.stdChoice);
-    this.selStdChoice.parentElement.replaceChild(tmp, this.selStdChoice); 
+    //var tmp = this.selectName(Quiz.stdChoice);
+    var c = Util.option(name, name);
+    this.selStdChoice.add(c);
+//    this.selStdChoice.parentElement.replaceChild(tmp, this.selStdChoice); 
 }
 
 
+QuizEdit.prototype.deleteStdChoice = function() {
+    var name = this.stdChoice.value;
+    delete Quiz.stdChoice[name];
+    for (var i = 0; i < this.selStdChoice.children.length; i++)
+        if (this.selStdChoice.children[i].value == name)
+            this.selStdChoice.remove(i);
+}
 
 QuizEdit.prototype.selectName = function(hash, action) {
     var sel = document.createElement("select");
@@ -281,7 +290,9 @@ QuizEdit.prototype.editMCtop = function() {
         Util.span("StdChoice Name"),
         this.stdChoice = Util.input("text", QuizEdit.NAME, 'stdChoice'),
         this.editButton("Create", this.addStdChoice),
-        this.selStdChoice);
+        this.selStdChoice,
+        this.editButton("Delete", this.deleteStdChoice)
+        );
 
     var list = [ ["Answer", "correct", ""] ];
     for (var row = 0; row < 4; row++) {
@@ -462,7 +473,7 @@ QuizEdit.prototype.editQuestion = function() {
     var e = this.editor = document.getElementById("edit-qc"+this.q.id);
     this.scrollToEditor();
 
-    e.appendChild(Util.h1("Question Editor"));
+    e.appendChild(Util.a('#editA'), Util.h1("Question Editor"));
     this.addEditButtons();
     
     e.appendChild(Util.table([ ["Title", this.title = this.inputBlur("text", "title")] ]));
