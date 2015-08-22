@@ -485,9 +485,10 @@ QuizEdit.prototype.editQuestion = function() {
       video = Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
     ]
     ] ));
+    var t = this;
     image.onchange = function() {
-    console.log('img');
-    }
+        t.q.content.push(['img', this.files, 0, 0]);
+    };
     var ins = [
     [ this.editButton("Equation", null),
       this.editButton("Rnd Int", null),
