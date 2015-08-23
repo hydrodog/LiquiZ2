@@ -413,9 +413,9 @@ QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,svg,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
 QuizEdit.videoFileTypes = "mpg,mpeg,mp4";
 
-QuizEdit.prototype.buildImage = function() {
+QuizEdit.prototype.buildImage = function(src, x, y, w, h) {
     return [
-        ['image', this.src, this.x, this.y, this.w, this.h]
+        ['image', src, x, y, w, h]
     ];
 };
 
@@ -512,15 +512,10 @@ QuizEdit.prototype.editQuestion = function() {
     ] ));
     var t = this;
     image.onchange = function() {
-        var f = new File(image.src);
+        //TODO: do the upload to the server
 
         console.log(image.files);
-        this.src = image.files[0];
-        this.x =0;
-        this.y = 0;
-        this.w = 500;
-        this.h = 500;
-        t.buildImage();
+        t.completeEdit(t.buildImage(image.files[0], 0,0,500,500));
     };
     var ins = [
     [ this.editButton("Equation", null),
