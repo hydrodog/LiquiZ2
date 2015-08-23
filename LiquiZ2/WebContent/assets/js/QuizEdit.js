@@ -17,7 +17,7 @@ QuizEdit.EDITCTRL = "editctrl";
 QuizEdit.INT = "editint";
 QuizEdit.DOUBLE = "editdouble";
 QuizEdit.NAME = "editname";
-QuizEdit.NAME = "question";
+QuizEdit.QUESTION = "question";
 
 QuizEdit.BUTTON = "editbutton";
 QuizEdit.ANSWERS = "answers";
@@ -331,7 +331,7 @@ QuizEdit.prototype.editSurvey = function() {
     }
     this.surveyQuestions = Util.table(surveyQuestions, false);
 
-    this.addFields(this.buildSurvey, this.mcHeader, this.ansTable, Util.h2("Survey Questions"),this.surveyQuestions);
+    this.addFields(this.buildSurvey, this.mcHeader, this.mcHeader2, this.ansTable, Util.h2("Survey Questions"),this.surveyQuestions);
     this.answers = [];
 }
 
