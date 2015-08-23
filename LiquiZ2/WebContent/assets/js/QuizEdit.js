@@ -393,7 +393,8 @@ QuizEdit.prototype.buildRegex = function() {
 QuizEdit.prototype.editRegex = function() {
     this.addFields(this.buildRegex,
         Util.table([
-            [Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName")],
+            [Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
+                this.editButton("Create", null), this.editButton("delete", null), this.editButton("test", null)],
             ["Pattern:", Util.input("text", QuizEdit.REGEX, "regex"), this.selRegex],
             [Util.span("Must match:"), this.mustMatch = this.textArea(null, 10, 40)],
             [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
@@ -441,10 +442,17 @@ QuizEdit.prototype.inputBlur = function(type, val) {
 
 QuizEdit.prototype.pickRegex = function() {
     console.log(this);
+    var s = this.selRegex.selectedIndex;
+    if (s == 0)
+        return;
+    var name = this.selRegex.options[s].value;
+    this.regex.value = QuizEdit.regex[name];
 };
 
 QuizEdit.prototype.pickStdChoice = function() {
-    var answers = Quiz.stdChoice[this.selStdChoice.options[this.selStdChoice.selectedIndex].value];
+    var name = this.selStdChoice.options[this.selStdChoice.selectedIndex].value;
+    this.stdChoice.value = name;
+    var answers = Quiz.stdChoice[name];
     console.log(answers);
     if (this.ansTable.rows.length < answers.length+1) {
         for (var i = this.ansTable.rows.length; i < answers.length+1; i++)
