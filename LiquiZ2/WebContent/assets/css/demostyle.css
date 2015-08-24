@@ -315,7 +315,9 @@ input.editpattern {
     size: 6;
     width:75px;
 }
-
+.question {
+    width: 100%;    
+}
 .surveyQuestion {
     size: 80;
     width: "100%";
