@@ -320,3 +320,19 @@ input.editpattern {
     size: 80;
     width: "100%";
 }
+
+.calMonth {
+    background: #20a;
+    width: 100%;
+}
+.calendar {
+    background: #888;
+    width: 50%;
+}
+.cal {
+    background: #888;
+}
+
+.hol {
+    background: #d00;
+}
