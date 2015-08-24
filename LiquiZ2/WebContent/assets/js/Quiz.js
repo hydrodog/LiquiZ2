@@ -603,8 +603,7 @@ Quiz.prototype.clickableImage = function(id, src, xs, ys) {
 };
 
 Quiz.prototype.image = function(src, x, y, w, h) {
-    var img = document.createElement("img");
-    img.src = mediaLocations.img + src;
+    var img = Util.img(src);
     img.style.left = x;
     img.style.top = y;
     img.width = w;

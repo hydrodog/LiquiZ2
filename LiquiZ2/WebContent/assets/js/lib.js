@@ -365,13 +365,18 @@ Util = {
             });            
     },
 
-    file: function(accept, className, id) {
-        return Util.make("input", {
+    file: function(value, accept, className, id) {
+        value = (typeof value === "undefined") ? "File Upload" : value;
+        var label = Util.label();
+        label.appendChild(Util.span(value));
+        label.input = Util.make("input", {
             type: "file",
             accept: accept,
             className: className,
             id: id,
         });
+        label.appendChild(label.input);
+        return label;
     },
 
     filebutton: function(value, accept, className, onAccept) {

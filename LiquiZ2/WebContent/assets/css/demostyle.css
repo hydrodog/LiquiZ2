@@ -2,6 +2,9 @@
     box-sizing: border-box;
 }
 
+input[type="file"] {
+    display: none;
+}
 .quiz {
     font-family: Arial, san-serif;
     background-color: #e0e0ff;

@@ -262,20 +262,19 @@ QuizEdit.prototype.deleteStdChoice = function() {
             this.selStdChoice.remove(i);
 }
 
-QuizEdit.prototype.selectName = function(hash, method) {
+QuizEdit.prototype.selectName = function(hash, method, defaultLabel) {
     var sel = document.createElement("select");
     sel.onchange = (method === null) ? null : method.bind(this);
 
+    sel.appendChild(Util.option(null, defaultLabel));
     for (var k in hash) {
-        var opt = Util.option(k,k);
-        sel.appendChild(opt);
+        sel.appendChild(Util.option(k,k));
     }
     return sel;
 }
 
-QuizEdit.prototype.editMCtop = function() {
+QuizEdit.prototype.editMCtop = function(checkbox) {
     var stdChoice;
-    this.withCheckbox = true; // default, turn off if you don't want it (survey)
     this.mcHeader = Util.divadd(QuizEdit.EDITPANE,
         this.optCount = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
         this.editButton("Add Option", this.addOption));
@@ -287,17 +286,22 @@ QuizEdit.prototype.editMCtop = function() {
         this.editButton("Delete", this.deleteStdChoice)
         );
 
-    var list = [ ["Answer", "correct", ""] ];
+    var list = (checkbox) ? [["Answer", "correct", ""]] : [["Answer", ""]];
     for (var row = 0; row < 4; row++) {
-        list.push([ Util.input("text", QuizEdit.EDITCTRL, "a"+row),
-           Util.checkbox(null, "check"+row, "editCB", "check"+row),
-           this.editButton("delete", this.deleteAnswer)]);
+        if (checkbox) {
+            list.push([ Util.input("text", QuizEdit.EDITCTRL, "a"+row),
+               Util.checkbox(null, "check"+row, "editCB", "check"+row),
+               this.editButton("delete", this.deleteAnswer)]);
+        } else {
+            list.push([ Util.input("text", QuizEdit.EDITCTRL, "a"+row),
+               this.editButton("delete", this.deleteAnswer)]);            
+        }
     }
     this.ansTable = Util.table(list, true, QuizEdit.ANSWERS);
 }
 
 QuizEdit.prototype.editMC = function(questionType) {
-    this.editMCtop();
+    this.editMCtop(true);
     this.addFields(questionType, this.mcHeader, this.mcHeader2, this.ansTable);
     this.answers = [];
 }
@@ -323,7 +327,7 @@ QuizEdit.prototype.addStandardChoice = function(name, choices, nameBlank) {
 }
 
 QuizEdit.prototype.editSurvey = function() {
-    this.editMCtop();
+    this.editMCtop(false);
     this.withCheckbox = false;
     var surveyQuestions = [];
     for (var i = 0; i < 4; i++) {
@@ -420,6 +424,18 @@ QuizEdit.prototype.buildImage = function(src, x, y, w, h) {
     ];
 };
 
+QuizEdit.prototype.buildVideo = function(src, x, y, w, h) {
+    return [
+        ['Util.video', src]
+    ];
+};
+
+QuizEdit.prototype.buildAudio = function(src, x, y, w, h) {
+    return [
+        ['Util.audio', src]
+    ];
+};
+
 QuizEdit.prototype.editImage = function() {
     this.addFields(this.buildImage, Util.table ( [
     [ Util.span("x="), this.x = Util.input("number", QuizEdit.INT, "x"),
@@ -462,7 +478,8 @@ QuizEdit.prototype.pickStdChoice = function() {
             this.ansTable.deleteRow(i);
     }
     for (var i = 0; i < answers.length; i++) {
-        this.ansTable.rows[i+1].cells[0].innerHTML = answers[i]
+        this.ansTable.rows[i+1].cells[0].innerHTML = "";
+        this.ansTable.rows[i+1].cells[0].appendChild(Util.input("text", null, null, answers[i]));
     }
 }
 
@@ -513,18 +530,25 @@ QuizEdit.prototype.editQuestion = function() {
     var image, audio, video;
     e.appendChild(Util.table(list));
     e.appendChild( Util.table( [
-    [ image = Util.file(QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
-      audio = Util.file(QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
-      video = Util.file(QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
+    [ image = Util.file("Upload Image", QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
+      audio = Util.file("Upload Audio", QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
+      video = Util.file("Upload Video", QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
     ]
     ] ));
     var t = this;
     image.onchange = function() {
         //TODO: do the upload to the server
-
-        console.log(image.files);
-        t.completeEdit(t.buildImage(image.files[0], 0,0,500,500));
+        t.completeEdit(t.buildImage(this.input.files[0].name, 0,0,500,500));
     };
+    audio.onchange = function() {
+        //TODO: do the upload to the server
+        t.completeEdit(t.buildAudio(this.input.files[0].name));
+    };
+    video.onchange = function() {
+        //TODO: do the upload to the server
+        t.completeEdit(t.buildVideo(this.input.files[0].name));
+    };
+
     var ins = [
     [ this.editButton("Equation", null),
       this.editButton("Rnd Int", null),
@@ -562,8 +586,8 @@ QuizEdit.prototype.editQuestion = function() {
     this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     this.addEditButtons();
-    this.selRegex = this.selectName(QuizEdit.regex, this.pickRegex);
-    this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice);
+    this.selRegex = this.selectName(QuizEdit.regex, this.pickRegex, "Select Regex");
+    this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
 }
 
 /*
