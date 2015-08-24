@@ -404,9 +404,11 @@ Util = {
             multiple: multiple,
         });
     },
+
     sel: function (innerHTML, className, id) {
 	return Util.select(null, false, innerHTML, className, id);
     },
+
     yesno: function(className, id, onChange) {
     var options = document.createDocumentFragment();
     options.appendChild(Util.option("F", "No"));
@@ -418,6 +420,7 @@ Util = {
         innerHTML: options
     });
     },
+    
     option: function(value, innerHTML, className, id) {
         return Util.make("option", {
             value: value,
