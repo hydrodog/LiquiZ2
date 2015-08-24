@@ -12,24 +12,28 @@ function Calendar(payload) {
     for ( var k in payload) {
         this[k] = payload[k];
     }
-    this.startDate = (typeof this.startDate === null) ? new Date() : this.startDate;
+    this.startDate = new Date();
+    //this.startDate = (typeof this.startDate === null) ? new Date() : this.startDate;
 
 	this.monthView = true;
     this.holidays = [];
     for (var i = 0; i < this.days; i++){
     	this.holidays.push('0');
     }
-    this.monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    this.endDateOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     this.body = document.getElementById("container");
 	this.body.className = "calendar";
 }
+
+Calendar.monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+Calendar.DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+Calendar.WEEKDAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+Calendar.HOLIDAY_COLOR = "#d00";
 
 Calendar.prototype.getDateOfYear = function(d) {
 	var dateOfYear = 0;
 	var month = d.getMonth();
 	for(var i=0; i<month; i++){
-		dateOfYear += this.endDateOfMonth[i];
+		dateOfYear += Calendar.DAYS_PER_MONTH[i];
 	}
 	dateOfYear += d.getDate();
 	return dateOfYear;
@@ -152,17 +156,17 @@ Calendar.prototype.drawMonth = function(d, id){
 	var calendar = this;
 	
 	// generate header of one month    
-    var t = Util.make("table", {className : "calendar", id : "calendar"});
+    var t = Util.make("table", {className : "calendar", id : id});
     var h = t.insertRow(0);
     var th = Util.make("th", {
         scope : "col",
-        innerHTML : d.getFullYear() + " " + this.monthAbbr[d.getMonth()],
+        innerHTML : d.getFullYear() + " " + Calendar.monthAbbr[d.getMonth()],
         colSpan : 7
     });
     h.appendChild(th);
     
     h = t.insertRow(1);
-    h.innerHTML = Util.tr(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], true).innerHTML;
+    h.innerHTML = Util.tr(Calendar.WEEKDAY, true).innerHTML;
     d.setDate(1);
     var monthId = d.getMonth();
     var dayOfWeek = d.getDay();
@@ -171,11 +175,13 @@ Calendar.prototype.drawMonth = function(d, id){
     // generate a calendar month week by week (5 is the most possible weeks contained by one month)
 	for (var i = 2; i <= 7; i++) {
         var r = t.insertRow(i);
+        r.className = "calendar";
         var rowFlag = false; // indicates whether it is the last week of this month
         
         // generate one week of a month
         for (var j = 0; j < 7; j++) {
             var c = r.insertCell(j);
+            c.className = "cal";
             if(d.getMonth() == (monthId-1+12)%12){
                 d.setDate(d.getDate() + 1);
             }
@@ -196,10 +202,12 @@ Calendar.prototype.drawMonth = function(d, id){
             	var holidayFlag = this.holidays[this.getDateOfYear(d) - 1];
             	// here is the place we can do other things for marked holidays, turning red for illustration purpose
             	if(holidayFlag == '1'){
-            		c.style.color = "red";
+            		//c.style.background = "red";
+                    c.className = "hol";
             	}
             	else{
-            		c.style.color = "black";
+            		//c.style.background = null;
+                    c.className = "cal";
             	}
                 d.setDate(d.getDate() + 1);
             }
@@ -219,11 +227,15 @@ Calendar.prototype.drawMonth = function(d, id){
 Calendar.prototype.year = function(d) {
     var div = Util.div("calYear", "calYear");
     div.appendChild(this.initialButtons());
+    //var months = [];
     for (var month = 0; month < 12; month++){
     	var id = "cal" + month;
     	div.appendChild(this.month(d, id));
+        //months.push(this.month(d, id));
     	d.setMonth(d.getMonth() + 1);
     }
+    //var t = Util.table(months, false);
+    //div.appendChild(t);
     d.setMonth(d.getMonth() - 1);//back to the last year of the working calendar
     return div;
 }
