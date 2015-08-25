@@ -370,6 +370,38 @@ QuizEdit.prototype.editCLOZE = function() {
     this.CLOZE.ondblclick = function(){ t.addBrackets(); };
 }
 
+//Equation part
+QuizEdit.prototype.buildEquation = function() {
+    this.q.answers.push(parseEquation(this.equation.tag));
+    return [
+        ['equation', "xx", "true"]
+    ];
+};
+
+QuizEdit.prototype.editEquation = function() {
+	this.equation = new Equation(this.varEdit , ["Fraction", "Script", /*"Radical"*/, "Integral", "LargeOperator", "Bracket", "Function"]); 
+    this.addFields(this.buildEquation, 
+    		Util.span("Answer: "), this.equation.equationBox(), 
+    		Util.br(), this.equation.equationButton("Equation Editor")
+    );
+    this.varEdit.appendChild(this.equation.x);
+};
+
+QuizEdit.prototype.buildEquationQues = function() {
+    return [
+        ['equation', "xx", "false", parseEquation(this.equation.tag)]	//TODO: maybe add parameter to pass button editions 
+    ];
+};
+
+QuizEdit.prototype.editEquationQues = function() {
+	this.equation = new Equation(this.varEdit , ["Fraction", "Script", /*"Radical"*/, "Integral", "LargeOperator", "Bracket", "Function"]); 
+    this.addFields(this.buildEquationQues,
+    		Util.span("Question: "), this.equation.equationBox(), 
+    		Util.br(), this.equation.equationButton("Equation Editor")
+    );
+    this.varEdit.appendChild(this.equation.x);
+};
+
 QuizEdit.prototype.buildMatrix = function() {
     return [
         ['matrix', this.matrixRows, this.matrixCols],
@@ -550,7 +582,7 @@ QuizEdit.prototype.editQuestion = function() {
     };
 
     var ins = [
-    [ this.editButton("Equation", null),
+    [ this.editButton("Equation", this.editEquation),
       this.editButton("Rnd Int", null),
       this.editButton("Rnd Dec", null),
       this.editButton("Rnd String", null),
@@ -568,7 +600,7 @@ QuizEdit.prototype.editQuestion = function() {
       this.editButton("Formula", null)
          ],
     [
-      this.editButton("Equation", null),
+      this.editButton("EquationQues", this.editEquationQues),
       this.editButton("Essay", this.editEssay),
       this.editButton("Code", this.editCode),
       this.editButton("Matrix", this.editMatrix),

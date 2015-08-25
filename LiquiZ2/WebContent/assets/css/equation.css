@@ -1,8 +1,46 @@
+/* popup div editor */
+div.popup 
+{
+  height:auto; 
+  border: 1px solid #327eca; 
+  width: 300px;
+} 
+div.popup div.menu_form_header 
+{ 
+  border-bottom: 0px; 
+  cursor: move; 
+  width:100%;
+  height:      22px; 
+  line-height: 22px; 
+  vertical-align: middle; 
+  text-decoration: none; 
+  font-family: "Times New Roman", Serif; 
+  font-weight: 800; 
+  font-size: 13px; 
+  color: #206040; 
+  background-color:#c8caf5;
+} 
+div.menu_form_body 
+{ 
+/*    width:100%; */
+/*    height:100%; */
+  background-color:#f1f8fe;
+} 
+div.popup input.menu_form_exit 
+{ 
+  float: right; 
+/*    margin: 4px 5px 0px 0px;  */
+  color: white;
+  cursor: pointer; 
+  background-color:#d83333;
+} 
+/*end: div */
+
 .equation * {
-	box-sizing: initial;
+    box-sizing: initial;
 }
 .equation sup {
-	top:0;
+    top:0;
 }
 /*button*/
 .math-button {
@@ -123,7 +161,7 @@
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9); 
 }
 .math-box::-webkit-scrollbar-thumb:window-inactive {
-	background: rgba(0,0,0,0.9); 
+    background: rgba(0,0,0,0.9); 
 }
 
 .align-mid-large-oper
@@ -133,13 +171,25 @@ display: block;
 font-size: 80%!important;
 outline: 0;
 }
-.div6
+.top-in-frac
 {
 text-align: left;
 display: block;
 font-size: 80%!important;
 }
-.div5
+.mid-in-frac
+{
+text-align: left;
+display: block;
+font-size: 80%!important;
+height: 7px;    
+}
+.space-in-frac
+{
+display: inline-block; 
+width: 0px;
+}
+.bot-in-frac
 {
 float: right;
 width: 100%;

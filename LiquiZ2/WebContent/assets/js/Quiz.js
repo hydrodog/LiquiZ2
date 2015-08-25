@@ -376,6 +376,19 @@ Quiz.prototype.instructions = function(txt) {
     return Util.p(txt, 'instructions');
 }
 
+Quiz.prototype.equation = function(id, editable, arr) {	
+	var div = Util.div("equation");
+    if (editable == "true") {
+    	var eq = new Equation(div, ["Fraction", "Script", /*"Radical"*/, "Integral", "LargeOperator", "Bracket", "Function"]);
+        div.appendChild(eq.equationBox());
+        div.appendChild(Util.br());
+        div.appendChild(eq.equationButton("Equation Editor"));
+    }
+    if (arr != undefined)
+    	parseEquationArray(div, arr);
+    return div;
+}
+
 Quiz.prototype.fillin = function(id) {
     var input = Util.input('text', 'fillin', id);
     return input;
