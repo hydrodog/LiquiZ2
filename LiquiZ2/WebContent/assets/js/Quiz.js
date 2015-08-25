@@ -49,9 +49,9 @@ Quiz.prototype.processParams = function() {
     }
 };
 
-Quiz.prototype.exec = function(params) {
+Quiz.prototype.exec = function(refresh) {
     this.processParams();
-    if (this.view !== url.view) {
+    if (refresh || this.view !== url.view) {
         clearPage();
         this.header();
         this.partialRefresh();
@@ -107,7 +107,7 @@ Quiz.prototype.partialRefresh = function() {
 
 
     this.headerButtons();
-    if (!this.questionsDiv) {
+    if (!document.contains(this.questionsDiv)) {
         this.questionsDiv = Util.div("questions", "questions");
         this.questionsDiv.appendChild(frag);
         this.render(this.questionsDiv);
@@ -232,11 +232,10 @@ Quiz.prototype.collapseExpandOnkeydown = function(e) {
 Quiz.prototype.headerButtons = function() {
     var button, input, render;
 
-    if (this.headerControl) {
+    if (document.contains(this.headerControl)) {
         this.headerControl.innerHTML = "";
         render = false;
-    }
-    else {
+    } else {
         this.headerControl = Util.div("header", "header-control");
         render = true;
     }
@@ -326,9 +325,27 @@ function createAndAddNewOpenFileDialog(name) {
     document.getElementById("filebrowse").innerHtml += "<input type='file' style='display:none' id='" + name + "'/>"
 }
 
-Quiz.prototype.saveLocal = function(id) {
-    filebrowser.savePopup(this.questions);
-}
+Quiz.prototype.loadLocal = function() {
+    filebrowser.loadPopup((function(payload) {
+        for (var item in payload)
+            this[item] = payload[item];
+        this.exec(true);
+    }).bind(this));
+};
+
+Quiz.prototype.generateData = function() {
+    var payload = {
+        title: this.title,
+        points: this.points,
+        timeLimit: this.timeLimit,
+        remainingTries: this.remainingTries,
+        dataDir: this.dataDir,
+        editMode: this.editMode,
+        data: this.data
+    };
+
+    return payload;
+};
 
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
@@ -358,12 +375,9 @@ Quiz.prototype.createSubmit = function(id) {
             }),
         Util.button("Save Local",  
             (function () {
-                this.saveLocal();
+                filebrowser.savePopup(this.generateData());
             }).bind(this)),
-        Util.button("Load From Local",  
-            (function () {
-                this.loadLocal();
-            }).bind(this), null, id + "-edit-buttons" )
+        Util.button("Load From Local", this.loadLocal.bind(this), null, id + "-edit-buttons" )
     ] );
         div.appendChild(editBox);
     }
