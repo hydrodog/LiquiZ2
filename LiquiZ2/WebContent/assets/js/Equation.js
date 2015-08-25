@@ -16,18 +16,21 @@
  * interface: 
  * Equation.prototype.equationButton		//return a new equation Editor button
  * Equation.prototype.editModeButton(target) {	//return 3 button for edit mode	
- * Equation.prototype.equationBox(target) 	//insert a edit box into target
+ * Equation.prototype.equationBox(target) 	//return a edit box into target
  * Equation.prototype.buildEquation(qcId) 	//return uneditable equation into qc, remove all events -> uneditable
  */
-function Equation(target, btn_set) {
-	if (target == null) 
+function Equation(payload) {
+    for ( var k in payload) {
+        this[k] = payload[k];
+    }
+	if (this.target == null) 
 		this.body = document.getElementById("container");	
 	else 
-		this.body = target;
-	console.log(target);
+		this.body = this.target;
+//	console.log(target);
 	this.btn_set = [];
-	for (var i in btn_set)
-    	this.btn_set.push(Equation[btn_set[i]]);
+	for (var i in this.btn)
+    	this.btn_set.push(Equation[this.btn[i]]);
     this.body.className = "equation";
 }
 
@@ -101,7 +104,7 @@ Equation.prototype.equationButton = function(name) {		//return a new equation Ed
 	x.addEventListener("mouseout", function(){x.setAttribute("isHover", false);}, false);
 
 	insertInto(x, [insertInto(Util.div("menu_form_header", "popup_drag"), 
-					[document.createTextNode("equation Editor"), Util.input("button", "menu_form_exit", popId.slice(1), "X")], false),
+					[document.createTextNode("Equation Editor"), Util.input("button", "menu_form_exit", popId.slice(1), "X")], false),
 					mkToolBtn(Util.div("menu_form_body", "math-tool-box"), this.btn_set)
 				]);
 	this.body.appendChild(x);
@@ -117,7 +120,7 @@ Equation.prototype.editModeButton = function(target) {	//insert 3 button for edi
            Util.button("edit", "button", "-1", editButton), 
            Util.button("complete", "button", "-1", editButtonEnd)]);
 };
-Equation.prototype.equationBox = function() {	//insert a edit box into target
+Equation.prototype.equationBox = function() {	//return a edit box 
 	var tag = make("span", {id: "main-math-box", 
 		className: "math-expr math-editable empty", 
 		style: {fontSize: "20px", backgroundColor: "white"}});
@@ -135,10 +138,10 @@ Equation.prototype.exec = function() {
 	this.editModeButton(this.body);
 	//the edit div box for equation
 	var box = Util.div("", "math-box");
-	this.equationBox(box);
+	box.appendChild(this.equationBox());
 	this.body.appendChild(box);
 	
-	insertInto(this.body, [this.equationButton("equation Editor")]);
+	insertInto(this.body, [this.equationButton("Equation Editor")]);
 };
 Equation.prototype.buildEquation = function(tag, qcId) {		//build equation into qc, remove all events -> uneditable
 	var elem = tag;

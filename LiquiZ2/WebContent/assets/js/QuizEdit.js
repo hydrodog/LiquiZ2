@@ -374,12 +374,15 @@ QuizEdit.prototype.editCLOZE = function() {
 QuizEdit.prototype.buildEquation = function() {
     this.q.answers.push(parseEquation(this.equation.tag));
     return [
-        ['equation', "xx", "true"]
+        ['equation', "equation"+this.id, "true"]
     ];
 };
 
 QuizEdit.prototype.editEquation = function() {
-	this.equation = new Equation(this.varEdit , ["Fraction", "Script", /*"Radical"*/, "Integral", "LargeOperator", "Bracket", "Function"]); 
+	this.equation = new Equation({
+        "target": this.varEdit,
+        "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+    }); 
     this.addFields(this.buildEquation, 
     		Util.span("Answer: "), this.equation.equationBox(), 
     		Util.br(), this.equation.equationButton("Equation Editor")
@@ -389,12 +392,15 @@ QuizEdit.prototype.editEquation = function() {
 
 QuizEdit.prototype.buildEquationQues = function() {
     return [
-        ['equation', "xx", "false", parseEquation(this.equation.tag)]	//TODO: maybe add parameter to pass button editions 
+        ['equation', "equationQues"+this.id, "false", parseEquation(this.equation.tag)]	//TODO: maybe add parameter to pass button editions 
     ];
 };
 
 QuizEdit.prototype.editEquationQues = function() {
-	this.equation = new Equation(this.varEdit , ["Fraction", "Script", /*"Radical"*/, "Integral", "LargeOperator", "Bracket", "Function"]); 
+	this.equation = new Equation({
+        "target": this.varEdit,
+        "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+    }); 
     this.addFields(this.buildEquationQues,
     		Util.span("Question: "), this.equation.equationBox(), 
     		Util.br(), this.equation.equationButton("Equation Editor")
