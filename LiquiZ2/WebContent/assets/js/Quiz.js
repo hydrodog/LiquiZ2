@@ -18,6 +18,7 @@ function Quiz(payload) {
     this.questions = this.data;
 }
 
+// TODO(asher): This should be passed in through QuizDemo_ajax
 Quiz.stdChoice = {
     Likert5: ["Strongly Agree",
           "Agree",
@@ -326,10 +327,7 @@ function createAndAddNewOpenFileDialog(name) {
 }
 
 Quiz.prototype.saveLocal = function(id) {
-    var saveVal = JSON.stringify(this.questions);
-    console.log(saveVal);
-    var name = Util.popupLocalStoreBrowser('quiz');
-    localStorage[name] = saveVal;
+    filebrowser.savePopup(this.questions);
 }
 
 Quiz.prototype.createSubmit = function(id) {
@@ -359,13 +357,13 @@ Quiz.prototype.createSubmit = function(id) {
                 clickPolicy++;
             }),
         Util.button("Save Local",  
-                function () {
-                    t.saveLocal();
-            }),
-            Util.button("Load From Local",  
-                function () {
-                    t.loadLocal();
-            }, null, id + "-edit-buttons" )
+            (function () {
+                this.saveLocal();
+            }).bind(this)),
+        Util.button("Load From Local",  
+            (function () {
+                this.loadLocal();
+            }).bind(this), null, id + "-edit-buttons" )
     ] );
         div.appendChild(editBox);
     }

@@ -24,58 +24,8 @@ mediaLocations = {
 };
 
 Util = {
-    popupCancel: function(w) {
-        w.close();
-    },
-
-    popupSave: function(w) {
-        console.log(w);
-        console.log(w.document.getElementById('filename'));
-    },
-
     dump: function(obj) {
         console.warn(JSON.stringify(obj, null, 3));
-    },
-
-    popup: function(x, y, w, h, claz) {
-        var p = window.open('', '_blank', 'top=' + y + ',left=' + x + ',width=' +
-                            w + ',height=' + h);
-        var pbody = p.document.body;
-        pbody.claz = claz;
-            pbody.style.border = "solid black 1px";
-        return p;
-    },
-
-    popuplist: function(x, y, w, h, claz, list) {
-        var p = Util.popup(x, y, w, h, claz);
-        p.document.head.title.innerHTML = 'Saving Files';
-            var d = p.document.createElement("div");
-            d.style.backgroundColor = '#f00';
-            d.innerHTML = JSON.stringify(files);
-            pbody.appendChild(d);
-
-        var div = Util.div();
-        Util.add(div, [Util.textarea('', 'filename', list),
-		       Util.input('text', 'filename', 'filename'),
-		       Util.button('Save',  Util.popupSave(p), 'filebutton', 'save' ),
-		       Util.button('Cancel', Util.popupCancel(p), 'filebutton', 'cancel' )
-		      ]);
-        pbody.appendChild(div);
-        return d;
-    },
-
-    popupLocalStoreBrowser: function(dir) {
-        dir = localStorage[dir];
-        console.log('dir=' + dir);
-        var files;
-        if (typeof (dir) == 'undefined') {
-            localStorage.dir = {}; // create empty directory
-            files = [];
-        } else {
-            files = dir.keys().sort();
-        }
-        var d = Util.popup(100, 100, 500, 500, 'localstore', files);
-        d.innerHTML = files;
     },
 
     add: function(parent, children) {
@@ -344,13 +294,18 @@ Util = {
         });
     },
 
-    input: function(type, className, id, value, onkeypress) {
+    input: function(type, className, id, value, oninput, onEnter) {
         return Util.make("input", {
             type: type,
             className: className,
             id: id,
             value: value,
-            onkeypress: onkeypress,
+            oninput: oninput,
+            onkeydown: function(e) {
+                if (e.keyCode === 13) {
+                    onEnter(e);
+                }
+            }
         });
     },
 
@@ -534,6 +489,91 @@ Util = {
     },
     
 };
+
+function FileBrowser() {
+    if (!window.localStorage.files)
+        window.localStorage.files = "{}";
+
+    this.storage = JSON.parse(window.localStorage.files);
+}
+
+FileBrowser.prototype.fileOnclick = function(e) {
+    console.log(this.storage[e.target.value]);
+};
+
+FileBrowser.prototype.render = function(data) {
+    this.body = document.getElementById("container");
+    this.body.appendChild(data);
+};
+
+FileBrowser.prototype.savePopup = function(data) {
+    this.destroy("file-saver");
+    var filesaver = Util.div("file-popup", "file-saver");
+
+    Util.add(filesaver, [
+        Util.h3("Save your data", "file-header"),
+
+        Util.input("text", "file-input", null, null,
+            (function(e) {
+                this.title = e.target.value;
+            }).bind(this),
+            (function(e) {
+                this.addFile(this.title, data);
+                this.destroy("file-saver");
+            }).bind(this)),
+
+        Util.button("Save", (function() {
+            this.addFile(this.title, data);
+            this.destroy("file-saver");
+        }).bind(this), "file-save"),
+
+        Util.button("Cancel", (function() {
+            this.destroy("file-saver");
+        }).bind(this), "file-cancel")
+    ]);
+    this.render(filesaver);
+};
+
+FileBrowser.prototype.loadPopup = function() {
+    this.destroy("file-picker");
+    var filepicker = Util.div("file-popup", "file-picker");
+
+    var l = [];
+
+    var filenames = Object.keys(this.storage).sort();
+    for (var i = 0; i < filenames.length; i++) {
+        l.push(Util.button(filenames[i], this.fileOnclick.bind(this), "file-item"));
+    }
+
+    var files = Util.div("files");
+    Util.add(files, l);
+
+    Util.add(filepicker, [
+        Util.h3("File Selector", "file-header"),
+        Util.button("Close", (function() {
+            this.destroy("file-picker");
+        }).bind(this), "file-close"),
+        files
+    ]);
+
+    this.render(filepicker);
+};
+
+FileBrowser.prototype.destroy = function(id) {
+    while (document.getElementById(id))
+        this.body.removeChild(document.getElementById(id));
+};
+
+FileBrowser.prototype.addFile = function(name, content) {
+    this.storage[name] = JSON.stringify(content);
+    window.localStorage.files = JSON.stringify(this.storage);
+
+    if (document.getElementById("file-picker"))
+        this.loadPopup();
+};
+
+filebrowser = new FileBrowser();
+
 
 function createXML() {
     return document.implementation.createDocument("", "");
