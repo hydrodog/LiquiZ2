@@ -379,7 +379,10 @@ Quiz.prototype.instructions = function(txt) {
 Quiz.prototype.equation = function(id, editable, arr) {	
 	var div = Util.div("equation");
     if (editable == "true") {
-    	var eq = new Equation(div, ["Fraction", "Script", /*"Radical"*/, "Integral", "LargeOperator", "Bracket", "Function"]);
+    	var eq = new Equation({
+            "target": div,
+            "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+        });
         div.appendChild(eq.equationBox());
         div.appendChild(Util.br());
         div.appendChild(eq.equationButton("Equation Editor"));
