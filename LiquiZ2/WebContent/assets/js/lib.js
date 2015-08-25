@@ -420,7 +420,7 @@ Util = {
         innerHTML: options
     });
     },
-    
+
     option: function(value, innerHTML, className, id) {
         return Util.make("option", {
             value: value,
@@ -720,16 +720,18 @@ Url.prototype.changeView = function(view) {
  */
 function scrollToId(id) { //TODO: Fix Jquery madness below
     var element = $('#' + id); //document.getElementById(id);
-    var offset = element.offset().top;
+    var yPos = element.offset().top;
+    var xPos = 0;
 
-    if (offset > window.innerHeight) {
-    // Not in view so scroll to it
-    $('html,body').animate({
-        scrollTop: offset
-    }, 10);
-    return false;
+    // if (yPos > window.innerHeight) {
+    //     window.scroll(xPos, yPos);
+    // }
+
+    if (yPos > window.innerHeight) {
+        $('html,body').animate({
+            scrollTop: yPos
+        }, 0);
     }
-    return true;
 }
 
 function clearPage() {
