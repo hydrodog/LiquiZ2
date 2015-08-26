@@ -4,6 +4,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name></display-name>
+	<servlet>
+		<servlet-name>GradeQuiz</servlet-name>
+		<servlet-class>org.adastraeducation.liquiz.servlet.GradeQuiz</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TestPostGradeQuiz</servlet-name>
+		<url-pattern>/GradeQuiz</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>TestPost</servlet-name>
