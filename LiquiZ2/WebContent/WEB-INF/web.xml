@@ -9,7 +9,7 @@
 		<servlet-class>org.adastraeducation.liquiz.servlet.GradeQuiz</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>TestPostGradeQuiz</servlet-name>
+		<servlet-name>GradeQuiz</servlet-name>
 		<url-pattern>/GradeQuiz</url-pattern>
 	</servlet-mapping>
 
