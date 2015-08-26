@@ -358,8 +358,13 @@ Quiz.prototype.generateData = function() {
     return payload;
 };
 
+Quiz.prototype.submitCB = function(worked, response) {
+    console.log("status:", worked);
+    console.log("response:", response);
+};
+
 Quiz.prototype.submit = function() {
-    
+    post("GradeQuiz", this.answers, this.submitCB);
 }
 
 Quiz.prototype.createSubmit = function(id) {
