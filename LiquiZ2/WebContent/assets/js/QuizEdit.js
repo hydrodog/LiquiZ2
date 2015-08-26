@@ -328,7 +328,6 @@ QuizEdit.prototype.addStandardChoice = function(name, choices, nameBlank) {
 
 QuizEdit.prototype.editSurvey = function() {
     this.editMCtop(false);
-    this.withCheckbox = false;
     var surveyQuestions = [];
     for (var i = 0; i < 4; i++) {
         surveyQuestions.push([Util.input("text", QuizEdit.QUESTION, 'surveyQuestion'+i)]);
@@ -394,12 +393,17 @@ QuizEdit.prototype.buildRegex = function() {
     ];
 };
 
+QuizEdit.prototype.testRegex = function() {
+
+    console.log(new RegExp(this.pattern.value));
+}
+
 QuizEdit.prototype.editRegex = function() {
     this.addFields(this.buildRegex,
         Util.table([
             [Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
-                this.editButton("Create", null), this.editButton("delete", null), this.editButton("test", null)],
-            ["Pattern:", Util.input("text", QuizEdit.REGEX, "regex"), this.selRegex],
+                this.editButton("Create", null), this.editButton("delete", null), this.editButton("test", this.testRegex)],
+            ["Pattern:", this.pattern = Util.input("text", QuizEdit.REGEX, "regex"), this.selRegex],
             [Util.span("Must match:"), this.mustMatch = this.textArea(null, 10, 40)],
             [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
         ]));
@@ -512,7 +516,7 @@ QuizEdit.prototype.editQuestion = function() {
     var e = this.editor = document.getElementById("edit-qc"+this.q.id);
     this.scrollToEditor();
 
-    e.appendChild(Util.a('#editA'), Util.h1("Question Editor"));
+    e.appendChild(Util.h1("Question Editor"));
     this.addEditButtons();
     
     e.appendChild(Util.table([ ["Title", this.title = this.inputBlur("text", "title")] ]));
@@ -568,7 +572,7 @@ QuizEdit.prototype.editQuestion = function() {
       this.editButton("Formula", null)
          ],
     [
-      this.editButton("Equation", null),
+      this.editButton("EquationQuest", null),
       this.editButton("Essay", this.editEssay),
       this.editButton("Code", this.editCode),
       this.editButton("Matrix", this.editMatrix),

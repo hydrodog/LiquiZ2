@@ -323,13 +323,13 @@ input.editpattern {
     width: "100%";
 }
 
-.calMonth {
+/*.calMonth {
     background: #20a;
     width: 100%;
-}
+}*/
 .calendar {
     background: #888;
-    width: 50%;
+    width: 90%;
 }
 .cal {
     background: #888;
