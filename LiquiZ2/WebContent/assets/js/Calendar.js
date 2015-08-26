@@ -241,13 +241,12 @@ Calendar.prototype.toolBar = function(){
     var b1 = Util.button("show month", function(){
 	    calendar.render = calendar.renderMonth;
 	    calendar.exec();
-	}
-    }, "toolButton", "b1");
+	}, "toolButton", "b1");
     
     var b2 = Util.button("show year", function(){
 	if(calendar.monthView){	   
 	    calendar.render = calendar.renderYear;
-	    calendar.exec());
+	    calendar.exec();
 	}
     }, "toolButton", "b2");
     
