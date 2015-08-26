@@ -491,11 +491,15 @@ Util = {
 };
 
 function FileBrowser() {
+    this.init();
+}
+
+FileBrowser.prototype.init = function() {
     if (!window.localStorage.files)
         window.localStorage.files = "{}";
 
     this.storage = JSON.parse(window.localStorage.files);
-}
+};
 
 FileBrowser.prototype.render = function(data) {
     this.body = document.getElementById("container");
@@ -531,6 +535,7 @@ FileBrowser.prototype.savePopup = function(data) {
 };
 
 FileBrowser.prototype.loadPopup = function(cb) {
+    this.init();
     this.destroy("file-picker");
     var filepicker = Util.div("file-popup", "file-picker");
 
@@ -538,7 +543,7 @@ FileBrowser.prototype.loadPopup = function(cb) {
 
     var func = (function(e) {
         this.destroy("file-picker");
-        cb(JSON.parse(this.storage[e.target.value]));
+        cb(this.getFile(e.target.value));
     }).bind(this);
 
     var filenames = Object.keys(this.storage).sort();
@@ -564,6 +569,11 @@ FileBrowser.prototype.destroy = function(id) {
     while (document.getElementById(id))
         this.body.removeChild(document.getElementById(id));
 };
+
+FileBrowser.prototype.getFile = function(name) {
+    return JSON.parse(this.storage[name]);
+};
+
 
 FileBrowser.prototype.addFile = function(name, content) {
     this.storage[name] = JSON.stringify(content);

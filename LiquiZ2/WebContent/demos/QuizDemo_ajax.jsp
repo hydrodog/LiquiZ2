@@ -7,7 +7,7 @@
         "remainingTries": 1,
         "dataDir": "assets/",
         "editMode": true,
-        "data": [
+        "questions": [
             {
                 "id": 1,
                 "title": "Mergesort",

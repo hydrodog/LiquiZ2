@@ -630,6 +630,8 @@ QuizEdit.prototype.editQuestion = function() {
     this.addEditButtons();
     this.selRegex = this.selectName(QuizEdit.regex, this.pickRegex, "Select Regex");
     this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
+
+    this.title.focus();
 }
 
 /*

@@ -15,7 +15,6 @@ function Quiz(payload) {
 
     this.body = document.getElementById("container");
     this.body.className = "quiz";
-    this.questions = this.data;
 }
 
 // TODO(asher): This should be passed in through QuizDemo_ajax
@@ -341,7 +340,7 @@ Quiz.prototype.generateData = function() {
         remainingTries: this.remainingTries,
         dataDir: this.dataDir,
         editMode: this.editMode,
-        data: this.data
+        questions: this.questions
     };
 
     return payload;
