@@ -18,6 +18,7 @@ function Quiz(payload) {
     this.questions = this.data;
 }
 
+// TODO(asher): This should be passed in through QuizDemo_ajax
 Quiz.stdChoice = {
     Likert5: ["Strongly Agree",
           "Agree",
@@ -48,9 +49,9 @@ Quiz.prototype.processParams = function() {
     }
 };
 
-Quiz.prototype.exec = function(params) {
+Quiz.prototype.exec = function(refresh) {
     this.processParams();
-    if (this.view !== url.view) {
+    if (refresh || this.view !== url.view) {
         clearPage();
         this.header();
         this.partialRefresh();
@@ -106,7 +107,7 @@ Quiz.prototype.partialRefresh = function() {
 
 
     this.headerButtons();
-    if (!this.questionsDiv) {
+    if (!document.contains(this.questionsDiv)) {
         this.questionsDiv = Util.div("questions", "questions");
         this.questionsDiv.appendChild(frag);
         this.render(this.questionsDiv);
@@ -231,11 +232,10 @@ Quiz.prototype.collapseExpandOnkeydown = function(e) {
 Quiz.prototype.headerButtons = function() {
     var button, input, render;
 
-    if (this.headerControl) {
+    if (document.contains(this.headerControl)) {
         this.headerControl.innerHTML = "";
         render = false;
-    }
-    else {
+    } else {
         this.headerControl = Util.div("header", "header-control");
         render = true;
     }
@@ -325,12 +325,27 @@ function createAndAddNewOpenFileDialog(name) {
     document.getElementById("filebrowse").innerHtml += "<input type='file' style='display:none' id='" + name + "'/>"
 }
 
-Quiz.prototype.saveLocal = function(id) {
-    var saveVal = JSON.stringify(this.questions);
-    console.log(saveVal);
-    var name = Util.popupLocalStoreBrowser('quiz');
-    localStorage[name] = saveVal;
-}
+Quiz.prototype.loadLocal = function() {
+    filebrowser.loadPopup((function(payload) {
+        for (var item in payload)
+            this[item] = payload[item];
+        this.exec(true);
+    }).bind(this));
+};
+
+Quiz.prototype.generateData = function() {
+    var payload = {
+        title: this.title,
+        points: this.points,
+        timeLimit: this.timeLimit,
+        remainingTries: this.remainingTries,
+        dataDir: this.dataDir,
+        editMode: this.editMode,
+        data: this.data
+    };
+
+    return payload;
+};
 
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
@@ -359,13 +374,10 @@ Quiz.prototype.createSubmit = function(id) {
                 clickPolicy++;
             }),
         Util.button("Save Local",  
-                function () {
-                    t.saveLocal();
-            }),
-            Util.button("Load From Local",  
-                function () {
-                    t.loadLocal();
-            }, null, id + "-edit-buttons" )
+            (function () {
+                filebrowser.savePopup(this.generateData());
+            }).bind(this)),
+        Util.button("Load From Local", this.loadLocal.bind(this), null, id + "-edit-buttons" )
     ] );
         div.appendChild(editBox);
     }
@@ -374,6 +386,22 @@ Quiz.prototype.createSubmit = function(id) {
 
 Quiz.prototype.instructions = function(txt) {
     return Util.p(txt, 'instructions');
+}
+
+Quiz.prototype.equation = function(id, editable, arr) {	
+	var div = Util.div("equation");
+    if (editable == "true") {
+    	var eq = new Equation({
+            "target": div,
+            "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+        });
+        div.appendChild(eq.equationBox());
+        div.appendChild(Util.br());
+        div.appendChild(eq.equationButton("Equation Editor"));
+    }
+    if (arr != undefined)
+    	parseEquationArray(div, arr);
+    return div;
 }
 
 Quiz.prototype.fillin = function(id) {

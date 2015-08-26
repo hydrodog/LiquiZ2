@@ -109,7 +109,7 @@
                     ["instructions",
                         "Submit your homework for the 3n+1 problem as a single .java file"
                     ],
-                    ["Util.file", ".java", "file-input", 7]
+                    ["Util.file", "Upload File", ".java", "file-input", 7]
                 ]
             },
 

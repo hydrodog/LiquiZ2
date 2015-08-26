@@ -338,3 +338,38 @@ input.editpattern {
 .hol {
     background: #d00;
 }
+
+.file-popup {
+    position:absolute;
+    left: 50%;
+    top: 10%;
+
+    margin:30px auto 0;
+    margin-left: -380px;
+    /*margin-top: -40px;*/
+    padding:6px;
+
+    width:760px;
+    border: 3px solid #000;
+    border-radius: 7px;
+    background:#fff;
+}
+
+.file-header {
+    text-align: center;
+    margin: 0;
+}
+
+.file-close {
+    position: absolute;
+    top: 6px;
+    left: 672px;
+}
+
+.file-item {
+    display: block;
+}
+
+.file-item:hover {
+    background-color: #268666;
+}
