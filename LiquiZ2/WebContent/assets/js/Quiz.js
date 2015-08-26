@@ -364,6 +364,7 @@ Quiz.prototype.submitCB = function(worked, response) {
 };
 
 Quiz.prototype.submit = function() {
+    console.log(this.answers);
     post("GradeQuiz", this.answers, this.submitCB);
 }
 
@@ -423,9 +424,9 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
     while (q[i].length <= j) {
         q[i].push({
-            value: [],
-            startTime: [],
-            endTime: [],
+            v: [],
+            s: [],
+            e: [],
         });
     }
 
@@ -434,7 +435,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
             q = this.answers[question][subQuestion];
 
-            q[i][j].value[q[i][j].value.length-1] = e.target.value;
+            q[i][j].v[q[i][j].v.length-1] = e.target.v;
         }).bind(this);
 
     input.onfocus = (function(e) {
@@ -442,8 +443,8 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
             q = this.answers[question][subQuestion];
 
-            q[i][j].value.push(e.target.value);
-            q[i][j].startTime.push(new Date().getTime());
+            q[i][j].v.push(e.target.v);
+            q[i][j].s.push(new Date().getTime());
         }).bind(this);
 
     input.onblur = (function(e) {
@@ -452,7 +453,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
             q = this.answers[question][subQuestion];
 
-            q[i][j].endTime.push(new Date().getTime());
+            q[i][j].e.push(new Date().getTime());
         }).bind(this);
 
     this.answers[question][subQuestion] = q;
