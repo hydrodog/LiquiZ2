@@ -326,11 +326,19 @@ QuizEdit.prototype.addStandardChoice = function(name, choices, nameBlank) {
     Quiz.stdChoice[name] = choices;
 }
 
+QuizEdit.prototype.addSurveyQuestion = function(i) {
+    var tr = this.surveyQuestions.insertRow();
+    var c = tr.insertCell();
+    c.appendChild(Util.input("text", QuizEdit.QUESTION, 'surveyQuestion'+i))
+    c = tr.insertCell();
+    c.appendChild(this.editButton("delete", null));
+}
+
 QuizEdit.prototype.editSurvey = function() {
     this.editMCtop(false);
-    var surveyQuestions = [];
+    var surveyQuestions = [[this.editButton("More Questions", this.addSurveyQuestion)]];
     for (var i = 0; i < 4; i++) {
-        surveyQuestions.push([Util.input("text", QuizEdit.QUESTION, 'surveyQuestion'+i)]);
+        surveyQuestions.push([Util.input("text", QuizEdit.QUESTION, 'surveyQuestion'+i), this.editButton("delete", null)]);
     }
     this.surveyQuestions = Util.table(surveyQuestions, false);
 
@@ -446,6 +454,7 @@ QuizEdit.prototype.editRegex = function() {
             [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
         ]));
 };
+
 
 QuizEdit.prototype.editRandInt = function() {
     this.addFields(this.buildRandInt, Util.table ( [
