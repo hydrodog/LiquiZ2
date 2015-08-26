@@ -295,6 +295,7 @@ Util = {
     },
 
     input: function(type, className, id, value, oninput, onEnter) {
+        onEnter = (typeof onEnter === "undefined") ? function(){} : onEnter;
         return Util.make("input", {
             type: type,
             className: className,
@@ -320,13 +321,13 @@ Util = {
             });            
     },
 
-    file: function(value, accept, className, id) {
+    file: function(value, filetypes, className, id) {
         value = (typeof value === "undefined") ? "File Upload" : value;
         var label = Util.label();
         label.appendChild(Util.span(value));
         label.input = Util.make("input", {
             type: "file",
-            accept: accept,
+            accept: filetypes,
             className: className,
             id: id,
         });

@@ -109,7 +109,7 @@
                     ["instructions",
                         "Submit your homework for the 3n+1 problem as a single .java file"
                     ],
-                    ["Util.file", "Upload File", ".java", "file-input", 7]
+                    ["file", "Upload File", ".java", "file-input", 7]
                 ]
             },
 
@@ -150,12 +150,12 @@
             {
                 "id": 12,
                 "title": "Dinosaur",
-                "type": "selectImg",
+                "type": "selectText",
                 "content": [
                     ["Util.p", "Which one is the dinosaur?"],
-                    ["Util.select", "which", false, ["stegosaurus", "dimetrodon",
+                    ["selectText", 13, ["stegosaurus", "dimetrodon",
                         "plesiosaurus"
-                    ], "mcdropdown"]
+                    ]]
                 ]
             },
 

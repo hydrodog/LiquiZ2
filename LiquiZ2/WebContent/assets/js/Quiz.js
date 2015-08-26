@@ -15,6 +15,11 @@ function Quiz(payload) {
 
     this.body = document.getElementById("container");
     this.body.className = "quiz";
+
+    this.answers = Array(this.questions.length);
+    for (var i = 0; i < this.questions.length; i++) {
+        this.answers[i] = Array(this.questions[i].content.length);
+    }
 }
 
 // TODO(asher): This should be passed in through QuizDemo_ajax
@@ -73,6 +78,10 @@ Quiz.prototype.editBox = function(id) {
     return Util.div("editBox", "edit-qc"+id);
 };
 
+Quiz.prototype.submitAnswers = function() {
+
+};
+
 Quiz.prototype.refreshQuestion = function(i) {
     var q = this.questions[i];
     var qc = this.addQuestion(q.id, q.title, q.type, q.points, q.level);
@@ -97,6 +106,7 @@ Quiz.prototype.partialRefresh = function() {
         var q = this.questions[i];
         var qc = this.addQuestion(q.id, q.title, q.type, q.points, q.level);
         if (cb(i)) {
+            this.question_id = i;
             qc.appendChild(this.processQuestion(q.content));
         }
         frag.appendChild(qc);
@@ -139,26 +149,17 @@ Quiz.prototype.addQuestion = function(id, title, type, points, level) {
     floatRight.appendChild(Util.span("points:" + points, "qpoints"));
     floatRight.appendChild(Util.span("level:" + level, "level"));
     if (this.editMode) {
-        floatRight.appendChild(makeEditBox(id,
-            function(e) {
-                console.log(e.target.id);
-            },
-            function(e) {
-                console.log(e.target.id);
-            },
-            function(e) {
-                console.log(e.target.id);
-            }));
+        floatRight.appendChild(this.makeEditBox(id));
     }
     header.appendChild(floatRight);
     qc.appendChild(header);
     return qc;
 };
 
-// TODO: FIX: QuizDemo_ajax.jsp might pass points. Default to 1.
 Quiz.prototype.processQuestion = function(q) {
     var frag = document.createDocumentFragment();
     for (var i = 0; i < q.length; i++) {
+        this.subQuestion_id = i;
         if (q[i][0].substring(0, 5) === "Util.") {
             frag.appendChild(Util[q[i][0].substring(5)].apply(this||window, q[i].slice(1)));
         } else {
@@ -166,7 +167,7 @@ Quiz.prototype.processQuestion = function(q) {
         }
     }
     return frag;
-}
+};
 
 Quiz.prototype.collapse = function(e) {
     var data = document.getElementById("collapse-input").value;
@@ -292,7 +293,18 @@ Quiz.prototype.end = function() {
     this.render(this.createSubmit(2));
 };
 
-function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
+Quiz.prototype.makeEditBox = function(id) {
+    var editFunc = function(e) {
+        console.log(e.target.id);
+    };
+    // TODO: Delete currene question
+    var deleteFunc = function(e) {
+        console.log(e.target.id);
+    };
+    var copyFunc = function(e) {
+        console.log(e.target.id);
+    };
+
     var editBox = Util.div("edit");
     Util.add(editBox,
         [
@@ -301,7 +313,7 @@ function makeEditBox(id, editFunc, deleteFunc, copyFunc) {
             Util.button("Copy", copyFunc, null, id+"-copy")
         ]);
     return editBox;
-}
+};
 
 function showDialog(openFileDialog) {
     document.getElementById(openFileDialog).click();
@@ -346,11 +358,15 @@ Quiz.prototype.generateData = function() {
     return payload;
 };
 
+Quiz.prototype.submit = function() {
+    
+}
+
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
     var t = this;
     var clickEditQuestion = 0, clickPolicy = 0, clickAssignment = 0;
-    div.appendChild(Util.button("Submit The Quiz", null, "submit-button", "submit-"+id));
+    div.appendChild(Util.button("Submit The Quiz", this.submit.bind(this), "submit-button", "submit-"+id));
     if (this.editMode) {
         var editBox = Util.div("edit-quiz", id + "-edit-quiz");
     Util.add(editBox, [
@@ -383,6 +399,65 @@ Quiz.prototype.createSubmit = function(id) {
     return div;
 };
 
+Quiz.prototype.add = function(parent, spec) {
+    parent.appendChild(this[spec.type](spec));
+}
+
+Quiz.prototype.addInputHandlers = function(input, i, j) {
+    i = (typeof i === "undefined") ? 0 : i;
+    j = (typeof j === "undefined") ? 0 : j;
+
+    var question = this.question_id,
+        subQuestion = this.subQuestion_id;
+
+    q = this.answers[question][subQuestion] || Array(0);
+
+    while (q.length <= i) {
+        q.push(Array(0));
+    }
+
+    while (q[i].length <= j) {
+        q[i].push({
+            value: [],
+            startTime: [],
+            endTime: [],
+        });
+    }
+
+    input.oninput = input.onchange = (function(e) {
+            console.log("recording input", question, subQuestion, i, j);
+
+            q = this.answers[question][subQuestion];
+
+            q[i][j].value[q[i][j].value.length-1] = e.target.value;
+        }).bind(this);
+
+    input.onfocus = (function(e) {
+            console.log("start timestamp", question, subQuestion, i, j);
+
+            q = this.answers[question][subQuestion];
+
+            q[i][j].value.push(e.target.value);
+            q[i][j].startTime.push(new Date().getTime());
+        }).bind(this);
+
+    input.onblur = (function(e) {
+            // record end timestamp
+            console.log("end timestamp", question, subQuestion, i, j);
+
+            q = this.answers[question][subQuestion];
+
+            q[i][j].endTime.push(new Date().getTime());
+        }).bind(this);
+
+    this.answers[question][subQuestion] = q;
+    return input;
+};
+
+/*
+ * NOTE: Question generators start here!
+ */
+
 Quiz.prototype.instructions = function(txt) {
     return Util.p(txt, 'instructions');
 }
@@ -405,22 +480,18 @@ Quiz.prototype.equation = function(id, editable, arr) {
 
 Quiz.prototype.fillin = function(id) {
     var input = Util.input('text', 'fillin', id);
-    return input;
+    return this.addInputHandlers(input);
 }
 
 Quiz.prototype.numeric = function(id) {
-    return Util.input('text', 'number', id);
+    return this.addInputHandlers(Util.input('text', 'number', id));
 }
 
 Quiz.prototype.numid = function(id, v) {
     var inp = Util.input('text', 'cell', id);
     inp.size = 3;
     inp.value = v;
-    return inp;
-}
-
-Quiz.prototype.add = function(parent, spec) {
-    parent.appendChild(this[spec.type](spec));
+    return this.addInputHandlers(inp);
 }
 
 /*
@@ -429,9 +500,10 @@ Quiz.prototype.add = function(parent, spec) {
 Quiz.prototype.mcRadioTextVert = function(id, txt) {
     var list = [];
     for (var i = 0; i < txt.length; i++) {
-    var radio = Util.radio(id + "-" + i, id, 'mcradio', id + "-" + i);
-    var label = Util.label(id + "-" + i, Util.span(txt[i]));
-    list.push([radio, label]);
+        var radio = this.addInputHandlers(
+                        Util.radio(id + "-" + i, id, 'mcradio', id + "-" + i), i);
+        var label = Util.label(id + "-" + i, Util.span(txt[i]));
+        list.push([radio, label]);
     }
     return Util.table(list);
 }
@@ -445,7 +517,8 @@ Quiz.prototype.mcRadioTextHoriz = function(id, choices) {
         list[0].push(Util.label(id + "-" + i, Util.span(choices[i])));
     }
     for (var i = 0; i < choices.length; i++) {
-        list[1].push(Util.radio(id + "-" + i, id, 'mcradio', id + "-" + i));
+        list[1].push(this.addInputHandlers(
+                        Util.radio(id + "-" + i, id, 'mcradio', id + "-" + i), i));
     }
 
     return Util.table(list, false);
@@ -461,7 +534,8 @@ Quiz.prototype.mcSurvey = function(id, questions, choices) {
     for (var j = 0; j < questions.length; j++) {
         var row = [questions[j]];
         for (var i = 0; i < choices.length; i++) {
-            row.push(Util.radio(i, id + "-" + j, 'mcradio', id + "-" + j + "-" + i));
+            row.push(this.addInputHandlers(
+                        Util.radio(i, id + "-" + j, 'mcradio', id + "-" + j + "-" + i), j, i));
         }
         list.push(row);
     }
@@ -475,9 +549,10 @@ Quiz.prototype.mcSurvey = function(id, questions, choices) {
 Quiz.prototype.mcRadioImg = function(id, src) {
     var list = [];
     for (var i = 0; i < src.length; i++) {
-    var radio = Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i);
-    var label = Util.label(id + "-" + i, Util.img(src[i]));
-    list.push([radio, label]);
+        var radio = this.addInputHandlers(
+                        Util.radio(id + "-" + i, id, 'multichoiceradio', id + "-" + i), i);
+        var label = Util.label(id + "-" + i, Util.img(src[i]));
+        list.push([radio, label]);
     }
     return Util.table(list);
 }
@@ -485,40 +560,33 @@ Quiz.prototype.mcRadioImg = function(id, src) {
 /*
  * Build dropdown list of text
  */
-Quiz.prototype.selectText = function(id, list) {
-    var s = document.createElement("select");
-    s.id = id;
-    s.className = "multichoicedropdown";
-    var opt = document.createElement("option");
-    opt.value = -1;
-    opt.appendChild(document.createTextNode("Select one"));
-    s.appendChild(opt);
-    for (var i = 0; i < list.length; i++) {
-    opt = document.createElement("option");
-    opt.value = i;
-    opt.appendChild(document.createTextNode(list[i]));
-    s.appendChild(opt);
+Quiz.prototype.selectText = function(id, list, title, skipHandler) {
+    l = [title||"Select one"];
+    Array.prototype.push.apply(l, list);
+    if (skipHandler) {
+        return Util.select("Select one", false, l, "mcdropdown", id);
     }
-    return s;
+    return this.addInputHandlers(Util.select("Select one", false, l, "mcdropdown", id));
 }
 
-/*
- * Build dropdown list of images
- */
-Quiz.prototype.selectImg = function(id, list) {
-    var s = document.createElement("select");
-    s.id = id;
-    s.className = "multichoicedropdown";
-    for (var i = 0; i < list.length; i++) {
-        var opt = document.createElement("option");
-        opt.value = i;
-        var img = document.createElement("img");
-        img.src = mediaLocations.img + list[i];
-        opt.appendChild(img);
-        s.appendChild(opt);
-    }
-    return s;
-}
+// /*
+//  * NOTE: Deprecated
+//  * Build dropdown list of images
+//  */
+// Quiz.prototype.selectImg = function(id, list) {
+//     var s = document.createElement("select");
+//     s.id = id;
+//     s.className = "multichoicedropdown";
+//     for (var i = 0; i < list.length; i++) {
+//         var opt = document.createElement("option");
+//         opt.value = i;
+//         var img = document.createElement("img");
+//         img.src = mediaLocations.img + list[i];
+//         opt.appendChild(img);
+//         s.appendChild(opt);
+//     }
+//     return s;
+// }
 
 Quiz.prototype.match = function(id, questions, answers) {
     var t = document.createElement("table");
@@ -527,10 +595,14 @@ Quiz.prototype.match = function(id, questions, answers) {
         var q = r.insertCell(0);
         q.appendChild(document.createTextNode(questions[i]));
         q = r.insertCell(1);
-        q.appendChild(this.selectText(id + "_" + i, answers, true));
+        q.appendChild(this.addInputHandlers(this.selectText(id + "_" + i, answers, null, true), i));
     }
     return t;
 }
+
+Quiz.prototype.file = function(value, filetypes, className, id) {
+    return this.addInputHandlers(Util.file(value, filetypes, className, id));
+};
 
 Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
     var l;
@@ -556,10 +628,9 @@ Quiz.prototype.emptyGrid = function(id, rows, cols, header) {
 
 Quiz.prototype.grid = function(id, list, header) {
     list = JSON.parse(JSON.stringify(list));
-    var d = document.createElement("div");
     var t = document.createElement("table");
     t.className = "matrix";
-    this.suffixMap.inputCount = 0;
+    this.inputCount = 0;
     if (header) {
         headList = list.shift();
         thead = t.createTHead();
@@ -577,34 +648,24 @@ Quiz.prototype.grid = function(id, list, header) {
         for (j = 0; j < list[i].length; j++) {
             td = r.insertCell(-1);
             td.className = "cell";
-            x = this.suffix(list[i][j], id);
+            x = this.suffix(list[i][j], id, i, j);
             td.appendChild(x);
         }
     }
-    d.appendChild(t);
-    return d;
+    return t;
 };
 
-Quiz.prototype.suffixMap = {
-    inputCount : 0,
-    jpg : Quiz.prototype.img,
-    png : Quiz.prototype.img,
-    gif : Quiz.prototype.img,
-};
-
-Quiz.prototype.tableInput = function(s, returnValue, id) {
+Quiz.prototype.tableInput = function(s, id) {
     input = Util.input("text", "grid-input", id + "_" + this.inputCount);
     this.inputCount++;
     return input;
 };
-Quiz.prototype.suffixMap["%%input%%"] = Quiz.prototype.tableInput;
 
-Quiz.prototype.suffix = function(s, id) {
+Quiz.prototype.suffix = function(s, id, i, j) {
     s += "";
-    var suf = s.split('.').pop();
-    if (this.suffixMap[suf])
-        return this.suffixMap[suf](s, true, id);
-    return Util.span(s, true);
+    if (s === "%%input%%")
+        return this.addInputHandlers(this.tableInput(s, id), i, j);
+    return Util.span(s);
 };
 
 // accept is a string: ".java,.txt"
@@ -613,10 +674,10 @@ Quiz.prototype.fileUpload = function(id, accept) {
     up.id = id;
     up.type = "file";
     up.accept = accept;
-    return up;
+    return this.addInputHandlers(up);
 };
 
-Quiz.imgClick = function(e) {
+Quiz.prototype.imgClick = function(e) {
     // getBoundingClientRect()
     var boundRect = e.target.getBoundingClientRect();
     console.log((e.clientX - boundRect.x).toFixed(0) + ", " + (e.clientY - boundRect.y).toFixed(0));
@@ -625,7 +686,8 @@ Quiz.imgClick = function(e) {
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
     var img = document.createElement("img");
     img.src = mediaLocations.img + src;
-    img.onclick = Quiz.imgClick;
+    img.onclick = this.imgClick;
+    // TODO(asher): Store answer in this.answers
     return img;
 };
 
@@ -647,7 +709,7 @@ Quiz.prototype.cloze = function (id, txt) {
     for (var i = 0; i < preItems.length; i++) {
         pre.appendChild(Util.span(preItems[i]));
         if (i != preItems.length-1)
-            pre.appendChild(this.fillin(id + "_" + i, true));
+            pre.appendChild(this.addInputHandlers(this.fillin(id + "_" + i, true), i));
     }
     return pre;
 }
@@ -658,7 +720,7 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
     ta.rows = rows;
     ta.cols = cols;
     ta.value = txt;
-    return ta;
+    return this.addInputHandlers(ta);
 };
 
 Quiz.prototype.precode = function(txt) {
@@ -671,7 +733,7 @@ Quiz.prototype.essay = function(id, rows, cols, maxwords) {
     ta.rows = rows;
     ta.cols = cols;
     // ta.value = essay.text;
-    return ta;
+    return this.addInputHandlers(ta);
 };
 
 Quiz.prototype.multiAnswer = function(id, txt) {
