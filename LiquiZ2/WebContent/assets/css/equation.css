@@ -1,11 +1,11 @@
 /* popup div editor */
-div.popup 
+div.popDiv 
 {
   height:auto; 
   border: 1px solid #327eca; 
   width: 300px;
 } 
-div.popup div.menu_form_header 
+div.popDiv div.popHeader 
 { 
   border-bottom: 0px; 
   cursor: move; 
@@ -20,13 +20,13 @@ div.popup div.menu_form_header
   color: #206040; 
   background-color:#c8caf5;
 } 
-div.menu_form_body 
+div.popBody 
 { 
 /*    width:100%; */
 /*    height:100%; */
   background-color:#f1f8fe;
 } 
-div.popup input.menu_form_exit 
+div.popDiv input.popExit 
 { 
   float: right; 
 /*    margin: 4px 5px 0px 0px;  */
@@ -240,20 +240,6 @@ display: inline-block;
   display: -moz-inline-box;
   display: inline-block;
 }
-.math-editable .cursor.blink {
-  visibility: hidden;
-}
-/*.math-editable*/
-.hasCursor {
-  -webkit-box-shadow: #68b4df 0 0 3px 2px;
-  -moz-box-shadow: #68b4df 0 0 3px 2px;
-  box-shadow: #68b4df 0 0 3px 2px;
-}
-.math-editable.empty:after,
-.math-expr .empty:after {
-  visibility: hidden;
-  content: 'c';
-}
 
 .math-expr {
   font-variant: normal;
@@ -286,11 +272,18 @@ display: inline-block;
   white-space: pre-wrap;
   box-sizing: initial;
 }
-.math-expr .empty {
+.math-expr:empty,
+.math-expr :empty {
   background: #ccc;
 }
-.math-expr.empty {
-  background: transparent;
+.math-expr:empty::after,
+.math-expr :empty::after {   /* placeholder for empty*/
+  content:'x';
+  visibility:hidden;
+}
+.math-expr:focus,
+.math-expr :focus {
+  background: rgba(42, 106, 189, 0.2);
 }
 .math-expr .font {
   font: 1em "Times New Roman", Symbola, serif;

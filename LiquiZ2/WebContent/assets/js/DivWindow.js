@@ -77,7 +77,7 @@ DivWindow.prototype.popupShow = function() {
 //	console.log(this.width);
 	element.style.left = (document.body.clientWidth - this.width) / 2 + "px";
 	//element.style.top = (document.body.offsetHeight - this.height) / 2 + "px";	//if page is too short, it's useless
-	element.style.top = elemOffsetTop(element) - 70 + "px";
+	element.style.top = elemOffsetTop(element) + "px";
 	element.style.margin = 0;
 	element.style.padding = 0;
 	element.style.zIndex = this.zindex;

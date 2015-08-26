@@ -19,6 +19,13 @@
  * Equation.prototype.equationBox(target) 	//return a edit box into target
  * Equation.prototype.buildEquation(qcId) 	//return uneditable equation into qc, remove all events -> uneditable
  */
+
+Node.prototype.appendChildren = function(newChildArr){
+	for (var i in newChildArr) 
+		this.appendChild(newChildArr[i]);
+	return this;
+};
+
 function Equation(payload) {
     for ( var k in payload) {
         this[k] = payload[k];
@@ -31,7 +38,8 @@ function Equation(payload) {
 	this.btn_set = [];
 	for (var i in this.btn)
     	this.btn_set.push(Equation[this.btn[i]]);
-    this.body.className = "equation";
+    console.log(this.btn_set);
+	this.body.className = "equation";
 }
 
 Equation.Fraction = {
@@ -95,35 +103,34 @@ Equation.Function = {
 			]
 };
 
-Equation.prototype.equationButton = function(name) {		//return a new equation Editor button
-	var popId = 'pop'+this.tag.getAttribute("math_id", math_id++);
-	var x = Util.div("popup", popId);
-	x.setAttribute("isHover", false);
-	x.setAttribute("style", "visibility: hidden; display: none;");
-	x.addEventListener("mouseover", function(){x.setAttribute("isHover", true);}, false);
-	x.addEventListener("mouseout", function(){x.setAttribute("isHover", false);}, false);
+Equation.prototype.equationButton = function(name, qcId) {		//return a new equation Editor button
+	var popId = 'pop' + qcId;
+	var popExitId = 'popExit' + qcId;
+	this.popDiv = Util.div("popDiv", popId);
+//	this.popDiv.setAttribute("isHover", false);
+	this.popDiv.setAttribute("style", "visibility: hidden; display: none;");
+//	this.popDiv.addEventListener("mouseover", function(){this.popDiv.setAttribute("isHover", true);});
+//	this.popDiv.addEventListener("mouseout", function(){this.popDiv.setAttribute("isHover", false);});
 
-	insertInto(x, [insertInto(Util.div("menu_form_header", "popup_drag"), 
-					[document.createTextNode("Equation Editor"), Util.input("button", "menu_form_exit", popId.slice(1), "X")], false),
-					mkToolBtn(Util.div("menu_form_body", "math-tool-box"), this.btn_set)
-				]);
-	this.body.appendChild(x);
-	console.log(x, this.body);
-	this.x = x;
-	x.target = this.tag;
-	console.log(popId);
+	this.popDiv.appendChildren(
+		[Util.div("popHeader", "popDrag").appendChildren([document.createTextNode("Equation Editor"),
+		                                                  Util.input("button", "popExit", popExitId, "X")]),
+		mkToolBtn(Util.div("popBody", "math-tool-box"), this.btn_set)]);
 	
-	return Util.button(name, function(){new DivWindow(this.id.slice(1),'popup_drag',this.id.slice(2),'500','125',1);}, "button", 0+popId);
+	this.body.appendChild(this.popDiv);
+	this.popDiv.target = this.tag;
+	return Util.button(name, function(){new DivWindow('pop'+this.id.slice(2),'popDrag','popExit'+this.id.slice(2),'500','125',1);}, "button", "eB"+qcId);
 };
 Equation.prototype.editModeButton = function(target) {	//insert 3 button for edit mode into target	
-	insertInto(this.body, [Util.button("reset", "button", "-1", resetButton), 
-           Util.button("edit", "button", "-1", editButton), 
-           Util.button("complete", "button", "-1", editButtonEnd)]);
+	target.appendChildren([Util.button("reset", "button", "-1", resetButton),
+	                       Util.button("edit", "button", "-1", editButton), 
+	                       Util.button("complete", "button", "-1", editButtonEnd)]);
 };
 Equation.prototype.equationBox = function() {	//return a edit box 
-	var tag = make("span", {id: "main-math-box", 
-		className: "math-expr math-editable empty", 
-		style: {fontSize: "20px", backgroundColor: "white"}});
+	var tag = make("span", 
+			{id: "main-math-box", 
+			className: "math-expr math-editable ", 
+			style: {fontSize: "20px"}});
 	tag.setAttribute("tabindex", "0"); 		//limitation: if the attribute does not belong to the element, it can't be added into the element by Util.make 
 	tag.setAttribute("math_id", math_id++);
 	addListener(tag, 1);
@@ -135,13 +142,9 @@ Equation.prototype.equationBox = function() {	//return a edit box
 Equation.prototype.exec = function() {
 	//add three buttons for teacher's mode 
 	//TODO: should be changed when add into Quiz Demo
-	this.editModeButton(this.body);
-	//the edit div box for equation
-	var box = Util.div("", "math-box");
-	box.appendChild(this.equationBox());
-	this.body.appendChild(box);
-	
-	insertInto(this.body, [this.equationButton("Equation Editor")]);
+	//this.editModeButton(this.body);
+	var box = Util.div("", "math-box").appendChild(this.equationBox());		//the edit div box for equation
+	this.body.appendChildren([box, Util.br(), this.equationButton("Equation Editor")]);
 };
 Equation.prototype.buildEquation = function(tag, qcId) {		//build equation into qc, remove all events -> uneditable
 	var elem = tag;
@@ -152,7 +155,6 @@ Equation.prototype.buildEquation = function(tag, qcId) {		//build equation into 
 	console.log(parseEquation(elemClone));
 	return elemClone;
 };
-
 
 /* Util part, some basic operation for save lines */
 // the following two function uses Asher's idea, rewrite make by adding style for use
@@ -209,43 +211,12 @@ function insertInto(parent, elem_set, flag) { //append a set of children into pa
 	//console.log(parent.nodeType);	//11 = documentfragment
 	if (parent.nodeType != 11 && parent.getAttribute("math_id")) {
 		if (flag != false)
-			checkClassName(parent);
+			
 		//console.log(parent);
 		parent.focus();
 //		parent.setAttribute("hasChild", "true");
 	}
 	return parent;
-}
-//TODO: possible to replace by css :active ???
-function checkClassName(elem) { //check if the class name should be changed by the cursor position
-	if (elem.className.indexOf(" hasCursor") != -1) {
-		if (elem.firstChild == null)
-			elem.className = elem.className.replace(" hasCursor", " empty");
-		else
-			elem.className = elem.className.replace(" hasCursor", "");
-	} else if (elem.className.indexOf(" empty") != -1) {
-		elem.className = elem.className.replace(" empty", " hasCursor");
-	} else {
-		elem.className = elem.className.concat(" hasCursor");
-	}
-	/*
-	switch (elem.className) {
-	case "denominator hasCursor":
-		if (elem.firstChild == null)
-			elem.className = "denominator empty";
-		else 
-			elem.className = "denominator";
-		break;
-	case "denominator empty":
-		elem.className = "denominator hasCursor";
-		break;
-	case "denominator":
-		elem.className = "denominator hasCursor";
-		break;
-	default:
-		break;
-	}*/
-	//console.log("check"+elem.className);
 }
 
 /* Operation for cursor */
@@ -262,12 +233,12 @@ function removeCursor() {	//remove the cursor and change the className of which 
 	if (cursor != null) {
 		var parent = cursor.parentNode;
 		removeElement(cursor);
-		checkClassName(parent);
+		
 	}
 }
 // the following two function is used for moving cursor 
 function insertCursorFront(elem) { //insert element before element's firstChild
-	checkClassName(elem);	//because cursor changed, so the className should be changed
+	
 	elem.focus();	//focus for next input
 	if (elem.firstChild == null)
 		elem.appendChild(createCursor());
@@ -275,7 +246,7 @@ function insertCursorFront(elem) { //insert element before element's firstChild
 		insertBefore(createCursor(), elem.firstChild);
 }
 function insertCursorEnd(elem) { //insert element after element's lastChild
-	checkClassName(elem);
+	
 	elem.focus();
 	if (elem.firstChild == null)
 		elem.appendChild(createCursor());
@@ -291,7 +262,7 @@ function createVar(string) {	//transfer a string to individual VAR element
 		tag.setAttribute("id", "char");
 		tag.setAttribute("math_id", math_id++);
 		tag.innerHTML = string[i];
-		tag.addEventListener('click', c, false);
+		tag.addEventListener('click', c);
 		frag.appendChild(tag);
 	}
 	return frag;
@@ -303,7 +274,7 @@ Equation.prototype.expr = {};
 Equation.prototype.expr.sub = function() {
 	var tnode = document.createElement("sub");
 	tnode.setAttribute("tabindex", "0");
-	tnode.setAttribute("class", "non-leaf limit empty");
+	tnode.setAttribute("class", "non-leaf limit ");
 	tnode.setAttribute("math_id", math_id++);
 	addListener(tnode, 1);
 	return tnode;
@@ -316,21 +287,21 @@ function createExpr(type) {		//complex expression
 	case "sub":
 		tnode = document.createElement("sub");
 		tnode.setAttribute("tabindex", "0");
-		tnode.setAttribute("class", "non-leaf limit empty");
+		tnode.setAttribute("class", "non-leaf limit ");
 		tnode.setAttribute("math_id", math_id++);
 		addListener(tnode, 1);
 		break;
 	case "sup":
 		tnode = document.createElement("sup");
 		tnode.setAttribute("tabindex", "0");
-		tnode.setAttribute("class", "non-leaf limit empty");
+		tnode.setAttribute("class", "non-leaf limit ");
 		tnode.setAttribute("math_id", math_id++);
 		addListener(tnode, 1);
 		break;
 	case "span":
 		tnode = document.createElement("span");
 		tnode.setAttribute("tabindex", "0");
-		tnode.setAttribute("class", "non-leaf empty");
+		tnode.setAttribute("class", "non-leaf ");
 		tnode.setAttribute("math_id", math_id++);
 		tnode.setAttribute("edit", "true");
 		addListener(tnode, 1);
@@ -339,7 +310,7 @@ function createExpr(type) {		//complex expression
 		tnode = document.createElement("span");
 		tnode.setAttribute("class", "large-oper");
 		tnode.setAttribute("math_id", math_id++);
-		tnode.addEventListener('click', c_both, false);
+		tnode.addEventListener('click', c_both);
 		
 		var top = createExpr("span");
 		top.setAttribute("class", "align-mid-large-oper");
@@ -395,7 +366,7 @@ function createExpr(type) {		//complex expression
 		tnode.setAttribute("class", "fraction non-leaf");
 		tnode.setAttribute("math_id", math_id++);
 		tnode.setAttribute("style", "margin-left: -0.25em;");
-		tnode.addEventListener('click', c_onlyRight, false);
+		tnode.addEventListener('click', c_onlyRight);
 		
 		var top = document.createElement("span");
 		top.setAttribute("class", "top-in-frac");
@@ -432,7 +403,7 @@ function createExpr(type) {		//complex expression
 		//tnode.setAttribute("style", "position:relative;");
 		
 		var sup = document.createElement("sup");
-		sup.setAttribute("class", "nthroot non-leaf empty");
+		sup.setAttribute("class", "nthroot non-leaf ");
 		sup.setAttribute("math_id", math_id++);
 		addListener(sup, 1);
 		sup.setAttribute("math_id", math_id++);
@@ -449,7 +420,7 @@ function createExpr(type) {		//complex expression
 		l.setAttribute("math_id", math_id++);
 		
 		var r = document.createElement("span");
-		r.setAttribute("class", "sqrt-stem non-leaf empty");
+		r.setAttribute("class", "sqrt-stem non-leaf ");
 		r.setAttribute("tabindex", "0");
 		r.setAttribute("math_id", math_id++);
 		addListener(r, 1);
@@ -548,7 +519,7 @@ function mkToolBtnTop(iconLoc, label) {	//make tool button top part, always visi
 					document.createTextNode(label),
 					make("br"),
 					div("math-button-sign")
-				])		
+				])
          	]);
 	btn.setAttribute("tabindex","0");
 	btn.addEventListener('click', btn1, false);
@@ -846,7 +817,7 @@ function c(e) { //bind with character in sub/sup
 	if (idObject != null) {
 		if (idObject.parentNode.getAttribute("math_id") == x.getAttribute("math_id")) { //use math_id to judge if they are same
 			removeElement(idObject);
-			checkClassName(this);	//for click same box more than once
+			
 			//x = null; //flag
 		} else {
 			// if not the same parent, change the className for the original one with cursor 
@@ -854,13 +825,13 @@ function c(e) { //bind with character in sub/sup
 			var parent = idObject.parentNode;
 			//console.log(parent);
 			removeElement(idObject);
-			checkClassName(parent);
+			
 		}
 	}
 	//define the cursor position
 	//console.log(this.firstChild.nodeType);	//3 means textnode
 	if (this.firstChild == null) {
-		checkClassName(this);
+		
 		this.appendChild(createCursor());
 	} else if (this.firstChild.nodeType == 3) {
 		var elemLeftSide = elemOffsetLeft(this);
@@ -870,7 +841,7 @@ function c(e) { //bind with character in sub/sup
 			insertAfter(createCursor(), this);
 		else
 			insertBefore(createCursor(), this);
-		checkClassName(this.parentNode);
+		
 	} else {
 		var mouseLeftSide = mousePosition(e);
 		for (var i in this.childNodes) {
@@ -878,15 +849,15 @@ function c(e) { //bind with character in sub/sup
 			if (mouseLeftSide < elemLeftSide) {
 				insertBefore(createCursor(), this.childNodes[i]);
 				e.stopPropagation();
-				checkClassName(this);
+				
 				return;
 			}
 		}
 		this.appendChild(createCursor());
-		checkClassName(this);
+		
 	}
 //	if (x != null)
-//		checkClassName(this.parentNode);
+//		
 	e.stopPropagation();
 }
 function c_onlyLeft(e) { //cursor appears before the expression when clicked, bind with math expression with sub/sup
@@ -895,12 +866,12 @@ function c_onlyLeft(e) { //cursor appears before the expression when clicked, bi
 	if (idObject != null) {
 		var parent = idObject.parentNode;
 		removeElement(idObject);
-		checkClassName(parent);
+		
 	}
 
 	//define the cursor position
 	insertBefore(createCursor(), this); //cursor after this expression is not allowed which should be in <sub>
-	checkClassName(this.parentNode);
+	
 	e.stopPropagation();
 }
 
@@ -910,8 +881,8 @@ function c_onlyRight(e) { //cursor appears after the expression when clicked
 	if (idObject != null) {
 		var parent = idObject.parentNode;
 		removeElement(idObject);
-		checkClassName(parent);
-		checkClassName(this.parentNode);
+		
+		
 	}
 
 	//define the cursor position
@@ -924,7 +895,7 @@ function c_both(e) { //c_special kind 2nd, bind with math expression without sub
 	if (idObject != null) {
 		var parent = idObject.parentNode;
 		removeElement(idObject);
-		checkClassName(parent);
+		
 	}
 	//define the cursor position
 	
@@ -935,16 +906,16 @@ function c_both(e) { //c_special kind 2nd, bind with math expression without sub
 		insertAfter(createCursor(), this);
 	else
 		insertBefore(createCursor(), this);
-	checkClassName(this.parentNode);
+	
 
 	e.stopPropagation();
 }
-function objBlur(e) {
-		for (var obj in this.childNodes) {
-			if (this.childNodes[obj].id == "cursor") {
-				removeElement(this.childNodes[obj]);
-				checkClassName(this);
-				return;
+
+function elemBlur() {	//remove className hasCursor and delete cursor
+	for (var obj in this.childNodes) {
+		if (this.childNodes[obj].id == "cursor") {
+			removeElement(this.childNodes[obj]);
+			return;
 		}
 	}
 };
@@ -953,28 +924,28 @@ function objBlur(e) {
 /* add event listener */
 function addListener(node, type) {
 	if (type == 1) {
-		node.addEventListener('click', c, false);
+		node.addEventListener('click', c);
 	} else if (type == 2) {
-		node.addEventListener('click', c_both, false);
+		node.addEventListener('click', c_both);
 	} else if (type == 3) {
-		node.addEventListener('click', c_onlyRight, false);
+		node.addEventListener('click', c_onlyRight);
 	}
-	node.addEventListener('keyup', keyOn, false);
-	node.addEventListener('keydown', keyDown, false);
-	node.addEventListener('blur', objBlur,  false);
+	node.addEventListener('keyup', keyOn);
+	node.addEventListener('keydown', keyDown);
+	node.addEventListener('blur', elemBlur);
 }
 /* remove event listener */
 function removeListener(node, type) {
 	if (type == 1) {
-		node.removeEventListener('click', c, false);
+		node.removeEventListener('click', c);
 	} else if (type == 2) {
-		node.removeEventListener('click', c_both, false);
+		node.removeEventListener('click', c_both);
 	} else if (type == 3) {
-		node.removeEventListener('click', c_onlyRight, false);
+		node.removeEventListener('click', c_onlyRight);
 	}
-	node.removeEventListener('keyup', keyOn, false);
-	node.removeEventListener('keydown', keyDown, false);
-	node.removeEventListener('blur', objBlur, false);
+	node.removeEventListener('keyup', keyOn);
+	node.removeEventListener('keydown', keyDown);
+	node.removeEventListener('blur', elemBlur);
 }
 
 function hasChild(elem) {
@@ -1016,7 +987,6 @@ function findPrev(elem) {
 			else {
 				removeCursor();
 				insertBefore(createCursor(), prev);
-				checkClassName(prev.parentNode);
 				prev.parentNode.focus();
 			}
 		}
@@ -1028,7 +998,6 @@ function findPrev(elem) {
 		else if (parent.parentNode.getAttribute("math_id") != null) {
 			removeCursor();
 			insertBefore(createCursor(), parent);
-			checkClassName(parent.parentNode);
 			parent.parentNode.focus();
 		}
 	}
@@ -1060,7 +1029,6 @@ function findNext(elem) {
 			else {
 				removeCursor();
 				insertAfter(createCursor(), next);
-				checkClassName(next.parentNode);
 				next.parentNode.focus();
 			}
 		}
@@ -1072,7 +1040,6 @@ function findNext(elem) {
 		else if (parent.parentNode.getAttribute("math_id") != null) {
 			removeCursor();
 			insertAfter(createCursor(), parent);
-			checkClassName(parent.parentNode);
 			parent.parentNode.focus();
 		}
 	}
@@ -1096,7 +1063,7 @@ function keyDown(e) {
 	case keys.SPACE:	//spacebar
 		var tnode = document.createTextNode(" ");
 		tag.appendChild(tnode);
-		tag.addEventListener('click', c, false);
+		tag.addEventListener('click', c);
 		insertBefore(tag, cursor);
 		break;
 	case keys.DELETE: //delete
@@ -1142,7 +1109,7 @@ function keyOn(e) {
 			if (keynum - 48 == 6) {
 				tnode = document.createElement("sup");
 				tnode.setAttribute("tabindex", "0");
-				tnode.setAttribute("class", "non-leaf limit hasCursor");
+				tnode.setAttribute("class", "non-leaf limit ");
 				//tnode.setAttribute("style","left: -0.44em; margin-right: -0.34em;");
 				tnode.setAttribute("math_id", math_id++);
 				addListener(tnode, 1);
@@ -1168,7 +1135,7 @@ function keyOn(e) {
 			if (keynum == 189) {
 				tnode = document.createElement("sub");
 				tnode.setAttribute("tabindex", "0");
-				tnode.setAttribute("class", "non-leaf limit hasCursor");
+				tnode.setAttribute("class", "non-leaf limit ");
 				//tnode.setAttribute("style","left: -0.44em; margin-right: -0.34em;");
 				tnode.setAttribute("math_id", math_id++);
 				addListener(tnode, 1);
@@ -1197,11 +1164,11 @@ function keyOn(e) {
 					tnode.firstChild.firstChild.appendChild(frag);
 					tnode.firstChild.firstChild.className = "non-leaf";
 					removeElement(cursor);
-					checkClassName(tnode.childNodes[1].firstChild);
+					
 					tnode.childNodes[1].firstChild.appendChild(createCursor());
 				} else {
 					removeElement(cursor);
-					checkClassName(tnode.firstChild.firstChild);
+					
 					tnode.firstChild.firstChild.appendChild(createCursor());
 				}
 					
@@ -1224,7 +1191,7 @@ function keyOn(e) {
 	}
 
 	tag.appendChild(tnode);
-	tag.addEventListener('click', c, false);
+	tag.addEventListener('click', c);
 	insertBefore(tag, cursor);
 	e.stopPropagation();
 }
