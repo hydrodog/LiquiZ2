@@ -640,16 +640,18 @@ function btn3(e) {
 		expr.appendChild(frac);
 		break;
 	case 'script/c1':
-		var sup = Equation.prototype.createExpr("sup");
-		sup.className = "non-leaf limit";
-		sup.appendChild(createVar("-i\u03C9t"));
-		insertInto(expr, [ createVar("e"), sup ], false);
+		var sup = Equation.prototype.createExpr("sup")
+									  .attr("class", "non-leaf limit")
+									  .append(createVar("-i\u03C9t"));
+		expr.append(createVar("e"))
+			.append(sup);
 		break;
 	case 'script/c2':
-		var sup = Equation.prototype.createExpr("sup");
-		sup.className = "non-leaf limit";
-		sup.appendChild(createVar("2"));
-		insertInto(expr, [ createVar("x"), sup ], false);
+		var sup = Equation.prototype.createExpr("sup")
+									  .attr("class", "non-leaf limit")
+									  .append(createVar("2"));
+		expr.append(createVar("x"))
+			.append(sup);
 		break;
 	case 'script/c3':
 		var frac = Equation.prototype.createExpr("fraction");
@@ -659,8 +661,8 @@ function btn3(e) {
 		frac.childNodes[1].className = "div7";
 		frac.childNodes[1].firstChild.appendChild(createVar("1"));
 		frac.childNodes[1].firstChild.className = "non-leaf";
-		expr.appendChild(frac);
-		insertInto(expr, [ frac, createVar("Y") ], false);
+		expr.append(frac)
+			.append(createVar("Y"));
 		break;
 	//radical
 	case "sqrt/1":	//TODO: change the height
@@ -682,26 +684,35 @@ function btn3(e) {
 		break;
 	//integral
 	case "int/1":
-		expr.appendChild(Equation.prototype.createExpr('\u222B'));
+		expr.appendChild(createEscapes('\u222B'));
 		break;
 	case "int/2":
-		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr("subp")], false);
+		expr.append(createEscapes('\u222B'))
+			.append(Equation.prototype.createExpr("subp"));
 		break;
 	case "int/3":
-		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B')], false);;
+		expr.append(createEscapes('\u222B'))
+			.append(createEscapes('\u222B'));
 		break;
 	case "int/4":
-		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr("subp")], false);
+		expr.append(createEscapes('\u222B'))
+			.append(createEscapes('\u222B'))
+			.append(Equation.prototype.createExpr("subp"));
 		break;
 	case "int/5":
-		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B')], false);
+		expr.append(createEscapes('\u222B'))
+			.append(createEscapes('\u222B'))
+			.append(createEscapes('\u222B'));
 		break;
 	case "int/6":
-		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr("subp")], false);
+		expr.append(createEscapes('\u222B'))
+			.append(createEscapes('\u222B'))
+			.append(createEscapes('\u222B'))
+			.append(Equation.prototype.createExpr("subp"));
 		break;
 	// large operator
 	case 'large/1':
-		expr.appendChild(Equation.prototype.createExpr('\u2211'));
+		expr.appendChild(createEscapes('\u2211'));
 		break;
 	case 'large/2':
 		expr.appendChild(Equation.prototype.createExpr("sum"));
@@ -713,52 +724,54 @@ function btn3(e) {
 		break;
 	// brackets
 	case "brackets/1":
-		insertInto(expr, [Equation.prototype.createExpr("("), Equation.prototype.createExpr(")")], false);
+		expr.append(createEscapes("("))
+			.append(createEscapes(")"));
 		break;
 	case "brackets/2":
-		insertInto(expr, [Equation.prototype.createExpr("["), Equation.prototype.createExpr("]")], false);
+		expr.append(createEscapes("["))
+			.append(createEscapes("]"));
 		break;
 	case "brackets/3":
-		insertInto(expr, [Equation.prototype.createExpr("{"), Equation.prototype.createExpr("}")], false);
+		expr.append(createEscapes("{"))
+			.append(createEscapes("}"));
 		break;
 	case "brackets/4":
-		insertInto(expr, [Equation.prototype.createExpr("|"), Equation.prototype.createExpr("|")], false);
+		expr.append(createEscapes("|"))
+			.append(createEscapes("|"));
 		break;
 	// function
 	case "func/1":
-		insertInto(expr, [createVar("sin")], false);
+		expr.append(createVar("sin"));
 		break;
 	case "func/2":
-		insertInto(expr, [createVar("cos")], false);
+		expr.append(createVar("cos"));
 		break;
 	case "func/3":
-		insertInto(expr, [createVar("tan")], false);
+		expr.append(createVar("tan"));
 		break;
 	case "func/4":
-		insertInto(expr, [createVar("cot")], false);
+		expr.append(createVar("cot"));
 		break;
 	case "func/5":
-		insertInto(expr, [createVar("sec")], false);
+		expr.append(createVar("sec"));
 		break;
 	case "func/6":
-		insertInto(expr, [createVar("csc")], false);
+		expr.append(createVar("csc"));
 		break;
 	case "func/c1":
-		insertInto(expr, [createVar("sin\u03B8")], false);
+		expr.append(createVar("sin\u03B8"));
 		break;
 	case "func/c2":
-		insertInto(expr, [createVar("cos2x")], false);
+		expr.append(createVar("cos2x"));
 		break;
 	case "func/c3":
 		var frac = Equation.prototype.createExpr("fraction");
-		frac.childNodes[0].className = "numerator";
-		insertInto(frac.childNodes[0].firstChild, [createVar("sin\u03B8")], false);
-		frac.childNodes[0].firstChild.className = "non-leaf";
-		frac.childNodes[1].className = "denominator";
-		insertInto(frac.childNodes[1].firstChild, [createVar("cos\u03B8")], false);
-		frac.childNodes[1].firstChild.className = "non-leaf";
+		frac.childNodes[0].firstChild.append(createVar("sin\u03B8"))
+		frac.childNodes[1].firstChild.append(createVar("cos\u03B8"))
 		expr.appendChild(frac);
-		insertInto(expr, [createVar("tan\u03B8"), createExpr("="), frac], false);
+		expr.append(createVar("tan\u03B8"))
+			.append(createVar("="))
+			.append(frac);
 		break;
 	default:
 		break;
