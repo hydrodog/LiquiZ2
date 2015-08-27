@@ -245,7 +245,8 @@ function createCursor() { //create cursor
 }
 function removeCursor() {	//remove the cursor and change the className of which the cursor belongs to
 	var cursor = document.getElementById("cursor");
-	removeElement(cursor);
+	if (cursor != null)
+		removeElement(cursor);
 }
 // the following two function is used for moving cursor 
 function insertCursorFront(elem) { //insert element before element's firstChild
@@ -276,7 +277,7 @@ function createVar(string) {	//transfer a string to individual VAR element
 	return frag;
 }
 Equation.prototype.createExpr = function(type) {
-    this.expr[type]();
+    return this.expr[type]();
 };
 Equation.prototype.expr = {
 	sub: function() {
@@ -296,7 +297,7 @@ Equation.prototype.expr = {
 		return tnode;
 	},
 	span: function() {
-		var tnode = Util.span(null, "non-leaf limit")
+		var tnode = Util.span(null, "non-leaf")
 						  .attr("tabindex", "0")
 						  .attr("math_id", math_id++)
 						  .attr("edit", "true");
@@ -361,7 +362,7 @@ Equation.prototype.expr = {
 
 		var mid = Util.span(" ", "mid-in-subp")
 	    				.attr("math_id", math_id++)
-	    				.attr("edit", "false")	
+	    				.attr("edit", "false");
 		
 		var bottom = Util.span(null, "bot-in-frac")
 	    				   .attr("math_id", math_id++)
@@ -370,7 +371,7 @@ Equation.prototype.expr = {
 
 		var space = Util.span(null, "space-in-frac")
 						  .attr("math_id", math_id++)
-						  .attr("edit", "false")
+						  .attr("edit", "false");
 		tnode.appendChildren([ top, mid, bottom, space ]);
 		return tnode;
 	},
@@ -465,7 +466,7 @@ function changeHeight() {
 
 /* teacher mode for editing equation */
 function edit() {
-	this .style.display = "none";
+	this.style.display = "none";
 }
 function resetButton() {
 	var btn_set = document.getElementsByClassName("math-box-item");
@@ -588,78 +589,70 @@ function btn3(e) {
 	switch (btn_id) {
 	//fraction
 	case 'frac/1':
-		expr.appendChild(createExpr("fraction"));
+		expr.append(Equation.prototype.createExpr("fraction"));
 		break;
 	case 'frac/2':
-		insertInto(expr, [createExpr("span"), createExpr("/"), createExpr("span")], false);
-		expr.firstChild.removeAttribute("edit");
-		expr.lastChild.removeAttribute("edit");
+		expr.append(Equation.prototype.createExpr("span"))
+			.append(createEscapes("/"))
+			.append(Equation.prototype.createExpr("span"));
 		break;
 	case 'frac/c1':
-		var frac = createExpr("fraction");
-		frac.childNodes[0].firstChild.className = "non-leaf";
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].firstChild.appendChild(createVar("dy"));
-		frac.childNodes[1].firstChild.className = "non-leaf";
 		frac.childNodes[1].firstChild.appendChild(createVar("dx"));
 		expr.appendChild(frac);
 		break;
 	case 'frac/c2':
-		var frac = createExpr("fraction");
-		frac.childNodes[0].firstChild.className = "non-leaf";
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].firstChild.appendChild(createVar("\u0394y"));
-		frac.childNodes[1].firstChild.className = "non-leaf";
 		frac.childNodes[1].firstChild.appendChild(createVar("\u0394x"));
 		expr.appendChild(frac);
 		break;
 	case 'frac/c4':
-		var frac = createExpr("fraction");
-		frac.childNodes[0].firstChild.className = "non-leaf";
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].firstChild.appendChild(createVar("\u2202y"));
-		frac.childNodes[1].firstChild.className = "non-leaf";
 		frac.childNodes[1].firstChild.appendChild(createVar("\u2202x"));
 		expr.appendChild(frac);
 		break;
 	case 'frac/c5':
-		var frac = createExpr("fraction");
-		frac.childNodes[0].firstChild.className = "non-leaf";
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].firstChild.appendChild(createVar("\u03C0"));
-		frac.childNodes[1].firstChild.className = "non-leaf";
 		frac.childNodes[1].firstChild.appendChild(createVar("2"));
 		expr.appendChild(frac);
 		break;
 	//script
 	case 'script/1':
-		expr.appendChild(createExpr("sup"));
+		expr.appendChild(Equation.prototype.createExpr("sup"));
 		break;
 	case 'script/2':
-		expr.appendChild(createExpr("sub"));
+		expr.appendChild(Equation.prototype.createExpr("sub"));
 		break;	
 	case 'script/3':	//TODO: distance
-		var frac = createExpr("fraction");
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].className = "top-in-frac";
 		frac.childNodes[1].className = "bot-in-frac";
 		expr.appendChild(frac);
 		break;
 	case 'script/4':	
-		var frac = createExpr("fraction");
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].className = "div8";
 		frac.childNodes[1].className = "div7";
 		expr.appendChild(frac);
 		break;
 	case 'script/c1':
-		var sup = createExpr("sup");
+		var sup = Equation.prototype.createExpr("sup");
 		sup.className = "non-leaf limit";
 		sup.appendChild(createVar("-i\u03C9t"));
 		insertInto(expr, [ createVar("e"), sup ], false);
 		break;
 	case 'script/c2':
-		var sup = createExpr("sup");
+		var sup = Equation.prototype.createExpr("sup");
 		sup.className = "non-leaf limit";
 		sup.appendChild(createVar("2"));
 		insertInto(expr, [ createVar("x"), sup ], false);
 		break;
 	case 'script/c3':
-		var frac = createExpr("fraction");
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].className = "div8";
 		frac.childNodes[0].firstChild.appendChild(createVar("n"));
 		frac.childNodes[0].firstChild.className = "non-leaf";
@@ -671,65 +664,65 @@ function btn3(e) {
 		break;
 	//radical
 	case "sqrt/1":	//TODO: change the height
-		expr.appendChild(createExpr("sqrt"));
+		expr.appendChild(Equation.prototype.createExpr("sqrt"));
 		removeElement(expr.firstChild.firstChild);
 		break;
 	case "sqrt/2":
-		insertInto(expr, [createExpr("sqrt")], false);
+		insertInto(expr, [Equation.prototype.createExpr("sqrt")], false);
 		break;
 	case "sqrt/3":
-		insertInto(expr, [createExpr("sqrt")], false);
+		insertInto(expr, [Equation.prototype.createExpr("sqrt")], false);
 		expr.firstChild.firstChild.className = "nthroot non-leaf";
 		expr.firstChild.firstChild.appendChild(createVar("2"));
 		break;
 	case "sqrt/4":
-		insertInto(expr, [createExpr("sqrt")], false);
+		insertInto(expr, [Equation.prototype.createExpr("sqrt")], false);
 		expr.firstChild.firstChild.className = "nthroot non-leaf";
 		expr.firstChild.firstChild.appendChild(createVar("3"));
 		break;
 	//integral
 	case "int/1":
-		expr.appendChild(createExpr('\u222B'));
+		expr.appendChild(Equation.prototype.createExpr('\u222B'));
 		break;
 	case "int/2":
-		insertInto(expr, [createExpr('\u222B'), createExpr("subp")], false);
+		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr("subp")], false);
 		break;
 	case "int/3":
-		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B')], false);;
+		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B')], false);;
 		break;
 	case "int/4":
-		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B'), createExpr("subp")], false);
+		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr("subp")], false);
 		break;
 	case "int/5":
-		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B'), createExpr('\u222B')], false);
+		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B')], false);
 		break;
 	case "int/6":
-		insertInto(expr, [createExpr('\u222B'), createExpr('\u222B'), createExpr('\u222B'), createExpr("subp")], false);
+		insertInto(expr, [Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr('\u222B'), Equation.prototype.createExpr("subp")], false);
 		break;
 	// large operator
 	case 'large/1':
-		expr.appendChild(createExpr('\u2211'));
+		expr.appendChild(Equation.prototype.createExpr('\u2211'));
 		break;
 	case 'large/2':
-		expr.appendChild(createExpr("sum"));
+		expr.appendChild(Equation.prototype.createExpr("sum"));
 		break;
 	case 'large/3':
-		var sum = createExpr("sum");
+		var sum = Equation.prototype.createExpr("sum");
 		removeElement(sum.firstChild);
 		expr.appendChild(sum);
 		break;
 	// brackets
 	case "brackets/1":
-		insertInto(expr, [createExpr("("), createExpr(")")], false);
+		insertInto(expr, [Equation.prototype.createExpr("("), Equation.prototype.createExpr(")")], false);
 		break;
 	case "brackets/2":
-		insertInto(expr, [createExpr("["), createExpr("]")], false);
+		insertInto(expr, [Equation.prototype.createExpr("["), Equation.prototype.createExpr("]")], false);
 		break;
 	case "brackets/3":
-		insertInto(expr, [createExpr("{"), createExpr("}")], false);
+		insertInto(expr, [Equation.prototype.createExpr("{"), Equation.prototype.createExpr("}")], false);
 		break;
 	case "brackets/4":
-		insertInto(expr, [createExpr("|"), createExpr("|")], false);
+		insertInto(expr, [Equation.prototype.createExpr("|"), Equation.prototype.createExpr("|")], false);
 		break;
 	// function
 	case "func/1":
@@ -757,7 +750,7 @@ function btn3(e) {
 		insertInto(expr, [createVar("cos2x")], false);
 		break;
 	case "func/c3":
-		var frac = createExpr("fraction");
+		var frac = Equation.prototype.createExpr("fraction");
 		frac.childNodes[0].className = "numerator";
 		insertInto(frac.childNodes[0].firstChild, [createVar("sin\u03B8")], false);
 		frac.childNodes[0].firstChild.className = "non-leaf";
@@ -775,11 +768,11 @@ function btn3(e) {
 	var cursor = document.getElementById("cursor");
 	if (cursor != null) {
 		insertBefore(expr, cursor);
-		cursor.paren .attr("hasChild", "true");
 		cursor.parentNode.focus();
 	} else {
-		insertInto(this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.target
-				, [ expr, createCursor() ]);
+		this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.target
+				.append(expr)
+				.append(createCursor());
 		box.focus();
 	}
 	e.stopPropagation();
@@ -787,27 +780,12 @@ function btn3(e) {
 
 /* click event bind with element*/
 function c(e) { //bind with character in sub/sup
-	//deal with the previous cursor
-	var x = this;
-	var idObject = document.getElementById('cursor');
-	if (idObject != null) {
-		if (idObject.parentNode.getAttribute("math_id") == x.getAttribute("math_id")) { //use math_id to judge if they are same
-			removeElement(idObject);
-			
-			//x = null; //flag
-		} else {
-			// if not the same parent, change the className for the original one with cursor 
-			// Note: delete cursor first, or there is no way to judge
-			var parent = idObject.parentNode;
-			//console.log(parent);
-			removeElement(idObject);
-			
-		}
-	}
+	//deal with the previous cursor if it still exists
+	removeCursor();
+
 	//define the cursor position
 	//console.log(this.firstChild.nodeType);	//3 means textnode
 	if (this.firstChild == null) {
-		
 		this.appendChild(createCursor());
 	} else if (this.firstChild.nodeType == 3) {
 		var elemLeftSide = elemOffsetLeft(this);
@@ -817,7 +795,6 @@ function c(e) { //bind with character in sub/sup
 			insertAfter(createCursor(), this);
 		else
 			insertBefore(createCursor(), this);
-		
 	} else {
 		var mouseLeftSide = mousePosition(e);
 		for (var i in this.childNodes) {
@@ -825,41 +802,25 @@ function c(e) { //bind with character in sub/sup
 			if (mouseLeftSide < elemLeftSide) {
 				insertBefore(createCursor(), this.childNodes[i]);
 				e.stopPropagation();
-				
 				return;
 			}
 		}
 		this.appendChild(createCursor());
-		
 	}
-//	if (x != null)
-//		
 	e.stopPropagation();
 }
 function c_onlyLeft(e) { //cursor appears before the expression when clicked, bind with math expression with sub/sup
 	//deal with the previous cursor
-	var idObject = document.getElementById('cursor');
-	if (idObject != null) {
-		var parent = idObject.parentNode;
-		removeElement(idObject);
-		
-	}
+	removeCursor();
 
 	//define the cursor position
 	insertBefore(createCursor(), this); //cursor after this expression is not allowed which should be in <sub>
-	
 	e.stopPropagation();
 }
 
 function c_onlyRight(e) { //cursor appears after the expression when clicked
 	//deal with the previous cursor
-	var idObject = document.getElementById('cursor');
-	if (idObject != null) {
-		var parent = idObject.parentNode;
-		removeElement(idObject);
-		
-		
-	}
+	removeCursor();
 
 	//define the cursor position
 	insertAfter(createCursor(), this); //cursor after this expression is not allowed which should be in <sub>
@@ -867,14 +828,9 @@ function c_onlyRight(e) { //cursor appears after the expression when clicked
 }
 function c_both(e) { //c_special kind 2nd, bind with math expression without sub/sup
 	//deal with the previous cursor
-	var idObject = document.getElementById('cursor');
-	if (idObject != null) {
-		var parent = idObject.parentNode;
-		removeElement(idObject);
-		
-	}
+	removeCursor();
+
 	//define the cursor position
-	
 	var elemLeftSide = elemOffsetLeft(this);
 	var mouseLeftSide = mousePosition(e);
 	var elemWidth = this.offsetWidth;
@@ -882,7 +838,6 @@ function c_both(e) { //c_special kind 2nd, bind with math expression without sub
 		insertAfter(createCursor(), this);
 	else
 		insertBefore(createCursor(), this);
-	
 
 	e.stopPropagation();
 }
@@ -1081,24 +1036,20 @@ function keyOn(e) {
 			tnode = document.createTextNode(keychar.toLowerCase());
 	} else if (keynum >= 48 && keynum <= 57) {
 		var signal = [ ")", "!", "@", "#", "$", "%", "^", "&", "\xD7", "(" ];
-//		if (e.shiftKey) {
-//			if (keynum - 48 == 6) {
-//				tnode = document.createElement("sup");
-//				 .attr("tabindex", "0");
-//				 .attr("class", "non-leaf limit ");
-//				// .attr("style","left: -0.44em; margin-right: -0.34em;");
-//				 .attr("math_id", math_id++);
-//				addListener(tnode, 1);
-//				//insert a cursor into the node
-//				insertBefore(tnode, cursor);
-//				removeCursor(); //remove the original cursor since a new one append on tnode
-//				tnode.appendChild(createCursor(), tnode);
-//				e.stopPropagation();
-//				return;
-//			} else
-//				tnode = document.createTextNode(signal[keynum - 48]);
-//		} else
-//			tnode = document.createTextNode(keychar);
+		if (e.shiftKey) {
+			if (keynum - 48 == 6) {
+				tnode = Equation.prototype.createExpr("sup")
+				//insert a cursor into the node
+				insertBefore(tnode, cursor);
+				removeCursor(); //remove the original cursor since a new one append on tnode
+				tnode.appendChild(createCursor());
+				tnode.focus();
+				e.stopPropagation();
+				return;
+			} else
+				tnode = document.createTextNode(signal[keynum - 48]);
+		} else
+			tnode = document.createTextNode(keychar);
 	} else if (keynum >= 96 && keynum <= 105) {
 		tnode = document.createTextNode(keynum - 96);
 	} else if (keynum >= 106 && keynum <= 111) {
@@ -1108,21 +1059,17 @@ function keyOn(e) {
 		var signal = [ ":", "+", "<", "_", ">", "?", "~" ];
 		var sign = [ ";", "=", ",", "-", ".", "/", "`" ];
 		if (e.shiftKey) {
-//			if (keynum == 189) {
-//				tnode = document.createElement("sub");
-//				 .attr("tabindex", "0");
-//				 .attr("class", "non-leaf limit ");
-//				// .attr("style","left: -0.44em; margin-right: -0.34em;");
-//				 .attr("math_id", math_id++);
-//				addListener(tnode, 1);
-//				//insert a cursor into the node
-//				insertBefore(tnode, cursor);
-//				removeCursor(); //remove the original cursor since a new one append on tnode
-//				tnode.appendChild(createCursor(), tnode);
-//				e.stopPropagation();
-//				return;
-//			} else
-//				tnode = document.createTextNode(signal[keynum - 186]);
+			if (keynum == 189) {
+				tnode = Equation.prototype.createExpr("sub")
+				//insert a cursor into the node
+				insertBefore(tnode, cursor);
+				removeCursor(); //remove the original cursor since a new one append on tnode
+				tnode.appendChild(createCursor());
+				tnode.focus();
+				e.stopPropagation();
+				return;
+			} else
+				tnode = document.createTextNode(signal[keynum - 186]);
 		} else {
 			if (keynum == 191) {
 				tnode = createExpr("fraction");
@@ -1198,9 +1145,7 @@ function transferToString(arr) {
 //			str += "] ";
 //		}
 	}
-		
 	str += "]";
-	
 	return str;
 }
 function parseEquation(target) {
@@ -1257,11 +1202,10 @@ function parseEquationArray(parent, arr) {
 	}
 }
 function parseEquationObj(obj) {
-    var node = make(obj.type, {
+    var node = Util.make(obj.type, {
 						        className: obj.className,
 						        id: obj.id,
-						        innerHTML: obj.innerHTML
-						    });
-    node.setAttribute("math_id", obj.mathId);
+						        innerHTML: obj.innerHTML})
+					.attr("math_id", obj.mathId);
     return node;
 }
