@@ -326,6 +326,10 @@ QuizEdit.prototype.addStandardChoice = function(name, choices, nameBlank) {
     Quiz.stdChoice[name] = choices;
 }
 
+QuizEdit.prototype.deleteSurveyQuestion = function(i) {
+    this.surveyQuestions.deleteRow(i);
+}
+
 QuizEdit.prototype.addSurveyQuestion = function(i) {
     var tr = this.surveyQuestions.insertRow();
     var c = tr.insertCell();
@@ -336,13 +340,14 @@ QuizEdit.prototype.addSurveyQuestion = function(i) {
 
 QuizEdit.prototype.editSurvey = function() {
     this.editMCtop(false);
-    var surveyQuestions = [[this.editButton("More Questions", this.addSurveyQuestion)]];
+    var surveyQuestions = [];
     for (var i = 0; i < 4; i++) {
         surveyQuestions.push([Util.input("text", QuizEdit.QUESTION, 'surveyQuestion'+i), this.editButton("delete", null)]);
     }
     this.surveyQuestions = Util.table(surveyQuestions, false);
 
-    this.addFields(this.buildSurvey, this.mcHeader, this.mcHeader2, this.ansTable, Util.h2("Survey Questions"),this.surveyQuestions);
+    this.addFields(this.buildSurvey, this.mcHeader, this.mcHeader2, this.ansTable, Util.h2("Survey Questions"),
+        this.editButton("More Questions", this.addSurveyQuestion), this.surveyQuestions);
     this.answers = [];
 }
 

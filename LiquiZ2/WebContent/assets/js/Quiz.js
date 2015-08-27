@@ -299,10 +299,12 @@ Quiz.prototype.makeEditBox = function(id) {
     };
     // TODO: Delete currene question
     var deleteFunc = function(e) {
-        console.log(e.target.id);
+        page.questions.splice(e.target.id, 1);
+        page.partialRefresh();
     };
     var copyFunc = function(e) {
-        console.log(e.target.id);
+//      page.questions.splice(e.target.id, 0, page.questions[e.target.id]);
+        page.partialRefresh();
     };
 
     var editBox = Util.div("edit");
@@ -394,7 +396,11 @@ Quiz.prototype.createSubmit = function(id) {
                 }
                 clickPolicy++;
             }),
-        Util.button("Save Local",  
+        Util.button("Save to Server", 
+            (function () {
+                
+            }).bind(this)),
+         Util.button("Save Local",  
             (function () {
                 filebrowser.savePopup(this.generateData());
             }).bind(this)),
