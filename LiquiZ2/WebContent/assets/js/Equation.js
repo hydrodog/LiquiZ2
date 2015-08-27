@@ -26,6 +26,33 @@ Node.prototype.appendChildren = function(newChildArr){
 	return this;
 };
 
+Node.prototype.append = function(newChild){
+	this.appendChild(newChild);
+	return this;
+};
+
+Node.prototype .attr = function(name, value){
+	var node = this.lastChild ? this.lastChild : this;
+	if (node.nodeType == 3)
+		node = this;	//in case of the text node situation
+	if (value)
+		node.setAttribute(name, value);
+	else
+		node.removeAttribute(name);
+	return this;
+};
+
+Node.prototype .style = function(name, value, priority){
+	var node = this.lastChild ? this.lastChild : this;
+	if (node.nodeType == 3)
+		node = this;	//in case of the text node situation
+	if (value)
+		this .style.setProperty(name, value, priority);
+	else
+		this .style.removeProperty(name);
+	return this;
+};
+
 function Equation(payload) {
     for ( var k in payload) {
         this[k] = payload[k];
@@ -106,33 +133,31 @@ Equation.Function = {
 Equation.prototype.equationButton = function(name, qcId) {		//return a new equation Editor button
 	var popId = 'pop' + qcId;
 	var popExitId = 'popExit' + qcId;
-	this.popDiv = Util.div("popDiv", popId);
+	this.popDiv = Util.div("popDiv", popId)
+					   .style("visibility", "hidden")
+					   .style("display", "none");
 //	this.popDiv.setAttribute("isHover", false);
-	this.popDiv.setAttribute("style", "visibility: hidden; display: none;");
 //	this.popDiv.addEventListener("mouseover", function(){this.popDiv.setAttribute("isHover", true);});
 //	this.popDiv.addEventListener("mouseout", function(){this.popDiv.setAttribute("isHover", false);});
 
-	this.popDiv.appendChildren(
-		[Util.div("popHeader", "popDrag").appendChildren([document.createTextNode("Equation Editor"),
-		                                                  Util.input("button", "popExit", popExitId, "X")]),
-		mkToolBtn(Util.div("popBody", "math-tool-box"), this.btn_set)]);
+	this.popDiv.append(Util.div("popHeader", "popDrag").append(document.createTextNode("Equation Editor"))
+		                                               .append(Util.input("button", "popExit", popExitId, "X")))
+               .append(mkToolBtn(Util.div("popBody", "math-tool-box"), this.btn_set));
 	
-	this.body.appendChild(this.popDiv);
+	this.body.append(this.popDiv);
 	this.popDiv.target = this.tag;
 	return Util.button(name, function(){new DivWindow('pop'+this.id.slice(2),'popDrag','popExit'+this.id.slice(2),'500','125',1);}, "button", "eB"+qcId);
 };
 Equation.prototype.editModeButton = function(target) {	//insert 3 button for edit mode into target	
-	target.appendChildren([Util.button("reset", "button", "-1", resetButton),
-	                       Util.button("edit", "button", "-1", editButton), 
-	                       Util.button("complete", "button", "-1", editButtonEnd)]);
+	target.append(Util.button("reset", resetButton))
+		  .append(Util.button("edit", editButton)) 
+	      .append(Util.button("complete", editButtonEnd));
 };
 Equation.prototype.equationBox = function() {	//return a edit box 
-	var tag = make("span", 
-			{id: "main-math-box", 
-			className: "math-expr math-editable ", 
-			style: {fontSize: "20px"}});
-	tag.setAttribute("tabindex", "0"); 		//limitation: if the attribute does not belong to the element, it can't be added into the element by Util.make 
-	tag.setAttribute("math_id", math_id++);
+	var tag = Util.span(null, "math-expr math-editable", "main-math-box") 
+			       .style("fontSize", "20px")
+				   .attr("tabindex", "0") 		//limitation: if the attribute does not belong to the element, it can't be added into the element by Util.make 
+				   .attr("math_id", math_id++);
 	addListener(tag, 1);
 	this.tag = tag;
 //	target.appendChild(tag);
@@ -142,15 +167,17 @@ Equation.prototype.equationBox = function() {	//return a edit box
 Equation.prototype.exec = function() {
 	//add three buttons for teacher's mode 
 	//TODO: should be changed when add into Quiz Demo
-	//this.editModeButton(this.body);
-	var box = Util.div("", "math-box").appendChild(this.equationBox());		//the edit div box for equation
-	this.body.appendChildren([box, Util.br(), this.equationButton("Equation Editor")]);
+	this.editModeButton(this.body);
+//	var box = Util.div("", "math-box").appendChild(this.equationBox());		//the edit div box for equation
+	this.body.append(Util.div(null, "math-box").append(this.equationBox()))
+			 .append(Util.br())
+			 .append(this.equationButton("Equation Editor"));
 };
 Equation.prototype.buildEquation = function(tag, qcId) {		//build equation into qc, remove all events -> uneditable
 	var elem = tag;
 	elemClone = elem.cloneNode(true);
 	elemClone.id += qcId;
-	elemClone.style.backgroundColor = "transparent";
+	elemClone .style.backgroundColor = "transparent";
 	console.log(elemClone);
 	console.log(parseEquation(elemClone));
 	return elemClone;
@@ -158,35 +185,35 @@ Equation.prototype.buildEquation = function(tag, qcId) {		//build equation into 
 
 /* Util part, some basic operation for save lines */
 // the following two function uses Asher's idea, rewrite make by adding style for use
-function make(tag, obj) {
-    // without a valid tag we can't continue
-    if (typeof tag === "undefined" || !tag) {
-        console.log("Util.make failed with \ntag: " + tag +
-            "\ninnerHTML: " + obj[innerHTML] +
-            "\nclassName: " + obj[className] +
-            "\nid: " + obj[id]);
-        return;
-    }
-    var element = document.createElement(tag);
-    for (var i in obj) {
-        if (typeof obj[i] !== "undefined" && obj[i] !== null)
-            if (i === "innerHTML" && obj[i].nodeName) {
-                element.appendChild(obj[i]);
-            } else if (i === "style") {
-            	for (var j in obj[i]) 
-            		element.style[j] = obj[i][j];
-            } else {
-                element[i] = obj[i];
-            }
-    }
-    return element;
-}
-function div(className, style) {
-    return make("div", {
-        className: className,
-        style: style
-    });
-}
+//function make(tag, obj) {
+//    // without a valid tag we can't continue
+//    if (typeof tag === "undefined" || !tag) {
+//        console.log("Util.make failed with \ntag: " + tag +
+//            "\ninnerHTML: " + obj[innerHTML] +
+//            "\nclassName: " + obj[className] +
+//            "\nid: " + obj[id]);
+//        return;
+//    }
+//    var element = document.createElement(tag);
+//    for (var i in obj) {
+//        if (typeof obj[i] !== "undefined" && obj[i] !== null)
+//            if (i === "innerHTML" && obj[i].nodeName) {
+//                element.appendChild(obj[i]);
+//            } else if (i === "style") {
+//            	for (var j in obj[i]) 
+//            		element .style[j] = obj[i][j];
+//            } else {
+//                element[i] = obj[i];
+//            }
+//    }
+//    return element;
+//}
+//function div(className, style) {
+//    return make("div", {
+//        className: className,
+//        style: style
+//    });
+//}
 
 var math_id = 1;	//math_id is used to identify if the expression is in a equation
 
@@ -205,40 +232,18 @@ function insertAfter(newElement, targetElement) {
 		parent.insertBefore(newElement, targetElement.nextSibling);
 	}
 }
-function insertInto(parent, elem_set, flag) { //append a set of children into parent, if flag exists, then no need to check class name
-	for ( var i in elem_set)
-		parent.appendChild(elem_set[i]);
-	//console.log(parent.nodeType);	//11 = documentfragment
-	if (parent.nodeType != 11 && parent.getAttribute("math_id")) {
-		if (flag != false)
-			
-		//console.log(parent);
-		parent.focus();
-//		parent.setAttribute("hasChild", "true");
-	}
-	return parent;
-}
 
 /* Operation for cursor */
 function createCursor() { //create cursor 
-	var tag = document.createElement("span");
-	tag.setAttribute("id", "cursor");
-	tag.setAttribute("math_id", math_id++);
-	var tnode = document.createTextNode("|");
-	tag.appendChild(tnode);
-	return tag;
+	return Util.span("|", null, "cursor")
+			    .attr("math_id", math_id++);
 }
 function removeCursor() {	//remove the cursor and change the className of which the cursor belongs to
 	var cursor = document.getElementById("cursor");
-	if (cursor != null) {
-		var parent = cursor.parentNode;
-		removeElement(cursor);
-		
-	}
+	removeElement(cursor);
 }
 // the following two function is used for moving cursor 
 function insertCursorFront(elem) { //insert element before element's firstChild
-	
 	elem.focus();	//focus for next input
 	if (elem.firstChild == null)
 		elem.appendChild(createCursor());
@@ -246,7 +251,6 @@ function insertCursorFront(elem) { //insert element before element's firstChild
 		insertBefore(createCursor(), elem.firstChild);
 }
 function insertCursorEnd(elem) { //insert element after element's lastChild
-	
 	elem.focus();
 	if (elem.firstChild == null)
 		elem.appendChild(createCursor());
@@ -258,11 +262,10 @@ function insertCursorEnd(elem) { //insert element after element's lastChild
 function createVar(string) {	//transfer a string to individual VAR element
 	var frag = document.createDocumentFragment();
 	for (var i in string) {
-		var tag = document.createElement("var");
-		tag.setAttribute("id", "char");
-		tag.setAttribute("math_id", math_id++);
+		var tag = document.createElement("var")
+						    .attr("math_id", math_id++)
+						    .addEventListener('click', c);
 		tag.innerHTML = string[i];
-		tag.addEventListener('click', c);
 		frag.appendChild(tag);
 	}
 	return frag;
@@ -270,14 +273,57 @@ function createVar(string) {	//transfer a string to individual VAR element
 Equation.prototype.createExpr = function(type) {
     this.expr[type]();
 };
-Equation.prototype.expr = {};
-Equation.prototype.expr.sub = function() {
-	var tnode = document.createElement("sub");
-	tnode.setAttribute("tabindex", "0");
-	tnode.setAttribute("class", "non-leaf limit ");
-	tnode.setAttribute("math_id", math_id++);
-	addListener(tnode, 1);
-	return tnode;
+Equation.prototype.expr = {
+	sub: function() {
+		var tnode = document.createElement("sub")
+							  .attr("tabindex", "0")
+							  .attr("class", "non-leaf limit")
+							  .attr("math_id", math_id++);
+		addListener(tnode, 1);
+		return tnode;
+	},
+	sup: function() {
+		var tnode = document.createElement("sup")
+							  .attr("tabindex", "0")
+							  .attr("class", "non-leaf limit")
+							  .attr("math_id", math_id++);
+		addListener(tnode, 1);
+		return tnode;
+	},
+	span: function() {
+		var tnode = Util.span(null, "non-leaf limit")
+						  .attr("tabindex", "0")
+						  .attr("math_id", math_id++)
+						  .attr("edit", "true");
+		addListener(tnode, 1);
+		return tnode;
+	},
+	sum: function() {
+		var tnode = Util.span(null, "large-oper")
+						  .attr("math_id", math_id++)
+						  .addEventListener('click', c_both);
+		
+		var top = Util.span(null, "align-mid-large-oper")
+					    .attr("math_id", math_id++)
+					    .attr("edit", "inside")	//TODO: if there is a better way?
+					  .append(Equation.prototype.expr.span());
+		removeListener(top, 1);
+
+		var mid = createExpr('\u2211')	//TODO: add a new class for escape
+					.attr("edit", "false")
+					.attr("class", "align-mid-large-oper")
+					.attr("math_id", math_id++);
+		removeListener(mid, 2);
+
+		var bottom = Util.span(null, "bot-align-mid-large-oper")
+	    				   .attr("math_id", math_id++)
+	    				   .attr("edit", "inside")	//TODO: if there is a better way?
+	    				 .append(Equation.prototype.expr.span());
+		removeListener(bottom, 1);
+
+		tnode.appendChildren([ top, mid, bottom ]);
+		return tnode;
+	},
 };
 
 function createExpr(type) {		//complex expression
@@ -286,60 +332,60 @@ function createExpr(type) {		//complex expression
 // TODO: replace by this.expr[type]
 	case "sub":
 		tnode = document.createElement("sub");
-		tnode.setAttribute("tabindex", "0");
-		tnode.setAttribute("class", "non-leaf limit ");
-		tnode.setAttribute("math_id", math_id++);
+		 .attr("tabindex", "0");
+		 .attr("class", "non-leaf limit ");
+		 .attr("math_id", math_id++);
 		addListener(tnode, 1);
 		break;
 	case "sup":
 		tnode = document.createElement("sup");
-		tnode.setAttribute("tabindex", "0");
-		tnode.setAttribute("class", "non-leaf limit ");
-		tnode.setAttribute("math_id", math_id++);
+		 .attr("tabindex", "0");
+		 .attr("class", "non-leaf limit ");
+		 .attr("math_id", math_id++);
 		addListener(tnode, 1);
 		break;
 	case "span":
 		tnode = document.createElement("span");
-		tnode.setAttribute("tabindex", "0");
-		tnode.setAttribute("class", "non-leaf ");
-		tnode.setAttribute("math_id", math_id++);
-		tnode.setAttribute("edit", "true");
+		 .attr("tabindex", "0");
+		 .attr("class", "non-leaf ");
+		 .attr("math_id", math_id++);
+		 .attr("edit", "true");
 		addListener(tnode, 1);
 		break;
 	case "sum":
 		tnode = document.createElement("span");
-		tnode.setAttribute("class", "large-oper");
-		tnode.setAttribute("math_id", math_id++);
+		 .attr("class", "large-oper");
+		 .attr("math_id", math_id++);
 		tnode.addEventListener('click', c_both);
 		
 		var top = createExpr("span");
 		top.setAttribute("class", "align-mid-large-oper");
 		top.setAttribute("math_id", math_id++);
 		removeListener(top, 1);
-		insertInto(top, [ createExpr("span") ], false);
+		top.appendChild(createExpr("span"));
 		top.setAttribute("edit", "inside");	//TODO: if there is a better way?
 		//top.setAttribute("hasChild", "true");
 
 		var mid = createExpr('\u2211');
-		mid.setAttribute("edit", "false");
+		.attr("edit", "false");
 		removeListener(mid, 2);
-		mid.setAttribute("class", "align-mid-large-oper");
-		mid.setAttribute("math_id", math_id++);
+		.attr("class", "align-mid-large-oper");
+		.attr("math_id", math_id++);
 
 		var bottom = createExpr("span");
-		bottom.setAttribute("class", "bot-align-mid-large-oper");
-		bottom.setAttribute("math_id", math_id++);
+		.attr("class", "bot-align-mid-large-oper");
+		.attr("math_id", math_id++);
 		removeListener(bottom, 1);
-		insertInto(bottom, [ createExpr("span") ], false);
-		bottom.setAttribute("edit", "inside");
-		//bottom.setAttribute("hasChild", "true");
+		bottom.appendChild(createExpr("span"));
+		.attr("edit", "inside");
+		//.attr("hasChild", "true");
 
-		insertInto(tnode, [ top, mid, bottom ], false);
+		tnode.appendChildren([ top, mid, bottom ]);
 		break;
 	case "fraction":
 		tnode = document.createElement("span");
-		tnode.setAttribute("class", "fraction non-leaf");
-		tnode.setAttribute("math_id", math_id++);
+		 .attr("class", "fraction non-leaf");
+		 .attr("math_id", math_id++);
 		tnode.addEventListener('click', c_both, false);
 
 		var top = document.createElement("span");
@@ -349,23 +395,23 @@ function createExpr(type) {		//complex expression
 		insertInto(top, [ createExpr("span") ], false);
 
 		var bottom = document.createElement("span");
-		bottom.setAttribute("class", "denominator");
-		bottom.setAttribute("math_id", math_id++);
-		bottom.setAttribute("edit", "inside");
-		insertInto(bottom, [ createExpr("span") ], false);
+		.attr("class", "denominator");
+		.attr("math_id", math_id++);
+		.attr("edit", "inside");
+		bottom.appendChild(createExpr("span"));
 
 		var space = document.createElement("span");
 		space.className = "space-in-frac";
 		space.setAttribute("math_id", math_id++);
 		space.setAttribute("edit", "false");
 		//<span style="display:inline-block;width:0">&#8203;</span>
-		insertInto(tnode, [ top, bottom, space ], false);
+		tnode.appendChildren([ top, bottom, space ]);
 		break;
 	case "subp":	//sub and sup for int
 		tnode = document.createElement("span");
-		tnode.setAttribute("class", "fraction non-leaf");
-		tnode.setAttribute("math_id", math_id++);
-		tnode.setAttribute("style", "margin-left: -0.25em;");
+		 .attr("class", "fraction non-leaf");
+		 .attr("math_id", math_id++);
+		 .attr("style", "margin-left: -0.25em;");
 		tnode.addEventListener('click', c_onlyRight);
 		
 		var top = document.createElement("span");
@@ -373,19 +419,19 @@ function createExpr(type) {		//complex expression
 		top.setAttribute("math_id", math_id++);
 		top.setAttribute("edit", "inside");
 		top.setAttribute("style", "margin-left: 0.25em;");
-		insertInto(top, [createExpr("span")], false);
+		top.appendChild(createExpr("span"));
 		
 		var mid = document.createElement("span");	//adjust the top location
 		mid.innerHTML = " ";
-		mid.setAttribute("class", "mid-in-frac");
-		mid.setAttribute("math_id", math_id++);
-		mid.setAttribute("edit", "false");
+		.attr("class", "mid-in-frac");
+		.attr("math_id", math_id++);
+		.attr("edit", "false");
 		
 		var bottom = document.createElement("span");
-		bottom.setAttribute("class", "bot-in-frac");
-		bottom.setAttribute("math_id", math_id++);
-		bottom.setAttribute("edit", "inside");
-		insertInto(bottom, [createExpr("span")], false);
+		.attr("class", "bot-in-frac");
+		.attr("math_id", math_id++);
+		.attr("edit", "inside");
+		bottom.appendChild(createExpr("span"));
 
 		var space = document.createElement("span");
 		space.className = "space-in-frac";
@@ -393,14 +439,14 @@ function createExpr(type) {		//complex expression
 		space.setAttribute("math_id", math_id++);
 
 		//<span style="display:inline-block;width:0">&#8203;</span>
-		insertInto(tnode, [ top, mid, bottom, space ], false);
+		tnode.appendChildren([ top, mid, bottom, space ]);
 		break;
 	case "sqrt":
 		tnode = document.createElement("span");
-		tnode.setAttribute("class", "non-leaf");
+		 .attr("class", "non-leaf");
 		tnode.addEventListener('click', c_both, false);
-		tnode.setAttribute("math_id", math_id++);
-		//tnode.setAttribute("style", "position:relative;");
+		 .attr("math_id", math_id++);
+		// .attr("style", "position:relative;");
 		
 		var sup = document.createElement("sup");
 		sup.setAttribute("class", "nthroot non-leaf ");
@@ -425,15 +471,15 @@ function createExpr(type) {		//complex expression
 		r.setAttribute("math_id", math_id++);
 		addListener(r, 1);
 		r.addEventListener('DOMSubtreeModified',changeHeight,false);
-		insertInto(tnode1, [l, r], false);
-		insertInto(tnode, [sup, tnode1], false);
+		tnode1.appendChildren([l, r]);
+		tnode.appendChildren([sup, tnode1]);
 		break;
 	default:
 		tnode = document.createElement("big");
 		text = document.createTextNode(type);
 		tnode.appendChild(text);
-		tnode.setAttribute("math_id", math_id++);
-		//tnode.setAttribute("edit", "false");
+		 .attr("math_id", math_id++);
+		// .attr("edit", "false");
 		addListener(tnode, 2);	//TODO: if the bind was meaningful
 		break;
 	}
@@ -487,12 +533,12 @@ function changeHeight() {
 
 /* teacher mode for editing equation */
 function edit() {
-	this.style.display = "none";
+	this .style.display = "none";
 }
 function resetButton() {
 	var btn_set = document.getElementsByClassName("math-box-item");
 	for (var i in btn_set)
-		btn_set[i].style.display = "inline-block";
+		btn_set[i] .style.display = "inline-block";
 }
 function editButton() {
 	var btn_set = document.getElementsByClassName("math-box-item");
@@ -504,7 +550,7 @@ function editButton() {
 function editButtonEnd() {
 	var btn_set = document.getElementsByClassName("math-box-item");
 	for (var i in btn_set) {
-		if (btn_set[i].style.display != "none") {
+		if (btn_set[i] .style.display != "none") {
 			btn_set[i].removeEventListener('click', edit, false);
 			btn_set[i].addEventListener('click', btn3, false);
 		}
@@ -513,40 +559,34 @@ function editButtonEnd() {
 
 /* create equation tool buttons */
 function mkToolBtnTop(iconLoc, label) {	//make tool button top part, always visiable
-	var btn = insertInto(div("math-button"), [
+	var btn = div("math-button").appendChildren([
 		 		div("math-button-icon", {background: "url(assets/img/toolbar/" + iconLoc + ")"}),
-				insertInto(div("math-button-label"), [
-					document.createTextNode(label),
-					make("br"),
-					div("math-button-sign")
-				])
-         	]);
+				div("math-button-label").appendChildren([document.createTextNode(label),
+				                                         make("br"),
+				                                         div("math-button-sign")
+				                                         ])]);
 	btn.setAttribute("tabindex","0");
-	btn.addEventListener('click', btn1, false);
-	btn.addEventListener('blur', btn2, false);
+	btn.addEventListener('click', btn1);
+	btn.addEventListener('blur', btn2);
 	return btn;
 }
 
 function mkToolBtnBot(group_set) {	//make tool button bottom part, visiable when top part is clicked
-	var btn = insertInto(div("math-button-mount-point", {display: "none"}), [
-		insertInto(div("math-box", {width: "300px", height: "200px"}), [
-			insertInto(div("math-box-container"), group_set)
-		])
-	]);
+	var btn = div("math-button-mount-point", {display: "none"}).appendChild(
+				div("math-box", {width: "300px", height: "200px"}.appendChild(div("math-box-container"), group_set)));
 	return btn;
 }
 
-function mkGroup(title, smallBtn_set) {	//make group part in tool button bottom
-	var btn = insertInto(div("math-box-group"), [
-		insertInto(div("math-box-group-title"), [
-			document.createTextNode(title)
-		]),
-		insertInto(div("math-box-group-container"), smallBtn_set)
-	]);
-	
-	btn.onclick = function(e){e.stopPropagation();};
-	return btn;
-}
+//function mkGroup(title, smallBtn_set) {	//make group part in tool button bottom
+//	var btn = div("math-box-group").appendChildren([div("math-box-group-title").appendChild(
+//															document.createTextNode(title)
+//		]),
+//		insertInto(div("math-box-group-container"), smallBtn_set)
+//	]);
+//	
+//	btn.onclick = function(e){e.stopPropagation();};
+//	return btn;
+//}
 
 function mkSmallBtn(loc, botton_id, w, h) {	//w means width , h means height, 
 	w = w||56;	//default value is 56, same with w == undefined ? 56 : w
@@ -591,11 +631,11 @@ function mkToolBtn(parent, btn_set) { //make the whole btn and append to parent
 function btn1(e) {
 	var bot = this.getElementsByClassName("math-button-mount-point")[0];
 	//console.log(bot);
-	if (bot.style.display == "block") {
-		bot.style.display = "none";
+	if (bot .style.display == "block") {
+		bot .style.display = "none";
 		this.className = "math-button";
 	} else {
-		bot.style.display = "block";
+		bot .style.display = "block";
 		this.className = "math-button math-button-in";
 	}
 	e.stopPropagation();	
@@ -603,7 +643,7 @@ function btn1(e) {
 function btn2(e) {	//blur has no bubble event catch
 	var bot = this.getElementsByClassName("math-button-mount-point")[0];
 	//console.log(bot);
-	bot.style.display = "none";
+	bot .style.display = "none";
 	this.className = "math-button";
 }
 function btn3(e) {
@@ -799,7 +839,7 @@ function btn3(e) {
 	var cursor = document.getElementById("cursor");
 	if (cursor != null) {
 		insertBefore(expr, cursor);
-		cursor.parentNode.setAttribute("hasChild", "true");
+		cursor.paren .attr("hasChild", "true");
 		cursor.parentNode.focus();
 	} else {
 		insertInto(this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.target
@@ -1108,10 +1148,10 @@ function keyOn(e) {
 		if (e.shiftKey) {
 			if (keynum - 48 == 6) {
 				tnode = document.createElement("sup");
-				tnode.setAttribute("tabindex", "0");
-				tnode.setAttribute("class", "non-leaf limit ");
-				//tnode.setAttribute("style","left: -0.44em; margin-right: -0.34em;");
-				tnode.setAttribute("math_id", math_id++);
+				 .attr("tabindex", "0");
+				 .attr("class", "non-leaf limit ");
+				// .attr("style","left: -0.44em; margin-right: -0.34em;");
+				 .attr("math_id", math_id++);
 				addListener(tnode, 1);
 				//insert a cursor into the node
 				insertBefore(tnode, cursor);
@@ -1134,10 +1174,10 @@ function keyOn(e) {
 		if (e.shiftKey) {
 			if (keynum == 189) {
 				tnode = document.createElement("sub");
-				tnode.setAttribute("tabindex", "0");
-				tnode.setAttribute("class", "non-leaf limit ");
-				//tnode.setAttribute("style","left: -0.44em; margin-right: -0.34em;");
-				tnode.setAttribute("math_id", math_id++);
+				 .attr("tabindex", "0");
+				 .attr("class", "non-leaf limit ");
+				// .attr("style","left: -0.44em; margin-right: -0.34em;");
+				 .attr("math_id", math_id++);
 				addListener(tnode, 1);
 				//insert a cursor into the node
 				insertBefore(tnode, cursor);
