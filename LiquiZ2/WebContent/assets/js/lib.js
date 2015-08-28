@@ -589,6 +589,9 @@ FileBrowser.prototype.addFile = function(name, content) {
 filebrowser = new FileBrowser();
 
 
+/*
+* Test to output xml. Not totally working yet.
+*/
 function createXML() {
     return document.implementation.createDocument("", "");
 }
@@ -626,11 +629,14 @@ function testXML() {
     console.log(writeXML(xml));
 }
 
-testXML();
+// testXML();
 
 var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 
 
+/*
+* post json to a url.
+*/
 function post(url, payload, callback) {
     payload = JSON.stringify(payload);
     var http = new XMLHttpRequest();
@@ -793,6 +799,9 @@ function clearPage() {
     document.getElementById("currentStatus").innerHTML = "";
 }
 
+/*
+* Displays an error on the page
+*/
 function errorStatus(errorCode) {
     var frag = document.createDocumentFragment();
     frag.appendChild(Util.h1("Error: " + errorCode));
@@ -800,11 +809,6 @@ function errorStatus(errorCode) {
     document.getElementById("currentStatus").appendChild(frag);
 }
 
-function handlePage(text, url) {
-    var json = JSON.parse(text);
-    page = new window[json.type](json.payload);
-    loadView(url);
-}
 
 function requestAjax(ajax_url, handler, error, url) {
     var ajax = new XMLHttpRequest();
@@ -820,7 +824,9 @@ function requestAjax(ajax_url, handler, error, url) {
     ajax.send();
 }
 
-function loadView(url) {
+function handlePage(text) {
+    var json = JSON.parse(text);
+    page = new window[json.type](json.payload);
     page.exec();
     GoToOldScrollPosition();
 }
