@@ -23,6 +23,11 @@ function Quiz(payload) {
 }
 
 // TODO(asher): This should be passed in through QuizDemo_ajax
+/* stdChoice is the map of all shared common answers to be reused.  
+ * If a question has a stdChoice of name, then it looks up the list of answers
+ * from stdChoice.  This is most useful for surveys where the set of answers is
+ * usually constant.
+ */
 Quiz.stdChoice = {
     Likert5: ["Strongly Agree",
           "Agree",
@@ -278,14 +283,26 @@ Quiz.prototype.render = function(child) {
     this.body.appendChild(child);
 }
 
+Quiz.prototype.updateTimer = function() {
+    this.timer.innerHTML = Math.round((this.startTime + this.timeLimit - Date.now()) / 1000);
+}
+
 Quiz.prototype.displayHeader = function() {
-    var header = Util.div("header");
-    header.appendChild(Util.h1(this.title));
-    header.appendChild(Util.span(" Points: " + this.points, "points"));
-    header.appendChild(Util.p("timer"));
+    this.startTime = Date.now();
+    var header = Util.divadd("header",
+        Util.h1(this.title),
+        Util.span(" Points: " + this.points, "points"),
+        Util.table([
+            [Util.p("timer"), this.timer = Util.div("timer") ],
+            [Util.p("tries remaining: "), this.tries = Util.div("tries") ]
+            ]) 
+        );
+    this.tries.innerHTML = 1;
+    this.timeLimit = 300000;
+    if (this.timeLimit > 0) {
+        setInterval(this.updateTimer.bind(this), 1000);
+    }
     return header;
-    //TODO: add time and countdown
-    //TODO: add remaining tries
 }
 
 
@@ -419,6 +436,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
     i = (typeof i === "undefined") ? 0 : i;
     j = (typeof j === "undefined") ? 0 : j;
 
+    var thisQuiz = this;
     var question = this.question_id,
         subQuestion = this.subQuestion_id;
 
@@ -450,7 +468,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
             q = this.answers[question][subQuestion];
 
             q[i][j].v.push(e.target.v);
-            q[i][j].s.push(new Date().getTime());
+            q[i][j].s.push(Date.now() - thisQuiz.startTime);
         }).bind(this);
 
     input.onblur = (function(e) {
@@ -459,7 +477,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
             q = this.answers[question][subQuestion];
 
-            q[i][j].e.push(new Date().getTime());
+            q[i][j].e.push(Date.now() - thisQuiz.startTime);
         }).bind(this);
 
     this.answers[question][subQuestion] = q;
