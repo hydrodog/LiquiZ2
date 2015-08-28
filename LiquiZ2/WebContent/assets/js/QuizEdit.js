@@ -66,14 +66,10 @@ QuizEdit.prototype.completeEdit = function(array) {
     this.update();
     for (var i = 0; i < array.length; i++)
         this.q.content.push(array[i]);
-//    $("#editor").remove(); // remove from window
-//    $("#qC").remove();
-//    var array = buildFunc(); //.apply(this||window, Array.prototype.slice.call(arguments, 1));
     this.renderQuestion();
 }
 
 // create a question, display it, remove the editor
-//TODO: Have a mode where it automatically keeps the editor open for multiple questions?
 QuizEdit.prototype.addQuestion = function() {
     var t = this;
     return function() {
@@ -82,6 +78,7 @@ QuizEdit.prototype.addQuestion = function() {
     };
 }
 
+//add a question to the current compound question and keep going in the editor
 QuizEdit.prototype.addSubQuestion = function() {
     var t = this;
     return function() {
@@ -89,11 +86,12 @@ QuizEdit.prototype.addSubQuestion = function() {
     };
 }
 
-// Cancel a question, add nothing and remove the editor
+// TODO: Cancel a question, add nothing and remove the editor
 QuizEdit.prototype.cancel = function() {
 
 }
 
+// Add variable fields to the editor for editing specific question types
 QuizEdit.prototype.addFields = function(cbFunc) {
     this.cbFunc = cbFunc;
     this.varEdit.innerHTML = ""; // clear all the options before adding the new ones
@@ -106,6 +104,11 @@ QuizEdit.prototype.addFields = function(cbFunc) {
     this.scrollToEditor();
 }
 
+/*
+ * For each question type, the editXXX function creates whatever fields are needed
+ * to provide information for editing that type and the buildXXX function adds the question
+ * into the quiz when the user clicks either create Question or subquestion.
+ */
 QuizEdit.prototype.buildFillin = function() {
     this.q.answers.push([this.ans.value]);
     return [
@@ -163,6 +166,10 @@ QuizEdit.prototype.editCode = function() {
     );
 }
 
+/*
+* This is the code common to all the multiple choice questions including
+ *
+*/
 QuizEdit.prototype.buildMC = function() {
     var rows = this.ansTable.rows;
     var answers = new Array(rows.length-1);
@@ -235,6 +242,10 @@ QuizEdit.prototype.addOption = function(row) {
     this.scrollToEditor();
 }
 
+/*
+*  Add a standard choice to the list
+*/
+
 QuizEdit.prototype.addStdChoice = function() {
     //stdChoice.style.background="#fff";
     var name = this.stdChoice.value;
@@ -253,6 +264,9 @@ QuizEdit.prototype.addStdChoice = function() {
     this.selStdChoice.add(c);
 }
 
+/*
+* Remove a standard choice from the hash and update the screen 
+*/
 
 QuizEdit.prototype.deleteStdChoice = function() {
     var name = this.stdChoice.value;
@@ -262,6 +276,11 @@ QuizEdit.prototype.deleteStdChoice = function() {
             this.selStdChoice.remove(i);
 }
 
+/*
+ *  Build a selection from a named global hash. This is used for
+ *  named regexes, named stdSelections, and any other item where a single
+ *  shared name must be added
+ */
 QuizEdit.prototype.selectName = function(hash, method, defaultLabel) {
     var sel = document.createElement("select");
     sel.onchange = (method === null) ? null : method.bind(this);
