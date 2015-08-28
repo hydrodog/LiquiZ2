@@ -15,6 +15,7 @@
  * documentation for more details.
  */
 
+// Keep these global so they are cached!
 video = {};
 audio = {};
 mediaLocations = {
@@ -24,6 +25,7 @@ mediaLocations = {
 };
 
 Util = {
+    SERVER_SUFFIX: "_ajax.jsp", // we are using jsp to feed our ajax
     dump: function(obj) {
         console.warn(JSON.stringify(obj, null, 3));
     },
@@ -833,7 +835,7 @@ function loadPage(e) {
 
     var ajax_url;
     if (location.pathname === "/") {
-        ajax_url = url.url + "_ajax.jsp" + url.buildParams(); // name of dynamic file
+        ajax_url = url.url + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
     } else {
         ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
     }
