@@ -123,7 +123,7 @@ QuizEdit.prototype.editFillin = function() {
 QuizEdit.prototype.buildNumber = function() {
     this.q.answers.push([this.min.value, this.max.value]);
     return [
-    ['numeric', QuizEdit.newid]
+        ['numeric', QuizEdit.newid]
     ];
 };
 

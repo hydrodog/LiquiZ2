@@ -25,20 +25,17 @@ function Calendar(payload) {
 }
 
 Calendar.monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-Calendar.DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-Calendar.WEEKDAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+Calendar.DAYS_PER_MONTH =   [31, 28, 31, 30,  31,  30,  31,  31,  30,  31,  30, 31];
+Calendar.JULDATE =          [ 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+Calendar.WEEKDAY_ABBR =     ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+Calendar.WEEKDAY =          ["Sunday", "Monday", "Tuesday", "Wednesday", "Thusday", "Friday", "Saturday"];
+
 Calendar.REGULAR_STYLE = "cal";
 Calendar.HOLIDAY_STYLE = "calhol";
 Calendar.HIGHLIGHT_STYLE ="calhi";
 
-Calendar.prototype.getDateOfYear = function(d) {
-	var dateOfYear = 0;
-	var month = d.getMonth();
-	for(var i=0; i<month; i++){
-		dateOfYear += Calendar.DAYS_PER_MONTH[i];
-	}
-	dateOfYear += d.getDate();
-	return dateOfYear;
+Calendar.prototype.getJulDate = function(d) {
+    return Calendar.JULDATE[d.getMonth()-1] + d.getDate(); // TODO: Check might be off by 1 day.
 }
 
 Calendar.prototype.clearHolidays = function(){
@@ -58,6 +55,24 @@ Calendar.prototype.isHoliday = function(d){
     return this.holidays[this.getDateOfYear(d) - 1];
 }
 
+Calendar.add = function(d, offset) {
+    d.setDate(d.getDate() + offset);    
+    return d;
+}
+
+Calendar.prototype.addSkipHolidays = function(d, offset) {
+    for (var ind = d.getDate(); offset > 0; ind++)
+        if (!this.holidays[ind]) 
+            offset--;
+    return d.setDate(ind);
+}
+
+Calendar.prototype.loadHolidays = function(list) {
+    for (var i = 0; i < list.length; i++) {
+        var d = new Date(list[i][0], list[i][1], list[i][2]);
+        this.setHoliday(d, true);
+    }
+}
 /*
  * set holiday status of date d, d+x,d+2x,... to true or false
  */
@@ -72,14 +87,6 @@ Calendar.prototype.setHolidays = function(d, delta, count, flag){
 // Reverse holiday status of a date
 Calendar.prototype.toggleHoliday = function(d){
     this.holidays[this.getDateOfYear(d) - 1] ^= 1;
-}
-
-Calendar.prototype.shiftHoliday = function(){
-	var holidays = [];
-	for(var i=0; i<365; i++){
-		holidays[i] = this.holidays[(i-7+365)%365];
-	}
-	this.holidays = holidays;
 }
 
 //Calendar.prototype.
@@ -116,23 +123,19 @@ Calendar.prototype.renderButtons = function(){
 	var calendar = this;
 	var b1 = Util.button("<<", function(){
 		calendar.startDate.setFullYear(calendar.startDate.getFullYear() - 1);
-    	calendar.removeCalendar();
-    	calendar.body.appendChild(calendar.showCalendar());
+        calendar.exec();
     });
     var b2 = Util.button("<", function(){
     	calendar.startDate.setMonth(calendar.startDate.getMonth() - 1);
-    	calendar.removeCalendar();
-    	calendar.body.appendChild(calendar.showCalendar());
+        calendar.exec();
     });
     var b3 = Util.button(">", function(){
     	calendar.startDate.setMonth(calendar.startDate.getMonth() + 1);
-    	calendar.removeCalendar();
-    	calendar.body.appendChild(calendar.showCalendar());
+        calendar.exec();
     });
     var b4 = Util.button(">>", function(){
 		calendar.startDate.setFullYear(calendar.startDate.getFullYear() + 1);
-		calendar.removeCalendar();
-    	calendar.body.appendChild(calendar.showCalendar());
+        calendar.exec();
     });
     
     var div = Util.div("calbutton", null);
@@ -224,18 +227,6 @@ Calendar.prototype.renderYear = function(d) {
     return div;
 }
 
-
-Calendar.prototype.showCalendar = function(){
-	var d = new Date(this.startDate);
-	if(this.monthView){
-		return this.month(d);
-	}
-	else{
-		d.setMonth(0);
-		return this.year(d);
-	}
-}
-
 Calendar.prototype.toolBar = function(){
     var calendar = this;
     var b1 = Util.button("show month", function(){
@@ -244,39 +235,31 @@ Calendar.prototype.toolBar = function(){
 	}, "toolButton", "b1");
     
     var b2 = Util.button("show year", function(){
-	if(calendar.monthView){	   
 	    calendar.render = calendar.renderYear;
 	    calendar.exec();
-	}
-    }, "toolButton", "b2");
+	}, "toolButton", "b2");
     
-    var days = ["Sunday", "Monday", "Tuesday", "Wednesday",
-		"Thusday", "Friday", "Saturday"];
     var s1 = Util.select("holiday indicator", false, days, "toolSelect", "s1");	
     var b3 = Util.button("mark holidays", function(){
-	var idx = document.getElementById("s1").selectedIndex;
-	calendar.markHoliday(idx);
-	calendar.removeCalendar();
-	calendar.body.appendChild(calendar.showCalendar());
+        var idx = document.getElementById("s1").selectedIndex;
+        calendar.markHoliday(idx);
+        calendar.exec();
     }, "toolButton", "b3");
     
-    var b4 = Util.button("unmark holidays", function(){
-	var idx = document.getElementById("s1").selectedIndex;
-	calendar.unmarkHoliday(idx);
-	calendar.removeCalendar();
-	calendar.body.appendChild(calendar.showCalendar());
+    var b4 = Util.button("unmark holidays", function() {
+        var idx = document.getElementById("s1").selectedIndex;
+        calendar.unmarkHoliday(idx);
+        calendar.exec();
     }, "toolButton", "b4");
     
-    var b5 = Util.button("reset holidays", function(){
-	calendar.resetHoliday();
-	calendar.removeCalendar();
-	calendar.body.appendChild(calendar.showCalendar());
+    var b5 = Util.button("reset holidays", function() {
+        calendar.resetHoliday();
+        calendar.exec();
     }, "toolButton", "b5");
 	
     var b6 = Util.button("shift holidays", "toolButton", "b6", function(){
     	calendar.shiftHoliday();
-    	calendar.removeCalendar();
-    	calendar.body.appendChild(calendar.showCalendar());
+        calendar.exec();
     });
     return Util.divadd("toolbar", b1, b2, s1, b3, b4, b5, b6);
 }

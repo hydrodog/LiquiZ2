@@ -10,15 +10,14 @@ function QuizList(payload) {
     for (var k in payload) {
         this[k] = payload[k];
     }
-    this.months = [ "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ",
-            "Aug ", "Sep ", "Oct ", "Nov ", "Dec " ];
+    //this.months = [ "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec " ];
     this.body = document.getElementById("container");
     this.body.className = "quizlist";
 }
 
 QuizList.prototype.exec = function() {
     this.body.appendChild(this.qtoolbar());
-    this.body.appendChild(this.qtable());
+    this.body.appendChild(this.renderTable());
 }
 
 QuizList.prototype.dayshift = function(datetype, rowID, rowNum, NOD) {
@@ -26,7 +25,7 @@ QuizList.prototype.dayshift = function(datetype, rowID, rowNum, NOD) {
     var date = new Date(this.data[rowNum][datetype]);
     date.setDate(date.getDate() + NOD);
     this.data[rowNum][datetype] = date.toString();
-    cell.innerHTML = this.months[date.getMonth()] + date.getDate() + " at "
+    cell.innerHTML = Calendar.monthAbbr[date.getMonth()] + date.getDate() + " at "
     + date.getHours() + ":" + date.getMinutes();
     if (this.checkDates(rowNum)) {
     this.dayshift(datetype, rowID, rowNum, -NOD);
@@ -57,14 +56,14 @@ QuizList.prototype.checkDates = function(rowNum) {
 }
 // Conditional day shift.
 QuizList.prototype.condDayShift = function(rowID, rowNum, NOD) {
-    if (document.getElementById("selectOpenDate").checked == true) {
-    this.dayshift(2, rowID, rowNum, NOD);
+    if (document.getElementById("selectOpenDate").checked) {
+        this.dayshift(2, rowID, rowNum, NOD);
     }
-    if (document.getElementById("selectCloseDate").checked == true) {
-    this.dayshift(3, rowID, rowNum, NOD);
+    if (document.getElementById("selectCloseDate").checked) {
+        this.dayshift(3, rowID, rowNum, NOD);
     }
-    if (document.getElementById("selectDueDate").checked == true) {
-    this.dayshift(4, rowID, rowNum, NOD);
+    if (document.getElementById("selectDueDate").checked) {
+        this.dayshift(4, rowID, rowNum, NOD);
     }
 }
 // make day shift buttons i.e. (-7, -1, +1, +7)
@@ -172,9 +171,9 @@ QuizList.prototype.qtablehead = function(headtype) {
     return thead;
 }
 
-QuizList.prototype.qtable = function() {
+QuizList.prototype.renderTable = function() {
     var t = document.createElement("table");
-    t.border = "1";
+//    t.border = "1";
     // table head for current quizzes
     var h1 = this.qtablehead(0);
     t.appendChild(h1);
@@ -191,15 +190,15 @@ QuizList.prototype.qtable = function() {
             c.innerHTML = this.data[i][j];
         }
         var opendate = new Date(this.data[i][2]);
-        tr.cells[2].innerHTML = this.months[opendate.getMonth()]
+        tr.cells[2].innerHTML = Calendar.monthAbbr[opendate.getMonth()]
                 + opendate.getDate() + " at " + opendate.getHours() + ":"
                 + opendate.getMinutes();
         var closedate = new Date(this.data[i][3]);
-        tr.cells[3].innerHTML = this.months[closedate.getMonth()]
+        tr.cells[3].innerHTML = Calendar.monthAbbr[closedate.getMonth()]
                 + closedate.getDate() + " at " + closedate.getHours() + ":"
                 + closedate.getMinutes();
         var duedate = new Date(this.data[i][4]);
-        tr.cells[4].innerHTML = this.months[duedate.getMonth()]
+        tr.cells[4].innerHTML = Calendar.monthAbbr[duedate.getMonth()]
                 + duedate.getDate() + " at " + duedate.getHours() + ":"
                 + duedate.getMinutes();
     }
