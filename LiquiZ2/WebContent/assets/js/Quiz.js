@@ -443,28 +443,19 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
     }
 
     input.oninput = input.onchange = (function(e) {
-            console.log("recording input", question, subQuestion, i, j);
-
             q = this.answers[question][subQuestion];
-
             q[i][j].v[q[i][j].v.length-1] = e.target.value;
         }).bind(this);
 
     input.onfocus = (function(e) {
-            console.log("start timestamp", question, subQuestion, i, j);
-
             q = this.answers[question][subQuestion];
-
             q[i][j].v.push(e.target.value);
             q[i][j].s.push(new Date().getTime());
         }).bind(this);
 
     input.onblur = (function(e) {
             // record end timestamp
-            console.log("end timestamp", question, subQuestion, i, j);
-
             q = this.answers[question][subQuestion];
-
             q[i][j].e.push(new Date().getTime());
         }).bind(this);
 
