@@ -17,14 +17,6 @@ function Quiz(payload) {
     this.body.className = "quiz";
 }
 
-Quiz.prototype.initAnswers = function() {
-    var a = Array(this.questions.length);
-    for (var i = 0; i < this.questions.length; i++) {
-        a[i] = Array(this.questions[i].content.length);
-    }
-    return a;
-}
-
 // TODO(asher): This should be passed in through QuizDemo_ajax
 /* stdChoice is the map of all shared common answers to be reused.  
  * If a question has a stdChoice of name, then it looks up the list of answers
@@ -63,7 +55,7 @@ Quiz.prototype.processParams = function() {
 
 Quiz.prototype.exec = function(refresh) {
     this.processParams();
-    this.answers = this.initAnswers();
+    this.answers = [];
     if (refresh || this.view !== url.view) {
         clearPage();
         this.header();
@@ -444,41 +436,25 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
     var question = this.question_id,
         subQuestion = this.subQuestion_id;
 
-    this.answers = this.answers||this.initAnswers();
-    q = (typeof this.answers[question][subQuestion] !== "undefined") ?
-            this.answers[question][subQuestion] : Array(0);
-
-    while (q.length <= i) {
-        q.push(Array(0));
-    }
-
-    while (q[i].length <= j) {
-        q[i].push({
-            v: [], // value
-            s: [], // startTime
-            e: [], // endTime
-        });
-    }
-
-    input.oninput = input.onchange = (function(e) {
-            q = this.answers[question][subQuestion];
-            q[i][j].v[q[i][j].v.length-1] = e.target.value;
-        }).bind(this);
+    this.answers = this.answers||[];
+    var q;
 
     input.onfocus = (function(e) {
-            q = this.answers[question][subQuestion];
+        q = [[question, subQuestion, i, j].join("_")];
+        q.push(Date.now() - thisQuiz.startTime);
+        q.push(e.target.value);
+    }).bind(this);
 
-            q[i][j].v.push(e.target.value);
-            q[i][j].s.push(Date.now() - thisQuiz.startTime);
-        }).bind(this);
+    input.oninput = input.onchange = (function(e) {
+        q[2] = e.target.value;
+    }).bind(this);
 
     input.onblur = (function(e) {
-            // record end timestamp
-            q = this.answers[question][subQuestion];
-            q[i][j].e.push(Date.now() - thisQuiz.startTime);
-        }).bind(this);
+        // record end timestamp
+        q.push(Date.now() - thisQuiz.startTime);
+        this.answers.push(q);
+    }).bind(this);
 
-    this.answers[question][subQuestion] = q;
     return input;
 };
 
