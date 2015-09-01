@@ -2,6 +2,12 @@
     box-sizing: border-box;
 }
 
+.clickableimage{
+	position: relative;
+	top:0px;
+	left:0px;
+}
+
 input[type="file"] {
     display: none;
 }
@@ -163,7 +169,7 @@ th {
     background-color: white;
 }
 
-.matrix img {
+.matrix {
     width: 100px;
 }
 
@@ -196,10 +202,7 @@ input[disabled] {
     text-decoration-color: white;
 }
 
-img {
-    width: 300px;
-    height: auto;
-}
+
 
 #menu {
 	font-family: Arial, sanserif;

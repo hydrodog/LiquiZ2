@@ -681,18 +681,8 @@ Quiz.prototype.fileUpload = function(id, accept) {
     return this.addInputHandlers(up);
 };
 
-Quiz.prototype.imgClick = function(e) {
-    // getBoundingClientRect()
-    var boundRect = e.target.getBoundingClientRect();
-    console.log((e.clientX - boundRect.x).toFixed(0) + ", " + (e.clientY - boundRect.y).toFixed(0));
-};
-
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
-    var img = document.createElement("img");
-    img.src = mediaLocations.img + src;
-    img.onclick = this.imgClick;
-    // TODO(asher): Store answer in this.answers
-    return img;
+    return new ClickableImage(id, src, xs, ys, this.answers);
 };
 
 Quiz.prototype.image = function(src, x, y, w, h) {
