@@ -26,45 +26,37 @@
  * ClickableImage.prototype.reticleLoad (e, clickableImage) - onload of reticle to properly position it.
  */
 
-ClickableImage = function(id, src, xs, ys, answersRef, reticleSrc) {
+ClickableImage = function(id, src, xs, ys, reticleSrc) {
     var img = Util.img(src);
     var div = Util.div();
-    img.src = mediaLocations.img + src;
 	div.classList.add("clickableimage");
-	var self = this;
-    div.onclick = function(e){
-		self.imgClick(e,self);
-	};
+    div.onclick = (this.imgClick).bind(this);
 	this.x = null;
 	this.y = null;
 	this.id = id;
 	this.reticle = reticleSrc || (mediaLocations.img + "reticle.png");
-	this.answers = answersRef;
-	this.response = null;
-	this.div = div;
+	this.target = div;
 	div.appendChild(img);
     return div;
 };
 
 ClickableImage.prototype.addAnswer = function(x, y) {
+	this.target.onfocus(this);
 	this.x = x;
 	this.y = y;
-	var i = this.answers.indexOf(this.response);
-	if(i != -1){
-		this.answers.splice(i,1);
-	}
-	this.response = [this.id, this.x,this.y];
-	this.answers.push(this.response);
+	this.target.value = [this.x,this.y];
+	this.target.onchange(this);
 	this.addReticle(this.x, this.y);
+	this.target.onblur(this);
 }
 
-ClickableImage.prototype.imgClick = function(e, clickableImage) {
-    var boundRect = clickableImage.div.getBoundingClientRect();
-	clickableImage.addAnswer(Math.floor(e.clientX - boundRect.left),Math.floor(e.clientY - boundRect.top));
+ClickableImage.prototype.imgClick = function(e) {
+    var boundRect = this.target.getBoundingClientRect();
+	this.addAnswer(Math.floor(e.clientX - boundRect.left),Math.floor(e.clientY - boundRect.top));
 };
 
-ClickableImage.prototype.reticleLoad = function(e, clickableImage) {
-	var img = clickableImage.reticle;
+ClickableImage.prototype.reticleLoad = function(e) {
+	var img = this.reticle;
 	img.style.left = (this.x-img.clientWidth/2) + "px";
 	img.style.top = (this.y-img.clientHeight/2) + "px";
 };
@@ -76,11 +68,8 @@ ClickableImage.prototype.addReticle = function() {
 		img.innerHTML = "&nbsp";
 		img.src = this.reticle;
 		img.style.position = "absolute";
-		this.div.appendChild(img);
-		var self = this;
-		img.onload = function(e){
-			self.reticleLoad(e,self);;
-		};
+		this.target.appendChild(img);
+		img.onload = (this.reticleLoad).bind(this);
 	}
 	img.style.left = (this.x-img.clientWidth/2) + "px";
 	img.style.top = (this.y-img.clientHeight/2) + "px";

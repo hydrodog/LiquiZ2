@@ -438,7 +438,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
     this.answers = this.answers||[];
     var q;
-
+	
     input.onfocus = (function(e) {
         q = [[question, subQuestion, i, j].join("_")];
         q.push(Date.now() - thisQuiz.startTime);
@@ -682,7 +682,7 @@ Quiz.prototype.fileUpload = function(id, accept) {
 };
 
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
-    return new ClickableImage(id, src, xs, ys, this.answers);
+    return this.addInputHandlers(new ClickableImage(id, src, xs, ys));
 };
 
 Quiz.prototype.image = function(src, x, y, w, h) {
