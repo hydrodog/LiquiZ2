@@ -227,6 +227,8 @@ Util = {
      * src is relative to the dir you defined in mediaLocations
      */
     img: function(src, className, id) {
+		className = (className || "");
+		className = "quizimg" + (className.length > 0 ? " " : "") + className;
         return Util.make("img", {
             src: mediaLocations.img + src,
             className: className,

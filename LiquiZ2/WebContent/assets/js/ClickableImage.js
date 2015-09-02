@@ -27,8 +27,8 @@
  */
 
 ClickableImage = function(id, src, xs, ys, answersRef, reticleSrc) {
-    var img = document.createElement("img");
-    var div = document.createElement("div");
+    var img = Util.img(src);
+    var div = Util.div();
     img.src = mediaLocations.img + src;
 	div.classList.add("clickableimage");
 	var self = this;

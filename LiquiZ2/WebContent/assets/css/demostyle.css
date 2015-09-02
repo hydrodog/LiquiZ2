@@ -274,6 +274,12 @@ input[disabled] {
   -moz-osx-font-smoothing: grayscale;
 }*/
 
+.quizimg
+{
+	width: 300px;
+	height: auto;
+}
+
 img.logo {
     width: 141px;
     height: 32px;
