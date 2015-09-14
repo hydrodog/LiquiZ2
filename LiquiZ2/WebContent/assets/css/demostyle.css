@@ -13,7 +13,7 @@ input[type="file"] {
 }
 .quiz {
     font-family: Arial, san-serif;
-    background-color: #e0e0ff;
+    background-color: #ffffff;
     font-size:18pt;
 }
 
@@ -21,12 +21,13 @@ input[type="file"] {
 }
 
 .qc {
-    background-color: #0040f0;
+    background-color: #8db4d0;
     font-size: 12pt;
     font-weight: normal;
-    border-style: none;
-    padding: 3px;
-    margin: 5px;
+    border-style: solid 0px;
+	border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
 }
 
 .match-qc td {
@@ -36,12 +37,17 @@ input[type="file"] {
 .mcRadioImg-qc td {
     padding: 2px;
 }
-
+.header {
+	padding: 10px;
+}
 .qheader {
-    background-color: #8080d0;
-    padding: 0px;
-    margin: 1px;
-    width: 100%;
+    background-color: #648AA7;
+    margin: -10px -10px 10px -10px;
+	padding: 5px;
+	border: solid;
+	border-width: 0 0 2px 0;
+	border-radius: 10px 10px 0 0;
+	border-color: #ffffff;
     height: 32px;
 }
 
@@ -116,7 +122,11 @@ text-align: center;
 }
 
 .instructions {
-    background-color: #f88;
+    background-color: #648AA7;
+	margin: 16px 10px 16px -10px;
+	padding: 3px 3px 3px 8px;
+	border: 0px;
+	border-radius: 0 5px 5px 0;
     font: 14pt Arial, sanserif;
 }
 
@@ -131,7 +141,6 @@ table {
     /*display: inline-block;*/
     border: 1px solid black;
     border-collapse: collapse;
-//    width: 700px;
 }
 
 .matrix {
@@ -140,7 +149,7 @@ table {
     /*display: inline-block;*/
     border: 1px solid black;
     border-collapse: collapse;
-    width: 100px;
+	background-color: #ffffff;
 }
 
 td,
@@ -153,36 +162,37 @@ th {
     //width: 30px;
     margin: 1px;
     /*padding: 2px;*/
-    background-color: #aaa;
 }
-
+.mcdropdown{
+	width:250px;
+}
 .matrix td span {
     padding: 2px;
 }
 
-.matrix input {
+.grid-input {
     /*border-width: 1px;*/
-    width: 70px;
+    width: 64px;
     height: 100%;
     border: none;
     padding: 2px;
+	text-align: center;
     background-color: white;
 }
 
-.matrix {
-    width: 100px;
-}
 
 .cell {
-    background-color: white;
-    width: 40px;
+    background-color: #DEE4E6;
+    width: 70px;
+	text-align: center;
 }
+
 
 .submit {
 /*    font-family: Arial;
     font-size: 16pt;
     font-weight: bold;*/
-    background-color: #00e;
+    background-color: #8db4d0;
     /*color: white;*/
 }
 
@@ -202,19 +212,24 @@ input[disabled] {
     text-decoration-color: white;
 }
 
-
+h1{
+	margin: 0px;
+}
 
 #menu {
 	font-family: Arial, sanserif;
 	font-size: 12pt;
 	width: 100%;
-	background-color: #def;
+	background-color: #8db4d0;
 }
 #menu div {
-  float: right;
+    position: relative;
+	width: 100%;
+	text-align: right;
 }
 #menu a, #menu a:link{
-	background: #8f8;
+	background: #eeeeee;
+	color: black;
 	border-radius: 5px;
     padding: 2px; 
     width: 70px;

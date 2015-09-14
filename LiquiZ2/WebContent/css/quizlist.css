@@ -25,6 +25,12 @@ A:hover {font-size:24; font-weight:bold; color: #58ACFA;}
 	left:10px;
 	
 }
+h1{
+	margin: 0px;
+}
+body{
+	margin: 0px;
+}
 .Heading{
 	font-family: 'Abel', sans-serif; 
 	color:#000;
@@ -34,7 +40,6 @@ A:hover {font-size:24; font-weight:bold; color: #58ACFA;}
 	position:relative;
 	left:30px;
 	top:20px;
-	
 }
 #quizparam{
 	margin-top:30px;
