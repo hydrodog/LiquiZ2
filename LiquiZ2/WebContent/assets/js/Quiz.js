@@ -558,7 +558,7 @@ Quiz.prototype.mcRadioImg = function(id, src) {
         var label = Util.label(id + "-" + i, Util.img(src[i]));
         list.push([radio, label]);
     }
-    return Util.table(list);
+    return Util.table(list,undefined,"mcRadioTable");
 }
 
 /*
