@@ -52,7 +52,11 @@ ClickableImage.prototype.addAnswer = function(x, y) {
 
 ClickableImage.prototype.imgClick = function(e) {
     var boundRect = this.target.getBoundingClientRect();
-	this.addAnswer(Math.floor(e.clientX - boundRect.left),Math.floor(e.clientY - boundRect.top));
+	var x = Math.floor(e.clientX - boundRect.left),
+		y = Math.floor(e.clientY - boundRect.top);
+	if(x >= 0 && y >= 0 && x <= boundRect.width && x <= this.target.clientWidth && y <= this.target.clientHeight){
+		this.addAnswer(x,y);
+	}
 };
 
 ClickableImage.prototype.reticleLoad = function(e) {
