@@ -36,6 +36,7 @@ ClickableImage = function(id, src, xs, ys, reticleSrc) {
 	this.id = id;
 	this.reticle = reticleSrc || (mediaLocations.img + "reticle.png");
 	this.target = div;
+	this.img = img;
 	div.appendChild(img);
     return div;
 };
@@ -51,7 +52,7 @@ ClickableImage.prototype.addAnswer = function(x, y) {
 }
 
 ClickableImage.prototype.imgClick = function(e) {
-    var boundRect = this.target.getBoundingClientRect();
+    var boundRect = this.img.getBoundingClientRect();
 	var x = Math.floor(e.clientX - boundRect.left),
 		y = Math.floor(e.clientY - boundRect.top);
 	if(x >= 0 && y >= 0 && x <= boundRect.width && x <= this.target.clientWidth && y <= this.target.clientHeight){
