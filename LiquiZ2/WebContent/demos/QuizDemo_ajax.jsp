@@ -165,7 +165,7 @@
                 "type": "audio",
                 "content": [
                     ["instructions",
-                        "listen to the following audio file and pick the name of the main character."
+                        "Listen to the following audio file and pick the name of the main character."
                     ],
                     ["Util.audio", "clip1.mp3"],
                     ["selectText", 13, ["Yijin", "Asher", "Ying", "Xuefan", "Bob"]]
@@ -191,7 +191,7 @@
                 "type": "numeric",
                 "content": [
                     ["instructions",
-                        "What is the square root of 2 (four digits is fine)?"
+                        "What is the square root of 2? Be specific to three decimal places."
                     ],
                     ["numeric", 15]
                 ]

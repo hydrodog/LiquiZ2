@@ -285,13 +285,23 @@ Quiz.prototype.updateTimer = function() {
 
 Quiz.prototype.displayHeader = function() {
     this.startTime = Date.now();
+	
+	
     var header = Util.divadd("header",
         Util.h1(this.title),
-        Util.span(" Points: " + this.points, "points"),
-        Util.table([
-            [Util.p("timer"), this.timer = Util.div("timer") ],
-            [Util.p("tries remaining: "), this.tries = Util.div("tries") ]
-            ]) 
+		Util.divadd("quizdataheader",
+        	
+			//Util.divadd("headdisplay",
+			Util.span(" Points: " + this.points, "points"),
+			Util.text(" | "),
+			Util.span("Timer: "),
+			this.timer = Util.div("timer headdisplay"),
+			Util.text(" | "),
+			Util.span("Tries remaining: ", "headdisplay"),
+			this.tries = Util.div("tries headdisplay")
+			//)
+			
+				   )
         );
     this.tries.innerHTML = 1;
     this.timeLimit = 300000;

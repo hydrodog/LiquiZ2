@@ -184,7 +184,9 @@ Util = {
             id: id,
         });
     },
-
+	text: function(text){
+		return document.createTextNode(text);
+	},
     /*
      * This function takes rows and cols as additional arguments
      */

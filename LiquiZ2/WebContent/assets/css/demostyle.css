@@ -13,7 +13,7 @@ input[type="file"] {
 }
 .quiz {
     font-family: Arial, san-serif;
-    background-color: #ffffff;
+    background-color: #E2EDFF;
     font-size:18pt;
 }
 
@@ -21,7 +21,7 @@ input[type="file"] {
 }
 
 .qc {
-    background-color: #8db4d0;
+    background-color: #A7C1E8;
     font-size: 12pt;
     font-weight: normal;
     border-style: solid 0px;
@@ -41,7 +41,7 @@ input[type="file"] {
 	padding: 10px;
 }
 .qheader {
-    background-color: #648AA7;
+    background-color: #7A9DD2;
     margin: -10px -10px 10px -10px;
 	padding: 5px 5px 3px 5px;
 	border: solid;
@@ -124,14 +124,22 @@ text-align: center;
 }
 
 .instructions {
-    background-color: #648AA7;
+    background-color: #7A9DD2;
 	margin: 16px 10px 16px -10px;
 	padding: 3px 3px 3px 8px;
 	border: 0px;
 	border-radius: 0 5px 5px 0;
     font: 14pt Arial, sanserif;
 }
-
+.quizdataheader {
+	color:#ffffff;
+    background-color: #7A9DD2;
+	margin: 0 30px 16px -10px;
+	padding: 3px 3px 3px 8px;
+	border: 0px;
+	border-radius: 0 0 5px 0;
+    font: 14pt Arial, sanserif;
+}
 .box {
     background-color: #8f8;
     border: 1 solid #000;
@@ -155,7 +163,7 @@ table {
 .mcRadioTable td{
 	border: solid 0px;
 	padding: 3px 3px 0 3px;
-	border-width: 0 0 1px 0;
+	border-width: 0 0 1px 1px;
 	border-color: #A1A5A7;
 }
 .matrix {
@@ -207,7 +215,7 @@ th {
 /*    font-family: Arial;
     font-size: 16pt;
     font-weight: bold;*/
-    background-color: #8db4d0;
+    background-color: #A7C1E8;
     /*color: white;*/
 }
 
@@ -230,33 +238,62 @@ input[disabled] {
 h1{
 	margin: 0px;
 }
-
+.loginform{
+	padding: 12px;
+}
+.header h1{
+	background-color: #A7C1E8;
+	margin: 16px 10px 0 -10px;
+	padding: 3px 3px 3px 8px;
+	border: 0px;
+	border-radius: 0 5px 5px 0;
+	color:#285479;
+}
+.editBox h1{
+	background-color: #A7C1E8;
+	margin: 16px 30px 16px 0;
+	padding: 3px 3px 3px 8px;
+	border: 0px;
+	border-radius: 0 5px 5px 0;
+}
 #menu {
 	font-family: Arial, sanserif;
 	font-size: 12pt;
 	width: 100%;
-	background-color: #8db4d0;
+	background-color: #7A9DD2;
 }
-#menu div {
+
+.loginform {
     position: relative;
 	width: 100%;
 	text-align: right;
 }
-#menu a, #menu a:link{
-	background: #eeeeee;
-	color: black;
-	border-radius: 5px;
+.mi, .mi:link{
+	color: #ffffff;
     padding: 2px; 
     width: 70px;
     height: 30px; 
-    font-weight: bold;
+	margin-right: 30px;
+	position: relative;
     text-decoration: none;
+	cursor: pointer;
 }
-#menu a:hover {
-	background: #8d0;
-	border-radius: 5px;
-    padding: 2px; 
-    width: 65px;
+.midropdown {
+	display: none;
+	position: absolute;
+	width: 200px;
+	background: #7A9DD2;
+	border: solid 0px;
+	border-width: 0 2px 2px 2px;
+	border-radius: 0 0 10px 10px;
+	border-color: #A7C1E8;
+	padding: 20px;
+}
+.midropdown .mi {
+	line-height: 30px;
+}
+.mi:hover {
+    text-decoration: underline;
 }
 
 /*.mi {
@@ -266,15 +303,42 @@ h1{
 */
 #menu input {
 	width: 100px;
+	border: solid 0px;
 }
-
-#login {
-	width: 60px;
-	background: #0b5;
-	foreground: #fff;
+input[type="button"]{
+	background: #7A9DD2;
+	color: #fff;
 	font-family: Arial;
 	font-weight: bold;
-	border-radius: 8px;
+	border: solid 0px;
+	border-radius: 0px;
+	margin-left: -1px;
+	margin-right: -1px;
+	
+	
+}
+#login {
+	width: 60px;
+	background: #6083B9;
+	color: #fff;
+	font-family: Arial;
+	font-weight: bold;
+	border: solid 0px;
+	border-radius: 5px;
+}
+.headdisplay{
+	display:inline-block;
+}
+img.logo {
+    width: 108px;
+}
+#menu ul {
+	position: absolute;
+	margin-left: 108px;
+}
+#menu li {
+	list-style: none;
+	display: inline-block;
 }
 /*.hvr-float {
   display: inline-block;
@@ -310,10 +374,6 @@ h1{
 	height: auto;
 }
 
-img.logo {
-    width: 141px;
-    height: 32px;
-}
 
 .edit-quiz {
     /*width: 200px;*/
