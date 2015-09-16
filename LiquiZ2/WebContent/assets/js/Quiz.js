@@ -285,13 +285,23 @@ Quiz.prototype.updateTimer = function() {
 
 Quiz.prototype.displayHeader = function() {
     this.startTime = Date.now();
+	
+	
     var header = Util.divadd("header",
         Util.h1(this.title),
-        Util.span(" Points: " + this.points, "points"),
-        Util.table([
-            [Util.p("timer"), this.timer = Util.div("timer") ],
-            [Util.p("tries remaining: "), this.tries = Util.div("tries") ]
-            ]) 
+		Util.divadd("quizdataheader",
+        	
+			//Util.divadd("headdisplay",
+			Util.span(" Points: " + this.points, "points"),
+			Util.text(" | "),
+			Util.span("Timer: "),
+			this.timer = Util.div("timer headdisplay"),
+			Util.text(" | "),
+			Util.span("Tries remaining: ", "headdisplay"),
+			this.tries = Util.div("tries headdisplay")
+			//)
+			
+				   )
         );
     this.tries.innerHTML = 1;
     this.timeLimit = 300000;
@@ -438,7 +448,7 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
 
     this.answers = this.answers||[];
     var q;
-
+	
     input.onfocus = (function(e) {
         q = [[question, subQuestion, i, j].join("_")];
         q.push(Date.now() - thisQuiz.startTime);
@@ -558,7 +568,7 @@ Quiz.prototype.mcRadioImg = function(id, src) {
         var label = Util.label(id + "-" + i, Util.img(src[i]));
         list.push([radio, label]);
     }
-    return Util.table(list);
+    return Util.table(list,undefined,"mcRadioTable");
 }
 
 /*
@@ -681,18 +691,8 @@ Quiz.prototype.fileUpload = function(id, accept) {
     return this.addInputHandlers(up);
 };
 
-Quiz.prototype.imgClick = function(e) {
-    // getBoundingClientRect()
-    var boundRect = e.target.getBoundingClientRect();
-    console.log((e.clientX - boundRect.x).toFixed(0) + ", " + (e.clientY - boundRect.y).toFixed(0));
-};
-
 Quiz.prototype.clickableImage = function(id, src, xs, ys) {
-    var img = document.createElement("img");
-    img.src = mediaLocations.img + src;
-    img.onclick = this.imgClick;
-    // TODO(asher): Store answer in this.answers
-    return img;
+    return this.addInputHandlers(new ClickableImage(id, src, xs, ys));
 };
 
 Quiz.prototype.image = function(src, x, y, w, h) {

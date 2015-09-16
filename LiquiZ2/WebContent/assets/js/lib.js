@@ -184,7 +184,9 @@ Util = {
             id: id,
         });
     },
-
+	text: function(text){
+		return document.createTextNode(text);
+	},
     /*
      * This function takes rows and cols as additional arguments
      */
@@ -227,6 +229,8 @@ Util = {
      * src is relative to the dir you defined in mediaLocations
      */
     img: function(src, className, id) {
+		className = (className || "");
+		className = "quizimg" + (className.length > 0 ? " " : "") + className;
         return Util.make("img", {
             src: mediaLocations.img + src,
             className: className,
