@@ -833,7 +833,7 @@ function getPrefs(ajax_url, error, url) {
         if (ajax.readyState === 4 && ajax.status !== 200) {
             error(ajax.status);
         } else if (ajax.readyState === 4 && ajax.status === 200) {
-            prefs = JSON.parse(text);
+            prefs = JSON.parse(ajax.responseText);
             console.log(prefs);
         }
     };
@@ -865,7 +865,9 @@ function loadPage(e) {
         ajax_url = location.pathname + url.url.slice(1) + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
     }
     console.log(ajax_url);
-
+    if (prefs === null) {
+        getPrefs("demos/prefs" +  Util.SERVER_SUFFIX);
+    }
     if (oldUrl.ajax) {
         clearPage();
         requestAjax(ajax_url, handlePage, errorStatus, url);
@@ -896,7 +898,7 @@ function GoToOldScrollPosition() {
     }, SCROLL_SECONDS_AFTER_RELOAD);
 }
 
-var prefs;
+var prefs = null;
 var page;
 
 // If the link clicked is the current page, reload the page.

@@ -17,6 +17,15 @@ function Quiz(payload) {
     this.body.className = "quiz";
 }
 
+Quiz.scopeMap = {
+    question: 0,
+    quiz: 1,
+    course: 2,
+    user: 3,
+    subject: 4, // shared among multiple users at same institution
+    school: 5, // shared across all subjects
+    commons: 6
+};
 // TODO(asher): This should be passed in through QuizDemo_ajax
 /* stdChoice is the map of all shared common answers to be reused.  
  * If a question has a stdChoice of name, then it looks up the list of answers
