@@ -48,11 +48,11 @@ Calendar.prototype.clearHolidays = function(){
  * set holiday status of date d to true or false
  */
 Calendar.prototype.setHoliday = function(d, flag){
-	this.holidays[this.getDateOfYear(d) - 1] = flag;
+	this.holidays[this.getJulDate(d) - 1] = flag;
 }
 
 Calendar.prototype.isHoliday = function(d){
-    return this.holidays[this.getDateOfYear(d) - 1];
+    return this.holidays[this.getJulDate(d) - 1];
 }
 
 Calendar.add = function(d, offset) {
@@ -160,16 +160,21 @@ Calendar.prototype.month = function(d, id) {
 	var div = Util.div("calMonth", id);
     
 	if(this.monthView){
-		div.appendChild(this.initialButtons());
+		div.appendChild(this.renderButtons());
 	}
 	div.appendChild(this.drawMonth(d, id));
     return div;
 }
 
 // draw a monthly calendar with the buttons needed to traverse through time
-Calendar.prototype.renderMonth = function(d){
+Calendar.prototype.renderMonth = function(){
     this.renderButtons();
-    this.body.appendChild(this.drawMonth(d));
+    this.body.appendChild(this.drawMonth(this.currentDate));
+}
+
+Calendar.prototype.renderYear = function(){
+    this.renderButtons();
+    this.body.appendChild(this.drawYear(this.currentDate));
 }
 
 //internal function used by renderMonth and renderYear
@@ -180,40 +185,42 @@ Calendar.prototype.drawMonth = function(d){
     var monthId = d.getMonth();
     var start = d.setDate(d.getDate() - dayOfWeek); // go back to Sunday
 
-    var t = Util.table();
-    var r = t.appendRow();
-    r.appendChild(Util.td(
+    var t = document.createElement("table");
+    var r = t.insertRow();
+    var c = r.insertCell();
+    c.appendChild(
         Util.make("th", {
             innerHTML : d.getFullYear() + " " + Calendar.monthAbbr[d.getMonth()],
             colSpan : 7
-        }) ));
+        }) );
 
     for (var j = 0; j < 5; j++) {
-        r = t.appendRow();
+        r = t.insertRow();
         for (var i = 0; i < 7; i++) {
-            var c = r.appendChild();
-            c.innerHTML = d;
+            var c = r.insertCell();
+            var dd = d.getDate();
+            c.innerHTML = dd;
             c.className = this.isHoliday(d) ? Calendar.HOLIDAY_STYLE : Calendar.REGULAR_STYLE;
-            d.setDate(d.getDate() + 1);
+            d.setDate(dd + 1);
         }
         if (d.getMonth() > monthId)
             break; // stop at row 4 if it's a short month (only Feb? only if 1 is top-left?)
     }
+    return t;
 }
 
-Calendar.prototype.renderYear = function(d) {
-    this.renderButtons();
-
-    var t = Util.table();
-    for (var i = 0; i < 4; i++) {
+Calendar.prototype.drawYear = function(d) {
+    var div = Util.div("calendar");
+    var t = document.createElement("table");
+    for (var i = 0; i < 3; i++) {
         var r = t.insertRow(i);
-        for (var j = 0; j < 3; j++) {
-            var c = r.appendCell();
-            c.appendChild(this.drawMonth());
+        for (var j = 0; j < 4; j++) {
+            var c = r.insertCell();
+            c.appendChild(this.drawMonth(d));
         }
     }
 
-    div.appendChild(this.initialButtons());
+    div.appendChild(this.renderButtons());
     //var months = [];
     for (var month = 0; month < 12; month++){
     	var id = "cal" + month;
@@ -239,7 +246,7 @@ Calendar.prototype.toolBar = function(){
 	    calendar.exec();
 	}, "toolButton", "b2");
     
-    var s1 = Util.select("holiday indicator", false, days, "toolSelect", "s1");	
+    var s1 = Util.select("holiday indicator", false, Calendar.WEEKDAY, "toolSelect", "s1");	
     var b3 = Util.button("mark holidays", function(){
         var idx = document.getElementById("s1").selectedIndex;
         calendar.markHoliday(idx);

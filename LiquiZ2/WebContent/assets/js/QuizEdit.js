@@ -402,10 +402,28 @@ QuizEdit.prototype.editCLOZE = function() {
 }
 
 //Equation part
-QuizEdit.prototype.buildEquation = function() {
+QuizEdit.prototype.buildEquationQuestion = function() {
     this.q.answers.push(parseEquation(this.equation.tag));
     return [
         ['equation', "equation"+this.id, "true"]
+    ];
+};
+
+QuizEdit.prototype.editEquationQuestion = function() {
+	this.equation = new Equation({
+        "target": this.varEdit,
+        "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+    }); 
+    this.addFields(this.buildEquationQuestion, 
+    		Util.span("Answer: "), this.equation.equationBox(), 
+    		Util.br(), this.equation.equationButton("Equation Editor")
+    );
+    this.varEdit.appendChild(this.equation.x);
+};
+
+QuizEdit.prototype.buildEquation = function() {
+    return [
+        ['equation', "equationQues"+this.id, "false", parseEquation(this.equation.tag)]	//TODO: maybe add parameter to pass button editions 
     ];
 };
 
@@ -414,25 +432,7 @@ QuizEdit.prototype.editEquation = function() {
         "target": this.varEdit,
         "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
     }); 
-    this.addFields(this.buildEquation, 
-    		Util.span("Answer: "), this.equation.equationBox(), 
-    		Util.br(), this.equation.equationButton("Equation Editor")
-    );
-    this.varEdit.appendChild(this.equation.x);
-};
-
-QuizEdit.prototype.buildEquationQues = function() {
-    return [
-        ['equation', "equationQues"+this.id, "false", parseEquation(this.equation.tag)]	//TODO: maybe add parameter to pass button editions 
-    ];
-};
-
-QuizEdit.prototype.editEquationQues = function() {
-	this.equation = new Equation({
-        "target": this.varEdit,
-        "btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
-    }); 
-    this.addFields(this.buildEquationQues,
+    this.addFields(this.buildEquation,
     		Util.span("Question: "), this.equation.equationBox(), 
     		Util.br(), this.equation.equationButton("Equation Editor")
     );
@@ -479,15 +479,20 @@ QuizEdit.prototype.editRegex = function() {
         ]));
 };
 
+QuizEdit.prototype.createVar = function() {}
 
-QuizEdit.prototype.editRandInt = function() {
-    this.addFields(this.buildRandInt, Util.table ( [
-    [ Util.span("min="), this.min = Util.input("number", QuizEdit.DOUBLE, "min"),
-      Util.span("step="), this.step = Util.input("number", QuizEdit.DOUBLE, "step"),
-      Util.span("max="), this.max = Util.input("number", QuizEdit.DOUBLE, "max")]
-    ]));    
+QuizEdit.prototype.deleteVar = function() {}
+
+QuizEdit.prototype.editRandomVars = function() {
+    this.addFields(null,
+    [
+        [ "Var Name:", this.varName = Util.input("text", QuizEdit.EDITCTRL, "varname"),
+            this.editButton("Create", this.createVar),
+            this.editButton("Delete", this.deleteVar),
+            this.varType = this.selectName(this.varTypes, null, "vartype") 
+        ]
+    ] );
 }
-
 
 QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,svg,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
@@ -564,6 +569,10 @@ QuizEdit.regex = {
     time: "sec|s|second"
 };
 
+QuizEdit.varTypes = [
+    "question", "quiz", "course", "user", "subject", "global"
+];
+
 QuizEdit.prototype.addEditButtons = function () {
     this.editor.appendChild(Util.button("Add Question", this.addQuestion()));
     this.editor.appendChild(Util.button("Add SubQuestion", this.addSubQuestion()));
@@ -594,7 +603,7 @@ QuizEdit.prototype.editQuestion = function() {
     e.appendChild(Util.table([ ["Level:", this.level = this.inputBlur("number", "level"),
                                 "Points:", this.points = this.inputBlur("number", "points")] ]));
     var list = [    
-    ["Question Text:", this.textBox = this.textArea("blankbox", 5, 60),
+    ["Text:", this.textBox = this.textArea("blankbox", 5, 60),
      Util.divadd(null, Util.h2("Insert"),
              this.addDispButton("Instructions", "instructions"),
              this.addDispButton("Paragraph", "Util.p"),
@@ -626,10 +635,10 @@ QuizEdit.prototype.editQuestion = function() {
 
     var ins = [
     [ this.editButton("Equation", this.editEquation),
-      this.editButton("Rnd Int", null),
-      this.editButton("Rnd Dec", null),
-      this.editButton("Rnd String", null),
-      this.editButton("Rnd Name", null)         ],
+      this.editButton("Random Var", this.editRandomVars),
+      this.editButton("", null),
+      this.editButton("", null),
+      this.editButton("", null)         ],
     [ this.editButton("MC Dropdown", this.editMultiChoiceDropdown),
       this.editButton("MC RadioVert", this.editMultiChoiceRadioVert),
       this.editButton("MC RadioHoriz", this.editMultiChoiceRadioHoriz),
@@ -643,7 +652,7 @@ QuizEdit.prototype.editQuestion = function() {
       this.editButton("Formula", null)
          ],
     [
-      this.editButton("EquationQues", this.editEquationQues),
+      this.editButton("Eq Question", this.editEquationQuestion),
       this.editButton("Essay", this.editEssay),
       this.editButton("Code", this.editCode),
       this.editButton("Matrix", this.editMatrix),
@@ -657,12 +666,13 @@ QuizEdit.prototype.editQuestion = function() {
       this.editButton("", null)
          ]
     ];
-    e.appendChild(Util.divadd(Util.h2("Insert"), Util.table(ins)));
+    e.appendChild(Util.table(ins));
     this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     this.addEditButtons();
     this.selRegex = this.selectName(QuizEdit.regex, this.pickRegex, "Select Regex");
-    this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
+    //this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
+    //this.selVarType = this.selectName(QuizEdit.varTypes, this.pickVar, "Select Var");
 
     this.title.focus();
 }
@@ -733,4 +743,28 @@ Assignment.prototype.edit = function() {
     ])
     );
     this.scrollToEditor();
+}
+
+/**
+* Named Entities are values that are stored in a hash, have a selector to pick the name
+* The user can type in a new name and create a new NamedEntity, delete an old one
+* The hash is stored as a class variable in Quiz.
+* The parameters to the constructor include the three methods of QuizEdit that should be invoked
+* when clicked:
+*   When the create button is pressed, create a new named entity in the hash and update the select
+*   When the delete button is pressed, remove the name from the hash and selection.
+*   When an item is selected from the selection, 
+*
+*/
+QuizEdit.prototype.NamedEntity = function(kind, createAction, deleteAction, selectAction) {
+//    Quiz[kind] = page[kind]; // look up the name in the ajax payload and store in the quiz.
+    var hash = page[kind];
+    var sel = QuizEdit["select" + kind] = document.createElement("select");
+    sel.onchange = (method === null) ? null : method.bind(this);
+
+    sel.appendChild(Util.option(null, defaultLabel));
+    for (var k in hash) {
+        sel.appendChild(Util.option(k,k));
+    }
+    this["sel" + kind] = sel;
 }

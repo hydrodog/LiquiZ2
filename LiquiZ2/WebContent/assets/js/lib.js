@@ -818,7 +818,20 @@ function requestAjax(ajax_url, handler, error, url) {
         } else if (ajax.readyState === 4 && ajax.status === 200) {
             handler(ajax.responseText, url);
         }
-        return;
+    };
+    ajax.open("GET", ajax_url, true);
+    ajax.send();
+}
+
+function getPrefs(ajax_url, error, url) {
+    var ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = function() {
+        if (ajax.readyState === 4 && ajax.status !== 200) {
+            error(ajax.status);
+        } else if (ajax.readyState === 4 && ajax.status === 200) {
+            prefs = JSON.parse(text);
+            console.log(prefs);
+        }
     };
     ajax.open("GET", ajax_url, true);
     ajax.send();
@@ -843,8 +856,11 @@ function loadPage(e) {
     if (location.pathname === "/") {
         ajax_url = url.url + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
     } else {
-        ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
+//        ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
+//Dov: why the slice?
+        ajax_url = location.pathname + url.url.slice(1) + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
     }
+    console.log(ajax_url);
 
     if (oldUrl.ajax) {
         clearPage();
@@ -876,6 +892,7 @@ function GoToOldScrollPosition() {
     }, SCROLL_SECONDS_AFTER_RELOAD);
 }
 
+var prefs;
 var page;
 
 // If the link clicked is the current page, reload the page.

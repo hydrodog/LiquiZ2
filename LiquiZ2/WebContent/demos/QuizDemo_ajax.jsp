@@ -1,5 +1,6 @@
 {
     "type": "Quiz",
+    "css": "demostyle.css",
     "payload": {
         "title": "Quiz Demo #1",
         "points": 100,
