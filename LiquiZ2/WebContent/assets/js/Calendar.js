@@ -67,9 +67,11 @@ Calendar.prototype.addSkipHolidays = function(d, offset) {
     return d.setDate(ind);
 }
 
+//load a list of holidays in an array form yyyymmdd
 Calendar.prototype.loadHolidays = function(list) {
     for (var i = 0; i < list.length; i++) {
-        var d = new Date(list[i][0], list[i][1], list[i][2]);
+        var s = list[i];
+        var d = new Date(Number(s.substr(0,4)), Number(s.substr(5,2)), Number(s.substr(7,2)));
         this.setHoliday(d, true);
     }
 }
@@ -120,22 +122,22 @@ Calendar.prototype.setMonthly = function() {
 }
 
 Calendar.prototype.renderButtons = function(){
-	var calendar = this;
+	var cal = this;
 	var b1 = Util.button("<<", function(){
-		calendar.startDate.setFullYear(calendar.startDate.getFullYear() - 1);
-        calendar.exec();
+		cal.startDate.setFullYear(cal.startDate.getFullYear() - 1);
+        cal.exec();
     });
     var b2 = Util.button("<", function(){
-    	calendar.startDate.setMonth(calendar.startDate.getMonth() - 1);
-        calendar.exec();
+    	cal.startDate.setMonth(cal.startDate.getMonth() - 1);
+        cal.exec();
     });
     var b3 = Util.button(">", function(){
-    	calendar.startDate.setMonth(calendar.startDate.getMonth() + 1);
-        calendar.exec();
+    	cal.startDate.setMonth(cal.startDate.getMonth() + 1);
+        cal.exec();
     });
     var b4 = Util.button(">>", function(){
-		calendar.startDate.setFullYear(calendar.startDate.getFullYear() + 1);
-        calendar.exec();
+		cal.startDate.setFullYear(calendar.startDate.getFullYear() + 1);
+        cal.exec();
     });
     
     var div = Util.div("calbutton", null);
@@ -191,7 +193,7 @@ Calendar.prototype.drawMonth = function(d){
     c.appendChild(
         Util.make("th", {
             innerHTML : d.getFullYear() + " " + Calendar.monthAbbr[d.getMonth()],
-            colSpan : 7
+            colSpan : "7"
         }) );
 
     for (var j = 0; j < 5; j++) {
