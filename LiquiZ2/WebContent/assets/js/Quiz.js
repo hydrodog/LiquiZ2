@@ -17,6 +17,7 @@ function Quiz(payload) {
     this.body.className = "quiz";
 }
 
+//TODO: (Dov) if needed, automatically generate scopeMap from list of scopes below
 Quiz.scopeMap = {
     question: 0,
     quiz: 1,
@@ -26,6 +27,7 @@ Quiz.scopeMap = {
     school: 5, // shared across all subjects
     commons: 6
 };
+Quiz.SCOPES = ["question", "quiz", "course", "user", "subject", "school", "commons"];
 // TODO(asher): This should be passed in through QuizDemo_ajax
 /* stdChoice is the map of all shared common answers to be reused.  
  * If a question has a stdChoice of name, then it looks up the list of answers

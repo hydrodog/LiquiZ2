@@ -1,5 +1,24 @@
 {
     "css": "demostyle.css",
+    "calendar": {
+        "startdate": 20150101,
+        "weekdayHolidays": [0,6],
+        "holidays": {
+            "scope": 6,
+            "list": [
+                [101, "New Year's"],
+                [1225, "Christmas"]
+            ]
+        },
+        "events": {
+            "scope": 3,
+            "list": [
+                [914, "", "Rosh Hashanah"],
+                [916, "1330-1430", "ECE Dept. Meeting"],
+                [923, "1300-0230", "Safe Training"]
+            ]
+        }
+    },
     "policy": {
         "hw4x": {
             "scope": "user",
