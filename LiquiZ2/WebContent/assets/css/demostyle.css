@@ -175,8 +175,7 @@ table {
 	background-color: #ffffff;
 }
 
-td,
-th {
+td{
     border: 1px solid black;
 }
 
