@@ -190,13 +190,16 @@ Calendar.prototype.drawMonth = function(d){
     var t = document.createElement("table");
     var r = t.insertRow();
     var c = r.insertCell();
-    c.appendChild(
-        Util.make("th", {
-            innerHTML : d.getFullYear() + " " + Calendar.monthAbbr[d.getMonth()],
-            colSpan : "7"
-        }) );
+    c.colSpan = 7;
+    c.innerHTML = d.getFullYear() + " " + Calendar.monthAbbr[d.getMonth()];
 
-    for (var j = 0; j < 5; j++) {
+    r = t.insertRow();
+    for (var i = 0; i < Calendar.WEEKDAY_ABBR.length; i++) {
+        c = r.insertCell();
+        c.innerHTML = Calendar.WEEKDAY_ABBR[i];
+    }
+// go either 4 or 5 rows until the next month
+    for (var j = 0; d.getMonth() <= monthId; j++) {
         r = t.insertRow();
         for (var i = 0; i < 7; i++) {
             var c = r.insertCell();
@@ -205,8 +208,6 @@ Calendar.prototype.drawMonth = function(d){
             c.className = this.isHoliday(d) ? Calendar.HOLIDAY_STYLE : Calendar.REGULAR_STYLE;
             d.setDate(dd + 1);
         }
-        if (d.getMonth() > monthId)
-            break; // stop at row 4 if it's a short month (only Feb? only if 1 is top-left?)
     }
     return t;
 }
@@ -225,8 +226,8 @@ Calendar.prototype.drawYear = function(d) {
     div.appendChild(this.renderButtons());
     //var months = [];
     for (var month = 0; month < 12; month++){
-    	var id = "cal" + month;
-    	div.appendChild(this.month(d, id));
+//    	var id = "cal" + month;
+    	div.appendChild(this.month(d));
         //months.push(this.month(d, id));
     	d.setMonth(d.getMonth() + 1);
     }
