@@ -291,7 +291,15 @@ Quiz.prototype.render = function(child) {
 }
 
 Quiz.prototype.updateTimer = function() {
-    this.timer.innerHTML = Math.round((this.startTime + this.timeLimit - Date.now()) / 1000);
+	var totalSec = Math.round((this.startTime + this.timeLimit - Date.now())/1000);
+	var hours = parseInt( totalSec / 3600 ) % 24;
+	hours = (hours>0?((hours < 10 ? "0" + hours : hours) + ":") : "");
+	var minutes = parseInt( totalSec / 60 ) % 60;
+	minutes = (minutes>0?((minutes < 10 ? "0" + minutes : minutes) + ":") : "")
+	var seconds = totalSec % 60;
+	seconds = (seconds >= 0?(seconds  < 10 ? "0" + seconds : seconds) : "00");
+	var result = hours + minutes + seconds;
+   	this.timer.innerHTML = result;
 }
 
 Quiz.prototype.displayHeader = function() {
@@ -318,6 +326,7 @@ Quiz.prototype.displayHeader = function() {
     this.timeLimit = 300000;
     if (this.timeLimit > 0) {
         setInterval(this.updateTimer.bind(this), 1000);
+		this.updateTimer.bind(this)();
     }
     return header;
 }

@@ -25,6 +25,7 @@ mediaLocations = {
 };
 
 Util = {
+	aryCons: ([]).constructor,
     SERVER_SUFFIX: "_ajax.jsp", // we are using jsp to feed our ajax
     dump: function(obj) {
         console.warn(JSON.stringify(obj, null, 3));
@@ -40,10 +41,18 @@ Util = {
     divadd: function(className) {
     var div = Util.div(className);
     for (var i = 1; i < arguments.length; i++)
-            div.appendChild(arguments[i]);
+            this.append(div,arguments[i]);
         return div;
     },
-    
+    append: function(p,e){
+		if(e.constructor != Util.aryCons) {
+			p.appendChild(e);
+		}else{
+			for(var i = 0; i < e.length; i++){
+				this.append(p,e[i]);
+			}
+		}
+	},
     goToId: function(id) {
         // if (typeof id === "undefined") {
         // id = window.location.hash.substr(1);
@@ -92,7 +101,7 @@ Util = {
     div: function(className, id) {
         return Util.make("div", {
             className: className,
-            id: id,
+            id: id
         });
     },
 
