@@ -186,7 +186,6 @@ Calendar.prototype.drawMonth = function(d){
     d.setDate(1);
     var monthId = d.getMonth();
     var start = d.setDate(d.getDate() - dayOfWeek); // go back to Sunday
-
     var t = document.createElement("table");
     var r = t.insertRow();
     var c = r.insertCell();
@@ -198,9 +197,13 @@ Calendar.prototype.drawMonth = function(d){
         c = r.insertCell();
         c.innerHTML = Calendar.WEEKDAY_ABBR[i];
     }
-// go either 4 or 5 rows until the next month
-    for (var j = 0; d.getMonth() <= monthId; j++) {
+
+	//go until the next month, but avoid mod12 issues
+    var pr = d.getMonth() > 7?5:0;
+
+	for (var j = 0; ((d.getMonth()+pr)%12-(monthId+pr)%12) < 1; j++) {
         r = t.insertRow();
+
         for (var i = 0; i < 7; i++) {
             var c = r.insertCell();
             var dd = d.getDate();
@@ -215,11 +218,14 @@ Calendar.prototype.drawMonth = function(d){
 Calendar.prototype.drawYear = function(d) {
     var div = Util.div("calendar");
     var t = document.createElement("table");
+	console.log(t);
     for (var i = 0; i < 3; i++) {
         var r = t.insertRow(i);
         for (var j = 0; j < 4; j++) {
             var c = r.insertCell();
-            c.appendChild(this.drawMonth(d));
+			var dpass = new Date(d);
+            c.appendChild(this.drawMonth(dpass));
+			d.setMonth(d.getMonth()+1);
         }
     }
 
@@ -227,12 +233,12 @@ Calendar.prototype.drawYear = function(d) {
     //var months = [];
     for (var month = 0; month < 12; month++){
 //    	var id = "cal" + month;
-    	div.appendChild(this.month(d));
+    	//div.appendChild(this.month(d));
         //months.push(this.month(d, id));
-    	d.setMonth(d.getMonth() + 1);
+    	//d.setMonth(d.getMonth() + 1);
     }
     //var t = Util.table(months, false);
-    //div.appendChild(t);
+    div.appendChild(t);
     d.setMonth(d.getMonth() - 1);//back to the last year of the working calendar
     return div;
 }
