@@ -16,6 +16,7 @@
                 "content": [["instructions", "Show the first pass of Mergesort below"],
                          ["grid" ,"1_1", [[9, 8, 7, 6, 5, 4, 3, 1]] ],
                          ["Util.br"],
+                         ["Util.br"],
                          ["emptyGrid", "1_2", 1, 8]]
             },
             

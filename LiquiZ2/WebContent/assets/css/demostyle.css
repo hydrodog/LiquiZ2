@@ -86,7 +86,11 @@ h2 {
     background-color: white;
     color: black;
 }
-
+#blankbox {
+	font-family: monospace;
+	font-size: 16px;
+	width: 600px;
+}
 .code {
     font: 12pt monospace;
     background-color: black;
@@ -149,7 +153,6 @@ table {
     font: 10pt Courier, fixed;
     background-color: #DEE4E6;
     /*display: inline-block;*/
-    border: 1px solid black;
     border-collapse: collapse;
 }
 .mcRadioTable img{
@@ -166,13 +169,36 @@ table {
 	border-width: 0 0 1px 1px;
 	border-color: #A1A5A7;
 }
+.qetitlehold {
+	text-align: center;
+	font-size: 16px;
+}
+.qetitle {
+	display: inline-block;
+	padding: 5px 32px 0 32px;
+	border-radius: 10px 10px 0 0;
+	background-color: #A7C1E8;
+	color: #ffffff;
+	margin: 3px 3px 0 3px;
+}
+.qelabel {
+	display: inline-block;
+	padding: 5px;
+	font-size: 16px;
+	border-radius: 10px;
+	background-color: #A7C1E8;
+	color: #ffffff;
+	margin: 3px;
+	line-height: normal;
+}
+
 .matrix {
     font: 10pt Courier, fixed;
     background-color: #DEE4E6;
-    /*display: inline-block;*/
-    border: 1px solid black;
+    display: inline-block;
     border-collapse: collapse;
 	background-color: #ffffff;
+	vertical-align: middle;
 }
 
 td{
@@ -207,6 +233,7 @@ td{
     background-color: #DEE4E6;
     width: 70px;
 	text-align: center;
+	height: 20px;
 }
 
 
@@ -226,13 +253,7 @@ input {
     outline: none;
 }
 
-input[disabled] {
-    background-color: white;
-    border-width: 1px;
-    color: black;
-    padding: 2px;
-    text-decoration-color: white;
-}
+
 
 h1{
 	margin: 0px;
@@ -309,7 +330,7 @@ h1{
 	width: 100px;
 	border: solid 0px;
 }
-input[type="button"]{
+/*input[type="button"]{
 	background: #7A9DD2;
 	color: #fff;
 	font-family: Arial;
@@ -320,7 +341,30 @@ input[type="button"]{
 	margin-right: -1px;
 	
 	
+}*/
+
+.paramulti {
+	background-color: #A7C1E8;
+	border: solid 0px;
+	border-radius: 0px;
+	min-width: 150px;
+	text-align: center;
+	color: #ffffff;
+	font-size: 16px;
 }
+
+.paramultileft {
+	border-radius: 5px 0 0 0;
+}
+
+.paramultiright {
+	border-radius: 0 5px 0 0;
+}
+
+.paramultiselected {
+	background-color: #6083B9;
+}
+
 #login {
 	width: 60px;
 	background: #6083B9;
@@ -392,17 +436,19 @@ img.logo {
 
 input#title {
     font-family: Arial, sanserif;
-    font-size: 14pt;
+    font-size: 16px;
     width: 600px;
+	border: solid 1px;
+	border-color: #000000;
+	border-radius: 5px;
+	margin: 0 3px 3px 3px;
+	box-sizing: content-box;
 }
 
-input[disabled] {
-    background-color: #a22;
-    color: white;
-}
+
 
 .answers {
-    background: #8d;d
+    background: #8dd;
     width: 300px;
 }
 
@@ -413,7 +459,9 @@ input.editpattern {
 }
 
 .editctrl {
-    background: #bc4;
+	height: 30px;
+	margin: 3px;
+	font-size: 16px;
 }
 
 .editint {
@@ -483,4 +531,11 @@ input.editpattern {
 
 .file-item:hover {
     background-color: #268666;
+}
+input[disabled] {
+    border-width: 0px;
+    color: black;
+    background-color: #DEE4E6;
+    color: #444;
+
 }

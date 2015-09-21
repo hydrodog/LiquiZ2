@@ -31,7 +31,6 @@ QuizEdit.prototype.scrollToEditor = function() {
 
 QuizEdit.prototype.renderQuestion = function() {
     page.refreshQuestion(this.id);
-    this.scrollToEditor();
 }
 
 QuizEdit.prototype.editButton = function(label, method) {
@@ -42,12 +41,24 @@ QuizEdit.prototype.textArea = function(id, rows, cols) {
     return Util.textarea(null, QuizEdit.TEXTAREA, id, rows, cols);
 }
 
-QuizEdit.prototype.addDispButton = function(title, funcName) {
+QuizEdit.prototype.addDispButton = function(title, funcName, className) {
     var t = this;
-    return Util.button(title, function() {
-        t.q.content.push([funcName, t.textBox.value]);
-        t.renderQuestion();
-    });
+    return Util.button(title, 
+					   function() {
+							var e = this.paraEditor;
+							e.activeType.classList.remove("paramultiselected");
+							this.classList.add("paramultiselected");
+							e.activeType = this;
+							var cont = [funcName, e.textBox.value];
+							if(e.ind != -1){
+								t.q.content[e.ind] = cont;
+							}else{
+								t.q.content.push(cont);
+								e.ind = t.q.content.length-1;
+							}
+							t.renderQuestion();
+						},
+					   className);
 }
 
 QuizEdit.prototype.openBracket = "[[";
@@ -574,9 +585,78 @@ QuizEdit.varTypes = [
 ];
 
 QuizEdit.prototype.addEditButtons = function () {
-    this.editor.appendChild(Util.button("Add Question", this.addQuestion()));
-    this.editor.appendChild(Util.button("Add SubQuestion", this.addSubQuestion()));
-}
+    return [Util.button("Add Question", this.addQuestion()),
+			Util.button("Add SubQuestion", this.addSubQuestion())];
+};
+
+QuizEdit.prototype.appendParagraphEditor = function(){
+	this.appendParaEditor(1);
+};
+
+QuizEdit.prototype.appendParaCode = function(){
+	this.appendParaEditor(2);
+};
+
+QuizEdit.prototype.appendInstructions = function(){
+	this.appendParaEditor(0);
+};
+
+QuizEdit.prototype.appendParaEditor = function(num){
+	var i = 0;
+	var funcs = ["instructions",
+				 "Util.p",
+				 "precode",
+				 undefined
+				 ];
+	
+	var instr = this.addDispButton("Instructions", funcs[i++],"paramulti paramultileft"),
+		parag = this.addDispButton("Paragraph", funcs[i++],"paramulti"),
+		code = this.addDispButton("Code", funcs[i++],"paramulti"),
+		text2eq = Util.button("Text2Equation", funcs[i++],"paramulti paramultiright");
+	
+	
+	var types = [instr,
+				 parag,
+				 code,
+				 text2eq
+				];
+	
+	var textBox = this.textArea("blankbox", 5, 60);
+	var t = this;
+	textBox.oninput = function(){
+		var e = this.paraEditor;
+		var cont = [funcs[e.activeType.i], e.textBox.value];
+		if(e.ind != -1){
+			t.q.content[e.ind] = cont;
+		}else{
+			t.q.content.push(cont);
+			e.ind = t.q.content.length-1;
+		}
+		t.renderQuestion();
+	};
+	
+	var paraEditor = Util.divadd("qetitlehold",
+							  types,
+							  Util.br(),
+				  			  textBox,
+							  Util.br()
+							  );
+	
+	paraEditor.textBox = textBox;
+	paraEditor.activeType = types[num];
+	paraEditor.ind = -1;
+	types[num].classList.add("paramultiselected");
+	
+	for(var i in types){
+		types[i].paraEditor = paraEditor;
+		types[i].i = i;
+	}
+	textBox.paraEditor = paraEditor;
+	paraEditor.types = types;
+
+	textBox.oninput.call(textBox);
+	this.editor.appendChild(paraEditor);
+};
 QuizEdit.prototype.editQuestion = function() {
 //    var submitbar = document.getElementById("submitDiv-2");
 //    submitbar.parent.removeChild(submitbar);
@@ -595,24 +675,29 @@ QuizEdit.prototype.editQuestion = function() {
 
     var e = this.editor = document.getElementById("edit-qc"+this.q.id);
     this.scrollToEditor();
-
+	
     e.appendChild(Util.h1("Question Editor"));
-    this.addEditButtons();
+	
+	
+	e.appendChild(Util.divadd("qetitlehold",
+							  this.addEditButtons(),
+							  Util.br(),
+							  Util.span("Title","qetitle"),
+							  Util.br(),
+							  this.title = this.inputBlur("text", "title"),
+							  Util.br(),
+							  Util.span("Level:","qelabel"),
+							  this.level = this.inputBlur("number", "level"),
+							  Util.span("Points:","qelabel"),
+							  this.points = this.inputBlur("number", "points"),
+							  Util.br()
+				 ));
+	this.appendParaEditor(0);		   
+							   
+							   	
+
     
-    e.appendChild(Util.table([ ["Title", this.title = this.inputBlur("text", "title")] ]));
-    e.appendChild(Util.table([ ["Level:", this.level = this.inputBlur("number", "level"),
-                                "Points:", this.points = this.inputBlur("number", "points")] ]));
-    var list = [    
-    ["Text:", this.textBox = this.textArea("blankbox", 5, 60),
-     Util.divadd(null, Util.h2("Insert"),
-             this.addDispButton("Instructions", "instructions"),
-             this.addDispButton("Paragraph", "Util.p"),
-             this.addDispButton("Code", "precode"),
-             Util.button("Text2Equation"))//TODO: need equation feature
-    ]
-    ];
     var image, audio, video;
-    e.appendChild(Util.table(list));
     e.appendChild( Util.table( [
     [ image = Util.file("Upload Image", QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
       audio = Util.file("Upload Audio", QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
@@ -636,9 +721,9 @@ QuizEdit.prototype.editQuestion = function() {
     var ins = [
     [ this.editButton("Equation", this.editEquation),
       this.editButton("Random Var", this.editRandomVars),
-      this.editButton("", null),
-      this.editButton("", null),
-      this.editButton("", null)         ],
+      this.editButton("Paragraph", this.appendParagraphEditor),
+      this.editButton("Instruction", this.appendInstructions),
+      this.editButton("Code Paragraph", this.appendParaCode)         ],
     [ this.editButton("MC Dropdown", this.editMultiChoiceDropdown),
       this.editButton("MC RadioVert", this.editMultiChoiceRadioVert),
       this.editButton("MC RadioHoriz", this.editMultiChoiceRadioHoriz),
