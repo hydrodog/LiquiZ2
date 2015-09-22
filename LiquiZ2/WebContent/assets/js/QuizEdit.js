@@ -655,7 +655,8 @@ QuizEdit.prototype.appendParaEditor = function(num){
 	paraEditor.types = types;
 
 	textBox.oninput.call(textBox);
-	this.editor.appendChild(paraEditor);
+	//this.editor.appendChild();
+	this.editor.insertBefore(paraEditor,this.appendIndex);
 };
 QuizEdit.prototype.editQuestion = function() {
 //    var submitbar = document.getElementById("submitDiv-2");
@@ -692,10 +693,12 @@ QuizEdit.prototype.editQuestion = function() {
 							  this.points = this.inputBlur("number", "points"),
 							  Util.br()
 				 ));
-	this.appendParaEditor(0);		   
+	
 							   
-							   	
+	this.appendIndex = Util.div("apndIndx");
+	e.appendChild(this.appendIndex);
 
+	this.appendParaEditor(0);		   
     
     var image, audio, video;
     e.appendChild( Util.table( [
