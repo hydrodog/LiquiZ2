@@ -353,9 +353,9 @@ Quiz.prototype.makeEditBox = function(id) {
     var editBox = Util.div("edit");
     Util.add(editBox,
         [
-            Util.button("Edit", editFunc, null, id+"-edit"),
-            Util.button("Delete", deleteFunc, null, id+"-delete"), 
-            Util.button("Copy", copyFunc, null, id+"-copy")
+            Util.button("Edit", editFunc, "headbtn", id+"-edit"),
+            Util.button("Delete", deleteFunc, "headbtn", id+"-delete"), 
+            Util.button("Copy", copyFunc, "headbtn", id+"-copy")
         ]);
     return editBox;
 };
