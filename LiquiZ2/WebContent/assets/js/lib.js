@@ -45,6 +45,7 @@ Util = {
         return div;
     },
     append: function(p,e){
+		if(e)
 		if(e.constructor != Util.aryCons) {
 			p.appendChild(e);
 		}else{
