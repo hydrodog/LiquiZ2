@@ -357,7 +357,15 @@ h1{
 	
 	
 }*/
-
+.survey{
+	text-align: center;
+}
+.survey td{
+	padding: 3px 5px 3px 5px;
+}
+.survey th{
+	padding: 5px;
+}
 .paramulti {
 	background-color: #A7C1E8;
 	border: solid 0px;
