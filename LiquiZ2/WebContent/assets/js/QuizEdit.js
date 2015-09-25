@@ -308,6 +308,7 @@ QuizEdit.prototype.editMCtop = function(checkbox) {
     this.mcHeader = Util.divadd(QuizEdit.EDITPANE,
         this.optCount = Util.input("number", QuizEdit.EDITCTRL, "optionAdd"),
         this.editButton("Add Option", this.addOption));
+	console.log(this.selStdChoice);
     this.mcHeader2 = Util.divadd(QuizEdit.EDITPANE,     
         Util.span("StdChoice Name"),
         this.stdChoice = Util.input("text", QuizEdit.NAME, 'stdChoice'),
@@ -759,7 +760,7 @@ QuizEdit.prototype.editQuestion = function() {
     e.appendChild(this.varEdit);
     this.addEditButtons();
     this.selRegex = this.selectName(QuizEdit.regex, this.pickRegex, "Select Regex");
-    //this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
+    this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
     //this.selVarType = this.selectName(QuizEdit.varTypes, this.pickVar, "Select Var");
 
     this.title.focus();
