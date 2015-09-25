@@ -88,6 +88,8 @@ video {
 }
 .essay {
 	vertical-align: middle;
+	display: block;
+	margin: 12px;
 }
 .fillin .number {
     font: 12pt Courier bold;
@@ -357,6 +359,9 @@ h1{
 	
 	
 }*/
+.mcRadioVert td {
+	padding: 3px 5px 3px 5px;
+}
 .survey{
 	text-align: center;
 }
@@ -488,7 +493,6 @@ input.editpattern {
 }
 
 .editint {
-    background: #00f;
     size: 4;
     width:50px;
 }

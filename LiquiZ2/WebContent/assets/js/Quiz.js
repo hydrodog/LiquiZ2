@@ -539,7 +539,7 @@ Quiz.prototype.mcRadioTextVert = function(id, txt) {
         var label = Util.label(id + "-" + i, Util.span(txt[i]));
         list.push([radio, label]);
     }
-    return Util.table(list);
+    return Util.table(list, undefined, "mcRadioVert");
 }
 
 /*
