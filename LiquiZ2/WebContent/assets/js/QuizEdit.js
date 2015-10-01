@@ -40,7 +40,9 @@ QuizEdit.prototype.editButton = function(label, method) {
 QuizEdit.prototype.textArea = function(id, rows, cols) {
     return Util.textarea(null, QuizEdit.TEXTAREA, id, rows, cols);
 }
-
+QuizEdit.prototype.varWriter = function(id, rows, cols) {
+    return new VarWriter(id, rows, cols);
+}
 QuizEdit.prototype.addDispButton = function(title, funcName, className) {
     var t = this;
     return Util.button(title, 
@@ -49,7 +51,7 @@ QuizEdit.prototype.addDispButton = function(title, funcName, className) {
 							e.activeType.classList.remove("paramultiselected");
 							this.classList.add("paramultiselected");
 							e.activeType = this;
-							var cont = [funcName, e.textBox.value];
+							var cont = [funcName, e.textBox.valueOf()];
 							if(e.ind != -1){
 								t.q.content[e.ind] = cont;
 							}else{
@@ -449,7 +451,9 @@ QuizEdit.prototype.editEquation = function() {
     );
     this.varEdit.appendChild(this.equation.x);
 };
-
+QuizEdit.prototype.matrix = function(){
+	console.log("ASDFASDF");
+}
 QuizEdit.prototype.buildMatrix = function() {
     return [
         ['matrix', this.matrixRows, this.matrixCols],
@@ -621,11 +625,11 @@ QuizEdit.prototype.appendParaEditor = function(num){
 				 text2eq
 				];
 	
-	var textBox = this.textArea("blankbox", 5, 60);
+	var textBox = this.varWriter("blankbox", 5, 60);
 	var t = this;
 	textBox.oninput = function(){
 		var e = this.paraEditor;
-		var cont = [funcs[e.activeType.i], e.textBox.value];
+		var cont = [funcs[e.activeType.i], e.textBox.valueOf()];
 		if(e.ind != -1){
 			t.q.content[e.ind] = cont;
 		}else{
