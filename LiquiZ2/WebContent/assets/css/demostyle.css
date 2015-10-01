@@ -479,7 +479,10 @@ input#title {
     background: #8dd;
     width: 300px;
 }
-
+.writervariable {
+	color: #f00ff0;
+	text-decoration: underline;
+}
 input.editpattern {
     width: 100%;
     size: 60;
