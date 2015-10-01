@@ -104,6 +104,8 @@ VarWriter.prototype.keyUp = function(e){
 				writer.parentElement.removeChild(writer);
 				e.preventDefault();
 				e.stopPropagation();
+				if(this.div.oninput)
+					this.div.oninput();
 			}
 		}
 	}
