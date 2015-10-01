@@ -860,3 +860,114 @@ QuizEdit.prototype.NamedEntity = function(kind, createAction, deleteAction, sele
     }
     this["sel" + kind] = sel;
 }
+
+
+
+function Random() {
+
+
+}
+
+function createBase(con) {
+    var r = new Random();
+    //con.apply(r, )
+    return r;
+}
+
+function RandInt(min, max, step) {
+    this.min = min;
+    this.max = max;
+    this.step = step;
+    this.choices = Math.floor((max - min) / step + 1);
+}
+
+RandInt.prototype.choose = function() {
+    return this.current = this.min + this.step * (Math.random() * this.choices << 0);
+}
+
+function RandFloat(min, max, step, precision) {
+    this.min = min;
+    this.max = max;
+    this.step = step;
+    this.precision = precision;
+    this.choices = Math.floor((max - min) / step) + 1;
+}
+
+RandFloat.prototype.choose = function() {
+    return this.current = this.min + this.step * (Math.random() * this.choices << 0);
+}
+
+function RandString(spec, minlen, maxlen) {
+    var choices = 0;
+    var alphabet = new Array(65536);
+    for (var i = 0; i < spec.length; i++)
+        if (spec[i] == '\\') {
+            if (!alphabet[spec[i+1]]) {
+                choices++;
+            }
+            alphabet[spec[i+1]] = 1;
+        }
+    this.alphabet = new Array(choices);
+    var j = 0;
+    for (var i = 0; i < alphabet.length; i++)
+        if (alphabet[i]) {
+            this.alphabet[j++] = alphabet[i]; // build compact list of only letters supported
+        }
+    this.minlen = minlen;
+    this.maxlen = maxlen;
+}
+
+RandString.prototype.choose = function() {
+    var s = '';
+    var len = this.minlen + (Math.random() * (this.maxlen - this.minlen) << 0);
+    for (var i = 0; i < len; i++)
+        s += this.alphabet[Math.random() * this.alphabet.length << 0];
+    return this.current = s;
+}
+
+function RandWord(dict) {
+    this.dict = dict;
+}
+
+RandWord.prototype.choose = function() {
+    var keys = Object.keys(this.dict);
+    return this.current = keys[Math.random() * keys.length << 0];
+}
+
+function RandListElement(list) {
+    this.list = list;
+}
+RandListElement.prototype.choose = function() {
+    return this.current = this.list[Math.random() * this.list.length << 0];
+}
+
+function Answer() {
+
+
+}
+
+function TESTVAR(trials, randVar) {
+    var s = '';
+    for (var i = 0; i < trials; i++)
+        s += randVar.choose() + '\t';
+    console.log(s);
+}
+function TESTVars() {
+    var trials = 10;
+    TESTVAR(trials, new RandInt(1,11,2));
+    TESTVAR(trials, new RandInt(1,10,2));
+    TESTVAR(trials, new RandFloat(1.0,5.0, 0.1));
+    TESTVAR(trials, new RandFloat(1.0,2.0, 1/3));
+    var dict = {"hello":0, "test":0, "goodbye":0, "alpha":0};
+    TESTVAR(trials, new RandWord(dict));
+    TESTVAR(trials, new RandListElement([2, 3, 5, 7, 11, 13, 17]));
+    TESTVAR(trials, new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"]));
+    var list = ["Fred", "Norman", "Alice", "Mary", "Bob", "Dov", "Yu-Dong", "Ying Ying",
+    ];
+    TESTVAR(trials, new RandListElement(list));
+
+
+}
+
+TESTVars();
+
