@@ -100,7 +100,7 @@ VarWriter.prototype.keyUp = function(e){
 		var range = sel.getRangeAt(0);
 		var startIndex = range.startOffset;
 		if(writer.className == "writervariable"){
-			if(startIndex == 1 && key == 8){
+			if(startIndex == 0 && key == 8 || (startIndex == 1 && key == 8 && node.textContent.length == 1)){
 				writer.parentElement.removeChild(writer);
 				e.preventDefault();
 				e.stopPropagation();
