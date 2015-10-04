@@ -1,19 +1,63 @@
 /*
 * Author: Stephen Oro
-* Makes a "Clickable Image" that will supply its answer to the quiz.
+* Makes a "VarWriter" that will allow any kind of variable to be inserted by name.
 *
-* Overall: The Clickable Image must
+* Overall: The VarWriter must
+* Look like a text editing area, and be editable. Must not look broken ever
+* Accept paste events
+* Be able to list variables used that do not exist and:
+* 		check if a variable exists.
+* Convert existing variables to html.
+* Detect tags that are typed or pasted.
+* Not interfere with non-variable based use of keyword "$...$" vs "$100 $200"
 * 
 *  
 * Solution(s):
+* 
 * 
 */
 
 
 /*
- * interface: 
- * 
- */
+* interface: 
+* VarWriter(innerHTML, className, id, width, height)
+*
+* this.checkTag(tagname)
+*	return - js value associated or undefined if not found
+*	tagname - what is inside "$" tags e.g. $tagname$
+*	
+* this.tagToHTML(tag, tagname)
+*	return - HTML element value of tag
+*	tag - HTML tag div of class variablewriter (created by appendVar)
+*	
+* this.convertToHTML(div)
+*	converts all variable tags divs in an ancestor 'div' to their HTML values
+*	
+* this.unknownVariables()
+*	return - array of un unknown tag values as strings
+*	
+* this.appendVar(match)
+*	return - html div element of class variablewriter
+*	
+* this.tagMatch(node,index)
+*	searches within node's textcontent backwards from index
+*	return - false - if no tag found
+*	return - tagname - if tag found
+*	
+* this.valueOf()
+*	return div with html representing the values of evaluated text content
+*	
+* this.keyUp(e)
+*	checks to see if needs to delete a tag
+* this.keyDown(e)
+*	checks to see if needs to wrap with a tag
+*	or create a tag
+*
+* this.bubbleHasClass(node, className)
+*	returns true if any parent node has the searched class
+* 
+* 
+*/
 
 function VarWriter(innerHTML, className, id, width, height){
 	var div = Util.div(className, id);
@@ -70,6 +114,7 @@ VarWriter.prototype.convertToHTML = function(div){
 			i++;
 	}
 };
+
 /*
 VarWriter.prototype.paste = function(){
 	var index = 0;
@@ -102,6 +147,7 @@ VarWriter.prototype.appendVar = function(match){
 	this.tags.push(tag);
 	return tag;
 };
+
 VarWriter.prototype.tagMatch = function(node,index){
 	var text = node.textContent;
 	for(var i = index-1; i >= 0; i--){
@@ -120,34 +166,35 @@ VarWriter.prototype.tagMatch = function(node,index){
 	}
 	return false;
 };
-var AAAA = null;
+
 VarWriter.prototype.valueOf = function(){
 	var nDiv = Util.div();
 	nDiv.innerHTML = this.div.innerHTML;
 	this.convertToHTML(nDiv);
 	return nDiv;
 };
+
 VarWriter.prototype.keyUp = function(e){
 	var key = e.which;
 	var shift = e.shiftKey;
-	if(window.getSelection){
-		var sel = window.getSelection();
-		var node = sel.anchorNode;
-		var writer = node.parentElement;
-		var range = sel.getRangeAt(0);
-		var startIndex = range.startOffset;
-		if(writer.className == "writervariable"){
-			if(startIndex == 0 && key == 8){
-				writer.parentElement.removeChild(writer);
-				e.preventDefault();
-				e.stopPropagation();
-				if(this.div.oninput)
-					this.div.oninput();
+	if(startIndex == 0 && key == 8){
+		if(window.getSelection){
+			var sel = window.getSelection();
+			var node = sel.anchorNode;
+			var writer = node.parentElement;
+			var range = sel.getRangeAt(0);
+			var startIndex = range.startOffset;
+			if(writer.className == "writervariable"){
+					writer.parentElement.removeChild(writer);
+					e.preventDefault();
+					e.stopPropagation();
+					if(this.div.oninput)
+						this.div.oninput();
 			}
 		}
 	}
-
 };
+
 VarWriter.prototype.keyDown = function(e){
 	var key = e.which;
 	var shift = e.shiftKey;
@@ -199,11 +246,15 @@ VarWriter.prototype.keyDown = function(e){
 	}
 	
 };
+
 VarWriter.prototype.bubbleHasClass = function(node, className){
 	while(node != this.div){
 		if(node.className == className)
 			return true;
-		node = node.parentElement;
+		var p = node.parentElement;
+		if(node == p)
+			return false;
+		node = p;
 	}
 	return false;
 };
