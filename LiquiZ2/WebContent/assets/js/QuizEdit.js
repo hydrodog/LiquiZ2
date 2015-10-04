@@ -864,17 +864,18 @@ QuizEdit.prototype.NamedEntity = function(kind, createAction, deleteAction, sele
 
 
 function Random() {
-
-
+	this.current = undefined;
 }
 
-function createBase(con) {
-    var r = new Random();
-    //con.apply(r, )
-    return r;
+function subclass(child, instance){
+	child.prototype = instance;
+	for(var i in instance){
+		child[i] = instance[i];
+	}
 }
 
 function RandInt(min, max, step) {
+	subclass(this, new Random());
     this.min = min;
     this.max = max;
     this.step = step;
@@ -885,7 +886,15 @@ RandInt.prototype.choose = function() {
     return this.current = this.min + this.step * (Math.random() * this.choices << 0);
 }
 
+Random.prototype.toHTML = function() {
+	if(this.current === undefined)
+		this.choose();
+	var span = Util.span(this.current);
+	return span;
+}
+
 function RandFloat(min, max, step, precision) {
+	subclass(this, new Random());
     this.min = min;
     this.max = max;
     this.step = step;
@@ -898,6 +907,7 @@ RandFloat.prototype.choose = function() {
 }
 
 function RandString(spec, minlen, maxlen) {
+	subclass(this, new Random());
     var choices = 0;
     var alphabet = new Array(65536);
     for (var i = 0; i < spec.length; i++)
@@ -926,6 +936,7 @@ RandString.prototype.choose = function() {
 }
 
 function RandWord(dict) {
+	subclass(this, new Random());
     this.dict = dict;
 }
 
@@ -935,6 +946,7 @@ RandWord.prototype.choose = function() {
 }
 
 function RandListElement(list) {
+	subclass(this, new Random());
     this.list = list;
 }
 RandListElement.prototype.choose = function() {
