@@ -47,11 +47,9 @@
 * this.valueOf()
 *	return div with html representing the values of evaluated text content
 *	
-* this.keyUp(e)
-*	checks to see if needs to delete a tag
 * this.keyDown(e)
 *	checks to see if needs to wrap with a tag
-*	or create a tag
+*	or create/delete a tag
 *
 * this.bubbleHasClass(node, className)
 *	returns true if any parent node has the searched class
@@ -71,7 +69,6 @@ function VarWriter(innerHTML, className, id, width, height){
 	this.div = div;
 	div.varWriter = this;
 	div.addEventListener("keydown",(this.keyDown).bind(this));
-	div.addEventListener("keyup",(this.keyUp).bind(this));
 	//div.addEventListener("paste",(this.paste).bind(this));
 	div.valueOf = (this.valueOf).bind(this);
 	this.index = 0;
@@ -174,27 +171,6 @@ VarWriter.prototype.valueOf = function(){
 	return nDiv;
 };
 
-VarWriter.prototype.keyUp = function(e){
-	var key = e.which;
-	var shift = e.shiftKey;
-	if(startIndex == 0 && key == 8){
-		if(window.getSelection){
-			var sel = window.getSelection();
-			var node = sel.anchorNode;
-			var writer = node.parentElement;
-			var range = sel.getRangeAt(0);
-			var startIndex = range.startOffset;
-			if(writer.className == "writervariable"){
-					writer.parentElement.removeChild(writer);
-					e.preventDefault();
-					e.stopPropagation();
-					if(this.div.oninput)
-						this.div.oninput();
-			}
-		}
-	}
-};
-
 VarWriter.prototype.keyDown = function(e){
 	var key = e.which;
 	var shift = e.shiftKey;
@@ -202,8 +178,16 @@ VarWriter.prototype.keyDown = function(e){
 		var sel = window.getSelection();
 		var node = sel.anchorNode;
 		var writer = node.parentElement.parentElement;
-		if(writer.className == "writervariable"){
-			//if needed
+		if(key == 8 && writer.className == "writervariable"){
+			var range = sel.getRangeAt(0);
+			var startIndex = range.startOffset;
+			if((startIndex == 0 || startIndex == 1) && writer.className == "writervariable"){
+					writer.parentElement.removeChild(writer);
+					e.preventDefault();
+					e.stopPropagation();
+					if(this.div.oninput)
+						this.div.oninput();
+			}
 		}else if(key == 52 && shift){
 			var range = sel.getRangeAt(0);
 			var startIndex = range.startOffset;
