@@ -76,9 +76,9 @@ function VarWriter(innerHTML, className, id, width, height){
 	return div;
 }
 
-var variablePolicy = new PolicyDef({
+var variablePolicy = new PolicyDef("Variable",{
 	rand1: new RandInt(1,11,2),
-	rand2: new RandInt(1,10,2),
+	rand2: new RandInt(1,10,2)},{
 	rand3: new RandFloat(1.0,5.0, 0.1),
 	rand4: new RandFloat(1.0,2.0, 1/3),
 	rand5: new RandWord({"hello":0, "test":0, "goodbye":0, "alpha":0}),
@@ -86,6 +86,7 @@ var variablePolicy = new PolicyDef({
 	rand7: new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"])
 });
 
+QuizPolicies.add(variablePolicy);
 
 VarWriter.prototype.checkTag = function(tagname){
 	return variablePolicy.search(tagname);

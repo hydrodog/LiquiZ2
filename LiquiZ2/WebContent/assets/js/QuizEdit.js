@@ -479,16 +479,42 @@ QuizEdit.prototype.buildRegex = function() {
 };
 
 QuizEdit.prototype.testRegex = function() {
+    console.log(new RegExp(this.editInfo.regexPattern.value));
+};
 
-    console.log(new RegExp(this.pattern.value));
-}
+QuizEdit.prototype.createRegex = function() {
+	var name = this.editInfo.regexName.value;
+	var pattern = this.editInfo.regexPattern.value;
+	if(name && name.length > 0 && pattern && pattern.length > 0){
+		if(!QuizEdit.regex.local[name])
+			Util.addSelOption(this.editInfo.selRegex,name,false,"Local");
+		this.editInfo.value = name;
+		QuizEdit.regex.local[name] = pattern;
+	}
+};
+
+QuizEdit.prototype.deleteRegex = function() {
+	var name = this.editInfo.value;
+	if(this.editInfo.regexName.value != name){
+		console.log("Ambiguous case regex delete.");
+	}
+	QuizEdit.regex.delete(name);
+	Util.removeSelOption(this.editInfo.selRegex, name);
+	this.editInfo.regexName.placeholder = this.editInfo.regexName.value;
+	this.editInfo.regexPattern.placeholder = this.editInfo.regexPattern.value;
+	this.editInfo.regexName.value = "";
+	this.editInfo.regexPattern.value = "";
+};
 
 QuizEdit.prototype.editRegex = function() {
-    this.addFields(this.buildRegex,
+	
+	this.editInfo.selRegex = QuizEdit.regex.toSelect((this.pickRegex).bind(this));
+
+	this.addFields(this.buildRegex,
         Util.table([
-            [Util.span("Regex Name: "), Util.input("text", QuizEdit.EDITCTRL, "regexName"),
-                this.editButton("Create", null), this.editButton("delete", null), this.editButton("test", this.testRegex)],
-            ["Pattern:", this.pattern = Util.input("text", QuizEdit.REGEX, "regex"), this.selRegex],
+            [Util.span("Regex Name: "), this.editInfo.regexName = Util.input("text", QuizEdit.EDITCTRL, "regexName"),
+                this.editButton("Create", this.createRegex), this.editButton("delete", this.deleteRegex), this.editButton("test", this.testRegex)],
+            ["Pattern:", this.editInfo.regexPattern = Util.input("text", QuizEdit.REGEX, "regex"), this.editInfo.selRegex],
             [Util.span("Must match:"), this.mustMatch = this.textArea(null, 10, 40)],
             [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
         ]));
@@ -538,7 +564,7 @@ QuizEdit.prototype.editImage = function() {
     [ Util.span("w="), this.w = Util.input("number", QuizEdit.INT, "w"),
       Util.span("h="), this.h = Util.input("number", QuizEdit.INT, "h") ]
     ]));
-}
+};
 
 QuizEdit.prototype.inputBlur = function(type, val) {
     var t = this;
@@ -548,16 +574,16 @@ QuizEdit.prototype.inputBlur = function(type, val) {
         t.renderQuestion();
     };
     return v;
-}
-
+};
 
 QuizEdit.prototype.pickRegex = function() {
-    console.log(this);
-    var s = this.selRegex.selectedIndex;
+    var s = this.editInfo.selRegex.selectedIndex;
     if (s == 0)
         return;
-    var name = this.selRegex.options[s].value;
-    this.regex.value = QuizEdit.regex[name];
+    var name = this.editInfo.selRegex.options[s].value;
+	this.editInfo.value = name;
+    this.editInfo.regexName.value = name;
+    this.editInfo.regexPattern.value = QuizEdit.regex.search(name);
 };
 
 QuizEdit.prototype.pickStdChoice = function() {
@@ -576,13 +602,16 @@ QuizEdit.prototype.pickStdChoice = function() {
         this.ansTable.rows[i+1].cells[0].innerHTML = "";
         this.ansTable.rows[i+1].cells[0].appendChild(Util.input("text", null, null, answers[i]));
     }
-}
+};
 
-QuizEdit.regex = {
-    mass: "kg|KG|kilo|kilogram",
+QuizEdit.regex = new PolicyDef("Regex",{
+	mass: "kg|KG|kilo|kilogram",
     length: "m|meter",
     time: "sec|s|second"
-};
+});
+
+QuizPolicies.add(QuizEdit.regex);
+
 
 QuizEdit.varTypes = [
     "question", "quiz", "course", "user", "subject", "global"
@@ -673,6 +702,9 @@ QuizEdit.prototype.editQuestion = function() {
         content:[],
         answers: []
     };
+	
+	this.editInfo = {};
+	
     page.questions.push(this.q);
 
     this.id = page.questions.length-1;
@@ -762,7 +794,6 @@ QuizEdit.prototype.editQuestion = function() {
     this.varEdit = Util.div("varEdit", "varEdit");
     e.appendChild(this.varEdit);
     Util.append(e,this.addEditButtons());
-    this.selRegex = this.selectName(QuizEdit.regex, this.pickRegex, "Select Regex");
     this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
     //this.selVarType = this.selectName(QuizEdit.varTypes, this.pickVar, "Select Var");
 
