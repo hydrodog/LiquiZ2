@@ -360,11 +360,15 @@ Util = {
         w.document.body.appendChild(file);
     });
     },
-    select: function(name, multiple, innerHTML, className, id) {
+    select: function(name, multiple, innerHTML, className, id, indexesDisabled) {
+		indexesDisabled = indexesDisabled||[];
         if (innerHTML.constructor === Array) {
             var options = document.createDocumentFragment();
             for (var i = 0; i < innerHTML.length; i++) {
-                options.appendChild(Util.option(innerHTML[i], innerHTML[i]));
+				var ind = indexesDisabled.indexOf(i);
+				var u = undefined;
+				var disabled = (ind != -1) ? true : u;
+                options.appendChild(Util.option(innerHTML[i], innerHTML[i],u,u,disabled));
             }
             innerHTML = options;
         }
@@ -376,9 +380,39 @@ Util = {
             multiple: multiple,
         });
     },
+	
+	removeSelOption: function (sel, innerHTML){
+		var children = sel.children;
+		for(var i = 0; i < children.length; i++){
+			if(children[i].innerHTML == innerHTML){
+				sel.removeChild(children[i]);
+				i=children.length;
+			}
+		}
+	},
+	
+	addSelOption: function (sel, innerHTML, disabled, after){
+		var u = undefined;
+		var opt = Util.option(innerHTML, innerHTML,u,u,disabled);
+		var children = sel.children;
+		var insertIndex = children.length;
+		for(var i = 0; i < children.length; i++){
+			if(children[i].innerHTML == after){
+				insertIndex = i+1;
+			}
+			if(children[i].innerHTML == innerHTML){
+				sel.removeChild(children[i]);
+			}
+		}
+		if(insertIndex <= -1 || insertIndex >= children.length){
+			sel.appendChild(opt);
+		}else{
+			sel.insertBefore(opt, children[insertIndex]);
+		}
+	},
 
-    sel: function (innerHTML, className, id) {
-	return Util.select(null, false, innerHTML, className, id);
+    sel: function (innerHTML, className, id,indexesDisabled) {
+	return Util.select(null, false, innerHTML, className, id,indexesDisabled);
     },
 
     yesno: function(className, id, onChange) {
@@ -393,10 +427,11 @@ Util = {
     });
     },
 
-    option: function(value, innerHTML, className, id) {
+    option: function(value, innerHTML, className, id, disabled) {
         return Util.make("option", {
             value: value,
             innerHTML: innerHTML,
+			disabled: disabled,
             className: className,
             id: id,
         });
