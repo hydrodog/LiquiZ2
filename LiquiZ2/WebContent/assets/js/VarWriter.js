@@ -89,7 +89,10 @@ var variablePolicy = new PolicyDef("Variable",{
 QuizPolicies.add(variablePolicy);
 
 VarWriter.prototype.checkTag = function(tagname){
-	return variablePolicy.search(tagname);
+	var search = variablePolicy.search(tagname);
+	//if(!search)
+		//variablePolicy.local[tagname] = null;
+	return search;
 };
 
 VarWriter.prototype.tagToHTML = function(tag, tagname){
