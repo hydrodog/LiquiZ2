@@ -111,8 +111,8 @@ QuizEdit.prototype.addFields = function(cbFunc) {
     for (var i = 1; i < arguments.length; i++) {
         if (typeof(arguments[i]) === 'string')
            this.varEdit.appendChild(document.createTextNode(arguments[i]));
-       else
-            this.varEdit.appendChild(arguments[i]);
+        else
+           this.varEdit.appendChild(arguments[i]);
     }
     this.scrollToEditor();
 }
@@ -469,71 +469,77 @@ QuizEdit.prototype.editMatrix = function() {
 };
 
 QuizEdit.prototype.buildRegex = function() {
-    this.q.regexName = this.regexName.value;
-    this.q.regex = this.regex.value;
-    this.q.mustMatch = this.mustMatch.value;
-    this.q.cannotWatch = this.cannotMatch.value
     return [
             ['regex', QuizEdit.newid],
     ];
 };
 
+
+QuizEdit.prototype.buildRandomVar = function() {
+    return [
+            ['randomvar', QuizEdit.newid],
+    ];
+};
+
 QuizEdit.prototype.testRegex = function() {
-    console.log(new RegExp(this.editInfo.regexPattern.value));
+    console.log(new RegExp(this.q.regexPattern.value));
 };
 
 QuizEdit.prototype.createRegex = function() {
-	var name = this.editInfo.regexName.value;
-	var pattern = this.editInfo.regexPattern.value;
+	var name = this.q.regexName.value;
+	var pattern = this.q.regexPattern.value;
 	if(name && name.length > 0 && pattern && pattern.length > 0){
 		if(!QuizEdit.regex.local[name])
-			Util.addSelOption(this.editInfo.selRegex,name,false,"Local");
-		this.editInfo.value = name;
+			Util.addSelOption(this.q.selRegex,name,false,"Local");
+		this.q.value = name;
 		QuizEdit.regex.local[name] = pattern;
 	}
 };
 
 QuizEdit.prototype.deleteRegex = function() {
-	var name = this.editInfo.value;
-	if(this.editInfo.regexName.value != name){
+	var name = this.q.value;
+	if(this.q.regexName.value != name){
 		console.log("Ambiguous case regex delete.");
 	}
 	QuizEdit.regex.delete(name);
-	Util.removeSelOption(this.editInfo.selRegex, name);
-	this.editInfo.regexName.placeholder = this.editInfo.regexName.value;
-	this.editInfo.regexPattern.placeholder = this.editInfo.regexPattern.value;
-	this.editInfo.regexName.value = "";
-	this.editInfo.regexPattern.value = "";
+	Util.removeSelOption(this.q.selRegex, name);
+	this.q.regexName.placeholder = this.q.regexName.value;
+	this.q.regexPattern.placeholder = this.q.regexPattern.value;
+	this.q.regexName.value = "";
+	this.q.regexPattern.value = "";
 };
 
 QuizEdit.prototype.editRegex = function() {
 	
-	this.editInfo.selRegex = QuizEdit.regex.toSelect((this.pickRegex).bind(this));
+	this.q.selRegex = QuizEdit.regex.toSelect((this.pickRegex).bind(this));
 
 	this.addFields(this.buildRegex,
         Util.table([
-            [Util.span("Regex Name: "), this.editInfo.regexName = Util.input("text", QuizEdit.EDITCTRL, "regexName"),
+            [Util.span("Regex Name: "), this.q.regexName = Util.input("text", QuizEdit.EDITCTRL, "regexName"),
                 this.editButton("Create", this.createRegex), this.editButton("delete", this.deleteRegex), this.editButton("test", this.testRegex)],
-            ["Pattern:", this.editInfo.regexPattern = Util.input("text", QuizEdit.REGEX, "regex"), this.editInfo.selRegex],
+            ["Pattern:", this.q.regexPattern = Util.input("text", QuizEdit.REGEX, "regex"), this.q.selRegex],
             [Util.span("Must match:"), this.mustMatch = this.textArea(null, 10, 40)],
             [Util.span("Cannot match:"), this.cannotMatch = this.textArea(null, 10, 40)]
         ]));
 };
 
-QuizEdit.prototype.createVar = function() {}
+QuizEdit.prototype.createVar = function() {};
 
-QuizEdit.prototype.deleteVar = function() {}
+QuizEdit.prototype.selectVar = function() {};
+
+QuizEdit.prototype.deleteVar = function() {};
 
 QuizEdit.prototype.editRandomVars = function() {
-    this.addFields(null,
-    [
-        [ "Var Name:", this.varName = Util.input("text", QuizEdit.EDITCTRL, "varname"),
+	this.q.selVar = variablePolicy.toSelect((this.selectVar).bind(this));
+	
+    this.addFields(this.buildRandomVar,
+         "Var Name:", this.varName = Util.input("text", QuizEdit.EDITCTRL, "varname"),
             this.editButton("Create", this.createVar),
             this.editButton("Delete", this.deleteVar),
-            this.varType = this.selectName(this.varTypes, null, "vartype") 
-        ]
-    ] );
-}
+            this.q.selVar
+        
+     );
+};
 
 QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,svg,gif,bmp";
 QuizEdit.audioFileTypes = "mp3,ogg,wav";
@@ -577,13 +583,13 @@ QuizEdit.prototype.inputBlur = function(type, val) {
 };
 
 QuizEdit.prototype.pickRegex = function() {
-    var s = this.editInfo.selRegex.selectedIndex;
+    var s = this.q.selRegex.selectedIndex;
     if (s == 0)
         return;
-    var name = this.editInfo.selRegex.options[s].value;
-	this.editInfo.value = name;
-    this.editInfo.regexName.value = name;
-    this.editInfo.regexPattern.value = QuizEdit.regex.search(name);
+    var name = this.q.selRegex.options[s].value;
+	this.q.value = name;
+    this.q.regexName.value = name;
+    this.q.regexPattern.value = QuizEdit.regex.search(name);
 };
 
 QuizEdit.prototype.pickStdChoice = function() {
@@ -702,9 +708,7 @@ QuizEdit.prototype.editQuestion = function() {
         content:[],
         answers: []
     };
-	
-	this.editInfo = {};
-	
+		
     page.questions.push(this.q);
 
     this.id = page.questions.length-1;
@@ -894,9 +898,30 @@ QuizEdit.prototype.NamedEntity = function(kind, createAction, deleteAction, sele
 
 
 
-function Random() {
+function Random(type) {
 	this.current = undefined;
+	this.type = type;
 }
+
+Random.prototype.changeMin = function(e){
+	this.min = parseFloat(e.target.value);
+};
+
+Random.prototype.changeMin = function(e){
+	this.min = parseFloat(e.target.value);
+};
+
+Random.prototype.changeMax = function(e){
+	this.max = parseFloat(e.target.value);
+};
+
+Random.prototype.changeStep = function(e){
+	this.step = parseFloat(e.target.value);
+};
+
+Random.prototype.changePrecision = function(e){
+	this.precision = parseFloat(e.target.value);
+};
 
 function subclass(child, instance){
 	child.prototype = instance;
@@ -906,26 +931,35 @@ function subclass(child, instance){
 }
 
 function RandInt(min, max, step) {
-	subclass(this, new Random());
+	subclass(this, new Random("int"));
     this.min = min;
     this.max = max;
     this.step = step;
     this.choices = Math.floor((max - min) / step + 1);
 }
 
+RandInt.prototype.toEditor = function () {
+	var u = undefined;
+	return Util.divadd("",
+					   "Min: ", Util.input("number",u,u,u,(this.changeMin).bind(this)), Util.br(),
+					   "Max: ", Util.input("number",u,u,u,(this.changeMax).bind(this)), Util.br(),
+					   "Step: ", Util.input("number",u,u,u,(this.changeStep).bind(this)), Util.br()
+					  );
+};
+
 RandInt.prototype.choose = function() {
-    return this.current = this.min + this.step * (Math.random() * this.choices << 0);
-}
+    return this.current = (this.min + this.step * (Math.random() * this.choices << 0)) << 0;
+};
 
 Random.prototype.toHTML = function() {
 	if(this.current === undefined)
 		this.choose();
 	var span = Util.span(this.current);
 	return span;
-}
+};
 
 function RandFloat(min, max, step, precision) {
-	subclass(this, new Random());
+	subclass(this, new Random("float"));
     this.min = min;
     this.max = max;
     this.step = step;
@@ -933,12 +967,22 @@ function RandFloat(min, max, step, precision) {
     this.choices = Math.floor((max - min) / step) + 1;
 }
 
+RandFloat.prototype.toEditor = function () {
+	var u = undefined;
+	return Util.divadd("",
+					   "Min: ", Util.input("number",u,u,u,(this.changeMin).bind(this)), Util.br(),
+					   "Max: ", Util.input("number",u,u,u,(this.changeMax).bind(this)), Util.br(),
+					   "Step: ", Util.input("number",u,u,u,(this.changeStep).bind(this)), Util.br(),
+					   "Precision: ", Util.input("number",u,u,u,(this.changePrecision).bind(this)), Util.br()
+					  );
+};
+
 RandFloat.prototype.choose = function() {
     return this.current = this.min + this.step * (Math.random() * this.choices << 0);
 }
 
 function RandString(spec, minlen, maxlen) {
-	subclass(this, new Random());
+	subclass(this, new Random("string"));
     var choices = 0;
     var alphabet = new Array(65536);
     for (var i = 0; i < spec.length; i++)
@@ -948,6 +992,9 @@ function RandString(spec, minlen, maxlen) {
             }
             alphabet[spec[i+1]] = 1;
         }
+	console.log(111);
+	console.log(alphabet);
+
     this.alphabet = new Array(choices);
     var j = 0;
     for (var i = 0; i < alphabet.length; i++)
@@ -955,8 +1002,10 @@ function RandString(spec, minlen, maxlen) {
             this.alphabet[j++] = alphabet[i]; // build compact list of only letters supported
         }
     this.minlen = minlen;
-    this.maxlen = maxlen;
+		this.maxlen = maxlen;
 }
+
+
 
 RandString.prototype.choose = function() {
     var s = '';
@@ -967,7 +1016,7 @@ RandString.prototype.choose = function() {
 }
 
 function RandWord(dict) {
-	subclass(this, new Random());
+	subclass(this, new Random("word"));
     this.dict = dict;
 }
 
@@ -977,7 +1026,7 @@ RandWord.prototype.choose = function() {
 }
 
 function RandListElement(list) {
-	subclass(this, new Random());
+	subclass(this, new Random("listelement"));
     this.list = list;
 }
 RandListElement.prototype.choose = function() {

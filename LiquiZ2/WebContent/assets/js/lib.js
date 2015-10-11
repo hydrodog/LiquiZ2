@@ -26,6 +26,7 @@ mediaLocations = {
 
 Util = {
 	aryCons: ([]).constructor,
+	strCons: ("").constructor,
     SERVER_SUFFIX: "_ajax.jsp", // we are using jsp to feed our ajax
     dump: function(obj) {
         console.warn(JSON.stringify(obj, null, 3));
@@ -47,6 +48,8 @@ Util = {
     append: function(p,e){
 		if(e)
 		if(e.constructor != Util.aryCons) {
+			if(e.constructor == Util.strCons)
+				e = document.createTextNode(e);
 			p.appendChild(e);
 		}else{
 			for(var i = 0; i < e.length; i++){
