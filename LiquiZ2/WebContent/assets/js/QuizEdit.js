@@ -941,10 +941,10 @@ function RandInt(min, max, step) {
 RandInt.prototype.toEditor = function () {
 	var u = undefined;
 	return Util.divadd("",
-					   "Min: ", Util.input("number",u,u,u,(this.changeMin).bind(this)), Util.br(),
-					   "Max: ", Util.input("number",u,u,u,(this.changeMax).bind(this)), Util.br(),
-					   "Step: ", Util.input("number",u,u,u,(this.changeStep).bind(this)), Util.br()
-					  );
+		"Min: ", Util.input("number", u, u, u, (this.changeMin).bind(this)), Util.br(),
+		"Max: ", Util.input("number", u, u, u, (this.changeMax).bind(this)), Util.br(),
+		"Step: ", Util.input("number", u, u, u, (this.changeStep).bind(this)), Util.br()
+	);
 };
 
 RandInt.prototype.choose = function() {
@@ -970,68 +970,79 @@ function RandFloat(min, max, step, precision) {
 RandFloat.prototype.toEditor = function () {
 	var u = undefined;
 	return Util.divadd("",
-					   "Min: ", Util.input("number",u,u,u,(this.changeMin).bind(this)), Util.br(),
-					   "Max: ", Util.input("number",u,u,u,(this.changeMax).bind(this)), Util.br(),
-					   "Step: ", Util.input("number",u,u,u,(this.changeStep).bind(this)), Util.br(),
-					   "Precision: ", Util.input("number",u,u,u,(this.changePrecision).bind(this)), Util.br()
-					  );
+		"Min: ", Util.input("number", u, u, u, (this.changeMin).bind(this)), Util.br(),
+		"Max: ", Util.input("number", u, u, u, (this.changeMax).bind(this)), Util.br(),
+		"Step: ", Util.input("number", u, u, u, (this.changeStep).bind(this)), Util.br(),
+		"Precision: ", Util.input("number", u, u, u, (this.changePrecision).bind(this)), Util.br()
+	);
 };
 
 RandFloat.prototype.choose = function() {
     return this.current = this.min + this.step * (Math.random() * this.choices << 0);
 }
 
-function RandString(spec, minlen, maxlen) {
+
+function RandString(list) {
 	subclass(this, new Random("string"));
-    var choices = 0;
-    var alphabet = new Array(65536);
-    for (var i = 0; i < spec.length; i++)
-        if (spec[i] == '\\') {
-            if (!alphabet[spec[i+1]]) {
-                choices++;
-            }
-            alphabet[spec[i+1]] = 1;
-        }
-	console.log(111);
-	console.log(alphabet);
-
-    this.alphabet = new Array(choices);
-    var j = 0;
-    for (var i = 0; i < alphabet.length; i++)
-        if (alphabet[i]) {
-            this.alphabet[j++] = alphabet[i]; // build compact list of only letters supported
-        }
-    this.minlen = minlen;
-		this.maxlen = maxlen;
+    this.list = list;
+	this.choices = list.length;
 }
-
-
 
 RandString.prototype.choose = function() {
-    var s = '';
-    var len = this.minlen + (Math.random() * (this.maxlen - this.minlen) << 0);
-    for (var i = 0; i < len; i++)
-        s += this.alphabet[Math.random() * this.alphabet.length << 0];
-    return this.current = s;
+    return this.current = this.list[Math.random() * this.list.length << 0];
 }
+
+RandString.prototype.toEditor = function () {
+	var u = undefined;
+	return Util.divadd("",
+		"Strings: ", Util.input("text", u, u, this.list.join(","), (this.changeList).bind(this)), Util.br()
+	);
+};
+
+RandString.prototype.changeList = function (e) {
+	this.list = e.target.value.split(/,/g);
+};
 
 function RandWord(dict) {
 	subclass(this, new Random("word"));
-    this.dict = dict;
+	this.dict = dict;
 }
 
+RandWord.prototype.changeDict = function (e) {
+	this.dict = e.target.value.split(/\,/g);
+};
+
+RandWord.prototype.toEditor = function () {
+	var u = undefined;
+	return Util.divadd("",
+		"Dictionary: ", Util.input("text", u, u, this.dict.join(","), (this.changeDict).bind(this)), Util.br()
+	);
+};
+
 RandWord.prototype.choose = function() {
-    var keys = Object.keys(this.dict);
-    return this.current = keys[Math.random() * keys.length << 0];
+    return this.current = this.dict[(Math.random() * this.dict.length/2 << 0)*2];
 }
 
 function RandListElement(list) {
 	subclass(this, new Random("listelement"));
     this.list = list;
+	this.choices = list.length;
 }
+
 RandListElement.prototype.choose = function() {
     return this.current = this.list[Math.random() * this.list.length << 0];
 }
+
+RandListElement.prototype.toEditor = function () {
+	var u = undefined;
+	return Util.divadd("",
+		"List: ", Util.input("text", u, u, this.list.join(","), (this.changeList).bind(this)), Util.br()
+	);
+};
+
+RandListElement.prototype.changeList = function (e) {
+	this.list = e.target.value.split(/,/g);
+};
 
 function Answer() {
 
@@ -1050,7 +1061,7 @@ function TESTVars() {
     TESTVAR(trials, new RandInt(1,10,2));
     TESTVAR(trials, new RandFloat(1.0,5.0, 0.1));
     TESTVAR(trials, new RandFloat(1.0,2.0, 1/3));
-    var dict = {"hello":0, "test":0, "goodbye":0, "alpha":0};
+    var dict = ["hello",0, "test",0, "goodbye",0, "alpha",0];
     TESTVAR(trials, new RandWord(dict));
     TESTVAR(trials, new RandListElement([2, 3, 5, 7, 11, 13, 17]));
     TESTVAR(trials, new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"]));
