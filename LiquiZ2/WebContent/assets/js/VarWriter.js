@@ -78,12 +78,15 @@ function VarWriter(innerHTML, className, id, width, height){
 
 var variablePolicy = new PolicyDef("Variable",{
 	rand1: new RandInt(1,11,2),
-	rand2: new RandInt(1,10,2)},{
+	rand2: new RandInt(12,20,1)},{
 	rand3: new RandFloat(1.0,5.0, 0.1),
 	rand4: new RandFloat(1.0,2.0, 1/3),
-	rand5: new RandWord({"hello":0, "test":0, "goodbye":0, "alpha":0}),
+	rand5: new RandWord(["hello",0, "test",0, "goodbye",0, "alpha",0]),
 	rand6: new RandListElement([2, 3, 5, 7, 11, 13, 17]),
-	rand7: new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"])
+	rand7: new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"]),
+	carith: new RandString(["+", "-", "/", "*", "%"]),
+	modops: new RandString(["+=", "-=", "/=", "*=", "%="]),
+	comparators: new RandString([">=", "<=", "==", "<", ">"])
 });
 
 QuizPolicies.add(variablePolicy);
