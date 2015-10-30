@@ -1053,28 +1053,26 @@ function Answer() {
 
 }
 
-function TESTVAR(trials, randVar) {
-    var s = '';
-    for (var i = 0; i < trials; i++)
-        s += randVar.choose() + '\t';
-    console.log(s);
-}
-function TESTVars() {
-    var trials = 10;
-    TESTVAR(trials, new RandInt(1,11,2));
-    TESTVAR(trials, new RandInt(1,10,2));
-    TESTVAR(trials, new RandFloat(1.0,5.0, 0.1));
-    TESTVAR(trials, new RandFloat(1.0,2.0, 1/3));
-    var dict = ["hello",0, "test",0, "goodbye",0, "alpha",0];
-    TESTVAR(trials, new RandWord(dict));
-    TESTVAR(trials, new RandListElement([2, 3, 5, 7, 11, 13, 17]));
-    TESTVAR(trials, new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"]));
-    var list = ["Fred", "Norman", "Alice", "Mary", "Bob", "Dov", "Yu-Dong", "Ying Ying",
-    ];
-    TESTVAR(trials, new RandListElement(list));
-
-
-}
-
-TESTVars();
-
+//START TESTING BLOCK
+GlobalTestHandler.add(function () {
+	function TESTVAR(trials, randVar, regex) {
+		var s = '';
+		for (var i = 0; i < trials; i++)
+			s += randVar.choose() + '\t';
+		return s.match(regex)[0] == s;
+	}
+	var trials = 10;
+	var dict = ["hello", 0, "test", 0, "goodbye", 0, "alpha", 0];
+	GlobalTestHandler.assert(TESTVAR(trials, new RandInt(1, 11, 2), /(1*(1|3|5|7|9)\t){10}/), "RandInt fails [1]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandInt(1, 10, 2), /((1|3|5|7|9)\t){10}/), "RandInt fails [2]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandFloat(1.0, 5.0, 0.1), /((1|2|3|4|5)(\.[0-9]*)*\t){10}/), "RandFloat fails [3]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandFloat(1.0, 2.0, 1 / 3), /((1|2)(\.[0-9]*)*\t){10}/), "RandFloat fails [4]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandWord(dict), /((hello|test|goodbye|alpha)\t){10}/), "RandWord fails [4]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandListElement([2, 3, 5, 7, 11, 13, 17]), /((2|3|5|7|11|13|17)\t){10}/), "RandListElement fails [4]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"]), /((Stephen|Yijin|Asher|Ethan)\t){10}/), "RandListElement fails [4]");
+	var list = ["Fred", "Norman", "Alice", "Mary", "Bob", "Dov", "Yu-Dong", "Ying Ying"];
+	GlobalTestHandler.assert(TESTVAR(trials, new RandListElement(list), /((Fred|Norman|Alice|Mary|Bob|Dov|Yu\-Dong|Ying\sYing)\t){10}/), "RandListElement fails [4]");
+	GlobalTestHandler.assert(TESTVAR(trials, new RandString(["+", "-", "/", "*", "%"]), /((\+|\-|\/|\*|\%)\t){10}/), "RandListElement fails [4]");
+	return true;
+}, "Random Vars Fails");
+//END TESTING BLOCK
