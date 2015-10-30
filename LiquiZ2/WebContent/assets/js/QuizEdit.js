@@ -923,20 +923,16 @@ Random.prototype.changePrecision = function(e){
 	this.precision = parseFloat(e.target.value);
 };
 
-function subclass(child, instance){
-	child.prototype = instance;
-	for(var i in instance){
-		child[i] = instance[i];
-	}
-}
 
 function RandInt(min, max, step) {
-	subclass(this, new Random("int"));
+	Random.call(this, "int");
     this.min = min;
     this.max = max;
     this.step = step;
     this.choices = Math.floor((max - min) / step + 1);
 }
+
+Util.subClass(Random, RandInt);
 
 RandInt.prototype.toEditor = function () {
 	var u = undefined;
@@ -959,13 +955,15 @@ Random.prototype.toHTML = function() {
 };
 
 function RandFloat(min, max, step, precision) {
-	subclass(this, new Random("float"));
+	Random.call(this, "float");
     this.min = min;
     this.max = max;
     this.step = step;
     this.precision = precision;
     this.choices = Math.floor((max - min) / step) + 1;
 }
+
+Util.subClass(Random, RandFloat);
 
 RandFloat.prototype.toEditor = function () {
 	var u = undefined;
@@ -983,10 +981,12 @@ RandFloat.prototype.choose = function() {
 
 
 function RandString(list) {
-	subclass(this, new Random("string"));
+	Random.call(this, "string");
     this.list = list;
 	this.choices = list.length;
 }
+
+Util.subClass(Random, RandString);
 
 RandString.prototype.choose = function() {
     return this.current = this.list[Math.random() * this.list.length << 0];
@@ -1004,9 +1004,11 @@ RandString.prototype.changeList = function (e) {
 };
 
 function RandWord(dict) {
-	subclass(this, new Random("word"));
+	Random.call(this, "word");
 	this.dict = dict;
 }
+
+Util.subClass(Random, RandWord);
 
 RandWord.prototype.changeDict = function (e) {
 	this.dict = e.target.value.split(/\,/g);
@@ -1024,10 +1026,12 @@ RandWord.prototype.choose = function() {
 }
 
 function RandListElement(list) {
-	subclass(this, new Random("listelement"));
+	Random.call(this, "listelement");
     this.list = list;
 	this.choices = list.length;
 }
+
+Util.subClass(Random, RandListElement);
 
 RandListElement.prototype.choose = function() {
     return this.current = this.list[Math.random() * this.list.length << 0];

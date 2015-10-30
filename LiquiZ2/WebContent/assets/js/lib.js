@@ -45,6 +45,10 @@ Util = {
             this.append(div,arguments[i]);
         return div;
     },
+	subClass: function(sup,sub){
+		sub.prototype = Object.create(sup.prototype);
+		sub.prototype.constructor = sub;
+	},
     append: function(p,e){
 		if(e)
 		if(e.constructor != Util.aryCons) {
