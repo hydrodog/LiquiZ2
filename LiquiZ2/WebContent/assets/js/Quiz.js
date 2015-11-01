@@ -383,6 +383,7 @@ function createAndAddNewOpenFileDialog(name) {
 
 Quiz.prototype.loadLocal = function() {
     filebrowser.loadPopup((function(payload) {
+		QuizEdit.newid = payload.newQuestionId || 0;
         for (var item in payload)
             this[item] = payload[item];
         this.exec(true);
@@ -397,7 +398,8 @@ Quiz.prototype.generateData = function() {
         remainingTries: this.remainingTries,
         dataDir: this.dataDir,
         editMode: this.editMode,
-        questions: this.questions
+        questions: this.questions,
+		newQuestionId: QuizEdit.newid
     };
 
     return payload;
