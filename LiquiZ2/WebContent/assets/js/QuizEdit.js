@@ -86,7 +86,8 @@ QuizEdit.prototype.completeEdit = function(array) {
 QuizEdit.prototype.addQuestion = function() {
     var t = this;
     return function() {
-        t.completeEdit(t.cbFunc());
+		if(t.cbFunc)
+        	t.completeEdit(t.cbFunc());
         t.editor.innerHTML = "";
     };
 }
@@ -95,7 +96,8 @@ QuizEdit.prototype.addQuestion = function() {
 QuizEdit.prototype.addSubQuestion = function() {
     var t = this;
     return function() {
-        t.completeEdit(t.cbFunc());
+		if(t.cbFunc)
+        	t.completeEdit(t.cbFunc());
     };
 }
 
@@ -122,6 +124,8 @@ QuizEdit.prototype.addFields = function(cbFunc) {
  * to provide information for editing that type and the buildXXX function adds the question
  * into the quiz when the user clicks either create Question or subquestion.
  */
+
+
 QuizEdit.prototype.buildFillin = function() {
     this.q.answers.push([this.ans.value]);
     return [
@@ -666,7 +670,6 @@ QuizEdit.prototype.appendParaEditor = function(num){
 		var e = this.paraEditor;
 		
 		var cont = [funcs[e.activeType.i], e.textBox.valueOf()];
-		console.log(e.textBox.valueOf());
 		if(e.ind != -1){
 			t.q.content[e.ind] = cont;
 		}else{

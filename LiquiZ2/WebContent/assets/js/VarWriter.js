@@ -133,7 +133,6 @@ VarWriter.prototype.convertToHTML = function (div) {
 			rets.push(child.textContent);
 		}
 	}
-	console.log(rets);
 	return rets;
 	/*
 	var tags = div.getElementsByClassName("writervariable");
@@ -303,6 +302,5 @@ function VarWrittenParser(data, type, classOf) {
 	}
 	//ele.innerHTML = data.join("");
 	ele.classList.add(classOf);
-	console.log(ele);
 	return ele;
 }
