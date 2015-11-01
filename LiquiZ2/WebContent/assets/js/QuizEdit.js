@@ -643,7 +643,7 @@ QuizEdit.prototype.appendInstructions = function(){
 QuizEdit.prototype.appendParaEditor = function(num){
 	var i = 0;
 	var funcs = ["instructions",
-				 "Util.p",
+				 "paragraph",
 				 "precode",
 				 undefined
 				 ];
@@ -664,7 +664,9 @@ QuizEdit.prototype.appendParaEditor = function(num){
 	var t = this;
 	textBox.oninput = function(){
 		var e = this.paraEditor;
+		
 		var cont = [funcs[e.activeType.i], e.textBox.valueOf()];
+		console.log(e.textBox.valueOf());
 		if(e.ind != -1){
 			t.q.content[e.ind] = cont;
 		}else{

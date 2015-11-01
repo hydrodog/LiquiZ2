@@ -492,9 +492,21 @@ Quiz.prototype.addInputHandlers = function(input, i, j) {
  * NOTE: Question generators start here!
  */
 
-Quiz.prototype.instructions = function(txt) {
-    return Util.p(txt, 'instructions');
+Quiz.prototype.instructions = function (txt) {
+	if (typeof txt == 'string' || !txt)
+		return Util.p(txt, 'instructions');
+	return VarWrittenParser(txt, 'p', 'instructions');
+
 }
+
+Quiz.prototype.paragraph = function (txt) {
+	if (typeof txt == 'string' || !txt)
+		return Util.p(txt);
+	return VarWrittenParser(txt, 'p', 'paragraph');
+
+}
+
+
 
 Quiz.prototype.equation = function(id, editable, arr) {	
 	var div = Util.div("equation");
@@ -748,7 +760,9 @@ Quiz.prototype.code = function(id, txt, rows, cols) {
 };
 
 Quiz.prototype.precode = function(txt) {
-    return Util.pre(txt, "precode");
+	if (typeof txt == 'string' || !txt)
+		return Util.pre(txt);
+	return VarWrittenParser(txt, 'pre', 'code');
 };
 
 Quiz.prototype.essay = function(id, rows, cols, maxwords) {
