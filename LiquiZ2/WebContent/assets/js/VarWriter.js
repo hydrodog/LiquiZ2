@@ -31,7 +31,7 @@
  *	
  * this.tagToHTML(tag, tagname)
  *	return - HTML element value of tag
- *	tag - HTML tag div of class variablewriter (created by appendVar)
+ *	tag - HTML tag div of class variablewriter (created by VarWriterAppendVar)
  *	
  * this.convertToHTML(div)
  *	converts all variable tags divs in an ancestor 'div' to their HTML values
@@ -39,7 +39,7 @@
  * this.unknownVariables()
  *	return - array of un unknown tag values as strings
  *	
- * this.appendVar(match)
+ * VarWriterAppendVar(match)
  *	return - html div element of class variablewriter
  *	
  * this.tagMatch(node,index)
@@ -103,7 +103,7 @@ ReservedVariables = {
 	}
 };
 
-VarWriter.prototype.checkTag = function (tagname) {
+VarWriterCheckTag = function (tagname) {
 	var search = ReservedVariables[tagname];
 	if (search) return search;
 	search = variablePolicy.search(tagname);
@@ -112,18 +112,30 @@ VarWriter.prototype.checkTag = function (tagname) {
 	return search;
 };
 
-VarWriter.prototype.tagToHTML = function (tag, tagname) {
-	var html = this.checkTag(tagname);
+VarWriterTagToHTML = function (tagname, ids) {
+	var html = VarWriterCheckTag(tagname);
 	if (html) {
-		tag.innerHTML = "";
-		tag.removeAttribute("class");
-		tag.appendChild(html.toHTML(this.ids));
-		return true;
+		return (html.toHTML(ids));
+	} else {
+		return VarWriterAppendVar(tagname, true);
 	}
-	return false;
 };
 
 VarWriter.prototype.convertToHTML = function (div) {
+	var rets = [];
+	var nDiv = Util.div();
+	var children = div.childNodes;
+	for (var c = 0; c < children.length; c++) {
+		var child = children[c];
+		if (child.className == "writervariable") {
+			rets.push([child.children[0].innerHTML]);
+		} else {
+			rets.push(child.textContent);
+		}
+	}
+	console.log(rets);
+	return rets;
+	/*
 	var tags = div.getElementsByClassName("writervariable");
 	var i = 0;
 	this.ids = {
@@ -134,6 +146,7 @@ VarWriter.prototype.convertToHTML = function (div) {
 		if (!this.tagToHTML(tag, tag.children[0].textContent))
 			i++;
 	}
+	*/
 };
 
 /*
@@ -156,16 +169,18 @@ VarWriter.prototype.unknownVariables = function () {
 	return unknownVars;
 };
 
-VarWriter.prototype.appendVar = function (match) {
+VarWriterAppendVar = function (match, notEditable, varWriter) {
 	match = match.replace("$", "");
 	var tag = Util.span(undefined, "writervariable");
 	tag.appendChild(document.createTextNode("$"));
 	var innerSpan = Util.span(match);
-	innerSpan.contentEditable = true;
+	if (!notEditable)
+		innerSpan.contentEditable = true;
 	tag.appendChild(innerSpan);
 	tag.appendChild(document.createTextNode("$"));
 	tag.contentEditable = false;
-	this.tags.push(tag);
+	if (varWriter)
+		varWriter.tags.push(tag);
 	return tag;
 };
 
@@ -189,10 +204,8 @@ VarWriter.prototype.tagMatch = function (node, index) {
 };
 
 VarWriter.prototype.valueOf = function () {
-	var nDiv = Util.div();
-	nDiv.innerHTML = this.div.innerHTML;
-	this.convertToHTML(nDiv);
-	return nDiv;
+
+	return this.convertToHTML(this.div);
 };
 
 VarWriter.prototype.keyDown = function (e) {
@@ -222,7 +235,7 @@ VarWriter.prototype.keyDown = function (e) {
 				hasCls = hasCls || this.bubbleHasClass(range.endContainer, "writervariable");
 				if (match.length > 0 && !hasCls) {
 					range.deleteContents();
-					var tag = this.appendVar(match);
+					var tag = VarWriterAppendVar(match, 0, this);
 					range.insertNode(tag);
 					range.selectNode(tag);
 					sel.removeAllRanges();
@@ -236,7 +249,7 @@ VarWriter.prototype.keyDown = function (e) {
 			} else {
 				var match = this.tagMatch(node, startIndex);
 				if (match && !this.bubbleHasClass(node, "writervariable")) {
-					var tag = this.appendVar(match);
+					var tag = VarWriterAppendVar(match, 0, this);
 					range.setStart(node, this.index);
 					range.setEnd(node, this.index);
 					range.insertNode(tag);
@@ -267,3 +280,29 @@ VarWriter.prototype.bubbleHasClass = function (node, className) {
 	return false;
 };
 
+function VarWrittenParser(data, type, classOf) {
+	var ele = Util[type]();
+	var ids = {
+		next: 0
+	};
+	var wasStr = false;
+	for (var d = 0; d < data.length; d++) {
+		var dat = data[d];
+		if (dat.length > 0) {
+			if (typeof dat == 'string') {
+				if (wasStr) {
+					ele.appendChild(Util.br());
+				}
+				ele.appendChild(Util.text(dat));
+				wasStr = true;
+			} else {
+				ele.appendChild(VarWriterTagToHTML(dat[0], ids));
+				wasStr = false;
+			}
+		}
+	}
+	//ele.innerHTML = data.join("");
+	ele.classList.add(classOf);
+	console.log(ele);
+	return ele;
+}
