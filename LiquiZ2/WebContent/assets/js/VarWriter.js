@@ -117,12 +117,42 @@ VarWriterCheckTag = function (tagname) {
 	return search;
 };
 
+var signOps = /\*|\/|\+|\-|\||\*|\(|\)|\^|\%|\&|\!|\:|\?|\<\<|\>\>/g;
+
 VarWriterTagToHTML = function (tagname, ids) {
 	var html = VarWriterCheckTag(tagname);
 	if (html) {
 		return (html.toHTML(ids));
 	} else {
-		return VarWriterAppendVar(tagname, true);
+		var matches = tagname.match(signOps);
+		if (matches) {
+			var ret = "";
+			var splitted = tagname.split(signOps);
+			for (var i in splitted) {
+				var alt = splitted[i];
+				splitted[i] = VarWriterCheckTag(splitted[i]);
+				if (splitted[i]) {
+					splitted[i] = splitted[i].valueOf();
+				} else {
+					splitted[i] = alt;
+				}
+			}
+			
+			for (var i = 0; i < splitted.length; i++) {
+				var cur = splitted[i];
+				if (matches[i])
+					cur += matches[i];
+				ret += cur;
+			}
+			try{
+				ret = eval(ret);
+			}catch(e){
+				console.log("math fail");
+			}
+			return Util.span(ret);
+		} else {
+			return VarWriterAppendVar(tagname, true);
+		}
 	}
 };
 
@@ -133,7 +163,7 @@ VarWriter.prototype.convertToHTML = function (div) {
 	for (var c = 0; c < children.length; c++) {
 		var child = children[c];
 		if (child.className == "writervariable") {
-			rets.push([child.children[0].innerHTML]);
+			rets.push([child.children[0].textContent]);
 		} else if (child.tagName == "BR") {
 			rets.push(["\\n"]);
 		} else {
@@ -194,7 +224,6 @@ VarWriter.prototype.tagMatch = function (node, index) {
 	var text = node.textContent;
 	if (node == this.div || this.bubbleHasClass(node, "writervariable"))
 		return false;
-	console.log(node);
 	for (var i = index - 1; i >= 0; i--) {
 		var code = text.charAt(i);
 		if (Util.regMatch(code, /\s/)) {
@@ -242,13 +271,10 @@ VarWriter.prototype.keyDown = function (e) {
 				if (this.div.oninput)
 					this.div.oninput();
 			} else if (startIndex == 0) {
-				console.log(node);
 				var parent = node.parentElement;
 				var children = parent.childNodes;
 				var index = indexOfChild(node, children);
-				console.log(index);
 				var suspect = children[index - 1];
-				console.log(suspect);
 				if (index > 0) {
 					if (suspect.className == "writervariable") {
 						//suspect.parentElement.removeChild(suspect);
