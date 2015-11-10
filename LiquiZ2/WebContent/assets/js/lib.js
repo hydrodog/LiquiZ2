@@ -332,7 +332,11 @@ Util = {
             }
         });
     },
-
+    regMatch: function(str, reg){
+      var match = str.match(reg);
+      if(!match) return false;
+      return match[0] == str;
+    },
     button: function(value, onClick, className, id) {
             return Util.make("input", {
                 type: "button",

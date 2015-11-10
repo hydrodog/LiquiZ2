@@ -100,6 +100,11 @@ ReservedVariables = {
 		toHTML: function (ids) {
 			return Util.input('text', 'fillin', "ans-" + (ids.next++));
 		}
+	},
+	"\\n": {
+		toHTML: function (ids) {
+			return Util.br();
+		}
 	}
 };
 
@@ -112,12 +117,42 @@ VarWriterCheckTag = function (tagname) {
 	return search;
 };
 
+var signOps = /\*|\/|\+|\-|\||\*|\(|\)|\^|\%|\&|\!|\:|\?|\<\<|\>\>/g;
+
 VarWriterTagToHTML = function (tagname, ids) {
 	var html = VarWriterCheckTag(tagname);
 	if (html) {
 		return (html.toHTML(ids));
 	} else {
-		return VarWriterAppendVar(tagname, true);
+		var matches = tagname.match(signOps);
+		if (matches) {
+			var ret = "";
+			var splitted = tagname.split(signOps);
+			for (var i in splitted) {
+				var alt = splitted[i];
+				splitted[i] = VarWriterCheckTag(splitted[i]);
+				if (splitted[i]) {
+					splitted[i] = splitted[i].valueOf();
+				} else {
+					splitted[i] = alt;
+				}
+			}
+			
+			for (var i = 0; i < splitted.length; i++) {
+				var cur = splitted[i];
+				if (matches[i])
+					cur += matches[i];
+				ret += cur;
+			}
+			try{
+				ret = eval(ret);
+			}catch(e){
+				console.log("math fail");
+			}
+			return Util.span(ret);
+		} else {
+			return VarWriterAppendVar(tagname, true);
+		}
 	}
 };
 
@@ -128,7 +163,9 @@ VarWriter.prototype.convertToHTML = function (div) {
 	for (var c = 0; c < children.length; c++) {
 		var child = children[c];
 		if (child.className == "writervariable") {
-			rets.push([child.children[0].innerHTML]);
+			rets.push([child.children[0].textContent]);
+		} else if (child.tagName == "BR") {
+			rets.push(["\\n"]);
 		} else {
 			rets.push(child.textContent);
 		}
@@ -185,11 +222,13 @@ VarWriterAppendVar = function (match, notEditable, varWriter) {
 
 VarWriter.prototype.tagMatch = function (node, index) {
 	var text = node.textContent;
+	if (node == this.div || this.bubbleHasClass(node, "writervariable"))
+		return false;
 	for (var i = index - 1; i >= 0; i--) {
-		var code = text.charCodeAt(i);
-		if (code == 160 || code == 32) {
+		var code = text.charAt(i);
+		if (Util.regMatch(code, /\s/)) {
 			return false;
-		} else if (code == 36) {
+		} else if (Util.regMatch(code, /\$/)) {
 			var match = text.substring(i, index);
 			if (match.replace("$", "").length <= 0) {
 				return false;
@@ -207,6 +246,14 @@ VarWriter.prototype.valueOf = function () {
 	return this.convertToHTML(this.div);
 };
 
+function indexOfChild(child, children) {
+	var len = children.length;
+	while (len--)
+		if (children[len] == child)
+			return len;
+	return -1;
+}
+
 VarWriter.prototype.keyDown = function (e) {
 	var key = e.which;
 	var shift = e.shiftKey;
@@ -214,7 +261,7 @@ VarWriter.prototype.keyDown = function (e) {
 		var sel = window.getSelection();
 		var node = sel.anchorNode;
 		var writer = node.parentElement.parentElement;
-		if (key == 8 && writer.className == "writervariable") {
+		if (key == 8) {
 			var range = sel.getRangeAt(0);
 			var startIndex = range.startOffset;
 			if ((startIndex == 0 || startIndex == 1) && writer.className == "writervariable") {
@@ -223,6 +270,30 @@ VarWriter.prototype.keyDown = function (e) {
 				e.stopPropagation();
 				if (this.div.oninput)
 					this.div.oninput();
+			} else if (startIndex == 0) {
+				var parent = node.parentElement;
+				var children = parent.childNodes;
+				var index = indexOfChild(node, children);
+				var suspect = children[index - 1];
+				if (index > 0) {
+					if (suspect.className == "writervariable") {
+						//suspect.parentElement.removeChild(suspect);
+						range.selectNode(suspect);
+						sel.removeAllRanges();
+						sel.addRange(range);
+						if (this.div.oninput)
+							this.div.oninput();
+					}
+				}
+			} else if (node == this.div) {
+				var suspect = node.childNodes[startIndex - 1]
+				if (suspect.className == "writervariable") {
+					suspect.parentElement.removeChild(suspect);
+					e.preventDefault();
+					e.stopPropagation();
+					if (this.div.oninput)
+						this.div.oninput();
+				}
 			}
 		} else if (key == 52 && shift) {
 			var range = sel.getRangeAt(0);
@@ -284,14 +355,10 @@ function VarWrittenParser(data, type, classOf) {
 	var ids = {
 		next: 0
 	};
-	var wasStr = false;
 	for (var d = 0; d < data.length; d++) {
 		var dat = data[d];
 		if (dat.length > 0) {
 			if (typeof dat == 'string') {
-				if (wasStr) {
-					ele.appendChild(Util.br());
-				}
 				ele.appendChild(Util.text(dat));
 				wasStr = true;
 			} else {

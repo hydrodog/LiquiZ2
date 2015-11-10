@@ -6,6 +6,8 @@
  * All parameters are now passed to build methods by storing them in this.
  * Not so robust, but it streamlines the code 
  */
+console.log("bugs to fix - undefined-qc");
+console.log("bugs to fix - newlines-qc");
 
 QuizEdit.newid = 0;
 
@@ -957,6 +959,12 @@ Random.prototype.toHTML = function() {
 		this.choose();
 	var span = Util.span(this.current);
 	return span;
+};
+
+Random.prototype.valueOf = function() {
+	if(this.current === undefined)
+		this.choose();
+	return JSON.stringify(this.current);
 };
 
 function RandFloat(min, max, step, precision) {
