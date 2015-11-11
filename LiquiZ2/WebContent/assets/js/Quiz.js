@@ -415,6 +415,48 @@ Quiz.prototype.submit = function() {
     post("GradeQuiz", this.answers, this.submitCB);
 }
 
+Quiz.prototype.print = function() {
+    console.log('printing');
+
+    var doc = new jsPDF('p','in','letter')
+    , sizes = [12, 16, 20]
+    , fonts = [['Times','Roman'],['Helvetica',''], ['Times','Italic']]
+    , font, size, lines
+    , margin = 0.5 // inches on a 8.5 x 11 inch sheet.
+    , verticalOffset = margin
+    , loremipsum = 'testing testing 123'
+
+    // Margins:
+    doc.setDrawColor(0, 255, 0)
+	.setLineWidth(1/72)
+	.line(margin, margin, margin, 11 - margin)
+	.line(8.5 - margin, margin, 8.5-margin, 11-margin)
+
+    // We'll make our own renderer to skip this editor
+    var specialElementHandlers = {
+	'.quiz': function(element, renderer){
+	    console.log('in element handler');
+	    return true;
+	}
+};
+
+// All units are in the set measurement for the document
+// This can be changed to "pt" (points), "mm" (Default), "cm", "in"
+/*
+doc.fromHTML($('body').get(0), 15, 15, {
+	'width': 170, 
+	'elementHandlers': specialElementHandlers
+}); */ 
+    doc.save("quiz.pdf");
+
+}
+
+Quiz.prototype.buttonMethod = function(label, method, shortcut) {
+    //window.onKeyDown
+//    window.keyMap[shortcut] = method.bind(this); 
+    return Util.button(label, method.bind(this));
+}
+
 Quiz.prototype.createSubmit = function(id) {
     var div = Util.div("submit", "submitDiv-" + id);
     var t = this;
@@ -422,34 +464,35 @@ Quiz.prototype.createSubmit = function(id) {
     div.appendChild(Util.button("Submit The Quiz", this.submit.bind(this), "submit-button", "submit-"+id));
     if (this.editMode) {
         var editBox = Util.div("edit-quiz", id + "-edit-quiz");
-    Util.add(editBox, [
+	Util.add(editBox, [
             Util.button("New Question", 
-            function() {
-                var editor = new QuizEdit();
-                editor.editQuestion();
-            }),
+			function() {
+			    var editor = new QuizEdit();
+			    editor.editQuestion();
+			}),
             Util.button("Edit Assign",
-                function() {
-                    var ass = new Assignment();
-                    ass.edit();
-                } ),
+			function() {
+			    var ass = new Assignment();
+			    ass.edit();
+			} ),
             Util.button("Edit Policy", 
-            function() {
-                if (clickPolicy === 0) {
-                        var policy = new Policy();
-                        policy.edit();
-                }
-                clickPolicy++;
-            }),
-        Util.button("Save to Server", 
-            (function () {
-                
-            }).bind(this)),
-         Util.button("Save Local",  
-            (function () {
-                filebrowser.savePopup(this.generateData());
-            }).bind(this)),
-        Util.button("Load From Local", this.loadLocal.bind(this), null, id + "-edit-buttons" )
+			function() {
+			    if (clickPolicy === 0) {
+				var policy = new Policy();
+				policy.edit();
+			    }
+			    clickPolicy++;
+			}),
+            Util.button("Save to Server", 
+			(function () {
+			    
+			}).bind(this)),
+            Util.button("Save Local",  
+			(function () {
+			    filebrowser.savePopup(this.generateData());
+			}).bind(this)),
+            Util.button("Load From Local", this.loadLocal.bind(this), null, id + "-edit-buttons" ),
+            this.buttonMethod("Print", this.print, '\u0010')
     ] );
         div.appendChild(editBox);
     }
