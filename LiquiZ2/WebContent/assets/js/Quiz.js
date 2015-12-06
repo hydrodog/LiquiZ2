@@ -414,10 +414,11 @@ Quiz.prototype.submit = function() {
     console.log(this.answers);
     post("GradeQuiz", this.answers, this.submitCB);
 }
-
-Quiz.prototype.print = function() {
-    console.log('printing');
-
+Quiz.prototype.print = function () {
+		console.log('printing');
+		var printer = new PagePrinter();
+		printer.print();
+		/*
     var doc = new jsPDF('p','in','letter')
     , sizes = [12, 16, 20]
     , fonts = [['Times','Roman'],['Helvetica',''], ['Times','Italic']]
@@ -427,12 +428,9 @@ Quiz.prototype.print = function() {
     , loremipsum = 'testing testing 123'
 
     // Margins:
-    doc.setDrawColor(0, 255, 0)
-	.setLineWidth(1/72)
-	.line(margin, margin, margin, 11 - margin)
-	.line(8.5 - margin, margin, 8.5-margin, 11-margin)
+    
 
-    // We'll make our own renderer to skip this editor
+    // We'll make ourown renderer to skip this editor
     var specialElementHandlers = {
 	'.quiz': function(element, renderer){
 	    console.log('in element handler');
@@ -442,14 +440,13 @@ Quiz.prototype.print = function() {
 
 // All units are in the set measurement for the document
 // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
-/*
 doc.fromHTML($('body').get(0), 15, 15, {
 	'width': 170, 
 	'elementHandlers': specialElementHandlers
-}); */ 
+});
     doc.save("quiz.pdf");
-
-}
+*/
+};
 
 Quiz.prototype.buttonMethod = function(label, method, shortcut) {
     //window.onKeyDown

@@ -990,3 +990,153 @@ function loadOnce(e) {
 window.onload = loadOnce;
 window.onhashchange = loadPage;
 window.onscroll = captureScroll;
+
+function PagePrinter() {
+  this.doc = new jsPDF('p', 'pt', [768, 1086]);
+	this.scale = this.doc.internal.scaleFactor;
+	this.pageHeight = this.scale * this.doc.internal.pageSize.height;
+	this.pageWidth = this.scale * this.doc.internal.pageSize.width;
+  	
+	this.widthLeft = this.pageWidth;
+	this.heightLeft = this.pageHeight;
+	
+	
+	this.currentFontSize = 12;
+	this.doc.setFontSize(this.currentFontSize);
+	this.currentFontHeight = this.doc.getTextDimensions("|").h
+	this.currentDocTop = -1;
+	/*this.doc.fromHTML($('body').get(0), 15, 15, {
+        'width': 170
+    });*/
+}
+PagePrinter.handlers = {
+	img:function(self, element, x, y, width, height, computedStyle){
+		
+		self.doc.addImage(element, x, y);
+		return true;
+	},
+	input: function(self, element, x, y, width, height, computedStyle){
+		if(element.type.toLowerCase() == "radio"){
+			self.doc.circle(x+width/2,y+height/2,width/2,"stroke");
+		}else if(element.type.toLowerCase() == "checkbox"){
+			self.doc.rect(x, y, width, height, "stroke");
+		}
+		return true;
+		
+	},
+	textarea: function(self, element, x, y, width, height, computedStyle){
+		var text = element.value;
+		var textHeight = self.doc.getTextDimensions(text).h;
+		//self.doc.rect(x, y, width, height, "stroke");
+		self.doc.text(text, x, y + self.currentFontHeight);
+		return false;
+	},
+	span: function(self, element, x, y, width, height, computedStyle){
+		
+		return true;
+	}
+};
+PagePrinter.prototype.printElementBoarders = function (element, x, y, width, height, computedStyle) {
+	var bottom = parseInt(computedStyle.borderBottomWidth),
+		top = parseInt(computedStyle.borderTopWidth),
+		left = parseInt(computedStyle.borderLeftWidth),
+		right = parseInt(computedStyle.borderRightWidth);
+	
+	if (bottom && top && left && right) {
+		this.doc.rect(x, y, width, height, "stroke");
+	} else {
+		if (bottom) {
+			this.doc.line (x + width, y + height, x, y + height);
+		}
+		if (top) {
+			this.doc.line(x + width, y, x, y);
+		}
+		if (left) {
+			this.doc.line(x, y + height, x, y);
+		}
+		if (right) {
+			this.doc.line(x + width, y + height, x + width, y);
+		}
+	}
+};
+
+PagePrinter.prototype.printElement = function (element, shouldCareHeight) {
+	var clientRect = element.getBoundingClientRect();
+	if (clientRect) {
+		var computedStyle = getComputedStyle(element);
+		var x = clientRect.left / this.scale;
+		var y = clientRect.top / this.scale - this.currentDocTop;
+		if (this.currentDocTop < 0) {
+			this.currentDocTop = y - 10 / this.scale;
+			y = 10 / this.scale;
+		}
+		var height = clientRect.height / this.scale;
+		var width = clientRect.width / this.scale;
+		if (shouldCareHeight) {
+			this.heightLeft = this.pageHeight - height - y;
+			if (this.heightLeft < 0) {
+				this.currentDocTop = y + this.currentDocTop - 10 / this.scale;
+				y = 10 / this.scale;
+				this.doc.addPage();
+				this.heightLeft = this.pageHeight;
+			}
+		}
+		this.doc.setDrawColor(0);
+		this.doc.setFillColor(1);
+		//console.log(x + ":" + y + ":" + width + ":" + height);
+		if(PagePrinter.handlers[element.nodeName.toLowerCase()]){
+			if(!PagePrinter.handlers[element.nodeName.toLowerCase()](this, element, x, y, width, height, computedStyle)){
+				return false;
+			}
+		}
+		this.printElementBoarders(element, x, y, width, height, computedStyle);
+		var children = element.childNodes;
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].nodeType == 3) {
+				var textHeight = this.doc.getTextDimensions(children[i].textContent).h;
+				if(children[i].textContent.indexOf("\n") == -1){
+					this.doc.text(children[i].textContent, x, y + this.currentFontHeight);
+				}else{
+					var ary = children[i].textContent.split("\n");
+					console.log(ary);
+					for(var j = ary.length - 1; j >= 0; j--){
+						var span = document.createElement("SPAN");
+						span.textContent = ary[j];
+						if(j != ary.length - 1){
+							element.insertAdjacentElement('afterEnd', document.createElement("br"));
+						}
+						element.insertAdjacentElement('afterEnd', span);
+						
+					}
+					element.removeChild(children[i--]);
+				}
+				
+				//console.log(textHeight +":"+height);
+			} else {
+				this.printElement(children[i]);
+			}
+		}
+	}
+	};
+PagePrinter.prototype.print = function () {
+	this.widthLeft = this.pageWidth;
+	this.heightLeft = this.pageHeight;
+	document.body.classList.add("printing");
+	document.body.style.width = this.pageWidth+ "px";
+  window.scrollTo(0,0);
+	
+	var questionsSets = document.getElementsByClassName("questions");
+	for (var i = 0; i < questionsSets.length; i++) {
+		var currentQuestionSet = questionsSets[i];
+		var questions = currentQuestionSet.getElementsByClassName("qc");
+		for (var j = 0; j < questions.length; j++) {
+			var question = questions[j];
+			//var computedStyle = getComputedStyle(question);
+			//console.log(computedStyle.height);
+			this.printElement(question, true);
+		}
+	}
+	document.body.removeAttribute("style");
+	document.body.classList.remove("printing");
+	this.doc.save();
+};
