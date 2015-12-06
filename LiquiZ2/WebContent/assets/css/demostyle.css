@@ -1,101 +1,109 @@
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-.clickableimage{
+.clickableimage {
 	position: relative;
-	top:0px;
-	left:0px;
+	top: 0px;
+	left: 0px;
 }
 
 input[type="file"] {
-    display: none;
-}
-.quiz {
-    font-family: Arial, san-serif;
-    background-color: #E2EDFF;
-    font-size:18pt;
+	display: none;
 }
 
-.points {
+.quiz {
+	font-family: Arial, san-serif;
+	background-color: #E2EDFF;
+	font-size: 18pt;
 }
+
+.points {}
 
 .qc {
-    background-color: #A7C1E8;
-    font-size: 12pt;
-    font-weight: normal;
-    border-style: solid 0px;
+	background-color: #A7C1E8;
+	font-size: 12pt;
+	font-weight: normal;
+	border-style: solid 0px;
 	border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
+	padding: 10px;
+	margin: 10px;
 }
 
 .match-qc td {
-    padding: 1px 4px;
+	padding: 1px 4px;
 }
 
 .mcRadioImg-qc td {
-    padding: 2px;
+	padding: 2px;
 }
+
 .header {
 	padding: 10px;
 }
+
 .qheader {
-    background-color: #7A9DD2;
-    margin: -10px -10px 10px -10px;
+	background-color: #7A9DD2;
+	margin: -10px -10px 10px -10px;
 	padding: 5px 5px 3px 5px;
 	border: solid;
 	border-width: 0 0 2px 0;
 	border-radius: 10px 10px 0 0;
 	border-color: #ffffff;
-	
 }
 
-
-
 .qheader h2 {
-    display: inline-block;
+	display: inline-block;
 }
 
 .qheader .float-right {
-    float: right;
+	float: right;
 }
 
 .qheader .qpoints,
 .qheader .level,
 .qheader .edit {
-    display: inline-block;
-    padding: 0 10px;
+	display: inline-block;
+	padding: 0 10px;
 }
 
 .qheader .edit {
-    padding-right: 0;
+	padding-right: 0;
 }
 
 h2 {
-    font-size: 16pt;
-    margin: 0;
+	font-size: 16pt;
+	margin: 0;
 }
 
 .qpoints .level {
-    font-size: 10pt;
+	font-size: 10pt;
 }
+
 audio {
 	vertical-align: middle;
 }
+
 video {
 	vertical-align: middle;
 }
+
+.essay,
+.code {
+	max-width: 100%;
+}
+
 .essay {
 	vertical-align: middle;
 	display: block;
-	margin: 12px;
 }
+
 .fillin .number {
-    font: 12pt Courier bold;
-    background-color: white;
-    color: black;
+	font: 12pt Courier bold;
+	background-color: white;
+	color: black;
 }
+
 #blankbox {
 	font-family: monospace;
 	font-size: 16px;
@@ -103,93 +111,95 @@ video {
 }
 
 .code {
-    font: 12pt monospace;
-    background-color: black;
-    color: #00ff20;
-    width: 95%;
-    rows: 10;
-    cols: 80;
-    padding: 4px;
+	font: 12pt monospace;
+	background-color: black;
+	color: #00ff20;
+	width: 95%;
+	rows: 10;
+	cols: 80;
+	padding: 4px;
 }
 
 .headbtn {
-    background-color: #7A9DD2;
+	background-color: #7A9DD2;
 	color: #ffffff;
 	border: solid 0px;
 }
 
 .code input {
-    font: 12pt monospace;
-    color: #00ff20;
-    background-color: black;
-    border-color: black;
-    border-style: none;
-    border-bottom-style: solid;
-    border-bottom-color: #00ff20;
-    border-width: 1px;
-    text-align: center;
-    width: 100px;
+	font: 12pt monospace;
+	color: #00ff20;
+	background-color: black;
+	border-color: black;
+	border-style: none;
+	border-bottom-style: solid;
+	border-bottom-color: #00ff20;
+	border-width: 1px;
+	text-align: center;
+	width: 100px;
 }
 
-.varEdit {
-    
-}
+.varEdit {}
 
-.multichoicedropdown {
-
-
-}
+.multichoicedropdown {}
 
 .mdradio {
-text-align: center;
+	text-align: center;
 }
 
 .instructions {
-    background-color: #7A9DD2;
+	background-color: #7A9DD2;
 	margin: 16px 10px 16px -10px;
 	padding: 3px 3px 3px 8px;
 	border: 0px;
 	border-radius: 0 5px 5px 0;
-    font: 14pt Arial, sanserif;
+	font: 14pt Arial, sanserif;
 }
+
 .quizdataheader {
-	color:#ffffff;
-    background-color: #7A9DD2;
+	color: #ffffff;
+	background-color: #7A9DD2;
 	margin: 0 30px 16px -10px;
 	padding: 3px 3px 3px 8px;
 	border: 0px;
 	border-radius: 0 0 5px 0;
-    font: 14pt Arial, sanserif;
+	font: 14pt Arial, sanserif;
 }
+
 .box {
-    background-color: #8f8;
-    border: 1 solid #000;
+	background-color: #8f8;
+	border: 1 solid #000;
 }
 
 table {
-    font: 10pt Courier, fixed;
-    background-color: #DEE4E6;
-    /*display: inline-block;*/
-    border-collapse: collapse;
+	font: 10pt Courier, fixed;
+	background-color: #DEE4E6;
+	/*display: inline-block;*/
+	border-collapse: collapse;
 }
-.mcRadioTable img{
+
+.mcRadioTable img {
 	border-radius: 5px;
 }
-.mcRadioTable{
+
+.mcRadioTable {
 	border: solid 0px;
 	border-radius: 5px;
 	overflow: hidden;
 }
-.mcRadioTable td{
+
+.mcRadioTable td {
 	border: solid 0px;
 	padding: 3px 3px 0 3px;
 	border-width: 0 0 1px 1px;
 	border-color: #A1A5A7;
 }
+
 .qetitlehold {
 	text-align: center;
 	font-size: 16px;
 }
+
 .qetitle {
 	display: inline-block;
 	padding: 5px 32px 0 32px;
@@ -198,6 +208,7 @@ table {
 	color: #ffffff;
 	margin: 3px 3px 0 3px;
 }
+
 .qelabel {
 	display: inline-block;
 	padding: 5px;
@@ -210,98 +221,100 @@ table {
 }
 
 .matrix {
-    font: 10pt Courier, fixed;
-    background-color: #DEE4E6;
-    display: inline-block;
-    border-collapse: collapse;
+	font: 10pt Courier, fixed;
+	background-color: #DEE4E6;
+	display: inline-block;
+	border-collapse: collapse;
 	background-color: #ffffff;
 	vertical-align: middle;
 }
 
-td{
-    border: 1px solid black;
+td {
+	border: 1px solid black;
 }
 
 .matrix td {
-    border: 1px solid black;
-    //width: 30px;
-    margin: 1px;
-    /*padding: 2px;*/
+	border: 1px solid black;
+	//width: 30px;
+	margin: 1px;
+	/*padding: 2px;*/
 }
-.mcdropdown{
-	width:250px;
+
+.mcdropdown {
+	width: 250px;
 }
+
 .matrix td span {
-    padding: 2px;
+	padding: 2px;
 }
 
 .grid-input {
-    /*border-width: 1px;*/
-    width: 64px;
-    height: 100%;
-    border: none;
-    padding: 2px;
+	/*border-width: 1px;*/
+	width: 100%;
+	height: auto;
+	border: none;
 	text-align: center;
-    background-color: white;
+	background-color: white;
 }
 
-
 .cell {
-    background-color: #DEE4E6;
-    width: 70px;
+	background-color: #DEE4E6;
+	width: 70px;
 	text-align: center;
 	height: 20px;
 }
 
-
 .submit {
-/*    font-family: Arial;
+	/*    font-family: Arial;
     font-size: 16pt;
     font-weight: bold;*/
-    background-color: #A7C1E8;
-    /*color: white;*/
+	background-color: #A7C1E8;
+	/*color: white;*/
 }
 
 .new-question-button {
-    display: block;
+	display: block;
 }
 
 input {
-    outline: none;
+	outline: none;
 }
 
-
-
-h1{
+h1 {
 	margin: 0px;
 }
-.loginform{
+
+.loginform {
 	position: relative;
 }
+
 .loginformabs {
 	padding: 5px 5px 5px 5px;
 	border: solid 0px;
 	border-radius: 0 0 5px 5px;
-	background-color: #355380;	
+	background-color: #355380;
 	position: absolute;
 	right: 30px;
 	top: 0px;
 }
-.header h1{
+
+.header h1 {
 	background-color: #A7C1E8;
 	margin: 16px 10px 0 -10px;
 	padding: 3px 3px 3px 8px;
 	border: 0px;
 	border-radius: 0 5px 5px 0;
-	color:#285479;
+	color: #285479;
 }
-.editBox h1{
+
+.editBox h1 {
 	background-color: #A7C1E8;
 	margin: 16px 30px 16px 0;
 	padding: 3px 3px 3px 8px;
 	border: 0px;
 	border-radius: 0 5px 5px 0;
 }
+
 #menu {
 	font-family: Arial, sanserif;
 	font-size: 12pt;
@@ -309,17 +322,18 @@ h1{
 	background-color: #7A9DD2;
 }
 
- 
-.mi, .mi:link{
+.mi,
+.mi:link {
 	color: #ffffff;
-    padding: 2px; 
-    width: 70px;
-    height: 30px; 
+	padding: 2px;
+	width: 70px;
+	height: 30px;
 	margin-right: 30px;
 	position: relative;
-    text-decoration: none;
+	text-decoration: none;
 	cursor: pointer;
 }
+
 .midropdown {
 	display: none;
 	position: absolute;
@@ -331,22 +345,28 @@ h1{
 	border-color: #A7C1E8;
 	padding: 20px;
 }
+
 .midropdown .mi {
 	line-height: 30px;
 }
+
 .mi:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
+
 
 /*.mi {
   background-color: #04c;
   color: #fff;
 }
 */
+
 #menu input {
 	width: 100px;
 	border: solid 0px;
 }
+
+
 /*input[type="button"]{
 	background: #7A9DD2;
 	color: #fff;
@@ -359,18 +379,23 @@ h1{
 	
 	
 }*/
+
 .mcRadioVert td {
 	padding: 3px 5px 3px 5px;
 }
-.survey{
+
+.survey {
 	text-align: center;
 }
-.survey td{
+
+.survey td {
 	padding: 3px 5px 3px 5px;
 }
-.survey th{
+
+.survey th {
 	padding: 5px;
 }
+
 .paramulti {
 	background-color: #A7C1E8;
 	border: solid 0px;
@@ -402,20 +427,26 @@ h1{
 	border: solid 0px;
 	border-radius: 5px;
 }
-.headdisplay{
-	display:inline-block;
+
+.headdisplay {
+	display: inline-block;
 }
+
 img.logo {
-    width: 108px;
+	width: 108px;
 }
+
 #menu ul {
 	position: absolute;
 	margin-left: 108px;
 }
+
 #menu li {
 	list-style: none;
 	display: inline-block;
 }
+
+
 /*.hvr-float {
   display: inline-block;
   vertical-align: middle;
@@ -444,28 +475,27 @@ img.logo {
   -moz-osx-font-smoothing: grayscale;
 }*/
 
-.quizimg
-{
+.quizimg {
 	width: 300px;
 	height: auto;
 }
 
-
 .edit-quiz {
-    /*width: 200px;*/
-    height: 32px;
+	/*width: 200px;*/
+	height: 32px;
 	float: right;
-    font-size: 16px;
+	font-size: 16px;
 }
 
-.response { /*teacher feedback when showing the graded quiz*/
+.response {
+	/*teacher feedback when showing the graded quiz*/
 	/*placeholder to specify response classname*/
 }
 
 input#title {
-    font-family: Arial, sanserif;
-    font-size: 16px;
-    width: 600px;
+	font-family: Arial, sanserif;
+	font-size: 16px;
+	width: 600px;
 	border: solid 1px;
 	border-color: #000000;
 	border-radius: 5px;
@@ -473,20 +503,20 @@ input#title {
 	box-sizing: content-box;
 }
 
-
-
 .answers {
-    background: #8dd;
-    width: 300px;
+	background: #8dd;
+	width: 300px;
 }
+
 .writervariable {
 	color: #f00ff0;
 	text-decoration: underline;
 }
+
 input.editpattern {
-    width: 100%;
-    size: 60;
-    background: #f00;
+	width: 100%;
+	size: 60;
+	background: #f00;
 }
 
 .editctrl {
@@ -496,76 +526,80 @@ input.editpattern {
 }
 
 .editint {
-    size: 4;
-    width:50px;
+	size: 4;
+	width: 50px;
 }
+
 .editdouble {
-    background: #00f;
-    size: 6;
-    width:75px;
+	background: #00f;
+	size: 6;
+	width: 75px;
 }
+
 .question {
-    width: 100%;    
+	width: 100%;
 }
+
 .surveyQuestion {
-    size: 80;
-    width: "100%";
+	size: 80;
+	width: "100%";
 }
+
 
 /*.calMonth {
     background: #20a;
     width: 100%;
 }*/
+
 .calendar {
-    background: #807888;
-    width: 90%;
+	background: #807888;
+	width: 90%;
 }
+
 .cal {
-    background: #888;
+	background: #888;
 }
 
 .hol {
-    background: #d00;
+	background: #d00;
 }
 
 .file-popup {
-    position:fixed;
-    left: 50%;
-    top: 10%;
-
-    margin:30px auto 0;
-    margin-left: -380px;
-    /*margin-top: -40px;*/
-    padding:6px;
-
-    width:760px;
-    border: 3px solid #000;
-    border-radius: 7px;
-    background:#fff;
+	position: fixed;
+	left: 50%;
+	top: 10%;
+	margin: 30px auto 0;
+	margin-left: -380px;
+	/*margin-top: -40px;*/
+	padding: 6px;
+	width: 760px;
+	border: 3px solid #000;
+	border-radius: 7px;
+	background: #fff;
 }
 
 .file-header {
-    text-align: center;
-    margin: 0;
+	text-align: center;
+	margin: 0;
 }
 
 .file-close {
-    position: absolute;
-    top: 6px;
-    left: 672px;
+	position: absolute;
+	top: 6px;
+	left: 672px;
 }
 
 .file-item {
-    display: block;
+	display: block;
 }
 
 .file-item:hover {
-    background-color: #268666;
+	background-color: #268666;
 }
-input[disabled] {
-    border-width: 0px;
-    color: black;
-    background-color: #DEE4E6;
-    color: #444;
 
+input[disabled] {
+	border-width: 0px;
+	color: black;
+	background-color: #DEE4E6;
+	color: #444;
 }

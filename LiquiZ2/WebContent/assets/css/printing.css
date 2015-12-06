@@ -1,0 +1,42 @@
+.printing *,
+.printing,
+.printing h1 {
+	background-color: rgba(255, 255, 255, 0);
+	color: #000000;
+	border: solid 0px;
+}
+
+.printing #menu,
+.printing #currentStatus,
+.printing .quizdataheader,
+.printing .submit,
+.printing #header-control,
+.printing .edit {
+	display: none;
+}
+
+.printing input {
+	border-bottom-width: 1px;
+	background-color: rgba(255, 255, 255, 0);
+	color: rgba(255, 255, 255, 0);
+	border-color: #000000;
+}
+
+.printing .grid-input {
+	border: solid 0px;
+}
+
+.printing .qc,
+.printing td {
+	border: solid 1px;
+	border-color: black;
+}
+
+.printing .mcRadioTable * {
+	border-color: black;
+}
+
+.printing .mcRadioTable {
+	border: solid 1px black;
+	overflow: visible;
+}
