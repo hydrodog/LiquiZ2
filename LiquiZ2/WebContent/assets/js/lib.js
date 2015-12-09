@@ -1065,6 +1065,8 @@ PagePrinter.prototype.printElement = function (element, shouldCareHeight) {
 	var clientRect = element.getBoundingClientRect();
 	if (clientRect) {
 		var computedStyle = getComputedStyle(element);
+		if(computedStyle.display == "none")
+			return false;
 		var x = clientRect.left / this.scale;
 		var y = clientRect.top / this.scale - this.currentDocTop;
 		if (this.currentDocTop < 0) {
@@ -1101,6 +1103,8 @@ PagePrinter.prototype.setFont = function(computedStyle){
 	this.doc.setFontSize(fontSize);
 	var fontStyle = computedStyle.fontStyle;
 	this.doc.setFont(fontName, fontStyle);
+	this.currentFontSize = fontSize;
+	this.currentFontHeight = this.doc.getTextDimensions("|").h
 };
 PagePrinter.prototype.printChildText = function (element, x, y, width, height, computedStyle) {
 	var children = element.childNodes;
@@ -1137,6 +1141,7 @@ PagePrinter.prototype.print = function () {
 	document.body.style.width = this.pageWidth+ "px";
   window.scrollTo(0,0);
 	
+	this.printElement(document.body.getElementsByClassName("header")[0], true);
 	var questionsSets = document.getElementsByClassName("questions");
 	for (var i = 0; i < questionsSets.length; i++) {
 		var currentQuestionSet = questionsSets[i];
