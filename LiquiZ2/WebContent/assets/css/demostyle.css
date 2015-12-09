@@ -1,7 +1,9 @@
 * {
 	box-sizing: border-box;
 }
-
+table {
+	font-family: monospace;
+}
 .clickableimage {
 	position: relative;
 	top: 0px;
@@ -256,6 +258,7 @@ td {
 	text-align: center;
 	background-color: white;
 }
+
 
 .cell {
 	background-color: #DEE4E6;
