@@ -42,3 +42,11 @@
 	overflow: visible;
 }
 
+.print-only{
+	display: none;
+}
+
+.printing .print-only{
+	display: block;
+}
+

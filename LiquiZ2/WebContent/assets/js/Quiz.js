@@ -300,16 +300,21 @@ Quiz.prototype.updateTimer = function() {
 	seconds = (seconds >= 0?(seconds  < 10 ? "0" + seconds : seconds) : "00");
 	var result = hours + minutes + seconds;
    	this.timer.innerHTML = result;
-}
+};
 
-Quiz.prototype.displayHeader = function() {
-    this.startTime = Date.now();
-	
-	
-    var header = Util.divadd("header",
-        Util.h1(this.title),
+Quiz.prototype.displayHeader = function () {
+	this.startTime = Date.now();
+
+
+	var header = Util.divadd("header",
+		Util.h1(this.title),
+		Util.divadd("print-only",
+			Util.span(" Points: " + this.points, "points"),
+			Util.span(" Name:______________"),
+			Util.span(" Course:______________")
+		),
 		Util.divadd("quizdataheader",
-        	
+
 			//Util.divadd("headdisplay",
 			Util.span(" Points: " + this.points, "points"),
 			Util.text(" | "),
@@ -319,18 +324,17 @@ Quiz.prototype.displayHeader = function() {
 			Util.span("Tries remaining: ", "headdisplay"),
 			this.tries = Util.div("tries headdisplay")
 			//)
-			
-				   )
-        );
-    this.tries.innerHTML = 1;
-    this.timeLimit = 300000;
-    if (this.timeLimit > 0) {
-        setInterval(this.updateTimer.bind(this), 1000);
-		this.updateTimer.bind(this)();
-    }
-    return header;
-}
 
+		)
+	);
+	this.tries.innerHTML = 1;
+	this.timeLimit = 300000;
+	if (this.timeLimit > 0) {
+		setInterval(this.updateTimer.bind(this), 1000);
+		this.updateTimer.bind(this)();
+	}
+	return header;
+};
 
 Quiz.prototype.end = function() {
     this.render(this.createSubmit(2));
