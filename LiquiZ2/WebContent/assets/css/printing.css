@@ -11,7 +11,8 @@
 .printing .quizdataheader,
 .printing .submit,
 .printing #header-control,
-.printing .edit {
+.printing .edit,
+.printing .level{
 	display: none;
 }
 
@@ -40,3 +41,12 @@
 	border: solid 1px black;
 	overflow: visible;
 }
+
+.print-only{
+	display: none;
+}
+
+.printing .print-only{
+	display: block;
+}
+
