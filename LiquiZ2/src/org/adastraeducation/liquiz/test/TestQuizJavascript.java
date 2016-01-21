@@ -6,7 +6,16 @@ import java.util.Arrays;
 
 import org.adastraeducation.liquiz.*;
 public class TestQuizJavascript {
-	public static void main(String[] a) {
+	public static void main(String[] a) {		
+		printQuiz(test1());
+	}
+	public static void printQuiz(Quiz quiz) {
+		DisplayContext dc = new DisplayContext();
+		quiz.writeJS(dc);
+		System.out.println(dc.toString());
+	}
+	
+	public static Quiz test1() {
 		int qid=0;
 		int qcid=0;
 		Policy p = new Policy();
@@ -151,13 +160,7 @@ public class TestQuizJavascript {
 		//test for question 17 in QuizDemo_ajax.jsp
 		//not sure how to set up the test for this one
 		
-		
-		
-		
-		DisplayContext dc = new DisplayContext();
-		quiz.writeJS(dc);
-		System.out.println(dc.toString());
-		
+		return quiz;
 	}
 	
 }

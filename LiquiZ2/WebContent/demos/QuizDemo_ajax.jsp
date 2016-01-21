@@ -2,6 +2,7 @@
     "type": "Quiz",
     "css": "demostyle.css",
     "payload": {
+        "policy" : "Dov",
         "title": "Quiz Demo #1",
         "points": 100,
         "timeLimit": 0,
