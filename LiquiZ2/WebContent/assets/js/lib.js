@@ -1026,6 +1026,7 @@ PagePrinter.handlers = {
 	},
 	textarea: function(self, element, x, y, width, height, computedStyle){
 		var text = element.value;
+		self.setFont(computedStyle);
 		var textHeight = self.doc.getTextDimensions(text).h;
 		//self.doc.rect(x, y, width, height, "stroke");
 		self.doc.text(text, x, y + self.currentFontHeight);
@@ -1064,6 +1065,8 @@ PagePrinter.prototype.printElement = function (element, shouldCareHeight) {
 	var clientRect = element.getBoundingClientRect();
 	if (clientRect) {
 		var computedStyle = getComputedStyle(element);
+		if(computedStyle.display == "none")
+			return false;
 		var x = clientRect.left / this.scale;
 		var y = clientRect.top / this.scale - this.currentDocTop;
 		if (this.currentDocTop < 0) {
@@ -1090,34 +1093,47 @@ PagePrinter.prototype.printElement = function (element, shouldCareHeight) {
 			}
 		}
 		this.printElementBoarders(element, x, y, width, height, computedStyle);
-		var children = element.childNodes;
-		for (var i = 0; i < children.length; i++) {
-			if (children[i].nodeType == 3) {
-				var textHeight = this.doc.getTextDimensions(children[i].textContent).h;
-				if(children[i].textContent.indexOf("\n") == -1){
-					this.doc.text(children[i].textContent, x, y + this.currentFontHeight);
-				}else{
-					var ary = children[i].textContent.split("\n");
-					console.log(ary);
-					for(var j = ary.length - 1; j >= 0; j--){
-						var span = document.createElement("SPAN");
-						span.textContent = ary[j];
-						if(j != ary.length - 1){
-							element.insertAdjacentElement('afterEnd', document.createElement("br"));
-						}
-						element.insertAdjacentElement('afterEnd', span);
-						
-					}
-					element.removeChild(children[i--]);
-				}
-				
-				//console.log(textHeight +":"+height);
-			} else {
-				this.printElement(children[i]);
-			}
-		}
+		this.printChildText(element, x, y, width, height, computedStyle);
+		
 	}
 	};
+PagePrinter.prototype.setFont = function(computedStyle){
+	var fontName = (computedStyle.fontFamily).split(",")[0].trim();
+	var fontSize = parseFloat(computedStyle.fontSize);
+	this.doc.setFontSize(fontSize);
+	var fontStyle = computedStyle.fontStyle;
+	this.doc.setFont(fontName, fontStyle);
+	this.currentFontSize = fontSize;
+	this.currentFontHeight = this.doc.getTextDimensions("|").h
+};
+PagePrinter.prototype.printChildText = function (element, x, y, width, height, computedStyle) {
+	var children = element.childNodes;
+	for (var i = 0; i < children.length; i++) {
+		if (children[i].nodeType == 3) {
+			var textHeight = this.doc.getTextDimensions(children[i].textContent).h;
+			if (children[i].textContent.indexOf("\n") == -1) {
+				this.setFont(computedStyle);
+				this.doc.text(children[i].textContent, x, y + this.currentFontHeight);
+			} else {
+				var ary = children[i].textContent.split("\n");
+				for (var j = ary.length - 1; j >= 0; j--) {
+					var span = document.createElement("SPAN");
+					span.textContent = ary[j];
+					if (j != ary.length - 1) {
+						element.insertAdjacentElement('afterEnd', document.createElement("br"));
+					}
+					element.insertAdjacentElement('afterEnd', span);
+
+				}
+				element.removeChild(children[i--]);
+			}
+
+			//console.log(textHeight +":"+height);
+		} else {
+			this.printElement(children[i]);
+		}
+	}
+};
 PagePrinter.prototype.print = function () {
 	this.widthLeft = this.pageWidth;
 	this.heightLeft = this.pageHeight;
@@ -1125,6 +1141,7 @@ PagePrinter.prototype.print = function () {
 	document.body.style.width = this.pageWidth+ "px";
   window.scrollTo(0,0);
 	
+	this.printElement(document.body.getElementsByClassName("header")[0], true);
 	var questionsSets = document.getElementsByClassName("questions");
 	for (var i = 0; i < questionsSets.length; i++) {
 		var currentQuestionSet = questionsSets[i];
