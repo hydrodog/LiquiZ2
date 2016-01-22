@@ -3,7 +3,8 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.database.Database;
 
-public abstract class Question implements Displayable {
+public abstract class Question implements Displayable, java.io.Serializable
+ {
 	private int id,points,level;
 	private ArrayList<Answer> answers;
 

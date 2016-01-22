@@ -14,13 +14,18 @@ import org.adastraeducation.liquiz.util.*;
  * @author yijkang
  *
  */
-public class Quiz implements Displayable {
+public class Quiz implements Displayable, java.io.Serializable
+ {
 	private int id; // unique id for db and XML
-	private String name, desc; // display name & description, TODO possibly per Course? or copy renamed quiz
+	private Title title;
+	private String desc; // display name & description, TODO possibly per Course? or copy renamed quiz
 	private ArrayList<QuestionContainer> qContainers;
 	private Policy policy ; 
 	private boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
 	public static Random r;
+	private Type type;
+	private StyleSheet css;
+	private PayLoad payLoad;
 	
 	
 	static {
@@ -59,11 +64,11 @@ public class Quiz implements Displayable {
 	}
 
 	public String getName() {
-		return name;
+		return title.name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.title.name = name;
 	}
 	
 	public String getDesc() {
@@ -149,18 +154,29 @@ public class Quiz implements Displayable {
 		this.editMode=false;*/
 	}
 	
-	public Quiz(int id, String name, String desc, ArrayList<QuestionContainer> qContainers, Policy plc, boolean editMode) {
+	public Quiz(int id, Title title, String desc, ArrayList<QuestionContainer> qContainers, Policy plc, boolean editMode) {
 		this.id = id;
-		this.name = name;
+		this.title = title;
 		this.desc = desc;
 		this.qContainers = qContainers;
 		policy = plc;
 		this.editMode=editMode;
 	}
 	
-	public Quiz(int id, String name, String desc, Policy plc, boolean editMode) {
+	public Quiz(int id, Title title, String desc, Policy plc, boolean editMode) {
 		this.id = id;
-		this.name = name;
+		this.title = title;
+		this.desc = desc;
+		this.qContainers = new ArrayList<QuestionContainer>();
+		policy = plc;
+		this.editMode=editMode;
+	}
+	
+	public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
+		this.id = id;
+		this.type = type;
+		this.css = css;
+		this.title.name = name;
 		this.desc = desc;
 		this.qContainers = new ArrayList<QuestionContainer>();
 		policy = plc;
@@ -170,6 +186,14 @@ public class Quiz implements Displayable {
 	public Quiz(Policy plc) {
 		this.qContainers = new ArrayList<QuestionContainer>();
 		policy = plc;
+	}
+	
+	public Quiz(int id, Type type, StyleSheet css, PayLoad pl) {
+		this.id = id;
+		this.type = type;
+		this.css = css;
+		this.payLoad = pl;
+		this.qContainers = new ArrayList<QuestionContainer>();
 	}
 	
 	public void addQuestionContainer(QuestionContainer qc) {
@@ -239,16 +263,10 @@ public class Quiz implements Displayable {
 		int points = 100; //TODO: add points to quiz?
 		//yijinkang: getTotalPoints() will return the total number of points of the questions in the quiz
 		dc.append
-		("new Quiz(").
-			append("\n\t{"). 
-				append("\n\t\ttitle:").appendQuotedJS(name).
-				append(",\n\t\tpoints:").append(points).
-				append(",\n\t\ttimeLimit:").append(policy.getDuration()).
-				append(",\n\t\tremainingTries:").append(1). //TODO: need count of user's tries
-				append(",\n\t\tdataDir:").append("'assets/'").
-				append(",\n\t\teditMode:").append(editMode).
-			append("\n\t},").
-			append("\n\t[");
+		("{").append("\n\t\ttype:").appendQuotedJS(type.toString()).
+				append("\n\t\tcss:").appendQuotedJS(css.toString()).
+				append("\n\t\tpayload:").appendJS(payLoad).
+				append(",\n\t\t\tquestions:").append("\t[");
 		for(QuestionContainer qc: this.qContainers) {
 			qc.writeJS(dc);
 		}
