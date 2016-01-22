@@ -6,7 +6,8 @@ package org.adastraeducation.liquiz;
  * @author Tim Ding
  *
  */
-public class Policy {
+public class Policy implements java.io.Serializable
+{
 	private int id;				// unique id in database
 	public String name; 		// display name of the policy
 	private int attemptNum;		// number of times students are allowed to take the quiz
@@ -119,6 +120,13 @@ public class Policy {
 		accessCode = "";
 	}
 
+	public Policy(String name){
+		this();
+		this.name = name;
+	}
 	
+	public String toString(){
+		return name;
+	}
 
 }

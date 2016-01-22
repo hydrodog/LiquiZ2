@@ -87,6 +87,18 @@ public class DisplayContext {
 		append('\'');
 		return this;
 	}
+
+	public final DisplayContext appendJS(PayLoad pl) {
+		
+		append("{").append("\n\t\t\tpolicy:").appendQuotedJS(pl.getPolicy().toString()).
+		append(",\n\t\t\ttitle:").appendQuotedJS(pl.getTitle().toString()).
+		append(",\n\t\t\tpoints:").append(pl.getPoints()).
+		append(",\n\t\t\ttimeLimit:").append(pl.getTimeLimit()).
+		append(",\n\t\t\tremainingTries:").append(pl.getRemainingTries()). //TODO: need count of user's tries
+		append(",\n\t\t\tdataDir:").append(pl.getDataDir()).
+		append(",\n\t\t\teditMode:").append(pl.isEditMode());
+		return this;
+	}
 	// TODO: make this escape strings in single quotes
 	public final DisplayContext appendEscaped(String s) {
 		for (int i = 0; i < s.length(); i++) {

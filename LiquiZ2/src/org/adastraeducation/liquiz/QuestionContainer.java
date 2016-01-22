@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class QuestionContainer implements Displayable {
+public class QuestionContainer implements Displayable, java.io.Serializable
+{
 	private int id;
 	private String name;
 	private ArrayList<Displayable> displayables;
@@ -94,11 +95,11 @@ public class QuestionContainer implements Displayable {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t[\t").append(id).append(", ").appendQuotedJS(name).append(", ").appendQuotedJS(cssClass).append(",");
+		dc.append("\n\t\t{\t").append(id).append(", ").appendQuotedJS(name).append(", ").appendQuotedJS(cssClass).append(",");
 			for (Displayable d : displayables) {
 				d.writeJS(dc);
 			}
-		dc.append("\n\t\t],");
+		dc.append("\n\t\t},");
 	}
 
 	public String getCssClass() {
