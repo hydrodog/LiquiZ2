@@ -21,9 +21,10 @@ public class TestQuizJavascript {
 		Type t = new Type();
 		StyleSheet s = new StyleSheet("demostyle.css");
 		Policy p = new Policy("Dov");
-		Title ti = new Title("Quiz Demo #1");
-		PayLoad pl = new PayLoad(p, ti, 100, 0, 1, "'assets/'", true);
-		Quiz quiz = new Quiz(1, t, s, pl);
+//		Title ti = new Title("Quiz Demo #1");
+//		PayLoad pl = new PayLoad(p, ti, 100, 0, 1, "'assets/'", true);
+//		public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
+		Quiz quiz = new Quiz(1, t, s, "Quiz Demo #1", "", p, true);
 		QuestionContainer qc = 
 				new QuestionContainer(qcid++, "Operators", "fillin", new ArrayList<Displayable>());
 		qc.add(new TextQuestion("What is 2+2?"));
