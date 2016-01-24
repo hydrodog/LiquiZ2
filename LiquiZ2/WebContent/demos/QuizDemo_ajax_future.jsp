@@ -1,13 +1,8 @@
 {
     "type": "Quiz",
-    "css": "demostyle.css",
     "payload": {
         "policy" : "Dov",
         "title": "Quiz Demo #1",
-        "points": 100,
-        "timeLimit": 0,
-        "remainingTries": 1,
-        "dataDir": "assets/",
         "editMode": true,
         "questions": [
             {

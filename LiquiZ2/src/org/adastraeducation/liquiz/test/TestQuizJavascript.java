@@ -6,11 +6,24 @@ import java.util.Arrays;
 
 import org.adastraeducation.liquiz.*;
 public class TestQuizJavascript {
-	public static void main(String[] a) {
+	public static void main(String[] a) {		
+		printQuiz(test1());
+	}
+	public static void printQuiz(Quiz quiz) {
+		DisplayContext dc = new DisplayContext();
+		quiz.writeJS(dc);
+		System.out.println(dc.toString());
+	}
+	
+	public static Quiz test1() {
 		int qid=0;
 		int qcid=0;
-		Policy p = new Policy();
-		Quiz quiz = new Quiz(1, "Java1", "Java Quiz 1", p, true);
+		Type t = new Type();
+		StyleSheet s = new StyleSheet("demostyle.css");
+		Policy p = new Policy("Dov");
+		Title ti = new Title("Quiz Demo #1");
+		PayLoad pl = new PayLoad(p, ti, 100, 0, 1, "'assets/'", true);
+		Quiz quiz = new Quiz(1, t, s, pl);
 		QuestionContainer qc = 
 				new QuestionContainer(qcid++, "Operators", "fillin", new ArrayList<Displayable>());
 		qc.add(new TextQuestion("What is 2+2?"));
@@ -151,13 +164,7 @@ public class TestQuizJavascript {
 		//test for question 17 in QuizDemo_ajax.jsp
 		//not sure how to set up the test for this one
 		
-		
-		
-		
-		DisplayContext dc = new DisplayContext();
-		quiz.writeJS(dc);
-		System.out.println(dc.toString());
-		
+		return quiz;
 	}
 	
 }

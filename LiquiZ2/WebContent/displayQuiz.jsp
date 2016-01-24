@@ -16,8 +16,10 @@
 // ^ this gave me /Applications/Eclipse JEE/Eclipse JEE.app/Contents/MacOS
 
 DisplayContext dc = new DisplayContext();
+	Quiz quiz = org.adastraeducation.liquiz.test.TestQuizJavascript.test1();
 // int quizID = Integer.parseInt(request.getParameter("quizID")); // TODO
-Database.getQuiz(1).writeHTML(dc);
+//Database.getQuiz(1).writeJS(dc);
+quiz.writeJS(dc);
 out.print(dc.toString());
 %>
 </body>

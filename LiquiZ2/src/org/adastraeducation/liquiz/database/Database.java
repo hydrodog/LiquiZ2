@@ -2,6 +2,7 @@ package org.adastraeducation.liquiz.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.adastraeducation.liquiz.*;
 
@@ -17,6 +18,7 @@ public class Database {
 	private static ArrayList<Course> courses;
 	private static ArrayList<Policy> policies;
 	private static ArrayList<Quiz> quizzes;
+	private static HashMap<Integer, Quiz> quizByName;
 	private static ArrayList<QuestionContainer> quesCons;
 	private static ArrayList<Question> questions;
 	private static ArrayList<Answer> answers;
@@ -127,6 +129,7 @@ public class Database {
 	}
 	public static void addQuiz(Quiz q) {
 		quizzes.add(q);
+//		quizByName.put(q.getId(), q)
 	}
 	public static void setQuiz(int id, Quiz q) {
 		quizzes.set(id, q);
