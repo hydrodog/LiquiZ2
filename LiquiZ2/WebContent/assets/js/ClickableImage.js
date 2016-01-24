@@ -1,5 +1,5 @@
-/*
-* Author: Stephen Oro
+/**
+* @author Stephen Oro
 * Makes a "Clickable Image" that will supply its answer to the quiz.
 *
 * Overall: The Clickable Image must
@@ -13,19 +13,19 @@
 *    spliced from the Quiz.answers (stored in this.answers)
 * 2. keep a reticle and move it around as desired
 * 3. container must be a div in order to have a displayer image and a reticle
+*  
+* @constructor
+* @this {ClickableImage}
+*  
+* @param {unknown} id The id of the image
+* @param {string} src The src path of the image
+* @param {string} reticleSrc The src path of the reticle image.
+*  
+* @property {number} x The chosen x.
+* @property {number} y The chosen y.
+* @property {unknown} id Question id.
+*  
 */
-
-
-/*
- * interface: 
- * new ClickableImage (id, src, xs, ys, answersRef, reticleSrc) - don't know what xs and ys do. returns an image element
- * ClickableImage.addAnswer (x, y) - adds [id, x, y] to answers, will replace
- * owned previous answer if previously clicked
- * ClickableImage.imgClick (e, clickableImage) - onclick calls addAnswer with response
- * ClickableImage.reticle (x, y) places a reticle as a child of the image at the click location
- * ClickableImage.prototype.reticleLoad (e, clickableImage) - onload of reticle to properly position it.
- */
-
 ClickableImage = function(id, src, xs, ys, reticleSrc) {
     var img = Util.img(src);
     var div = Util.div();
@@ -41,6 +41,11 @@ ClickableImage = function(id, src, xs, ys, reticleSrc) {
     return div;
 };
 
+/**
+Sets up the answer at a position
+@param {number} x The seleted x value.
+@param {number} y The seleted y value.
+*/
 ClickableImage.prototype.addAnswer = function(x, y) {
 	this.target.onfocus(this);
 	this.x = x;
@@ -51,6 +56,12 @@ ClickableImage.prototype.addAnswer = function(x, y) {
 	this.target.onblur(this);
 }
 
+/**
+Bound function to handle clicks to the image
+
+@this {ClickableImage}
+@param {event} e The click event
+*/
 ClickableImage.prototype.imgClick = function(e) {
     var boundRect = this.img.getBoundingClientRect();
 	var x = Math.floor(e.clientX - boundRect.left),
@@ -60,12 +71,22 @@ ClickableImage.prototype.imgClick = function(e) {
 	}
 };
 
+
+/**
+Bound function to handle reticle image loading.
+
+@this {ClickableImage}
+@param {event} e The onload event
+*/
 ClickableImage.prototype.reticleLoad = function(e) {
 	var img = this.reticle;
 	img.style.left = (this.x-img.clientWidth/2) + "px";
 	img.style.top = (this.y-img.clientHeight/2) + "px";
 };
 
+/**
+Add the reticle to the container
+*/
 ClickableImage.prototype.addReticle = function() {
 	var img = this.reticle;
     if(typeof img === "string"){
