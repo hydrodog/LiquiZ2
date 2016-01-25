@@ -348,7 +348,7 @@ Util = {
 		});
 	},
 
-	file: function (value, filetypes, className, id) {
+	file: function (value, filetypes, className, id, onchange) {
 		value = (typeof value === "undefined") ? "File Upload" : value;
 		var label = Util.label();
 		label.appendChild(Util.span(value));
@@ -357,6 +357,7 @@ Util = {
 			accept: filetypes,
 			className: className,
 			id: id,
+			onchange: onchange
 		});
 		label.appendChild(label.input);
 		return label;
@@ -569,7 +570,7 @@ FileBrowser.prototype.render = function (data) {
 	this.body.appendChild(data);
 };
 
-FileBrowser.prototype.savePopup = function (data) {
+FileBrowser.prototype.savePopup = function (data, saveToSource) {
 	this.destroy("file-saver");
 	var filesaver = Util.div("file-popup", "file-saver");
 
@@ -579,12 +580,12 @@ FileBrowser.prototype.savePopup = function (data) {
         Util.input("text", "file-input", null, null, (function (e) {
 			this.title = e.target.value;
 		}).bind(this), (function (e) {
-			this.addFile(this.title, data);
+			this.addFile(this.title, data, saveToSource);
 			this.destroy("file-saver");
 		}).bind(this)),
 
         Util.button("Save", (function () {
-			this.addFile(this.title, data);
+			this.addFile(this.title, data, saveToSource);
 			this.destroy("file-saver");
 		}).bind(this), "file-save"),
 
@@ -636,10 +637,15 @@ FileBrowser.prototype.getFile = function (name) {
 };
 
 
-FileBrowser.prototype.addFile = function (name, content) {
+FileBrowser.prototype.addFile = function (name, content, saveToSource) {
+	if(saveToSource == 1){
 	this.storage[name] = JSON.stringify(content);
 	window.localStorage.files = JSON.stringify(this.storage);
-
+	}else if(saveToSource == 2){
+		var blob = new Blob([JSON.stringify(content)], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, name+".json");
+	}
+	
 	if (document.getElementById("file-picker"))
 		this.loadPopup();
 };
