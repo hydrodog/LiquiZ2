@@ -14,6 +14,10 @@ input[type="file"] {
 	display: none;
 }
 
+.edit-quiz>label{
+	
+}
+
 .quiz {
 	font-family: Arial, san-serif;
 	background-color: #E2EDFF;
