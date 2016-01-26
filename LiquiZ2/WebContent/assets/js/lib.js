@@ -19,674 +19,678 @@
 video = {};
 audio = {};
 mediaLocations = {
-    img: "assets/img/",
-    audio: "assets/audio/",
-    video: "assets/video/",
+	img: "assets/img/",
+	audio: "assets/audio/",
+	video: "assets/video/",
 };
 
 Util = {
 	aryCons: ([]).constructor,
 	strCons: ("").constructor,
-    SERVER_SUFFIX: "_ajax.jsp", // we are using jsp to feed our ajax
-    dump: function(obj) {
-        console.warn(JSON.stringify(obj, null, 3));
-    },
+	SERVER_SUFFIX: "_ajax.jsp", // we are using jsp to feed our ajax
+	dump: function (obj) {
+		console.warn(JSON.stringify(obj, null, 3));
+	},
 
-    add: function(parent, children) {
-        var fragment = document.createDocumentFragment();
-        for (var i = 0; i < children.length; i++)
-            fragment.appendChild(children[i]);
-        parent.appendChild(fragment);
-    },
-    
-    divadd: function(className) {
-    var div = Util.div(className);
-    for (var i = 1; i < arguments.length; i++)
-            this.append(div,arguments[i]);
-        return div;
-    },
-	subClass: function(sup,sub){
+	add: function (parent, children) {
+		var fragment = document.createDocumentFragment();
+		for (var i = 0; i < children.length; i++)
+			fragment.appendChild(children[i]);
+		parent.appendChild(fragment);
+	},
+
+	divadd: function (className) {
+		var div = Util.div(className);
+		for (var i = 1; i < arguments.length; i++)
+			this.append(div, arguments[i]);
+		return div;
+	},
+	subClass: function (sup, sub) {
 		sub.prototype = Object.create(sup.prototype);
 		sub.prototype.constructor = sub;
 	},
-    append: function(p,e){
-		if(e)
-		if(e.constructor != Util.aryCons) {
-			if(e.constructor == Util.strCons)
-				e = document.createTextNode(e);
-			p.appendChild(e);
-		}else{
-			for(var i = 0; i < e.length; i++){
-				this.append(p,e[i]);
+	append: function (p, e) {
+		if (e)
+			if (e.constructor != Util.aryCons) {
+				if (e.constructor == Util.strCons)
+					e = document.createTextNode(e);
+				p.appendChild(e);
+			} else {
+				for (var i = 0; i < e.length; i++) {
+					this.append(p, e[i]);
+				}
 			}
-		}
 	},
-    goToId: function(id) {
-        // if (typeof id === "undefined") {
-        // id = window.location.hash.substr(1);
-        // }
-        // window.location.hash = "";
-        // window.location.hash = id;
-    },
+	goToId: function (id) {
+		// if (typeof id === "undefined") {
+		// id = window.location.hash.substr(1);
+		// }
+		// window.location.hash = "";
+		// window.location.hash = id;
+	},
 
-    /*
-     * Returns an html tag filled with the keys and values you pass in Second
-     * arg is an object filled with key, value pairs Returns undefined if no
-     * valid tag was passed.
-     */
-    make: function(tag, obj) {
-        // without a valid tag we can't continue
-        if (typeof tag === "undefined" || !tag) {
-            console.error("Util.make failed with tag: " + tag);
-            Util.dump(obj);
-            return;
-        }
-        var element = document.createElement(tag);
-        for ( var i in obj) {
-            if (typeof obj[i] !== "undefined" && obj[i] !== null)
-                if (i === "innerHTML" && obj[i].nodeName) {
-                    element.appendChild(obj[i]);
-                } else {
-                    element[i] = obj[i];
-                }
-        }
-        return element;
-    },
+	/*
+	 * Returns an html tag filled with the keys and values you pass in Second
+	 * arg is an object filled with key, value pairs Returns undefined if no
+	 * valid tag was passed.
+	 */
+	make: function (tag, obj) {
+		// without a valid tag we can't continue
+		if (typeof tag === "undefined" || !tag) {
+			console.error("Util.make failed with tag: " + tag);
+			Util.dump(obj);
+			return;
+		}
+		var element = document.createElement(tag);
+		for (var i in obj) {
+			if (typeof obj[i] !== "undefined" && obj[i] !== null)
+				if (i === "innerHTML" && obj[i].nodeName) {
+					element.appendChild(obj[i]);
+				} else {
+					element[i] = obj[i];
+				}
+		}
+		return element;
+	},
 
-    /*
-     * Most of the following functions only take the innerHTML, the className,
-     * and the id of the tag you want, in that order. Any cases that break this
-     * rule will be noted explicitly.
-     */
-    span: function(innerHTML, className, id) {
-        return Util.make("span", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	/*
+	 * Most of the following functions only take the innerHTML, the className,
+	 * and the id of the tag you want, in that order. Any cases that break this
+	 * rule will be noted explicitly.
+	 */
+	span: function (innerHTML, className, id) {
+		return Util.make("span", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    div: function(className, id) {
-        return Util.make("div", {
-            className: className,
-            id: id
-        });
-    },
+	div: function (className, id) {
+		return Util.make("div", {
+			className: className,
+			id: id
+		});
+	},
 
-    p: function(innerHTML, className, id) {
-        return Util.make("p", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	p: function (innerHTML, className, id) {
+		return Util.make("p", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    a: function(href, innerHTML, className, id) {
-        return Util.make("a", {
-            href: href,
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	a: function (href, innerHTML, className, id) {
+		return Util.make("a", {
+			href: href,
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    h1: function(innerHTML, className, id) {
-        return Util.make("h1", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	h1: function (innerHTML, className, id) {
+		return Util.make("h1", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    h2: function(innerHTML, className, id) {
-        return Util.make("h2", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	h2: function (innerHTML, className, id) {
+		return Util.make("h2", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    h3: function(innerHTML, className, id) {
-        return Util.make("h3", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	h3: function (innerHTML, className, id) {
+		return Util.make("h3", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    h4: function(innerHTML, className, id) {
-        return Util.make("h4", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	h4: function (innerHTML, className, id) {
+		return Util.make("h4", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    h5: function(innerHTML, className, id) {
-        return Util.make("h5", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	h5: function (innerHTML, className, id) {
+		return Util.make("h5", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    h6: function(innerHTML, className, id) {
-        return Util.make("h6", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	h6: function (innerHTML, className, id) {
+		return Util.make("h6", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    strong: function(innerHTML, className, id) {
-        return Util.make("strong", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	strong: function (innerHTML, className, id) {
+		return Util.make("strong", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    em: function(innerHTML, className, id) {
-        return Util.make("em", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	em: function (innerHTML, className, id) {
+		return Util.make("em", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    pre: function(innerHTML, className, id) {
-        return Util.make("pre", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
-	text: function(text){
+	pre: function (innerHTML, className, id) {
+		return Util.make("pre", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
+	text: function (text) {
 		return document.createTextNode(text);
 	},
-    /*
-     * This function takes rows and cols as additional arguments
-     */
-    textarea: function(innerHTML, className, id, rows, cols) {
-        return Util.make("textarea", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-            rows: rows,
-            cols: cols,
-        });
-    },
+	/*
+	 * This function takes rows and cols as additional arguments
+	 */
+	textarea: function (innerHTML, className, id, rows, cols) {
+		return Util.make("textarea", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+			rows: rows,
+			cols: cols,
+		});
+	},
 
-    ul: function(innerHTML, className, id) {
-        return Util.make("ul", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	ul: function (innerHTML, className, id) {
+		return Util.make("ul", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    ol: function(innerHTML, className, id) {
-        return Util.make("ol", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	ol: function (innerHTML, className, id) {
+		return Util.make("ol", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    li: function(innerHTML, className, id) {
-        return Util.make("li", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	li: function (innerHTML, className, id) {
+		return Util.make("li", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    /*
-     * This function takes the src as its first argument instead of innerHTML
-     * src is relative to the dir you defined in mediaLocations
-     */
-    img: function(src, className, id) {
+	/*
+	 * This function takes the src as its first argument instead of innerHTML
+	 * src is relative to the dir you defined in mediaLocations
+	 */
+	img: function (src, className, id) {
 		className = (className || "");
 		className = "quizimg" + (className.length > 0 ? " " : "") + className;
-        return Util.make("img", {
-            src: mediaLocations.img + src,
-            className: className,
-            id: id,
-        });
-    },
+		return Util.make("img", {
+			src: mediaLocations.img + src,
+			className: className,
+			id: id,
+		});
+	},
 
-    /*
-     * Does not take any arguments
-     */
-    br: function() {
-        return Util.make("br");
-    },
+	/*
+	 * Does not take any arguments
+	 */
+	br: function () {
+		return Util.make("br");
+	},
 
-    /*
-     * Takes a src, class, id and a bool for controls. controls defaults to
-     * true. src is relative to the dir you defined in mediaLocations
-     */
-    video: function(src, controls, className, id, preload) {
-        controls = (typeof controls !== "undefined") ? controls: true;
-        preload = (typeof preload !== "undefined") ? preload: "metadata";
-        if (video[src]) {
-            return video[src];
-        }
-        var result = Util.make("video", {
-            src: mediaLocations.video + src,
-            controls: controls,
-            className: className,
-            id: id,
-            preload: preload,
-        });
-        video[src] = result;
-        return result;
-    },
+	/*
+	 * Takes a src, class, id and a bool for controls. controls defaults to
+	 * true. src is relative to the dir you defined in mediaLocations
+	 */
+	video: function (src, controls, className, id, preload) {
+		controls = (typeof controls !== "undefined") ? controls : true;
+		preload = (typeof preload !== "undefined") ? preload : "metadata";
+		if (video[src]) {
+			return video[src];
+		}
+		var result = Util.make("video", {
+			src: mediaLocations.video + src,
+			controls: controls,
+			className: className,
+			id: id,
+			preload: preload,
+		});
+		video[src] = result;
+		return result;
+	},
 
-    /*
-     * Takes a src, class, id and a bool for controls. controls defaults to
-     * true. src is relative to the dir you defined in mediaLocations
-     */
-    audio: function(src, controls, className, id) {
-        controls = (typeof controls !== "undefined") ? controls: true;
-        if (audio[src]) {
-            return audio[src];
-        }
-        var result = Util.make("audio", {
-            src: mediaLocations.audio + src,
-            controls: controls,
-            className: className,
-            id: id,
-        });
-        audio[src] = result;
-        return result;
-    },
+	/*
+	 * Takes a src, class, id and a bool for controls. controls defaults to
+	 * true. src is relative to the dir you defined in mediaLocations
+	 */
+	audio: function (src, controls, className, id) {
+		controls = (typeof controls !== "undefined") ? controls : true;
+		if (audio[src]) {
+			return audio[src];
+		}
+		var result = Util.make("audio", {
+			src: mediaLocations.audio + src,
+			controls: controls,
+			className: className,
+			id: id,
+		});
+		audio[src] = result;
+		return result;
+	},
 
-    canvas: function(height, width) {
-        return Util.make("canvas", {
-            height: height,
-            width: width,
-        });
-    },
+	canvas: function (height, width, className) {
+		return Util.make("canvas", {
+			height: height,
+			width: width,
+		});
+	},
 
-    form: function(innerHTML, className, id) {
-        return Util.make("form", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	form: function (innerHTML, className, id) {
+		return Util.make("form", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    input: function(type, className, id, value, oninput, onEnter) {
-        onEnter = (typeof onEnter === "undefined") ? function(){} : onEnter;
-        return Util.make("input", {
-            type: type,
-            className: className,
-            id: id,
-            value: value,
-            oninput: oninput,
-            onkeydown: function(e) {
-                if (e.keyCode === 13) {
-                    onEnter(e);
-                }
-            }
-        });
-    },
-    regMatch: function(str, reg){
-      var match = str.match(reg);
-      if(!match) return false;
-      return match[0] == str;
-    },
-    button: function(value, onClick, className, id) {
-            return Util.make("input", {
-                type: "button",
-                value: value,
-                className: className,
-                id: id,
-                onclick: onClick,
-                disabled: (onClick) ? false: true,
-            });            
-    },
+	input: function (type, className, id, value, oninput, onEnter) {
+		onEnter = (typeof onEnter === "undefined") ? function () {} : onEnter;
+		return Util.make("input", {
+			type: type,
+			className: className,
+			id: id,
+			value: value,
+			oninput: oninput,
+			onkeydown: function (e) {
+				if (e.keyCode === 13) {
+					onEnter(e);
+				}
+			}
+		});
+	},
+	regMatch: function (str, reg) {
+		var match = str.match(reg);
+		if (!match) return false;
+		return match[0] == str;
+	},
+	button: function (value, onClick, className, id) {
+		return Util.make("input", {
+			type: "button",
+			value: value,
+			className: className,
+			id: id,
+			onclick: onClick,
+			disabled: (onClick) ? false : true,
+		});
+	},
 
-    file: function(value, filetypes, className, id) {
-        value = (typeof value === "undefined") ? "File Upload" : value;
-        var label = Util.label();
-        label.appendChild(Util.span(value));
-        label.input = Util.make("input", {
-            type: "file",
-            accept: filetypes,
-            className: className,
-            id: id,
-        });
-        label.appendChild(label.input);
-        return label;
-    },
+	file: function (value, filetypes, className, id, onchange) {
+		value = (typeof value === "undefined") ? "File Upload" : value;
+		var label = Util.label();
+		label.appendChild(Util.span(value));
+		label.input = Util.make("input", {
+			type: "file",
+			accept: filetypes,
+			className: className,
+			id: id,
+			onchange: onchange
+		});
+		label.appendChild(label.input);
+		return label;
+	},
 
-    filebutton: function(value, accept, className, onAccept) {
-    var file = Util.file(accept, className);
-    file.onClick = onAccept; //TODO: if the user selects a file, add the name to the JSON.
-    //TODO: This really is not a file browser at all.  Maybe we should just browse a list of strings that are already on the server?
-    return Util.button(value, className, null, function() {
-        var w = Util.popup(0,0, 600, 500, 'filebrowser', null);
-        w.document.body.appendChild(file);
-    });
-    },
-    select: function(name, multiple, innerHTML, className, id, indexesDisabled) {
-		indexesDisabled = indexesDisabled||[];
-        if (innerHTML.constructor === Array) {
-            var options = document.createDocumentFragment();
-            for (var i = 0; i < innerHTML.length; i++) {
+	filebutton: function (value, accept, className, onAccept) {
+		var file = Util.file(accept, className);
+		file.onClick = onAccept; //TODO: if the user selects a file, add the name to the JSON.
+		//TODO: This really is not a file browser at all.  Maybe we should just browse a list of strings that are already on the server?
+		return Util.button(value, className, null, function () {
+			var w = Util.popup(0, 0, 600, 500, 'filebrowser', null);
+			w.document.body.appendChild(file);
+		});
+	},
+	select: function (name, multiple, innerHTML, className, id, indexesDisabled) {
+		indexesDisabled = indexesDisabled || [];
+		if (innerHTML.constructor === Array) {
+			var options = document.createDocumentFragment();
+			for (var i = 0; i < innerHTML.length; i++) {
 				var ind = indexesDisabled.indexOf(i);
 				var u = undefined;
 				var disabled = (ind != -1) ? true : u;
-                options.appendChild(Util.option(innerHTML[i], innerHTML[i],u,u,disabled));
-            }
-            innerHTML = options;
-        }
-        return Util.make("select", {
-            name: name,
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-            multiple: multiple,
-        });
-    },
-	
-	removeSelOption: function (sel, innerHTML){
+				options.appendChild(Util.option(innerHTML[i], innerHTML[i], u, u, disabled));
+			}
+			innerHTML = options;
+		}
+		return Util.make("select", {
+			name: name,
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+			multiple: multiple,
+		});
+	},
+
+	removeSelOption: function (sel, innerHTML) {
 		var children = sel.children;
-		for(var i = 0; i < children.length; i++){
-			if(children[i].innerHTML == innerHTML){
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].innerHTML == innerHTML) {
 				sel.removeChild(children[i]);
-				i=children.length;
+				i = children.length;
 			}
 		}
 	},
-	
-	addSelOption: function (sel, innerHTML, disabled, after){
+
+	addSelOption: function (sel, innerHTML, disabled, after) {
 		var u = undefined;
-		var opt = Util.option(innerHTML, innerHTML,u,u,disabled);
+		var opt = Util.option(innerHTML, innerHTML, u, u, disabled);
 		var children = sel.children;
 		var insertIndex = children.length;
-		for(var i = 0; i < children.length; i++){
-			if(children[i].innerHTML == after){
-				insertIndex = i+1;
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].innerHTML == after) {
+				insertIndex = i + 1;
 			}
-			if(children[i].innerHTML == innerHTML){
+			if (children[i].innerHTML == innerHTML) {
 				sel.removeChild(children[i]);
 			}
 		}
-		if(insertIndex <= -1 || insertIndex >= children.length){
+		if (insertIndex <= -1 || insertIndex >= children.length) {
 			sel.appendChild(opt);
-		}else{
+		} else {
 			sel.insertBefore(opt, children[insertIndex]);
 		}
 	},
 
-    sel: function (innerHTML, className, id,indexesDisabled) {
-	return Util.select(null, false, innerHTML, className, id,indexesDisabled);
-    },
+	sel: function (innerHTML, className, id, indexesDisabled) {
+		return Util.select(null, false, innerHTML, className, id, indexesDisabled);
+	},
 
-    yesno: function(className, id, onChange) {
-    var options = document.createDocumentFragment();
-    options.appendChild(Util.option("F", "No"));
-    options.appendChild(Util.option("T", "Yes"));
-    return Util.make("select", {
-            className: className,
-            id: id,
-        onChange: onChange,
-        innerHTML: options
-    });
-    },
+	yesno: function (className, id, onChange) {
+		var options = document.createDocumentFragment();
+		options.appendChild(Util.option("F", "No"));
+		options.appendChild(Util.option("T", "Yes"));
+		return Util.make("select", {
+			className: className,
+			id: id,
+			onChange: onChange,
+			innerHTML: options
+		});
+	},
 
-    option: function(value, innerHTML, className, id, disabled) {
-        return Util.make("option", {
-            value: value,
-            innerHTML: innerHTML,
+	option: function (value, innerHTML, className, id, disabled) {
+		return Util.make("option", {
+			value: value,
+			innerHTML: innerHTML,
 			disabled: disabled,
-            className: className,
-            id: id,
-        });
-    },
+			className: className,
+			id: id,
+		});
+	},
 
-    optgroup: function(label, innerHTML, className, id) {
-        return Util.make("optgroup", {
-            label: label,
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	optgroup: function (label, innerHTML, className, id) {
+		return Util.make("optgroup", {
+			label: label,
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    radio: function(value, name, className, id) {
-        return Util.make("input", {
-            type: "radio",
-            value: value,
-            name: name,
-            className: className,
-            id: id,
-        });
-    },
+	radio: function (value, name, className, id) {
+		return Util.make("input", {
+			type: "radio",
+			value: value,
+			name: name,
+			className: className,
+			id: id,
+		});
+	},
 
-    checkbox: function(value, name, className, id, checked) {
-        return Util.make("input", {
-            type: "checkbox",
-            value: value,
-            name: name,
-            className: className,
-            id: id,
-            checked: checked,
-        });
-    },
+	checkbox: function (value, name, className, id, checked) {
+		return Util.make("input", {
+			type: "checkbox",
+			value: value,
+			name: name,
+			className: className,
+			id: id,
+			checked: checked,
+		});
+	},
 
-    label: function(htmlFor, innerHTML, className, id) {
-        return Util.make("label", {
-            htmlFor: htmlFor,
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	label: function (htmlFor, innerHTML, className, id) {
+		return Util.make("label", {
+			htmlFor: htmlFor,
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    code: function(innerHTML, className, id) {
-        return Util.make("code", {
-            innerHTML: innerHTML,
-            className: className,
-            id: id,
-        });
-    },
+	code: function (innerHTML, className, id) {
+		return Util.make("code", {
+			innerHTML: innerHTML,
+			className: className,
+			id: id,
+		});
+	},
 
-    /*
-     * Generic <tr> generator. For the use of Util.table(). You probably
-     * shouldn't use this.
-     */
-    tr: function(list, th) {
-        var tr = Util.make("tr");
-        for (var i = 0; i < list.length; i++) {
-            var tElement;
-            if (th) {
-                tElement = Util.make("th", {
-                    scope: "col",
-                    innerHTML: list[i],
-                });
-            } else {
-                tElement = Util.make("td", {
-                    innerHTML: list[i],
-                });
-            }
-            tr.appendChild(tElement);
-        }
-        return tr;
-    },
+	/*
+	 * Generic <tr> generator. For the use of Util.table(). You probably
+	 * shouldn't use this.
+	 */
+	tr: function (list, th) {
+		var tr = Util.make("tr");
+		for (var i = 0; i < list.length; i++) {
+			var tElement;
+			if (th) {
+				tElement = Util.make("th", {
+					scope: "col",
+					innerHTML: list[i],
+				});
+			} else {
+				tElement = Util.make("td", {
+					innerHTML: list[i],
+				});
+			}
+			tr.appendChild(tElement);
+		}
+		return tr;
+	},
 
-    /*
-     * Takes in a class for the table, a list of elements to be inserted into
-     * the table, an optional boolean if there's a header in the table, and an
-     * optional function that will accept a list and a bool if the list passed
-     * in is the header and return a tr element
-     * 
-     * trFunction should be used to modify escape characters that you pass in
-     * through the list. It lets you insert any arbitrary formatting to any tr
-     * element based on whatever escape mechanism you choose.
-     */
-    table: function(list, header, className, trFunction) {
-        header = (typeof header !== "undefined") ? header: false;
-        trFunction = (typeof trFunction !== "undefined") ? trFunction: Util.tr;
-        var result = Util.make("table", {
-            className: className,
-        });
+	/*
+	 * Takes in a class for the table, a list of elements to be inserted into
+	 * the table, an optional boolean if there's a header in the table, and an
+	 * optional function that will accept a list and a bool if the list passed
+	 * in is the header and return a tr element
+	 * 
+	 * trFunction should be used to modify escape characters that you pass in
+	 * through the list. It lets you insert any arbitrary formatting to any tr
+	 * element based on whatever escape mechanism you choose.
+	 */
+	table: function (list, header, className, trFunction) {
+		header = (typeof header !== "undefined") ? header : false;
+		trFunction = (typeof trFunction !== "undefined") ? trFunction : Util.tr;
+		var result = Util.make("table", {
+			className: className,
+		});
 
-        if (header) {
-            var headList = list.shift();
-            var thead = result.createTHead();
-            thead.appendChild(trFunction(headList, true));
-        }
+		if (header) {
+			var headList = list.shift();
+			var thead = result.createTHead();
+			thead.appendChild(trFunction(headList, true));
+		}
 
-        var tbody = Util.make("tbody");
-        result.appendChild(tbody);
-        for (var i = 0; i < list.length; i++) {
-            var tr = trFunction(list[i], false);
-            tbody.appendChild(tr);
-        }
+		var tbody = Util.make("tbody");
+		result.appendChild(tbody);
+		for (var i = 0; i < list.length; i++) {
+			var tr = trFunction(list[i], false);
+			tbody.appendChild(tr);
+		}
 
-        return result;
-    },
-    
+		return result;
+	},
+
 };
 
 function FileBrowser() {
-    this.init();
+	this.init();
 }
 
-FileBrowser.prototype.init = function() {
-    if (!window.localStorage.files)
-        window.localStorage.files = "{}";
+FileBrowser.prototype.init = function () {
+	if (!window.localStorage.files)
+		window.localStorage.files = "{}";
 
-    this.storage = JSON.parse(window.localStorage.files);
+	this.storage = JSON.parse(window.localStorage.files);
 };
 
-FileBrowser.prototype.render = function(data) {
-    this.body = document.getElementById("container");
-    this.body.appendChild(data);
+FileBrowser.prototype.render = function (data) {
+	this.body = document.getElementById("container");
+	this.body.appendChild(data);
 };
 
-FileBrowser.prototype.savePopup = function(data) {
-    this.destroy("file-saver");
-    var filesaver = Util.div("file-popup", "file-saver");
+FileBrowser.prototype.savePopup = function (data, saveToSource) {
+	this.destroy("file-saver");
+	var filesaver = Util.div("file-popup", "file-saver");
 
-    Util.add(filesaver, [
+	Util.add(filesaver, [
         Util.h3("Save your data", "file-header"),
 
-        Util.input("text", "file-input", null, null,
-            (function(e) {
-                this.title = e.target.value;
-            }).bind(this),
-            (function(e) {
-                this.addFile(this.title, data);
-                this.destroy("file-saver");
-            }).bind(this)),
+        Util.input("text", "file-input", null, null, (function (e) {
+			this.title = e.target.value;
+		}).bind(this), (function (e) {
+			this.addFile(this.title, data, saveToSource);
+			this.destroy("file-saver");
+		}).bind(this)),
 
-        Util.button("Save", (function() {
-            this.addFile(this.title, data);
-            this.destroy("file-saver");
-        }).bind(this), "file-save"),
+        Util.button("Save", (function () {
+			this.addFile(this.title, data, saveToSource);
+			this.destroy("file-saver");
+		}).bind(this), "file-save"),
 
-        Util.button("Cancel", (function() {
-            this.destroy("file-saver");
-        }).bind(this), "file-cancel")
+        Util.button("Cancel", (function () {
+			this.destroy("file-saver");
+		}).bind(this), "file-cancel")
     ]);
-    this.render(filesaver);
+	this.render(filesaver);
 };
 
-FileBrowser.prototype.loadPopup = function(cb) {
-    this.init();
-    this.destroy("file-picker");
-    var filepicker = Util.div("file-popup", "file-picker");
+FileBrowser.prototype.loadPopup = function (cb) {
+	this.init();
+	this.destroy("file-picker");
+	var filepicker = Util.div("file-popup", "file-picker");
 
-    var l = [];
+	var l = [];
 
-    var func = (function(e) {
-        this.destroy("file-picker");
-        cb(this.getFile(e.target.value));
-    }).bind(this);
+	var func = (function (e) {
+		this.destroy("file-picker");
+		cb(this.getFile(e.target.value));
+	}).bind(this);
 
-    var filenames = Object.keys(this.storage).sort();
-    for (var i = 0; i < filenames.length; i++) {
-        l.push(Util.button(filenames[i], func, "file-item"));
-    }
+	var filenames = Object.keys(this.storage).sort();
+	for (var i = 0; i < filenames.length; i++) {
+		l.push(Util.button(filenames[i], func, "file-item"));
+	}
 
-    var files = Util.div("files");
-    Util.add(files, l);
+	var files = Util.div("files");
+	Util.add(files, l);
 
-    Util.add(filepicker, [
+	Util.add(filepicker, [
         Util.h3("File Selector", "file-header"),
-        Util.button("Close", (function() {
-            this.destroy("file-picker");
-        }).bind(this), "file-close"),
+        Util.button("Close", (function () {
+			this.destroy("file-picker");
+		}).bind(this), "file-close"),
         files
     ]);
 
-    this.render(filepicker);
+	this.render(filepicker);
 };
 
-FileBrowser.prototype.destroy = function(id) {
-    while (document.getElementById(id))
-        this.body.removeChild(document.getElementById(id));
+FileBrowser.prototype.destroy = function (id) {
+	while (document.getElementById(id))
+		this.body.removeChild(document.getElementById(id));
 };
 
-FileBrowser.prototype.getFile = function(name) {
-    return JSON.parse(this.storage[name]);
+FileBrowser.prototype.getFile = function (name) {
+	return JSON.parse(this.storage[name]);
 };
 
 
-FileBrowser.prototype.addFile = function(name, content) {
-    this.storage[name] = JSON.stringify(content);
-    window.localStorage.files = JSON.stringify(this.storage);
-
-    if (document.getElementById("file-picker"))
-        this.loadPopup();
+FileBrowser.prototype.addFile = function (name, content, saveToSource) {
+	if(saveToSource == 1){
+	this.storage[name] = JSON.stringify(content);
+	window.localStorage.files = JSON.stringify(this.storage);
+	}else if(saveToSource == 2){
+		var blob = new Blob([JSON.stringify(content)], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, name+".json");
+	}
+	
+	if (document.getElementById("file-picker"))
+		this.loadPopup();
 };
 
 filebrowser = new FileBrowser();
 
 
 /*
-* Test to output xml. Not totally working yet.
-*/
+ * Test to output xml. Not totally working yet.
+ */
 function createXML() {
-    return document.implementation.createDocument("", "");
+	return document.implementation.createDocument("", "");
 }
 
 function writeXML(xmlObj) {
-    xmlParser = new XMLSerializer();
-    return '<?xml version="1.0" encoding="UTF-8"?>' + xmlParser.serializeToString(xmlObj);
+	xmlParser = new XMLSerializer();
+	return '<?xml version="1.0" encoding="UTF-8"?>' + xmlParser.serializeToString(xmlObj);
 }
 
 function testXML() {
-    var xml = createXML();
-    
-    var quiz = Util.make("quiz");
-    xml.appendChild(quiz);
-    quiz.setAttribute("identifier", "123456");
-    quiz.setAttribute("xmlns", "http://canvas.instructure.com/xsd/cccv1p0");
-    quiz.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    quiz.setAttribute("xsi:schemaLocation", "http://canvas.instructure.com/xsd/cccv1p0 http://canvas.instructure.com/xsd/cccv1p0.xsd");
+	var xml = createXML();
 
-    var title = Util.make("title", {
-        innerText: "Scope and Lifetime"
-    });
-    quiz.appendChild(title);
+	var quiz = Util.make("quiz");
+	xml.appendChild(quiz);
+	quiz.setAttribute("identifier", "123456");
+	quiz.setAttribute("xmlns", "http://canvas.instructure.com/xsd/cccv1p0");
+	quiz.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+	quiz.setAttribute("xsi:schemaLocation", "http://canvas.instructure.com/xsd/cccv1p0 http://canvas.instructure.com/xsd/cccv1p0.xsd");
 
-    var description = Util.make("description", {
-        // innerText: "<p>Review of the facts about variables, their lifetimes, and where they can be referenced (scope)</p>"
-    });
-    quiz.appendChild(description);
+	var title = Util.make("title", {
+		innerText: "Scope and Lifetime"
+	});
+	quiz.appendChild(title);
 
-    var desc_sub = Util.make("desc_sub", {
-        innerText: "I'm a sub field!"
-    });
-    description.appendChild(desc_sub);
+	var description = Util.make("description", {
+		// innerText: "<p>Review of the facts about variables, their lifetimes, and where they can be referenced (scope)</p>"
+	});
+	quiz.appendChild(description);
 
-    console.log(writeXML(xml));
+	var desc_sub = Util.make("desc_sub", {
+		innerText: "I'm a sub field!"
+	});
+	description.appendChild(desc_sub);
+
+	console.log(writeXML(xml));
 }
 
 // testXML();
@@ -695,25 +699,25 @@ var url_regex = /#([\w\/]*)?!?(\w*)?\??(.*)?/;
 
 
 /*
-* post json to a url.
-*/
+ * post json to a url.
+ */
 function post(url, payload, callback) {
-    payload = JSON.stringify(payload);
-    var http = new XMLHttpRequest();
-    http.open("POST", location.pathname + url, true);
+	payload = JSON.stringify(payload);
+	var http = new XMLHttpRequest();
+	http.open("POST", location.pathname + url, true);
 
-    http.setRequestHeader("Content-type", "application/json");
+	http.setRequestHeader("Content-type", "application/json");
 
-    http.onreadystatechange = function() {
-        if (http.readyState === 4 && http.status !== 200) {
-            callback(false, http.response);
-        } else if (http.readyState === 4 && http.status === 200) {
-            callback(true, http.response);
-        }
-        return;
-    };
+	http.onreadystatechange = function () {
+		if (http.readyState === 4 && http.status !== 200) {
+			callback(false, http.response);
+		} else if (http.readyState === 4 && http.status === 200) {
+			callback(true, http.response);
+		}
+		return;
+	};
 
-    http.send(payload);
+	http.send(payload);
 }
 
 
@@ -727,111 +731,111 @@ function post(url, payload, callback) {
  * or make a new one. Either way will work.
  */
 function Url(url_hash) {
-    url_hash = (typeof url_hash === "undefined") ? document.location.hash: url_hash;
+	url_hash = (typeof url_hash === "undefined") ? document.location.hash : url_hash;
 
-    if (url_hash === "") {
-        this.hash = "";
-        this.url = "/";
-        this.view = "";
-        this.params = {};
-        return;
-    }
+	if (url_hash === "") {
+		this.hash = "";
+		this.url = "/";
+		this.view = "";
+		this.params = {};
+		return;
+	}
 
-    var reMatch = url_regex.exec(url_hash);
+	var reMatch = url_regex.exec(url_hash);
 
-    if (reMatch === null) {
-        console.error("The url parsed was null!");
-        console.log(url_hash);
-        return;
-    }
+	if (reMatch === null) {
+		console.error("The url parsed was null!");
+		console.log(url_hash);
+		return;
+	}
 
-    this.hash = url_hash;
-    this.url = reMatch[1] ? reMatch[1]: "";
-    this.view = reMatch[2] ? reMatch[2]: "";
-    this.params = this.parseParams(reMatch[3]);
-    this.ajax = true;
+	this.hash = url_hash;
+	this.url = reMatch[1] ? reMatch[1] : "";
+	this.view = reMatch[2] ? reMatch[2] : "";
+	this.params = this.parseParams(reMatch[3]);
+	this.ajax = true;
 }
 
-Url.prototype.copy = function() {
-    var u = new Url(this.hash);
-    u.ajax = this.ajax;
-    return u;
+Url.prototype.copy = function () {
+	var u = new Url(this.hash);
+	u.ajax = this.ajax;
+	return u;
 };
 
-Url.prototype.load = function(ajax) {
-    this.ajax = (typeof(ajax) === "undefined") ? true: ajax;
+Url.prototype.load = function (ajax) {
+	this.ajax = (typeof (ajax) === "undefined") ? true : ajax;
 
-    this.buildHash();
+	this.buildHash();
 
-    if (document.location.hash !== this.hash) {
-        document.location.hash = this.hash;
-    } else {
-        loadPage();
-    }
-    url = this;
+	if (document.location.hash !== this.hash) {
+		document.location.hash = this.hash;
+	} else {
+		loadPage();
+	}
+	url = this;
 };
 
-Url.prototype.parseParams = function(params) {
-    if (typeof params === "undefined") {
-        return {};
-    }
+Url.prototype.parseParams = function (params) {
+	if (typeof params === "undefined") {
+		return {};
+	}
 
-    var result = {};
-    paramArray = params.split("&");
-    for (var i = 0; i < paramArray.length; i++) {
-        var temp = paramArray[i].split("=");
-        if (temp[0] && temp[1]) {
-            result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
-        } else if (temp[0] && !temp[1]) {
-            result[decodeURIComponent(temp[0])] = true;
-        }
-    }
-    return result;
+	var result = {};
+	paramArray = params.split("&");
+	for (var i = 0; i < paramArray.length; i++) {
+		var temp = paramArray[i].split("=");
+		if (temp[0] && temp[1]) {
+			result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+		} else if (temp[0] && !temp[1]) {
+			result[decodeURIComponent(temp[0])] = true;
+		}
+	}
+	return result;
 };
 
-Url.prototype.buildParams = function() {
-    pstr = "?";
-    for (var item in this.params) {
-        if (typeof this.params[item] !== "boolean") {
-            pstr += item + "=" + this.params[item] + "&";
-        } else if (typeof this.params[item] === "boolean" && this.params[item] === true) {
-            pstr += item + "&";
-        }
-    }
-    return pstr.slice(0, -1);
+Url.prototype.buildParams = function () {
+	pstr = "?";
+	for (var item in this.params) {
+		if (typeof this.params[item] !== "boolean") {
+			pstr += item + "=" + this.params[item] + "&";
+		} else if (typeof this.params[item] === "boolean" && this.params[item] === true) {
+			pstr += item + "&";
+		}
+	}
+	return pstr.slice(0, -1);
 };
 
-Url.prototype.buildHash = function() {
-    this.hash = "#" + this.url;
-    if (this.view)
-        this.hash += "!" + this.view;
-    if (this.params) {
-        this.hash += this.buildParams();
-    }
+Url.prototype.buildHash = function () {
+	this.hash = "#" + this.url;
+	if (this.view)
+		this.hash += "!" + this.view;
+	if (this.params) {
+		this.hash += this.buildParams();
+	}
 };
 
-Url.prototype.addParam = function(key, value) {
-    value = (typeof value === "undefined") ? true: value;
-    this.params[key] = value;
+Url.prototype.addParam = function (key, value) {
+	value = (typeof value === "undefined") ? true : value;
+	this.params[key] = value;
 };
 
-Url.prototype.addParams = function(params) {
-    for (var item in params) {
-        this.params[item] = params[item];
-    }
+Url.prototype.addParams = function (params) {
+	for (var item in params) {
+		this.params[item] = params[item];
+	}
 };
 
-Url.prototype.removeParam = function(arg) {
-    delete this.params[arg];
+Url.prototype.removeParam = function (arg) {
+	delete this.params[arg];
 };
 
-Url.prototype.removeAllParams = function() {
-    this.params = {};
+Url.prototype.removeAllParams = function () {
+	this.params = {};
 };
 
-Url.prototype.changeView = function(view) {
-    view = (typeof view === "undefined") ? "": view;
-    this.view = view;
+Url.prototype.changeView = function (view) {
+	view = (typeof view === "undefined") ? "" : view;
+	this.view = view;
 };
 
 /**
@@ -839,119 +843,121 @@ Url.prototype.changeView = function(view) {
  * currently this function uses jquery but it would be nice to streamline
  */
 function scrollToId(id) { //TODO: Fix Jquery madness below
-    var element = $('#' + id); //document.getElementById(id);
-    var yPos = element.offset().top;
-    var xPos = 0;
+	var element = $('#' + id); //document.getElementById(id);
+	var yPos = element.offset().top;
+	var xPos = 0;
 
-    // if (yPos > window.innerHeight) {
-    //     window.scroll(xPos, yPos);
-    // }
+	// if (yPos > window.innerHeight) {
+	//     window.scroll(xPos, yPos);
+	// }
 
-    if (yPos > window.innerHeight) {
-        $('html,body').animate({
-            scrollTop: yPos
-        }, 0);
-    }
+	if (yPos > window.innerHeight) {
+		$('html,body').animate({
+			scrollTop: yPos
+		}, 0);
+	}
 }
 
 function clearPage() {
-    document.getElementById("container").innerHTML = "";
-    document.getElementById("currentStatus").innerHTML = "";
+	document.getElementById("container").innerHTML = "";
+	document.getElementById("currentStatus").innerHTML = "";
 }
 
 /*
-* Displays an error on the page
-*/
+ * Displays an error on the page
+ */
 function errorStatus(errorCode) {
-    var frag = document.createDocumentFragment();
-    frag.appendChild(Util.h1("Error: " + errorCode));
-    frag.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
-    document.getElementById("currentStatus").appendChild(frag);
+	var frag = document.createDocumentFragment();
+	frag.appendChild(Util.h1("Error: " + errorCode));
+	frag.appendChild(Util.p("Please make sure the url you entered in the address bar is correct."));
+	document.getElementById("currentStatus").appendChild(frag);
 }
 
 
 function requestAjax(ajax_url, handler, error, url) {
-    var ajax = new XMLHttpRequest();
-    ajax.onreadystatechange = function() {
-        if (ajax.readyState === 4 && ajax.status !== 200) {
-            error(ajax.status);
-        } else if (ajax.readyState === 4 && ajax.status === 200) {
-            handler(ajax.responseText, url);
-        }
-    };
-    ajax.open("GET", ajax_url, true);
-    ajax.send();
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function () {
+		if (ajax.readyState === 4 && ajax.status !== 200) {
+			error(ajax.status);
+		} else if (ajax.readyState === 4 && ajax.status === 200) {
+			handler(ajax.responseText, url);
+		}
+	};
+	ajax.open("GET", ajax_url, true);
+	ajax.send();
 }
 
 function getPrefs(ajax_url, error, url) {
-    var ajax = new XMLHttpRequest();
-    ajax.onreadystatechange = function() {
-        if (ajax.readyState === 4 && ajax.status !== 200) {
-            error(ajax.status);
-        } else if (ajax.readyState === 4 && ajax.status === 200) {
-            prefs = JSON.parse(ajax.responseText);
-            console.log(prefs);
-        }
-    };
-    ajax.open("GET", ajax_url, true);
-    ajax.send();
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function () {
+		if (ajax.readyState === 4 && ajax.status !== 200) {
+			error(ajax.status);
+		} else if (ajax.readyState === 4 && ajax.status === 200) {
+			prefs = JSON.parse(ajax.responseText);
+			console.log(prefs);
+		}
+	};
+	ajax.open("GET", ajax_url, true);
+	ajax.send();
 }
 
 function handlePage(text) {
-    var json = JSON.parse(text);
-    page = new window[json.type](json.payload);
-    page.exec();
-    GoToOldScrollPosition();
+	var json = JSON.parse(text);
+	page = new window[json.type](json.payload);
+	page.exec();
+	GoToOldScrollPosition();
 }
 
 var url = oldUrl = new Url();
+
 function loadPage(e) {
-    oldUrl = url.copy();
-    url = new Url(location.hash);
-    if (url.url === "/") {
-        url.url = "/index";
-    }
+	oldUrl = url.copy();
+	url = new Url(location.hash);
+	if (url.url === "/") {
+		url.url = "/index";
+	}
 
-    var ajax_url;
-    if (location.pathname === "/") {
-        ajax_url = url.url + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
-    } else {
-//        ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
-//Dov: why the slice?
-        ajax_url = location.pathname + url.url.slice(1) + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
-    }
-    console.log(ajax_url);
-    if (prefs === null) {
-        getPrefs("demos/prefs" +  Util.SERVER_SUFFIX);
-    }
-    if (oldUrl.ajax) {
-        clearPage();
-        requestAjax(ajax_url, handlePage, errorStatus, url);
-    }
+	var ajax_url;
+	if (location.pathname === "/") {
+		ajax_url = url.url + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
+	} else {
+		//        ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
+		//Dov: why the slice?
+		ajax_url = location.pathname + url.url.slice(1) + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
+	}
+	console.log(ajax_url);
+	if (prefs === null) {
+		getPrefs("demos/prefs" + Util.SERVER_SUFFIX);
+	}
+	if (oldUrl.ajax) {
+		clearPage();
+		requestAjax(ajax_url, handlePage, errorStatus, url);
+	}
 
-    oldUrl = url.copy();
+	oldUrl = url.copy();
 }
 
 function captureScroll(e) {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-    window.sessionStorage.scrollLocation = JSON.stringify({
-        top: top,
-        left: left,
-    });
+	var doc = document.documentElement;
+	var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+	window.sessionStorage.scrollLocation = JSON.stringify({
+		top: top,
+		left: left,
+	});
 }
 
 SCROLL_SECONDS_AFTER_RELOAD = 200;
+
 function GoToOldScrollPosition() {
-    setTimeout(function() {
-        if (sessionStorage.scrollLocation) {
-            var scrollLocation = JSON.parse(sessionStorage.scrollLocation);
-            var top = scrollLocation.top;
-            var left = scrollLocation.left;
-            window.scroll(left, top);        
-        }
-    }, SCROLL_SECONDS_AFTER_RELOAD);
+	setTimeout(function () {
+		if (sessionStorage.scrollLocation) {
+			var scrollLocation = JSON.parse(sessionStorage.scrollLocation);
+			var top = scrollLocation.top;
+			var left = scrollLocation.left;
+			window.scroll(left, top);
+		}
+	}, SCROLL_SECONDS_AFTER_RELOAD);
 }
 
 var prefs = null;
@@ -963,27 +969,27 @@ var page;
 var lastClicked;
 
 function setLastClicked(e) {
-    if (lastClicked === e.target) {
-        loadPage(e);
-    } else {
-        lastClicked = e.target;
-    }
+	if (lastClicked === e.target) {
+		loadPage(e);
+	} else {
+		lastClicked = e.target;
+	}
 }
 
 // Adds an onclick function to all <a> tags.
 function loadOnce(e) {
-    var aList = document.links;
-    for (var i = 0; i < aList.length; i++) {
-        if (aList[i].hostname === document.domain) { // Same domain links only
-            aList[i].onclick = setLastClicked;
-            if (aList[i].hash === location.hash) { // Our current page
-                lastClicked = aList[i];
-            }
-        }
-    }
+	var aList = document.links;
+	for (var i = 0; i < aList.length; i++) {
+		if (aList[i].hostname === document.domain) { // Same domain links only
+			aList[i].onclick = setLastClicked;
+			if (aList[i].hash === location.hash) { // Our current page
+				lastClicked = aList[i];
+			}
+		}
+	}
 
-    // resume regular loading
-    loadPage(e);
+	// resume regular loading
+	loadPage(e);
 }
 
 // loadOnce();
@@ -992,39 +998,39 @@ window.onhashchange = loadPage;
 window.onscroll = captureScroll;
 
 function PagePrinter() {
-  this.doc = new jsPDF('p', 'pt', [768, 1086]);
+	this.doc = new jsPDF('p', 'pt', [768, 1086]);
 	this.scale = this.doc.internal.scaleFactor;
 	this.pageHeight = this.scale * this.doc.internal.pageSize.height;
 	this.pageWidth = this.scale * this.doc.internal.pageSize.width;
-  	
+
 	this.widthLeft = this.pageWidth;
 	this.heightLeft = this.pageHeight;
-	
-	
+
+
 	this.currentFontSize = 12;
 	this.doc.setFontSize(this.currentFontSize);
 	this.currentFontHeight = this.doc.getTextDimensions("|").h
 	this.currentDocTop = -1;
 	/*this.doc.fromHTML($('body').get(0), 15, 15, {
-        'width': 170
-    });*/
+	      'width': 170
+	  });*/
 }
 PagePrinter.handlers = {
-	img:function(self, element, x, y, width, height, computedStyle){
-		
+	img: function (self, element, x, y, width, height, computedStyle) {
+
 		self.doc.addImage(element, x, y);
 		return true;
 	},
-	input: function(self, element, x, y, width, height, computedStyle){
-		if(element.type.toLowerCase() == "radio"){
-			self.doc.circle(x+width/2,y+height/2,width/2,"stroke");
-		}else if(element.type.toLowerCase() == "checkbox"){
+	input: function (self, element, x, y, width, height, computedStyle) {
+		if (element.type.toLowerCase() == "radio") {
+			self.doc.circle(x + width / 2, y + height / 2, width / 2, "stroke");
+		} else if (element.type.toLowerCase() == "checkbox") {
 			self.doc.rect(x, y, width, height, "stroke");
 		}
 		return true;
-		
+
 	},
-	textarea: function(self, element, x, y, width, height, computedStyle){
+	textarea: function (self, element, x, y, width, height, computedStyle) {
 		var text = element.value;
 		self.setFont(computedStyle);
 		var textHeight = self.doc.getTextDimensions(text).h;
@@ -1032,8 +1038,8 @@ PagePrinter.handlers = {
 		self.doc.text(text, x, y + self.currentFontHeight);
 		return false;
 	},
-	span: function(self, element, x, y, width, height, computedStyle){
-		
+	span: function (self, element, x, y, width, height, computedStyle) {
+
 		return true;
 	}
 };
@@ -1042,12 +1048,12 @@ PagePrinter.prototype.printElementBoarders = function (element, x, y, width, hei
 		top = parseInt(computedStyle.borderTopWidth),
 		left = parseInt(computedStyle.borderLeftWidth),
 		right = parseInt(computedStyle.borderRightWidth);
-	
+
 	if (bottom && top && left && right) {
 		this.doc.rect(x, y, width, height, "stroke");
 	} else {
 		if (bottom) {
-			this.doc.line (x + width, y + height, x, y + height);
+			this.doc.line(x + width, y + height, x, y + height);
 		}
 		if (top) {
 			this.doc.line(x + width, y, x, y);
@@ -1065,7 +1071,7 @@ PagePrinter.prototype.printElement = function (element, shouldCareHeight) {
 	var clientRect = element.getBoundingClientRect();
 	if (clientRect) {
 		var computedStyle = getComputedStyle(element);
-		if(computedStyle.display == "none")
+		if (computedStyle.display == "none")
 			return false;
 		var x = clientRect.left / this.scale;
 		var y = clientRect.top / this.scale - this.currentDocTop;
@@ -1087,17 +1093,17 @@ PagePrinter.prototype.printElement = function (element, shouldCareHeight) {
 		this.doc.setDrawColor(0);
 		this.doc.setFillColor(1);
 		//console.log(x + ":" + y + ":" + width + ":" + height);
-		if(PagePrinter.handlers[element.nodeName.toLowerCase()]){
-			if(!PagePrinter.handlers[element.nodeName.toLowerCase()](this, element, x, y, width, height, computedStyle)){
+		if (PagePrinter.handlers[element.nodeName.toLowerCase()]) {
+			if (!PagePrinter.handlers[element.nodeName.toLowerCase()](this, element, x, y, width, height, computedStyle)) {
 				return false;
 			}
 		}
 		this.printElementBoarders(element, x, y, width, height, computedStyle);
 		this.printChildText(element, x, y, width, height, computedStyle);
-		
+
 	}
-	};
-PagePrinter.prototype.setFont = function(computedStyle){
+};
+PagePrinter.prototype.setFont = function (computedStyle) {
 	var fontName = (computedStyle.fontFamily).split(",")[0].trim();
 	var fontSize = parseFloat(computedStyle.fontSize);
 	this.doc.setFontSize(fontSize);
@@ -1138,9 +1144,9 @@ PagePrinter.prototype.print = function () {
 	this.widthLeft = this.pageWidth;
 	this.heightLeft = this.pageHeight;
 	document.body.classList.add("printing");
-	document.body.style.width = this.pageWidth+ "px";
-  window.scrollTo(0,0);
-	
+	document.body.style.width = this.pageWidth + "px";
+	window.scrollTo(0, 0);
+
 	this.printElement(document.body.getElementsByClassName("header")[0], true);
 	var questionsSets = document.getElementsByClassName("questions");
 	for (var i = 0; i < questionsSets.length; i++) {
