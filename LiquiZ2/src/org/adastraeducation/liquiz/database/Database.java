@@ -128,8 +128,8 @@ public class Database {
 		return policies.get(id);
 	}
 	public static void addQuiz(Quiz q) {
-		quizzes.add(q);
-//		quizByName.put(q.getId(), q)
+//		quizzes.add(q);
+		quizByName.put(q.getId(), q);
 	}
 	public static void setQuiz(int id, Quiz q) {
 		quizzes.set(id, q);

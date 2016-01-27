@@ -16,7 +16,7 @@ public class TextInstruction extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['instruction', ").appendQuotedJS(getText()).append("],");
+		dc.append("\n\t\t\t[\"instruction\", ").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

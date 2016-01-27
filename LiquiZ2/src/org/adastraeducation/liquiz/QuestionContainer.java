@@ -95,11 +95,14 @@ public class QuestionContainer implements Displayable, java.io.Serializable
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t{\t").append(id).append(", ").appendQuotedJS(name).append(", ").appendQuotedJS(cssClass).append(",");
+		dc.append("\n\t\t{\t").append("\n\t\t\t\"id\": ").append(id).
+		   append(",\n\t\t\t\"title\": ").appendQuotedJS(name).
+		   append(",\n\t\t\t\"type\": ").appendQuotedJS(cssClass).
+		   append(",\n\t\t\t\"content\": [");
 			for (Displayable d : displayables) {
 				d.writeJS(dc);
 			}
-		dc.append("\n\t\t},");
+		dc.append(" ]\n\t\t},");
 	}
 
 	public String getCssClass() {

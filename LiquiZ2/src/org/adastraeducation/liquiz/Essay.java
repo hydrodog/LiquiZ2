@@ -82,7 +82,7 @@ public class Essay extends Question {
  	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['essay', ").append(getId()).append(", ").append(rows).append(", ").append(cols).append(", ").append(maxWords).append("],");
+		dc.append("\n\t\t\t[\"essay\", ").append(getId()).append(", ").append(rows).append(", ").append(cols).append(", ").append(maxWords).append("],");
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<essay>").append(Util.escapeXML(defaultText))

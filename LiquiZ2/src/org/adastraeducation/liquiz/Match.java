@@ -20,17 +20,17 @@ public class Match extends Question {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['match', ").append(getId()).append(", [");
+		dc.append("\n\t\t\t[\"match\", ").append(getId()).append(", [");
 		for (int i=0; i<leftSide.size(); i++) {
 			if (i!=0) {
 				dc.append(", ");
 			}
 			dc.appendQuotedJS(leftSide.get(i).getName());
 		}
-		dc.append("], [");
+		dc.append("], \n\t\t\t[");
 		for (int i=0; i<rightSide.size(); i++) {
 			if (i!=0) {
-				dc.append(", ");
+				dc.append(", \n\t\t\t");
 			}
 			dc.appendQuotedJS(rightSide.get(i).getName());
 		}
