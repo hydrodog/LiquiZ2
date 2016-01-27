@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class FileUpload extends Question {
+public class FileUpload extends Question implements java.io.Serializable{
 
 	private String label;
 

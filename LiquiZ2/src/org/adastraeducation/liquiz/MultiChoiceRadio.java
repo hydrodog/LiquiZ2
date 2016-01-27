@@ -2,7 +2,7 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-public class MultiChoiceRadio extends MultiChoiceDropdown {
+public class MultiChoiceRadio extends MultiChoiceDropdown implements java.io.Serializable{
 	public MultiChoiceRadio() {
 	}
 

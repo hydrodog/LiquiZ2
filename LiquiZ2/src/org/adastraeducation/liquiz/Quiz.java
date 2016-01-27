@@ -18,12 +18,13 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
  {
 	private int id; // unique id for db and XML
 	private String desc; // display name & description, TODO possibly per Course? or copy renamed quiz
+	public String name;
 	private ArrayList<QuestionContainer> qContainers;
 	private Policy policy ; 
 	private boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
 	public static Random r;
 	private PayLoad payLoad;
-	public String name;
+	
 	
 	
 	static {
@@ -34,6 +35,60 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		 */
 		r = new Random();
 	}
+	
+	public Quiz() {
+		super();
+/*		this.id = 0;
+		this.name = "defaultName";
+		this.qContainers = new ArrayList<QuestionContainer>();
+		this.policy = new Policy();
+		this.editMode=false;*/
+	}
+	
+	public Quiz(int id, String title, String desc, ArrayList<QuestionContainer> qContainers, Policy plc, boolean editMode) {
+		super();
+		this.id = id;
+		this.name = title;
+		this.desc = desc;
+		this.qContainers = qContainers;
+		this.policy = plc;
+		this.editMode=editMode;
+	}
+	
+	public Quiz(int id, String title, String desc, Policy plc, boolean editMode) {
+		super();
+		this.id = id;
+		this.name = title;
+		this.desc = desc;
+		this.qContainers = new ArrayList<QuestionContainer>();
+		this.policy = plc;
+		this.editMode=editMode;
+	}
+	
+	public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
+		super(type, css);
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.qContainers = new ArrayList<QuestionContainer>();
+		this.policy = plc;
+		this.editMode=editMode;
+	}
+	
+	public Quiz(Policy plc) {
+		super();
+		this.qContainers = new ArrayList<QuestionContainer>();
+		this.policy = plc;
+	}
+	
+	public Quiz(int id, String name, String desc, Policy policy) {
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.policy = policy;
+		this.qContainers = new ArrayList<QuestionContainer>();
+	}
+	
 	public static int random(int a, int b) {
 		return a + r.nextInt(b-a);
 	}
@@ -144,57 +199,6 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		return false;
 	}
 	
-	public Quiz() {
-		super();
-/*		this.id = 0;
-		this.name = "defaultName";
-		this.qContainers = new ArrayList<QuestionContainer>();
-		this.policy = new Policy();
-		this.editMode=false;*/
-	}
-	
-	public Quiz(int id, String title, String desc, ArrayList<QuestionContainer> qContainers, Policy plc, boolean editMode) {
-		super();
-		this.id = id;
-		this.name = title;
-		this.desc = desc;
-		this.qContainers = qContainers;
-		policy = plc;
-		this.editMode=editMode;
-	}
-	
-	public Quiz(int id, String title, String desc, Policy plc, boolean editMode) {
-		super();
-		this.id = id;
-		this.name = title;
-		this.desc = desc;
-		this.qContainers = new ArrayList<QuestionContainer>();
-		policy = plc;
-		this.editMode=editMode;
-	}
-	
-	public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
-		super(type, css);
-		this.id = id;
-		this.name = name;
-		this.desc = desc;
-		this.qContainers = new ArrayList<QuestionContainer>();
-		policy = plc;
-		this.editMode=editMode;
-	}
-	
-	public Quiz(Policy plc) {
-		super();
-		this.qContainers = new ArrayList<QuestionContainer>();
-		policy = plc;
-	}
-	
-	public Quiz(int id, Type type, StyleSheet css, PayLoad pl) {
-		super(type, css);
-		this.id = id;
-		this.payLoad = pl;
-		this.qContainers = new ArrayList<QuestionContainer>();
-	}
 	
 	public void addQuestionContainer(QuestionContainer qc) {
 		if(this.qContainers == null)

@@ -5,7 +5,7 @@ package org.adastraeducation.liquiz;
  * It is for answers for every question
  */
 
-public class Answer implements Displayable, Cloneable {
+public class Answer implements Displayable, Cloneable, java.io.Serializable{
 	private int id;
 	private DisplayElement ans;
 	private boolean correct;
@@ -53,6 +53,9 @@ public class Answer implements Displayable, Cloneable {
 	}
 	public int getIndex() {
 		return index;
+	}
+	public int getID() {
+		return id;
 	}
 	public void setIndex(int index) {
 		this.index = index;

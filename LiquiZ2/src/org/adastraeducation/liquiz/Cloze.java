@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author yijinkang
  *
  */
-public class Cloze extends Question {
+public class Cloze extends Question implements java.io.Serializable{
 	/************for testing************/
 	public void printAll() {
 		System.out.println(wAns);

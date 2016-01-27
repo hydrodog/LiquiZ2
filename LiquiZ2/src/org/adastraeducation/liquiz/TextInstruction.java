@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class TextInstruction extends Text {
+public class TextInstruction extends Text implements java.io.Serializable{
 	public TextInstruction() {
 		super();
 	}

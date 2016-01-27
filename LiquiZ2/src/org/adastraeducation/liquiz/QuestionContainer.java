@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class QuestionContainer implements Displayable, java.io.Serializable
-{
+public class QuestionContainer implements Displayable, java.io.Serializable{
 	private int id;
 	private String name;
 	private ArrayList<Displayable> displayables;
@@ -60,6 +59,10 @@ public class QuestionContainer implements Displayable, java.io.Serializable
 
 	public String getName() {
 		return name;
+	}
+	
+	public int getID() {
+		return id;
 	}
 
 	public int getTotalPoints() {

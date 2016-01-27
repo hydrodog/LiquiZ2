@@ -17,7 +17,7 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-public class FillIn extends Question {
+public class FillIn extends Question implements java.io.Serializable{
 	boolean caseSensitive;
 	
 	public FillIn(int id, int points, int level, ArrayList<Answer> answers) {

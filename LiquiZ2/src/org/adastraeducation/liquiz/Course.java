@@ -6,7 +6,7 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-public class Course implements Displayable {
+public class Course implements Displayable, java.io.Serializable{
 	private int id;
 	private String name;
 	// private String classname, qListClassName; // for user to override HTML class for style
@@ -100,5 +100,9 @@ public class Course implements Displayable {
 			}
 		}
 		dc.append("])");
+	}
+	
+	public String toString(){
+		return "Course Id: " + id + "\nCourse Name: " + name;
 	}
 }

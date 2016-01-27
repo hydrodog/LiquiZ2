@@ -19,7 +19,7 @@ import org.adastraeducation.liquiz.equation.Var;
  * The new type of question, that contain complex content. And generate the html dynamicly
  * 
  */
-public class EquationQuestion extends Question {
+public class EquationQuestion extends Question implements java.io.Serializable{
 	
 	private Equation eq;
 	

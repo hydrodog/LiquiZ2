@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Matrix implements Displayable {
+public class Matrix implements Displayable, java.io.Serializable{
 
 	private double[][] data;
 	private int row;

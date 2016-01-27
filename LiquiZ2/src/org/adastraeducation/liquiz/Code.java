@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class Code extends Question {
+public class Code extends Question implements java.io.Serializable{
 	private int rows, cols;
 	private String defaultText;
 	public Code() {

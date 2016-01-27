@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.adastraeducation.liquiz.*;
-public class TestQuizJavascript {
+public class TestQuizJavascript implements java.io.Serializable
+{
 	public static void main(String[] a) {		
 		printQuiz(test1());
 	}

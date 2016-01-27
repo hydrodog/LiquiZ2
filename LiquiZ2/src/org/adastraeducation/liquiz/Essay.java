@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class Essay extends Question {
+public class Essay extends Question implements java.io.Serializable{
 	private int rows, cols, maxWords;
 	private String defaultText;
 	public Essay() {

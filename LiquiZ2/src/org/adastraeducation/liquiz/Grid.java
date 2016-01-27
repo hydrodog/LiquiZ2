@@ -3,7 +3,7 @@ package org.adastraeducation.liquiz;
 import org.adastraeducation.liquiz.util.*;
 import java.util.*;
 
-public class Grid extends DisplayElement {
+public class Grid extends DisplayElement implements java.io.Serializable{
 	private ArrayList< ArrayList<Object>> grid;
 	
 	public Grid(){
