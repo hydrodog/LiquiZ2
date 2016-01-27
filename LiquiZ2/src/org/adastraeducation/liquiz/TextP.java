@@ -14,7 +14,7 @@ public class TextP extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['Util.p',").appendQuotedJS(getText()).append("],");
+		dc.append("\n\t\t\t[\"Util.p\",").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

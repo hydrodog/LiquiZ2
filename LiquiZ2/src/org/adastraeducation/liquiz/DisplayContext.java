@@ -82,9 +82,9 @@ public class DisplayContext {
 		quotedEscapeMap['"'] = "\""; // escape quoted strings, we prefer single quotes ' but just in case...
 	}
 	public final DisplayContext appendQuotedJS(String s) {
-		append('\'');
+		append('\"');
 		appendEscaped(s);
-		append('\'');
+		append('\"');
 		return this;
 	}
 

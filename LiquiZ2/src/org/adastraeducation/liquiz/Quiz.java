@@ -264,17 +264,13 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		//yijinkang: getTotalPoints() will return the total number of points of the questions in the quiz
 		super.writeJS(dc);
 		
-//		dc.append
-//		("{\n\t\t").appendQuotedJS("type").append(": ").appendQuotedJS(type.toString()).append(",\n\t\t").
-//				appendQuotedJS("css").append(": ").appendQuotedJS(css.toString()).append(",\n\t\t");
-		
 //			dc.appendQuotedJS("payload").append(": ").appendJS(payLoad).
 			dc.appendQuotedJS("payload").append(": {\n\t\t\t").append("\"policy\": ").appendQuotedJS(policy.name).
 							append("\n\t\t\t\"title\": ").appendQuotedJS(name).
 			 				append(",\n\t\t\tpoints: ").append(points).
 			 				append(",\n\t\t\ttimeLimit: ").append(policy.getDuration()).
 			 				append(",\n\t\t\tremainingTries: ").append(1). //TODO: need count of user's tries
-			 				append(",\n\t\t\tdataDir: ").append("'assets/'").
+			 				append(",\n\t\t\tdataDir: ").append("\"assets/\"").
 			 				append(",\n\t\t\teditMode: ").append(editMode).
 				append(",\n\t\t\tquestions: ").append("\t[");
 		for(QuestionContainer qc: this.qContainers) {

@@ -86,7 +86,7 @@ public class Cloze extends Question {
 				
 			}
 		} else {
-			dc.append("\n\t\t\t['cloze', ").append(getId()).append(", ").appendQuotedJS(noAns).append("],");
+			dc.append("\n\t\t\t[\"cloze\", ").append(getId()).append(", ").appendQuotedJS(noAns).append("],");
 		}
 	}
 

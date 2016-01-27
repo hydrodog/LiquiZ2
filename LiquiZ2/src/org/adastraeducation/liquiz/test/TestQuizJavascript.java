@@ -42,7 +42,8 @@ public class TestQuizJavascript {
 		m.setData(new double[][]{new double[]{9,8,7,6,5,4,3,2,1}});
 		qc.add(m);
 		qc.add(new LineBreak());
-		qc.add(new MatrixQuestion(qid++,10,100,1,9));
+		qc.add(new LineBreak());
+		qc.add(new MatrixQuestion(qid++,10,100,1,8));
 		quiz.addQuestion(qc);
 		
 		
