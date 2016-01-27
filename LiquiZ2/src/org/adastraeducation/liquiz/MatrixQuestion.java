@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Represents a matrix of numeric fillin questions to quickly
  * enter a matrix of answers from the user
  */
-public class MatrixQuestion extends Question {
+public class MatrixQuestion extends Question implements java.io.Serializable{
 	private int rows;
 	private int cols;
 	

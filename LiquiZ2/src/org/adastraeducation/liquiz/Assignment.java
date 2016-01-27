@@ -8,7 +8,7 @@ import java.util.Date;
  * @author Dov Kruger
  *
  */
-public class Assignment {
+public class Assignment implements java.io.Serializable{
 	public boolean isPublished() {
 		return published;
 	}

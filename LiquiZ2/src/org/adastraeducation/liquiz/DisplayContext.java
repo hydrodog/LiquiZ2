@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Also adds convenience functions for output
  *
  */
-public class DisplayContext {
+public class DisplayContext implements java.io.Serializable{
 	private StringBuilder b;
 	StudentResponses sr;
 	boolean displayResponses; // Shows student's response

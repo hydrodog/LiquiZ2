@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Audio extends Media {
+public class Audio extends Media implements java.io.Serializable{
 	public Audio() {
 		super();
 	}

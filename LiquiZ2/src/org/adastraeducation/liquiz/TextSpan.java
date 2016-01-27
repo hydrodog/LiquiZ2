@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class TextSpan extends Text {
+public class TextSpan extends Text implements java.io.Serializable{
 	public TextSpan() {
 		super();
 	}

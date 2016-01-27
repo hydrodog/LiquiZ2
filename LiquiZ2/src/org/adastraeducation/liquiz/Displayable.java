@@ -4,7 +4,7 @@ package org.adastraeducation.liquiz;
  * @author yijinkang
  *
  */
-public interface Displayable {
+public interface Displayable extends java.io.Serializable{
 	public void writeHTML(DisplayContext dc);
 	public void writeJS(DisplayContext dc);
 	public void writeXML(StringBuilder b);	//TODO: might delete. will use XML serialization 

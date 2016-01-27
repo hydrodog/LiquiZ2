@@ -4,6 +4,10 @@ package org.adastraeducation.liquiz;
  * @author yijinkang
  *
  */
-public abstract class DisplayElement implements Displayable {
+public abstract class DisplayElement implements Displayable, java.io.Serializable{
+	private int id;
 	public abstract String getName();
+	public int getID() {
+		return id;
+	}
 }

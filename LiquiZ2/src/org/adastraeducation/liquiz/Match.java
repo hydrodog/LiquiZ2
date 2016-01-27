@@ -2,7 +2,7 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-public class Match extends Question {
+public class Match extends Question implements java.io.Serializable{
 	private ArrayList<Answer> leftSide;					//leftSide is the prompt, so length of leftSide must be >= length of right side
 	private ArrayList<Answer> rightSide;				//rightSide is the response to leftSide
 	private ArrayList<Integer> matchReferences;		    //length of matchReferences must equal length of leftSide.  matchReferences should be set up so that the correct answer to leftSide.get(i) is rightSide.get(matchReferences.get(i)).

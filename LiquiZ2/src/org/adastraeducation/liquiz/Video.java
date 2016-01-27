@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Video extends RectangularMedia {
+public class Video extends RectangularMedia implements java.io.Serializable{
 	public Video() {
 		super();
 	}
