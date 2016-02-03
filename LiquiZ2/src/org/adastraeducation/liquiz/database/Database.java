@@ -30,6 +30,7 @@ public class Database {
 	private static HashMap<Integer, Answer> answerById;
 	private static ArrayList<DisplayElement> displayElements;
 	private static HashMap<Integer, DisplayElement> displayElementById;
+	private static int currentId;
 	
 	static{
 		userById = new HashMap<>();
@@ -40,7 +41,7 @@ public class Database {
 		questionById = new HashMap<>();
 		answerById = new HashMap<>();
 		displayElementById = new HashMap<>();
-		
+		currentId = 0;
 	}
 	
 	/**
@@ -61,7 +62,10 @@ public class Database {
 //		Load.loadAll();
 //	
 //	}
-	
+
+	public static int getUniqueId() {
+		return ++currentId;
+	}
 	/**
 	 * Find out the maximum value in a column
 	 * @param sql 'select max([column_name]) from [table]'

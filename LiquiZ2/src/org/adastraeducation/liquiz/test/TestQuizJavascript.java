@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.adastraeducation.liquiz.*;
+import org.adastraeducation.liquiz.database.Database;
 public class TestQuizJavascript implements java.io.Serializable
 {
 	public static void main(String[] a) {		
@@ -16,6 +17,19 @@ public class TestQuizJavascript implements java.io.Serializable
 		System.out.println(dc.toString());
 	}
 	
+	public static void buildQuizzes() {
+		Quiz q1 = test1();
+		Database.addQuiz(q1);		// add q1 to central database
+		Quiz q2 = test2();
+		Database.addQuiz(q2);		// add q1 to central database
+
+	}
+	// build equation question if you can
+	public static Quiz test2() {
+		Quiz quiz = null; // new Quiz(t, s, "Algebra quiz", "", p, true);
+		
+		return quiz;
+	}
 	public static Quiz test1() {
 		int qid=0;
 		int qcid=0;
