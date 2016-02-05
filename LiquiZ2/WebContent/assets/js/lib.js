@@ -638,14 +638,16 @@ FileBrowser.prototype.getFile = function (name) {
 
 
 FileBrowser.prototype.addFile = function (name, content, saveToSource) {
-	if(saveToSource == 1){
-	this.storage[name] = JSON.stringify(content);
-	window.localStorage.files = JSON.stringify(this.storage);
-	}else if(saveToSource == 2){
-		var blob = new Blob([JSON.stringify(content)], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, name+".json");
+	if (saveToSource == 1) {
+		this.storage[name] = JSON.stringify(content);
+		window.localStorage.files = JSON.stringify(this.storage);
+	} else if (saveToSource == 2) {
+		var blob = new Blob([JSON.stringify(content)], {
+			type: "text/plain;charset=utf-8"
+		});
+		saveAs(blob, name + ".json");
 	}
-	
+
 	if (document.getElementById("file-picker"))
 		this.loadPopup();
 };
@@ -997,12 +999,13 @@ window.onload = loadOnce;
 window.onhashchange = loadPage;
 window.onscroll = captureScroll;
 
+
+
 function PagePrinter() {
 	this.doc = new jsPDF('p', 'pt', [768, 1086]);
 	this.scale = this.doc.internal.scaleFactor;
 	this.pageHeight = this.scale * this.doc.internal.pageSize.height;
 	this.pageWidth = this.scale * this.doc.internal.pageSize.width;
-
 	this.widthLeft = this.pageWidth;
 	this.heightLeft = this.pageHeight;
 
@@ -1011,6 +1014,7 @@ function PagePrinter() {
 	this.doc.setFontSize(this.currentFontSize);
 	this.currentFontHeight = this.doc.getTextDimensions("|").h
 	this.currentDocTop = -1;
+
 	/*this.doc.fromHTML($('body').get(0), 15, 15, {
 	      'width': 170
 	  });*/
@@ -1129,7 +1133,6 @@ PagePrinter.prototype.printChildText = function (element, x, y, width, height, c
 						element.insertAdjacentElement('afterEnd', document.createElement("br"));
 					}
 					element.insertAdjacentElement('afterEnd', span);
-
 				}
 				element.removeChild(children[i--]);
 			}
