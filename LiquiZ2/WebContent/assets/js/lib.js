@@ -918,14 +918,16 @@ function loadPage(e) {
 	if (url.url === "/") {
 		url.url = "/index";
 	}
-
+  var location_pathname = location.pathname.split("/");
+  location_pathname.pop();
+  location_pathname = location_pathname.join("/") + "/";
 	var ajax_url;
 	if (location.pathname === "/") {
 		ajax_url = url.url + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
 	} else {
 		//        ajax_url = location.pathname + url.url.slice(1) + "_ajax.jsp" + url.buildParams(); // name of dynamic file
 		//Dov: why the slice?
-		ajax_url = location.pathname + url.url.slice(1) + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
+		ajax_url = location_pathname + url.url.slice(1) + Util.SERVER_SUFFIX + url.buildParams(); // name of dynamic file
 	}
 	console.log(ajax_url);
 	if (prefs === null) {
