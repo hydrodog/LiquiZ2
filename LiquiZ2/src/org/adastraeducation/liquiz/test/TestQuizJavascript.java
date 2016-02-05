@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.adastraeducation.liquiz.*;
-public class TestQuizJavascript {
+import org.adastraeducation.liquiz.database.Database;
+public class TestQuizJavascript implements java.io.Serializable
+{
 	public static void main(String[] a) {		
 		printQuiz(test1());
 	}
@@ -15,15 +17,24 @@ public class TestQuizJavascript {
 		System.out.println(dc.toString());
 	}
 	
+	public static void buildQuizzes() {
+		Quiz q1 = test1();
+		Database.addQuiz(q1);		// add q1 to central database
+		Quiz q2 = test2();
+		Database.addQuiz(q2);		// add q1 to central database
+
+	}
+	
 	public static Quiz test1() {
 		int qid=0;
 		int qcid=0;
 		Type t = new Type();
 		StyleSheet s = new StyleSheet("demostyle.css");
 		Policy p = new Policy("Dov");
-		Title ti = new Title("Quiz Demo #1");
-		PayLoad pl = new PayLoad(p, ti, 100, 0, 1, "'assets/'", true);
-		Quiz quiz = new Quiz(1, t, s, pl);
+//		Title ti = new Title("Quiz Demo #1");
+//		PayLoad pl = new PayLoad(p, ti, 100, 0, 1, "'assets/'", true);
+//		public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
+		Quiz quiz = new Quiz(1, t, s, "Quiz Demo #1", "", p, true);
 		QuestionContainer qc = 
 				new QuestionContainer(qcid++, "Operators", "fillin", new ArrayList<Displayable>());
 		qc.add(new TextQuestion("What is 2+2?"));
@@ -41,7 +52,8 @@ public class TestQuizJavascript {
 		m.setData(new double[][]{new double[]{9,8,7,6,5,4,3,2,1}});
 		qc.add(m);
 		qc.add(new LineBreak());
-		qc.add(new MatrixQuestion(qid++,10,100,1,9));
+		qc.add(new LineBreak());
+		qc.add(new MatrixQuestion(qid++,10,100,1,8));
 		quiz.addQuestion(qc);
 		
 		
@@ -167,4 +179,76 @@ public class TestQuizJavascript {
 		return quiz;
 	}
 	
+	// build equation question if you can
+		public static Quiz test2() {
+			int qid=0;
+			int qcid=0;
+			Type t = new Type();
+			StyleSheet s = new StyleSheet("demostyle.css");
+			Policy p = new Policy("Dov");
+			Quiz quiz = new Quiz(2, t, s, "Algebra quiz","This is an Algebra Quiz", p, true);
+			QuestionContainer qc = 
+					new QuestionContainer(qcid++,"Matrix Multiplication","matrix",new ArrayList<Displayable>());
+			qc.add(new TextInstruction("Show the result of matrix A * B"));
+			Matrix m1=new Matrix(4,4);
+			m1.setData(new double[][]{{1,0,2,1},{1,1,-2,0},{2,1,0,3},{2,1,5,4}});
+			qc.add(m1);
+			qc.add(new TextSpan("*"));
+			Matrix m2=new Matrix(4,4);
+			m2.setData(new double[][]{{1,1,-1,0},{-2,1,0,1},{1,1,3,0},{2,1,-1,4}});
+			qc.add(m2);
+			qc.add(new TextSpan("="));
+			qc.add(new MatrixQuestion(qid++,10,100,4,4));
+			quiz.addQuestion(qc);
+			
+			qc=new QuestionContainer(qcid++,"Arithmetic","fillin",new ArrayList<Displayable>());      
+			qc.add(new TextSpan("What is 5*10/2"));
+			qc.add(new FillIn(qid++,10,100));
+			quiz.addQuestion(qc);
+			
+			qc=new QuestionContainer(qcid++,"Arithmetic", "numeric", new ArrayList<Displayable>());
+			qc.add(new TextInstruction("What is the square of 10 (four digits is fine)?"));
+			qc.add(new FillIn(qid++,100,10,new Answer()));
+			quiz.addQuestion(qc);
+			
+			qc=new QuestionContainer(qcid++,"Arithmetic","selectText",new ArrayList<Displayable>());
+			qc.add(new TextP("Which one is the right answer of 10 + 5?"));
+			qc.add(new MultiChoiceRadio(qid++,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("15")),new Answer(new TextAnswer("20")),new Answer(new TextAnswer("25"))))));
+			quiz.addQuestion(qc);
+			
+			
+			return quiz;
+		}
+		
+		// build equation question if you can
+		public static Quiz test3() {
+			int qid=0;
+			int qcid=0;
+			Type t = new Type();
+			StyleSheet s = new StyleSheet("demostyle.css");
+			Policy p = new Policy("Dov");
+			Quiz quiz = new Quiz(3, t, s, "Programming Quiz", "", p, true);
+			QuestionContainer qc= 
+					new QuestionContainer(qcid++,"Java","code",new ArrayList<Displayable>());     
+			qc.add(new TextInstruction("Complete the code below so that it prints 'hello'"));
+			qc.add(new Code(qid++,1,1,10,80,"public A {\n  void   (String[] args) {\n  System.\n  }\n}\n"));
+			quiz.addQuestion(qc);
+			
+			qc=new QuestionContainer(qcid++,"Java","code", new ArrayList<Displayable>());
+			qc.add(new TextInstruction("Complete the following function so it computes factorial recursively."));
+			qc.add(new Code(qid++,1,1,10,80,"public static void fact(int n) {\n\n\n\n}"));
+			quiz.addQuestion(qc);
+			
+			qc=new QuestionContainer(qcid++,"Java","cloze", new ArrayList<Displayable>());
+			qc.add(new TextInstruction("Fill in the blanks to make the code correct"));
+			qc.add(new Cloze(qid++,1,1,"public [[class]] A {\n  [[public]] static [[void]] main([[String]] [] args) {\n  System.[[out]].[[println]]('hello');\n  }\n}"));
+			quiz.addQuestion(qc);
+			
+			qc=new QuestionContainer(qcid++,"Object Oriented Terminology","Match",new ArrayList<Displayable>());
+			qc.add(new TextInstruction("Match the object-oriented terminology to the meaning"));
+			qc.add(new Match(qid++,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("Class")),new Answer(new TextAnswer("Object")),new Answer(new TextAnswer("Method")),new Answer(new TextAnswer("Message")),new Answer(new TextAnswer("Polymorphism")),new Answer(new TextAnswer("Encapsulation")))),new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("A concrete instance of a class")),new Answer(new TextAnswer("A request made to an object")),new Answer(new TextAnswer("Hiding the internal details of a class or object")),new Answer(new TextAnswer("Sending the same message to different objects and getting different results")),new Answer(new TextAnswer("A specification of an object")),new Answer(new TextAnswer("A function that is applied to an object")))),new ArrayList<Integer>(Arrays.asList(1,2,3))));
+			quiz.addQuestion(qc);
+			
+			return quiz;
+		}
 }

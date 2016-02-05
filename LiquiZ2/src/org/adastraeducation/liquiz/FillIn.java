@@ -17,7 +17,7 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
-public class FillIn extends Question {
+public class FillIn extends Question implements java.io.Serializable{
 	boolean caseSensitive;
 	
 	public FillIn(int id, int points, int level, ArrayList<Answer> answers) {
@@ -125,7 +125,7 @@ public class FillIn extends Question {
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['fillin', ").append(getId()).append("],");
+		dc.append("\n\t\t\t[\"fillin\", ").append(getId()).append("],");
 	}
 
 	@Override

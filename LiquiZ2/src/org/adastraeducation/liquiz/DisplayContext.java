@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Also adds convenience functions for output
  *
  */
-public class DisplayContext {
+public class DisplayContext implements java.io.Serializable{
 	private StringBuilder b;
 	StudentResponses sr;
 	boolean displayResponses; // Shows student's response
@@ -82,9 +82,9 @@ public class DisplayContext {
 		quotedEscapeMap['"'] = "\""; // escape quoted strings, we prefer single quotes ' but just in case...
 	}
 	public final DisplayContext appendQuotedJS(String s) {
-		append('\'');
+		append('\"');
 		appendEscaped(s);
-		append('\'');
+		append('\"');
 		return this;
 	}
 
