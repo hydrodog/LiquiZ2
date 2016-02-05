@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class LineBreak implements Displayable {
+public class LineBreak implements Displayable, java.io.Serializable{
 
 	/* This class does not have any instance variables or methods other than
 	 * writeHTML, writeJS, and writeXML.  The only reason that this class exists
@@ -19,7 +19,7 @@ public class LineBreak implements Displayable {
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['Util.br'],");
+		dc.append("\n\t\t\t[\"Util.br\"],");
 	}
 
 	public void writeXML(StringBuilder b) {

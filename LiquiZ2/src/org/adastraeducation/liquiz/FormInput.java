@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class FormInput {
+public class FormInput implements java.io.Serializable{
 	
 	public static boolean ReadStdChoices(HttpServletRequest req){
 		String name=req.getParameter("name");

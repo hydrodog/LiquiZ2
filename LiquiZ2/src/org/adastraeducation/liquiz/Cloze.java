@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author yijinkang
  *
  */
-public class Cloze extends Question {
+public class Cloze extends Question implements java.io.Serializable{
 	/************for testing************/
 	public void printAll() {
 		System.out.println(wAns);
@@ -86,7 +86,7 @@ public class Cloze extends Question {
 				
 			}
 		} else {
-			dc.append("\n\t\t\t['cloze', ").append(getId()).append(", ").appendQuotedJS(noAns).append("],");
+			dc.append("\n\t\t\t[\"cloze\", ").append(getId()).append(", ").appendQuotedJS(noAns).append("],");
 		}
 	}
 

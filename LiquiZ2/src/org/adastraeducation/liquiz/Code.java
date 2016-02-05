@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class Code extends Question {
+public class Code extends Question implements java.io.Serializable{
 	private int rows, cols;
 	private String defaultText;
 	public Code() {
@@ -67,7 +67,7 @@ public class Code extends Question {
  	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['code', ").append(getId()).append(", ").appendQuotedJS(defaultText).append(", ").append(rows).append(", ").append(cols).append("],\n");
+		dc.append("\n\t\t\t[\"code\", ").append(getId()).append(", ").appendQuotedJS(defaultText).append(", ").append(rows).append(", ").append(cols).append("],\n");
 		//TODO default text?
 	}
 	public void writeXML(StringBuilder b) {

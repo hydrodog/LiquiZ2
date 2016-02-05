@@ -31,6 +31,11 @@ public class User {
 		
 	}
 	
+	public User(int id, String name ) {
+		this.id = id;
+		username = name;
+	}
+	
 	public User(String username, String passwd, String fName, String lName, String email, int permissions) {
 	}
 		
@@ -114,5 +119,9 @@ public class User {
 		if (username == null || passwd == null)
 			return false;
 		return username.equals("test") && passwd.equals("test");
+	}
+	
+	public String toString(){
+		return "username: " + username;
 	}
 }

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
-public class FileUpload extends Question {
+public class FileUpload extends Question implements java.io.Serializable{
 
 	private String label;
 
 	public FileUpload() {
 		label = "Submit";
 	}
-
+//qc.add(new FileUpload(qid++,10,100,".java"));
 	public FileUpload(int id, int level, int points,String label) {
 		super(id, level, points, (ArrayList<Answer>) null);
 		this.label = label;
@@ -40,7 +40,7 @@ public class FileUpload extends Question {
  	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['Util.file', ").appendQuotedJS(label).append(", 'file-input', ").append(getId()).append("],");	
+		dc.append("\n\t\t\t[\"file\", \"Upload File\"").appendQuotedJS(label).append(", \"file-input\", ").append(getId()).append("],");	
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<fileUpload/>");

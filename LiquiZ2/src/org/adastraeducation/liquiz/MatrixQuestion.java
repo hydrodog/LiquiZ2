@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Represents a matrix of numeric fillin questions to quickly
  * enter a matrix of answers from the user
  */
-public class MatrixQuestion extends Question {
+public class MatrixQuestion extends Question implements java.io.Serializable{
 	private int rows;
 	private int cols;
 	
@@ -56,7 +56,7 @@ public class MatrixQuestion extends Question {
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['emptyGrid',").append(getId()).append(",").append(rows).append(",").append(cols).append("],");
+		dc.append("\n\t\t\t[\"emptyGrid\",").append(getId()).append(",").append(rows).append(",").append(cols).append("],");
 	}
 
 	@Override

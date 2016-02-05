@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class TextQuestion extends Text {
+public class TextQuestion extends Text implements java.io.Serializable{
 	public TextQuestion() {
 		super();
 	}
@@ -16,7 +16,7 @@ public class TextQuestion extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['Util.span', ").appendQuotedJS(getText()).append("],");
+		dc.append("\n\t\t\t[\"instructions\", ").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

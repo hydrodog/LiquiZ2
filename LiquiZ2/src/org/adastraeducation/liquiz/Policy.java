@@ -22,6 +22,28 @@ public class Policy implements java.io.Serializable
 	//TODO: require access from specific access point??
 	private String accessCode;	// if not null, this code is used to take the quiz
 	//TODO: restrict to local range of addresses, ie in class?
+	
+	public Policy() {
+		attemptNum = 3;
+		timed = false;
+		duration = 300;
+		showAns = false;
+		scored = true;
+		shuffleQues = true;
+		shuffleAns = true;
+		accessCode = "";
+	}
+
+	public Policy(String name){
+		this();
+		this.name = name;
+	}
+	
+	public Policy(int id, String name){
+		this.id = id;
+		this.name = name;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -109,24 +131,8 @@ public class Policy implements java.io.Serializable
 		this.accessCode = code;
 	}
 	
-	public Policy() {
-		attemptNum = 3;
-		timed = false;
-		duration = 300;
-		showAns = false;
-		scored = true;
-		shuffleQues = true;
-		shuffleAns = true;
-		accessCode = "";
-	}
-
-	public Policy(String name){
-		this();
-		this.name = name;
-	}
-	
 	public String toString(){
-		return name;
+		return "Policy Name: " + name;
 	}
 
 }

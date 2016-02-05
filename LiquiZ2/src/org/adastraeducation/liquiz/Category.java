@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Category {
+public class Category implements java.io.Serializable{
 	private String name;
 	private int points;
 	public Category(String name, int points) {

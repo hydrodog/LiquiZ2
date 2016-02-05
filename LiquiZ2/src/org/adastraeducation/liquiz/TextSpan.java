@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class TextSpan extends Text {
+public class TextSpan extends Text implements java.io.Serializable{
 	public TextSpan() {
 		super();
 	}
@@ -13,7 +13,7 @@ public class TextSpan extends Text {
 	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t['Util.span',").appendQuotedJS(getText()).append("],");
+		dc.append("\n\t\t\t[\"Util.span\",").appendQuotedJS(getText()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {

@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-public class Image extends RectangularMedia {
+public class Image extends RectangularMedia implements java.io.Serializable{
 	public Image(){
 		super();		
 	}
@@ -19,7 +19,7 @@ public class Image extends RectangularMedia {
 	}
 
 	public void writeJS(DisplayContext dc){
-		dc.append("\n\t\t\t['Util.img', ").appendQuotedJS(getSource()).append("],");
+		dc.append("\n\t\t\t[\"Util.img\", ").appendQuotedJS(getSource()).append("],");
 	}
 	
 	public void writeXML(StringBuilder b) {
