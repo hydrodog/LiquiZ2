@@ -797,50 +797,6 @@ QuizEdit.prototype.editQuestion = function () {
 	this.title.focus();
 }
 
-/*
- * Edit and store the policies governing a quiz, ie how it may be taken, when to display answers, etc.
- */
-function Policy() {
-	this.body = document.getElementById("container");
-	this.body.className = "quizEditor";
-}
-
-Policy.names = ["homework1x", "homework4x", "midtermreview"];
-Policy.prototype.edit = function () {
-	var policy = Util.div("policy", "policy");
-	this.body.appendChild(policy);
-
-	policy.appendChild(
-		Util.table([
-        ["Name", Util.input("text", "name"),
-         Util.select("existingName", false, Policy.names, QuizEdit.EDITCTRL),
-         Util.button("Save", QuizEdit.EDITBUTTON), Util.button("Delete", QuizEdit.EDITBUTTON), Util.button("Copy", QuizEdit.EDITBUTTON)
-        ]
-    ]));
-
-	policy.appendChild(
-		Util.table([
-        ["Attempts permitted", Util.input("number", QuizEdit.EDITCTRL, "attempts")],
-        ["Duration (min)", Util.input("number", QuizEdit.EDITCTRL, "duration", 0)],
-        ["Show Student Answers", Util.yesno(QuizEdit.EDITCTRL, "showStudentAnswers")],
-        ["Show Correct Answers", Util.yesno(QuizEdit.EDITCTRL, "showCorrectAnswers")],
-        ["One question per page", Util.yesno(QuizEdit.EDITCTRL, "showCorrectAnswers")],
-        ["Scored", Util.yesno(QuizEdit.EDITCTRL, "scored")],
-        ["Shuffle Questions", Util.yesno(QuizEdit.EDITCTRL, "shuffleQuestions")],
-        ["Shuffle Answers", Util.yesno(QuizEdit.EDITCTRL, "shuffleAnswers")],
-        ["Access Code", Util.input("text", QuizEdit.EDITCTRL, "accessCode")],
-        ["Filter IP", Util.yesno(QuizEdit.EDITCTRL, "filterIP")],
-
-        ["Early Bonus", Util.input("number", QuizEdit.EDITCTRL, "earlyBonus", 0)],
-        ["Early Daily Bonus", Util.input("number", QuizEdit.EDITCTRL, "earlyDailyBonus", 0)],
-        ["Late Penalty", Util.input("number", QuizEdit.EDITCTRL, "latePenalty", 0)],
-        ["Late Daily Penalty", Util.input("number", QuizEdit.EDITCTRL, "lateDailyPenalty", 0)],
-
-    ])
-	);
-	this.scrollToEditor();
-}
-
 
 /*
  * Edit and store the parameters of an assignment, including due dates

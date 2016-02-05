@@ -27,6 +27,11 @@
 	border: solid 0px;
 }
 
+.printing .header h1 {
+	font-size: 1.5em;
+	margin-left: 10px;
+}
+
 .printing .qc,
 .printing td {
 	border: solid 1px;
