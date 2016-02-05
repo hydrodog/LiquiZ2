@@ -15,7 +15,7 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 	}
 
 	public QuestionContainer(ArrayList<Displayable> list) {
-		displayables = list;
+		displayables = new ArrayList<Displayable>(list);
 	}
 
 	public QuestionContainer(String name, ArrayList<Displayable> list) {
@@ -28,7 +28,7 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 		this.id = id;
 		this.name = name;
 		this.cssClass = cssClass;
-		displayables = list;
+		displayables = new ArrayList<Displayable>(list);
 	}
 
 	public ArrayList<Displayable> getDisplayables() {
