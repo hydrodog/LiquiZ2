@@ -45,15 +45,6 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		this.editMode=false;*/
 	}
 	
-	public Quiz(int id, String title, String desc, t qContainers, Policy plc, boolean editMode) {
-		super();
-		this.id = id;
-		this.name = title;
-		this.desc = desc;
-		this.qContainers = qContainers;
-		this.policy = plc;
-		this.editMode=editMode;
-	}
 	
 	public Quiz(int id, String title, String desc, Policy plc, boolean editMode) {
 		super();
