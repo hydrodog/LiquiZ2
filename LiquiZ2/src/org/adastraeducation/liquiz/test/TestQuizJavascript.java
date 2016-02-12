@@ -9,7 +9,7 @@ import org.adastraeducation.liquiz.database.Database;
 public class TestQuizJavascript implements java.io.Serializable
 {
 	public static void main(String[] a) {		
-		printQuiz(test1());
+		printQuiz(test3());
 //		System.out.println("\\\"hello \"\\");
 		
 	}
@@ -187,14 +187,16 @@ public class TestQuizJavascript implements java.io.Serializable
 	
 	// build equation question if you can
 		public static Quiz test2() {
-			int qid=0;
+			int qid= 1;
 			int qcid=0;
 			Type t = new Type();
 			StyleSheet s = new StyleSheet("demostyle.css");
 			Policy p = new Policy("Dov");
 			Quiz quiz = new Quiz(2, t, s, "Algebra quiz","This is an Algebra Quiz", p, true);
+			
+			// question1
 			QuestionContainer qc = 
-					new QuestionContainer(qcid++,"Matrix Multiplication","matrix",new ArrayList<Displayable>());
+					new QuestionContainer(++qcid,"Matrix Multiplication","matrix",new ArrayList<Displayable>());
 			qc.add(new TextInstruction("Show the result of matrix A * B"));
 			Matrix m1=new Matrix(4,4);
 			m1.setData(new double[][]{{1,0,2,1},{1,1,-2,0},{2,1,0,3},{2,1,5,4}});
@@ -207,17 +209,20 @@ public class TestQuizJavascript implements java.io.Serializable
 			qc.add(new MatrixQuestion(qid++,10,100,4,4));
 			quiz.addQuestion(qc);
 			
-			qc=new QuestionContainer(qcid++,"Arithmetic","fillin",new ArrayList<Displayable>());      
-			qc.add(new TextSpan("What is 5*10/2"));
+			// question2
+			qc=new QuestionContainer(++qcid,"Arithmetic","fillin",new ArrayList<Displayable>());      
+			qc.add(new TextInstruction("What is 5*10/2"));
 			qc.add(new FillIn(qid++,10,100));
 			quiz.addQuestion(qc);
 			
-			qc=new QuestionContainer(qcid++,"Arithmetic", "numeric", new ArrayList<Displayable>());
+			// question3
+			qc=new QuestionContainer(++qcid,"Arithmetic", "numeric", new ArrayList<Displayable>());
 			qc.add(new TextInstruction("What is the square of 10 (four digits is fine)?"));
 			qc.add(new FillIn(qid++,100,10,new Answer()));
 			quiz.addQuestion(qc);
 			
-			qc=new QuestionContainer(qcid++,"Arithmetic","selectText",new ArrayList<Displayable>());
+			// question4
+			qc=new QuestionContainer(++qcid,"Arithmetic","selectText",new ArrayList<Displayable>());
 			qc.add(new TextP("Which one is the right answer of 10 + 5?"));
 			qc.add(new MultiChoiceRadio(qid++,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("15")),new Answer(new TextAnswer("20")),new Answer(new TextAnswer("25"))))));
 			quiz.addQuestion(qc);
@@ -228,31 +233,31 @@ public class TestQuizJavascript implements java.io.Serializable
 		
 		// build equation question if you can
 		public static Quiz test3() {
-			int qid=0;
-			int qcid=0;
+			int qid= 1;
+			int qcid= 0;
 			Type t = new Type();
 			StyleSheet s = new StyleSheet("demostyle.css");
 			Policy p = new Policy("Dov");
 			Quiz quiz = new Quiz(3, t, s, "Programming Quiz", "", p, true);
 			QuestionContainer qc= 
-					new QuestionContainer(qcid++,"Java","code",new ArrayList<Displayable>());     
-			qc.add(new TextInstruction("Complete the code below so that it prints 'hello'"));
+					new QuestionContainer(++qcid,"Java","code",new ArrayList<Displayable>());     
+			qc.add(new TextInstruction("Complete the code below so that it prints \\\"hello \\\""));
 			qc.add(new Code(qid++,1,1,10,80,"public A {\n  void   (String[] args) {\n  System.\n  }\n}\n"));
 			quiz.addQuestion(qc);
 			
-			qc=new QuestionContainer(qcid++,"Java","code", new ArrayList<Displayable>());
+			qc=new QuestionContainer(++qcid,"Java","code", new ArrayList<Displayable>());
 			qc.add(new TextInstruction("Complete the following function so it computes factorial recursively."));
-			qc.add(new Code(qid++,1,1,10,80,"public static void fact(int n) {\n\n\n\n}"));
+			qc.add(new Code(qcid,1,1,10,80,"public static void fact(int n) {\n\n\n\n}"));
 			quiz.addQuestion(qc);
 			
-			qc=new QuestionContainer(qcid++,"Java","cloze", new ArrayList<Displayable>());
+			qc=new QuestionContainer(++qcid,"Java","cloze", new ArrayList<Displayable>());
 			qc.add(new TextInstruction("Fill in the blanks to make the code correct"));
-			qc.add(new Cloze(qid++,1,1,"public [[class]] A {\n  [[public]] static [[void]] main([[String]] [] args) {\n  System.[[out]].[[println]]('hello');\n  }\n}"));
+			qc.add(new Cloze(qcid,1,1,"public [[class]] A {\n  [[public]] static [[void]] main([[String]] [] args) {\n  System.[[out]].[[println]](\\\"hello \\\");\n  }\n}"));
 			quiz.addQuestion(qc);
 			
-			qc=new QuestionContainer(qcid++,"Object Oriented Terminology","Match",new ArrayList<Displayable>());
+			qc=new QuestionContainer(++qcid,"Object Oriented Terminology","Match",new ArrayList<Displayable>());
 			qc.add(new TextInstruction("Match the object-oriented terminology to the meaning"));
-			qc.add(new Match(qid++,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("Class")),new Answer(new TextAnswer("Object")),new Answer(new TextAnswer("Method")),new Answer(new TextAnswer("Message")),new Answer(new TextAnswer("Polymorphism")),new Answer(new TextAnswer("Encapsulation")))),new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("A concrete instance of a class")),new Answer(new TextAnswer("A request made to an object")),new Answer(new TextAnswer("Hiding the internal details of a class or object")),new Answer(new TextAnswer("Sending the same message to different objects and getting different results")),new Answer(new TextAnswer("A specification of an object")),new Answer(new TextAnswer("A function that is applied to an object")))),new ArrayList<Integer>(Arrays.asList(1,2,3))));
+			qc.add(new Match(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("Class")),new Answer(new TextAnswer("Object")),new Answer(new TextAnswer("Method")),new Answer(new TextAnswer("Message")),new Answer(new TextAnswer("Polymorphism")),new Answer(new TextAnswer("Encapsulation")))),new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("A concrete instance of a class")),new Answer(new TextAnswer("A request made to an object")),new Answer(new TextAnswer("Hiding the internal details of a class or object")),new Answer(new TextAnswer("Sending the same message to different objects and getting different results")),new Answer(new TextAnswer("A specification of an object")),new Answer(new TextAnswer("A function that is applied to an object")))),new ArrayList<Integer>(Arrays.asList(1,2,3))));
 			quiz.addQuestion(qc);
 			
 			return quiz;
