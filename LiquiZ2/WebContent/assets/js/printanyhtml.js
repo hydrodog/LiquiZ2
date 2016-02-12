@@ -50,147 +50,50 @@ PrintNode.prototype.render = function (jsdoc, start, end) {
   var f = this.style.backgroundColor;
   var str = "";
   var fill = false;
-
+  var stroke = false;
   if (f.a > 0) {
     fill = true;
     jsdoc.setFillColor(f.r, f.g, f.b);
-    str += "F";
+  }
+  if (d.a > 0) {
+    stroke = true;
+    jsdoc.setFillColor(f.r, f.g, f.b);
   }
   var line = false;
-  if (this.style.radius.rad) {
 
-    if (str != "") {
-      jsdoc.roundedRect(rect.x, rect.y, rect.width, rect.height, this.style.radius.rad, this.style.radius.rad, str);
-    }
+
+  if (d.a > 0) {
+    jsdoc.setDrawColor(d.r, d.g, d.b);
+    var line = this.style.border.top || this.style.border.right || this.style.border.bottom || this.style.border.left;
+    var r = this.style.radius.rad;
+
+    jsdoc.setLineWidth(line);
+    var lines = [];
+    var k = 0.552228474;
+    var currentLine = [];
+    var startingPos = null;
+    var radius = this.style.radius;
+    var currentPosition = [0, 0];
+    var border = this.style.border;
+
     if (fill) {
-      //top is top-left
-      if (!this.style.radius.top) {
-        var r = this.style.radius.rad;
-        jsdoc.rect(rect.x, rect.y, r, r, "F");
-      }
-      if (!this.style.radius.right) {
-        var r = this.style.radius.rad;
-        jsdoc.rect(rect.x + rect.width - r, rect.y, r, r, "F");
-      }
-      if (!this.style.radius.bottom) {
-        var r = this.style.radius.rad;
-        jsdoc.rect(rect.x + rect.width - r, rect.y + rect.height - r, r, r, "F");
-      }
-      if (!this.style.radius.left) {
-        var r = this.style.radius.rad;
-        jsdoc.rect(rect.x, rect.y + rect.height - r, r, r, "F");
+      var bez = new BezierRect(rect.x, rect.y, rect.width, rect.height, [radius.top, radius.right, radius.bottom, radius.left], [1, 1, 1, 1]);
+
+      for (var i = 0; i < bez.lines.length; i++) {
+        jsdoc.lines(bez.lines[i].lines, bez.lines[i].x, bez.lines[i].y, [1, 1], "F");
       }
     }
-    if (d.a > 0) {
-      jsdoc.setDrawColor(d.r, d.g, d.b);
-      var line = this.style.border.top || this.style.border.right || this.style.border.bottom || this.style.border.left;
-      if (line) {
-        var r = this.style.radius.rad;
-        
-        jsdoc.setLineWidth(line);
-        var lines = [];
-        var k = 0.552228474;
-        var currentLine = [];
-        var startingPos = null;
-        var radius = this.style.radius;
-        var currentPosition = [0, 0];
-        var border = this.style.border;
-        if (border.top || border.left) {
-          if (radius.top) {
-            currentLine.push([0, k, 1 - k, r, r, r]);
-            startingPos = [0, -r];
-            currentPosition[0] = startingPos[0] + currentPosition[0];
-            currentPosition[1] = startingPos[1] + currentPosition[1];
-          } else {
-            startingPos = [0, 0];
-          }
-        }
-        if (border.top) {
-          var nextPos = [rect.width, rect.height];
-          var deltas = [];
-          if (radius.top) {
-            nextPos[0] -= r;
-          }
-        }
-        if (border.right || border.top) {
-          var deltas = [rect.width - currentPosition[0], 0 - currentPosition[1]];
-          if (radius.right) {
-            currentLine.push([deltas[0], -r, 0, -k, k, 0, r, 0]);
-          } else {
-            currentLine.push([0, 0]);
-          }
-        }
-        jsdoc.lines(lines, rect.x, rect.y);
-        /*if (!this.style.radius.top) {
-          var r = this.style.radius.rad;
-          jsdoc.lines([[r, 0]], rect.x, rect.y);
-          jsdoc.lines([[0, r]], rect.x, rect.y);
-        }
-        if (!this.style.radius.right) {
-          var r = this.style.radius.rad;
-          jsdoc.lines([[-r, 0]], rect.x + rect.width, rect.y);
-          jsdoc.lines([[0, r]], rect.x + rect.width, rect.y);
-        }
-        if (!this.style.radius.bottom) {
-          var r = this.style.radius.rad;
-          jsdoc.lines([[-r, 0]], rect.x + rect.width, rect.y + rect.height);
-          jsdoc.lines([[0, -r]], rect.x + rect.width, rect.y + rect.height);
-        }
-        if (!this.style.radius.left) {
-          var r = this.style.radius.rad;
-          jsdoc.lines([[r, 0]], rect.x, rect.y + rect.height);
-          jsdoc.lines([[0, -r]], rect.x, rect.y + rect.height);
-        }*/
-      }
-    }
-  } else {
-    if (str != "") {
-      jsdoc.rect(rect.x, rect.y, rect.width, rect.height, str);
-    }
-    if (d.a > 0) {
-      jsdoc.setDrawColor(d.r, d.g, d.b);
-      if (this.style.border.top) {
-        jsdoc.setLineWidth(this.style.border.top);
-        jsdoc.lines([[rect.width, 0]], rect.x, rect.y);
-      }
-      if (this.style.border.bottom) {
-        jsdoc.setLineWidth(this.style.border.bottom);
-        jsdoc.lines([[rect.width, 0]], rect.x, rect.y + rect.height);
-      }
-      if (this.style.border.left) {
-        jsdoc.setLineWidth(this.style.border.left);
-        jsdoc.lines([[0, rect.height]], rect.x, rect.y);
-      }
-      if (this.style.border.right) {
-        jsdoc.setLineWidth(this.style.border.right);
-        jsdoc.lines([[0, rect.height]], rect.x + rect.width, rect.y);
+    if (stroke) {
+      var bez = new BezierRect(rect.x, rect.y, rect.width, rect.height, [radius.top, radius.right, radius.bottom, radius.left], [border.top, border.right, border.bottom, border.left]);
+      for (var i = 0; i < bez.lines.length; i++) {
+        jsdoc.lines(bez.lines[i].lines, bez.lines[i].x, bez.lines[i].y, [1, 1], "D");
       }
     }
 
 
 
-    /*
-    if (d.a > 0) {
-      jsdoc.setDrawColor(d.r, d.g, d.b);
-      if (this.style.border.top) {
-        jsdoc.setLineWidth(this.style.border.top);
-        jsdoc.lines([[rect.width + 2, 0]], rect.x - 1, rect.y);
-      }
-      if (this.style.border.bottom) {
-        jsdoc.setLineWidth(this.style.border.bottom);
-        jsdoc.lines([[rect.width + 2, 0]], rect.x - 1, rect.y + rect.height);
-      }
-      if (this.style.border.left) {
-        jsdoc.setLineWidth(this.style.border.left);
-        jsdoc.lines([[0, rect.height + 2]], rect.x, rect.y - 1);
-      }
-      if (this.style.border.right) {
-        jsdoc.setLineWidth(this.style.border.right);
-        jsdoc.lines([[0, rect.height + 2]], rect.x + rect.width, rect.y - 1);
-      }
-    }
-    */
   }
+
 
   for (var i = 0; i < this.children.length; i++) {
     this.children[i].render(jsdoc, start, end);
