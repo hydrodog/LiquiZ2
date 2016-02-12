@@ -40,6 +40,11 @@ public class DisplayContext implements java.io.Serializable{
 		b.append(bool);
 		return this;
 	}
+	
+	public DisplayContext remove(){
+		b.deleteCharAt(b.length()-1);
+		return this;
+	}
 	public String toString() {
 		return b.toString();
 	}
@@ -78,7 +83,8 @@ public class DisplayContext implements java.io.Serializable{
 		mlEscapeMap['<'] = "&lt;";
 		mlEscapeMap['>'] = "&gt;";
 		System.arraycopy(mlEscapeMap, 0, quotedEscapeMap, 0, mlEscapeMap.length);
-		quotedEscapeMap['\''] = "\\'";  // this is the preferred quote to use in our javascript since we use " in java
+		quotedEscapeMap['\\'] = "\\";  
+		quotedEscapeMap['\''] = "\"";  // this is the preferred quote to use in our javascript since we use " in java
 		quotedEscapeMap['"'] = "\""; // escape quoted strings, we prefer single quotes ' but just in case...
 	}
 	public final DisplayContext appendQuotedJS(String s) {
