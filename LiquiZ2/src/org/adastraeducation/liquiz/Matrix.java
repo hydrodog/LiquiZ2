@@ -5,7 +5,8 @@ public class Matrix implements Displayable, java.io.Serializable{
 	private double[][] data;
 	private int row;
 	private int col;
-	
+	private int qcid;			// the id of the questionContainer
+	private int id;    // the counter of matrix
 	/******************************************************/
 	public double[][] getData(){
 		return data;
@@ -44,21 +45,29 @@ public class Matrix implements Displayable, java.io.Serializable{
 		data = new double[row][col];
 	}
 	
+	public Matrix(int qcid, int id, int row, int col){
+		this.row=row;
+		this.col=col;
+		this.qcid = qcid;
+		this.id = id;
+		data = new double[row][col];
+	}
+	
 	/**
 	 *  Create a random matrix of row x col with random elements
 	 *  between min and max inclusive
 	 */
-	public Matrix(int row, int col, int min, int max){
-		this.row=row;
-		this.col=col;
-		
-		data = new double[row][col];
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < col; j++){
-				data[i][j] = Quiz.random(min,max);
-			}
-		}
-	}
+//	public Matrix(int row, int col, int min, int max){
+//		this.row=row;
+//		this.col=col;
+//		
+//		data = new double[row][col];
+//		for(int i = 0; i < row; i++){
+//			for(int j = 0; j < col; j++){
+//				data[i][j] = Quiz.random(min,max);
+//			}
+//		}
+//	}
 	
 	//Matrix get element
 	public double get(int row, int col){
@@ -138,15 +147,16 @@ public class Matrix implements Displayable, java.io.Serializable{
 	//TODO: Fix the commas after each row, they aren't there!
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"grid\", [");
+		dc.append(",\n\t\t\t[\"grid\", \"").append(qcid).append('_').append(id).append("\", [");
 		for (int i = 0; i < row; i++) {
-			dc.append('[').append(data[i][0]);
+			if(i == 0) dc.append("[").append(data[i][0]);
+			else dc.append(",[").append(data[i][0]);
 			for (int j = 1; j < col; j++) {
 				dc.append(',').append(data[i][j]);
 			}
-			dc.append(']');
+			dc.append("]");
 		}		
-		dc.append("]],");
+		dc.append("]]");
 	}
 
 	@Override

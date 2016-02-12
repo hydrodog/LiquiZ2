@@ -19,7 +19,7 @@ public class LineBreak implements Displayable, java.io.Serializable{
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"Util.br\"],");
+		dc.append(",\n\t\t\t[\"Util.br\"]");
 	}
 
 	public void writeXML(StringBuilder b) {

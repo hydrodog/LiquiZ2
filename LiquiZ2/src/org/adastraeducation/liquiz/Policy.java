@@ -26,7 +26,7 @@ public class Policy implements java.io.Serializable
 	public Policy() {
 		attemptNum = 3;
 		timed = false;
-		duration = 300;
+		duration = 0;
 		showAns = false;
 		scored = true;
 		shuffleQues = true;

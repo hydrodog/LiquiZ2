@@ -125,7 +125,7 @@ public class FillIn extends Question implements java.io.Serializable{
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"fillin\", ").append(getId()).append("],");
+		dc.append(",\n\t\t\t[\"fillin\", ").append(getId()).append("]");
 	}
 
 	@Override

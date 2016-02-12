@@ -40,7 +40,7 @@ public class FileUpload extends Question implements java.io.Serializable{
  	}
 	
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"file\", \"Upload File\"").appendQuotedJS(label).append(", \"file-input\", ").append(getId()).append("],");	
+		dc.append(",\n\t\t\t[\"file\", \"Upload File\",").appendQuotedJS(label).append(", \"file-input\", ").append(getId()).append("]");	
 	}
 	public void writeXML(StringBuilder b ) {
 		b.append("<fileUpload/>");
