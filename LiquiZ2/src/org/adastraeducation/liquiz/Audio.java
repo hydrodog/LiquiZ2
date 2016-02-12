@@ -20,7 +20,7 @@ public class Audio extends Media implements java.io.Serializable{
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"Util.audio\", ").appendQuotedJS(getSource()).append("],");
+		dc.append(",\n\t\t\t[\"Util.audio\", ").appendQuotedJS(getSource()).append("]");
 	}
 
 	public void writeXML(StringBuilder b) {

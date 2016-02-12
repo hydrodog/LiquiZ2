@@ -105,7 +105,7 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 			for (Displayable d : displayables) {
 				d.writeJS(dc);
 			}
-		dc.append(" ]\n\t\t},");
+		dc.append(" ]\n\t\t}");
 	}
 
 	public String getCssClass() {

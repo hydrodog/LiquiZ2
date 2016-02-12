@@ -261,18 +261,20 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		
 //			dc.appendQuotedJS("payload").append(": ").appendJS(payLoad).
 			dc.appendQuotedJS("payload").append(": {\n\t\t\t").append("\"policy\": ").appendQuotedJS(policy.name).
-							append("\n\t\t\t\"title\": ").appendQuotedJS(name).
-			 				append(",\n\t\t\tpoints: ").append(points).
-			 				append(",\n\t\t\ttimeLimit: ").append(policy.getDuration()).
-			 				append(",\n\t\t\tremainingTries: ").append(1). //TODO: need count of user's tries
-			 				append(",\n\t\t\tdataDir: ").append("\"assets/\"").
-			 				append(",\n\t\t\teditMode: ").append(editMode).
-				append(",\n\t\t\tquestions: ").append("\t[");
+							append(",\n\t\t\t\"title\": ").appendQuotedJS(name).
+			 				append(",\n\t\t\t\"points\": ").append(points).
+			 				append(",\n\t\t\t\"timeLimit\": ").append(policy.getDuration()).
+			 				append(",\n\t\t\t\"remainingTries\": ").append(1). //TODO: need count of user's tries
+			 				append(",\n\t\t\t\"dataDir\": ").append("\"assets/\"").
+			 				append(",\n\t\t\t\"editMode\": ").append(editMode).
+				append(",\n\t\t\t\"questions\": ").append("\t[");
 		for(QuestionContainer qc: this.qContainers) {
 			qc.writeJS(dc);
+			dc.append(',');
 		}
-		dc.append
-			("\n\t]").
-		append("\n);");
+			dc.remove();
+		dc.append("\n\t\t]").
+			append("\n\t}").
+		append("\n}");
 	}
 }
