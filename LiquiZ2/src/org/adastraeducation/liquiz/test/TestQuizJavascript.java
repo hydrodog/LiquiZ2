@@ -169,7 +169,7 @@ public class TestQuizJavascript implements java.io.Serializable
 		//test for question 15 in QuizDemo_ajax.jsp, not good as of 7/21/2015, fillin used instead of numeric (although I don't understand why you can't just use fillin)
 		qc=new QuestionContainer(++qcid,"Arithmetic", "numeric", new ArrayList<Displayable>());
 		qc.add(new TextInstruction("What is the square root of 2? Be specific to three decimal places."));
-		qc.add(new FillIn(qcid,100,10,new Answer()));
+		qc.add(new FillIn(qid++,100,10,new Answer()));
 		quiz.addQuestion(qc);
 		
 		
