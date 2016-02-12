@@ -20,7 +20,7 @@ public class Match extends Question implements java.io.Serializable{
 	}
 
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"match\", ").append(getId()).append(", [");
+		dc.append(",\n\t\t\t[\"match\", ").append(getId()).append(", [");
 		for (int i=0; i<leftSide.size(); i++) {
 			if (i!=0) {
 				dc.append(", ");
@@ -34,7 +34,7 @@ public class Match extends Question implements java.io.Serializable{
 			}
 			dc.appendQuotedJS(rightSide.get(i).getName());
 		}
-		dc.append("]],");
+		dc.append("]]");
 	}
 
 	public void writeXML(StringBuilder b) {

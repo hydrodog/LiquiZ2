@@ -9,6 +9,8 @@ import java.util.ArrayList;
 public class MatrixQuestion extends Question implements java.io.Serializable{
 	private int rows;
 	private int cols;
+	private int qcid;
+	private int id;
 	
 	public int getRows(){
 		return rows;
@@ -33,6 +35,13 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 		this.rows = rows;
 		this.cols = cols;
 	}
+	public MatrixQuestion(int qcid, int id, int points, int level, int rows, int cols) {
+		super(id, points, level, (ArrayList<Answer>) null);
+		this.rows = rows;
+		this.cols = cols;
+		this.qcid = qcid;
+		this.id = id;
+	}
 	public MatrixQuestion(int points, int level, int rows, int cols) {
 		super(points, level);
 		this.rows = rows;
@@ -56,7 +65,7 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("\n\t\t\t[\"emptyGrid\",").append(getId()).append(",").append(rows).append(",").append(cols).append("],");
+		dc.append(",\n\t\t\t[\"emptyGrid\", \"").append(qcid).append('_').append(id).append("\", ").append(rows).append(",").append(cols).append("]");
 	}
 
 	@Override

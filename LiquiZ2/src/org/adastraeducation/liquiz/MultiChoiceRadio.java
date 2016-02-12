@@ -101,7 +101,7 @@ public class MultiChoiceRadio extends MultiChoiceDropdown implements java.io.Ser
 		} else if (answers.get(0).getAnswer() instanceof TextAnswer) {
 			mcRadioType = "selectText";
 		}
-		dc.append("\n\t\t\t[").appendQuotedJS(mcRadioType).append(", ")
+		dc.append(",\n\t\t\t[").appendQuotedJS(mcRadioType).append(", ")
 				.append(getId()).append(", [");
 		for (int i = 0; i < answers.size(); i++) {
 			if (i != 0) {
@@ -109,7 +109,7 @@ public class MultiChoiceRadio extends MultiChoiceDropdown implements java.io.Ser
 			}
 			dc.appendQuotedJS(answers.get(i).getName());
 		}
-		dc.append("]],");
+		dc.append("]]");
 	}
 
 }
