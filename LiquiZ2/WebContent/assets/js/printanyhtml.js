@@ -138,7 +138,7 @@ Grows the height of a parent element and self by delta y
 */
 PrintNode.prototype.extendHeight = function (delta) {
   this.height += delta;
-  if (this.parent) {
+  if (this.parent && this.parent != this) {
     this.parent.extendHeight(delta);
   }
 };
@@ -174,7 +174,11 @@ PrintImgNode.prototype.render = function (jsdoc, start, end) {
   if (!rect) {
     return;
   }
-  jsdoc.addImage(this.img, rect.x, rect.y);
+  if (rect.y < 0) {
+    jsdoc.addImage(this.img, rect.x, rect.y - this.height + rect.height);
+  } else {
+    jsdoc.addImage(this.img, rect.x, rect.y);
+  }
 };
 
 /**
@@ -214,7 +218,9 @@ PrintTextNode.prototype.render = function (jsdoc, start, end) {
   jsdoc.setFont(this.style.fontFamily, this.style.fontStyle);
   jsdoc.setFontSize(parseFloat(this.style.fontSize));
   var height = jsdoc.getTextDimensions("|").h;
-  jsdoc.text(this.children[0], rect.x, rect.y + height * 2 / 3);
+  for (var y = 0; y < this.children.length; y++) {
+    jsdoc.text(this.children[y], rect.x, y * height + rect.y + height * 2 / 3);
+  }
   //jsdoc.addImage(this.img, rect.x, rect.y);
 };
 
@@ -237,7 +243,9 @@ function PagePrinterV2() {
   this.pageWidth = this.scale * this.doc.internal.pageSize.width;
   this.nodeDocument = null;
   this.currentNode = null;
+  this.printingCursor = null;
   this.hasBeenRendered = false;
+  this.isPre = false;
 };
 
 /**
@@ -254,7 +262,13 @@ PagePrinterV2.prototype.print = function (ele) {
   }
   document.body.parentElement.style.width = null;
   if (!this.hasBeenRendered) {
-    this.nodeDocument.render(this.doc, 0, this.pageHeight);
+
+    for (var y = 0; y < this.nodeDocument.height; y += this.pageHeight) {
+      this.nodeDocument.render(this.doc, y, y + this.pageHeight);
+      if(y + this.pageHeight< this.nodeDocument.height){
+      this.doc.addPage();
+      }
+    }
     this.hasBeenRendered = true;
   }
   this.doc.save();
@@ -284,12 +298,37 @@ PagePrinterV2.prototype.prepare_head = function (element) {};
 /**
 Does nothing really.
 */
-PagePrinterV2.prototype.prepare_input = function (element) {};
+PagePrinterV2.prototype.prepare_input = function (element) {
+
+  var printNode = this.generallyPrep(element);
+  if (printNode && element.type != "radio" && element.type != "checkbox")
+    printNode.children.push(this.textInBox(printNode, element.value));
+  return printNode;
+};
+
+/**
+Does nothing really.
+*/
+PagePrinterV2.prototype.prepare__comment = function (element) {
+  console.log(element);
+};
 
 /**
 Does nothing really.
 */
 PagePrinterV2.prototype.prepare_br = function (element) {};
+
+
+/**
+Calls prep generallyPrep and sets mode to pre
+*/
+PagePrinterV2.prototype.prepare_pre = function (element) {
+  var oldIsPre = this.isPre;
+  this.isPre = true;
+  var printNode = this.generallyPrep(element);
+  this.isPre = oldIsPre;
+  return printNode;
+};
 
 /**
 Does nothing really.
@@ -298,18 +337,87 @@ PagePrinterV2.prototype.prepare_select = function (element) {};
 
 
 /**
+Prepares a textarea for printing
+*/
+PagePrinterV2.prototype.prepare_textarea = function (element) {
+  var printNode = this.generallyPrep(element);
+  printNode.children.push(this.textInBox(printNode, element.value));
+  return printNode;
+};
+
+PagePrinterV2.prototype.textInBox = function (printNode, text) {
+  var x = 0;
+  var y = 0;
+  var lines = text.split(/\n/g);
+  var printNode = new PrintTextNode(printNode.x, printNode.y, printNode.width, printNode.height, 0, 0, printNode.style);
+  for (var l = 0; l < lines.length; l++) {
+    var line = lines[l];
+    var words = line.split(/\s/g);
+    var currentString = "";
+    for (var w = 0; w < words.length; w++) {
+      var word = words[w];
+      var width = this.doc.getTextDimensions(word).w;
+      if (width > printNode.width) {
+        printNode.children.push(currentString);
+        currentString = word;
+      } else {
+        currentString += " " + word;
+      }
+    }
+    if (currentString.length > 0) {
+      printNode.children.push(currentString);
+    }
+  }
+  return printNode;
+};
+
+
+/**
 Does nothing really.
 */
 PagePrinterV2.prototype.prepare__text = function (element) {
+  var orig = element;
   var text = element.textContent;
   var range = document.createRange();
   range.selectNode(element);
+
   var clientRect = range.getBoundingClientRect();
   range.detach(); // frees up memory in older browsers
   element = element.parentElement;
   var computedStyle = getComputedStyle(element);
-  var printNode = new PrintTextNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, 0, styleFromComputed(computedStyle));
-  printNode.children.push(text);
+  var style = styleFromComputed(computedStyle);
+  var printNode = new PrintTextNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, 0, style);
+  var printingCursor = this.printingCursor;
+
+  var width = this.doc.getTextDimensions(text).w;
+
+  if (width > printNode.width) {
+    var timessplit = 0;
+    text = text.split(/\s/g);
+    var currentString = text[0].trim();
+    var words = 1;
+    while (words < text.length) {
+      if (this.doc.getTextDimensions(currentString + text[words]).w < printNode.width) {
+        currentString += " " + text[words];
+        words++;
+      } else {
+        printNode.children.push(currentString);
+        currentString = text[words];
+        timessplit++;
+        words++;
+      }
+    }
+    if (currentString.length > 0) {
+      printNode.children.push(currentString);
+      timessplit++;
+    }
+    if (timessplit <= 1) {
+      printNode.extendHeight((timessplit - 1) * this.doc.getTextDimensions("|").h);
+    }
+
+  } else {
+    printNode.children.push(text);
+  }
   return printNode;
 };
 
@@ -344,28 +452,59 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
   if (computedStyle.display == "none")
     return false;
   var clientRect = element.getBoundingClientRect();
-
-  var printNode = new PrintNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, 0, styleFromComputed(computedStyle));
+  var style = styleFromComputed(computedStyle)
+  var printNode = new PrintNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, 0, style);
+  //console.log(style.position);
 
   printNode.style.fontHeight = this.doc.getTextDimensions("|").h;
   //console.log(printNode.style);
-
+  var oldPrintingCursor = this.printingCursor;
+  if (oldPrintingCursor)
+    oldPrintingCursor.nextRect(printNode);
+  this.printingCursor = new PrintingCursor(printNode);
   var oldDoc = this.nodeDocument;
   var oldCurrent = this.currentNode;
+  this.currentNode = printNode;
   if (!this.nodeDocument) {
     this.nodeDocument = printNode;
-    this.currentNode = printNode;
   }
-  var children = element.childNodes;
-  for (var i = 0; i < children.length; i++) {
-    var child = this.prepare(children[i]);
-    if (child) {
-      printNode.children.push(child);
-      child.parent = printNode;
+  for (var i = 0; i < element.childNodes.length; i++) {
+    var childEle = element.childNodes[i];
+    if (childEle.nodeName == "#text") {
+      var text = childEle.textContent;
+      if (text.search(/\s/) != -1 && text.search(/[^\s]/) != -1) {
+        var matches = text.match(/\s/g);
+        var m = 0;
+        var nexts = text.split(/\s/g);
+        for (var n = 0; n < nexts.length; n++) {
+          var span = Util.span();
+          span.textContent = nexts[n];
+          element.insertBefore(span, childEle);
+          if (m < matches.length) {
+            var span = Util.span();
+            span.textContent = matches[m++];
+            element.insertBefore(span, childEle);
+          }
+        }
+
+        element.removeChild(childEle);
+
+        childEle = null;
+        i--;
+
+      }
+    }
+    if (childEle) {
+      var child = this.prepare(childEle);
+      if (child) {
+        printNode.children.push(child);
+        child.parent = printNode;
+      }
     }
   }
   if (oldDoc)
     this.nodeDocument = oldDoc;
+  this.printingCursor = oldPrintingCursor;
   this.currentNode = oldCurrent;
   return printNode;
 };
@@ -500,6 +639,24 @@ function styleFromComputed(computedStyle) {
     },
     fontSize: computedStyle.fontSize,
     fontFamily: computedStyle.fontFamily,
-    fontStyle: computedStyle.fontStyle
+    fontStyle: computedStyle.fontStyle,
+    display: computedStyle.display
   };
 }
+
+
+function PrintingCursor(node) {
+  this.x = node.x;
+  this.y = node.y;
+  this.width = node.width;
+  this.height = node.height;
+  this.owner = node;
+}
+
+PrintingCursor.prototype.nextRect = function (node) {
+  this.x = node.x;
+  this.y = node.y;
+  this.width = node.width;
+  this.height = node.height;
+  this.owner = node;
+};
