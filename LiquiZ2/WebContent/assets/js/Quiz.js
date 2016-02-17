@@ -441,8 +441,10 @@ Quiz.prototype.submit = function () {
 }
 Quiz.prototype.print = function () {
 	console.log('printing');
-	var printer = new PagePrinter();
-	printer.print();
+  document.body.classList.add("printing");
+	var printer = new PagePrinterV2();
+	printer.print(document.body.parentElement);
+  document.body.classList.remove("printing");
 	/*
     var doc = new jsPDF('p','in','letter')
     , sizes = [12, 16, 20]
