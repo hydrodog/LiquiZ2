@@ -1,3 +1,4 @@
+var MAX_SPLIT_SIZE = null;
 /**
 @author Stephen Oro
 
@@ -27,7 +28,7 @@ function PrintNode(x, y, width, height, offsetX, offsetY, style) {
   this.width = width;
   this.height = height;
   this.offsetX = offsetX;
-  this.offsetY = offsetY;
+  this.offsetY = 0;
   this.style = style;
   this.children = [];
   this.parent = null;
@@ -149,7 +150,6 @@ PrintNode.prototype.extendHeight = function (delta) {
 Shifts by delta y so that we don't cut awkwardly on pages
 */
 PrintNode.prototype.shiftDeltaY = function (delta) {
-  this.offsetY += delta;
   this.y += delta;
   if (this.parent && this.parent != this) {
     this.parent.extendHeight(delta);
@@ -254,11 +254,14 @@ function PagePrinterV2() {
   this.scale = this.doc.internal.scaleFactor;
   this.pageHeight = this.scale * this.doc.internal.pageSize.height;
   this.pageWidth = this.scale * this.doc.internal.pageSize.width;
+  if(MAX_SPLIT_SIZE === null)
+    MAX_SPLIT_SIZE = this.pageHeight;
   this.nodeDocument = null;
   this.currentNode = null;
   this.printingCursor = null;
   this.hasBeenRendered = false;
   this.isPre = false;
+  this.pageOffsetKeep = 0;
   this.offsetY = 0;
 };
 
@@ -366,6 +369,7 @@ PagePrinterV2.prototype.textInBox = function (printNode, text) {
   var y = 0;
   var lines = text.split(/\n/g);
   var printNode = new PrintTextNode(printNode.x, printNode.y, printNode.width, printNode.height, 0, 0, printNode.style);
+  printNode.parent = this.currentNode;
   for (var l = 0; l < lines.length; l++) {
     var line = lines[l];
     var words = line.split(/\s/g);
@@ -402,7 +406,9 @@ PagePrinterV2.prototype.prepare__text = function (element) {
   element = element.parentElement;
   var computedStyle = getComputedStyle(element);
   var style = styleFromComputed(computedStyle);
-  var printNode = new PrintTextNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, this.offsetY, style);
+  var printNode = new PrintTextNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, this.offsetY + this.pageOffsetKeep, style);
+  printNode.parent = this.currentNode;
+
   var printingCursor = this.printingCursor;
 
   var dim = this.doc.getTextDimensions(text);
@@ -454,7 +460,8 @@ PagePrinterV2.prototype.prepare_img = function (element) {
     return false;
   var clientRect = element.getBoundingClientRect();
 
-  var printNode = new PrintImgNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, element, this.offsetY);
+  var printNode = new PrintImgNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, element, this.offsetY + this.pageOffsetKeep);
+  printNode.parent = this.currentNode;
 
   return printNode;
 };
@@ -463,8 +470,9 @@ PagePrinterV2.prototype.antiSplitator = function (printNode) {
   var comparingTo = printNode.y % this.pageHeight;
   var compareTo = printNode.height;
   if (comparingTo + compareTo > this.pageHeight) {
-    if (printNode.height < this.pageHeight) {
+    if (printNode.height < MAX_SPLIT_SIZE) {
       var shiftBy = this.pageHeight + 1 - comparingTo;
+      //this.pageOffsetKeep += shiftBy;
       this.offsetY += shiftBy;
       printNode.shiftDeltaY(shiftBy);
     }
@@ -485,7 +493,9 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
     return false;
   var clientRect = element.getBoundingClientRect();
   var style = styleFromComputed(computedStyle)
-  var printNode = new PrintNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, this.offsetY, style);
+  var printNode = new PrintNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, this.offsetY + this.pageOffsetKeep, style);
+  printNode.parent = this.currentNode;
+
   //console.log(style.position);
 
   printNode.style.fontHeight = this.doc.getTextDimensions("|").h;
@@ -541,7 +551,7 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
           myOffsetYDelta += this.offsetY - myOffsetY;
           this.offsetY = myOffsetY;
         } else {
-          myOffsetY = this.offsetY;
+          myOffsetY = this.offsetY; // + myOffsetYDelta?
           myOffsetYDelta = 0;
         }
       } else {
@@ -551,7 +561,7 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
       var child = this.prepare(childEle);
       if (child) {
         printNode.children.push(child);
-        child.parent = printNode;
+        //child.parent = printNode;
       }
     }
   }
@@ -559,8 +569,11 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
 
   if (oldDoc)
     this.nodeDocument = oldDoc;
-  if (style.position == "absolute")
+  if (style.position == "absolute"){
     this.offsetY == oldOffsetY;
+  }else{
+    this.offsetY = myOffsetY + myOffsetYDelta + printNode.offsetY;
+  }
   this.printingCursor = oldPrintingCursor;
   this.currentNode = oldCurrent;
   return printNode;
