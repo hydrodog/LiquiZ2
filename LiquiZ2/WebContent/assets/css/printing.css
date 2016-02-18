@@ -29,7 +29,8 @@
 
 .printing .header h1 {
 	font-size: 1.5em;
-	margin-left: 10px;
+	margin-left: 0px;
+  padding: 0px;
 }
 
 .printing .qc,

@@ -2,8 +2,11 @@
  * author: Dov Kruger
  
  @todo2 print 
-3 policies - (name of course) 
+3 policies - (name of course) + editing
+pull out fields that are in quiz to policy
+named policies
 4 editing
+mathjax
 5 regex
 5a Diagrams
 1 insert insertAdjacentElement does not exist in Mozilla
