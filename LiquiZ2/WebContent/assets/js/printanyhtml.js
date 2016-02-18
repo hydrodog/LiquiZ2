@@ -318,8 +318,26 @@ Does nothing really.
 PagePrinterV2.prototype.prepare_input = function (element) {
 
   var printNode = this.generallyPrep(element);
-  if (printNode && element.type != "radio" && element.type != "checkbox")
+  if (printNode && element.type != "radio" && element.type != "checkbox"){
     printNode.children.push(this.textInBox(printNode, element.value));
+  }else if(printNode){
+    var borderWidth = 1;
+    var radius = 0;
+    if(element.type == "radio")
+      radius = printNode.width/2;
+    printNode.style.borderColor = htmlToRGBA("#000");
+    printNode.style.radius.rad = radius;
+    printNode.style.radius.top = radius;
+    printNode.style.radius.right = radius;
+    printNode.style.radius.bottom = radius;
+    printNode.style.radius.left = radius;
+    
+    printNode.style.border.top = borderWidth;
+    printNode.style.border.right = borderWidth;
+    printNode.style.border.bottom = borderWidth;
+    printNode.style.border.left = borderWidth;
+  }
+  
   return printNode;
 };
 
