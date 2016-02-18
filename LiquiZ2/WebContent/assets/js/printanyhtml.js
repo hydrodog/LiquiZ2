@@ -23,7 +23,7 @@
 */
 function PrintNode(x, y, width, height, offsetX, offsetY, style) {
   this.x = x;
-  this.y = y;
+  this.y = y + offsetY;
   this.width = width;
   this.height = height;
   this.offsetX = offsetX;
@@ -138,6 +138,19 @@ Grows the height of a parent element and self by delta y
 */
 PrintNode.prototype.extendHeight = function (delta) {
   this.height += delta;
+  this.offsetY += delta;
+  if (this.parent && this.parent != this) {
+    this.parent.extendHeight(delta);
+  }
+};
+
+
+/**
+Shifts by delta y so that we don't cut awkwardly on pages
+*/
+PrintNode.prototype.shiftDeltaY = function (delta) {
+  this.offsetY += delta;
+  this.y += delta;
   if (this.parent && this.parent != this) {
     this.parent.extendHeight(delta);
   }
@@ -152,9 +165,9 @@ PrintNode.prototype.extendHeight = function (delta) {
 
 @property {HTMLElement} img The image to be rendered.
 */
-function PrintImgNode(x, y, width, height, img) {
+function PrintImgNode(x, y, width, height, img, offsetY) {
   this.x = x;
-  this.y = y;
+  this.y = y + offsetY;
   this.width = width;
   this.height = height;
   this.img = img;
@@ -246,6 +259,7 @@ function PagePrinterV2() {
   this.printingCursor = null;
   this.hasBeenRendered = false;
   this.isPre = false;
+  this.offsetY = 0;
 };
 
 /**
@@ -265,8 +279,8 @@ PagePrinterV2.prototype.print = function (ele) {
 
     for (var y = 0; y < this.nodeDocument.height; y += this.pageHeight) {
       this.nodeDocument.render(this.doc, y, y + this.pageHeight);
-      if(y + this.pageHeight< this.nodeDocument.height){
-      this.doc.addPage();
+      if (y + this.pageHeight < this.nodeDocument.height) {
+        this.doc.addPage();
       }
     }
     this.hasBeenRendered = true;
@@ -333,7 +347,9 @@ PagePrinterV2.prototype.prepare_pre = function (element) {
 /**
 Does nothing really.
 */
-PagePrinterV2.prototype.prepare_select = function (element) {};
+PagePrinterV2.prototype.prepare_select = function (element) {
+
+};
 
 
 /**
@@ -386,11 +402,13 @@ PagePrinterV2.prototype.prepare__text = function (element) {
   element = element.parentElement;
   var computedStyle = getComputedStyle(element);
   var style = styleFromComputed(computedStyle);
-  var printNode = new PrintTextNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, 0, style);
+  var printNode = new PrintTextNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, this.offsetY, style);
   var printingCursor = this.printingCursor;
 
-  var width = this.doc.getTextDimensions(text).w;
-
+  var dim = this.doc.getTextDimensions(text);
+  var width = dim.w;
+  var deltaHeight = 0;
+  var ch = this.doc.getTextDimensions("|").h;
   if (width > printNode.width) {
     var timessplit = 0;
     text = text.split(/\s/g);
@@ -401,6 +419,7 @@ PagePrinterV2.prototype.prepare__text = function (element) {
         currentString += " " + text[words];
         words++;
       } else {
+        deltaHeight += ch;
         printNode.children.push(currentString);
         currentString = text[words];
         timessplit++;
@@ -411,13 +430,15 @@ PagePrinterV2.prototype.prepare__text = function (element) {
       printNode.children.push(currentString);
       timessplit++;
     }
-    if (timessplit <= 1) {
-      printNode.extendHeight((timessplit - 1) * this.doc.getTextDimensions("|").h);
+    if (timessplit >= 1) {
+      //this.offsetY += deltaHeight;
+      //printNode.extendHeight(deltaHeight);
     }
 
   } else {
     printNode.children.push(text);
   }
+  this.antiSplitator(printNode);
   return printNode;
 };
 
@@ -433,11 +454,22 @@ PagePrinterV2.prototype.prepare_img = function (element) {
     return false;
   var clientRect = element.getBoundingClientRect();
 
-  var printNode = new PrintImgNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, element);
+  var printNode = new PrintImgNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, element, this.offsetY);
 
   return printNode;
 };
 
+PagePrinterV2.prototype.antiSplitator = function (printNode) {
+  var comparingTo = printNode.y % this.pageHeight;
+  var compareTo = printNode.height;
+  if (comparingTo + compareTo > this.pageHeight) {
+    if (printNode.height < this.pageHeight) {
+      var shiftBy = this.pageHeight + 1 - comparingTo;
+      this.offsetY += shiftBy;
+      printNode.shiftDeltaY(shiftBy);
+    }
+  }
+};
 
 
 /**
@@ -453,11 +485,14 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
     return false;
   var clientRect = element.getBoundingClientRect();
   var style = styleFromComputed(computedStyle)
-  var printNode = new PrintNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, 0, style);
+  var printNode = new PrintNode(clientRect.left + window.scrollX, clientRect.top + window.scrollY, clientRect.width, clientRect.height, 0, this.offsetY, style);
   //console.log(style.position);
 
   printNode.style.fontHeight = this.doc.getTextDimensions("|").h;
   //console.log(printNode.style);
+  var oldOffsetY = this.offsetY;
+  if (style.position == "absolute")
+    this.offsetY == 0;
   var oldPrintingCursor = this.printingCursor;
   if (oldPrintingCursor)
     oldPrintingCursor.nextRect(printNode);
@@ -468,9 +503,15 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
   if (!this.nodeDocument) {
     this.nodeDocument = printNode;
   }
+
+  this.antiSplitator(printNode);
+
+  var myOffsetY = this.offsetY,
+    myOffsetYDelta = 0;
   for (var i = 0; i < element.childNodes.length; i++) {
     var childEle = element.childNodes[i];
-    if (childEle.nodeName == "#text") {
+
+    if (childEle.nodeName == "#text" && printNode.style.display == "inline") {
       var text = childEle.textContent;
       if (text.search(/\s/) != -1 && text.search(/[^\s]/) != -1) {
         var matches = text.match(/\s/g);
@@ -495,6 +536,18 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
       }
     }
     if (childEle) {
+      if (childEle.style) {
+        if (childEle.style.display == "inline") {
+          myOffsetYDelta += this.offsetY - myOffsetY;
+          this.offsetY = myOffsetY;
+        } else {
+          myOffsetY = this.offsetY;
+          myOffsetYDelta = 0;
+        }
+      } else {
+        myOffsetYDelta += this.offsetY - myOffsetY;
+        this.offsetY = myOffsetY;
+      }
       var child = this.prepare(childEle);
       if (child) {
         printNode.children.push(child);
@@ -502,8 +555,12 @@ PagePrinterV2.prototype.generallyPrep = function (element) {
       }
     }
   }
+  this.offsetY = myOffsetY + myOffsetYDelta;
+
   if (oldDoc)
     this.nodeDocument = oldDoc;
+  if (style.position == "absolute")
+    this.offsetY == oldOffsetY;
   this.printingCursor = oldPrintingCursor;
   this.currentNode = oldCurrent;
   return printNode;
@@ -640,7 +697,8 @@ function styleFromComputed(computedStyle) {
     fontSize: computedStyle.fontSize,
     fontFamily: computedStyle.fontFamily,
     fontStyle: computedStyle.fontStyle,
-    display: computedStyle.display
+    display: computedStyle.display,
+    position: computedStyle.position
   };
 }
 
