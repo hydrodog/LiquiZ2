@@ -1,22 +1,24 @@
 package org.adastraeducation.liquiz;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Page implements Displayable, java.io.Serializable{
-	public String name;
-	private Type type;
-	private StyleSheet css;
+	protected String pageName;
+	protected String type;
+	protected String css;
 	
 	public Page(){
 		
 	}
 	
 	
-	public Page(Type type, StyleSheet css){
+	public Page(String type, String css){
 		this.type = type;
 		this.css = css;
 	}
 	
-	public Page(String name, Type type, StyleSheet css){
-		this.name = name;
+	public Page(String name, String type, String css){
+		this.pageName = name;
 		this.type = type;
 		this.css = css;
 	}
@@ -43,7 +45,37 @@ public class Page implements Displayable, java.io.Serializable{
 	
 	
 	public String toString(){
-		return name;
+		return pageName;
+	}
+
+
+	public String getPageName() {
+		return pageName;
+	}
+
+
+	public void setPageName(String pageName) {
+		this.pageName = pageName;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public String getCss() {
+		return css;
+	}
+
+
+	public void setCss(String css) {
+		this.css = css;
 	}
 
 	

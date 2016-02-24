@@ -23,4 +23,11 @@ public class TextAnswer extends Text {
 		b.append("<text>").append(getText()).append("</text>");
 		//TODO, if this is still going to be used
 	}
+
+	@Override
+	public String toString() {
+		return "TextAnswer [TextAnswer=" + getText() + "]";
+	}
+	
+	
 }

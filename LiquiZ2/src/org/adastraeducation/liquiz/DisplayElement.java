@@ -10,4 +10,10 @@ public abstract class DisplayElement implements Displayable, java.io.Serializabl
 	public int getID() {
 		return id;
 	}
+	@Override
+	public String toString() {
+		return "DisplayElement [text=" + getName() + "]";
+	}
+	
+	
 }

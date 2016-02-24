@@ -23,7 +23,7 @@ public class Grid extends DisplayElement implements java.io.Serializable{
 	}
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append("page.grid(").append(grid).append(");\n");
+//	dc.append("page.grid(").append(grid).append(");\n");  TODO: fix this error
 	}
 	@Override
 	public void writeXML(StringBuilder b) {
