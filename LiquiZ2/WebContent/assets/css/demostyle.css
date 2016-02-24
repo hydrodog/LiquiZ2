@@ -136,11 +136,10 @@ video {
 	font: 12pt monospace;
 	color: #00ff20;
 	background-color: black;
-	border-color: black;
 	border-style: none;
 	border-bottom-style: solid;
 	border-bottom-color: #00ff20;
-	border-width: 1px;
+	border-width: 0px 0px 1px 0px;
 	text-align: center;
 	width: 100px;
 }
