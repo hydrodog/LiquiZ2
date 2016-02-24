@@ -1,4 +1,7 @@
 package org.adastraeducation.liquiz;
+
+import com.google.gson.annotations.SerializedName;
+
 /**
  * A Type gives information about the type of the quiz.
  * 
@@ -7,19 +10,28 @@ package org.adastraeducation.liquiz;
  */
 public class Type implements java.io.Serializable
 {
-
-	public String name;
+	public String typeName;
 	
 	public Type(){
-		this.name = "Quiz";
+		this.typeName = "Quiz";
 	}
 	
 	public Type(String name){
-		this.name = name;
+		this.typeName = name;
 	}
 	
 	public String toString(){
-		return name;
+		return typeName;
 	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	
+	
 	
 }

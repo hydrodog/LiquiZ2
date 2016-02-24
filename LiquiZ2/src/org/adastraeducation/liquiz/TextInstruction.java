@@ -23,4 +23,11 @@ public class TextInstruction extends Text implements java.io.Serializable{
 		b.append("<text>").append(getText()).append("</text>");
 		//TODO, if this is still going to be used
 	}
+
+	@Override
+	public String toString() {
+		return "TextInstruction [instructions: " + getText() + "]";
+	}
+	
+	
 }

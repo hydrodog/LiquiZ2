@@ -66,6 +66,18 @@ public class Code extends Question implements java.io.Serializable{
 		
  	}
 
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public int getCols() {
+		return cols;
+	}
+	public void setCols(int cols) {
+		this.cols = cols;
+	}
 	public void writeJS(DisplayContext dc) {
 		dc.append(",\n\t\t\t[\"code\", ").append(getId()).append(", ").appendQuotedJS(defaultText).append(", ").append(rows).append(", ").append(cols).append("]\n");
 		//TODO default text?
@@ -84,5 +96,11 @@ public class Code extends Question implements java.io.Serializable{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	@Override
+	public String toString() {
+		return "Code [id = " + getId() + ", defaultText=" + defaultText + ", rows=" + rows + ", cols=" + cols + "]";
+	}
+	
+	
 	
 }

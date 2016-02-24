@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import org.adastraeducation.liquiz.util.*;
+
+import com.google.gson.annotations.SerializedName;
 /**
  * 
  * Represent a quiz on the server
@@ -16,14 +18,17 @@ import org.adastraeducation.liquiz.util.*;
  */
 public class Quiz extends Page implements Displayable, java.io.Serializable
  {
-	private int id; // unique id for db and XML
-	private String desc; // display name & description, TODO possibly per Course? or copy renamed quiz
-	public String name;
-	private ArrayList<QuestionContainer> qContainers;
-	private Policy policy ; 
-	private boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
-	public static Random r;
-	private PayLoad payLoad;
+	private transient int id; // unique id for db and XML
+	private transient String desc; // display name & description, TODO possibly per Course? or copy renamed quiz
+	public transient String quizName;
+	@SerializedName("questions")
+	
+	private transient ArrayList<QuestionContainer> qContainers;
+	private transient Policy policy ; 
+	private transient boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
+	public transient static Random r;
+	private PayLoad payload;
+	
 	
 	
 	
@@ -49,21 +54,22 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 	public Quiz(int id, String title, String desc, Policy plc, boolean editMode) {
 		super();
 		this.id = id;
-		this.name = title;
+		this.quizName = title;
 		this.desc = desc;
 		this.qContainers = new ArrayList<QuestionContainer>();
 		this.policy = plc;
 		this.editMode=editMode;
 	}
 	
-	public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
+	public Quiz(int id, String type, String css, String name, String desc, Policy plc, boolean editMode) {
 		super(type, css);
 		this.id = id;
-		this.name = name;
+		this.quizName = name;
 		this.desc = desc;
 		this.qContainers = new ArrayList<QuestionContainer>();
 		this.policy = plc;
 		this.editMode=editMode;
+		this.payload = new PayLoad(plc, quizName, 100, 0, 1, "assets/", editMode);
 	}
 	
 	public Quiz(Policy plc) {
@@ -74,12 +80,20 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 	
 	public Quiz(int id, String name, String desc, Policy policy) {
 		this.id = id;
-		this.name = name;
+		this.quizName = name;
 		this.desc = desc;
 		this.policy = policy;
 		this.qContainers = new ArrayList<QuestionContainer>();
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return "Quiz [" + "type=" + type + ", css=" + css + ", payload=" + payload +  "]";
+	}
+
+
 	public static int random(int a, int b) {
 		return a + r.nextInt(b-a);
 	}
@@ -108,11 +122,11 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 	}
 
 	public String getName() {
-		return name;
+		return quizName;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.quizName = name;
 	}
 	
 	public String getDesc() {
@@ -142,8 +156,8 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		return count;
 	}
 	
-	public Policy getPolicy(){
-		return policy;
+	public String getPolicy(){
+		return policy.getName();
 	}
 	
 /*	public void setPolicy(int num,boolean timed, int duration, 
@@ -195,6 +209,7 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		if(this.qContainers == null)
 			this.qContainers = new ArrayList<QuestionContainer>();
 		qContainers.add(qc);
+		payload.getQuestions().add(qc);
 	}
 	
 	public void deleteQuestionContainer(int Index) {
@@ -203,6 +218,7 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 	
 	public void addQuestion(QuestionContainer qc) {
 		qContainers.add(qc);
+		payload.getQuestions().add(qc);
 	}
 	public void addQuestion(HttpServletRequest req) {
 		String questionType = req.getParameter("question_type");
@@ -260,8 +276,8 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 		super.writeJS(dc);
 		
 //			dc.appendQuotedJS("payload").append(": ").appendJS(payLoad).
-			dc.appendQuotedJS("payload").append(": {\n\t\t\t").append("\"policy\": ").appendQuotedJS(policy.name).
-							append(",\n\t\t\t\"title\": ").appendQuotedJS(name).
+			dc.appendQuotedJS("payload").append(": {\n\t\t\t").append("\"policy\": ").appendQuotedJS(policy.getName()).
+							append(",\n\t\t\t\"title\": ").appendQuotedJS(quizName).
 			 				append(",\n\t\t\t\"points\": ").append(points).
 			 				append(",\n\t\t\t\"timeLimit\": ").append(policy.getDuration()).
 			 				append(",\n\t\t\t\"remainingTries\": ").append(1). //TODO: need count of user's tries
@@ -277,4 +293,36 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 			append("\n\t}").
 		append("\n}");
 	}
+
+
+	public String getQuizName() {
+		return quizName;
+	}
+
+
+	public void setQuizName(String quizName) {
+		this.quizName = quizName;
+	}
+
+
+	public static Random getR() {
+		return r;
+	}
+
+
+	public static void setR(Random r) {
+		Quiz.r = r;
+	}
+
+
+	public PayLoad getPayload() {
+		return payload;
+	}
+
+
+	public void setPayload(PayLoad payload) {
+		this.payload = payload;
+	}
+	
+	
 }

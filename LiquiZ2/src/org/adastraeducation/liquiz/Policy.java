@@ -1,4 +1,7 @@
 package org.adastraeducation.liquiz;
+
+import com.google.gson.annotations.SerializedName;
+
 /**
  * A Policy represents how a quiz is modified and accessed.
  * See also Assignment which controls when a Quiz is visible.
@@ -8,19 +11,35 @@ package org.adastraeducation.liquiz;
  */
 public class Policy implements java.io.Serializable
 {
-	private int id;				// unique id in database
-	public String name; 		// display name of the policy
-	private int attemptNum;		// number of times students are allowed to take the quiz
-	private boolean timed;		// true if timed, false otherwise
-	private int duration;		// if timed is true, duration is the time allotted in seconds.
-	private boolean showAns;	// if true, then after grading display the answers
-	private boolean showAnsOnLastAtt;	// if true, then display answers on last attempt
-	private boolean scored;		// if true, then this quiz is scored (otherwise do not score)
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPolicyName() {
+		return policyName;
+	}
+
+	public void setPolicyName(String policyName) {
+		this.policyName = policyName;
+	}
+
+	private transient int id;				// unique id in database
+	public String policyName; 		// display name of the policy
+	private transient int attemptNum;		// number of times students are allowed to take the quiz
+	private transient boolean timed;		// true if timed, false otherwise
+	private transient int duration;		// if timed is true, duration is the time allotted in seconds.
+	private transient boolean showAns;	// if true, then after grading display the answers
+	private transient boolean showAnsOnLastAtt;	// if true, then display answers on last attempt
+	private transient boolean scored;		// if true, then this quiz is scored (otherwise do not score)
 	// TODO have a policy to do something IF grade < x???
-	private boolean shuffleQues;// if true, randomly shuffle the question order
-	private boolean shuffleAns;	// if true, randomly shuffle the order of multiple choice answers
+	private transient boolean shuffleQues;// if true, randomly shuffle the question order
+	private transient boolean shuffleAns;	// if true, randomly shuffle the order of multiple choice answers
 	//TODO: require access from specific access point??
-	private String accessCode;	// if not null, this code is used to take the quiz
+	private transient String accessCode;	// if not null, this code is used to take the quiz
 	//TODO: restrict to local range of addresses, ie in class?
 	
 	public Policy() {
@@ -36,20 +55,20 @@ public class Policy implements java.io.Serializable
 
 	public Policy(String name){
 		this();
-		this.name = name;
+		this.policyName = name;
 	}
 	
 	public Policy(int id, String name){
 		this.id = id;
-		this.name = name;
+		this.policyName = name;
 	}
 	
 	public String getName() {
-		return name;
+		return policyName;
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		this.policyName = name;
 	}
 	
 	public int getID() {
@@ -132,7 +151,7 @@ public class Policy implements java.io.Serializable
 	}
 	
 	public String toString(){
-		return "Policy Name: " + name;
+		return "Policy Name: " + policyName;
 	}
 
 }

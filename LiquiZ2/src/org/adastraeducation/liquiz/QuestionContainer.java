@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
 
+import com.google.gson.annotations.SerializedName;
+
 public class QuestionContainer implements Displayable, java.io.Serializable{
 	private int id;
-	private String name;
-	private ArrayList<Displayable> displayables;
+	@SerializedName("title")
+	private String qcName;
+	@SerializedName("type")
 	private String cssClass; // the display for this container
+	@SerializedName("content")
+	private ArrayList<Displayable> displayables;
+	
 
 	public QuestionContainer() {
 		displayables = new ArrayList<Displayable>();
@@ -19,14 +25,14 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 	}
 
 	public QuestionContainer(String name, ArrayList<Displayable> list) {
-		this.name = name;
+		this.qcName = name;
 		displayables = new ArrayList<Displayable>(list);
 	}
 
 	public QuestionContainer(int id, String name, String cssClass,
 			ArrayList<Displayable> list) {
 		this.id = id;
-		this.name = name;
+		this.qcName = name;
 		this.cssClass = cssClass;
 		displayables = new ArrayList<Displayable>(list);
 	}
@@ -58,13 +64,9 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 	}
 
 	public String getName() {
-		return name;
+		return qcName;
 	}
 	
-	public int getID() {
-		return id;
-	}
-
 	public int getTotalPoints() {
 		int totalPoints = 0;
 		for (Displayable d : displayables) {
@@ -99,7 +101,7 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 
 	public void writeJS(DisplayContext dc) {
 		dc.append("\n\t\t{\t").append("\n\t\t\t\"id\": ").append(id).
-		   append(",\n\t\t\t\"title\": ").appendQuotedJS(name).
+		   append(",\n\t\t\t\"title\": ").appendQuotedJS(qcName).
 		   append(",\n\t\t\t\"type\": ").appendQuotedJS(cssClass).
 		   append(",\n\t\t\t\"content\": [");
 			for (Displayable d : displayables) {
@@ -115,4 +117,28 @@ public class QuestionContainer implements Displayable, java.io.Serializable{
 	public void setCssClass(String cssClass) {
 		this.cssClass = cssClass;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getQcName() {
+		return qcName;
+	}
+
+	public void setQcName(String qcName) {
+		this.qcName = qcName;
+	}
+
+	@Override
+	public String toString() {
+		return "QuestionContainer [id=" + id + ", title=" + qcName + ", type=" + cssClass + ", content="
+				+ displayables + "]";
+	}
+	
+	
 }

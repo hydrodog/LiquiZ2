@@ -7,6 +7,10 @@ public class Match extends Question implements java.io.Serializable{
 	private ArrayList<Answer> rightSide;				//rightSide is the response to leftSide
 	private ArrayList<Integer> matchReferences;		    //length of matchReferences must equal length of leftSide.  matchReferences should be set up so that the correct answer to leftSide.get(i) is rightSide.get(matchReferences.get(i)).
 
+	
+	public Match(){
+		super();
+	}
 	public Match(int id, int points, int level, ArrayList<Answer> leftSide, ArrayList<Answer> rightSide, ArrayList<Integer> matchReferences) {
 		super(id, points, level);
 		this.leftSide=leftSide;
@@ -47,5 +51,28 @@ public class Match extends Question implements java.io.Serializable{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	public ArrayList<Answer> getLeftSide() {
+		return leftSide;
+	}
+	public void setLeftSide(ArrayList<Answer> leftSide) {
+		this.leftSide = leftSide;
+	}
+	public ArrayList<Answer> getRightSide() {
+		return rightSide;
+	}
+	public void setRightSide(ArrayList<Answer> rightSide) {
+		this.rightSide = rightSide;
+	}
+	public ArrayList<Integer> getMatchReferences() {
+		return matchReferences;
+	}
+	public void setMatchReferences(ArrayList<Integer> matchReferences) {
+		this.matchReferences = matchReferences;
+	}
+	@Override
+	public String toString() {
+		return "Match [id=" + getId() + ", leftSide=" + leftSide + ", rightSide=" + rightSide + "]";
+	}
+	
 	
 }

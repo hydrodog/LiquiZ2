@@ -10,7 +10,6 @@ public class TestQuizJavascript implements java.io.Serializable
 {
 	public static void main(String[] a) {		
 		printQuiz(test3());
-//		System.out.println("\\\"hello \"\\");
 		
 	}
 	public static void printQuiz(Quiz quiz) {
@@ -30,13 +29,13 @@ public class TestQuizJavascript implements java.io.Serializable
 	public static Quiz test1() {
 		int qid=1;
 		int qcid=0;
-		Type t = new Type();
-		StyleSheet s = new StyleSheet("demostyle.css");
 		Policy p = new Policy("Dov");
+		String t = "Quiz";
+		String s = "demostyle.css";
 //		Title ti = new Title("Quiz Demo #1");
 //		PayLoad pl = new PayLoad(p, ti, 100, 0, 1, "'assets/'", true);
 //		public Quiz(int id, Type type, StyleSheet css, String name, String desc, Policy plc, boolean editMode) {
-		Quiz quiz = new Quiz(1, t, s, "Quiz Demo #1", "", p, true);
+		Quiz quiz = new Quiz(1, t , s, "Quiz Demo #1", "", p, true);
 //		QuestionContainer qc = 
 //				new QuestionContainer(qcid++, "Operators", "fillin", new ArrayList<Displayable>());
 //		qc.add(new TextQuestion("What is 2+2?"));
@@ -189,8 +188,8 @@ public class TestQuizJavascript implements java.io.Serializable
 		public static Quiz test2() {
 			int qid= 1;
 			int qcid=0;
-			Type t = new Type();
-			StyleSheet s = new StyleSheet("demostyle.css");
+			String t = "Quiz";
+			String s = "demostyle.css";
 			Policy p = new Policy("Dov");
 			Quiz quiz = new Quiz(2, t, s, "Algebra quiz","This is an Algebra Quiz", p, true);
 			
@@ -235,8 +234,8 @@ public class TestQuizJavascript implements java.io.Serializable
 		public static Quiz test3() {
 			int qid= 1;
 			int qcid= 0;
-			Type t = new Type();
-			StyleSheet s = new StyleSheet("demostyle.css");
+			String t = "Quiz";
+			String s = "demostyle.css";
 			Policy p = new Policy("Dov");
 			Quiz quiz = new Quiz(3, t, s, "Programming Quiz", "", p, true);
 			QuestionContainer qc= 

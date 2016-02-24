@@ -110,4 +110,26 @@ public class Cloze extends Question implements java.io.Serializable{
 		return earned;
 	}
 
+	public String getNoAns() {
+		return noAns;
+	}
+
+	public void setNoAns(String noAns) {
+		this.noAns = noAns;
+	}
+
+	public String getwAns() {
+		return wAns;
+	}
+
+	public void setwAns(String wAns) {
+		this.wAns = wAns;
+	}
+
+	@Override
+	public String toString() {
+		return "Cloze [id= " + getId() + ", noAns=" + noAns +"]";
+	}
+
+	
 }

@@ -97,4 +97,11 @@ public class Answer implements Displayable, Cloneable, java.io.Serializable{
 		ans.writeXML(b);
 		b.append("</A>");
 	}
+
+	@Override
+	public String toString() {
+		return "Answer [ans=" + ans + "]";
+	}
+	
+	
 }
