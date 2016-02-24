@@ -41,11 +41,25 @@ public class JsonTranslator{
 		
 	}
 	
+	
+	
+	public static Gson getGson() {
+		return gson;
+	}
+
+
+
+	public static void setGson(Gson gson) {
+		JsonTranslator.gson = gson;
+	}
+
+
+
 	public JsonTranslator(){
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(Quiz.class, new QuizTranslator());
 		builder.registerTypeAdapter(PayLoad.class, new PayLoadTranslator());
-		builder.registerTypeAdapter(Policy.class, new PolicyTranslator());
+//		builder.registerTypeAdapter(Policy.class, new PolicyTranslator());
 		builder.registerTypeAdapter(QuestionContainer.class, new QuestionContainerTranslator());
 		// Using serializers of these classes
 		builder.registerTypeAdapter(TextInstruction.class, new TextInstructionTranslator());
@@ -89,9 +103,9 @@ public class JsonTranslator{
 		@Override
 		public JsonElement serialize(PayLoad payload, Type arg1, JsonSerializationContext arg2) {
 		    JsonObject jobj = new JsonObject();
-		    JsonElement policy = arg2.serialize(payload.getPolicy());
-			jobj.add("policy", policy);
-//		    jobj.addProperty("policy", payload.getPolicyName());
+//		    JsonElement policy = arg2.serialize(payload.getPolicy());
+//			jobj.add("policy", policy);
+		    jobj.addProperty("policy", payload.getPolicyName());
 		    jobj.addProperty("title", payload.getTitle());
 		    jobj.addProperty("points", payload.getPoints());
 		    jobj.addProperty("timeLimit", payload.getTimeLimit());
@@ -111,8 +125,8 @@ public class JsonTranslator{
 			PayLoad payload = new PayLoad();
 			Type qcType = new TypeToken<ArrayList<QuestionContainer>>(){}.getType();
 			
-			payload.setPolicy(gson.fromJson(jobj.get("policy"), Policy.class));
-			
+//			payload.setPolicy(gson.fromJson(jobj.get("policy"), Policy.class));
+			payload.setPolicy(new Policy(jobj.get("policy").getAsString()));
 			payload.setTitle(jobj.get("title").getAsString());
 			payload.setPoints(jobj.get("points").getAsInt()); 
 			payload.setTimeLimit(jobj.get("timeLimit").getAsInt());
@@ -261,7 +275,7 @@ public class JsonTranslator{
 				
 				JsonObject jobj = json.getAsJsonObject();
 				Policy policy = new Policy();
-				policy.setName(jobj.get("policy").getAsString());
+				policy.setName(jobj.getAsString());
 				return policy;
 			}
 			
