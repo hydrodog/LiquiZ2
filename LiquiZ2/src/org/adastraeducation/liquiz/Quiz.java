@@ -25,6 +25,7 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 	
 	private transient ArrayList<QuestionContainer> qContainers;
 	private transient Policy policy ; 
+	private String policyName;
 	private transient boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
 	public transient static Random r;
 	private PayLoad payload;
