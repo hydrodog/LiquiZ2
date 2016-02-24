@@ -2,8 +2,11 @@
  * author: Dov Kruger
  
  @todo2 print 
-3 policies - (name of course) 
+3 policies - (name of course) + editing
+pull out fields that are in quiz to policy
+named policies
 4 editing
+mathjax
 5 regex
 5a Diagrams
 1 insert insertAdjacentElement does not exist in Mozilla
@@ -441,8 +444,10 @@ Quiz.prototype.submit = function () {
 }
 Quiz.prototype.print = function () {
 	console.log('printing');
-	var printer = new PagePrinter();
-	printer.print();
+  document.body.classList.add("printing");
+	var printer = new PagePrinterV2();
+	printer.print(document.body.parentElement);
+  document.body.classList.remove("printing");
 	/*
     var doc = new jsPDF('p','in','letter')
     , sizes = [12, 16, 20]
