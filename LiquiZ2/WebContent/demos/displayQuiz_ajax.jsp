@@ -23,16 +23,18 @@
  */
  
             
-		    Gson gson = JsonTranslator.getGson();
+		    Gson gson = new JsonTranslator().getGson();
 			Quiz quiz = TestQuizJavascript.test3();
-			String je = gson.toJson(quiz); 
-		//	System.out.println("Quiz Json");
+		    String je = gson.toJson(quiz);
+		 // out.println(je);
 		//	System.out.println(je);
-		//Quiz quiz1 = gson.fromJson(je,  Quiz.class);
+		    Quiz quiz1 = gson.fromJson(je,  Quiz.class);
 		//	System.out.println("Quiz Object: ");
 		//	System.out.println(quiz1);
-			//String je1 = gson.toJson(quiz1);
-			//out.println(je1);
+		
+		
+			String je1 = gson.toJson(quiz1);
+			out.println(je1);
 %>	  
 
 <%-- <%=out.println(dc.toString()) %> --%>
