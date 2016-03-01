@@ -28,15 +28,39 @@ public class JsonTranslator{
 	public static void  main(String[] args) throws ClassNotFoundException{
 	    new JsonTranslator();
 		Quiz quiz = TestQuizJavascript.test3();
-		String je = gson.toJson(quiz);
-//		System.out.println("Quiz Json");
-//		System.out.println(je);
+		String je = "";
+		je = gson.toJson(quiz);
 		Quiz quiz1 = gson.fromJson(je,  Quiz.class);
+		
+		
+		
+		
+		final int n = (int)1e6;
+		long t0 = System.nanoTime();
+        for(int i = 0; i < n; i++){
+        	  je = gson.toJson(quiz);
+        }
+        long t1 = System.nanoTime() - t0;
+        
+        System.out.println("the average serializing time is: " + (double)(t1)/n/1.0e9);
+        
+	    System.out.println(je);
+        
+		  long t2 = System.nanoTime();
+		  for(int i = 0; i < n; i++){
+			   quiz1 = gson.fromJson(je,  Quiz.class);
+		  }
+		  
+		  long t3 = System.nanoTime() - t2;  
+		  
+		  System.out.println("the average deserializing time is: " + (double)(t3)/n/1.0e9);
+		  System.out.println(quiz1);
+//		Quiz quiz1 = gson.fromJson(je,  Quiz.class);
 //		System.out.println("Quiz Object: ");
 //		System.out.println(quiz1);
-		String je1 = gson.toJson(quiz1);
-		System.out.println("Quiz Json1");
-		System.out.println(je1);
+//		String je1 = gson.toJson(quiz1);
+//		System.out.println("Quiz Json1");
+//		System.out.println(je1);
 		
 		
 	}
