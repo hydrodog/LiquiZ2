@@ -10,7 +10,7 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 	private int rows;
 	private int cols;
 	private int qcid;
-	private int matrixid; // Don't change this to id since Question class has the same field named id, this will prevent GSON from deserialization.
+	private int id; // Don't change this to id since Question class has the same field named id, this will prevent GSON from deserialization.
 	
 	public int getRows(){
 		return rows;
@@ -40,7 +40,7 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 		this.rows = rows;
 		this.cols = cols;
 		this.qcid = qcid;
-		this.matrixid = id;
+		this.id = id;
 	}
 	public MatrixQuestion(int points, int level, int rows, int cols) {
 		super(points, level);
@@ -48,6 +48,23 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 		this.cols = cols;
 	}
 	
+	
+	public int getQcid() {
+		return qcid;
+	}
+
+	public void setQcid(int qcid) {
+		this.qcid = qcid;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public void writeHTML(DisplayContext dc) {
 		dc.append("<table class='matquest'>\n");
@@ -65,7 +82,7 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append(",\n\t\t\t[\"emptyGrid\", \"").append(qcid).append('_').append(matrixid).append("\", ").append(rows).append(",").append(cols).append("]");
+		dc.append(",\n\t\t\t[\"emptyGrid\", \"").append(qcid).append('_').append(id).append("\", ").append(rows).append(",").append(cols).append("]");
 	}
 
 	@Override

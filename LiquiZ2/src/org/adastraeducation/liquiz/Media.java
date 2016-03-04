@@ -46,4 +46,8 @@ public abstract class Media extends DisplayElement {
 	public final String getType() {
 		return type;
 	}
+	
+	public final void setName(String source){
+		this.source = source;
+	}
 }

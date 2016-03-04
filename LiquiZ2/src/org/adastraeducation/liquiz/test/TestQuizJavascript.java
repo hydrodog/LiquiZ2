@@ -9,7 +9,7 @@ import org.adastraeducation.liquiz.database.Database;
 public class TestQuizJavascript implements java.io.Serializable
 {
 	public static void main(String[] a) {		
-		printQuiz(test3());
+		printQuiz(test1());
 		
 	}
 	public static void printQuiz(Quiz quiz) {
@@ -164,7 +164,6 @@ public class TestQuizJavascript implements java.io.Serializable
 		qc.add(new Essay(qcid,1,1,10,80,200,""));
 		quiz.addQuestion(qc);
 		
-		
 		//test for question 15 in QuizDemo_ajax.jsp, not good as of 7/21/2015, fillin used instead of numeric (although I don't understand why you can't just use fillin)
 		qc=new QuestionContainer(++qcid,"Arithmetic", "numeric", new ArrayList<Displayable>());
 		qc.add(new TextInstruction("What is the square root of 2? Be specific to three decimal places."));
@@ -180,7 +179,6 @@ public class TestQuizJavascript implements java.io.Serializable
 		
 		//test for question 17 in QuizDemo_ajax.jsp
 		//not sure how to set up the test for this one
-		
 		return quiz;
 	}
 	
