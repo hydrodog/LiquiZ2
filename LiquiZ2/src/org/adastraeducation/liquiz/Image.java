@@ -12,6 +12,10 @@ public class Image extends RectangularMedia implements java.io.Serializable{
 	public Image(String image, int width, int height){
 		super(image, width, height);
 	}
+	
+	public Image(String image){
+		super(image);
+	}
 
 	public void writeHTML(DisplayContext dc){
 		//TODO should src prepend a directory? where will the images be?

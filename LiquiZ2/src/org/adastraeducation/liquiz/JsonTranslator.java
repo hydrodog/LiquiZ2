@@ -30,38 +30,38 @@ public class JsonTranslator{
 		Quiz quiz = TestQuizJavascript.test3();
 		String je = "";
 		je = gson.toJson(quiz);
-		Quiz quiz1 = gson.fromJson(je,  Quiz.class);
-		
-		
-		
-		
-		final int n = (int)1e6;
-		long t0 = System.nanoTime();
-        for(int i = 0; i < n; i++){
-        	  je = gson.toJson(quiz);
-        }
-        long t1 = System.nanoTime() - t0;
-        
-        System.out.println("the average serializing time is: " + (double)(t1)/n/1.0e9);
-        
-	    System.out.println(je);
-        
-		  long t2 = System.nanoTime();
-		  for(int i = 0; i < n; i++){
-			   quiz1 = gson.fromJson(je,  Quiz.class);
-		  }
-		  
-		  long t3 = System.nanoTime() - t2;  
-		  
-		  System.out.println("the average deserializing time is: " + (double)(t3)/n/1.0e9);
-		  System.out.println(quiz1);
+		System.out.println(je);
 //		Quiz quiz1 = gson.fromJson(je,  Quiz.class);
-//		System.out.println("Quiz Object: ");
-//		System.out.println(quiz1);
-//		String je1 = gson.toJson(quiz1);
-//		System.out.println("Quiz Json1");
-//		System.out.println(je1);
+//		 System.out.println(quiz1);
 		
+		
+		
+//		final int n = (int)1e6;
+//		long t0 = System.nanoTime();
+//        for(int i = 0; i < n; i++){
+//        	  je = gson.toJson(quiz);
+//        }
+//        long t1 = System.nanoTime() - t0;
+//        
+//        System.out.println("the average serializing time is: " + (double)(t1)/n/1.0e9);
+//        
+//	    System.out.println(je);
+//        
+//		  long t2 = System.nanoTime();
+//		  for(int i = 0; i < n; i++){
+//			   quiz1 = gson.fromJson(je,  Quiz.class);
+//		  }
+//		  
+//		  long t3 = System.nanoTime() - t2;  
+//		  
+//		  System.out.println("the average deserializing time is: " + (double)(t3)/n/1.0e9);
+		 
+		Quiz quiz1 = gson.fromJson(je,  Quiz.class);
+		System.out.println("Quiz Object: ");
+		System.out.println(quiz1);
+		String je1 = gson.toJson(quiz1);
+		System.out.println("Quiz Json1");
+		System.out.println(je1);
 		
 	}
 	
@@ -90,10 +90,22 @@ public class JsonTranslator{
 		builder.registerTypeAdapter(Code.class, new CodeTranslator());
 		builder.registerTypeAdapter(Cloze.class, new ClozeTranslator());
 		builder.registerTypeAdapter(Match.class, new MatchTranslator());
+		builder.registerTypeAdapter(Matrix.class, new MatrixTranslator());
+		builder.registerTypeAdapter(LineBreak.class, new LineBreakTranslator());
+		builder.registerTypeAdapter(TextSpan.class, new TextSpanTranslator());
+		builder.registerTypeAdapter(MatrixQuestion.class, new MatrixQuestionTranslator());
+		builder.registerTypeAdapter(FileUpload.class, new FileUploadTranslator());
+		builder.registerTypeAdapter(Image.class, new ImageTranslator());
+		builder.registerTypeAdapter(FillIn.class, new FillInTranslator());
+		builder.registerTypeAdapter(TextP.class, new TextPTranslator());
+		builder.registerTypeAdapter(Audio.class, new AudioTranslator());
+		builder.registerTypeAdapter(Video.class, new VideoTranslator());
+		builder.registerTypeAdapter(Essay.class, new EssayTranslator());
+		builder.registerTypeAdapter(MultiChoiceRadio.class, new MultiChoiceRadioTranslator());
 		// Using deserializer of this class
 		builder.registerTypeAdapter(Displayable.class, new DisplayableTranslator());
 		
-		builder.setPrettyPrinting();
+		builder.setPrettyPrinting().disableHtmlEscaping();
 		gson = builder.create();
 	}
 	
@@ -219,6 +231,38 @@ public class JsonTranslator{
 		}
 		
 	}
+	
+private class FileUploadTranslator implements  JsonDeserializer<FileUpload>, JsonSerializer<FileUpload>{
+		
+		@Override
+		public JsonElement serialize(FileUpload file, Type arg1, JsonSerializationContext arg2) {
+			JsonArray jobj = new JsonArray();
+			JsonPrimitive fileName = new JsonPrimitive("file");
+			JsonPrimitive text = new JsonPrimitive("Upload File");
+			JsonPrimitive label = new JsonPrimitive(file.getLabel());
+			JsonPrimitive text1 = new JsonPrimitive("file-input");
+			JsonPrimitive fileId = new JsonPrimitive(file.getId());
+			jobj.add(fileName);
+			jobj.add(text);
+			jobj.add(label);
+			jobj.add(text1);
+			jobj.add(fileId);
+			return jobj;
+		}
+		
+		// TODO: 
+		@Override
+		public FileUpload deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+			
+			JsonArray jobj = json.getAsJsonArray();
+			FileUpload file = new FileUpload();
+			file.setLabel(jobj.get(2).getAsString());
+			file.setId(jobj.get(4).getAsInt());
+			return file;
+		}
+		
+	}
+	
 	private class CodeTranslator implements  JsonDeserializer<Code>, JsonSerializer<Code>{
 		
 		@Override
@@ -305,6 +349,226 @@ public class JsonTranslator{
 			
 	}
 	
+private class LineBreakTranslator implements  JsonDeserializer<LineBreak>, JsonSerializer<LineBreak>{
+			
+			@Override
+			public JsonElement serialize(LineBreak lineBreak, Type arg1, JsonSerializationContext arg2) {
+				
+				JsonArray jobj = new JsonArray();
+				jobj.add(new JsonPrimitive("Util.br")); 
+				return jobj;
+				
+			}
+			
+			@Override
+			public LineBreak deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+				return new LineBreak();
+			}
+			
+	}
+
+private class ImageTranslator implements  JsonDeserializer<Image>, JsonSerializer<Image>{
+	
+	@Override
+	public JsonElement serialize(Image image, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("Util.image")); 
+		jobj.add(new JsonPrimitive(image.getSource()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public Image deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		Image image = new Image();
+		image.setSource(array.get(1).getAsString());
+		return image;
+	}
+	
+}
+
+private class VideoTranslator implements  JsonDeserializer<Video>, JsonSerializer<Video>{
+	
+	@Override
+	public JsonElement serialize(Video video, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("Util.video")); 
+		jobj.add(new JsonPrimitive(video.getSource()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public Video deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		Video video = new Video();
+		video.setSource(array.get(1).getAsString());
+		return video;
+	}
+	
+}
+
+private class EssayTranslator implements  JsonDeserializer<Essay>, JsonSerializer<Essay>{
+	
+	@Override
+	public JsonElement serialize(Essay essay, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("essay")); 
+		jobj.add(essay.getId());
+		jobj.add(essay.getRows());
+		jobj.add(essay.getCols());
+		jobj.add(essay.getMaxWords());
+		return jobj;
+		
+	}
+	
+	@Override
+	public Essay deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		Essay essay = new Essay();
+		essay.setId(array.get(1).getAsInt());
+		essay.setRows(array.get(2).getAsInt());
+		essay.setCols(array.get(3).getAsInt());
+		essay.setMaxWords(array.get(4).getAsInt());
+		return essay;
+	}
+	
+}
+private class TextPTranslator implements  JsonDeserializer<TextP>, JsonSerializer<TextP>{
+	
+	@Override
+	public JsonElement serialize(TextP textp, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("Util.p")); 
+		jobj.add(new JsonPrimitive(textp.getText()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public TextP deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		TextP textp = new TextP();
+		textp.setText(array.get(1).getAsString());
+		return textp;
+	}
+	
+}
+
+private class MultiChoiceRadioTranslator implements  JsonDeserializer<MultiChoiceRadio>, JsonSerializer<MultiChoiceRadio>{
+	
+	@Override
+	public JsonElement serialize(MultiChoiceRadio mcr, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		ArrayList<Answer> answers = mcr.getAns();
+		if(answers.get(0).getAnswer() instanceof Image) jobj.add(new JsonPrimitive("mcRadioImg"));
+		if(answers.get(0).getAnswer() instanceof TextAnswer) jobj.add(new JsonPrimitive("selectText"));
+		jobj.add(new JsonPrimitive(mcr.getId())); 
+		JsonArray subArray = new JsonArray();
+		for(int i = 0; i < answers.size(); i++){
+			subArray.add(new JsonPrimitive(answers.get(i).getName()));
+		}
+		jobj.add(subArray);
+		return jobj;
+		
+	}
+	
+	@Override
+	public MultiChoiceRadio deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		MultiChoiceRadio mcr = new MultiChoiceRadio();
+		mcr.setId(array.get(1).getAsInt());
+		ArrayList<Answer> answers = new ArrayList<>();
+		JsonArray subArray = array.get(2).getAsJsonArray();
+		if(subArray.get(0).getAsString().length() > 3 && subArray.get(0).getAsString().substring(subArray.get(0).getAsString().length()-3) == "jpg"){
+			for(int i = 0; i < subArray.size(); i++){
+				answers.add(new Answer(new Image(subArray.get(i).getAsString())));
+			}
+		}
+		else{
+			for(int i = 0; i < subArray.size(); i++){
+				answers.add(new Answer(new TextAnswer(subArray.get(i).getAsString())));
+			}
+		}
+		
+		mcr.setAns(answers);
+		return mcr;
+	}
+	
+}
+
+private class FillInTranslator implements  JsonDeserializer<FillIn>, JsonSerializer<FillIn>{
+	
+	@Override
+	public JsonElement serialize(FillIn fillin, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("fillin")); 
+		jobj.add(new JsonPrimitive(fillin.getId()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public FillIn deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		FillIn fillin = new FillIn();
+		fillin.setId(array.get(1).getAsInt());
+		return fillin;
+	}
+	
+}
+
+private class TextSpanTranslator implements  JsonDeserializer<TextSpan>, JsonSerializer<TextSpan>{
+	
+	@Override
+	public JsonElement serialize(TextSpan text, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("Util.span")); 
+		jobj.add(new JsonPrimitive(text.getText()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public TextSpan deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray jobj = json.getAsJsonArray();
+		TextSpan text = new TextSpan();
+		text.setText(jobj.get(1).getAsString());
+		return text;
+	}
+	
+}
+
+private class AudioTranslator implements  JsonDeserializer<Audio>, JsonSerializer<Audio>{
+	
+	@Override
+	public JsonElement serialize(Audio audio, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("Util.audio")); 
+		jobj.add(new JsonPrimitive(audio.getSource()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public Audio deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray jobj = json.getAsJsonArray();
+		Audio audio = new Audio();
+		audio.setSource(jobj.get(1).getAsString());
+		return audio;
+	}
+	
+}
+	
 	private class MatchTranslator implements  JsonDeserializer<Match>, JsonSerializer<Match>{
 		
 		@Override
@@ -356,6 +620,84 @@ public class JsonTranslator{
 		
 	}
 	
+private class MatrixTranslator implements  JsonDeserializer<Matrix>, JsonSerializer<Matrix>{
+		
+		@Override
+		public JsonElement serialize(Matrix matrix, Type arg1, JsonSerializationContext arg2) {
+			JsonArray jobj = new JsonArray();
+			JsonPrimitive matrixName = new JsonPrimitive("grid");
+			JsonPrimitive matrixId = new JsonPrimitive(Integer.toString(matrix.getQcid())+ "_" + Integer.toString(matrix.getId()));
+			JsonArray data = new JsonArray();
+			for(double[] array : matrix.getData()){
+				JsonArray dataArray = new JsonArray();
+				for(double number : array){
+					JsonPrimitive a = new JsonPrimitive(number);
+					dataArray.add(a);
+				}
+				data.add(dataArray);
+			}
+			jobj.add(matrixName);
+			jobj.add(matrixId);
+			jobj.add(data);
+			return jobj;
+			
+		}
+		
+		//TODO
+		@Override
+		public Matrix deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+			
+			JsonArray jobj = json.getAsJsonArray();
+			Matrix matrix = new Matrix();
+			
+			int row = jobj.get(2).getAsJsonArray().size();
+			int col = jobj.get(2).getAsJsonArray().get(0).getAsJsonArray().size();
+			double[][] data = new double[row][col];
+			for(int i = 0; i < row; i++){
+				for(int j = 0; j < col; j++){
+					data[i][j] = jobj.get(2).getAsJsonArray().get(i).getAsJsonArray().get(j).getAsDouble();
+				}
+			}
+			matrix.setData(data);
+			matrix.setCol(col);
+			matrix.setRow(row);
+			matrix.setQcid(Integer.parseInt(jobj.get(1).getAsString().substring(0, 1)));
+			matrix.setId(Integer.parseInt(jobj.get(1).getAsString().substring(2, 3)));
+			return matrix;
+		}
+		
+	}
+private class MatrixQuestionTranslator implements  JsonDeserializer<MatrixQuestion>, JsonSerializer<MatrixQuestion>{
+	
+	@Override
+	public JsonElement serialize(MatrixQuestion matrixQ, Type arg1, JsonSerializationContext arg2) {
+		JsonArray jobj = new JsonArray();
+		JsonPrimitive matrixName = new JsonPrimitive("emptyGrid");
+		JsonPrimitive matrixId = new JsonPrimitive(Integer.toString(matrixQ.getQcid())+ "_" + Integer.toString(matrixQ.getId()));
+		JsonPrimitive matrixRow = new JsonPrimitive(matrixQ.getRows());
+		JsonPrimitive matrixCol = new JsonPrimitive(matrixQ.getCols());
+		jobj.add(matrixName);
+		jobj.add(matrixId);
+		jobj.add(matrixRow);
+		jobj.add(matrixCol);
+		return jobj;
+		
+	}
+	
+	//TODO
+	@Override
+	public MatrixQuestion deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		
+		JsonArray jobj = json.getAsJsonArray();
+		MatrixQuestion matrixQ = new MatrixQuestion();
+		matrixQ.setQcid(Integer.parseInt(jobj.get(1).getAsString().substring(0, 1)));
+		matrixQ.setId(Integer.parseInt(jobj.get(1).getAsString().substring(2, 3)));
+		matrixQ.setRows(jobj.get(2).getAsInt());
+		matrixQ.setCols(jobj.get(3).getAsInt());
+		return matrixQ;
+	}
+	
+}
 	private class DisplayableTranslator implements JsonSerializer<Displayable>, JsonDeserializer<Displayable>{
 		
 		@Override
@@ -381,11 +723,23 @@ public class JsonTranslator{
 				char first = Character.toUpperCase(klassString.charAt(0));
 				klassString = first+""+ klassString.substring(1,klassString.length());
 				klassString = (klassString.equals("Instructions"))? "TextInstruction" : klassString;
+				klassString = (klassString.equals("Grid"))? "Matrix" : klassString;
+				klassString = (klassString.equals("Util.br"))? "LineBreak" : klassString;
+				klassString = (klassString.equals("EmptyGrid")) ? "MatrixQuestion" : klassString;
+				klassString = (klassString.equals("Util.span")) ? "TextSpan" : klassString;
+				klassString = (klassString.equals("File")) ? "FileUpload" : klassString;
+				klassString = (klassString.equals("Util.image")) ? "Image" : klassString;
+				klassString = (klassString.equals("Fillin"))? "FillIn" : klassString;
+				klassString = (klassString.equals("Util.p"))? "TextP" : klassString;
+				klassString = ((klassString.equals("SelectText"))||(klassString.equals("McRadioImg")))? "MultiChoiceRadio" : klassString;
+				klassString = (klassString.equals("Util.audio"))? "Audio" : klassString;
+				klassString = (klassString.equals("Util.video"))?"Video" : klassString;
 				klassString = "org.adastraeducation.liquiz." + klassString;
 				Class<?> klass = null;
 				
 				try{
 					klass = Class.forName(klassString);
+					System.out.println(klass);
 				}catch(ClassNotFoundException e){
 					e.printStackTrace();
 					throw new JsonParseException(e.getMessage());

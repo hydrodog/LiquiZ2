@@ -53,6 +53,22 @@ public class Matrix implements Displayable, java.io.Serializable{
 		data = new double[row][col];
 	}
 	
+	public int getQcid() {
+		return qcid;
+	}
+
+	public void setQcid(int qcid) {
+		this.qcid = qcid;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	/**
 	 *  Create a random matrix of row x col with random elements
 	 *  between min and max inclusive

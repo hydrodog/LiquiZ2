@@ -34,4 +34,8 @@ public abstract class RectangularMedia extends Media {
 		this.height= height;
 		this.width= width;
 	}
+	
+	public RectangularMedia(String source){
+		super(source);
+	}
 }
