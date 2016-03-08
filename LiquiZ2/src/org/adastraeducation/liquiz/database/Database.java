@@ -179,7 +179,7 @@ public class Database {
 	}
 	public static void addQuesCon(QuestionContainer qc) {
 //		quesCons.add(qc);
-		quesConById.put(qc.getID(), qc);
+		quesConById.put(qc.getId(), qc);
 	}
 	public static void setQuesCon(int id, QuestionContainer qc) {
 		quesCons.set(id, qc);
