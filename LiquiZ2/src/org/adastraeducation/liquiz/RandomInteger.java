@@ -9,4 +9,9 @@ public class RandomInteger extends RandomVariable {
 	public void writeJS(DisplayContext dc) {
 		dc.append(Quiz.random(min, max));
 	}
+	@Override
+	public void eval() {
+		// TODO Auto-generated method stub
+		
+	}
 }

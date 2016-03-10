@@ -1,11 +1,14 @@
 package org.adastraeducation.liquiz;
 
+import org.mongodb.morphia.annotations.Entity;
+
 /*
  * author: together
  * It is for answers for every question
  */
+@Entity("answers")
+public class Answer extends BaseEntity implements Displayable, Cloneable, java.io.Serializable{
 
-public class Answer implements Displayable, Cloneable, java.io.Serializable{
 	private int id;
 	private DisplayElement ans;
 	private boolean correct;

@@ -3,9 +3,10 @@ package org.adastraeducation.liquiz;
 import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
+import org.mongodb.morphia.annotations.Embedded;
 
 import com.google.gson.annotations.SerializedName;
-
+@Embedded
 public class QuestionContainer implements Displayable, java.io.Serializable{
 	private int id;
 	@SerializedName("title")

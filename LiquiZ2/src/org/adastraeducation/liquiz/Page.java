@@ -1,8 +1,9 @@
 package org.adastraeducation.liquiz;
 
-import com.google.gson.annotations.SerializedName;
+import org.mongodb.morphia.annotations.Entity;
 
-public class Page implements Displayable, java.io.Serializable{
+@Entity("quizzes")
+public class Page extends BaseEntity implements Displayable, java.io.Serializable{
 	protected String pageName;
 	protected String type;
 	protected String css;

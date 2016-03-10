@@ -2,10 +2,14 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 import java.util.Random;
-import javax.servlet.http.HttpServletRequest;
-import org.adastraeducation.liquiz.util.*;
 
-import com.google.gson.annotations.SerializedName;
+import javax.servlet.http.HttpServletRequest;
+
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 /**
  * 
  * Represent a quiz on the server
@@ -16,18 +20,19 @@ import com.google.gson.annotations.SerializedName;
  * @author yijkang
  *
  */
+@Entity("quizzes")
 public class Quiz extends Page implements Displayable, java.io.Serializable
- {
+ {	
+	
 	private transient int id; // unique id for db and XML
 	private transient String desc; // display name & description, TODO possibly per Course? or copy renamed quiz
 	public transient String quizName;
-	@SerializedName("questions")
-	
 	private transient ArrayList<QuestionContainer> qContainers;
-	private transient Policy policy ; 
+	private transient Policy policy; 
 	private String policyName;
 	private transient boolean editMode;  //depending on editMode, different html elements will be rendered (if true, there will be options on the html document to edit the quiz)
 	public transient static Random r;
+	@Embedded
 	private PayLoad payload;
 	
 	
@@ -114,13 +119,17 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 
 	
 	
+	
+
 	public int getId() {
 		return id;
 	}
 
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 	public String getName() {
 		return quizName;

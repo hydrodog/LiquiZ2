@@ -3,7 +3,8 @@ package org.adastraeducation.liquiz;
 import java.util.ArrayList;
 
 import org.adastraeducation.liquiz.util.Util;
-
+import org.mongodb.morphia.annotations.Entity;
+@Entity("questions")
 public class Code extends Question implements java.io.Serializable{
 	private int rows, cols;
 	private String defaultText;

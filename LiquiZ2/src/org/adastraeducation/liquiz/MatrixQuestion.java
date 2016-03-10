@@ -1,16 +1,19 @@
 package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
+
+import org.mongodb.morphia.annotations.Entity;
 /*
  * @author Dov Kruger
  * Represents a matrix of numeric fillin questions to quickly
  * enter a matrix of answers from the user
  */
+@Entity("questions")
 public class MatrixQuestion extends Question implements java.io.Serializable{
 	private int rows;
 	private int cols;
 	private int qcid;
-	private int id; // Don't change this to id since Question class has the same field named id, this will prevent GSON from deserialization.
+	private int mqId; // Don't change this to id since Question class has the same field named id, this will prevent GSON from deserialization.
 	
 	public int getRows(){
 		return rows;
@@ -40,7 +43,7 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 		this.rows = rows;
 		this.cols = cols;
 		this.qcid = qcid;
-		this.id = id;
+		this.mqId = id;
 	}
 	public MatrixQuestion(int points, int level, int rows, int cols) {
 		super(points, level);
@@ -58,11 +61,11 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 	}
 
 	public int getId() {
-		return id;
+		return mqId;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.mqId = id;
 	}
 
 	@Override
@@ -82,7 +85,7 @@ public class MatrixQuestion extends Question implements java.io.Serializable{
 
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append(",\n\t\t\t[\"emptyGrid\", \"").append(qcid).append('_').append(id).append("\", ").append(rows).append(",").append(cols).append("]");
+		dc.append(",\n\t\t\t[\"emptyGrid\", \"").append(qcid).append('_').append(mqId).append("\", ").append(rows).append(",").append(cols).append("]");
 	}
 
 	@Override
