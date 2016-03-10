@@ -67,11 +67,13 @@ public class MongoDatabase {
 //	    Quiz quiz1 = TestQuizJavascript.test1();
 //		Quiz quiz2 = TestQuizJavascript.test2();
 //		Quiz quiz3 = TestQuizJavascript.test3();
-//		datastore.save(quiz1);
-//		datastore.save(quiz2);
-//		datastore.save(quiz3);
-		
-
+//		Quiz_database.save(quiz1);
+//		Quiz_database.save(quiz2);
+//		Quiz_database.save(quiz3);
+//		
+		/**
+		 * Content in Question_database
+		 */
 //		Question q1 = new MatrixQuestion(qcid, qid++,10,100,1,8);
 //		Question q2 = new MatrixQuestion(qcid, qid++,10,100,1,8);
 //		Question q3 = new MatrixQuestion(qcid, qid++,10,100,1,8);
@@ -86,21 +88,21 @@ public class MongoDatabase {
 //		Question q11 = new Code(qid++,1,1,10,80,"public A {\n  void   (String[] args) {\n  System.\n  }\n}\n");
 //		Question q12 = new Code(qid++,1,1,10,80,"public A {\n  void   (String[] args) {\n  System.\n  }\n}\n");
 //		
-//		datastore1.save(q1);
-//		datastore1.save(q2);
-//		datastore1.save(q3);
-//		datastore1.save(q7);
-//		datastore1.save(q8);
-//		datastore1.save(new FillIn(qcid,10,100));
-//		datastore1.save(new FillIn(qcid,10,100));
-//		datastore1.save(new FillIn(qcid,10,100));
-//		datastore1.save(new FillIn(qcid,10,100));
-//	    datastore1.save(new MultiChoiceRadio(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("stegosaurus")),new Answer(new TextAnswer("dimetrodon")),new Answer(new TextAnswer("plesiosaurus"))))));
-//	    datastore1.save(new MultiChoiceRadio(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("stegosaurus")),new Answer(new TextAnswer("dimetrodon")),new Answer(new TextAnswer("plesiosaurus"))))));
-//	    datastore1.save(new MultiChoiceRadio(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("stegosaurus")),new Answer(new TextAnswer("dimetrodon")),new Answer(new TextAnswer("plesiosaurus"))))));
-//		List<Question> questions = datastore1.find(Question.class).disableValidation().filter("className", Question.class.getName())
+//		Question_database.save(q1);
+//		Question_database.save(q2);
+//		Question_database.save(q3);
+//		Question_database.save(q7);
+//		Question_database.save(q8);
+//		Question_database.save(new FillIn(qcid,10,100));
+//		Question_database.save(new FillIn(qcid,10,100));
+//		Question_database.save(new FillIn(qcid,10,100));
+//		Question_database.save(new FillIn(qcid,10,100));
+//		Question_database.save(new MultiChoiceRadio(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("stegosaurus")),new Answer(new TextAnswer("dimetrodon")),new Answer(new TextAnswer("plesiosaurus"))))));
+//	    Question_database.save(new MultiChoiceRadio(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("stegosaurus")),new Answer(new TextAnswer("dimetrodon")),new Answer(new TextAnswer("plesiosaurus"))))));
+//	    Question_database.save(new MultiChoiceRadio(qcid,10,100,new ArrayList<Answer>(Arrays.asList(new Answer(new TextAnswer("stegosaurus")),new Answer(new TextAnswer("dimetrodon")),new Answer(new TextAnswer("plesiosaurus"))))));
+//		List<Question> questions = Question_database.find(Question.class).disableValidation().filter("className", Question.class.getName())
 //				 .asList();
-//		
+		
 	    final Query<Quiz> query = Quiz_database.createQuery(Quiz.class);
 		final List<Quiz> quizzes = query.asList();
 		
@@ -129,9 +131,8 @@ public class MongoDatabase {
 		
 		
 		
-//		System.out.println(datastore1.getCount(Question.class));
 		
-//		mongoClient.close();
+		mongoClient.close();
 		
 		
 	}
