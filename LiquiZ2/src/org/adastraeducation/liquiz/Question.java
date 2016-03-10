@@ -1,10 +1,14 @@
 package org.adastraeducation.liquiz;
 import java.util.ArrayList;
 
-import org.adastraeducation.liquiz.database.Database;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Property;
 
-public abstract class Question implements Displayable, java.io.Serializable
- {
+@Entity("questions")
+public abstract class Question extends BaseEntity implements Displayable, java.io.Serializable
+ {	
 	private int id,points,level;
 	private ArrayList<Answer> answers;
 
@@ -127,4 +131,11 @@ public abstract class Question implements Displayable, java.io.Serializable
 	public void writeJS(String funcName, DisplayContext dc) {
 		dc.append(funcName).append('(').append(getId()).append(',');
 	}
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", points=" + points + ", level=" + level + ", answers=" + answers + "]";
+	}
+	
+	
 }

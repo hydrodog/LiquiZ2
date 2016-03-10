@@ -2,9 +2,11 @@ package org.adastraeducation.liquiz;
 
 import java.util.ArrayList;
 
+import org.mongodb.morphia.annotations.Embedded;
+@Embedded
 public class PayLoad implements java.io.Serializable{
 
-
+	
 	private Policy policy;
 	private String title;
 	private int points;

@@ -1,6 +1,6 @@
 package org.adastraeducation.liquiz;
 
-import com.google.gson.annotations.SerializedName;
+import org.mongodb.morphia.annotations.Entity;
 
 /**
  * A Policy represents how a quiz is modified and accessed.
@@ -9,7 +9,8 @@ import com.google.gson.annotations.SerializedName;
  * @author Tim Ding
  *
  */
-public class Policy implements java.io.Serializable
+@Entity("policies")
+public class Policy extends BaseEntity implements java.io.Serializable
 {
 	public int getId() {
 		return id;

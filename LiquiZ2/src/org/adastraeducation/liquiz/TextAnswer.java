@@ -1,5 +1,6 @@
 package org.adastraeducation.liquiz;
 
+
 public class TextAnswer extends Text {
 	public TextAnswer() {
 		super();

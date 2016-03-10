@@ -4,6 +4,7 @@ package org.adastraeducation.liquiz;
  * @author yijinkang
  *
  */
+
 public interface Displayable extends java.io.Serializable{
 	public void writeHTML(DisplayContext dc);
 	public void writeJS(DisplayContext dc);
