@@ -112,7 +112,7 @@ public class MongoDatabase {
 		System.out.println(quizzes.size());
 		List<Code> questions_code = Question_database.find(Code.class).disableValidation().filter("className", Code.class.getName()).asList();
 		List<FillIn> questions_fillin = Question_database.find(FillIn.class).disableValidation().filter("className", FillIn.class.getName()).asList();
-		List<MultiChoiceRadio> questions_mcdp = Question_database.find(MultiChoiceRadio.class).disableValidation().filter("className", Code.class.getName()).asList();
+		List<MultiChoiceRadio> questions_mcdp = Question_database.find(MultiChoiceRadio.class).disableValidation().filter("className", MultiChoiceRadio.class.getName()).asList();
 		List<MatrixQuestion> questions_mq = Question_database.find(MatrixQuestion.class).disableValidation().filter("className", MatrixQuestion.class.getName()).asList();
 
 		for(Question q : questions_code){
