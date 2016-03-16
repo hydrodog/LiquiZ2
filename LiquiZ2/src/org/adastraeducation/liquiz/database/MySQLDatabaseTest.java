@@ -13,8 +13,13 @@ import org.adastraeducation.liquiz.MatrixQuestion;
 public class MySQLDatabaseTest {
 			private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 			private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/liquiz";
-			private static final String DB_USER = "ying";
-			private static final String DB_PASSWORD = "371989";
+			/** username and password for Mac */
+			private static final String DB_USER = "root";
+			private static final String DB_PASSWORD = "000000";
+			/** username and password for Windows */
+//			private static final String DB_USER = "ying";
+//			private static final String DB_PASSWORD = "371989";
+			
 
 	public static void main(String[] args) {
 		
@@ -37,9 +42,9 @@ public class MySQLDatabaseTest {
 						
 
 						long t1 = System.currentTimeMillis();
-						test1(myConn, (int)1e4);
-						long t2 = System.currentTimeMillis();
-						System.out.println("saving time for 10k objects");
+						test1(myConn, (int)1e5);
+						long t2 = System.currentTimeMillis(); 
+						System.out.println("saving time for 100k objects");  // about 16.916s
 						System.out.println((t2-t1)/1e3);
 //						 2. Create a statement
 							Statement myStmt = myConn.createStatement();

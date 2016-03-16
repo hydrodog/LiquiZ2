@@ -32,7 +32,7 @@ public class MongoDatabase {
 	    long t0 = System.currentTimeMillis();
 	    Datastore Test_database = morphia.createDatastore(new MongoClient(), "Test_database");
 	    long t00 = System.currentTimeMillis();
-		System.out.println("loading time for 100k objects");
+		System.out.println("loading time for 100k objects"); // about 0.001s
 		System.out.println((t00-t0)/1e3);
 		Question_database.ensureIndexes();
 	    
@@ -47,7 +47,7 @@ public class MongoDatabase {
 			Test_database.save(new MatrixQuestion(qcid, qid++,10,100,1,8));
 		}
 		long t2 = System.currentTimeMillis();
-		System.out.println("saving time for 10k objects");
+		System.out.println("saving time for 10k objects");  // about 1.477s
 		System.out.println((t2-t1)/1e3);
 		
 		Test_database.delete(Test_database.createQuery(Question.class));
@@ -58,7 +58,7 @@ public class MongoDatabase {
 			Test_database.save(new MatrixQuestion(qcid, qid++,10,100,1,8));
 		}
 		long t4 = System.currentTimeMillis();
-		System.out.println("saving time for 100k objects");
+		System.out.println("saving time for 100k objects"); // about 9.737s
 		System.out.println((t4-t3)/1e3);
 		
 		/**
