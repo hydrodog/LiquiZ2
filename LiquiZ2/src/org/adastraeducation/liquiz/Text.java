@@ -8,7 +8,7 @@ import org.adastraeducation.liquiz.util.*;
  * @author yijinkang
  *
  */
-public class Text extends DisplayElement {
+public class Text extends DisplayElement implements java.io.Serializable{
 	private String text;
 	
 	public Text(){

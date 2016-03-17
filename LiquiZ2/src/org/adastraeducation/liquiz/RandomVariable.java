@@ -1,17 +1,17 @@
 package org.adastraeducation.liquiz;
 
 public abstract class RandomVariable extends DisplayElement {
-	private int id;
+	private int rvId; // rvId is id for RandomVariable, don't use id as variable since it would conflict with field name 'id' in MongoDB
 	String name;
 	public RandomVariable(int id, String name) {
-		this.id = id;
+		this.rvId = id;
 		this.name = name;
 	}
 	public int getId() {
-		return id;
+		return rvId;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.rvId = id;
 	}
 	public String getName() {
 		return name;
