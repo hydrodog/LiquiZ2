@@ -13,12 +13,9 @@ import org.adastraeducation.liquiz.MatrixQuestion;
 public class MySQLDatabaseTest {
 			private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 			private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/liquiz";
-			/** username and password for Mac */
+			/** username and password for */
 			private static final String DB_USER = "root";
 			private static final String DB_PASSWORD = "000000";
-			/** username and password for Windows */
-//			private static final String DB_USER = "ying";
-//			private static final String DB_PASSWORD = "371989";
 			
 
 	public static void main(String[] args) {

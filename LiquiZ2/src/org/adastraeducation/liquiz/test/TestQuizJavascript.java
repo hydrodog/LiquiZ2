@@ -49,7 +49,7 @@ public class TestQuizJavascript implements java.io.Serializable
 		//test for question 1 in QuizDemo_ajax.jsp, good as of 7/20/2015 except for 1_1 part.  Apparently the 1_1 part in QuizDemo_ajax.jsp was a mistake though, so the test is still good.
 		QuestionContainer qc = new QuestionContainer(++qcid,"Mergesort","grid",new ArrayList<Displayable>());
 		qc.add(new TextInstruction("Show the first pass of Mergesort below"));
-		Matrix m=new Matrix(qcid, qid++,1, 9);
+		Matrix m=new Matrix(qcid, qid++, 10, 100, 1, 9);
 		m.setData(new double[][]{new double[]{9,8,7,6,5,4,3,2,1}});
 		qc.add(m);
 		qc.add(new LineBreak());
@@ -63,11 +63,11 @@ public class TestQuizJavascript implements java.io.Serializable
 		qid = 1;
 		qc=new QuestionContainer(++qcid,"Matrix Multiplication","matrix",new ArrayList<Displayable>());
 		qc.add(new TextInstruction("Show the result of matrix A * B"));
-		Matrix m1=new Matrix(qcid, qid++, 3,3);
+		Matrix m1=new Matrix(qcid, qid++, 10, 100, 3, 3);
 		m1.setData(new double[][]{{1,0,2},{1,1,-2},{2,1,0}});
 		qc.add(m1);
 		qc.add(new TextSpan("*"));
-		Matrix m2=new Matrix(qcid, qid++, 3,3);
+		Matrix m2=new Matrix(qcid, qid++, 10, 100, 3,3);
 		m2.setData(new double[][]{{1,1,-1},{-2,1,0},{1,1,3}});
 		qc.add(m2);
 		qc.add(new TextSpan("="));

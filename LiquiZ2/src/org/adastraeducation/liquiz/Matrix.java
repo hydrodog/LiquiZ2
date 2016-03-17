@@ -1,12 +1,14 @@
 package org.adastraeducation.liquiz;
 
-public class Matrix implements Displayable, java.io.Serializable{
+import java.util.ArrayList;
+
+public class Matrix extends Question implements Displayable, java.io.Serializable{
 
 	private double[][] data;
 	private int row;
 	private int col;
 	private int qcid;			// the id of the questionContainer
-	private int id;    // the counter of matrix
+	private int mqid;    // the counter of matrix
 	/******************************************************/
 	public double[][] getData(){
 		return data;
@@ -43,13 +45,14 @@ public class Matrix implements Displayable, java.io.Serializable{
 		this.row=row;
 		this.col=col;
 		data = new double[row][col];
+		
 	}
 	
-	public Matrix(int qcid, int id, int row, int col){
+	public Matrix(int qcid, int id, int points, int level, int row, int col){
+		super(id, points, level, (ArrayList<Answer>) null);
 		this.row=row;
 		this.col=col;
 		this.qcid = qcid;
-		this.id = id;
 		data = new double[row][col];
 	}
 	
@@ -62,11 +65,11 @@ public class Matrix implements Displayable, java.io.Serializable{
 	}
 
 	public int getId() {
-		return id;
+		return mqid;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.mqid = id;
 	}
 
 	/**
@@ -163,7 +166,7 @@ public class Matrix implements Displayable, java.io.Serializable{
 	//TODO: Fix the commas after each row, they aren't there!
 	@Override
 	public void writeJS(DisplayContext dc) {
-		dc.append(",\n\t\t\t[\"grid\", \"").append(qcid).append('_').append(id).append("\", [");
+		dc.append(",\n\t\t\t[\"grid\", \"").append(qcid).append('_').append(mqid).append("\", [");
 		for (int i = 0; i < row; i++) {
 			if(i == 0) dc.append("[").append(data[i][0]);
 			else dc.append(",[").append(data[i][0]);
@@ -187,8 +190,8 @@ public class Matrix implements Displayable, java.io.Serializable{
 		b.append("</matrix>");
 	}
 	public static void main(String[] args){
-		Matrix a = new Matrix(2,3,-3,3);
-		Matrix b = new Matrix(3,2,-3,3);
+		Matrix a = new Matrix(2,3,10, 100, -3,3);
+		Matrix b = new Matrix(3,2,10, 100, -3,3);
 		Matrix c = a.multiply(b);
 		System.out.println(a);
 		System.out.println(b);
@@ -196,6 +199,12 @@ public class Matrix implements Displayable, java.io.Serializable{
 		DisplayContext dc = new DisplayContext();
 		c.writeHTML(dc);
 		System.out.println(dc);
+	}
+
+	@Override
+	public double grade(String[] s) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
