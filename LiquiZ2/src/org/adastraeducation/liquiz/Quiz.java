@@ -26,7 +26,7 @@ public class Quiz extends Page implements Displayable, java.io.Serializable
 	
 	private transient int id; // unique id for db and XML
 	private transient String desc; // display name & description, TODO possibly per Course? or copy renamed quiz
-	public transient String quizName;
+	public String quizName;
 	private transient ArrayList<QuestionContainer> qContainers;
 	private transient Policy policy; 
 	private String policyName;
