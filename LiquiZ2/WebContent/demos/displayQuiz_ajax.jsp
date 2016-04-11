@@ -6,7 +6,7 @@
 		/* Quiz q1 = TestQuizJavascript.test3(); 
 		DisplayContext dc = new DisplayContext();
 		q1.writeJS(dc);
-		out.println(dc.toString());  */
+		out.println(dc.toString());   */
 		
 		
 		/* GsonBuilder builder = new GsonBuilder();
@@ -37,5 +37,4 @@
 			//out.println(je1);
 %>	  
 
-<%-- <%=out.println(dc.toString()) %> --%>
 
