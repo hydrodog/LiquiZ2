@@ -1,8 +1,9 @@
-package org.adastraeducation.liquiz;
+package org.adastraeducation.liquiz.database;
 
 import java.util.Iterator;
 import java.util.List;
 
+import org.adastraeducation.liquiz.Quiz;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.MorphiaIterator;
@@ -47,7 +48,8 @@ public class MongoDB_Quiz {
 //			iterator.next();
 //		}
 		
-		System.out.println(query.field("quizName").equal("Algebra quiz").get());
+//		System.out.println(query.field("quizName").equal("Algebra quiz").get());
+		printQuiz(query.field("quizName").equal("Algebra quiz").get());
 								 
 	}
 

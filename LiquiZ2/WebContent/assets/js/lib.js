@@ -889,6 +889,32 @@ function requestAjax(ajax_url, handler, error, url) {
 	ajax.send();
 }
 
+function sendAjax(url) {
+//	var ajax = new XMLHttpRequest();
+//	ajax.onreadystatechange = function () {
+//		if (ajax.readyState === 4 && ajax.status !== 200) {
+//			error(ajax.status);
+//		} else if (ajax.readyState === 4 && ajax.status === 200) {
+//			handler(ajax.responseText, url);
+//		}
+//	};
+//	ajax.open("post", ajax_url, true);
+//	ajax.send();
+	
+	
+	$.ajax({
+	       url: url,
+	       type: 'POST',
+	       contentType:'application/json',
+	       data: JSON.stringify({ "userName": 'ying', "password" : 'zhao' }),
+	       dataType:'json',
+	       success: function () {
+
+	           alert("Thanks!"); 
+	           }
+	});
+}
+
 function getPrefs(ajax_url, error, url) {
 	var ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function () {
