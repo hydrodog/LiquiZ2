@@ -27,7 +27,7 @@
 			Quiz quiz = TestQuizJavascript.test1();
 		    String je = gson.toJson(quiz);
 		    out.println(je);
-			System.out.println(je);
+			//System.out.println(je);
 		    //Quiz quiz1 = gson.fromJson(je,  Quiz.class);
 		//	System.out.println("Quiz Object: ");
 		//	System.out.println(quiz1);
