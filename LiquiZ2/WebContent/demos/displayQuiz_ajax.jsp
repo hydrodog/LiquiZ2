@@ -2,6 +2,7 @@
 <%@ page import = "org.adastraeducation.liquiz.test.*" %>
 <%@ page import = "com.google.gson.*" %>
 
+
 <% 
 		/* Quiz q1 = TestQuizJavascript.test3(); 
 		DisplayContext dc = new DisplayContext();
@@ -24,10 +25,10 @@
  
             
 		    Gson gson = new JsonTranslator().getGson();
-			Quiz quiz = TestQuizJavascript.test1();
+			Quiz quiz = TestQuizJavascript.test2();
 		    String je = gson.toJson(quiz);
 		    out.println(je);
-			//System.out.println(je);
+			//ystem.out.println(je);
 		    //Quiz quiz1 = gson.fromJson(je,  Quiz.class);
 		//	System.out.println("Quiz Object: ");
 		//	System.out.println(quiz1);
