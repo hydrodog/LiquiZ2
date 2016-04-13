@@ -24,7 +24,7 @@
  
             
 		    Gson gson = new JsonTranslator().getGson();
-			Quiz quiz = TestQuizJavascript.test1();
+			Quiz quiz = TestQuizJavascript.test2();
 		    String je = gson.toJson(quiz);
 		    out.println(je);
 			//System.out.println(je);
