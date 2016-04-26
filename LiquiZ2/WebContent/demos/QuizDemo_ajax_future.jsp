@@ -1,6 +1,7 @@
 {
     "type": "Quiz",
     "payload": {
+        "class" : "Quiz",
         "policy" : "Dov",
         "title": "Quiz Demo #1",
         "editMode": true,
