@@ -27,7 +27,7 @@ public class JsonTranslator{
 	
 	public static void  main(String[] args) throws ClassNotFoundException{
 	    new JsonTranslator();
-		Quiz quiz = TestQuizJavascript.test3();
+		Quiz quiz = TestQuizJavascript.test2();
 		String je = "";
 		je = gson.toJson(quiz);
 		System.out.println(je);

@@ -1,14 +1,34 @@
 <%@ page import="java.io.*" %>
+<%@ page import = "org.adastraeducation.liquiz.util.*" %>
+<%@ page import="org.adastraeducation.liquiz.*" %>
+<%@ page import="org.adastraeducation.liquiz.test.*" %>
+<%@ page import="com.google.gson.Gson" %>
 
 <html>
 <body>
 <% 
 
-BufferedReader r = new BufferedReader(request.getReader());
-String line;
-while ((line=r.readLine()) != null)
-	System.out.println(line);
 
+	 //ReadsInFromPost.printOut(request);
+	Gson gson = new JsonTranslator().getGson();
+	
+	BufferedReader r = new BufferedReader(request.getReader());
+	String line, jsonString = "";
+	while ((line=r.readLine()) != null){
+		jsonString += line;
+	}
+		
+	System.out.println(jsonString);
+	
+	new JsonTranslator();
+	Quiz quiz = TestQuizJavascript.test2();
+	String je = "";
+	je = gson.toJson(quiz);
+	System.out.println(je);
+	
+	Quiz quiz1 = gson.fromJson(je, Quiz.class);
+	System.out.println("Quiz Object: ");
+	System.out.println(quiz1);
 
 
 
