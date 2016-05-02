@@ -12,6 +12,20 @@ import static org.adastraeducation.liquiz.test.TestQuizJavascript.*;
 import com.mongodb.MongoClient;
 
 public class MongoDB_Quiz {
+	
+	
+	public static void saveQuiz(Quiz quiz){
+		final Morphia morphia = new Morphia();
+		morphia.mapPackage("org.adastraeducation.liquiz"); 
+		
+		MongoClient mongoClient = new MongoClient("127.0.0.1", 27017);
+		
+		
+		Datastore quiz_Database = morphia.createDatastore(mongoClient, "quiz_Database");
+//		quiz_Database.delete(quiz_Database.createQuery(Quiz.class));
+
+		quiz_Database.save(quiz); 
+	}
 
 	public static void main(String[] args) {
 
