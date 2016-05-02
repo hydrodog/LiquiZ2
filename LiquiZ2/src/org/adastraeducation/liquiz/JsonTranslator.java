@@ -27,7 +27,7 @@ public class JsonTranslator{
 	
 	public static void  main(String[] args) throws ClassNotFoundException{
 	    new JsonTranslator();
-		Quiz quiz = TestQuizJavascript.test3();
+		Quiz quiz = TestQuizJavascript.test2();
 		String je = "";
 		je = gson.toJson(quiz);
 		System.out.println(je);
@@ -79,7 +79,7 @@ public class JsonTranslator{
 
 
 
-	public JsonTranslator(){
+	static{
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(Quiz.class, new QuizTranslator());
 		builder.registerTypeAdapter(PayLoad.class, new PayLoadTranslator());
@@ -109,7 +109,7 @@ public class JsonTranslator{
 		gson = builder.create();
 	}
 	
-	private class QuizTranslator implements JsonDeserializer<Quiz>, JsonSerializer<Quiz>{
+	private static class QuizTranslator implements JsonDeserializer<Quiz>, JsonSerializer<Quiz>{
 
 		@Override
 		public JsonElement serialize(Quiz quiz, Type arg1, JsonSerializationContext arg2) {
@@ -134,7 +134,7 @@ public class JsonTranslator{
 		
 	}
 	
-	private class PayLoadTranslator implements  JsonDeserializer<PayLoad>, JsonSerializer<PayLoad>{
+	private static class  PayLoadTranslator implements  JsonDeserializer<PayLoad>, JsonSerializer<PayLoad>{
 
 		@Override
 		public JsonElement serialize(PayLoad payload, Type arg1, JsonSerializationContext arg2) {
@@ -177,7 +177,7 @@ public class JsonTranslator{
 	}
 	
 	
-	private class QuestionContainerTranslator implements  JsonDeserializer<QuestionContainer>, JsonSerializer<QuestionContainer>{
+	private static class QuestionContainerTranslator implements  JsonDeserializer<QuestionContainer>, JsonSerializer<QuestionContainer>{
 
 		@Override
 		public JsonElement serialize(QuestionContainer qc, Type arg1, JsonSerializationContext arg2) {
@@ -207,7 +207,7 @@ public class JsonTranslator{
 		}
 		
 	}
-	private class TextInstructionTranslator implements  JsonDeserializer<TextInstruction>, JsonSerializer<TextInstruction>{
+	private static class TextInstructionTranslator implements  JsonDeserializer<TextInstruction>, JsonSerializer<TextInstruction>{
 		
 		@Override
 		public JsonElement serialize(TextInstruction text, Type arg1, JsonSerializationContext arg2) {
@@ -232,7 +232,7 @@ public class JsonTranslator{
 		
 	}
 	
-private class FileUploadTranslator implements  JsonDeserializer<FileUpload>, JsonSerializer<FileUpload>{
+private static class FileUploadTranslator implements  JsonDeserializer<FileUpload>, JsonSerializer<FileUpload>{
 		
 		@Override
 		public JsonElement serialize(FileUpload file, Type arg1, JsonSerializationContext arg2) {
@@ -263,7 +263,7 @@ private class FileUploadTranslator implements  JsonDeserializer<FileUpload>, Jso
 		
 	}
 	
-	private class CodeTranslator implements  JsonDeserializer<Code>, JsonSerializer<Code>{
+	private static class CodeTranslator implements  JsonDeserializer<Code>, JsonSerializer<Code>{
 		
 		@Override
 		public JsonElement serialize(Code code, Type arg1, JsonSerializationContext arg2) {
@@ -297,7 +297,7 @@ private class FileUploadTranslator implements  JsonDeserializer<FileUpload>, Jso
 		}
 		
 	}
-	private class ClozeTranslator implements  JsonDeserializer<Cloze>, JsonSerializer<Cloze>{
+	private static class ClozeTranslator implements  JsonDeserializer<Cloze>, JsonSerializer<Cloze>{
 		
 		@Override
 		public JsonElement serialize(Cloze cloze, Type arg1, JsonSerializationContext arg2) {
@@ -326,7 +326,7 @@ private class FileUploadTranslator implements  JsonDeserializer<FileUpload>, Jso
 		}
 	}
 		
-		private class PolicyTranslator implements  JsonDeserializer<Policy>, JsonSerializer<Policy>{
+		private static class PolicyTranslator implements  JsonDeserializer<Policy>, JsonSerializer<Policy>{
 			
 			@Override
 			public JsonElement serialize(Policy policy, Type arg1, JsonSerializationContext arg2) {
@@ -349,7 +349,7 @@ private class FileUploadTranslator implements  JsonDeserializer<FileUpload>, Jso
 			
 	}
 	
-private class LineBreakTranslator implements  JsonDeserializer<LineBreak>, JsonSerializer<LineBreak>{
+private static class LineBreakTranslator implements  JsonDeserializer<LineBreak>, JsonSerializer<LineBreak>{
 			
 			@Override
 			public JsonElement serialize(LineBreak lineBreak, Type arg1, JsonSerializationContext arg2) {
@@ -367,7 +367,7 @@ private class LineBreakTranslator implements  JsonDeserializer<LineBreak>, JsonS
 			
 	}
 
-private class ImageTranslator implements  JsonDeserializer<Image>, JsonSerializer<Image>{
+private static class ImageTranslator implements  JsonDeserializer<Image>, JsonSerializer<Image>{
 	
 	@Override
 	public JsonElement serialize(Image image, Type arg1, JsonSerializationContext arg2) {
@@ -389,7 +389,7 @@ private class ImageTranslator implements  JsonDeserializer<Image>, JsonSerialize
 	
 }
 
-private class VideoTranslator implements  JsonDeserializer<Video>, JsonSerializer<Video>{
+private static class VideoTranslator implements  JsonDeserializer<Video>, JsonSerializer<Video>{
 	
 	@Override
 	public JsonElement serialize(Video video, Type arg1, JsonSerializationContext arg2) {
@@ -411,7 +411,7 @@ private class VideoTranslator implements  JsonDeserializer<Video>, JsonSerialize
 	
 }
 
-private class EssayTranslator implements  JsonDeserializer<Essay>, JsonSerializer<Essay>{
+private static class EssayTranslator implements  JsonDeserializer<Essay>, JsonSerializer<Essay>{
 	
 	@Override
 	public JsonElement serialize(Essay essay, Type arg1, JsonSerializationContext arg2) {
@@ -438,7 +438,7 @@ private class EssayTranslator implements  JsonDeserializer<Essay>, JsonSerialize
 	}
 	
 }
-private class TextPTranslator implements  JsonDeserializer<TextP>, JsonSerializer<TextP>{
+private static class TextPTranslator implements  JsonDeserializer<TextP>, JsonSerializer<TextP>{
 	
 	@Override
 	public JsonElement serialize(TextP textp, Type arg1, JsonSerializationContext arg2) {
@@ -460,7 +460,7 @@ private class TextPTranslator implements  JsonDeserializer<TextP>, JsonSerialize
 	
 }
 
-private class MultiChoiceRadioTranslator implements  JsonDeserializer<MultiChoiceRadio>, JsonSerializer<MultiChoiceRadio>{
+private static class MultiChoiceRadioTranslator implements  JsonDeserializer<MultiChoiceRadio>, JsonSerializer<MultiChoiceRadio>{
 	
 	@Override
 	public JsonElement serialize(MultiChoiceRadio mcr, Type arg1, JsonSerializationContext arg2) {
@@ -503,7 +503,7 @@ private class MultiChoiceRadioTranslator implements  JsonDeserializer<MultiChoic
 	
 }
 
-private class FillInTranslator implements  JsonDeserializer<FillIn>, JsonSerializer<FillIn>{
+private static class FillInTranslator implements  JsonDeserializer<FillIn>, JsonSerializer<FillIn>{
 	
 	@Override
 	public JsonElement serialize(FillIn fillin, Type arg1, JsonSerializationContext arg2) {
@@ -525,7 +525,7 @@ private class FillInTranslator implements  JsonDeserializer<FillIn>, JsonSeriali
 	
 }
 
-private class TextSpanTranslator implements  JsonDeserializer<TextSpan>, JsonSerializer<TextSpan>{
+private static class TextSpanTranslator implements  JsonDeserializer<TextSpan>, JsonSerializer<TextSpan>{
 	
 	@Override
 	public JsonElement serialize(TextSpan text, Type arg1, JsonSerializationContext arg2) {
@@ -547,7 +547,7 @@ private class TextSpanTranslator implements  JsonDeserializer<TextSpan>, JsonSer
 	
 }
 
-private class AudioTranslator implements  JsonDeserializer<Audio>, JsonSerializer<Audio>{
+private static  class AudioTranslator implements  JsonDeserializer<Audio>, JsonSerializer<Audio>{
 	
 	@Override
 	public JsonElement serialize(Audio audio, Type arg1, JsonSerializationContext arg2) {
@@ -569,7 +569,7 @@ private class AudioTranslator implements  JsonDeserializer<Audio>, JsonSerialize
 	
 }
 	
-	private class MatchTranslator implements  JsonDeserializer<Match>, JsonSerializer<Match>{
+	private static class MatchTranslator implements  JsonDeserializer<Match>, JsonSerializer<Match>{
 		
 		@Override
 		public JsonElement serialize(Match match, Type arg1, JsonSerializationContext arg2) {
@@ -620,7 +620,7 @@ private class AudioTranslator implements  JsonDeserializer<Audio>, JsonSerialize
 		
 	}
 	
-private class MatrixTranslator implements  JsonDeserializer<Matrix>, JsonSerializer<Matrix>{
+private static class MatrixTranslator implements  JsonDeserializer<Matrix>, JsonSerializer<Matrix>{
 		
 		@Override
 		public JsonElement serialize(Matrix matrix, Type arg1, JsonSerializationContext arg2) {
@@ -667,7 +667,7 @@ private class MatrixTranslator implements  JsonDeserializer<Matrix>, JsonSeriali
 		}
 		
 	}
-private class MatrixQuestionTranslator implements  JsonDeserializer<MatrixQuestion>, JsonSerializer<MatrixQuestion>{
+private static class MatrixQuestionTranslator implements  JsonDeserializer<MatrixQuestion>, JsonSerializer<MatrixQuestion>{
 	
 	@Override
 	public JsonElement serialize(MatrixQuestion matrixQ, Type arg1, JsonSerializationContext arg2) {
@@ -698,7 +698,7 @@ private class MatrixQuestionTranslator implements  JsonDeserializer<MatrixQuesti
 	}
 	
 }
-	private class DisplayableTranslator implements JsonSerializer<Displayable>, JsonDeserializer<Displayable>{
+	private static class DisplayableTranslator implements JsonSerializer<Displayable>, JsonDeserializer<Displayable>{
 		
 		@Override
 		public JsonElement serialize(Displayable arg0, Type arg1, JsonSerializationContext arg2) {
@@ -706,9 +706,6 @@ private class MatrixQuestionTranslator implements  JsonDeserializer<MatrixQuesti
 			JsonPrimitive className = new JsonPrimitive(arg0.getClass().getName());
 			jobj.add(className);
 			System.out.println(className);
-//			JsonElement elem = arg2.serialize(arg0, );
-			
-//			jobj.add(elem);
 			return jobj;
 		}
 

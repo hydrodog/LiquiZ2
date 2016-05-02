@@ -2,7 +2,7 @@
 <!-- Configuration of the Ant build system to generate a Jar file --> 
 <project name="LiquiZ" default="CreateJar">
   <target name="CreateJar" description="Create Jar file">
-        <!-- <jar destfile= "LiquiZ.jar" basedir="../../../src" includes="*.class" basedir="${/LiquiZ2/src}/classes"> -->
-        <jar destfile= "LiquiZ.jar"  basedir="."  includes="*.class"/>
+  	<!-- includes="*.class" -->
+        <jar destfile= "LiquiZ.jar"  basedir="../../../../LiquiZ2"  includes="/.class" />
   </target>
 </project>

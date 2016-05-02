@@ -889,7 +889,7 @@ function requestAjax(ajax_url, handler, error, url) {
 	ajax.send();
 }
 
-function sendAjax(url) {
+function sendAjax(url, data) {
 //	var ajax = new XMLHttpRequest();
 //	ajax.onreadystatechange = function () {
 //		if (ajax.readyState === 4 && ajax.status !== 200) {
@@ -906,11 +906,11 @@ function sendAjax(url) {
 	       url: url,
 	       type: 'POST',
 	       contentType:'application/json',
-	       data: JSON.stringify({ "userName": 'ying', "password" : 'zhao' }),
+	       data: JSON.stringify(data),
 	       dataType:'json',
 	       success: function () {
 
-	           alert("Thanks!"); 
+	           alert("success!"); 
 	           }
 	});
 }
