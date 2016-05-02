@@ -1,0 +1,28 @@
+<html>
+
+<head>
+  <script src="../assets/js/jquery.1.11.3.min.js"></script>
+  <script>
+  function sendAjax(url) {
+	    
+	    $.ajax({
+	           url: url,
+	           type: 'POST',
+	           contentType:'application/json',
+	           data: JSON.stringify({ "userName": 'ying', "password" : 'zhao' }),
+	           dataType:'json',
+	           success: function () {
+
+	               alert("Thanks!"); 
+	               }
+	    });
+	}
+
+  sendAjax("test_ajax.jsp");
+  
+  </script>
+</head>
+<body>
+
+</body>
+</html>
