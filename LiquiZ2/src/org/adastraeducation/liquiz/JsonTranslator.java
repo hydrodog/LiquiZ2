@@ -96,6 +96,7 @@ public class JsonTranslator{
 		builder.registerTypeAdapter(MatrixQuestion.class, new MatrixQuestionTranslator());
 		builder.registerTypeAdapter(FileUpload.class, new FileUploadTranslator());
 		builder.registerTypeAdapter(Image.class, new ImageTranslator());
+		builder.registerTypeAdapter(ClickableImage.class, new ClickableImageTranslator());
 		builder.registerTypeAdapter(FillIn.class, new FillInTranslator());
 		builder.registerTypeAdapter(TextP.class, new TextPTranslator());
 		builder.registerTypeAdapter(Audio.class, new AudioTranslator());
@@ -384,6 +385,28 @@ private static class ImageTranslator implements  JsonDeserializer<Image>, JsonSe
 		JsonArray array = json.getAsJsonArray();
 		Image image = new Image();
 		image.setSource(array.get(1).getAsString());
+		return image;
+	}
+	
+}
+
+private static class ClickableImageTranslator implements  JsonDeserializer<ClickableImage>, JsonSerializer<ClickableImage>{
+	
+	@Override
+	public JsonElement serialize(ClickableImage image, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("Util.image")); 
+		jobj.add(new JsonPrimitive(image.getSource()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public ClickableImage deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		ClickableImage image = new ClickableImage();
+		image.setSource(array.get(2).getAsString());
 		return image;
 	}
 	
@@ -725,8 +748,9 @@ private static class MatrixQuestionTranslator implements  JsonDeserializer<Matri
 				klassString = (klassString.equals("EmptyGrid")) ? "MatrixQuestion" : klassString;
 				klassString = (klassString.equals("Util.span")) ? "TextSpan" : klassString;
 				klassString = (klassString.equals("File")) ? "FileUpload" : klassString;
-				klassString = (klassString.equals("Util.image")) ? "Image" : klassString;
-				klassString = (klassString.equals("Fillin"))? "FillIn" : klassString;
+				klassString = (klassString.equals("Util.image") || klassString.equals("Util.img")) ? "Image" : klassString;
+				klassString = (klassString.equals("ClickableImage"))? "ClickableImage" : klassString;
+				klassString = (klassString.equals("Fillin") || klassString.equals("Numeric"))? "FillIn" : klassString;
 				klassString = (klassString.equals("Util.p"))? "TextP" : klassString;
 				klassString = ((klassString.equals("SelectText"))||(klassString.equals("McRadioImg")))? "MultiChoiceRadio" : klassString;
 				klassString = (klassString.equals("Util.audio"))? "Audio" : klassString;

@@ -3,6 +3,6 @@
 <project name="LiquiZ" default="CreateJar">
   <target name="CreateJar" description="Create Jar file">
   	<!-- includes="*.class" -->
-        <jar destfile= "LiquiZ.jar"  basedir="../../../../LiquiZ2"  includes="/.class" />
+        <jar destfile= "LiquiZ.jar"  basedir="../../../../LiquiZ2/build" />
   </target>
 </project>

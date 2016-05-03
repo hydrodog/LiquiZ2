@@ -17,13 +17,18 @@ public class ReadsInFromPost{
 
 	public static void printOut(HttpServletRequest request) throws IOException{
 
-		
-		BufferedReader r = new BufferedReader(request.getReader());
-		String line, jsonString = "";
-		while ((line=r.readLine()) != null){
-			jsonString += line;
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = request.getReader();
+		try{
+			String line;
+			while((line = reader.readLine()) != null){
+				sb.append(line).append('\n');
+			}
+		}finally{
+			reader.close();
 		}
-			
+		
+		String jsonString = sb.toString();
 		System.out.println(jsonString);
 		
 		
@@ -33,7 +38,7 @@ public class ReadsInFromPost{
 		System.out.println(quiz1);
 		
 		
-		MongoDB_Quiz.saveQuiz(quiz1);
+//		MongoDB_Quiz.saveQuiz(quiz1);
 		
 		
 //		new JsonTranslator();

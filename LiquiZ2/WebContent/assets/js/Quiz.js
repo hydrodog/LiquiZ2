@@ -419,18 +419,24 @@ Quiz.prototype.loadLocalFunc = function () {
 };
 
 Quiz.prototype.generateData = function () {
-	var payload = {
-		title: this.title,
-		points: this.points,
-		timeLimit: this.timeLimit,
-		remainingTries: this.remainingTries,
-		dataDir: this.dataDir,
-		editMode: this.editMode,
-		questions: this.questions,
-		newQuestionId: QuizEdit.newid
+	var quiz = {
+		type: "Quiz",
+		css: "demostyle.css",
+		payload: {
+			policy: this.policy,
+			title: this.title,
+			points: this.points,
+			timeLimit: this.timeLimit,
+			remainingTries: this.remainingTries,
+			dataDir: this.dataDir,
+			editMode: this.editMode,
+			questions: this.questions,
+			newQuestionId: QuizEdit.newid
+		}
+		
 	};
 
-	return payload;
+	return quiz;
 };
 
 Quiz.prototype.submitCB = function (worked, response) {
