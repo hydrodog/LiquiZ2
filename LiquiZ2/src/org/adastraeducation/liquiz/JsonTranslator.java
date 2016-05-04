@@ -186,7 +186,9 @@ public class JsonTranslator{
 		    JsonObject jobj = new JsonObject();
 		    jobj.addProperty("id", qc.getId());
 		    jobj.addProperty("title", qc.getName());
-		    jobj.addProperty("type", qc.getCssClass());
+		    if(qc.getCssClass() != ""){
+		    	 jobj.addProperty("type", qc.getCssClass());
+		    }
 		    JsonElement content = arg2.serialize(qc.getDisplayables());
 			jobj.add("content", content);
 		    
@@ -202,7 +204,9 @@ public class JsonTranslator{
 			
 			qc.setId(jobj.get("id").getAsInt());
 			qc.setQcName(jobj.get("title").getAsString());
-			qc.setCssClass(jobj.get("type").getAsString());
+			if(jobj.get("type").getAsString() != ""){
+				qc.setCssClass(jobj.get("type").getAsString());
+			}
 			qc.setDisplayables((ArrayList<Displayable>) gson.fromJson(jobj.get("content"), dcType));
 			
 			return qc;

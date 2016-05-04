@@ -913,6 +913,8 @@ function sendAjax(url, data) {
 	           alert("success!"); 
 	           }
 	});
+	
+//	console.log( JSON.stringify(data));
 }
 
 function getPrefs(ajax_url, error, url) {

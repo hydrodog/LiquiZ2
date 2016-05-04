@@ -519,7 +519,7 @@ Quiz.prototype.createSubmit = function (id) {
 					clickPolicy++;
 				}),
             Util.button("Save to Server", (function () {
-            	console.log(this.generateData())
+//            	console.log(this.generateData())
             	ajax_url = "/LiquiZ2/demos/test_ajax.jsp"
             	sendAjax(ajax_url, this.generateData())
 			}).bind(this)),

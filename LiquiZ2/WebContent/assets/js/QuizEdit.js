@@ -72,6 +72,7 @@ QuizEdit.prototype.closeBracket = "]]";
 QuizEdit.prototype.currentEdit;
 
 QuizEdit.prototype.update = function () {
+//		console.log(this)
 		this.q.title = this.title.value;
 		this.q.level = this.level.value;
 		this.q.points = this.points.value;
@@ -130,6 +131,7 @@ QuizEdit.prototype.addFields = function (cbFunc) {
 
 QuizEdit.prototype.buildFillin = function () {
 	this.q.answers.push([this.ans.value]);
+	this.q.type = "fillin";
 	return [
         ['fillin', --QuizEdit.newid],
     ];
@@ -144,6 +146,8 @@ QuizEdit.prototype.editFillin = function () {
 
 QuizEdit.prototype.buildNumber = function () {
 	this.q.answers.push([this.min.value, this.max.value]);
+	this.q.type = "numeric";
+	
 	return [
         ['numeric', QuizEdit.newid]
     ];
@@ -157,6 +161,7 @@ QuizEdit.prototype.editNumber = function () {
 }
 
 QuizEdit.prototype.buildEssay = function () {
+	this.q.type = "essay";
 	return [
     ['essay', 14, this.textAreaRows.value, this.textAreaCols.value, 200],
     ];
@@ -169,6 +174,8 @@ QuizEdit.prototype.editEssay = function () {
 }
 
 QuizEdit.prototype.buildCode = function () {
+	this.q.type = "code";
+	
 	return [
         ['instructions', "Please use " + this.selectedLanguage + " to code"],
         ['code', --QuizEdit.newid, "", this.textAreaRows.value, this.textAreaCols.value]
@@ -209,30 +216,39 @@ QuizEdit.prototype.buildSurveyQuestions = function () {
 }
 
 QuizEdit.prototype.buildMCDropdown = function () {
+	this.q.type = "selectText";
+	
 	return [
     ['selectText', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildMCRadioTextVert = function () {
+	this.q.type = "mcRadioTextVert";
+	
 	return [
     ['mcRadioTextVert', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildMCRadioTextHoriz = function () {
+	this.q.type = "mcRadioTextHoriz";
+	
 	return [
         ['mcRadioTextHoriz', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildMAnswer = function () {
+	this.q.type = "multiAnswer";
+	
 	return [
     ['multiAnswer', --QuizEdit.newid, this.buildMC()]
     ];
 }
 
 QuizEdit.prototype.buildSurvey = function () {
+	this.q.type = "mcSurvey";
 	return [
     ['mcSurvey', --QuizEdit.newid, this.buildSurveyQuestions(), this.buildMC()]
     ];
@@ -388,6 +404,7 @@ QuizEdit.prototype.editSurvey = function () {
 }
 
 QuizEdit.prototype.buildCLOZE = function () {
+	this.q.type = "cloze";
 	return [
         ['cloze', --QuizEdit.newid, this.CLOZE.value],
     ];
@@ -421,6 +438,7 @@ QuizEdit.prototype.editCLOZE = function () {
 
 //Equation part
 QuizEdit.prototype.buildEquationQuestion = function () {
+	this.q.type = "equation";
 	this.q.answers.push(parseEquation(this.equation.tag));
 	return [
         ['equation', "equation" + this.id, "true"]
@@ -440,6 +458,7 @@ QuizEdit.prototype.editEquationQuestion = function () {
 };
 
 QuizEdit.prototype.buildEquation = function () {
+	this.q.type = "equation";
 	return [
         ['equation', "equationQues" + this.id, "false", parseEquation(this.equation.tag)] //TODO: maybe add parameter to pass button editions 
     ];
@@ -460,6 +479,7 @@ QuizEdit.prototype.matrix = function () {
 	console.log("ASDFASDF");
 }
 QuizEdit.prototype.buildMatrix = function () {
+	this.q.type = "matrix";
 	return [
         ['matrix', this.matrixRows, this.matrixCols],
     ];
@@ -478,6 +498,8 @@ QuizEdit.prototype.editRandomVars = function () {
 };
 
 QuizEdit.prototype.buildRegex = function () {
+	this.q.type = "regex";
+	
 	return [
             ['regex', QuizEdit.newid],
     ];
@@ -485,6 +507,7 @@ QuizEdit.prototype.buildRegex = function () {
 
 
 QuizEdit.prototype.buildRandomVar = function () {
+	this.q.type = "randomvar";
 	return [
             ['randomvar', QuizEdit.newid],
     ];
@@ -510,7 +533,7 @@ QuizEdit.prototype.deleteRegex = function () {
 	if (this.q.regexName.value != name) {
 		console.log("Ambiguous case regex delete.");
 	}
-	QuizEdit.regex.delete(name);
+	QuizEdit.regexdelete(name);
 	Util.removeSelOption(this.q.selRegex, name);
 	this.q.regexName.placeholder = this.q.regexName.value;
 	this.q.regexPattern.placeholder = this.q.regexPattern.value;
@@ -538,18 +561,21 @@ QuizEdit.audioFileTypes = "mp3,ogg,wav";
 QuizEdit.videoFileTypes = "mpg,mpeg,mp4";
 
 QuizEdit.prototype.buildImage = function (src, x, y, w, h) {
+	this.q.type = "image";
 	return [
         ['image', src, x, y, w, h]
     ];
 };
 
 QuizEdit.prototype.buildVideo = function (src, x, y, w, h) {
+	this.q.type = "Util.video";
 	return [
         ['Util.video', src]
     ];
 };
 
 QuizEdit.prototype.buildAudio = function (src, x, y, w, h) {
+	this.q.type = "Util.audio";
 	return [
         ['Util.audio', src]
     ];
