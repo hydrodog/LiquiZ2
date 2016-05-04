@@ -22,10 +22,18 @@ public class MongoDB_Quiz {
 		
 		
 		Datastore quiz_Database = morphia.createDatastore(mongoClient, "quiz_Database");
-//		quiz_Database.delete(quiz_Database.createQuery(Quiz.class));
 
 		quiz_Database.save(quiz); 
+		
+		Query<Quiz> query = quiz_Database.createQuery(Quiz.class);
+		
+		printQuiz(query.field("quizName").equal("Algebra quiz").get());
+		System.out.println();
+		System.out.println();
+		printQuiz(query.field("quizName").equal("Quiz Demo #1").get());
+		
 	}
+	
 
 	public static void main(String[] args) {
 

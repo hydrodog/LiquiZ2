@@ -98,6 +98,7 @@ public class JsonTranslator{
 		builder.registerTypeAdapter(Image.class, new ImageTranslator());
 		builder.registerTypeAdapter(ClickableImage.class, new ClickableImageTranslator());
 		builder.registerTypeAdapter(FillIn.class, new FillInTranslator());
+		builder.registerTypeAdapter(Numeric.class, new NumericTranslator());
 		builder.registerTypeAdapter(TextP.class, new TextPTranslator());
 		builder.registerTypeAdapter(Audio.class, new AudioTranslator());
 		builder.registerTypeAdapter(Video.class, new VideoTranslator());
@@ -374,7 +375,7 @@ private static class ImageTranslator implements  JsonDeserializer<Image>, JsonSe
 	public JsonElement serialize(Image image, Type arg1, JsonSerializationContext arg2) {
 		
 		JsonArray jobj = new JsonArray();
-		jobj.add(new JsonPrimitive("Util.image")); 
+		jobj.add(new JsonPrimitive("Util.img")); 
 		jobj.add(new JsonPrimitive(image.getSource()));
 		return jobj;
 		
@@ -396,7 +397,8 @@ private static class ClickableImageTranslator implements  JsonDeserializer<Click
 	public JsonElement serialize(ClickableImage image, Type arg1, JsonSerializationContext arg2) {
 		
 		JsonArray jobj = new JsonArray();
-		jobj.add(new JsonPrimitive("Util.image")); 
+		jobj.add(new JsonPrimitive("clickableImage")); 
+		jobj.add(new JsonPrimitive(image.getId())); 
 		jobj.add(new JsonPrimitive(image.getSource()));
 		return jobj;
 		
@@ -406,6 +408,7 @@ private static class ClickableImageTranslator implements  JsonDeserializer<Click
 	public ClickableImage deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
 		JsonArray array = json.getAsJsonArray();
 		ClickableImage image = new ClickableImage();
+		image.setId(array.get(1).getAsInt());
 		image.setSource(array.get(2).getAsString());
 		return image;
 	}
@@ -544,6 +547,28 @@ private static class FillInTranslator implements  JsonDeserializer<FillIn>, Json
 		FillIn fillin = new FillIn();
 		fillin.setId(array.get(1).getAsInt());
 		return fillin;
+	}
+	
+}
+
+private static class NumericTranslator implements  JsonDeserializer<Numeric>, JsonSerializer<Numeric>{
+	
+	@Override
+	public JsonElement serialize(Numeric num, Type arg1, JsonSerializationContext arg2) {
+		
+		JsonArray jobj = new JsonArray();
+		jobj.add(new JsonPrimitive("numeric")); 
+		jobj.add(new JsonPrimitive(num.getId()));
+		return jobj;
+		
+	}
+	
+	@Override
+	public Numeric deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+		JsonArray array = json.getAsJsonArray();
+		Numeric num = new Numeric();
+		num.setId(array.get(1).getAsInt());
+		return num;
 	}
 	
 }
@@ -699,10 +724,19 @@ private static class MatrixQuestionTranslator implements  JsonDeserializer<Matri
 		JsonPrimitive matrixId = new JsonPrimitive(Integer.toString(matrixQ.getQcid())+ "_" + Integer.toString(matrixQ.getId()));
 		JsonPrimitive matrixRow = new JsonPrimitive(matrixQ.getRows());
 		JsonPrimitive matrixCol = new JsonPrimitive(matrixQ.getCols());
+		JsonArray data = new JsonArray();
+		for(int i = 1; i<= matrixQ.getCols(); i++){
+			
+				JsonPrimitive a = new JsonPrimitive(i);
+				data.add(a);
+			}
+		
 		jobj.add(matrixName);
 		jobj.add(matrixId);
 		jobj.add(matrixRow);
 		jobj.add(matrixCol);
+		jobj.add(data);
+		
 		return jobj;
 		
 	}
@@ -750,7 +784,8 @@ private static class MatrixQuestionTranslator implements  JsonDeserializer<Matri
 				klassString = (klassString.equals("File")) ? "FileUpload" : klassString;
 				klassString = (klassString.equals("Util.image") || klassString.equals("Util.img")) ? "Image" : klassString;
 				klassString = (klassString.equals("ClickableImage"))? "ClickableImage" : klassString;
-				klassString = (klassString.equals("Fillin") || klassString.equals("Numeric"))? "FillIn" : klassString;
+				klassString = (klassString.equals("Fillin"))? "FillIn" : klassString;
+				klassString = (klassString.equals("Numeric"))? "Numeric" : klassString;
 				klassString = (klassString.equals("Util.p"))? "TextP" : klassString;
 				klassString = ((klassString.equals("SelectText"))||(klassString.equals("McRadioImg")))? "MultiChoiceRadio" : klassString;
 				klassString = (klassString.equals("Util.audio"))? "Audio" : klassString;

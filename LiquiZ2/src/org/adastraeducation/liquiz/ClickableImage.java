@@ -1,13 +1,11 @@
 package org.adastraeducation.liquiz;
 
 public class ClickableImage extends RectangularMedia implements java.io.Serializable{
+	private int id;
+	
 	public ClickableImage(){
 		super();		
 	}
-	//TODO: is it alright to leave width and height 0?
-//	public Image(String image){
-//		super(image);
-//	}
 	
 	public ClickableImage(String image, int width, int height){
 		super(image, width, height);
@@ -30,6 +28,15 @@ public class ClickableImage extends RectangularMedia implements java.io.Serializ
 		b.append("<image id='???' name='/>");
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
 }
 
 
