@@ -362,11 +362,26 @@ Quiz.prototype.makeEditBox = function (id) {
 	};
 	// TODO: Delete currene question
 	var deleteFunc = function (e) {
-		page.questions.splice(e.target.id, 1);
+		var arrayid=e.target.id.split("-delete");
+		var a=page.questions.length;
+		for(var i=0;i<page.questions.length;i++){
+			if(page.questions[i].id==arrayid[0]){
+				page.questions.splice(i,1);
+				break;
+			}
+		}
+		//page.questions.splice(arrayid[0]-2, 1);
+		var b=page.questions.length;
 		page.partialRefresh();
 	};
 	var copyFunc = function (e) {
-		//      page.questions.splice(e.target.id, 0, page.questions[e.target.id]);
+		var arrayid=e.target.id.split("-copy");
+		for(var i=0;i<page.questions.length;i++){
+			if(page.questions[i].id==arrayid[0]){
+				page.questions.splice(i,0, page.questions[i]);
+				break;
+			}
+		}
 		page.partialRefresh();
 	};
 
