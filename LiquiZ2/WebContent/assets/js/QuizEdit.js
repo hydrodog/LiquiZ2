@@ -35,8 +35,8 @@ QuizEdit.prototype.renderQuestion = function () {
 	page.refreshQuestion(this.id);
 }
 
-QuizEdit.prototype.editButton = function (label, method) {
-	return Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL);
+QuizEdit.prototype.editButton = function (label, method,id) {
+	return Util.button(label, (method === null) ? null : method.bind(this), QuizEdit.EDITCTRL,id);
 }
 
 QuizEdit.prototype.textArea = function (id, rows, cols) {
@@ -238,24 +238,29 @@ QuizEdit.prototype.buildSurvey = function () {
     ];
 }
 
-QuizEdit.prototype.deleteAnswer = function () {
+QuizEdit.prototype.deleteOptionAnswer = function (e) {
 	console.log('delete answer');
+	var nid=e.target.id.split("-OptionDelete")[0];
+	var table=this.ansTable;
+	for(var i=1;i<table.rows.length;i++){
+		if(table.rows[i].cells[1].childNodes[0].id.split("-OptionDelete")[0]==nid){
+			this.ansTable.deleteRow(i);
+			break;
+		}
+	}	
 }
 
 QuizEdit.prototype.addOption = function (row) {
-	var count = Number(this.optCount.value);
-	if (count < 1 || count > 100) count = 1;
-	for (var i = 0; i < count; i++) {
-		var r = this.ansTable.insertRow();
-		var td = r.insertCell();
-		td.appendChild(Util.input("text", QuizEdit.EDITCTRL, "a" + row));
-		if (this.withCheckbox) {
-			td = r.insertCell();
-			td.appendChild(Util.checkbox(null, "check" + row, "editCB", "check" + row));
-		}
+	var leng = this.ansTable.rows.length;
+	var r = this.ansTable.insertRow();
+	var td = r.insertCell();
+	td.appendChild(Util.input("text", QuizEdit.EDITCTRL, "a" + (leng+1)));
+	if (this.withCheckbox) {
 		td = r.insertCell();
-		td.appendChild(this.editButton("delete", this.deleteAnswer));
+		td.appendChild(Util.checkbox(null, "check" + (leng+1), "editCB", "check" + (leng+1)));
 	}
+	td = r.insertCell();
+	td.appendChild(this.editButton("delete", this.deleteOptionAnswer,(leng+1)+"-OptionDelete"));
 	this.scrollToEditor();
 }
 
@@ -327,10 +332,10 @@ QuizEdit.prototype.editMCtop = function (checkbox) {
 		if (checkbox) {
 			list.push([Util.input("text", QuizEdit.EDITCTRL, "a" + row),
                Util.checkbox(null, "check" + row, "editCB", "check" + row),
-               this.editButton("delete", this.deleteAnswer)]);
+               this.editButton("delete", this.deleteOptionAnswer,row+"-OptionDelete")]);
 		} else {
 			list.push([Util.input("text", QuizEdit.EDITCTRL, "a" + row),
-               this.editButton("delete", this.deleteAnswer)]);
+               this.editButton("delete", this.deleteOptionAnswer,row+"-OptionDelete")]);
 		}
 	}
 	this.ansTable = Util.table(list, true, QuizEdit.ANSWERS);
@@ -362,26 +367,38 @@ QuizEdit.prototype.addStandardChoice = function (name, choices, nameBlank) {
 	Quiz.stdChoice[name] = choices;
 }
 
-QuizEdit.prototype.deleteSurveyQuestion = function (i) {
-	this.surveyQuestions.deleteRow(i);
+QuizEdit.prototype.deleteSurveyQuestion = function (e) {
+	var nid=e.target.id.split("-SurveyDelete")[0];
+	var table=this.surveyQuestions;
+	for(var i=0;i<table.rows.length;i++){
+		if(table.rows[i].cells[1].childNodes[0].id.split("-SurveyDelete")[0]==nid){
+			this.surveyQuestions.deleteRow(i);
+			break;
+		}
+	}	
 }
 
 QuizEdit.prototype.addSurveyQuestion = function (i) {
+	var leng=this.surveyQuestions.rows.length;
 	var tr = this.surveyQuestions.insertRow();
 	var c = tr.insertCell();
-	c.appendChild(Util.input("text", QuizEdit.QUESTION, 'surveyQuestion' + i))
+	c.appendChild(Util.input("text", QuizEdit.QUESTION, 'surveyQuestion' + (leng+1)));
 	c = tr.insertCell();
-	c.appendChild(this.editButton("delete", null));
+	c.appendChild(this.editButton("delete", this.deleteSurveyQuestion,(leng+1)+"-SurveyDelete"));
 }
 
 QuizEdit.prototype.editSurvey = function () {
 	this.editMCtop(false);
 	var surveyQuestions = [];
-	for (var i = 0; i < 4; i++) {
-		surveyQuestions.push([Util.input("text", QuizEdit.QUESTION, 'surveyQuestion' + i), this.editButton("delete", null)]);
-	}
 	this.surveyQuestions = Util.table(surveyQuestions, false);
-
+	for (var i = 0; i < 4; i++) {
+		var r= this.surveyQuestions.insertRow();
+		var td=r.insertCell();
+		td.appendChild(Util.input("text", QuizEdit.QUESTION, 'surveyQuestion' + i));
+		td= r.insertCell();
+		td.appendChild(this.editButton("delete", this.deleteSurveyQuestion,i+"-SurveyDelete"));
+	} 
+	var table=this.surveyQuestions;
 	this.addFields(this.buildSurvey, this.mcHeader, this.mcHeader2, this.ansTable, Util.h2("Survey Questions"),
 		this.editButton("More Questions", this.addSurveyQuestion), this.surveyQuestions);
 	this.answers = [];
