@@ -436,6 +436,20 @@ QuizEdit.prototype.editCLOZE = function () {
 	};
 }
 
+//Image Click part
+QuizEdit.prototype.buildImgClick = function(img){
+	return [
+	        ['image', --QuizEdit.newid, img]
+	    ];
+}
+
+QuizEdit.prototype.editImgClick = function(e){
+	var src = "usmap.png";
+	var img = new ClickableImage("ClickableImage",src);
+	this.addFields(this.buildImgClick, img);
+}
+
+
 //Equation part
 QuizEdit.prototype.buildEquationQuestion = function () {
 	this.q.answers.push(parseEquation(this.equation.tag));
@@ -797,7 +811,7 @@ QuizEdit.prototype.editQuestion = function () {
       this.editButton("CLOZE", this.editCLOZE)
          ],
     [
-      this.editButton("ImgClick", null),
+      this.editButton("ImgClick", this.editImgClick),
       this.editButton("Graph", null),
       this.editButton("Diagram", null),
       this.editButton("", null),
