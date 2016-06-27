@@ -192,22 +192,29 @@ Quiz.prototype.processQuestion = function (q,id) {
 		this.subQuestion_id = i;
 		if(q[i][0]!="instructions"){
 			var type=q[i][0];
-			var divitem=Util.div(type,type+"-test"+i);
+			var divitem=Util.div(type,type+"-test"+myQid+"-"+i);
 			divitem.attr('tabindex',-1);
 			$(divitem).focus(function (e) {
 				console.log("Focus");
+				type=e.target.id.split("-test")[0];
 				var num=e.target.id.split(type+"-test")[1];
+				var numid=num.split("-")[1];
 			    var dele=Util.button("Delete",
 						function () {
 							console.log("delete subquestion");
-							console.log(divitem);
+							var divitem=document.getElementById(type+"-test"+num);
 							if(divitem!=null){
 								divitem.remove();
-								q.splice(num,1);
+								q.splice(numid,1);
 							}
 						});
 			    var mydiv=document.getElementById(type+"-test"+num);
-			    Util.append(mydiv,dele);
+			    if(e.target.childNodes[1]==null){
+			    	Util.append(mydiv,dele);
+			    }
+			    else{
+			    	e.target.childNodes[1].remove();
+			    }
 			});
 		}
 		/*
@@ -238,7 +245,9 @@ Quiz.prototype.processQuestion = function (q,id) {
 				div.attr('tabindex',-1);
 				$(div).focus(function (e) {
 					console.log("Focus");
+
 					var num=e.target.id.split("equation-test")[1];
+					var numid=num.split("-")[1];
 				    var eq = new Equation({
 						"target": div,
 						"btn": ["Fraction", "Script", "Radical","Integral", "LargeOperator", "Bracket", "Function"]
@@ -247,14 +256,24 @@ Quiz.prototype.processQuestion = function (q,id) {
 				    var dele=Util.button("Delete",
 							function () {
 								console.log("delete equation");
-								console.log(q[num][3]);
+								console.log(q[numid][3]);
 								if(div!=null){
+									console.log(document.getElementById("equation-test"+num).value);
 									document.getElementById("equation-test"+num).remove();
-									q.splice(num,1);
+									for(var i=0;i<q.length;i++){
+									
+											q.splice(num,1);
+										
+									}
 								}
 							});
 				    var mydiv=document.getElementById("equation-test"+num);
-				    Util.append(mydiv,dele);
+				    if(e.target.childNodes[3]==null){
+				    	Util.append(mydiv,dele);
+				    }
+				    else{
+				    	e.target.childNodes[3].remove();
+				    }
 				});
 				console.log(myQid);
 				var newqu=document.getElementById("qc"+myQid);
