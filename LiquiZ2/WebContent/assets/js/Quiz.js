@@ -113,7 +113,7 @@ Quiz.prototype.submitAnswers = function () {
 Quiz.prototype.refreshQuestion = function (i) {
 	var q = this.questions[i];
 	var qc = this.addQuestion(q.id, q.title, q.type, q.points, q.level);
-	qc.appendChild(this.processQuestion(q.content));
+	qc.appendChild(this.processQuestion(q.content,q.id));
 
 	if (!document.getElementById("qc" + q.id))
 		this.questionsDiv.appendChild(qc);
@@ -135,7 +135,7 @@ Quiz.prototype.partialRefresh = function () {
 		var qc = this.addQuestion(q.id, q.title, q.type, q.points, q.level);
 		if (cb(i)) {
 			this.question_id = i;
-			qc.appendChild(this.processQuestion(q.content));
+			qc.appendChild(this.processQuestion(q.content,q.id));
 		}
 		frag.appendChild(qc);
 		if (this.editMode)
@@ -166,6 +166,7 @@ Quiz.prototype.addQuestion = function (id, title, type, points, level) {
 	var qc = document.getElementById("qc" + id);
 	if (qc) {
 		qc.innerHTML = "";
+		console.log("time");
 	} else {
 		qc = Util.div("qc " + type + "-qc", "qc" + id);
 	}
@@ -174,7 +175,7 @@ Quiz.prototype.addQuestion = function (id, title, type, points, level) {
 	header.appendChild(Util.h2(title));
 
 	var floatRight = Util.div("float-right");
-	floatRight.appendChild(Util.span("points:" + points, "qpoints"));
+	floatRight.appendChild(Util.span("points:" + points, "qpoints"));	
 	floatRight.appendChild(Util.span("level:" + level, "level"));
 	if (this.editMode) {
 		floatRight.appendChild(this.makeEditBox(id));
@@ -184,14 +185,94 @@ Quiz.prototype.addQuestion = function (id, title, type, points, level) {
 	return qc;
 };
 
-Quiz.prototype.processQuestion = function (q) {
+Quiz.prototype.processQuestion = function (q,id) {
+	var myQid=id;
 	var frag = document.createDocumentFragment();
 	for (var i = 0; i < q.length; i++) {
 		this.subQuestion_id = i;
+		if(q[i][0]!="instructions"){
+			var type=q[i][0];
+			var divitem=Util.div(type,type+"-test"+i);
+			divitem.attr('tabindex',-1);
+			$(divitem).focus(function (e) {
+				console.log("Focus");
+				var num=e.target.id.split(type+"-test")[1];
+			    var dele=Util.button("Delete",
+						function () {
+							console.log("delete subquestion");
+							console.log(divitem);
+							if(divitem!=null){
+								divitem.remove();
+								q.splice(num,1);
+							}
+						});
+			    var mydiv=document.getElementById(type+"-test"+num);
+			    Util.append(mydiv,dele);
+			});
+		}
+		/*
+		 * 
+		if (q[i][0].substring(0, 5) === "Util.") {
+			frag.appendChild(Util[q[i][0].substring(5)].apply(this || window, q[i].slice(1)));
+		}else{
+			frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+		}
+		 */
 		if (q[i][0].substring(0, 5) === "Util.") {
 			frag.appendChild(Util[q[i][0].substring(5)].apply(this || window, q[i].slice(1)));
 		} else {
-			frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+			if(q[i][0]=="equation"){//Judge if the question is a equation question
+				var text="";
+				if(q[i][3]==null){
+					frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+					break;
+				}
+				for(var j=1;j<q[i][3].length;j++){//Get the text of the equation we build
+					console.log(q[i][3]);
+					text+=q[i][3][j].innerHTML;
+				}
+				console.log(text);
+				//MathInput.innerHTML= "`"+text+"`";//Just for test
+				var div= Util.div("equation","equation-test"+myQid+"-"+i);
+				var child=this[q[i][0]].apply(this || window, q[i].slice(1));
+				div.attr('tabindex',-1);
+				$(div).focus(function (e) {
+					console.log("Focus");
+					var num=e.target.id.split("equation-test")[1];
+				    var eq = new Equation({
+						"target": div,
+						"btn": ["Fraction", "Script", "Radical","Integral", "LargeOperator", "Bracket", "Function"]
+					});
+				    //div.appendChild(eq.equationButton("Equation Editor"));
+				    var dele=Util.button("Delete",
+							function () {
+								console.log("delete equation");
+								console.log(q[num][3]);
+								if(div!=null){
+									document.getElementById("equation-test"+num).remove();
+									q.splice(num,1);
+								}
+							});
+				    var mydiv=document.getElementById("equation-test"+num);
+				    Util.append(mydiv,dele);
+				});
+				console.log(myQid);
+				var newqu=document.getElementById("qc"+myQid);
+				Util.append(newqu, div);
+				div.innerHTML = "`"+text+"`";
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);//Use mathjax to transfer the text to build a beautiful equation
+			}
+			else{
+				if(divitem!=null){
+					divitem.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+					frag.appendChild(divitem);
+				}
+				else{
+					frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+				}
+
+				
+			}
 		}
 	}
 	return frag;
@@ -357,7 +438,20 @@ Quiz.prototype.end = function () {
 };
 
 Quiz.prototype.makeEditBox = function (id) {
+	var page=this;
 	var editFunc = function (e) {
+		var arrayid=e.target.id.split("-edit");
+		var editor = new QuizEdit();
+		var edi =document.getElementById("edit-qc" + arrayid[0]);
+		console.log(arrayid[0]);
+		for(var i=0;i<page.questions.length;i++){
+			if(page.questions[i].id==arrayid[0]){
+				var q = page.questions[i];
+				var num=i;
+				break;
+			}
+		}
+		editor.editOldQuestion(edi,q,num);
 		console.log(e.target.id);
 	};
 	// TODO: Delete currene question
@@ -512,7 +606,7 @@ Quiz.prototype.createSubmit = function (id) {
             Util.button("New Question",
 				function () {
 					var editor = new QuizEdit();
-					editor.editQuestion();
+					editor.editNewQuestion();
 				}),
             Util.button("Edit Assign",
 				function () {
@@ -618,7 +712,7 @@ Quiz.prototype.equation = function (id, editable, arr) {
 	if (editable == "true") {
 		var eq = new Equation({
 			"target": div,
-			"btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+			"btn": ["Fraction", "Script", "Radical","Integral", "LargeOperator", "Bracket", "Function"]
 		});
 		div.appendChild(eq.equationBox());
 		div.appendChild(Util.br());
