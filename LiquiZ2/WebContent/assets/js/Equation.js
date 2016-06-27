@@ -70,7 +70,7 @@ function Equation(payload) {
 	this.btn_set = [];
 	for (var i in this.btn)
     	this.btn_set.push(Equation[this.btn[i]]);
-    console.log(this.btn_set);
+	console.log(this.btn_set);
 	this.body.className = "equation";
 }
 
@@ -139,12 +139,12 @@ Equation.prototype.equationButton = function(name, qcId) {		//return a new equat
 	var popId = 'pop' + qcId;
 	var popExitId = 'popExit' + qcId;
 	this.popDiv = Util.div("popDiv", popId)
-					   .styles("visibility", "hidden")
+					   .styles("visibility", "")
 					   .styles("display", "none");
 //	this.popDiv.setAttribute("isHover", false);
 //	this.popDiv.addEventListener("mouseover", function(){this.popDiv.setAttribute("isHover", true);});
 //	this.popDiv.addEventListener("mouseout", function(){this.popDiv.setAttribute("isHover", false);});
-
+	console.log(this.popDiv);
 	this.popDiv.append(Util.div("popHeader", "popDrag")
 							 .append(document.createTextNode("Equation Editor"))
 		                     .append(Util.input("button", "popExit", popExitId, "X")))
@@ -160,10 +160,12 @@ Equation.prototype.editModeButton = function(target) {	//insert 3 button for edi
 	      .append(Util.button("complete", editButtonEnd));
 };
 Equation.prototype.equationBox = function() {	//return a edit box 
-	var tag = Util.span(null, "math-expr math-editable", "main-math-box") 
+	var tag = Util.span(null,"math-expr math-editable", "main-math-box") 
 			       .styles("fontSize", "20px")
 				   .attr("tabindex", "0") 		//limitation: if the attribute does not belong to the element, it can't be added into the element by Util.make 
 				   .attr("math_id", math_id++);
+	var input=Util.input(null);
+	addListener(input,1);
 	addListener(tag, 1);
 	this.tag = tag;
 //	target.appendChild(tag);
@@ -375,7 +377,9 @@ Equation.prototype.expr = {
 		tnode.appendChildren([ top, mid, bottom, space ]);
 		return tnode;
 	},
-	sqrt: function() {	//TODO: rethink the css structure
+	sqrt: function() {	
+		document.write("When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$");
+		//TODO: rethink the css structure
 //		tnode = document.createElement("span");
 //		 .attr("class", "non-leaf");
 //		tnode.addEventListener('click', c_both, false);
@@ -583,6 +587,187 @@ function btn2(e) {	//blur has no bubble event catch
 	bot .style.display = "none";
 	this.className = "math-button";
 }
+
+function btn3(e) {
+	var expr = document.createDocumentFragment();
+	var btn_id = this.getAttribute("btn_id");
+	switch (btn_id) {
+	//fraction
+	case 'frac/1':
+		expr.append(createVar("frac"));
+		break;
+	case 'frac/2':
+		expr.append(createVar("/"));
+		break;
+	case 'frac/c1':
+		expr.append(createVar("dx/dy"));
+		break;
+	case 'frac/c2':
+		expr.append(createVar("(\u0394y)/(\u0394x)"));
+		break;
+	case 'frac/c4':
+		expr.append(createVar("(\u2202y)/(\u2202x)"));
+		break;
+	case 'frac/c5':
+		expr.append(createVar("pi/2"));
+		break;
+	//script
+	case 'script/1':
+		expr.append(createVar("^"));
+		break;
+	case 'script/2':
+		expr.append(createVar("_"));
+		break;	
+	case 'script/3':	//TODO: distance
+		var frac = Equation.prototype.createExpr("fraction");
+		frac.childNodes[0].className = "top-in-frac";
+		frac.childNodes[1].className = "bot-in-frac";
+		expr.appendChild(frac);
+		break;
+	case 'script/4':	
+		var frac = Equation.prototype.createExpr("fraction");
+		frac.childNodes[0].className = "div8";
+		frac.childNodes[1].className = "div7";
+		expr.appendChild(frac);
+		break;
+	case 'script/c1':
+		expr.append(createVar("e^{-i\u03C9t}"));
+		break;
+	case 'script/c2':
+		expr.append(createVar("x^2"));
+		break;
+	case 'script/c3':
+		var frac = Equation.prototype.createExpr("fraction");
+		frac.childNodes[0].className = "div8";
+		frac.childNodes[0].firstChild.appendChild(createVar("n"));
+		frac.childNodes[0].firstChild.className = "non-leaf";
+		frac.childNodes[1].className = "div7";
+		frac.childNodes[1].firstChild.appendChild(createVar("1"));
+		frac.childNodes[1].firstChild.className = "non-leaf";
+		expr.append(frac)
+			.append(createVar("Y"));
+		break;
+	//radical
+	case "sqrt/1":	//TODO: change the height
+		expr.append(createVar("sqrt"));
+		break;
+	case "sqrt/2":
+		expr.append(createVar("sqrt"));
+		break;
+	case "sqrt/3":
+		expr.append(createVar("sqrt"));
+		break;
+	case "sqrt/4":
+		expr.append(createVar("sqrt"));
+		break;
+	case "sqrt/c1":
+		expr.append(createVar("(-b+-sqrt(b^2-4ac))/(2a)"));
+		break;
+	case "sqrt/c2":
+		expr.append(createVar("sqrt(a^2+b^2)"));
+		break;
+	//integral
+	case "int/1":
+		expr.append(createEscapes('\u222B'));
+		break;
+	case "int/2":
+		expr.append(createEscapes('\u222B'))
+			.append(createVar("_()^()"));
+		break;
+	case "int/3":
+		expr.append(createEscapes('\u222B'))
+		.append(createEscapes('\u222B'));
+		break;
+	case "int/4":
+		expr.append(createEscapes('\u222B'))
+		.append(createEscapes('\u222B'))
+		.append(createVar("_()^()"));
+		break;
+	case "int/5":
+		expr.append(createEscapes('\u222B'))
+		.append(createEscapes('\u222B'))
+		.append(createEscapes('\u222B'));
+		break;
+	case "int/6":
+		expr.append(createEscapes('\u222B'))
+		.append(createEscapes('\u222B'))
+		.append(createEscapes('\u222B'))
+		.append(createVar("_()^()"));
+		break;
+	// large operator
+	case 'large/1':
+		expr.append(createVar("sum"));
+		break;
+	case 'large/2':
+		expr.append(createVar("sum_()^()"));
+		break;
+	case 'large/3':
+		expr.append(createVar("sum_()"));
+		break;
+	// brackets
+	case "brackets/1":
+		expr.append(createEscapes("("))
+			.append(createEscapes(")"));
+		break;
+	case "brackets/2":
+		expr.append(createEscapes("["))
+			.append(createEscapes("]"));
+		break;
+	case "brackets/3":
+		expr.append(createEscapes("{"))
+			.append(createEscapes("}"));
+		break;
+	case "brackets/4":
+		expr.append(createEscapes("|"))
+			.append(createEscapes("|"));
+		break;
+	// function
+	case "func/1":
+		expr.append(createVar("sin"));
+		break;
+	case "func/2":
+		expr.append(createVar("cos"));
+		break;
+	case "func/3":
+		expr.append(createVar("tan"));
+		break;
+	case "func/4":
+		expr.append(createVar("cot"));
+		break;
+	case "func/5":
+		expr.append(createVar("sec"));
+		break;
+	case "func/6":
+		expr.append(createVar("csc"));
+		break;
+	case "func/c1":
+		expr.append(createVar("sin\u03B8"));
+		break;
+	case "func/c2":
+		expr.append(createVar("cos2x"));
+		break;
+	case "func/c3":
+		expr.append(createVar("tan\u03B8=(sin\u03B8)/(cos\u03B8)"));
+		break;
+	default:
+		break;
+	}
+
+	var box = document.getElementById("main-math-box");
+	var cursor = document.getElementById("cursor");
+	if (cursor != null) {
+		insertBefore(expr, cursor);
+		cursor.parentNode.focus();
+	} else {
+		this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.target
+				.append(expr)
+				.append(createCursor());
+		box.focus();
+	}
+	e.stopPropagation();
+}
+
+/*
 function btn3(e) {
 	var expr = document.createDocumentFragment();
 	var btn_id = this.getAttribute("btn_id");
@@ -790,7 +975,7 @@ function btn3(e) {
 	}
 	e.stopPropagation();
 }
-
+*/
 /* click event bind with element*/
 function c(e) { //bind with character in sub/sup
 	//deal with the previous cursor if it still exists
@@ -1051,6 +1236,8 @@ function keyOn(e) {
 		var signal = [ ")", "!", "@", "#", "$", "%", "^", "&", "\xD7", "(" ];
 		if (e.shiftKey) {
 			if (keynum - 48 == 6) {
+				tnode = document.createTextNode("^");
+				/*
 				tnode = Equation.prototype.createExpr("sup")
 				//insert a cursor into the node
 				insertBefore(tnode, cursor);
@@ -1058,7 +1245,7 @@ function keyOn(e) {
 				tnode.appendChild(createCursor());
 				tnode.focus();
 				e.stopPropagation();
-				return;
+				return;*/
 			} else
 				tnode = document.createTextNode(signal[keynum - 48]);
 		} else
@@ -1073,6 +1260,8 @@ function keyOn(e) {
 		var sign = [ ";", "=", ",", "-", ".", "/", "`" ];
 		if (e.shiftKey) {
 			if (keynum == 189) {
+				tnode = document.createTextNode("_");
+				/*
 				tnode = Equation.prototype.createExpr("sub")
 				//insert a cursor into the node
 				insertBefore(tnode, cursor);
@@ -1081,10 +1270,13 @@ function keyOn(e) {
 				tnode.focus();
 				e.stopPropagation();
 				return;
+				*/
 			} else
 				tnode = document.createTextNode(signal[keynum - 186]);
 		} else {
 			if (keynum == 191) {
+				tnode = document.createTextNode("/");
+				/*
 				tnode = createExpr("fraction");
 				insertBefore(tnode, cursor);
 				var tmp = tnode.previousSibling;
@@ -1110,6 +1302,8 @@ function keyOn(e) {
 					
 				e.stopPropagation();
 				return;
+				*/
+
 			} else 
 				tnode = document.createTextNode(sign[keynum - 186]);
 		}
@@ -1186,6 +1380,12 @@ function parseEquation(target) {
 	console.log(transferToString(arr));
 	return arr;
 }
+function makeMathJax(text){
+	var container = Util.div();
+	container.innerHTML = "`"+text+"`";
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,container]);
+}
+
 function parseNode(node) {
 	var obj = {};
 	obj.type = node.tagName;
