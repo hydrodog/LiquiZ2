@@ -676,7 +676,7 @@ QuizEdit.prototype.appendInstructions = function () {
 	this.appendParaEditor(0);
 };
 
-QuizEdit.prototype.appendParaEditor = function (num) {
+QuizEdit.prototype.appendParaEditor = function (num,q) {
 	var i = 0;
 	var funcs = ["instructions",
 				 "paragraph",
@@ -697,6 +697,12 @@ QuizEdit.prototype.appendParaEditor = function (num) {
 				];
 
 	var textBox = this.varWriter("blankbox", 5, 60);
+	if(q!=null){
+		if(q.content[0][0]=="instructions"){
+		textBox.innerHTML=q.content[0][1];
+		}
+	}
+	
 	var t = this;
 	textBox.oninput = function () {
 		var e = this.paraEditor;
@@ -780,7 +786,7 @@ QuizEdit.prototype.editNewQuestion = function () {
 
 	this.appendIndex = Util.div("apndIndx");
 	e.appendChild(this.appendIndex);
-
+	
 	this.appendParaEditor(0);
 
 	var image, audio, video;
@@ -874,8 +880,8 @@ QuizEdit.prototype.editOldQuestion = function (edi,qu,num) {
 
 	this.appendIndex = Util.div("apndIndx");
 	e.appendChild(this.appendIndex);
-
-	this.appendParaEditor(0);
+	console.log(this.q);
+	this.appendParaEditor(0,this.q);
 
 	var image, audio, video;
 	e.appendChild(Util.table([
