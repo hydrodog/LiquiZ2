@@ -248,8 +248,11 @@ Util = {
 	img: function (src, className, id) {
 		className = (className || "");
 		className = "quizimg" + (className.length > 0 ? " " : "") + className;
+		if(!src.startsWith("data:")){
+			src = mediaLocations.img + src;
+		}
 		return Util.make("img", {
-			src: mediaLocations.img + src,
+			src: src,
 			className: className,
 			id: id,
 		});

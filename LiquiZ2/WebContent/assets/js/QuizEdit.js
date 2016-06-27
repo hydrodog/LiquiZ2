@@ -445,15 +445,19 @@ QuizEdit.prototype.editCLOZE = function () {
 }
 
 //Image Click part
-QuizEdit.prototype.buildImgClick = function(img){
+QuizEdit.prototype.buildImgClick = function(){
+	var canvas = document.getElementById("canvas");
+	var src = canvas.toDataURL();
+	//var src = this.imgEditor.canvas.toDataURL();
 	return [
-	        ['image', --QuizEdit.newid, img]
+	        ['image', src, --QuizEdit.newid]
 	    ];
 }
 
 QuizEdit.prototype.editImgClick = function(e){
-	var src = "usmap.png";
-	var img = new ClickableImage("ClickableImage",src);
+	var src = "usmap1.png";
+	var img = new Paint(src, 600 , 330);
+	this.imgEditor = img;
 	this.addFields(this.buildImgClick, img);
 }
 
