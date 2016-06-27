@@ -102,11 +102,14 @@ QuizEdit.prototype.addSubQuestion = function () {
 			t.completeEdit(t.cbFunc());
 	};
 }
-
-// TODO: Cancel a question, add nothing and remove the editor
-QuizEdit.prototype.cancel = function () {
-
+//Close button for editor
+QuizEdit.prototype.closeEditor = function () {
+	var t = this;
+	return function () {
+		t.editor.innerHTML = "";
+	};
 }
+
 
 // Add variable fields to the editor for editing specific question types
 QuizEdit.prototype.addFields = function (cbFunc) {
@@ -170,7 +173,7 @@ QuizEdit.prototype.editEssay = function () {
 
 QuizEdit.prototype.buildCode = function () {
 	return [
-        ['instructions', "Please use " + this.selectedLanguage + " to code"],
+        ['instructions', "Please use " + this.varEdit.childNodes[4].value + " to code"],
         ['code', --QuizEdit.newid, "", this.textAreaRows.value, this.textAreaCols.value]
     ];
 }
@@ -248,6 +251,11 @@ QuizEdit.prototype.deleteOptionAnswer = function (e) {
 			break;
 		}
 	}	
+}
+
+QuizEdit.prototype.deleteEquation = function (e) {
+	console.log('delete equation answer');
+	console.log(e.target);
 }
 
 QuizEdit.prototype.addOption = function (row) {
@@ -461,13 +469,13 @@ QuizEdit.prototype.buildEquationQuestion = function () {
 QuizEdit.prototype.editEquationQuestion = function () {
 	this.equation = new Equation({
 		"target": this.varEdit,
-		"btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+		"btn": ["Fraction", "Script","Radical", "Integral", "LargeOperator", "Bracket", "Function"]
 	});
 	this.addFields(this.buildEquationQuestion,
 		Util.span("Answer: "), this.equation.equationBox(),
-		Util.br(), this.equation.equationButton("Equation Editor")
+		Util.br(),this.equation.equationButton("Equation Editor for answer")
 	);
-	this.varEdit.appendChild(this.equation.x);
+	this.varEdit.appendChild(this.equation.popDiv);
 };
 
 QuizEdit.prototype.buildEquation = function () {
@@ -479,13 +487,13 @@ QuizEdit.prototype.buildEquation = function () {
 QuizEdit.prototype.editEquation = function () {
 	this.equation = new Equation({
 		"target": this.varEdit,
-		"btn": ["Fraction", "Script", "Integral", "LargeOperator", "Bracket", "Function"]
+		"btn": ["Fraction", "Script", "Radical","Integral", "LargeOperator", "Bracket", "Function"]
 	});
 	this.addFields(this.buildEquation,
 		Util.span("Question: "), this.equation.equationBox(),
-		Util.br(), this.equation.equationButton("Equation Editor")
+		Util.br(), this.equation.equationButton("Equation Editor for Question")
 	);
-	this.varEdit.appendChild(this.equation.x);
+	this.varEdit.appendChild(this.equation.popDiv);
 };
 QuizEdit.prototype.matrix = function () {
 	console.log("ASDFASDF");
@@ -648,7 +656,8 @@ QuizEdit.varTypes = [
 
 QuizEdit.prototype.addEditButtons = function () {
 	return [Util.button("Add Question", this.addQuestion()),
-			Util.button("Add SubQuestion", this.addSubQuestion())];
+			Util.button("Add SubQuestion", this.addSubQuestion()),
+			Util.button("Close Editor",this.closeEditor())];
 };
 
 QuizEdit.prototype.appendParagraphEditor = function () {
@@ -687,13 +696,19 @@ QuizEdit.prototype.appendParaEditor = function (num) {
 	var t = this;
 	textBox.oninput = function () {
 		var e = this.paraEditor;
-
+		
 		var cont = [funcs[e.activeType.i], e.textBox.valueOf()];
 		if (e.ind != -1) {
 			t.q.content[e.ind] = cont;
 		} else {
-			t.q.content.push(cont);
-			e.ind = t.q.content.length - 1;
+			if(t.q.content[0]!=null&&t.q.content[0][0]==cont[0]){
+				cont=t.q.content[0];
+				e.ind = 0;
+			}
+			else{
+				t.q.content.push(cont);
+				e.ind = t.q.content.length - 1;
+			}
 		}
 		t.renderQuestion();
 	};
@@ -721,7 +736,7 @@ QuizEdit.prototype.appendParaEditor = function (num) {
 	//this.editor.appendChild();
 	this.editor.insertBefore(paraEditor, this.appendIndex);
 };
-QuizEdit.prototype.editQuestion = function () {
+QuizEdit.prototype.editNewQuestion = function () {
 	//    var submitbar = document.getElementById("submitDiv-2");
 	//    submitbar.parent.removeChild(submitbar);
 	this.q = {
@@ -827,7 +842,100 @@ QuizEdit.prototype.editQuestion = function () {
 
 	this.title.focus();
 }
+QuizEdit.prototype.editOldQuestion = function (edi,qu,num) {
+	console.log(edi);
+	this.q = qu;
+	this.q.answers=[];
+	this.id = num;
+	page.refreshQuestion(this.id);
 
+	var e = this.editor =  edi;
+	this.scrollToEditor();
+
+	e.appendChild(Util.h1("Question Editor"));
+	e.appendChild(Util.divadd("qetitlehold",
+		this.addEditButtons(),
+		Util.br(),
+		Util.span("Title", "qetitle"),
+		Util.br(),
+		this.title = this.inputBlur("text", "title"),
+		Util.br(),
+		Util.span("Level:", "qelabel"),
+		this.level = this.inputBlur("number", "level"),
+		Util.span("Points:", "qelabel"),
+		this.points = this.inputBlur("number", "points"),
+		Util.br()
+	));
+
+
+	this.appendIndex = Util.div("apndIndx");
+	e.appendChild(this.appendIndex);
+
+	this.appendParaEditor(0);
+
+	var image, audio, video;
+	e.appendChild(Util.table([
+    [image = Util.file("Upload Image", QuizEdit.imageFileTypes, QuizEdit.EDITCTRL, "image_src"),
+      audio = Util.file("Upload Audio", QuizEdit.audioFileTypes, QuizEdit.EDITCTRL, "audio_src"),
+      video = Util.file("Upload Video", QuizEdit.videoFileTypes, QuizEdit.EDITCTRL, "video_src")
+    ]
+    ]));
+	var t = this;
+	image.onchange = function () {
+		//TODO: do the upload to the server
+		t.completeEdit(t.buildImage(this.input.files[0].name, 0, 0, 500, 500));
+	};
+	audio.onchange = function () {
+		//TODO: do the upload to the server
+		t.completeEdit(t.buildAudio(this.input.files[0].name));
+	};
+	video.onchange = function () {
+		//TODO: do the upload to the server
+		t.completeEdit(t.buildVideo(this.input.files[0].name));
+	};
+
+	var ins = [
+    [this.editButton("Equation", this.editEquation),
+      this.editButton("Random Var", this.editRandomVars),
+      this.editButton("Paragraph", this.appendParagraphEditor),
+      this.editButton("Instruction", this.appendInstructions),
+      this.editButton("Code Paragraph", this.appendParaCode)],
+    [this.editButton("MC Dropdown", this.editMultiChoiceDropdown),
+      this.editButton("MC RadioVert", this.editMultiChoiceRadioVert),
+      this.editButton("MC RadioHoriz", this.editMultiChoiceRadioHoriz),
+      this.editButton("MultiAnswer", this.editMultiAnswer),
+      this.editButton("Matching", null)],
+    [
+      this.editButton("Survey", this.editSurvey),
+      this.editButton("Fillin", this.editFillin),
+      this.editButton("Number", this.editNumber),
+      this.editButton("Regex", this.editRegex),
+      this.editButton("Formula", null)
+         ],
+    [
+      this.editButton("Eq Question", this.editEquationQuestion),
+      this.editButton("Essay", this.editEssay),
+      this.editButton("Code", this.editCode),
+      this.editButton("Matrix", this.editMatrix),
+      this.editButton("CLOZE", this.editCLOZE)
+         ],
+    [
+      this.editButton("ImgClick", this.editImgClick),
+      this.editButton("Graph", null),
+      this.editButton("Diagram", null),
+      this.editButton("", null),
+      this.editButton("", null)
+         ]
+    ];
+	e.appendChild(Util.table(ins));
+	this.varEdit = Util.div("varEdit", "varEdit");
+	e.appendChild(this.varEdit);
+	Util.append(e, this.addEditButtons());
+	this.selStdChoice = this.selectName(Quiz.stdChoice, this.pickStdChoice, "Select Choice");
+	//this.selVarType = this.selectName(QuizEdit.varTypes, this.pickVar, "Select Var");
+
+	this.title.focus();
+}
 
 /*
  * Edit and store the parameters of an assignment, including due dates
