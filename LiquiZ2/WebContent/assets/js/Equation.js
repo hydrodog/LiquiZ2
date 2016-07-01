@@ -160,16 +160,16 @@ Equation.prototype.editModeButton = function(target) {	//insert 3 button for edi
 	      .append(Util.button("complete", editButtonEnd));
 };
 Equation.prototype.equationBox = function() {	//return a edit box 
+	//var tag = Util.input("text");
+	
 	var tag = Util.span(null,"math-expr math-editable", "main-math-box") 
 			       .styles("fontSize", "20px")
 				   .attr("tabindex", "0") 		//limitation: if the attribute does not belong to the element, it can't be added into the element by Util.make 
 				   .attr("math_id", math_id++);
-	var input=Util.input(null);
-	addListener(input,1);
 	addListener(tag, 1);
 	this.tag = tag;
 //	target.appendChild(tag);
-//	target.appendChild(Util.br());
+//	target.appendChild(Util.br());	
 	return tag;
 };
 Equation.prototype.exec = function() {
@@ -980,7 +980,7 @@ function btn3(e) {
 function c(e) { //bind with character in sub/sup
 	//deal with the previous cursor if it still exists
 	removeCursor();
-
+	
 	//define the cursor position
 	//console.log(this.firstChild.nodeType);	//3 means textnode
 	if (this.firstChild == null) {
@@ -1041,12 +1041,22 @@ function c_both(e) { //c_special kind 2nd, bind with math expression without sub
 }
 
 function elemBlur() {	//remove className hasCursor and delete cursor
+	console.log(this);
+	var text="";
+	for (var i=0;i<this.childElementCount;i++){
+		if(this.childNodes[i].id == "char"){
+			text+=this.childNodes[i].innerHTML;
+		}
+	}
 	for (var obj in this.childNodes) {
 		if (this.childNodes[obj].id == "cursor") {
 			removeElement(this.childNodes[obj]);
-			return;
 		}
 	}
+	console.log(text);
+	var div=document.getElementById("equation-preivew");
+	div.innerHTML = "`"+text+"`";
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
 };
 
 
@@ -1058,10 +1068,18 @@ function addListener(node, type) {
 		node.addEventListener('click', c_both);
 	} else if (type == 3) {
 		node.addEventListener('click', c_onlyRight);
+	} else if (type == 0) {
+		node.addEventListener('click', c);
+		node.addEventListener('listen',listen);
+		return;
 	}
 	node.addEventListener('keyup', keyOn);
 	node.addEventListener('keydown', keyDown);
 	node.addEventListener('blur', elemBlur);
+}
+function listen(e) {
+	var keynum = window.event ? e.keyCode : e.which;
+	
 }
 /* remove event listener */
 function removeListener(node, type) {

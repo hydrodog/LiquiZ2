@@ -495,7 +495,8 @@ QuizEdit.prototype.editEquation = function () {
 	});
 	this.addFields(this.buildEquation,
 		Util.span("Question: "), this.equation.equationBox(),
-		Util.br(), this.equation.equationButton("Equation Editor for Question")
+		Util.br(), this.equation.equationButton("Equation Editor for Question"),
+		Util.br(),Util.span("Preview: "),Util.div("equation-preivew","equation-preivew")
 	);
 	this.varEdit.appendChild(this.equation.popDiv);
 };
