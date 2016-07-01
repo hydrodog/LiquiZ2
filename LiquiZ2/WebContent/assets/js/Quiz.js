@@ -186,6 +186,7 @@ Quiz.prototype.addQuestion = function (id, title, type, points, level) {
 };
 
 Quiz.prototype.processQuestion = function (q,id) {
+	var th=this;
 	var myQid=id;
 	var frag = document.createDocumentFragment();
 	for (var i = 0; i < q.length; i++) {
@@ -200,12 +201,14 @@ Quiz.prototype.processQuestion = function (q,id) {
 				var num=e.target.id.split(type+"-test")[1];
 				var numid=num.split("-")[1];
 			    var dele=Util.button("Delete",
-						function () {
+						function (ev) {
 							console.log("delete subquestion");
+							var divitem=ev.srcElement.parentElement;
 							var divitem=document.getElementById(type+"-test"+num);
 							if(divitem!=null){
 								divitem.remove();
 								q.splice(numid,1);
+								th.refreshQuestion(myQid-1);
 							}
 						});
 			    var mydiv=document.getElementById(type+"-test"+num);
