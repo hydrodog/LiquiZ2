@@ -231,70 +231,13 @@ Quiz.prototype.processQuestion = function (q,id) {
 		if (q[i][0].substring(0, 5) === "Util.") {
 			frag.appendChild(Util[q[i][0].substring(5)].apply(this || window, q[i].slice(1)));
 		} else {
-			if(q[i][0]=="equation"){//Judge if the question is a equation question
-				var text="";
-				if(q[i][3]==null){
-					frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
-					break;
-				}
-				for(var j=1;j<q[i][3].length;j++){//Get the text of the equation we build
-					console.log(q[i][3]);
-					text+=q[i][3][j].innerHTML;
-				}
-				console.log(text);
-				//MathInput.innerHTML= "`"+text+"`";//Just for test
-				var div= Util.div("equation","equation-test"+myQid+"-"+i);
-				var child=this[q[i][0]].apply(this || window, q[i].slice(1));
-				div.attr('tabindex',-1);
-				$(div).focus(function (e) {
-					console.log("Focus");
-
-					var num=e.target.id.split("equation-test")[1];
-					var numid=num.split("-")[1];
-				    var eq = new Equation({
-						"target": div,
-						"btn": ["Fraction", "Script", "Radical","Integral", "LargeOperator", "Bracket", "Function"]
-					});
-				    //div.appendChild(eq.equationButton("Equation Editor"));
-				    var dele=Util.button("Delete",
-							function () {
-								console.log("delete equation");
-								console.log(q[numid][3]);
-								if(div!=null){
-									console.log(document.getElementById("equation-test"+num).value);
-									document.getElementById("equation-test"+num).remove();
-									for(var i=0;i<q.length;i++){
-									
-											q.splice(num,1);
-										
-									}
-								}
-							});
-				    var mydiv=document.getElementById("equation-test"+num);
-				    if(e.target.childNodes[3]==null){
-				    	Util.append(mydiv,dele);
-				    }
-				    else{
-				    	e.target.childNodes[3].remove();
-				    }
-				});
-				console.log(myQid);
-				var newqu=document.getElementById("qc"+myQid);
-				Util.append(newqu, div);
-				div.innerHTML = "`"+text+"`";
-				MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);//Use mathjax to transfer the text to build a beautiful equation
+			if(divitem!=null){
+				divitem.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+				frag.appendChild(divitem);
 			}
 			else{
-				if(divitem!=null){
-					divitem.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
-					frag.appendChild(divitem);
-				}
-				else{
-					frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
-				}
-
-				
-			}
+				frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
+			}	
 		}
 	}
 	return frag;
@@ -874,18 +817,20 @@ Quiz.prototype.file = function (value, filetypes, className, id) {
 Quiz.prototype.emptyGrid = function (id, rows, cols, header) {
 	var l;
 	var returnHeader = false;
+	var rws=Number(rows);
+	var cls=Number(cols);
 	i = 0;
 	if (header) {
-		l = new Array(rows + 1);
+		l = new Array(rws + 1);
 		l[0] = header;
 		i = 1;
 		returnHeader = true;
 	} else {
-		l = new Array(rows);
+		l = new Array(rws);
 	}
 
 	for (i; i < l.length; i++) {
-		l[i] = new Array(cols);
+		l[i] = new Array(cls);
 		for (j = 0; j < l[i].length; j++) {
 			l[i][j] = "%%input%%";
 		}

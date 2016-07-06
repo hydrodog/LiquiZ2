@@ -503,16 +503,16 @@ QuizEdit.prototype.editEquation = function () {
 QuizEdit.prototype.matrix = function () {
 	console.log("ASDFASDF");
 }
-QuizEdit.prototype.buildMatrix = function () {
+QuizEdit.prototype.buildGrid = function () {
 	return [
-        ['matrix', this.matrixRows, this.matrixCols],
+        ['emptyGrid',"grid-test", this.matrixRows.value, this.matrixCols.value],
     ];
 };
 
-QuizEdit.prototype.editMatrix = function () {
-	this.addFields(this.buildMatrix,
-		Util.span("Rows: "), this.matrixRows = Util.input("number", QuizEdit.INT, "rows"),
-		Util.span("Cols: "), this.matrixCols = Util.input("number", QuizEdit.INT, "cols")
+QuizEdit.prototype.editGrid= function () {
+	this.addFields(this.buildGrid,
+		Util.span("Rows: "), this.matrixRows = Util.input("number", QuizEdit.INT, "rows",3),
+		Util.span("Cols: "), this.matrixCols = Util.input("number", QuizEdit.INT, "cols",3)
 		//   this.ans = //TODO: add a matrix to fill in the values
 	);
 };
@@ -833,7 +833,7 @@ QuizEdit.prototype.editNewQuestion = function () {
       this.editButton("Eq Question", this.editEquationQuestion),
       this.editButton("Essay", this.editEssay),
       this.editButton("Code", this.editCode),
-      this.editButton("Matrix", this.editMatrix),
+      this.editButton("Grid", this.editGrid),
       this.editButton("CLOZE", this.editCLOZE)
          ],
     [
@@ -927,7 +927,7 @@ QuizEdit.prototype.editOldQuestion = function (edi,qu,num) {
       this.editButton("Eq Question", this.editEquationQuestion),
       this.editButton("Essay", this.editEssay),
       this.editButton("Code", this.editCode),
-      this.editButton("Matrix", this.editMatrix),
+      this.editButton("Grid", this.editGrid),
       this.editButton("CLOZE", this.editCLOZE)
          ],
     [

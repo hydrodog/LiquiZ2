@@ -1418,6 +1418,16 @@ function parseNode(node) {
 	return obj;
 }
 function parseEquationArray(parent, arr) {
+	var text="";
+	for(var j=1;j<arr.length;j++){//Get the text of the equation we build
+		text+=arr[j].innerHTML;
+	}
+	console.log(text);
+	//MathInput.innerHTML= "`"+text+"`";//Just for test
+
+	parent.innerHTML = "`"+text+"`";
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,parent]);//Use mathjax to transfer the text to build a beautiful equation
+/*
 	for (var i in arr) {
 		if (arr[i].parent == undefined) {
 			var node = parseEquationObj(arr[i]);
@@ -1431,6 +1441,7 @@ function parseEquationArray(parent, arr) {
 			parent = node;
 		}
 	}
+	*/
 }
 function parseEquationObj(obj) {
     var node = Util.make(obj.type, {
