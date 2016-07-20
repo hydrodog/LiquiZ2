@@ -673,7 +673,7 @@ Quiz.prototype.paragraph = function (txt) {
 
 
 Quiz.prototype.equation = function (id, editable, arr) {
-	var div = Util.div("equation");
+	var div = Util.div("equation","equation-show");
 	if (editable == "true") {
 		var eq = new Equation({
 			"target": div,
