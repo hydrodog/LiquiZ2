@@ -1057,6 +1057,15 @@ function elemBlur() {	//remove className hasCursor and delete cursor
 	var div=document.getElementById("equation-preivew");
 	div.innerHTML = "`"+text+"`";
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+	/*
+	$(div).click(function() {
+	    var divHtml = $(this).html(); // notice "this" instead of a specific #myDiv
+	    var editableText = $("<textarea />");
+	    editableText.val(divHtml);
+	    $(this).replaceWith(editableText);
+	    editableText.focus();
+	});
+	*/
 };
 
 
@@ -1427,7 +1436,8 @@ function parseEquationArray(parent, arr) {
 
 	parent.innerHTML = "`"+text+"`";
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub,parent]);//Use mathjax to transfer the text to build a beautiful equation
-/*
+	console.log(parent);
+	/*
 	for (var i in arr) {
 		if (arr[i].parent == undefined) {
 			var node = parseEquationObj(arr[i]);
