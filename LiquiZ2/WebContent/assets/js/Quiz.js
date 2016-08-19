@@ -230,13 +230,13 @@ Quiz.prototype.processQuestion = function (q, id) {
     if (q[i][0].substring(0, 5) === "Util.") {
       frag.appendChild(Util[q[i][0].substring(5)].apply(this || window, q[i].slice(1)));
     } else {
-      if (divitem != null) {
+      /*if (divitem != null) {
         console.log(q[i][0]);
         divitem.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
         frag.appendChild(divitem);
-      } else {
+      } else {*/
         frag.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
-      }
+      //}
     }
   }
   return frag;
@@ -787,7 +787,7 @@ Quiz.prototype.mcRadioImg = function (id, src) {
 /*
  * Build dropdown list of text
  */
-Quiz.prototype.selectText = function (id, list, title, skipHandler) {
+Quiz.prototype.selectText = function (id, list, answers, title, skipHandler) {
   l = [title || "Select one"];
   Array.prototype.push.apply(l, list);
   if (skipHandler) {
@@ -822,7 +822,7 @@ Quiz.prototype.match = function (id, questions, answers) {
     var q = r.insertCell(0);
     q.appendChild(document.createTextNode(questions[i]));
     q = r.insertCell(1);
-    q.appendChild(this.addInputHandlers(this.selectText(id + "_" + i, answers, null, true), i));
+    q.appendChild(this.addInputHandlers(this.selectText(id + "_" + i, answers, null, null, true), i));
   }
   return t;
 }
