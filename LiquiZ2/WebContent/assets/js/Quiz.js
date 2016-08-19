@@ -231,6 +231,7 @@ Quiz.prototype.processQuestion = function (q, id) {
       frag.appendChild(Util[q[i][0].substring(5)].apply(this || window, q[i].slice(1)));
     } else {
       if (divitem != null) {
+        console.log(q[i][0]);
         divitem.appendChild(this[q[i][0]].apply(this || window, q[i].slice(1)));
         frag.appendChild(divitem);
       } else {

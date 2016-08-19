@@ -772,7 +772,7 @@ GoodEditor.MultipleFields.prototype.valueOf = function () {
   var ret = new Array(this.num + 1);
   ret[0] = this.functionKind;
   for (var i = 0; i < this.num; i++) {
-    ret[i] = this.editors[i].value;
+    ret[i+1] = this.editors[i].value;
   }
   return ret;
 };
