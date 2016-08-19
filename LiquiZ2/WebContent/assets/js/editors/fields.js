@@ -27,7 +27,7 @@ Dump the NumberField's editor into a html element
 the editor to.
 */
 NumberField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -94,7 +94,7 @@ Dump the NumberField's editor into a html element
 the editor to.
 */
 NumberArrayField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -193,7 +193,7 @@ Dump the StringField's editor into a html element
 the editor to.
 */
 StringField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -260,7 +260,7 @@ Dump the StringField's editor into a html element
 the editor to.
 */
 StringArrayField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -352,7 +352,7 @@ Dump the ColorField's editor into a html element
 the editor to.
 */
 ColorField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -417,7 +417,7 @@ Dump the ColorField's editor into a html element
 the editor to.
 */
 ColorArrayField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -509,7 +509,7 @@ Dump the BooleanField's editor into a html element
 the editor to.
 */
 BooleanField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**
@@ -574,7 +574,7 @@ Dump the BooleanField's editor into a html element
 the editor to.
 */
 BooleanArrayField.prototype.edit = function (container) {
-  this.archetype.edit(this, container);
+  return this.archetype.edit(this, container);
 };
 
 /**

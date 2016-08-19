@@ -609,3 +609,27 @@ input[disabled] {
 	background-color: #DEE4E6;
 	color: #444;
 }
+
+
+.fielded-editor {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.fielded-editor-row {
+  display: table;
+  width: 600px;
+  margin: 0px auto;
+  text-align: right;
+}
+
+.editor-label {
+  display: table-cell;
+  text-align: left;
+}
+
+.editor-field {
+  display: table-cell;
+  text-align: right;
+}

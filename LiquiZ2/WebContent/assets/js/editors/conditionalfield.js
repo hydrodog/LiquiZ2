@@ -167,6 +167,7 @@ ConditionalField.prototype.edit = function (container) {
   var holder = new EditorConditional(this.archetype, this, this._captive.edit.apply(this._captive, arguments));
   holder.show();
   this._holders.push(holder);
+	return holder;
 };
 
 /**

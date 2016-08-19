@@ -125,7 +125,6 @@
                         "Find the Shortest Path from vertex 1 to 5.  Leave any cost box blank if the vertex is unreachable."
                     ],
                     ["Util.img", "Bellmanford_3.png"],
-                    ["Util.br"],
                     ["emptyGrid", "8_1", 6, 6, [1, 2, 3, 4, 5, 6]]
                 ]
             },
@@ -135,7 +134,7 @@
                 "title": "Arithmetic",
                 "type": "fillin",
                 "content": [
-                    ["Util.span", "What is 2 + 2?"],
+                    ["instructions", "What is 2 + 2?"],
                     ["fillin", 9]
                 ]
             },
@@ -156,7 +155,7 @@
                 "type": "selectText",
                 "content": [
                     ["Util.p", "Which one is the dinosaur?"],
-                    ["selectText", 13, ["stegosaurus", "dimetrodon",
+                    ["selectText", 12, ["stegosaurus", "dimetrodon",
                         "plesiosaurus"
                     ]]
                 ]

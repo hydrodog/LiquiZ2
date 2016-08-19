@@ -522,7 +522,7 @@ Get the nth bool stored.
 BooleanArchetype.prototype.get = function (nth) {
   var byte = Math.floor(nth / 8);
   var pos = 7 - (nth - (byte << 3));
-  return this.data[byte] & (1 << pos);
+  return !!(this.data[byte] & (1 << pos));
 };
 
 /**
@@ -534,7 +534,7 @@ BooleanArchetype.prototype.set = function (nth, val) {
   var byte = Math.floor(nth / 8);
   var pos = 7 - (nth - (byte << 3));
   this.data[byte] ^= this.data[byte] & (1 << pos);
-  this.data[byte] |= (val << pos);
+  this.data[byte] |= ((!!val) << pos);
 };
 
 /**
@@ -688,7 +688,7 @@ Get the nth bool stored.
 BooleanArrayArchetype.prototype.get = function (nth) {
   var byte = Math.floor(nth / 8);
   var pos = 7 - (nth - (byte << 3));
-  return this.data[byte] & (1 << pos);
+  return !!(this.data[byte] & (1 << pos));
 };
 
 /**
@@ -700,7 +700,7 @@ BooleanArrayArchetype.prototype.set = function (nth, val) {
   var byte = Math.floor(nth / 8);
   var pos = 7 - (nth - (byte << 3));
   this.data[byte] ^= this.data[byte] & (1 << pos);
-  this.data[byte] |= (val << pos);
+  this.data[byte] |= ((!!val) << pos);
 };
 
 /**

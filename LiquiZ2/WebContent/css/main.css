@@ -1,190 +1,188 @@
 
-
-.moving{
-  position:absolute;
-  z-index:100000;
-
+.moving {
+  position: absolute;
+  z-index: 100000;
 }
-.dragBar{
-width:100%;
-height:32px;
-  color:#097F9D;
-  background-color:#097F9D;
-  border:solid;
-  border-width:0px 10px 0px 10px;
-  margin-left:-10px;
-  margin-top:-10px;
-  border-radius:10px 10px 0px 0px;
+
+.dragBar {
+  width: 100%;
+  height: 32px;
+  color: #097F9D;
+  background-color: #097F9D;
+  border: solid;
+  border-width: 0px 10px 0px 10px;
+  margin-left: -10px;
+  margin-top: -10px;
+  border-radius: 10px 10px 0px 0px;
 }
-#top_bar{
-  position:fixed;
-  left:0%;
-  top:0%;
-  width:100%;
-  height:80px;
-  padding:0px;
-  background-color:rgba(128,128,128,.5);
-  z-index:1010;
+
+#top_bar {
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 80px;
+  padding: 0px;
+  background-color: rgba(128, 128, 128, .5);
+  z-index: 1010;
   border-radius: 0 0 10px 10px;
   font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-  font-size:48px;
-  color:#fff;
-}
-#top_bar_fill{
-  position:relative;
-  left:0%;
-  top:0%;
-  width:100%;
-  height:80px;
-  
+  font-size: 48px;
+  color: #fff;
 }
 
-form{
-  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-    font-size:18px ;
-  
+#top_bar_fill {
+  position: relative;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 80px;
 }
-textarea{
-  display:inline-block;
+
+form {
+  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+  font-size: 18px;
+}
+
+textarea {
+  display: inline-block;
   vertical-align: middle;
-  border:0px solid;
-  
-  border-radius:10px;
-  padding:10px;
-  background-color:#097F9D;
-  margin:5px;
-  color:white;
-  
+  border: 0px solid;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #097F9D;
+  margin: 5px;
+  color: white;
   font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-    font-size:18px ;
+  font-size: 18px;
 }
-pre{
-   font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-    font-size:18px ;
-}
-.drop{
-  width:350px;
-}
-.multidrop{
-  
-}
-.singledrop{
-  
-}
-.insidemulti{
-  
-}
-.number{
-  
-}
-.code{
-  font-family:Monaco, Courier, monospace;
-}
-.essay{
-  
-}
-.qHTML{
-  vertical-align: middle;
-}
-.multiquestion{
-  
-}
-.question{
-  
-}
-.nonquestion{
-    font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-    font-size:18px;
-}
-.stop{
-  
-}
-.run{
-  
-}
-.compile{
-  
-}
-button{
+
+pre {
   font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-    font-size:18px ;
-  cursor:pointer;
-  border-radius:10px;
-  padding:10px;
-  background-color:#0b9fc4;
-  border-color:#54BCD6;
+  font-size: 18px;
 }
-.Q{
-  position:relative;
-  border-radius:10px;
-  padding:10px;
-  background-color:#0b9fc4;
-  margin:5px;
-  
+
+.drop {
+  width: 350px;
 }
-.inlineParent>div{
-  display:inline-block;
-  width:auto;
+
+.multidrop {}
+
+.singledrop {}
+
+.insidemulti {}
+
+.number {}
+
+.code {
+  font-family: Monaco, Courier, monospace;
 }
-img{
-  display:inline-block;
+
+.essay {}
+
+.qHTML {
   vertical-align: middle;
 }
-.quiz{
-  
-  border-radius:10px;
-  padding:10px;
-  background-color:#555555;
-  margin:10px 0px 10px 0px;
-  
+
+.multiquestion {}
+
+.question {}
+
+.nonquestion {
+  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+  font-size: 18px;
 }
-html{
-  width:100%;
-  height:100%;
-  background-color:#444444;
-  
+
+.stop {}
+
+.run {}
+
+.compile {}
+
+button {
+  font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #0b9fc4;
+  border-color: #54BCD6;
 }
+
+.Q {
+  position: relative;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #0b9fc4;
+  margin: 5px;
+}
+
+.inlineParent>div {
+  display: inline-block;
+  width: auto;
+}
+
+img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.quiz {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #555555;
+  margin: 10px 0px 10px 0px;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  background-color: #444444;
+}
+
 .but {
-	position:absolute;
-	top:0px;
-    width:24px;
-    height:24px;
-    border-width: 0;
-    border-radius:0px;
+  position: absolute;
+  top: 0px;
+  width: 24px;
+  height: 24px;
+  border-width: 0;
+  border-radius: 0px;
 }
 
 .editbut {
-    right:24px;
-    background: url(../assets/img/edit.png);
-    background-size:24px 24px;
+  right: 24px;
+  background: url(../assets/img/edit.png);
+  background-size: 24px 24px;
 }
 
 .delbut {
-    right:0px;
-    background: url(../assets/img/delete.png);
-    background-size:24px 24px;
+  right: 0px;
+  background: url(../assets/img/delete.png);
+  background-size: 24px 24px;
 }
 
 .copybut {
-    right:48px;
-    background: url(../assets/img/copy.png);
-    background-size:24px 24px;
+  right: 48px;
+  background: url(../assets/img/copy.png);
+  background-size: 24px 24px;
 }
 
 ::-webkit-input-placeholder {
   color: #04333F;
 }
 
-:-moz-placeholder { /* Firefox 18- */
-  color: #04333F;  
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: #04333F;
 }
 
-::-moz-placeholder {  /* Firefox 19+ */
-  color: #04333F;  
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #04333F;
 }
 
-:-ms-input-placeholder {  
-  color: #04333F;  
-  padding:0px;
-  margin:0px;
+:-ms-input-placeholder {
+  color: #04333F;
+  padding: 0px;
+  margin: 0px;
 }
