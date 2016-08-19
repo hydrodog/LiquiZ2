@@ -374,11 +374,13 @@ QuizEdit.prototype.editMultiChoiceDropdown = function () {
 }
 
 QuizEdit.prototype.editMultiChoiceRadioVert = function () {
-  this.editMC(this.buildMCRadioTextVert);
+  var editor = GoodEditor.mcRadioTextVert();
+  this.addEditor(editor, "mcRadioTextVert");
 }
 
 QuizEdit.prototype.editMultiChoiceRadioHoriz = function () {
-  this.editMC(this.buildMCRadioTextHoriz);
+  var editor = GoodEditor.mcRadioTextHoriz();
+  this.addEditor(editor, "mcRadioTextHoriz");
 }
 
 QuizEdit.prototype.editMultiAnswer = function () {
@@ -936,8 +938,12 @@ GoodEditor.selectText = function (id, content, correctAnswers) {
   return new GoodEditor.MultiChoice(id, content, correctAnswers, "selectText");
 };
 
-GoodEditor.selectText = function (id, content, correctAnswers) {
-  return new GoodEditor.MultiChoice(id, content, correctAnswers, "selectText");
+GoodEditor.mcRadioTextVert = function (id, content, correctAnswers) {
+  return new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextVert");
+};
+
+GoodEditor.mcRadioTextHoriz = function (id, content, correctAnswers) {
+  return new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextHoriz");
 };
 
 
