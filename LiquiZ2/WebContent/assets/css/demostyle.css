@@ -633,3 +633,8 @@ input[disabled] {
   display: table-cell;
   text-align: right;
 }
+
+.fielded-editor-container{
+  width:100%;
+  text-align: center;
+}

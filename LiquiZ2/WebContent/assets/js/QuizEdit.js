@@ -582,7 +582,7 @@ QuizEdit.prototype.editRegex = function () {
   this.addEditor(editor, "regex");
 };
 
-QuizEdit.prototype.addEditor = function(editor, title){
+QuizEdit.prototype.addEditor = function (editor, title) {
   this.goodEditors.push(editor);
   this.editor.insertBefore(editor.container, this.appendIndex);
 };
@@ -730,6 +730,8 @@ GoodEditor.ParaEditor = function (num, content) {
 
 };
 
+
+
 GoodEditor.ParaEditor.prototype.valueOf = function () {
   return [this.kinds[this.activeInd], this.writer.valueOf()];
 };
@@ -746,34 +748,91 @@ GoodEditor.ParaEditor.prototype.dispButton = function (title, info, className) {
   return button;
 };
 
-GoodEditor.MultipleFields = function (num, names, defaults, types, classes, functionKind) {
+GoodEditor.MultipleFieldRow = function (parent, num, names, defaults, types, classes) {
+  var self = this;
   this.num = num;
+  this.editors = new Array(num);
+  var remove = Util.button("Remove Answer",
+    function () {
+      parent.removeChild(self);
+    },
+    "fielded-row-remove");
+  this.container = Util.div("fielded-editor");
+  for (var i = 0; i < num; i++) {
+    var className = classes[i % classes.length];
+    (className && (className += " editor-field")) || (className = "editor-field");
+    this.editors[i] = Util.input(types[i % types.length], className, undefined, defaults[i % defaults.length]);
+    Util.append(this.container,
+      Util.divadd("fielded-editor-row", [Util.span(names[i % names.length], "editor-label"),
+                             this.editors[i]])
+    );
+  }
+  Util.append(this.container,
+    remove);
+
+};
+
+GoodEditor.MultipleFieldRow.prototype.valueOf = function () {
+  var ret = new Array(this.num);
+  for (var i = 0; i < this.num; i++) {
+    ret[i] = this.editors[i].value;
+  }
+  console.error(ret);
+  return ret;
+};
+
+GoodEditor.MultipleFields = function (num, numpernum, names, defaults, values, types, classes, functionKind) {
+  this.num = num;
+  this.numpernum = numpernum;
   this.names = names;
   this.types = types;
   this.defaults = defaults;
   this.classes = classes;
   this.functionKind = functionKind;
   this.editors = new Array(num);
-  this.container = Util.div("fielded-editor");
+  this.container = Util.div("fielded-editor-container");
+  this.inside = Util.div("fielded-editor-inside");
   for (var i = 0; i < num; i++) {
-    var className = classes[i % classes.length];
-    (className && (className += " editor-field")) || (className = "editor-field");
-    this.editors[i] = Util.input(types[i % types.length], className, undefined, defaults[i % defaults.length]);
-
-    Util.append(this.container,
-      Util.divadd("fielded-editor-row", [Util.span(names[i % names.length], "editor-label"),
-                             this.editors[i]])
-    );
-
+    var def = defaults;
+    if (i < values.length) {
+      def = values[i];
+    }
+    this.editors[i] = new GoodEditor.MultipleFieldRow(this, numpernum, names, def, types, classes);
+    Util.append(this.inside, this.editors[i]);
   }
+  Util.append(this.container, this.inside);
+  var self = this;
+  var add = Util.button("Add Answer",
+    function () {
+      self.addAnswer();
+    },
+    "fielded-row-add");
+  Util.append(this.container, add);
+
 };
 
+GoodEditor.MultipleFields.prototype.addAnswer = function () {
+  var editor = new GoodEditor.MultipleFieldRow(this, this.numpernum, this.names, this.defaults, this.types, this.classes);
+  this.editors.push(editor);
+  Util.append(this.inside, editor);
+  this.num++;
+};
+
+GoodEditor.MultipleFields.prototype.removeChild = function (child) {
+  var index = this.editors.indexOf(child);
+  if (index != -1) {
+    this.editors.splice(index, 1);
+    this.inside.removeChild(child.container);
+    this.num--;
+  }
+};
 GoodEditor.MultipleFields.prototype.valueOf = function () {
   var ret = new Array(this.num + 1);
   ret[0] = this.functionKind;
   for (var i = 0; i < this.num; i++) {
-    ret[i+1] = this.editors[i].value;
+    ret[i + 1] = this.editors[i].valueOf();
   }
+  console.warn(ret);
   return ret;
 };
 
@@ -794,24 +853,24 @@ GoodEditor.text2equation = function (content) {
 };
 
 GoodEditor.numeric = function (content) {
-  content || (content = [0]);
+  content || (content = []);
   var numericEditor = null;
-  if (content.length == 2)
-    numericEditor = new GoodEditor.MultipleFields(2, ["Min:", "Max:"], content, ["number"], [undefined], "numeric");
+  if (content.length > 0 && content[0].length == 2)
+    numericEditor = new GoodEditor.MultipleFields(content.length || 1, 2, ["Min:", "Max:"], [0], content, ["number"], [undefined], "numeric");
   else
-    numericEditor = new GoodEditor.MultipleFields(1, ["Value:"], content, ["number"], [undefined], "numeric");
+    numericEditor = new GoodEditor.MultipleFields(content.length || 1, 1, ["Value:"], [0], content, ["number"], [undefined], "numeric");
   return numericEditor;
 };
 
 GoodEditor.fillin = function (content) {
-  content || (content = [""]);
-  var fillinEditor = new GoodEditor.MultipleFields(1, ["Answer:"], content, ["text"], [undefined], "fillin");
+  content || (content = []);
+  var fillinEditor = new GoodEditor.MultipleFields(content.length || 1, 1, ["Answer:"], [""], content, ["text"], [undefined], "fillin");
   return fillinEditor;
 };
 
 GoodEditor.regex = function (content) {
-  content || (content = [0,"m"]);
-  var fillinEditor = new GoodEditor.MultipleFields(2, ["Value:","Units:"], content, ["number","text"], [undefined], "regex");
+  content || (content = []);
+  var fillinEditor = new GoodEditor.MultipleFields(content.length || 1, 2, ["Value:", "Units:"], [0, "m"], content, ["number", "text"], [undefined], "regex");
   return fillinEditor;
 };
 
@@ -833,7 +892,7 @@ QuizEdit.prototype.editNewQuestion = function () {
     content: [],
     answers: []
   };
-  this.goodEditors = [];
+  this.goodEditors = [GoodEditor.instructions()];
   page.questions.push(this.q);
 
   this.id = page.questions.length - 1;
@@ -859,11 +918,10 @@ QuizEdit.prototype.editNewQuestion = function () {
     Util.br()
   ));
 
-
+  Util.append(e,this.goodEditors[0]);
   this.appendIndex = Util.div("apndIndx");
   e.appendChild(this.appendIndex);
 
-  this.appendParaEditor(0);
 
   var image, audio, video;
   e.appendChild(Util.table([

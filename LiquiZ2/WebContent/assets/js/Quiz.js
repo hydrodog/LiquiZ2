@@ -347,10 +347,14 @@ Quiz.prototype.headerButtons = function () {
     this.render(this.headerControl);
 }
 
-Quiz.prototype.regex = function () {
-  this.addInputHandlers(Util.input('text', 'number', id));
-  this.addInputHandlers(Util.input('text', 'number', id));
-
+Quiz.prototype.regex = function (content) {
+  var inp1 = Util.input('text', 'number', "0"),
+    inp2 = Util.input('text', 'number', "0");
+  inp1.placeholder = "answer";
+  inp2.placeholder = "units";
+  this.addInputHandlers(inp1);
+  this.addInputHandlers(inp2);
+  return Util.divadd("regex-question", [inp1, inp2]);
 };
 
 Quiz.prototype.render = function (child) {
@@ -698,13 +702,16 @@ Quiz.prototype.equation = function (id, editable, arr) {
   return div;
 }
 
-Quiz.prototype.fillin = function (id) {
-  var input = Util.input('text', 'fillin', id);
+Quiz.prototype.fillin = function () {
+  var input = Util.input('text', 'fillin', "0");
+  input.placeholder = "answer";
   return this.addInputHandlers(input);
 }
 
-Quiz.prototype.numeric = function (id) {
-  return this.addInputHandlers(Util.input('text', 'number', id));
+Quiz.prototype.numeric = function () {
+  var input = Util.input('text', 'number', "0");
+  input.placeholder = "answer";
+  return this.addInputHandlers(input);
 }
 
 Quiz.prototype.numid = function (id, v) {
