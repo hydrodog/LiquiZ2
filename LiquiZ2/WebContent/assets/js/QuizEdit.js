@@ -157,8 +157,8 @@ QuizEdit.prototype.buildFillin = function () {
 };
 
 QuizEdit.prototype.editFillin = function () {
-  var editor = GoodEditor.fillin();
-  this.addEditor(editor, "fillin");
+  var editor = GoodEditor.fillin(this);
+  this.addEditor(editor);
 };
 
 QuizEdit.prototype.buildNumber = function () {
@@ -169,7 +169,7 @@ QuizEdit.prototype.buildNumber = function () {
 };
 
 QuizEdit.prototype.editNumber = function () {
-  this.addEditor(GoodEditor.numeric(), "numeric");
+  this.addEditor(GoodEditor.numeric(this));
 };
 
 QuizEdit.prototype.buildEssay = function () {
@@ -333,7 +333,7 @@ QuizEdit.prototype.selectName = function (hash, method, defaultLabel) {
     sel.appendChild(Util.option(k, k));
   }
   return sel;
-}
+};
 
 QuizEdit.prototype.editMCtop = function (checkbox) {
   var stdChoice;
@@ -360,32 +360,33 @@ QuizEdit.prototype.editMCtop = function (checkbox) {
     }
   }
   this.ansTable = Util.table(list, true, QuizEdit.ANSWERS);
-}
+};
 
 QuizEdit.prototype.editMC = function (questionType) {
   this.editMCtop(true);
   this.addFields(questionType, this.mcHeader, this.mcHeader2, this.ansTable);
   this.answers = [];
-}
+};
 
 QuizEdit.prototype.editMultiChoiceDropdown = function () {
-  var editor = GoodEditor.selectText();
-  this.addEditor(editor, "selectText");
-}
+  var editor = GoodEditor.selectText(this);
+  this.addEditor(editor);
+};
 
 QuizEdit.prototype.editMultiChoiceRadioVert = function () {
-  var editor = GoodEditor.mcRadioTextVert();
-  this.addEditor(editor, "mcRadioTextVert");
-}
+  var editor = GoodEditor.mcRadioTextVert(this);
+  this.addEditor(editor);
+};
 
 QuizEdit.prototype.editMultiChoiceRadioHoriz = function () {
-  var editor = GoodEditor.mcRadioTextHoriz();
-  this.addEditor(editor, "mcRadioTextHoriz");
-}
+  var editor = GoodEditor.mcRadioTextHoriz(this);
+  this.addEditor(editor);
+};
 
 QuizEdit.prototype.editMultiAnswer = function () {
-  this.editMC(this.buildMAnswer);
-}
+  var editor = GoodEditor.multiAnswer(this);
+  this.addEditor(editor);
+};
 
 QuizEdit.prototype.addStandardChoice = function (name, choices, nameBlank) {
   Quiz.stdChoice[name] = choices;
@@ -505,8 +506,8 @@ QuizEdit.prototype.buildEquation = function () {
 };
 
 QuizEdit.prototype.editEquation = function () {
-  var editor = GoodEditor.text2equation();
-  this.addEditor(editor, "text2equation");
+  var editor = GoodEditor.text2equation(this);
+  this.addEditor(editor);
   /*this.equation = new Equation({
     "target": this.varEdit,
     "btn": ["Fraction", "Script", "Radical", "Integral", "LargeOperator", "Bracket", "Function"]
@@ -581,14 +582,15 @@ QuizEdit.prototype.deleteRegex = function () {
 };
 
 QuizEdit.prototype.editRegex = function () {
-  var editor = GoodEditor.regex();
-  this.addEditor(editor, "regex");
+  var editor = GoodEditor.regex(this);
+  this.addEditor(editor);
 };
 
 QuizEdit.prototype.addEditor = function (editor, title) {
   this.goodEditors.push(editor);
   this.editor.insertBefore(editor.container, this.appendIndex);
 };
+
 
 
 QuizEdit.imageFileTypes = "jpg,jpeg,png,eps,svg,gif,bmp";
@@ -680,18 +682,30 @@ QuizEdit.prototype.addEditButtons = function () {
 };
 
 QuizEdit.prototype.appendParagraphEditor = function () {
-  this.addEditor(GoodEditor.paragraph(), "Paragraph");
+  this.addEditor(GoodEditor.paragraph(this));
 };
 
 QuizEdit.prototype.appendParaCode = function () {
-  this.addEditor(GoodEditor.precode(), "Code");
+  this.addEditor(GoodEditor.precode(this));
 };
 
 QuizEdit.prototype.appendInstructions = function () {
-  this.addEditor(GoodEditor.instructions(), "Instructions");
+  this.addEditor(GoodEditor.instructions(this));
 };
 
 var GoodEditor = {};
+
+
+GoodEditor.GoodEditorContainer = function (editor, title, quizEditor) {
+  this.editor = editor;
+  this.title = title;
+  this.quizEditor = quizEditor;
+  this.container = Util.divadd("editor-title-container", [Util.divadd("editor-tools", Util.span(title)), this.editor]);
+};
+
+GoodEditor.GoodEditorContainer.prototype.valueOf = function () {
+  return this.editor.valueOf;
+};
 
 GoodEditor.ParaEditor = function (num, content) {
   var i = 0;
@@ -767,7 +781,7 @@ GoodEditor.MultipleFieldRow = function (parent, num, names, defaults, types, cla
     var type = types[i % types.length];
     if (type == "checkbox") {
       this.editors[i] = Util.checkbox(undefined, undefined, className, undefined, defaults[i % defaults.length])
-    }else{
+    } else {
       this.editors[i] = Util.input(type, className, undefined, defaults[i % defaults.length]);
     }
     Util.append(this.container,
@@ -852,23 +866,27 @@ GoodEditor.MultipleFields.prototype.valueOf = function () {
   return ret;
 };
 
-GoodEditor.instructions = function (content, correctAnswers) {
-  return new GoodEditor.ParaEditor(0, content);
+GoodEditor.instructions = function (quiz, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.ParaEditor(0, content), "Text", quiz);
+  return titledEditor;
 };
 
-GoodEditor.paragraph = function (content, correctAnswers) {
-  return new GoodEditor.ParaEditor(1, content);
+GoodEditor.paragraph = function (quiz, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.ParaEditor(1, content), "Text", quiz);
+  return titledEditor;
 };
 
-GoodEditor.precode = function (content, correctAnswers) {
-  return new GoodEditor.ParaEditor(2, content);
+GoodEditor.precode = function (quiz, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.ParaEditor(2, content), "Text", quiz);
+  return titledEditor;
 };
 
-GoodEditor.text2equation = function (content, correctAnswers) {
-  return new GoodEditor.ParaEditor(3, content);
+GoodEditor.text2equation = function (quiz, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.ParaEditor(3, content), "Text", quiz);
+  return titledEditor;
 };
 
-GoodEditor.numeric = function (id, content, correctAnswers) {
+GoodEditor.numeric = function (quiz, id, content, correctAnswers) {
   var len = 1;
   if (correctAnswers)
     len = correctAnswers.length;
@@ -878,25 +896,31 @@ GoodEditor.numeric = function (id, content, correctAnswers) {
     numericEditor = new GoodEditor.MultipleFields(id, len, 2, ["Min:", "Max:"], [0], correctAnswers, ["number"], [undefined], "numeric");
   else
     numericEditor = new GoodEditor.MultipleFields(id, len, 1, ["Value:"], [0], correctAnswers, ["number"], [undefined], "numeric");
-  return numericEditor;
+  var titledEditor = new GoodEditor.GoodEditorContainer(numericEditor, "Numeric Fill-In", quiz);
+
+  return titledEditor;
 };
 
-GoodEditor.fillin = function (id, content, correctAnswers) {
+GoodEditor.fillin = function (quiz, id, content, correctAnswers) {
   var len = 1;
   if (correctAnswers)
     len = correctAnswers.length;
   correctAnswers || (correctAnswers = []);
   var fillinEditor = new GoodEditor.MultipleFields(id, len, 1, ["Answer:"], [""], correctAnswers, ["text"], [undefined], "fillin");
-  return fillinEditor;
+  var titledEditor = new GoodEditor.GoodEditorContainer(fillinEditor, "Fill-In", quiz);
+
+  return titledEditor;
 };
 
-GoodEditor.regex = function (id, content, correctAnswers) {
+GoodEditor.regex = function (quiz, id, content, correctAnswers) {
   var len = 1;
   if (correctAnswers)
     len = correctAnswers.length;
   correctAnswers || (correctAnswers = []);
   var fillinEditor = new GoodEditor.MultipleFields(id, len, 2, ["Value:", "Units:"], [0, "m"], correctAnswers, ["number", "text"], [undefined], "regex");
-  return fillinEditor;
+  var titledEditor = new GoodEditor.GoodEditorContainer(fillinEditor, "Regex Fill-In", quiz);
+
+  return titledEditor;
 };
 
 GoodEditor.MultiChoice = function (id, content, correctAnswers, functionKind) {
@@ -934,16 +958,28 @@ GoodEditor.MultiChoice.prototype.valueOf = function () {
   return val;
 };
 
-GoodEditor.selectText = function (id, content, correctAnswers) {
-  return new GoodEditor.MultiChoice(id, content, correctAnswers, "selectText");
+GoodEditor.selectText = function (quiz, id, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.MultiChoice(id, content, correctAnswers, "selectText"), "Drop Down", quiz);
+
+  return titledEditor;
 };
 
-GoodEditor.mcRadioTextVert = function (id, content, correctAnswers) {
-  return new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextVert");
+GoodEditor.multiAnswer = function (quiz, id, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.MultiChoice(id, content, correctAnswers, "multiAnswer"), "Multi-Answer", quiz);
+
+  return titledEditor;
 };
 
-GoodEditor.mcRadioTextHoriz = function (id, content, correctAnswers) {
-  return new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextHoriz");
+GoodEditor.mcRadioTextVert = function (quiz, id, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextVert"), "Radio Vertical", quiz);
+
+  return titledEditor;
+};
+
+GoodEditor.mcRadioTextHoriz = function (quiz, id, content, correctAnswers) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextHoriz"), "Radio Horizontal", quiz);
+
+  return titledEditor;
 };
 
 
@@ -964,7 +1000,7 @@ QuizEdit.prototype.editNewQuestion = function () {
     content: [],
     answers: []
   };
-  this.goodEditors = [GoodEditor.instructions()];
+  this.goodEditors = [GoodEditor.instructions(this)];
   page.questions.push(this.q);
 
   this.id = page.questions.length - 1;
@@ -1104,7 +1140,8 @@ QuizEdit.prototype.editOldQuestion = function (edi, qu, num, actualID) {
       correctAnswers = content[3];
     }
     console.log(this.q.content[i][0]);
-    this.goodEditors[i] = GoodEditor[this.q.content[i][0]](id, construction, correctAnswers);
+
+    this.goodEditors[i] = GoodEditor[this.q.content[i][0]](this, id, construction, correctAnswers);
     e.appendChild(this.goodEditors[i].container);
   }
   this.appendIndex = Util.div("apndIndx");
