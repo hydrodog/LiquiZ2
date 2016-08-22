@@ -413,7 +413,7 @@ QuizEdit.prototype.addSurveyQuestion = function (i) {
 }
 
 QuizEdit.prototype.editSurvey = function () {
-  this.editMCtop(false);
+  /*this.editMCtop(false);
   var surveyQuestions = [];
   this.surveyQuestions = Util.table(surveyQuestions, false);
   for (var i = 0; i < 4; i++) {
@@ -426,7 +426,9 @@ QuizEdit.prototype.editSurvey = function () {
   var table = this.surveyQuestions;
   this.addFields(this.buildSurvey, this.mcHeader, this.mcHeader2, this.ansTable, Util.h2("Survey Questions"),
     this.editButton("More Questions", this.addSurveyQuestion), this.surveyQuestions);
-  this.answers = [];
+  this.answers = [];*/
+  var editor = GoodEditor.mcSurvey(this);
+  this.addEditor(editor);
 }
 
 QuizEdit.prototype.buildCLOZE = function () {
@@ -745,6 +747,27 @@ QuizEdit.prototype.moveDown = function (subquestion) {
 
 var GoodEditor = {};
 
+GoodEditor.popOverOptions = function (container, title, onRemove) {
+  this.onRemove = onRemove;
+  Util.divadd("editor-popover",
+    Util.divaded("editor-popover-container",
+      Util.divadd("editor-popover-tools", [title, Util.button("Close", this.close.bind(this))], container)
+    )
+  );
+};
+
+GoodEditor.popOverOptions.prototype.close = function () {
+  var shouldRemove = true;
+  if (this.onRemove) {
+    if (this.onRemove() === false) {
+      shouldRemove = false;
+    }
+  }
+  var parent = this.container.parentElement;
+  if (shouldRemove && parent)
+    parent.removeChild(this.container);
+
+};
 
 GoodEditor.GoodEditorContainer = function (editor, title, quizEditor) {
   this.editor = editor;
@@ -779,7 +802,7 @@ GoodEditor.GoodEditorContainer.prototype.valueOf = function () {
 };
 
 GoodEditor.ParaEditor = function (num, content) {
-  if (content && content.constructor == Util.aryCons){
+  if (content && content.constructor == Util.aryCons) {
     console.log(content);
     content = content[1];
   }
@@ -840,11 +863,12 @@ GoodEditor.ParaEditor.prototype.dispButton = function (title, info, className) {
   return button;
 };
 
-GoodEditor.MultipleFieldRow = function (parent, num, names, defaults, types, classes) {
+GoodEditor.MultipleFieldRow = function (parent, num, names, defaults, types, classes, removeAnswerTitle) {
+  this.removeAnswerTitle = removeAnswerTitle;
   var self = this;
   this.num = num;
   this.editors = new Array(num);
-  var remove = Util.button("Remove Answer",
+  var remove = Util.button(this.removeAnswerTitle,
     function () {
       parent.removeChild(self);
     },
@@ -881,7 +905,9 @@ GoodEditor.MultipleFieldRow.prototype.valueOf = function () {
   return ret;
 };
 
-GoodEditor.MultipleFields = function (id, num, numpernum, names, defaults, values, types, classes, functionKind) {
+GoodEditor.MultipleFields = function (id, num, numpernum, names, defaults, values, types, classes, functionKind, addAnswerTitle, removeAnswerTitle) {
+  this.addAnswerTitle = addAnswerTitle || "Add Answer";
+  this.removeAnswerTitle = removeAnswerTitle || "Remove Answer";
   (id === undefined) && (id = 1);
   this.id = id;
   this.num = num;
@@ -899,12 +925,12 @@ GoodEditor.MultipleFields = function (id, num, numpernum, names, defaults, value
     if (i < values.length) {
       def = values[i];
     }
-    this.editors[i] = new GoodEditor.MultipleFieldRow(this, numpernum, names, def, types, classes);
+    this.editors[i] = new GoodEditor.MultipleFieldRow(this, numpernum, names, def, types, classes, this.removeAnswerTitle);
     Util.append(this.inside, this.editors[i]);
   }
   Util.append(this.container, this.inside);
   var self = this;
-  var add = Util.button("Add Answer",
+  var add = Util.button(this.addAnswerTitle,
     function () {
       self.addAnswer();
     },
@@ -914,7 +940,7 @@ GoodEditor.MultipleFields = function (id, num, numpernum, names, defaults, value
 };
 
 GoodEditor.MultipleFields.prototype.addAnswer = function () {
-  var editor = new GoodEditor.MultipleFieldRow(this, this.numpernum, this.names, this.defaults, this.types, this.classes);
+  var editor = new GoodEditor.MultipleFieldRow(this, this.numpernum, this.names, this.defaults, this.types, this.classes, this.removeAnswerTitle);
   this.editors.push(editor);
   Util.append(this.inside, editor);
   this.num++;
@@ -928,6 +954,7 @@ GoodEditor.MultipleFields.prototype.removeChild = function (child) {
     this.num--;
   }
 };
+
 GoodEditor.MultipleFields.prototype.valueOf = function () {
   var ret = new Array(4);
   ret[0] = this.functionKind;
@@ -939,6 +966,33 @@ GoodEditor.MultipleFields.prototype.valueOf = function () {
   }
   console.warn(ret);
   return ret;
+};
+
+GoodEditor.mcSurvey = function (quiz, id, questions, choices) {
+  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.SurveyEditor(quiz, id, questions, choices, "mcSurvey"), "Survey", quiz);
+  return titledEditor;
+};
+
+GoodEditor.SurveyEditor = function (quiz, id, questions, choices, kind) {
+  var qlen = 1,clen = 1;
+  if (questions)
+    qlen = questions.length;
+  if (choices)
+    clen = choices.length;
+  this.choices = new GoodEditor.MultipleFields(id, clen, 1, ["Choice:"], [""], choices || [], ["text"], [undefined], kind, "Add Choice", "Remove Choice");
+  this.questions = new GoodEditor.MultipleFields(id, qlen, 1, ["Question:"], [""], questions || [], ["text"], [undefined], kind, "Add Question", "Remove Question");
+  var choicesTitle = Util.div("survey-editor-title");
+  choicesTitle.innerHTML = "Choices";
+  var questionsTitle = Util.div("survey-editor-title");
+  questionsTitle.innerHTML = "Questions";
+  this.container = Util.divadd("survey-editor", choicesTitle, this.choices.container, questionsTitle, this.questions.container);
+};
+
+GoodEditor.SurveyEditor.prototype.valueOf = function () {
+  var ch = this.choices.valueOf(),
+    qu = this.questions.valueOf();
+  ch[2] = qu[3];
+  return ch;
 };
 
 GoodEditor.instructions = function (quiz, content, correctAnswers) {

@@ -755,6 +755,7 @@ Quiz.prototype.mcRadioTextHoriz = function (id, choices) {
  * Build a survey sharing labels with horizontal radio boxes
  */
 Quiz.prototype.mcSurvey = function (id, questions, choices) {
+  console.log(id, questions, choices);
   var head = choices.slice();
   head.unshift("");
   var list = [head];
