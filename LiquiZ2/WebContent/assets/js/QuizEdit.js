@@ -779,6 +779,10 @@ GoodEditor.GoodEditorContainer.prototype.valueOf = function () {
 };
 
 GoodEditor.ParaEditor = function (num, content) {
+  if (content && content.constructor == Util.aryCons){
+    console.log(content);
+    content = content[1];
+  }
   var i = 0;
   var instr = this.dispButton("Instructions", {
       self: this,
