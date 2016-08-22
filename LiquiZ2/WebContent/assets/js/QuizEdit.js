@@ -693,6 +693,56 @@ QuizEdit.prototype.appendInstructions = function () {
   this.addEditor(GoodEditor.instructions(this));
 };
 
+QuizEdit.prototype.moveUp = function (subquestion) {
+  var index = this.goodEditors.indexOf(subquestion);
+  if (index != -1) {
+    if (index > 0) {
+      this.goodEditors[index] = this.goodEditors[index - 1];
+      this.goodEditors[index - 1] = subquestion;
+      var parent = subquestion.container.parentElement;
+      if (parent) {
+        parent.removeChild(subquestion.container);
+        parent.insertBefore(subquestion.container, this.goodEditors[index].container);
+      }
+    }
+  } else {
+    console.error("could not move up subquestion, not child of goodEditors");
+  }
+};
+
+QuizEdit.prototype.trash = function (subquestion) {
+  var index = this.goodEditors.indexOf(subquestion);
+  if (index != -1) {
+    this.goodEditors.splice(index, 1);
+    var parent = subquestion.container.parentElement;
+    if (parent) {
+      parent.removeChild(subquestion.container);
+    }
+  } else {
+    console.error("could not move up subquestion, not child of goodEditors");
+  }
+};
+
+QuizEdit.prototype.moveDown = function (subquestion) {
+  var index = this.goodEditors.indexOf(subquestion),
+    last = this.goodEditors.length - 1;
+  if (index != last) {
+    if (index < last) {
+      var subquestion = this.goodEditors[index];
+      var b = this.goodEditors[index + 1];
+      this.goodEditors[index] = b;
+      this.goodEditors[index + 1] = subquestion;
+      var parent = b.container.parentElement;
+      if (parent) {
+        parent.removeChild(b.container);
+        parent.insertBefore(b.container, subquestion.container);
+      }
+    }
+  } else {
+    console.error("could not move up subquestion, not child of goodEditors");
+  }
+};
+
 var GoodEditor = {};
 
 
@@ -700,11 +750,32 @@ GoodEditor.GoodEditorContainer = function (editor, title, quizEditor) {
   this.editor = editor;
   this.title = title;
   this.quizEditor = quizEditor;
-  this.container = Util.divadd("editor-title-container", [Util.divadd("editor-tools", Util.span(title)), this.editor]);
+  this.container = Util.divadd("editor-title-container", [Util.divadd("editor-tools", Util.span(title), this.moveUpButton(), this.moveDownButton(), this.deleteButton()), this.editor]);
+};
+
+GoodEditor.GoodEditorContainer.prototype.moveUpButton = function () {
+  var self = this;
+  return Util.button("Up", function () {
+    self.quizEditor.moveUp(self);
+  }, "editor-tools-button");
+};
+
+GoodEditor.GoodEditorContainer.prototype.moveDownButton = function () {
+  var self = this;
+  return Util.button("Down", function () {
+    self.quizEditor.moveDown(self);
+  }, "editor-tools-button");
+};
+
+GoodEditor.GoodEditorContainer.prototype.deleteButton = function () {
+  var self = this;
+  return Util.button("Delete", function () {
+    self.quizEditor.trash(self);
+  }, "editor-tools-button");
 };
 
 GoodEditor.GoodEditorContainer.prototype.valueOf = function () {
-  return this.editor.valueOf;
+  return this.editor.valueOf();
 };
 
 GoodEditor.ParaEditor = function (num, content) {
