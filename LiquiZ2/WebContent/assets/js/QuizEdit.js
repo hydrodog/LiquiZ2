@@ -89,7 +89,6 @@ QuizEdit.prototype.valueOf = function () {
   for (var i = 0; i < values.length; i++) {
     values[i] = this.goodEditors[i].valueOf();
   }
-  console.log(values);
   return values;
 };
 
@@ -747,13 +746,14 @@ QuizEdit.prototype.moveDown = function (subquestion) {
 
 var GoodEditor = {};
 
-GoodEditor.popOverOptions = function (container, title, onRemove) {
+GoodEditor.popOverOptions = function (container, title, content, onRemove) {
   this.onRemove = onRemove;
-  Util.divadd("editor-popover",
-    Util.divaded("editor-popover-container",
-      Util.divadd("editor-popover-tools", [title, Util.button("Close", this.close.bind(this))], container)
+  this.container = Util.divadd("editor-popover",
+    Util.divadd("editor-popover-container",
+      Util.divadd("editor-popover-tools", [title, Util.button("Close", this.close.bind(this), "editor-tools-advanced-btn"), content])
     )
   );
+  Util.append(container, this.container);
 };
 
 GoodEditor.popOverOptions.prototype.close = function () {
@@ -769,11 +769,16 @@ GoodEditor.popOverOptions.prototype.close = function () {
 
 };
 
-GoodEditor.GoodEditorContainer = function (editor, title, quizEditor) {
+GoodEditor.GoodEditorContainer = function (editor, title, quizEditor, advancedCallback) {
   this.editor = editor;
   this.title = title;
   this.quizEditor = quizEditor;
-  this.container = Util.divadd("editor-title-container", [Util.divadd("editor-tools", Util.span(title), this.moveUpButton(), this.moveDownButton(), this.deleteButton()), this.editor]);
+
+  this.container = Util.div("editor-title-container");
+  if (advancedCallback) {
+    Util.append(this.container, Util.button("Advanced", advancedCallback, "editor-tools-advanced-btn"));
+  }
+  Util.append(this.container, [Util.divadd("editor-tools", Util.span(title), this.moveUpButton(), this.moveDownButton(), this.deleteButton()), this.editor]);
 };
 
 GoodEditor.GoodEditorContainer.prototype.moveUpButton = function () {
@@ -803,7 +808,6 @@ GoodEditor.GoodEditorContainer.prototype.valueOf = function () {
 
 GoodEditor.ParaEditor = function (num, content) {
   if (content && content.constructor == Util.aryCons) {
-    console.log(content);
     content = content[1];
   }
   var i = 0;
@@ -893,6 +897,16 @@ GoodEditor.MultipleFieldRow = function (parent, num, names, defaults, types, cla
 
 };
 
+GoodEditor.MultipleFieldRow.prototype.setValue = function (values) {
+  for (var i = 0; i < this.num; i++) {
+    if (this.editors[i].type == "checkbox") {
+      this.editors[i].checked = values[i];
+    } else {
+      this.editors[i].value = values[i];
+    }
+  }
+};
+
 GoodEditor.MultipleFieldRow.prototype.valueOf = function () {
   var ret = new Array(this.num);
   for (var i = 0; i < this.num; i++) {
@@ -939,6 +953,27 @@ GoodEditor.MultipleFields = function (id, num, numpernum, names, defaults, value
 
 };
 
+GoodEditor.MultipleFields.prototype.setValue = function (value, isNested) {
+  var skip = isNested ? 1 : this.numpernum;
+  var len = value.length/skip;
+  if(len > this.num){
+    while(this.num < len){
+      this.addAnswer();
+    }
+  }else if(len < this.num){
+    while(this.num > len){
+      this.removeChild(this.editors[this.editors.length-1]);
+    }
+  }
+  for (var i = 0, ei = 0; i < value.length; i += skip, ei++) {
+    if (isNested) {
+      this.editors[ei].setValue(value[i]);
+    } else {
+      this.editors[ei].setValue(value.slice(i, i + skip));
+    }
+  }
+};
+
 GoodEditor.MultipleFields.prototype.addAnswer = function () {
   var editor = new GoodEditor.MultipleFieldRow(this, this.numpernum, this.names, this.defaults, this.types, this.classes, this.removeAnswerTitle);
   this.editors.push(editor);
@@ -969,16 +1004,20 @@ GoodEditor.MultipleFields.prototype.valueOf = function () {
 };
 
 GoodEditor.mcSurvey = function (quiz, id, questions, choices) {
-  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.SurveyEditor(quiz, id, questions, choices, "mcSurvey"), "Survey", quiz);
+  var survey = new GoodEditor.SurveyEditor(quiz, id, questions, choices, "mcSurvey");
+  var titledEditor = new GoodEditor.GoodEditorContainer(survey, "Survey", quiz, survey.advancedCallback);
   return titledEditor;
 };
 
 GoodEditor.SurveyEditor = function (quiz, id, questions, choices, kind) {
-  var qlen = 1,clen = 1;
+  var qlen = 1,
+    clen = 1;
   if (questions)
     qlen = questions.length;
   if (choices)
     clen = choices.length;
+  this.overwriteUserDefined = true;
+  this.stdChoiceChosen = "User Defined";
   this.choices = new GoodEditor.MultipleFields(id, clen, 1, ["Choice:"], [""], choices || [], ["text"], [undefined], kind, "Add Choice", "Remove Choice");
   this.questions = new GoodEditor.MultipleFields(id, qlen, 1, ["Question:"], [""], questions || [], ["text"], [undefined], kind, "Add Question", "Remove Question");
   var choicesTitle = Util.div("survey-editor-title");
@@ -986,6 +1025,36 @@ GoodEditor.SurveyEditor = function (quiz, id, questions, choices, kind) {
   var questionsTitle = Util.div("survey-editor-title");
   questionsTitle.innerHTML = "Questions";
   this.container = Util.divadd("survey-editor", choicesTitle, this.choices.container, questionsTitle, this.questions.container);
+  this.advancedCallback = this.advancedCallback.bind(this);
+  this.advancedClose = this.advancedClose.bind(this);
+};
+
+GoodEditor.SurveyEditor.prototype.advancedCallback = function () {
+  var keys = ["User Defined"].concat(Object.keys(Quiz.stdChoice));
+  if (this.overwriteUserDefined) {
+    this.userDefined = this.choices.valueOf()[3];
+  }
+  this.popoverSelect = Util.select("Halp", false, keys);
+  this.popoverSelect.value = this.stdChoiceChosen;
+  this.popoverContent = Util.divadd("survey-popover", [Util.span("Standard Choice Set: "), this.popoverSelect]);
+  this.popoverAdvanced = new GoodEditor.popOverOptions(this.container, "Survey - Advanced", this.popoverContent, this.advancedClose);
+};
+
+GoodEditor.SurveyEditor.prototype.advancedClose = function () {
+  var index = this.popoverSelect.selectedIndex;
+  if(index == 0){
+    this.overwriteUserDefined = true;
+    this.choices.setValue(this.userDefined);    
+  }else{
+    this.overwriteUserDefined = false;
+    index--;
+    var ch = Quiz.stdChoice[Object.keys(Quiz.stdChoice)[index]];
+    this.choices.setValue(ch);
+  }
+  this.stdChoiceChosen = this.popoverSelect.value;
+  this.popoverContent = null;
+  this.popoverSelect = null;
+  this.popoverAdvanced = null;
 };
 
 GoodEditor.SurveyEditor.prototype.valueOf = function () {
@@ -1085,6 +1154,14 @@ GoodEditor.MultiChoice.prototype.valueOf = function () {
   val[2] = content;
   val[3] = ans;
   return val;
+};
+
+GoodEditor.EssayEditor = function(){
+  this.container = Util.textarea();
+};
+
+GoodEditor.essay = function (quiz, id, content, correctAnswers) {
+  
 };
 
 GoodEditor.selectText = function (quiz, id, content, correctAnswers) {
@@ -1225,7 +1302,6 @@ QuizEdit.prototype.editNewQuestion = function () {
 }
 QuizEdit.prototype.editOldQuestion = function (edi, qu, num, actualID) {
   this.ActualID = actualID;
-  console.log(edi, num);
   this.q = qu;
   if (qu.level === undefined)
     qu.level = 1;
@@ -1268,7 +1344,6 @@ QuizEdit.prototype.editOldQuestion = function (edi, qu, num, actualID) {
     if (content.length > 3) {
       correctAnswers = content[3];
     }
-    console.log(this.q.content[i][0]);
 
     this.goodEditors[i] = GoodEditor[this.q.content[i][0]](this, id, construction, correctAnswers);
     e.appendChild(this.goodEditors[i].container);
