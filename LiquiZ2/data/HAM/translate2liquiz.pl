@@ -74,7 +74,7 @@ while ($line = <IMPORT>) {
 	my $answers = join(",", @answers);
 	print "text: $text\n";
 	print LIQUIZ <<XXX
-{"id":$q,"title":"","level":"1","points":"1","content":[
+{"id":"$q","title":"","level":"1","points":"1","content":[
      ["instructions",["$text",]],["selectText",-2,["$A", "$B", "$C", "$D"]],"answers":["A","B","C","D"],[$answers]]},
 XXX
 ;
