@@ -1,0 +1,69 @@
+Pool: E1 - COMMISSION’S RULES	[6 Exam Questions - 6 Groups]
+E1A Operating Standards: frequency privileges; emission standards; automatic message forwarding; frequency sharing; stations aboard ships or aircraft.
+E1B Station restrictions and special operations: restrictions on station location; general operating restrictions, spurious emissions, control operator reimbursement; antenna structure restrictions; RACES operations; national quiet zone.
+E1C Definitions and restrictions pertaining to local, automatic and remote control operation; control operator responsibilities for remote and automatically controlled stations; IARP and CEPT licenses; third party communications over automatically controlled stations.
+E1D Amateur satellites: definitions and purpose; license requirements for space stations; available frequencies and bands; telecommand and telemetry operations; restrictions, and special provisions; notification requirements.
+E1E Volunteer examiner program: definitions; qualifications; preparation and administration of exams; accreditation; question pools; documentation requirements.
+E1F Miscellaneous rules: external RF power amplifiers; business communications; compensated communications; spread spectrum; auxiliary stations; reciprocal operating privileges; special temporary authority.
+
+Pool: E2 - OPERATING PROCEDURES	[5 Exam Questions - 5 Groups]
+E2A Amateur radio in space: amateur satellites; orbital mechanics; frequencies and modes; satellite hardware; satellite operations; experimental telemetry applications.
+E2B Television practices: fast scan television standards and techniques; slow scan television standards and techniques.
+E2C Operating methods: contest and DX operating; remote operation techniques; Cabrillo format; QSLing; RF network connected systems.
+E2D Operating methods: VHF and UHF digital modes and procedures; APRS; EME procedures, meteor scatter procedures.
+E2E Operating methods: operating HF digital modes
+
+Pool: E3 - RADIO WAVE PROPAGATION	[3 Exam Questions - 3 Groups]
+E3A Electromagnetic waves; Earth-Moon-Earth communications; meteor scatter; microwave tropospheric and scatter propagation; aurora propagation.
+E3B Transequatorial propagation; long path; gray-line; multi-path; ordinary and extraordinary waves; chordal hop, sporadic E mechanisms.
+E3C Radio-path horizon; less common propagation modes; propagation prediction techniques and modeling; space weather parameters and amateur radio.
+
+Pool: E4 - AMATEUR PRACTICES	[5 Exam Questions - 5 Groups]
+E4A Test equipment: analog and digital instruments; spectrum and network analyzers, antenna analyzers; oscilloscopes; RF measurements; computer aided measurements.
+E4B Measurement technique and limitations: instrument accuracy and performance limitations; probes; techniques to minimize errors; measurement of "Q"; instrument calibration; S parameters; vector network analyzers.
+E4C Receiver performance characteristics, phase noise, noise floor, image rejection, MDS, signal-to-noise-ratio; selectivity; effects of SDR receiver non-linearity.
+E4D Receiver performance characteristics: blocking dynamic range; intermodulation and cross-modulation interference; 3rd order intercept; desensitization; preselector.
+E4E Noise suppression: system noise; electrical appliance noise; line noise; locating noise sources; DSP noise reduction; noise blankers; grounding for signals.
+
+Pool: E5 - ELECTRICAL PRINCIPLES	[4 Exam Questions - 4 Groups]
+E5A Resonance and Q: characteristics of resonant circuits: series and parallel resonance; definitions and effects of Q; half-power bandwidth; phase relationships in reactive circuits.
+E5B Time constants and phase relationships: RLC time constants; definition; time constants in RL and RC circuits; phase angle between voltage and current; phase angles of series RLC; phase angle of inductance vs susceptance; admittance and susceptance.
+E5C Coordinate systems and phasors in electronics: Rectangular Coordinates; Polar Coordinates; Phasors.
+E5D AC and RF energy in real circuits: skin effect; electrostatic and electromagnetic fields; reactive power; power factor; electrical length of conductors at UHF and microwave frequencies.
+
+Pool: E6 - CIRCUIT COMPONENTS	[6 Exam Questions - 6 Groups]
+E6A Semiconductor materials and devices: semiconductor materials; germanium, silicon, P-type, N-type; transistor types: NPN, PNP, junction, field-effect transistors: enhancement mode; depletion mode; MOS; CMOS; N-channel; P-channel.
+E6B Diodes.
+E6C Digital ICs: Families of digital ICs; gates; Programmable Logic Devices (PLDs).
+E6D Toroidal and Solenoidal Inductors: permeability, core material, selecting, winding; transformers; Piezoelectric devices.
+E6E Analog ICs: MMICs, CCDs, Device packages.
+E6F Optical components: photoconductive principles and effects, photovoltaic systems, optical couplers, optical sensors, and optoisolators; LCDs.
+
+Pool: E7 - PRACTICAL CIRCUITS	[8 Exam Questions - 8 Groups]
+E7A Digital circuits: digital circuit principles and logic circuits: classes of logic elements; positive and negative logic; frequency dividers; truth tables.
+E7B Amplifiers: Class of operation; vacuum tube and solid-state circuits; distortion and intermodulation; spurious and parasitic suppression; microwave amplifiers; switching-type amplifiers.
+E7C Filters and matching networks: types of networks; types of filters; filter applications; filter characteristics; impedance matching; DSP filtering.
+E7D Power supplies and voltage regulators; Solar array charge controllers.
+E7E Modulation and demodulation: reactance, phase and balanced modulators; detectors; mixer stages.
+E7F DSP filtering and other operations; Software Defined Radio Fundamentals; DSP modulation and demodulation.
+E7G Active filters and op-amp circuits: active audio filters; characteristics; basic circuit design; operational amplifiers.
+E7H Oscillators and signal sources: types of oscillators; synthesizers and phase-locked loops; direct digital synthesizers; stabilizing thermal drift; microphonics; high accuracy oscillators.
+
+Pool: E8 - SIGNALS AND EMISSIONS	[4 Exam Questions - 4 Groups]
+E8A AC waveforms: sine, square, sawtooth and irregular waveforms; AC measurements; average and PEP of RF signals; Fourier analysis; Analog to digital conversion: Digital to Analog conversion.
+E8B Modulation and demodulation: modulation methods; modulation index and deviation ratio; frequency and time division multiplexing; Orthogonal Frequency Division Multiplexing.
+E8C Digital signals: digital communication modes; information rate vs bandwidth; error correction.
+E8D Keying defects and overmodulation of digital signals; digital codes; spread spectrum.
+
+Pool: E9 - ANTENNAS & TRANSMISSION LINES	[8 Exam Questions - 8 Groups]
+E9A Basic Antenna parameters: radiation resistance, gain, beamwidth, efficiency, beamwidth; effective radiated power, polarization.
+E9B Antenna patterns: E and H plane patterns; gain as a function of pattern; antenna design.
+E9C Wire and phased array antennas: rhombic antennas; effects of ground reflections; e-off angles; Practical wire antennas: Zepps, OCFD, loops.
+E9D Directional antennas: gain; Yagi Antennas; losses; SWR bandwidth; antenna efficiency; shortened and mobile antennas; RF Grounding.
+E9E Matching: matching antennas to feed lines; phasing lines; power dividers.
+E9F Transmission lines: characteristics of open and shorted feed lines; 1/8 wavelength; 1/4 wavelength; 1/2 wavelength; feed lines: coax versus open-wire; velocity factor; electrical length; coaxial cable dielectrics; velocity factor.
+E9G The Smith chart.
+E9H Receiving Antennas: radio direction finding antennas; Beverage Antennas; specialized receiving antennas; longwire receiving antennas.
+
+Pool: E0 – SAFETY	[1 exam question -– 1 group]
+E0A Safety: amateur radio safety practices; RF radiation hazards; hazardous materials; grounding and bonding.

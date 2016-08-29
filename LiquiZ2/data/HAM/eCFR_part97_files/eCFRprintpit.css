@@ -1,0 +1,920 @@
+
+/* Tag settings */
+html, body, select, input, a {
+        font: 13pt Arial, Sans-Serif;
+
+}
+
+p {
+        font-variant: normal;
+        text-indent: 2em;
+}
+
+body {
+        padding: 0;
+        text-align: center;
+        font-size: 13pt;
+}
+
+#browse {
+        display: none;
+}
+
+#return {
+        display: none;
+}
+
+#back-to-top {
+        display: none;
+}
+
+a {
+        text-decoration: none;
+}
+a:hover {
+        text-decoration: underline;
+}
+
+img {
+        border: 0;
+}
+ul {
+        list-style: square;
+}
+
+/* center paragraphs without an indent. */
+.fullcenter {
+    text-indent:0;
+    text-align:center;
+}
+
+/****************************************************/
+/*   This group is used for display links to        */
+/*   amendments and to display the amendments       */
+/*   themselves.                                    */
+/****************************************************/
+/* Link to amendment published in Federal Register. */
+.linktoamn {
+    text-indent:0;
+    text-align:center;
+}
+
+
+/* Amendment's published ... (in amendments file) */
+.bfrpage {
+    text-indent:0;
+    text-align:center;
+}
+/* View Printed Federal Register page */
+.breghd {
+    text-indent:0;
+    text-align:left;
+}
+
+/* Effective Dates in Amendments */
+.effdates {
+    font-variant: small-caps;
+}
+
+/****************************************************/
+/*  End of amendment styles.                        */
+/****************************************************/
+
+/* e-CFR data is current as of ... */
+.updated {
+    color:#ff0000;
+    font-size:16pt;
+    text-indent:0;
+    text-align:center;
+    font-family:Arial,Helvetica,sans-serif;
+    font-weight:bold;
+}
+
+/* For questions or comments ... */
+.contact {
+    font-size: 11pt;
+    text-indent: 0;
+    text-align: left;
+}
+.top-menu {
+    padding: 3pt 0 4pt 3pt;
+    white-space: nowrap;
+}
+.top-menu a {
+    display: none;
+}
+
+.top-menu-pipe {
+    display: none;
+}
+
+
+.clear {
+    clear: both;
+}
+
+.hits {
+    color: red;
+}
+
+#notice {
+     display: none;
+}
+ 
+#top-banner-home, #top-banner-inside {
+    display: none;
+}
+#top-banner-inside {
+    display: none;
+}
+
+#top-menu-two {
+    display: none;
+}
+
+.menu-home-title, .menu-home-title:hover {
+        color: #000000;
+}
+
+.menu-customers-title, .menu-customers-title:hover {
+        color: #666633;
+}
+
+.menu-vendors-title, .menu-vendors-title:hover {
+        color: #333366;
+}
+
+.menu-libraries-title, .menu-libraries-title:hover {
+        color: #006666;
+}
+
+.two-col-layout-table {
+        width: 100%;
+        background-color: #FFFFFF;
+    border-top: 5pt solid #FFFFFF;
+}
+
+.two-col-layout-table td {
+        vertical-align: top;
+}
+ 
+.two-col-layout-left {
+        display: none;
+}
+
+.two-col-layout-right {
+}
+
+.menu-search-title, .menu-search-title:hover {
+    display: none;
+}
+
+.left-menu-title {
+    display: none;
+}
+
+.left-menu-sublinks {
+    display: none;
+}
+.left-menu-sublinks a {
+        color: #666666;
+        letter-spacing: .5pt;
+}
+.left-menu-sublinks a:hover {
+        color: #000000;
+}
+
+.sidebar-title-bar {
+    display: none;
+}
+
+.collection-latest-resources-mask {
+        margin-top: 10pt;
+}
+
+hr.black-1-cccccc {
+    color: #CCCCCC;
+    background-color: #CCCCCC;
+    height: 1pt;
+    border: 0;
+}
+
+.vert-spacer-450 {
+        width: 1pt;
+        height: 425pt;
+}
+
+.page-title {
+        padding: 0;
+        font-size: 16pt;
+        font-family: "Times Roman", "Times New Roman", serif;
+        text-align: left;
+    text-transform: uppercase;
+}
+
+#top-menu-one {
+    display: none;
+}
+
+#top-menu-one a {
+    color: #FFFFFF;
+}
+
+#wrapper {
+}
+
+#left-menu ul li {
+        padding-left: 5pt;
+}
+#left-menu hr {
+    color: #CCCCCC;
+    background-color: #CCCCCC;
+    height: 1pt;
+    border: 0;
+}
+
+#latest-resources-content {
+        padding: 10pt;
+        font-size: 12pt;
+}
+#latest-resources-content a {
+        color: #333366;
+        font-weight: bold;
+}
+
+#browse-layout-mask {
+        padding: 15pt;
+}
+
+#footer {
+        display: none;
+}
+
+#footer-links {
+        display: none;
+}
+#footer-links, #footer-links a {
+        display: none;
+}
+#footer ul {
+        display: none;
+}
+#footer li {
+        display: none;
+}
+#footer a:link, #footer a:visited {
+        display: none;
+}
+
+#gpo-address-bar {
+     display: none;
+}
+
+/***************************************************************
+  EVERYTHING FROM HERE UP HAS BEEN ADDED SINCE 4-22-2012
+****************************************************************/
+
+
+
+.hd1 {
+        font-variant: small-caps;
+        font-weight: normal;
+        text-align: center;
+}
+
+.hd2 {
+        font-variant: normal;
+        font-weight: normal;
+        font-style: italic;
+        text-align: center;
+}
+
+.hd3 {
+        font-variant: normal;
+        font-weight: normal;
+        text-align: center;
+}
+
+.hd4 {
+        font-variant: normal;
+        font-weight: normal;
+        text-align: center;
+}
+
+.hd5 {
+        font-variant: normal;
+        font-size: 15pt;
+        font-weight: bold;
+        text-align: center;
+}
+
+.hed1 {
+        font-variant: normal;
+        font-size: 13pt;
+        font-weight: bold;
+        text-align: center;
+}
+
+.frp {
+        display: block;
+        font-variant: normal;
+        text-indent: 0em;
+        text-align: right;
+        margin-right: 2em;
+}
+
+.frp0 {
+        display: block;
+        font-variant: normal;
+        text-indent: 0em;
+        text-align: right;
+}
+
+.p1 {
+        display: block;
+        font-variant: normal;
+        margin-left: 6em;
+        text-indent: -2em;
+}
+
+.p-1 {
+        display: block;
+        font-variant: normal;
+        margin-left: 2em;
+        text-indent: 0em;
+}
+
+.p2 {
+        display: block;
+        font-variant: normal;
+        margin-left: 2em;
+        text-indent: 2em;
+}
+
+.p-2 {
+        display: block;
+        font-variant: normal;
+        margin-left: 4em;
+        text-indent: 0em;
+}
+
+.p-3 {
+        display: block;
+        font-variant: normal;
+        margin-left: 4em;
+        text-indent: -2em;
+}
+
+p-dash {
+        display: block;
+        margin-top: 10pt;
+        margin-left: 2em;
+        text-indent: 2em;
+        border-bottom: 1pt solid;
+        width: 500pt; 
+        text-align: left;
+}
+
+/**********************************************************/
+
+.fp {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+/* Subpart Heads in the Contents */
+.contentsp {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-size: 13pt;
+        font-weight: bold;
+}
+
+/* Subject Group Heads in the Contents */
+.contentsg {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-size: 13pt;
+        font-variant: small-caps;
+}
+
+/* Recent updates page */
+.updatetitle {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.updatebodytest {
+        text-align: left;
+        text-indent: 0;
+        font-weight: normal;
+}
+
+.updatebold {
+        text-align: left;
+        text-indent: 0;
+        font-weight: bold;
+}
+
+.source {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.ednote {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 12pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.effdnot {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 12pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.example {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.crossref {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.note {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-size: 12pt;
+        font-variant: normal;
+}
+
+.cita {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-size: 12pt;
+        font-variant: normal;
+}
+
+.appro {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.auth {
+        display: block;
+        text-align: left;
+        text-indent: 2em;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+        font-size: 12pt;
+}
+
+.parauth {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-size: 12pt;
+        font-variant: normal;
+}
+
+.secauth {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-size: 12pt;
+        font-variant: normal;
+}
+
+.title {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.subtitle {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.chapter {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.subchapter {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.part {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.subpart {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: 10pt;
+        font-variant: normal;
+}
+
+.apphead {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+        font-size: 13pt;
+        font-weight: normal;
+        font-variant: small-caps;
+}
+
+.sphead {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: left;
+        text-indent: 0;
+        font-size: 16pt;
+        font-weight: bold;
+        font-variant: normal;
+}
+
+/* Subject group head that appears in generated contents pages. */
+.cpsghead {
+        display: block;
+        margin-top: 5pt;
+        margin-bottom: 0pt;
+        text-align: left;
+        text-indent: 0;
+        font-size: 14pt;
+        font-weight: normal;
+        font-variant: small-caps;
+}
+
+/* Subject group head that appears in the text. */
+.tsghead {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: left;
+        text-indent: 0;
+        font-size: 16pt;
+        font-weight: bold;
+        font-variant: small-caps;
+}
+
+/* Subject group head that appears in amendment contents (I think, may not be necessary) */
+.sghead {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+        text-indent: 0;
+        font-size: 13pt;
+        font-weight: normal;
+        font-variant: small-caps;
+}
+
+/* A line of asterisks. Here just in case we want to change something. */
+.stars {
+        font-style: normal;
+        font-weight: normal;
+}
+
+/* table caption? */
+.tcap {
+       text-align: center;
+}
+
+/* graphic caption? */
+.bcap {
+       text-align: left;
+}
+/******************************************/
+h1 {
+        display: block;
+        text-align: center;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        font-size: 13pt;
+}
+
+h2 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+        font-size: 13pt;
+}
+
+h3 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+        font-size: 13pt;
+}
+
+h4 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+        font-size: 13pt;
+}
+
+h5 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+        font-weight: bold;
+        font-size: 13pt;
+}
+
+hed1 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        text-align: center;
+}
+
+h2 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 0em;
+        text-indent: 0em;
+        font-size: 13pt;
+        font-weight: bold;
+}
+
+.fp-1 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 2em;
+        text-indent: -2em;
+}
+
+.fp-2 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 4em;
+        text-indent: -4em;
+}
+
+.fp1-2 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 4em;
+        text-indent: -2em;
+}
+
+.fp2-2 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 4em;
+        text-indent: 0em;
+}
+
+.fp2-3 {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 6em;
+        text-indent: -2em;
+}
+
+.contents {
+        display: block;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        margin-left: 0;
+        text-indent: 0;
+}
+
+p-dash {
+        display: block;
+        margin-top: 10pt;
+        margin-left: 2em;
+        text-indent: 2em;
+        border-bottom: 1pt solid;
+        width: 500pt; 
+}
+
+fp-dash {
+        display: block;
+        margin-top: 10pt;
+        margin-left: 2em;
+        text-indent: -2em;
+        border-bottom: 1pt solid;
+        width: 500pt; 
+}
+
+ul.leaders {
+    max-width: 70em;
+    padding: 0;
+    overflow-x: hidden;
+    list-style: none}
+ul.leaders li:after {
+    float: left;
+    width: 0;
+    white-space: nowrap;
+    content:
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "}
+ul.leaders span:first-child {
+    padding-right: 0.33em;
+    background: white}
+ul.leaders span + span {
+    float: right;
+    padding-left: 0.33em;
+    background: white;
+    position: relative;
+    z-index: 1
+}
+
+.three-col-layout-middle {
+    border-left: 1pt solid #CCCCCC;
+    width: 539pt;
+}
+.three-col-layout-right {
+    border-left: 1pt solid #CCCCCC;
+}
+div#left-menu a.highlight {
+    text-decoration: none;
+ }
+
+.extract {
+   font-size: 12pt;
+}
+
+.ftnt {
+   font-size: 12pt;
+}
+
+div.fpdash { 
+  margin-top: 22pt;
+  margin-left: 0;
+  height: 1pt; 
+  border-top: 1pt solid black; 
+  text-align: left; 
+  position: relative; 
+}
+span.fpdash { 
+  position: relative; 
+  top: -1em; 
+  background: white; 
+  display: inline-block; 
+}
+
+div.pdash { 
+  margin-top: 22pt;
+  margin-left: 0;
+  height: 1pt; 
+  border-top: 1pt solid black; 
+  text-align: left; 
+  text-indent: 2em;
+  position: relative; 
+}
+span.pdash { 
+  position: relative; 
+  top: -1em; 
+  background: white; 
+  display: inline-block; 
+}
+
+li.leaders {
+   margin-bottom: 11pt;
+}
+
+.tpl {
+   font-size: 13pt;
+}
+
+.sechd {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: -8pt;
+        font-variant: normal;
+}
+
+.c_entry {
+        display: block;
+        text-align: left;
+        text-indent: 0;
+        margin-left: 0;
+        margin-top: -8pt;
+        font-variant: normal;
+}
+
+/* See ECFRpreprocess.java for an explanation */
+.su {
+        font-size: 70%;
+        vertical-align: super;
+        font-variant: normal;
+}
+
+.titlepage {
+        font-size: 14pt;
+        text-align: left;
+}
+
+.gpotbl_hang { text-indent: -2em; }
+.gpotbl_table { empty-cells: show;
+            border-collapse: collapse ;
+            padding-top: .5em ; }
+.gpotbl_div   { border: 2px solid black; text-indent: 0; font-size: 10pt;}
+.gpotbl_title { font-weight: bold; 
+               text-align: center; padding-bottom: .5em; font-variant: small-caps; }
+.gpotbl_description { text-align: center; }
+.gpotbl_cell { border: 1pt solid black ; vertical-align: top }
+.gpotbl_colhed { border: 1pt solid black ; vertical-align: bottom }
+.gpotbl_note { }
+
