@@ -622,9 +622,22 @@ input[disabled] {
   text-align: right;
 }
 
-.editor-label {
+.editor-label-container {
   display: table-cell;
   text-align: left;
+}
+
+.editor-label {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #6083B9;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  vertical-align: middle;
 }
 
 .editor-field {
@@ -648,29 +661,139 @@ input[disabled] {
   margin: 5px auto;
 }
 
-.survey-editor-title{
-  width: 100%;
+.survey-editor-title {
+  width: 90%;
   text-align: center;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #6083B9;
+  color: #ffffff;
+  line-height: 27px;
+  margin: 10px auto;
+  vertical-align: middle;
 }
 
-.editor-tools-advanced-btn{
+.editor-tools-advanced-btn {
   position: absolute;
   right: 5px;
-  top:5px;
-  width: 100px;
-  height: 24px;
+  top: 5px;
+  min-width: 100px;
   font-size: 16px;
+  padding: 5px 10px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #A7C1E8;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  vertical-align: middle;
 }
 
-.editor-popover{
+.editor-popover {
   background-color: #f5f8ff;
   position: absolute;
-  top:0px;
-  left:0px;
-  width:100%;
-  height:100%;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
   display: block;
   border-width: 0px;
   border-radius: 10px;
   padding: 10px 0px;
+}
+
+.editor-popover-title {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #6083B9;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  min-width: 80px;
+}
+
+.editBox>.qetitlehold>input[type="button"] {
+  display: inline-block;
+  padding: 5px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #6083B9;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  width: 150px;
+}
+
+.editor-tools-button {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #A7C1E8;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  width: 80px;
+}
+
+.editor-tools-title {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #6083B9;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  min-width: 80px;
+}
+
+.fielded-row-remove,
+.fielded-row-add {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #A7C1E8;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  min-width: 80px;
+}
+
+.survey-popover {
+  display: table;
+  padding: 15px;
+  width: 100%;
+  text-align: right;
+}
+
+.survey-popover-right {
+  display: table-cell;
+  text-align: right;
+}
+
+.survey-popover-left-container {
+  display: table-cell;
+  text-align: left;
+}
+
+.survey-popover-left {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: #6083B9;
+  color: #ffffff;
+  margin: 3px;
+  line-height: normal;
+  vertical-align: middle;
 }

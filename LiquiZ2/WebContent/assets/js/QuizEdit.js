@@ -436,31 +436,7 @@ QuizEdit.prototype.buildCLOZE = function () {
     ];
 }
 
-QuizEdit.prototype.addBrackets = function () {
-  var ta = this.CLOZE;
-  var v = ta.value;
-  ta.value = v.substring(0, this.selStart) + ' ' + this.openBracket +
-    v.substring(this.selStart, this.selEnd) + this.closeBracket + ' ' + v.substring(this.selEnd);
-}
 
-QuizEdit.prototype.editCLOZE = function () {
-  var t = this;
-  this.addFields(this.buildCLOZE,
-    Util.table([
-           [Util.span("Rows:"), this.textAreaRows = Util.input("number", QuizEdit.INT, null, 10),
-           Util.span("Cols:"), this.textAreaCols = Util.input("number", QuizEdit.INT, null, 80)],
-           [this.editButton("SquareBracket It!", this.addBrackets)]
-        ]), this.CLOZE = Util.textarea(null, "code cloze", "cloze", this.textAreaRows.value, this.textAreaCols.value));
-
-  this.CLOZE.onmouseup = function () {
-    t.selStart = t.CLOZE.selectionStart;
-    t.selEnd = t.CLOZE.selectionEnd;
-    console.log(t.selStart + "," + t.selEnd);
-  };
-  this.CLOZE.ondblclick = function () {
-    t.addBrackets();
-  };
-}
 
 //Image Click part
 QuizEdit.prototype.buildImgClick = function () {
@@ -746,11 +722,61 @@ QuizEdit.prototype.moveDown = function (subquestion) {
 
 var GoodEditor = {};
 
+GoodEditor.ClozeEditor = function (quiz, id, clozeText) {
+  var t = this;
+  this.id = id;
+  this.openBracket = "[[";
+  this.closeBracket = "]]";
+  this.options = Util.table([
+           [Util.span("Rows:"), this.textAreaRows = Util.input("number", QuizEdit.INT, null, 10),
+           Util.span("Cols:"), this.textAreaCols = Util.input("number", QuizEdit.INT, null, 80)],
+           [quiz.editButton("SquareBracket It!", this.addBrackets.bind(this))]
+        ]);
+  this.CLOZE = Util.textarea(null, "code cloze", "cloze", this.textAreaRows.value, this.textAreaCols.value)
+
+  //this.addFields(this.buildCLOZE,
+  this.CLOZE.value = clozeText;
+  this.CLOZE.onmouseup = function () {
+    t.selStart = t.CLOZE.selectionStart;
+    t.selEnd = t.CLOZE.selectionEnd;
+    console.log(t.selStart + "," + t.selEnd);
+  };
+  this.CLOZE.ondblclick = function () {
+    t.addBrackets();
+  };
+  this.container = Util.divadd("cloze-editor-container", [this.options, this.CLOZE]);
+};
+
+
+GoodEditor.ClozeEditor.prototype.addBrackets = function () {
+  var ta = this.CLOZE;
+  var v = ta.value;
+  ta.value = v.substring(0, this.selStart) + ' ' + this.openBracket +
+    v.substring(this.selStart, this.selEnd) + this.closeBracket + ' ' + v.substring(this.selEnd);
+};
+
+GoodEditor.ClozeEditor.prototype.valueOf = function () {
+  return ['cloze', this.id, this.CLOZE.value];
+};
+
+QuizEdit.prototype.editCLOZE = function () {
+  this.addEditor(GoodEditor.cloze(this, 0, ""));
+};
+
+GoodEditor.cloze = function (quiz, id, innerValue) {
+  if (!innerValue)
+    innerValue = "";
+  var editor = new GoodEditor.ClozeEditor(quiz, id, innerValue);
+  var titledEditor = new GoodEditor.GoodEditorContainer(editor, "Cloze", quiz);
+  return titledEditor;
+};
+
+
 GoodEditor.popOverOptions = function (container, title, content, onRemove) {
   this.onRemove = onRemove;
   this.container = Util.divadd("editor-popover",
     Util.divadd("editor-popover-container",
-      Util.divadd("editor-popover-tools", [title, Util.button("Close", this.close.bind(this), "editor-tools-advanced-btn"), content])
+      Util.divadd("editor-popover-tools", [Util.span(title,"editor-popover-title"), Util.button("Close", this.close.bind(this), "editor-tools-advanced-btn"), content])
     )
   );
   Util.append(container, this.container);
@@ -778,7 +804,7 @@ GoodEditor.GoodEditorContainer = function (editor, title, quizEditor, advancedCa
   if (advancedCallback) {
     Util.append(this.container, Util.button("Advanced", advancedCallback, "editor-tools-advanced-btn"));
   }
-  Util.append(this.container, [Util.divadd("editor-tools", Util.span(title), this.moveUpButton(), this.moveDownButton(), this.deleteButton()), this.editor]);
+  Util.append(this.container, [Util.divadd("editor-tools", Util.span(title, "editor-tools-title"), this.moveUpButton(), this.moveDownButton(), this.deleteButton()), this.editor]);
 };
 
 GoodEditor.GoodEditorContainer.prototype.moveUpButton = function () {
@@ -888,7 +914,7 @@ GoodEditor.MultipleFieldRow = function (parent, num, names, defaults, types, cla
       this.editors[i] = Util.input(type, className, undefined, defaults[i % defaults.length]);
     }
     Util.append(this.container,
-      Util.divadd("fielded-editor-row", [Util.span(names[i % names.length], "editor-label"),
+      Util.divadd("fielded-editor-row", [Util.divadd("editor-label-container",Util.span(names[i % names.length], "editor-label")),
                              this.editors[i]])
     );
   }
@@ -955,14 +981,14 @@ GoodEditor.MultipleFields = function (id, num, numpernum, names, defaults, value
 
 GoodEditor.MultipleFields.prototype.setValue = function (value, isNested) {
   var skip = isNested ? 1 : this.numpernum;
-  var len = value.length/skip;
-  if(len > this.num){
-    while(this.num < len){
+  var len = value.length / skip;
+  if (len > this.num) {
+    while (this.num < len) {
       this.addAnswer();
     }
-  }else if(len < this.num){
-    while(this.num > len){
-      this.removeChild(this.editors[this.editors.length-1]);
+  } else if (len < this.num) {
+    while (this.num > len) {
+      this.removeChild(this.editors[this.editors.length - 1]);
     }
   }
   for (var i = 0, ei = 0; i < value.length; i += skip, ei++) {
@@ -1034,18 +1060,18 @@ GoodEditor.SurveyEditor.prototype.advancedCallback = function () {
   if (this.overwriteUserDefined) {
     this.userDefined = this.choices.valueOf()[3];
   }
-  this.popoverSelect = Util.select("Halp", false, keys);
+  this.popoverSelect = Util.select("Halp", false, keys, "survey-popover-right");
   this.popoverSelect.value = this.stdChoiceChosen;
-  this.popoverContent = Util.divadd("survey-popover", [Util.span("Standard Choice Set: "), this.popoverSelect]);
+  this.popoverContent = Util.divadd("survey-popover", [Util.divadd("survey-popover-left-container",Util.span("Standard Choice Set: ", "survey-popover-left")), this.popoverSelect]);
   this.popoverAdvanced = new GoodEditor.popOverOptions(this.container, "Survey - Advanced", this.popoverContent, this.advancedClose);
 };
 
 GoodEditor.SurveyEditor.prototype.advancedClose = function () {
   var index = this.popoverSelect.selectedIndex;
-  if(index == 0){
+  if (index == 0) {
     this.overwriteUserDefined = true;
-    this.choices.setValue(this.userDefined);    
-  }else{
+    this.choices.setValue(this.userDefined);
+  } else {
     this.overwriteUserDefined = false;
     index--;
     var ch = Quiz.stdChoice[Object.keys(Quiz.stdChoice)[index]];
@@ -1156,12 +1182,12 @@ GoodEditor.MultiChoice.prototype.valueOf = function () {
   return val;
 };
 
-GoodEditor.EssayEditor = function(){
-  this.container = Util.textarea();
+GoodEditor.EssayEditor = function () {
+  //this.container Util.divadd(""
 };
 
 GoodEditor.essay = function (quiz, id, content, correctAnswers) {
-  
+
 };
 
 GoodEditor.selectText = function (quiz, id, content, correctAnswers) {
@@ -1183,7 +1209,12 @@ GoodEditor.mcRadioTextVert = function (quiz, id, content, correctAnswers) {
 };
 
 GoodEditor.mcRadioTextHoriz = function (quiz, id, content, correctAnswers) {
-  var titledEditor = new GoodEditor.GoodEditorContainer(new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextHoriz"), "Radio Horizontal", quiz);
+  var titledEditor = new GoodEditor.GoodEditorContainer
+
+    (new GoodEditor.MultiChoice(id, content, correctAnswers, "mcRadioTextHoriz")
+
+
+    , "Radio Horizontal", quiz);
 
   return titledEditor;
 };
@@ -1206,6 +1237,7 @@ QuizEdit.prototype.editNewQuestion = function () {
     content: [],
     answers: []
   };
+  this.ActualID = this.q.id;
   this.goodEditors = [GoodEditor.instructions(this)];
   page.questions.push(this.q);
 
@@ -1213,6 +1245,7 @@ QuizEdit.prototype.editNewQuestion = function () {
   page.refreshQuestion(this.id);
 
   var e = this.editor = document.getElementById("edit-qc" + this.q.id);
+  document.getElementById("qc" + this.q.id).style.display = "none";
   this.scrollToEditor();
 
   e.appendChild(Util.h1("Question Editor"));
