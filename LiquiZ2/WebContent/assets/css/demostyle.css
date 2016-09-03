@@ -797,3 +797,12 @@ input[disabled] {
   line-height: normal;
   vertical-align: middle;
 }
+
+.policy-container {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.7);
+    left: 0px;
+    top: 0px;
+}
