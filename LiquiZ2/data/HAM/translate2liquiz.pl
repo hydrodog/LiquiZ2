@@ -5,6 +5,7 @@ sub expect {
     my ($tag) = @_;
     $linenum++;
     my $line = <IMPORT>;
+    chomp $line;
     
     if ($line =~/^$tag:/) {
 	return $line;
@@ -80,5 +81,6 @@ XXX
 ;
     }
 }
+print LIQUIZ "]}";
 close(IMPORT);
 close(LIQUIZ);
