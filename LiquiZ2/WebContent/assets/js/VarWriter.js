@@ -161,7 +161,7 @@ function VarWriter(innerHTML, className, id, width, height) {
   return div;
 }
 
-var variablePolicy = new PolicyDef("Variable", {
+var variablePolicy = new ScopedDictionary("Variable", {
   rand1: new RandInt(1, 11, 2),
   rand2: new RandInt(12, 20, 1)
 }, {
@@ -175,7 +175,7 @@ var variablePolicy = new PolicyDef("Variable", {
   comparators: new RandString([">=", "<=", "==", "<", ">"])
 });
 
-QuizPolicies.add(variablePolicy);
+QuizDictionaries.add(variablePolicy);
 
 ReservedVariables = {
   ans: {

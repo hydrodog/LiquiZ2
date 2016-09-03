@@ -639,13 +639,13 @@ QuizEdit.prototype.pickStdChoice = function () {
   }
 };
 
-QuizEdit.regex = new PolicyDef("Regex", {
+QuizEdit.regex = new ScopedDictionary("Regex", {
   mass: "kg|KG|kilo|kilogram",
   length: "m|meter",
   time: "sec|s|second"
 });
 
-QuizPolicies.add(QuizEdit.regex);
+QuizDictionaries.add(QuizEdit.regex);
 
 
 QuizEdit.varTypes = [

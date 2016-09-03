@@ -1,5 +1,5 @@
-/**A GlobalPolicyManager singleton*/
-var QuizPolicies = new GlobalPolicyManager();
+/**A GlobalDictionaryManager singleton*/
+var QuizDictionaries = new GlobalDictionaryManager();
 
 /**
 Holds the policies for a class.
@@ -7,18 +7,18 @@ At the moment simply an object wrapper that
 is accesed by the name of an object's policy.
 @author Stephen Oro
 @constructor
-@this {GlobalPolicyManager}
+@this {GlobalDictionaryManager}
 */
-function GlobalPolicyManager() {
+function GlobalDictionaryManager() {
 	this.policies = {};
 }
 
 /**
 Adds a policy to the manager's list
 
-@param {PolicyDef} def The policy to be added.
+@param {ScopedDictionary} def The policy to be added.
 */
-GlobalPolicyManager.prototype.add = function (def) {
+GlobalDictionaryManager.prototype.add = function (def) {
 	this.policies[def.name] = def;
 };
 
@@ -26,9 +26,9 @@ GlobalPolicyManager.prototype.add = function (def) {
 gets a policy from the manager's list by name
 
 @param {string} name The name of the desired policy.
-@return {PolicyDef} the desired policy or undefined
+@return {ScopedDictionary} the desired policy or undefined
 */
-GlobalPolicyManager.prototype.get = function (name) {
+GlobalDictionaryManager.prototype.get = function (name) {
 	return this.policies[name];
 };
 
@@ -37,7 +37,7 @@ removes a policy from the manager's list by name
 
 @param {string} name The name of the desired policy to remove.
 */
-GlobalPolicyManager.prototype.delete = function (name) {
+GlobalDictionaryManager.prototype.delete = function (name) {
 	this.policies[name] = undefined;
 	delete(this.policies[name]);
 };
@@ -45,7 +45,7 @@ GlobalPolicyManager.prototype.delete = function (name) {
 /**
 @author Stephen Oro
 @constructor
-@this {PolicyDef}
+@this {ScopedDictionary}
 @param {string} name
 @param {object} global Global-level objects
 @param {object} school School-level objects
@@ -57,7 +57,7 @@ stored lowest-level to highest-level.
 @property {array} labels The English names of the levels
 stored lowest-level to highest-level
 */
-function PolicyDef(name, global, school, subject, local) {
+function ScopedDictionary(name, global, school, subject, local) {
 	this.name = name;
 	this.global = global || {};
 	this.school = school || {};
@@ -69,11 +69,11 @@ function PolicyDef(name, global, school, subject, local) {
 
 /**
 Get a html wrapped object to manage a select element of an
-PolicyDef's values
+ScopedDictionary's values
 @return {SelectOptGrouped} select element with the values
 opt-grouped by level.
 */
-PolicyDef.prototype.toSelect = function (onselect) {
+ScopedDictionary.prototype.toSelect = function (onselect) {
 	var newVar = "New " + this.name;
 	var list = {
 		[newVar]: {
@@ -95,13 +95,13 @@ PolicyDef.prototype.toSelect = function (onselect) {
 };
 
 /**
-Select from the PolicyDef a the value that is found matching
+Select from the ScopedDictionary a the value that is found matching
 a key in any collection. This returns on
 a lowest-level first-match basis.
 
 @return {object} the value found at a key or undefined.
 */
-PolicyDef.prototype.search = function (key) {
+ScopedDictionary.prototype.search = function (key) {
 	var ret;
 	for (var i = 0; i < this.collection.length; i++) {
 		ret = this.collection[i][key];
@@ -112,13 +112,13 @@ PolicyDef.prototype.search = function (key) {
 };
 
 /**
-Deletes from the PolicyDef a the value that is found matching
+Deletes from the ScopedDictionary a the value that is found matching
 a key in any collection. This deletes on
 a lowest-level first-match basis.
 
 @return {object} the value found at a key or undefined.
 */
-PolicyDef.prototype.delete = function (key) {
+ScopedDictionary.prototype.delete = function (key) {
 	var ret;
 	for (var i = 0; i < this.collection.length; i++) {
 		ret = this.collection[i][key];
@@ -132,12 +132,12 @@ PolicyDef.prototype.delete = function (key) {
 };
 
 /**
-Deletes from the PolicyDef a the value that is found matching
+Deletes from the ScopedDictionary a the value that is found matching
 the key in the collection at the specified level.
 
 @return {object} the value found at the key or undefined.
 */
-PolicyDef.prototype.deleteInLevel = function (key, level) {
+ScopedDictionary.prototype.deleteInLevel = function (key, level) {
 	var ret;
 	var index = this.labels.indexOf(level);
 	if (index != -1) {
@@ -152,12 +152,12 @@ PolicyDef.prototype.deleteInLevel = function (key, level) {
 };
 
 /**
-Gets from the PolicyDef a the value that is found matching
+Gets from the ScopedDictionary a the value that is found matching
 the key in the collection at the specified level.
 
 @return {object} the value found at the key or undefined.
 */
-PolicyDef.prototype.getInLevel = function (key, level) {
+ScopedDictionary.prototype.getInLevel = function (key, level) {
 	var ret;
 	var index = this.labels.indexOf(level);
 	if (index != -1) {
@@ -170,12 +170,12 @@ PolicyDef.prototype.getInLevel = function (key, level) {
 };
 
 /**
-Sets in the PolicyDef a the value at
+Sets in the ScopedDictionary a the value at
 the key in the collection at the specified level.
 
 @return {object} the value found at the key or undefined.
 */
-PolicyDef.prototype.addInLevel = function (key, level, value) {
+ScopedDictionary.prototype.addInLevel = function (key, level, value) {
 	var ret;
 	var index = this.labels.indexOf(level);
 	if (index != -1) {
@@ -188,7 +188,7 @@ Get all occurences of a key in all levels.
 
 @return {array} all values matching the key in all levels.
 */
-PolicyDef.prototype.searchAll = function (key) {
+ScopedDictionary.prototype.searchAll = function (key) {
 	var rets = [];
 	for (var i = 0; i < this.collection.length; i++) {
 		var ret = this.collection[i][key];
@@ -201,7 +201,7 @@ PolicyDef.prototype.searchAll = function (key) {
 
 //START TESTING BLOCK
 GlobalTestHandler.add(function () {
-	var testPolicy = new PolicyDef("Variable", {
+	var testPolicy = new ScopedDictionary("Variable", {
 		rand1: new RandInt(1, 11, 2),
 		rand2: new RandInt(12, 20, 1)
 	}, {
@@ -228,11 +228,11 @@ GlobalTestHandler.add(function () {
 	//GlobalTestHandler.assert(selectEl.type == "select-one", "To Select fails! [6]");
 	//GlobalTestHandler.assert(selectEl.children.length == 14, "To Select fails! [7]"); // Trust me, this should work
 
-	var testSet = new GlobalPolicyManager();
+	var testSet = new GlobalDictionaryManager();
 	testSet.add(testPolicy);
-	GlobalTestHandler.assert(testPolicy == testSet.get(testPolicy.name), "GlobalPolicyManager.get / add fail! [6]");
+	GlobalTestHandler.assert(testPolicy == testSet.get(testPolicy.name), "GlobalDictionaryManager.get / add fail! [6]");
 	testSet.delete(testPolicy.name);
-	GlobalTestHandler.assert(testSet.get(testPolicy.name) === undefined, "GlobalPolicyManager.delete fail! [6]");
+	GlobalTestHandler.assert(testSet.get(testPolicy.name) === undefined, "GlobalDictionaryManager.delete fail! [6]");
 	return true;
 }, "Policy.js Fails");
 //END TESTING BLOCK
