@@ -795,16 +795,20 @@ GoodEditor.popOverOptions.prototype.close = function () {
 
 };
 
-GoodEditor.GoodEditorContainer = function (editor, title, quizEditor, advancedCallback) {
+GoodEditor.GoodEditorContainer = function (editor, title, quizEditor, advancedCallback, advancedTitle) {
   this.editor = editor;
   this.title = title;
   this.quizEditor = quizEditor;
 
   this.container = Util.div("editor-title-container");
   if (advancedCallback) {
-    Util.append(this.container, Util.button("Advanced", advancedCallback, "editor-tools-advanced-btn"));
+    Util.append(this.container, Util.button(advancedTitle || "Advanced", advancedCallback, "editor-tools-advanced-btn"));
   }
-  Util.append(this.container, [Util.divadd("editor-tools", Util.span(title, "editor-tools-title"), this.moveUpButton(), this.moveDownButton(), this.deleteButton()), this.editor]);
+  var tools = [Util.span(title, "editor-tools-title")];
+  if(!quizEditor){
+    tools = [tools[0], this.moveUpButton(), this.moveDownButton(), this.deleteButton()];
+  }
+  Util.append(this.container, [Util.divadd("editor-tools", tools), this.editor]);
 };
 
 GoodEditor.GoodEditorContainer.prototype.moveUpButton = function () {
