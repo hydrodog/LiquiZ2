@@ -905,6 +905,24 @@ function requestAjax(ajax_url, handler, error, url) {
   ajax.send();
 }
 
+// send JSON in, get JSON back
+function requestResponse(url, ajaxIn, cb) {
+	var payload = JSON.stringify(ajaxIn);
+	var http = new XMLHttpRequest();
+	http.open("POST", location.pathname + url, true);
+	http.setRequestHeader("Content-type", "application/json");
+	http.onreadystatechange = function () {
+		cb(!(http.readyState === 4 && http.status !== 200), http.response);
+	};
+	http.send(payload);
+}
+
+var test;
+function getAjax(state, resp) {
+	test = resp;
+	console.log(test);
+}
+
 function sendAjax(url) {
   //	var ajax = new XMLHttpRequest();
   //	ajax.onreadystatechange = function () {

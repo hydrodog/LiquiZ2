@@ -791,10 +791,8 @@ Quiz.prototype.mcRadioImg = function (id, src) {
 Quiz.prototype.selectText = function (id, list, answers, title, skipHandler) {
   l = [title || "Select one"];
   Array.prototype.push.apply(l, list);
-  if (skipHandler) {
-    return Util.select("Select one", false, l, "mcdropdown", id);
-  }
-  return this.addInputHandlers(Util.select("Select one", false, l, "mcdropdown", id));
+  s = Util.select("Select one", false, l, "mcdropdown", id);
+  return skipHandler ? s :this.addInputHandlers(s);
 }
 
 // /*

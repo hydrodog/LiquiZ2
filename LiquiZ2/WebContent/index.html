@@ -80,10 +80,10 @@
 	</ul>
 	<div class="loginform">
 		<div class="loginformabs">
-		  <form method="GET" action="Login.jsp">
+		  <form method="POST" action="AJAXLogin.jsp">
 			<input name="userid" placeholder="ID"/>
 			<input type="password" name="passwd"/>
-			<input id="login" type="submit" value="Login"/>
+			<input id="login" type="button" onclick="requestResponse('AJAXLogin.jsp', this.form.userid, getAjax)" value="Login"/>
 		  </form>
 		</div>
     </div>

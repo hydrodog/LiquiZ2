@@ -13,6 +13,12 @@ sub expect {
     die "$linenum: Expected $tag, found: $line\n";
 }
 
+sub escape {
+    my ($s) = @_;
+    $s =~ s/([\"\$])/\\\1/g;
+    print "s=", $s, "\n";
+    return $s;
+}
 sub buildHeader {
     my $title = expect("Title");
     my $src = expect("Source");
@@ -62,7 +68,7 @@ while ($line = <IMPORT>) {
 	my $sec1 = $3;
 	my $sec2 = $4;
 	print "$q $ans $sec1 $sec2\n";
-	my $text = <IMPORT>;
+	my $text = escape(<IMPORT>);
 	my $A = <IMPORT>;
 	my $B = <IMPORT>;
 	my $C = <IMPORT>;
@@ -76,7 +82,7 @@ while ($line = <IMPORT>) {
 	print "text: $text\n";
 	print LIQUIZ <<XXX
 {"id":"$q","title":"","level":"1","points":"1","content":[
-     ["instructions",["$text",]],["selectText",-2,["$A", "$B", "$C", "$D"]],"answers":["A","B","C","D"],[$answers]]},
+     ["instructions",["$text"]],["selectText",-2,["$A", "$B", "$C", "$D"]]],"answers":[["A","B","C","D"],[$answers]]},
 XXX
 ;
     }
