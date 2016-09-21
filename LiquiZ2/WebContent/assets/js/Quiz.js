@@ -31,6 +31,7 @@ function Quiz(payload) {
 
   this.body = document.getElementById("container");
   this.body.className = "quiz";
+    this.policy = new Policy(Quiz.policies[this.policy]);
 }
 
 //TODO: (Dov) if needed, automatically generate scopeMap from list of scopes below
@@ -65,6 +66,23 @@ Quiz.stdChoice = {
           "Very Poor"],
   Yesno: ["Yes", "No"],
   Boolean: ["true", "false"]
+};
+
+Quiz.policies = {
+    Dov: {
+	"attempts": 4,
+	"duration": 0,
+	"showStudentAnswers": false,
+	"showCorrectAnswers": {"showafter": 20160915120000},
+	"oneAnswerPerPage": false,
+	"scored": false,
+	"shuffleQuestions": false,
+	"shuffleAnswers": false,
+	"accessCode": "acode",
+	"filterIP": "155.246.33.128",
+	"bonus": { "absolute": 0, "daily": 1, "continuous": true},
+	"penalty": { "absolute": 0, "daily": 1, "continuous": true}
+    }
 };
 
 Quiz.prototype.processParams = function () {
@@ -595,8 +613,9 @@ Quiz.prototype.createSubmit = function (id) {
             Util.button("Edit Policy",
         function () {
           if (clickPolicy === 0) {
-            var policy = new Policy();
-            policy.edit();
+//            var policy = new Policy();
+//            policy.edit();
+	      t.policy.edit(document.body);
           }
           clickPolicy++;
         }),
@@ -985,6 +1004,7 @@ Quiz.prototype.multiAnswer = function (id, txt) {
 /*
  * Edit and store the policies governing a quiz, ie how it may be taken, when to display answers, etc.
  */
+/*
 function Policy() {
   this.body = document.getElementById("container");
   this.body.className = "quizEditor";
@@ -1009,7 +1029,7 @@ Policy.prototype.edit = function () {
         ["Duration (min)", Util.input("number", QuizEdit.EDITCTRL, "duration", 0)],
         ["Show Student Answers", Util.yesno(QuizEdit.EDITCTRL, "showStudentAnswers")],
         ["Show Correct Answers", Util.yesno(QuizEdit.EDITCTRL, "showCorrectAnswers")],
-        ["One question per page", Util.yesno(QuizEdit.EDITCTRL, "showCorrectAnswers")],
+        ["One question per page", Util.yesno(QuizEdit.EDITCTRL, "oneQuestionPerPage")],
         ["Scored", Util.yesno(QuizEdit.EDITCTRL, "scored")],
         ["Shuffle Questions", Util.yesno(QuizEdit.EDITCTRL, "shuffleQuestions")],
         ["Shuffle Answers", Util.yesno(QuizEdit.EDITCTRL, "shuffleAnswers")],

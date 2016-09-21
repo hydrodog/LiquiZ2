@@ -968,6 +968,7 @@ function getPrefs(ajax_url, error, url) {
 
 function handlePage(text) {
   var json = JSON.parse(text);
+//console.error(json.type, json.payload);
   page = new window[json.type](json.payload);
   page.exec();
   GoToOldScrollPosition();

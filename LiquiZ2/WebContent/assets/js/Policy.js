@@ -1,238 +1,115 @@
-/**A GlobalPolicyManager singleton*/
-var QuizPolicies = new GlobalPolicyManager();
-
 /**
-Holds the policies for a class.
-At the moment simply an object wrapper that
-is accesed by the name of an object's policy.
-@author Stephen Oro
-@constructor
-@this {GlobalPolicyManager}
+   Holds the Policies for a quiz that do not belong in individual quizzes 
+   because they are so often shared.  For example, a teacher who gives students
+   3 tries to get a perfect score will do so for most if not all quizzes, not just one.
+
+   @author Dov Kruger
+   @constructor
+   @this {Policy}
 */
-function GlobalPolicyManager() {
-	this.policies = {};
+function Policy(data) {
+    for (var x in data)
+	this[x] = data[x];
 }
 
-/**
-Adds a policy to the manager's list
-
-@param {PolicyDef} def The policy to be added.
-*/
-GlobalPolicyManager.prototype.add = function (def) {
-	this.policies[def.name] = def;
-};
-
-/**
-gets a policy from the manager's list by name
-
-@param {string} name The name of the desired policy.
-@return {PolicyDef} the desired policy or undefined
-*/
-GlobalPolicyManager.prototype.get = function (name) {
-	return this.policies[name];
-};
-
-/**
-removes a policy from the manager's list by name
-
-@param {string} name The name of the desired policy to remove.
-*/
-GlobalPolicyManager.prototype.delete = function (name) {
-	this.policies[name] = undefined;
-	delete(this.policies[name]);
-};
-
-/**
-@author Stephen Oro
-@constructor
-@this {PolicyDef}
-@param {string} name
-@param {object} global Global-level objects
-@param {object} school School-level objects
-@param {object} subject Subject-level objects
-@param {object} local Local-level objects
-
-@property {array} collection The levels of objects
-stored lowest-level to highest-level.
-@property {array} labels The English names of the levels
-stored lowest-level to highest-level
-*/
-function PolicyDef(name, global, school, subject, local) {
-	this.name = name;
-	this.global = global || {};
-	this.school = school || {};
-	this.subject = subject || {};
-	this.local = local || {};
-	this.collection = [this.local, this.subject, this.school, this.global];
-	this.labels = ["Local", "Subject", "School", "Global"];
+Policy.prototype.edit = function(div) {
+    this.policyEditor = new PolicyEditor(this);
+    this.editor = new GoodEditor.GoodEditorContainer(this.policyEditor, "Policy Editor", null,
+						     this.close.bind(this), "Close");
+    this.container = Util.divadd("policy-container", this.editor);
+    if (div) {
+	Util.append(div, this);
+    }
+    return this.editor;
 }
 
-/**
-Get a html wrapped object to manage a select element of an
-PolicyDef's values
-@return {SelectOptGrouped} select element with the values
-opt-grouped by level.
-*/
-PolicyDef.prototype.toSelect = function (onselect) {
-	var newVar = "New " + this.name;
-	var list = {
-		[newVar]: {
-			value: newVar
-		}
-	};
-	for (var i = 0; i < this.collection.length; i++) {
-		var obj = {};
-		var col = this.collection[i];
-		for (var key in col) {
-			obj[key] = {value:key};
-		}
-		list[this.labels[i]] = {value:obj,isOptGroup:1};
-	}
+Policy.prototype.close = function() {
+    var p = this.container.parentElement;
+    if (p)
+	p.removeChild(this.container);
+    this.policyEditor.change(this);
+    this.policyEditor = this.editor = this.container = null;
+}
 
-	var sel = new SelectOptGrouped(list);
-	sel.onchange = onselect;
-	return sel;
+function PolicyEditor(policy) {
+    this.editor = new PolicyMultipleFields
+    (0, 1, 3,
+     ["Attempts permitted", "Duration (min)","Show Student Answers", "Show Correct Answers", 
+      "One question per page", "Scored", "Shuffle Questions", "Shuffle Answers", "Access Code", 
+      "Filter IP"],
+     [0, 0, 0, 0, 0, 0, 0, 0, "", ""],
+     [this.toArray(policy)],
+     ["number", "number", "checkbox", "checkbox", "checkbox", "checkbox", "checkbox", "checkbox", "text", "text"], 
+     []);
+    this.bonus = new PolicyBonusEditor("Early Bonus", policy.bonus);
+    this.penalty = new PolicyBonusEditor("Late Penalty", policy.penalty);
+
+    this.container = Util.divadd("policy-editor",
+				 [this.editor, this.bonus, this.penalty]);
+}
+
+PolicyEditor.keys = ["attempts","duration", "showStudentAnswers", "showCorrectAnswers",
+		     "showafter", "oneQuestionPerPage", "scored", "shuffleQuestions",
+		     "shuffleAnswers", "accessCode", "filterIP"];
+PolicyEditor.prototype.toArray = function(policy) {
+    var keys = PolicyEditor.keys;
+    var ret = new Array(keys.length);
+    for (var i = 0; i < keys.length; i++)
+	ret[i] = policy[keys[i]];
+    return ret;
+}
+
+PolicyEditor.prototype.change = function(policy) {
+    var keys = PolicyEditor.keys;
+    var ret = this.valueOf();
+    for (var i = 0; i < keys.length; i++)
+	policy[keys[i]] = ret[i];
+    this.bonus.change(policy.bonus);
+    this.penalty.change(policy.penalty);
+}
+
+function PolicyBonusEditor(titleText, bonus) {
+    this.editor = new PolicyMultipleFields(0, 1, 3, ["Absolute", "Daily", "Continuous"], [0, 0, false], [this.toArray(bonus)], ["number", "number", "checkbox"], []);
+    var title = Util.div("bonus-editor-title");
+    title.innerHTML = titleText;
+    this.container = Util.divadd("policy-bonus-editor", [title, this.editor]);
+}
+
+PolicyBonusEditor.keys = ["absolute", "daily", "continuous"];
+
+PolicyBonusEditor.prototype.valueOf = function() {
+    return this.editor.valueOf();
 };
 
-/**
-Select from the PolicyDef a the value that is found matching
-a key in any collection. This returns on
-a lowest-level first-match basis.
+PolicyBonusEditor.prototype.toArray = function(bonus) {
+    var keys = PolicyBonusEditor.keys;
+    var ret = new Array(keys.length);
+    for (var i = 0; i < keys.length; i++)
+	ret[i] = bonus[keys[i]];
+    return ret;
+}
 
-@return {object} the value found at a key or undefined.
-*/
-PolicyDef.prototype.search = function (key) {
-	var ret;
-	for (var i = 0; i < this.collection.length; i++) {
-		ret = this.collection[i][key];
-		if (ret)
-			return ret;
-	}
-	return undefined;
-};
+PolicyBonusEditor.prototype.change = function(bonus) {
+    var keys = PolicyBonusEditor.keys;
+    var ret = this.valueOf();
+    for (var i = 0; i < keys.length; i++)
+	bonus[keys[i]] = ret[i];
+}
 
-/**
-Deletes from the PolicyDef a the value that is found matching
-a key in any collection. This deletes on
-a lowest-level first-match basis.
+function PolicyMultipleFields() {
+  GoodEditor.MultipleFields.apply(this, arguments);
+}
 
-@return {object} the value found at a key or undefined.
-*/
-PolicyDef.prototype.delete = function (key) {
-	var ret;
-	for (var i = 0; i < this.collection.length; i++) {
-		ret = this.collection[i][key];
-		if (ret) {
-			this.collection[i][key] = undefined;
-			delete(this.collection[i][key]);
-			return ret;
-		}
-	}
-	return undefined;
-};
+PolicyMultipleFields.prototype = GoodEditor.MultipleFields.prototype;
 
-/**
-Deletes from the PolicyDef a the value that is found matching
-the key in the collection at the specified level.
+PolicyMultipleFields.prototype.constructor = PolicyMultipleFields;
 
-@return {object} the value found at the key or undefined.
-*/
-PolicyDef.prototype.deleteInLevel = function (key, level) {
-	var ret;
-	var index = this.labels.indexOf(level);
-	if (index != -1) {
-		if (this.collection[index].hasOwnProperty(key)) {
-			var ret = this.collection[index];
-			this.collection[index][key] = undefined;
-			delete(this.collection[index][key]);
-			return ret;
-		}
-	}
-	return undefined;
-};
-
-/**
-Gets from the PolicyDef a the value that is found matching
-the key in the collection at the specified level.
-
-@return {object} the value found at the key or undefined.
-*/
-PolicyDef.prototype.getInLevel = function (key, level) {
-	var ret;
-	var index = this.labels.indexOf(level);
-	if (index != -1) {
-		if (this.collection[index].hasOwnProperty(key)) {
-			var ret = this.collection[index][key];
-			return ret;
-		}
-	}
-	return undefined;
-};
-
-/**
-Sets in the PolicyDef a the value at
-the key in the collection at the specified level.
-
-@return {object} the value found at the key or undefined.
-*/
-PolicyDef.prototype.addInLevel = function (key, level, value) {
-	var ret;
-	var index = this.labels.indexOf(level);
-	if (index != -1) {
-		this.collection[index][key] = value;
-	}
-};
-
-/**
-Get all occurences of a key in all levels.
-
-@return {array} all values matching the key in all levels.
-*/
-PolicyDef.prototype.searchAll = function (key) {
-	var rets = [];
-	for (var i = 0; i < this.collection.length; i++) {
-		var ret = this.collection[i][key];
-		if (ret)
-			rets.push(ret);
-	}
-	return rets;
-};
+PolicyMultipleFields.prototype.valueOf = function() {
+    var ret = new Array(this.num);
+    for (var i = 0; i < this.num; i++) {
+	ret[i] = this.editors[i].valueOf();
+    }
+    return ret;
+}
 
 
-//START TESTING BLOCK
-GlobalTestHandler.add(function () {
-	var testPolicy = new PolicyDef("Variable", {
-		rand1: new RandInt(1, 11, 2),
-		rand2: new RandInt(12, 20, 1)
-	}, {
-		rand3: new RandFloat(1.0, 5.0, 0.1),
-		rand1: new RandFloat(1.0, 2.0, 1 / 3),
-		rand5: new RandWord(["hello", 0, "test", 0, "goodbye", 0, "alpha", 0]),
-		rand6: new RandListElement([2, 3, 5, 7, 11, 13, 17]),
-		rand7: new RandListElement(["Stephen", "Yijin", "Asher", "Ethan"]),
-		carith: new RandString(["+", "-", "/", "*", "%"]),
-		modops: new RandString(["+=", "-=", "/=", "*=", "%="]),
-		comparators: new RandString([">=", "<=", "==", "<", ">"])
-	});
-	GlobalTestHandler.assert(testPolicy.global.rand2 == testPolicy.search("rand2"), "Search fails! [1]");
-	GlobalTestHandler.assert(testPolicy.school.carith == testPolicy.search("carith"), "Search fails! [2]");
-
-	var search = testPolicy.searchAll("rand1");
-	GlobalTestHandler.assert(search.length == 2 && (search.indexOf(testPolicy.global.rand1) != -1) && (search.indexOf(testPolicy.school.rand1) != -1), "SearchALL fails! [3]");
-
-	GlobalTestHandler.assert(testPolicy.school.carith == testPolicy.delete("carith"), "Delete fails! [4]");
-
-	GlobalTestHandler.assert(testPolicy.search("carith") === undefined, "Delete fails! [5]");
-
-	//var selectEl = testPolicy.toSelect();
-	//GlobalTestHandler.assert(selectEl.type == "select-one", "To Select fails! [6]");
-	//GlobalTestHandler.assert(selectEl.children.length == 14, "To Select fails! [7]"); // Trust me, this should work
-
-	var testSet = new GlobalPolicyManager();
-	testSet.add(testPolicy);
-	GlobalTestHandler.assert(testPolicy == testSet.get(testPolicy.name), "GlobalPolicyManager.get / add fail! [6]");
-	testSet.delete(testPolicy.name);
-	GlobalTestHandler.assert(testSet.get(testPolicy.name) === undefined, "GlobalPolicyManager.delete fail! [6]");
-	return true;
-}, "Policy.js Fails");
-//END TESTING BLOCK
