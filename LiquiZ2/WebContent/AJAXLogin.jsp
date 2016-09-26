@@ -26,7 +26,7 @@
 //	out.print(b);
 //	out.println("\",");
 %>
-
+{
 	"css" : "red.css",
 	"stdchoice": {
 		"tf" : ["true", "false"],
