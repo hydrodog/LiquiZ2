@@ -19,6 +19,8 @@ Yujie Liu
 
 Zhiyuan Chen
 
+Jack Ziqi Tan
+
 [Add your name here]
 
 ## Introduction
